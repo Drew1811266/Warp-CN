@@ -73,52 +73,50 @@ impl EnableAutoReloadModalBody {
             },
         );
 
-        ctx.subscribe_to_model(
-            &UserWorkspaces::handle(ctx),
-            |me, _handle, event, ctx| {
-                match event {
-                    UserWorkspacesEvent::UpdateWorkspaceSettingsSuccess => {
-                        if me.update_workspace_settings_loading {
-                            me.update_workspace_settings_loading = false;
+        ctx.subscribe_to_model(&UserWorkspaces::handle(ctx), |me, _handle, event, ctx| {
+            match event {
+                UserWorkspacesEvent::UpdateWorkspaceSettingsSuccess => {
+                    if me.update_workspace_settings_loading {
+                        me.update_workspace_settings_loading = false;
 
-                            // Emit telemetry for successful auto-reload enablement
-                            let selected_credits = me
-                                .addon_credits_options
-                                .get(me.selected_denomination_index)
-                                .map(|option| option.credits);
-                            send_telemetry_from_ctx!(
-                                TelemetryEvent::AutoReloadModalClosed {
-                                    action: AutoReloadModalAction::EnabledAutoReload,
-                                    selected_credits,
-                                    banner_toggle_flag_enabled:
-                                        FeatureFlag::BuildPlanAutoReloadBannerToggle.is_enabled(),
-                                    post_purchase_modal_flag_enabled:
-                                        FeatureFlag::BuildPlanAutoReloadPostPurchaseModal.is_enabled(),
-                                },
-                                ctx
-                            );
+                        // Emit telemetry for successful auto-reload enablement
+                        let selected_credits = me
+                            .addon_credits_options
+                            .get(me.selected_denomination_index)
+                            .map(|option| option.credits);
+                        send_telemetry_from_ctx!(
+                            TelemetryEvent::AutoReloadModalClosed {
+                                action: AutoReloadModalAction::EnabledAutoReload,
+                                selected_credits,
+                                banner_toggle_flag_enabled:
+                                    FeatureFlag::BuildPlanAutoReloadBannerToggle.is_enabled(),
+                                post_purchase_modal_flag_enabled:
+                                    FeatureFlag::BuildPlanAutoReloadPostPurchaseModal.is_enabled(),
+                            },
+                            ctx
+                        );
 
-                            ctx.emit(EnableAutoReloadModalBodyEvent::ShowToast {
-                                message: "Auto-reload settings updated".to_string(),
-                                flavor: ToastFlavor::Success,
-                            });
-                            ctx.emit(EnableAutoReloadModalBodyEvent::Close);
-                        }
+                        ctx.emit(EnableAutoReloadModalBodyEvent::ShowToast {
+                            message: "自动充值设置已更新".to_string(),
+                            flavor: ToastFlavor::Success,
+                        });
+                        ctx.emit(EnableAutoReloadModalBodyEvent::Close);
                     }
-                    UserWorkspacesEvent::UpdateWorkspaceSettingsRejected(_err) => {
-                        if me.update_workspace_settings_loading {
-                            me.update_workspace_settings_loading = false;
-                            ctx.emit(EnableAutoReloadModalBodyEvent::ShowToast {
-                                message: "Failed to enable auto-reload. Please try updating your settings in Billing & usage.".to_string(),
-                                flavor: ToastFlavor::Error,
-                            });
-                            ctx.notify();
-                        }
-                    }
-                    _ => {}
                 }
-            },
-        );
+                UserWorkspacesEvent::UpdateWorkspaceSettingsRejected(_err) => {
+                    if me.update_workspace_settings_loading {
+                        me.update_workspace_settings_loading = false;
+                        ctx.emit(EnableAutoReloadModalBodyEvent::ShowToast {
+                            message: "无法启用自动充值。请尝试在“账单和使用量”中更新设置。"
+                                .to_string(),
+                            flavor: ToastFlavor::Error,
+                        });
+                        ctx.notify();
+                    }
+                }
+                _ => {}
+            }
+        });
 
         let denomination_dropdown = ctx.add_typed_action_view(|ctx| {
             let mut dropdown = Dropdown::new(ctx);
@@ -216,13 +214,13 @@ impl EnableAutoReloadModalBody {
     fn render_content(&self, appearance: &Appearance) -> Box<dyn Element> {
         let theme = appearance.theme();
         let explanation_fragments = vec![
-            FormattedTextFragment::plain_text("When enabled, "),
-            FormattedTextFragment::bold("auto-reload"),
+            FormattedTextFragment::plain_text("启用后，"),
+            FormattedTextFragment::bold("自动充值"),
             FormattedTextFragment::plain_text(
-                " will automatically purchase your selected package when you run out. ",
+                "会在用完时自动购买你选择的套餐。",
             ),
             FormattedTextFragment::hyperlink(
-                "Learn more",
+                "了解更多",
                 "https://docs.warp.dev/support-and-community/plans-and-billing/add-on-credits#id-2.-enable-auto-reload",
             ),
         ];
@@ -274,7 +272,7 @@ impl EnableAutoReloadModalBody {
                 }),
                 ..Default::default()
             })
-            .with_text_label("Cancel".to_string())
+            .with_text_label("取消".to_string())
             .build()
             .on_click(|ctx, _, _| {
                 ctx.dispatch_typed_action(Action::Cancel);
@@ -282,9 +280,9 @@ impl EnableAutoReloadModalBody {
             .finish();
 
         let button_text = if self.update_workspace_settings_loading {
-            "Saving...".to_string()
+            "正在保存...".to_string()
         } else {
-            "Enable".to_string()
+            "启用".to_string()
         };
 
         let mut enable_button = appearance
@@ -391,8 +389,7 @@ impl warpui::TypedActionView for EnableAutoReloadModalBody {
                 let workspaces = UserWorkspaces::as_ref(ctx);
                 let Some(team_uid) = workspaces.current_team_uid() else {
                     ctx.emit(EnableAutoReloadModalBodyEvent::ShowToast {
-                        message: "Oops, something went wrong; your team's data could not be found."
-                            .to_string(),
+                        message: "出了点问题：找不到你团队的数据。".to_string(),
                         flavor: ToastFlavor::Error,
                     });
                     return;
@@ -423,7 +420,7 @@ impl EnableAutoReloadModal {
         let body = ctx.add_typed_action_view(EnableAutoReloadModalBody::new);
 
         let modal = ctx.add_typed_action_view(|ctx| {
-            Modal::new(Some("Enable auto reload?".to_string()), body.clone(), ctx).with_body_style(
+            Modal::new(Some("启用自动充值？".to_string()), body.clone(), ctx).with_body_style(
                 UiComponentStyles {
                     // Padding of 0 here since we add a horizontal bar that needs to span the full width in the body
                     // So we handle padding in the body itself

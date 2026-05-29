@@ -156,15 +156,15 @@ impl Body {
             > max_session_size.as_u64();
 
         let scrollback_from_active_block_message = if model.is_alt_screen_active() {
-            "Share from current screen"
+            "从当前屏幕开始共享"
         } else if model
             .block_list()
             .active_block()
             .is_active_and_long_running()
         {
-            "Share from current block"
+            "从当前块开始共享"
         } else {
-            "Share without scrollback"
+            "不包含回滚内容共享"
         };
 
         let mut options = vec![
@@ -175,7 +175,7 @@ impl Body {
                 is_disabled: is_scrollback_from_active_block_disabled,
             },
             ScrollbackOption {
-                label: "Share from start of session",
+                label: "从会话开始处共享",
                 scrollback_type: SharedSessionScrollbackType::All,
                 mouse_state_handle: Default::default(),
                 is_disabled: is_all_scrollback_disabled,
@@ -208,7 +208,7 @@ impl Body {
             options.insert(
                 0,
                 ScrollbackOption {
-                    label: "Share from selected block and onwards",
+                    label: "从所选块及之后内容共享",
                     scrollback_type,
                     mouse_state_handle: Default::default(),
                     is_disabled,
@@ -239,7 +239,7 @@ impl View for Body {
                 ButtonVariant::Accent,
                 self.button_mouse_states.start_sharing_button.clone(),
             )
-            .with_centered_text_label(String::from("Start sharing"))
+            .with_centered_text_label(String::from("开始共享"))
             .with_style(style::button_styles());
 
         // If none of the scrollback options are available, the start sharing
@@ -265,7 +265,7 @@ impl View for Body {
                 ButtonVariant::Outlined,
                 self.button_mouse_states.cancel_button.clone(),
             )
-            .with_centered_text_label(String::from("Cancel"))
+            .with_centered_text_label(String::from("取消"))
             .with_style(style::button_styles())
             .build()
             .with_cursor(Cursor::PointingHand)
@@ -334,16 +334,16 @@ impl View for Body {
         } else if disabled_count > 1 {
             // Multiple options disabled - mention both reasons if agent conversations exist
             if self.has_agent_conversations {
-                Some("Some options are disabled due to sharing size limits and the presence of agent conversations in the session")
+                Some("由于共享大小限制且会话中包含 Agent 对话，部分选项已停用")
             } else {
-                Some("Some options are disabled due to sharing size limits")
+                Some("由于共享大小限制，部分选项已停用")
             }
         } else {
             // Only one option disabled - use specific message if it's due to agent conversations
             if self.has_agent_conversations {
-                Some("Sharing without scrollback is disabled because this session has agent conversations")
+                Some("此会话包含 Agent 对话，因此无法在不包含回滚内容的情况下共享")
             } else {
-                Some("Some options are disabled due to sharing size limits")
+                Some("由于共享大小限制，部分选项已停用")
             }
         };
 

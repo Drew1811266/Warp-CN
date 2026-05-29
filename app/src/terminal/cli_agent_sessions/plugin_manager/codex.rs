@@ -41,7 +41,7 @@ static INSTALL_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| {
             link: Some("https://developers.openai.com/codex/cli#upgrade"),
         },
         PluginInstructionStep {
-            description: "Set the notification condition to \"always\" in your Codex config. Open or create ~/.codex/config.toml and add:",
+            description: "在 Codex 配置中将通知条件设为“always”。打开或创建 ~/.codex/config.toml 并添加：",
             command: "[tui]\nnotification_condition = \"always\"",
             executable: false,
             link: None,

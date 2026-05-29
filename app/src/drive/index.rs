@@ -145,7 +145,7 @@ const HOVER_PREVIEW_Y_OFFSET: f32 = 0.;
 
 const CREATE_TEAM_ICON_WIDTH: f32 = 16.;
 const CREATE_TEAM_ICON_HEIGHT: f32 = 16.;
-const CREATE_TEAM_TEXT: &str = "Share commands & knowledge with your teammates.";
+const CREATE_TEAM_TEXT: &str = "与队友共享命令和知识。";
 
 const LOADING_ICON_WIDTH: f32 = 16.;
 const LOADING_ICON_HEIGHT: f32 = 16.;
@@ -186,10 +186,9 @@ const SORTING_BUTTON_TOOLTIP_LABEL: &str = "Sort by";
 const RETRY_BUTTON_TOOLTIP_LABEL: &str = "Retry sync";
 
 const SHARED_OBJECT_LIMIT_HIT_BANNER_LINE: &str =
-    "Upgrade for access to more notebooks, workflows, shared sessions, and AI credits.";
+    "升级后可访问更多 Notebook、工作流、共享会话和 AI 额度。";
 
-const PAYMENT_ISSUE_BANNER_LINE_1: &str =
-    "Shared objects have been restricted due to a subscription payment issue.";
+const PAYMENT_ISSUE_BANNER_LINE_1: &str = "由于订阅付款问题，共享对象已受限。";
 
 const PAYMENT_ISSUE_BANNER_LINE_2_ADMIN: &str =
     "Please update your payment information to restore access.";
@@ -407,7 +406,7 @@ impl From<&DriveIndexAction> for LoginGatedFeature {
     fn from(val: &DriveIndexAction) -> LoginGatedFeature {
         use DriveIndexAction::*;
         match val {
-            OpenTeamSettingsPage => "Open Team Settings",
+            OpenTeamSettingsPage => "打开团队设置",
             ViewPlans { .. } => "View Plans",
             ManageBilling { .. } => "Manage Billing",
             _ => "Unknown reason",
@@ -2074,8 +2073,7 @@ impl DriveIndex {
     }
 
     fn render_team_space_zero_state(&self, appearance: &Appearance) -> Box<dyn Element> {
-        let hint_text =
-            "Drag or move a personal workflow or notebook here to share it with your team.";
+        let hint_text = "将个人工作流或 Notebook 拖到这里或移动到这里，以与团队共享。";
         let zero_state_info = Container::new(
             appearance
                 .ui_builder()
@@ -4440,7 +4438,7 @@ impl DriveIndex {
                 if let Some(object) = object {
                     if let Some(object_link) = object.object_link() {
                         menu_items.push(
-                            MenuItemFields::new("Copy link")
+                            MenuItemFields::new("复制链接")
                                 .with_on_select_action(DriveIndexAction::CopyObjectLinkToClipboard(
                                     object_link,
                                 ))
@@ -4449,7 +4447,7 @@ impl DriveIndex {
                         );
                         if editability.can_edit() {
                             menu_items.push(
-                                MenuItemFields::new("Share")
+                                MenuItemFields::new("共享")
                                     .with_on_select_action(DriveIndexAction::ToggleShareDialog {
                                         warp_drive_item_id: *warp_drive_item_id,
                                     })
@@ -4577,9 +4575,9 @@ impl DriveIndex {
                         let workflow: Option<&CloudWorkflow> = object.into();
                         let workflow = workflow.expect("Object is workflow");
                         let label = if workflow.model().data.is_agent_mode_workflow() {
-                            "Copy prompt"
+                            "复制提示"
                         } else {
-                            "Copy workflow text"
+                            "复制工作流文本"
                         };
                         menu_items.push(
                             MenuItemFields::new(label)
@@ -4591,7 +4589,7 @@ impl DriveIndex {
                         );
                         if workflow.model().data.is_agent_mode_workflow() {
                             menu_items.push(
-                                MenuItemFields::new("Copy id")
+                                MenuItemFields::new("复制 ID")
                                     .with_on_select_action(DriveIndexAction::CopyWorkflowId(
                                         *cloud_object_type_and_id,
                                     ))
@@ -4604,7 +4602,7 @@ impl DriveIndex {
                         JsonObjectType::EnvVarCollection,
                     )) => {
                         menu_items.push(
-                            MenuItemFields::new("Copy variables")
+                            MenuItemFields::new("复制变量")
                                 .with_on_select_action(DriveIndexAction::CopyObjectToClipboard(
                                     *cloud_object_type_and_id,
                                 ))
@@ -4668,7 +4666,7 @@ impl DriveIndex {
                     )) => {
                         if let Some(object_link) = object.object_link() {
                             menu_items.push(
-                                MenuItemFields::new("Copy link")
+                                MenuItemFields::new("复制链接")
                                     .with_on_select_action(
                                         DriveIndexAction::CopyObjectLinkToClipboard(object_link),
                                     )
@@ -4678,7 +4676,7 @@ impl DriveIndex {
                         }
                         if editability.can_edit() {
                             menu_items.push(
-                                MenuItemFields::new("Share")
+                                MenuItemFields::new("共享")
                                     .with_on_select_action(DriveIndexAction::ToggleShareDialog {
                                         warp_drive_item_id: *warp_drive_item_id,
                                     })
@@ -4696,7 +4694,7 @@ impl DriveIndex {
                             if let Some(object_link) = object.object_link() {
                                 if let Ok(url) = Url::parse(&object_link) {
                                     menu_items.push(
-                                        MenuItemFields::new("Open on Desktop")
+                                        MenuItemFields::new("在桌面版中打开")
                                             .with_on_select_action(
                                                 DriveIndexAction::OpenObjectLinkOnDesktop(url),
                                             )
@@ -4773,7 +4771,7 @@ impl DriveIndex {
         prefer_open: bool,
     ) -> MenuItemFields<DriveIndexAction> {
         if (FeatureFlag::SharedWithMe.is_enabled() && !editability.can_edit()) || prefer_open {
-            MenuItemFields::new("Open").with_icon(Icon::Eye)
+            MenuItemFields::new("打开").with_icon(Icon::Eye)
         } else {
             MenuItemFields::new("Edit").with_icon(Icon::Rename)
         }
@@ -4830,7 +4828,7 @@ impl DriveIndex {
             }
             if !FeatureFlag::SharedWithMe.is_enabled() || access_level.can_delete() {
                 menu_items.push(
-                    MenuItemFields::new("Delete forever")
+                    MenuItemFields::new("永久删除")
                         .with_on_select_action(DriveIndexAction::DeleteObject {
                             cloud_object_type_and_id: *cloud_object_type_and_id,
                         })
@@ -4874,7 +4872,7 @@ impl DriveIndex {
         if self.auth_state.is_anonymous_or_logged_out() {
             AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                 auth_manager.attempt_login_gated_feature(
-                    "Share Object",
+                    "共享对象",
                     AuthViewVariant::ShareRequirementCloseable,
                     ctx,
                 )

@@ -120,11 +120,11 @@ impl CliAgentPluginManager for ClaudeCodePluginManager {
     }
 
     fn install_success_message(&self) -> &'static str {
-        "Warp plugin installed. Please run /reload-plugins to activate."
+        "Warp 插件已安装。请运行 /reload-plugins 以激活。"
     }
 
     fn update_success_message(&self) -> &'static str {
-        "Warp plugin updated. Please run /reload-plugins to activate."
+        "Warp 插件已更新。请运行 /reload-plugins 以激活。"
     }
 
     fn install_instructions(&self) -> &'static PluginInstructions {

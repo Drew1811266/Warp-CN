@@ -230,9 +230,9 @@ impl ExportManager {
         if is_bulk && self.exports.is_empty() {
             ToastStack::handle(ctx).update(ctx, move |toast_stack, ctx| {
                 let link_label = if cfg!(target_os = "macos") {
-                    "Open in Finder"
+                    "在 Finder 中打开"
                 } else {
-                    "Open in folder"
+                    "在文件夹中打开"
                 };
 
                 let mut toast_link = ToastLink::new(link_label.to_string());
@@ -398,9 +398,9 @@ impl ExportManager {
                 };
 
                 let link_label = if cfg!(target_os = "macos") {
-                    "Open in Finder"
+                    "在 Finder 中打开"
                 } else {
-                    "Open in folder"
+                    "在文件夹中打开"
                 };
 
                 toast_stack.add_ephemeral_toast(

@@ -36,13 +36,12 @@ const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_BORDER_RADIUS: f32 = 4.;
 const BORDER_WIDTH: f32 = 1.;
 
-const MODAL_SUBHEADER: &str =
-    "Automatically generate a theme based on extracted colors from an image (.png, .jpg).";
-const IMAGE_PICKER_BUTTON_PRE_SELECT_TEXT: &str = "Select an image";
-const IMAGE_PICKER_BUTTON_SELECTING_TEXT: &str = "Selecting image...";
-const IMAGE_PICKER_BUTTON_POST_SELECT_TEXT: &str = "Select a new image";
-const CANCEL_BUTTON_TEXT: &str = "Cancel";
-const CREATE_BUTTON_TEXT: &str = "Create theme";
+const MODAL_SUBHEADER: &str = "根据图片（.png、.jpg）中提取的颜色自动生成主题。";
+const IMAGE_PICKER_BUTTON_PRE_SELECT_TEXT: &str = "选择图片";
+const IMAGE_PICKER_BUTTON_SELECTING_TEXT: &str = "正在选择图片...";
+const IMAGE_PICKER_BUTTON_POST_SELECT_TEXT: &str = "选择新图片";
+const CANCEL_BUTTON_TEXT: &str = "取消";
+const CREATE_BUTTON_TEXT: &str = "创建主题";
 
 #[derive(Default)]
 struct MouseStateHandles {
@@ -175,11 +174,7 @@ impl ThemeCreatorBody {
                 .and_then(|extension| extension.to_str());
 
             let Some(image_extension) = image_extension else {
-                self.send_error_toast(
-                    "Failed to process selected image. Please try again with a different image."
-                        .to_string(),
-                    ctx,
-                );
+                self.send_error_toast("无法处理所选图片。请换一张图片后重试。".to_string(), ctx);
                 return;
             };
 
@@ -212,7 +207,7 @@ impl ThemeCreatorBody {
             #[cfg(not(feature = "local_fs"))]
             log::warn!("Tried to save theme without a local filesystem.");
             if errored {
-                self.send_error_toast("Something went wrong".to_string(), ctx);
+                self.send_error_toast("出了点问题".to_string(), ctx);
             }
         }
     }
@@ -260,25 +255,23 @@ impl ThemeCreatorBody {
 
         ctx.spawn(
             InMemoryThemeOptions::new(file_stem_string.clone(), path.clone()),
-            move |theme_creator_body, theme_options, ctx| {
-                match theme_options {
-                    Ok(theme_options) => {
-                        AppearanceManager::handle(ctx).update(ctx, |appearance_manager, ctx| {
-                            appearance_manager.clear_transient_theme(ctx);
-                        });
+            move |theme_creator_body, theme_options, ctx| match theme_options {
+                Ok(theme_options) => {
+                    AppearanceManager::handle(ctx).update(ctx, |appearance_manager, ctx| {
+                        appearance_manager.clear_transient_theme(ctx);
+                    });
 
-                        theme_creator_body.theme_options = Some(theme_options);
-                        theme_creator_body.editor.update(ctx, |editor, ctx| {
-                            editor.set_buffer_text(&file_stem_string, ctx);
-                        });
-                        theme_creator_body.image_state = ThemeCreatorImageState::Uploaded;
-                    },
-                    Err(e) => {
-                        theme_creator_body.send_error_toast(
-                            format!("Failed to process selected image due to error: {e}. Please try again with a different image."),
-                            ctx,
-                        );
-                    }
+                    theme_creator_body.theme_options = Some(theme_options);
+                    theme_creator_body.editor.update(ctx, |editor, ctx| {
+                        editor.set_buffer_text(&file_stem_string, ctx);
+                    });
+                    theme_creator_body.image_state = ThemeCreatorImageState::Uploaded;
+                }
+                Err(e) => {
+                    theme_creator_body.send_error_toast(
+                        format!("由于错误 {e}，无法处理所选图片。请换一张图片后重试。"),
+                        ctx,
+                    );
                 }
             },
         );
@@ -446,7 +439,7 @@ impl View for ThemeCreatorBody {
         if let Some(theme_options) = &self.theme_options {
             flex.add_child(
                 Container::new(
-                    Text::new_inline("Theme name", appearance.ui_font_family(), 14.)
+                    Text::new_inline("主题名称", appearance.ui_font_family(), 14.)
                         .with_color(appearance.theme().active_ui_text_color().into())
                         .finish(),
                 )
@@ -475,7 +468,7 @@ impl View for ThemeCreatorBody {
 
             flex.add_child(
                 Container::new(
-                    Text::new_inline("Background color", appearance.ui_font_family(), 14.)
+                    Text::new_inline("背景颜色", appearance.ui_font_family(), 14.)
                         .with_color(appearance.theme().active_ui_text_color().into())
                         .finish(),
                 )
