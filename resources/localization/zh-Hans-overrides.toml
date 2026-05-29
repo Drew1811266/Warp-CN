@@ -11733,3 +11733,18 @@ target = "自动运行登录命令"
 path = "app/src/settings_view/ai_page.rs"
 source = "When enabled, the login command will run automatically when AWS Bedrock credentials expire."
 target = "启用后，当 AWS Bedrock 凭据过期时会自动运行登录命令。"
+
+[[replace]]
+path = "app/src/terminal/input.rs"
+source = "Search queries to rewind to"
+target = "搜索要回退到的查询"
+
+[[replace]]
+path = "app/src/terminal/input/rewind/search_item.rs"
+source = "Current state (no rewind)"
+target = "当前状态（不回退）"
+
+[[replace]]
+path = "app/src/terminal/view/ambient_agent/delete_auth_secret_confirmation_dialog.rs"
+source = "Are you sure you want to delete {}? This action cannot be undone. Any agents or environments referencing this secret will no longer have access to it."
+target = "确定要删除 {} 吗？此操作无法撤销。任何引用此密钥的 Agent 或环境都将无法再访问它。"

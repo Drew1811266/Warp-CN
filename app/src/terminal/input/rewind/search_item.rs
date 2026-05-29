@@ -218,7 +218,7 @@ impl SearchItem for RewindSearchItem {
 
     fn accessibility_label(&self) -> String {
         if self.is_current {
-            "Current state (no rewind)".to_string()
+            "当前状态（不回退）".to_string()
         } else if self.has_code_changes() {
             format!(
                 "Rewind to: {} (+{} -{})",
