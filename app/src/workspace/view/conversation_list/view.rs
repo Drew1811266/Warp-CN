@@ -878,9 +878,7 @@ impl TypedActionView for ConversationListView {
                 if !conversation_is_done {
                     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
-                            DismissibleToast::error(
-                                "Conversations cannot be deleted while in progress.".to_string(),
-                            ),
+                            DismissibleToast::error("进行中的对话无法删除。".to_string()),
                             window_id,
                             ctx,
                         );
@@ -894,7 +892,7 @@ impl TypedActionView for ConversationListView {
                     .as_ref(ctx)
                     .get_item_by_id(&id, ctx)
                     .map(|entry| entry.display.title)
-                    .unwrap_or_else(|| "Conversation".to_string());
+                    .unwrap_or_else(|| "对话".to_string());
                 ctx.emit(Event::ShowDeleteConfirmationDialog {
                     conversation_id: *conversation_id,
                     conversation_title,
@@ -932,14 +930,13 @@ impl TypedActionView for ConversationListView {
                         })
                         .with_disabled(!entry.capabilities.can_delete);
                     if !entry.capabilities.can_delete {
-                        delete_item =
-                            delete_item.with_tooltip("This conversation cannot be deleted");
+                        delete_item = delete_item.with_tooltip("此对话无法删除");
                     }
 
                     // Only show share item if the conversation is shareable
                     let share_item = if entry.capabilities.can_share {
                         Some(
-                            MenuItemFields::new("Share conversation")
+                            MenuItemFields::new("共享对话")
                                 .with_on_select_action(
                                     ConversationListViewAction::OpenShareDialog { conversation_id },
                                 )
@@ -953,7 +950,7 @@ impl TypedActionView for ConversationListView {
                         // Forking from a closed ambient agent conversation is not supported at this point.
                         if entry.capabilities.can_fork_locally {
                             Some([
-                                MenuItemFields::new("Fork in new pane")
+                                MenuItemFields::new("在新窗格中 fork")
                                     .with_on_select_action(
                                         ConversationListViewAction::ForkConversation {
                                             conversation_id,
@@ -961,7 +958,7 @@ impl TypedActionView for ConversationListView {
                                         },
                                     )
                                     .into_item(),
-                                MenuItemFields::new("Fork in new tab")
+                                MenuItemFields::new("在新标签页中 fork")
                                     .with_on_select_action(
                                         ConversationListViewAction::ForkConversation {
                                             conversation_id,
@@ -1040,10 +1037,7 @@ impl TypedActionView for ConversationListView {
                         let window_id = ctx.window_id();
                         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                             toast_stack.add_ephemeral_toast(
-                                DismissibleToast::error(
-                                    "Conversations cannot be deleted while in progress."
-                                        .to_string(),
-                                ),
+                                DismissibleToast::error("进行中的对话无法删除。".to_string()),
                                 window_id,
                                 ctx,
                             );
