@@ -342,6 +342,75 @@ TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open
 - 继续处理 Appearance 中确认可见的控件文案；保留主题名、settings search tag、占位符和示例命令。
 - 继续扩展账号、云端、权限、CLI 安装、共享和破坏性确认框路径。
 
+## 7.1 第二阶段 Round 2 执行结果
+
+执行时间：2026-05-30。
+
+Round 2 是第二阶段第一轮之后的下一组可审查切片，目标是继续降低高可见路径中的英文残留，同时保持搜索关键词、动态价格、倍率和示例值不被误翻译。
+
+| 任务 | 结果 | 证据 |
+| --- | --- | --- |
+| Round 2 实施计划 | 已完成 | `05b719f4 docs: plan phase 2 round 2 zh-Hans localization` |
+| Appearance 命令面板动作标签 | 已完成 | `81672827 feat: localize appearance command actions` |
+| 会话列表菜单和删除 toast | 已完成 | `25d71e8c feat: localize conversation actions` |
+| 云端 Agent 容量弹窗 | 已完成 | `4c31e506 feat: localize cloud agent capacity modal` |
+| AWS 凭据错误和环境删除确认框 | 已完成 | `43613337 feat: localize credential and environment dialogs` |
+| 发布命令行审计 | 已完成 | dry-run、coverage、fmt、diff、py_compile、cargo check、cargo test 和 bundle gate 均通过 |
+| GUI 自动冒烟 | manual gate | `WarpOss` 进程和 `terminal-server` 进程可启动，但 Computer Use 读取窗口状态超时 |
+
+Round 2 最终 dry-run：
+
+```text
+entries: 2400
+files: 176
+already_applied: 2385
+would_change: 0
+missing: 0
+```
+
+Round 2 最终覆盖率快照：
+
+| 预设 | 已覆盖 | 候选 | 覆盖率 |
+| --- | ---: | ---: | ---: |
+| `onboarding` | 266 | 55 | 82.9% |
+| `workspace` | 495 | 475 | 51.0% |
+| `search` | 267 | 40 | 87.0% |
+| `settings` | 1163 | 867 | 57.3% |
+| `modals` | 573 | 5865 | 8.9% |
+| `release` | 2642 | 7281 | 26.6% |
+
+Round 2 命令行验证已通过：
+
+```bash
+python3 script/zh_apply_localization.py --dry-run --summary
+python3 script/zh_localization_inventory.py --preset onboarding --coverage
+python3 script/zh_localization_inventory.py --preset workspace --coverage
+python3 script/zh_localization_inventory.py --preset search --coverage
+python3 script/zh_localization_inventory.py --preset settings --coverage
+python3 script/zh_localization_inventory.py --preset modals --coverage
+python3 script/zh_localization_inventory.py --preset release --coverage
+cargo fmt --check
+git diff --check
+python3 -m py_compile script/zh_apply_localization.py script/zh_localization_inventory.py
+cargo check -p warp
+cargo test -p warp_search_core
+cargo test -p warp command_palette
+TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open
+```
+
+Round 2 保留项：
+
+- `dim inactive panes`、`focus follows mouse`、`jump to bottom of block button` 同时出现在 Appearance 命令动作和 settings search keyword 中；当前清单按文件做精确替换，无法只替换 UI action 而不影响搜索关键词，因此本轮保留并记录为后续需要更细粒度替换能力的任务。
+- 云端 Agent 容量弹窗中的 `${price}/month`、`2x`、`5x` 保留原文，因为它们是动态价格和倍率片段。
+- 主题名、示例 token、配置 key、命令语法继续保留原文。
+
+Round 2 合理性复盘：
+
+- 覆盖面集中在用户会直接看到的动作、toast、modal 和错误提示，符合第二阶段真实用户路径优先原则。
+- 每个切片都先 dry-run，再应用，再用覆盖率、字符串检查、格式检查和 `cargo check -p warp` 审核后提交。
+- 没有为了提高覆盖率翻译 settings search tag、动态价格、倍率、主题名或示例值。
+- GUI 自动化仍受本机窗口读取限制影响，因此没有声称这些路径已经完成视觉验收，而是继续作为 manual gate。
+
 ## 8. 风险与缓解
 
 | 风险 | 影响 | 缓解 |
