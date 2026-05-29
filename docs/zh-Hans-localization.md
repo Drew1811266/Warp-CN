@@ -17,16 +17,16 @@ The script applies exact replacements inside Rust double-quoted strings. It is i
 
 Last verified release audit: 2026-05-29.
 
-- Manifest entries: 2260.
+- Manifest entries: 2311.
 - Covered areas: onboarding/auth, workspace shell, search and command entry points, settings core pages, advanced settings pages, common modals/toasts, Warp Drive surfaces, tab configs, themes, terminal sharing surfaces, and Agent management/input panels.
-- Dry-run summary: `entries: 2260`, `files: 166`, `already_applied: 2245`, `would_change: 0`, `missing: 0`.
+- Dry-run summary: `entries: 2311`, `files: 167`, `already_applied: 2296`, `would_change: 0`, `missing: 0`.
 - Coverage snapshot:
   - `onboarding`: 266 covered, 92 candidates, 74.3%.
   - `workspace`: 451 covered, 529 candidates, 46.0%.
-  - `search`: 216 covered, 52 candidates, 80.6%.
+  - `search`: 267 covered, 63 candidates, 80.9%.
   - `settings`: 1126 covered, 946 candidates, 54.3%.
   - `modals`: 560 covered, 6278 candidates, 8.2%.
-  - `release`: 2497 covered, 7871 candidates, 24.1%.
+  - `release`: 2548 covered, 7882 candidates, 24.4%.
 - Package note: the app crate package is currently named `warp`; the older checklist label `cargo check -p app` fails in this workspace because no package named `app` exists.
 - Passed validation:
   - `python3 script/zh_apply_localization.py --dry-run --summary`
@@ -40,10 +40,13 @@ Last verified release audit: 2026-05-29.
   - `git diff --check`
   - `cargo check -p onboarding`
   - `cargo check -p warp`
+  - `cargo test -p warp_search_core`
+  - `cargo test -p warp command_palette`
   - `TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open`
 - Recorded failures / manual gates:
   - `cargo check -p app` fails with `error: package ID specification 'app' did not match any packages`; use `cargo check -p warp` for the current app package.
-  - Interactive `./script/run` smoke remains a manual release gate; the non-interactive bundle gate produced `target/debug/bundle/osx/WarpOss.app`.
+  - GUI smoke with `target/debug/bundle/osx/WarpOss.app` verified the terminal-only workspace and command palette filter chips (`文件`, `操作`, `会话`, `启动配置`).
+  - Interactive login/account smoke remains a manual release gate; the non-interactive bundle gate produced `target/debug/bundle/osx/WarpOss.app`.
 
 ## Apply translations after syncing upstream
 
@@ -85,7 +88,7 @@ python3 script/zh_localization_inventory.py --preset modals --coverage
 python3 script/zh_localization_inventory.py --preset release --coverage
 ```
 
-`release` is an aggregate preset across the named high-visibility source roots. Keep the per-surface commands in release notes so regressions remain easy to locate.
+`search` includes the app search surfaces and the shared `warp_search_core` crate, where common filter chip labels and search placeholders live. `release` is an aggregate preset across the named high-visibility source roots. Keep the per-surface commands in release notes so regressions remain easy to locate.
 
 ## Local release checklist
 
@@ -104,6 +107,8 @@ git diff --check
 cargo check -p onboarding
 cargo check -p app
 cargo check -p warp
+cargo test -p warp_search_core
+cargo test -p warp command_palette
 TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open
 ./script/run
 ```
@@ -112,7 +117,7 @@ Current workspace notes:
 
 - `cargo check -p app` is retained because older planning docs used `app` as the app-crate label. In the current workspace the package is named `warp`; expect `cargo check -p app` to fail with `package ID specification 'app' did not match any packages`.
 - Use `TERM=xterm-256color ./script/run --dont-open` for a non-interactive bundle/build check. Without that `TERM`, `cargo-bundle` may panic while printing colored status output with `Error(Term(ColorOutOfRange), ...)`.
-- Use `./script/run` for the interactive app smoke pass after the bundle gate is green.
+- Use `./script/run` or `open -n target/debug/bundle/osx/WarpOss.app` for the interactive app smoke pass after the bundle gate is green.
 
 2026-05-29 recorded failure output:
 

@@ -2985,6 +2985,261 @@ source = "No results found"
 target = "未找到结果"
 
 [[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search history"
+target = "搜索历史记录"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search workflows"
+target = "搜索工作流"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search prompts"
+target = "搜索提示词"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search notebooks"
+target = "搜索笔记本"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search plans"
+target = "搜索计划"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "e.g. replace string in file"
+target = "例如：替换文件中的字符串"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search actions"
+target = "搜索操作"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search sessions"
+target = "搜索会话"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search tabs"
+target = "搜索标签页"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search conversations"
+target = "搜索对话"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search launch configurations"
+target = "搜索启动配置"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search objects in drive"
+target = "搜索 Warp Drive 对象"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search environment variables"
+target = "搜索环境变量"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search prompt history"
+target = "搜索提示词历史"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search files"
+target = "搜索文件"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search commands"
+target = "搜索命令"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search blocks"
+target = "搜索块"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search code symbols"
+target = "搜索代码符号"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search AI rules"
+target = "搜索 AI 规则"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search code repos"
+target = "搜索代码仓库"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search diff sets"
+target = "搜索差异集"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search static slash commands"
+target = "搜索静态斜杠命令"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search skills"
+target = "搜索技能"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search base models"
+target = "搜索基础模型"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search full terminal use models"
+target = "搜索完整终端使用模型"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "Search conversations in current directory"
+target = "搜索当前目录中的对话"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "history"
+target = "历史记录"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "workflows"
+target = "工作流"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "prompts"
+target = "提示词"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "notebooks"
+target = "笔记本"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "plans"
+target = "计划"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "AI command suggestions"
+target = "AI 命令建议"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "actions"
+target = "操作"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "sessions"
+target = "会话"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "tabs"
+target = "标签页"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "conversations"
+target = "对话"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "launch configurations"
+target = "启动配置"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "environment variables"
+target = "环境变量"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "prompt history"
+target = "提示词历史"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "files"
+target = "文件"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "commands"
+target = "命令"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "blocks"
+target = "块"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "code"
+target = "代码"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "rules"
+target = "规则"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "repos"
+target = "仓库"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "diff sets"
+target = "差异集"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "slash commands"
+target = "斜杠命令"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "skills"
+target = "技能"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "base models"
+target = "基础模型"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "full terminal use models"
+target = "完整终端使用模型"
+
+[[replace]]
+path = "crates/warp_search_core/src/data_source.rs"
+source = "current directory conversations"
+target = "当前目录对话"
+
+[[replace]]
 path = "app/src/search/command_palette/view.rs"
 source = "Cannot switch conversations while agent is monitoring a command."
 target = "Agent 正在监控命令时无法切换对话。"
