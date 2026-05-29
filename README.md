@@ -23,8 +23,8 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 
 | 项目 | 状态 |
 | --- | --- |
-| 翻译清单条目 | `2311` |
-| 已纳入清单的源码文件 | `167` |
+| 翻译清单条目 | `2349` |
+| 已纳入清单的源码文件 | `173` |
 | dry-run 校验 | `missing: 0` |
 | 主要构建包 | `warp` |
 | 可运行 bundle | `target/debug/bundle/osx/WarpOss.app` |
@@ -34,18 +34,20 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 
 | 预设 | 已覆盖 | 候选 | 覆盖率 |
 | --- | ---: | ---: | ---: |
-| `onboarding` | 266 | 92 | 74.3% |
-| `workspace` | 451 | 529 | 46.0% |
-| `search` | 267 | 63 | 80.9% |
-| `settings` | 1126 | 946 | 54.3% |
-| `modals` | 560 | 6278 | 8.2% |
-| `release` | 2548 | 7882 | 24.4% |
+| `onboarding` | 266 | 55 | 82.9% |
+| `workspace` | 474 | 496 | 48.9% |
+| `search` | 267 | 40 | 87.0% |
+| `settings` | 1142 | 887 | 56.3% |
+| `modals` | 563 | 5875 | 8.7% |
+| `release` | 2590 | 7332 | 26.1% |
 
 这些数字来自仓库内的本地化 inventory 脚本。覆盖率不是“整仓中文化百分比”，而是对选定高可见源代码区域中“可能用户可见字符串”的粗略审计指标。
 
 ## 已汉化范围
 
-第一阶段已完成 M0-M8 里程碑，重点覆盖以下路径：
+第一阶段已完成 M0-M8 里程碑。第二阶段第一轮深度覆盖也已完成，重点把审计口径降噪，并补齐 HOA onboarding、AI 设置深层路径、BYO API keys、AWS Bedrock、终端 rewind 和 auth-secret 删除确认文案。
+
+当前重点覆盖以下路径：
 
 - 首次启动和 onboarding 流程。
 - 登录、AI 启用/禁用、匿名使用提示。
@@ -55,13 +57,18 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 - 主题、标签页配置、Warp Drive、共享会话等常见模态框。
 - Agent 管理、Agent 输入面板、常见 toast 和确认弹窗。
 - 部分终端共享、会话、工作流、Notebook、环境变量相关文本。
+- HOA onboarding、垂直标签页介绍、Agent inbox 介绍和 tab config 引导。
+- AI 设置中的 Build 方案提示、自带 API keys、AWS Bedrock 凭据和登录命令设置。
+- 终端 rewind 搜索提示和 auth-secret 删除确认说明。
 
-GUI 冒烟测试已确认：
+历史 GUI 冒烟测试已确认：
 
 - 终端-only 路径可以进入中文工作区。
 - 菜单栏显示中文：`文件`、`编辑`、`视图`、`标签页`、`块`、`窗口`、`帮助` 等。
 - 全局搜索占位符显示中文。
 - 命令面板占位符和筛选标签显示中文，例如 `文件`、`操作`、`会话`、`启动配置`。
+
+第二阶段本机自动 GUI 冒烟已尝试，但当前 `WarpOss` 进程启动后窗口自动化读取超时，仍需要在交互式桌面会话中人工复验 HOA onboarding、AI 设置、rewind 和 auth-secret 确认框。
 
 ## 仍未完整覆盖的范围
 
@@ -126,9 +133,9 @@ python3 script/zh_apply_localization.py --dry-run --summary
 期望输出类似：
 
 ```text
-entries: 2311
-files: 167
-already_applied: 2296
+entries: 2349
+files: 173
+already_applied: 2334
 would_change: 0
 missing: 0
 ```
@@ -184,7 +191,6 @@ python3 script/zh_localization_inventory.py --preset modals --coverage
 python3 script/zh_localization_inventory.py --preset release --coverage
 cargo fmt --check
 git diff --check
-cargo check -p onboarding
 cargo check -p warp
 cargo test -p warp_search_core
 cargo test -p warp command_palette
@@ -287,7 +293,7 @@ cargo check -p warp
 
 ## 里程碑回顾
 
-本轮 M0-M8 已完成：
+第一阶段 M0-M8 已完成：
 
 | 里程碑 | 内容 |
 | --- | --- |
@@ -301,7 +307,19 @@ cargo check -p warp
 | M7 | 扩展主题、标签页配置、Drive、共享会话、slash commands |
 | M8 | 完成 release checklist、bundle 验证、GUI 冒烟和命令面板筛选标签修复 |
 
-详细执行记录见 [`docs/zh-Hans-localization.md`](docs/zh-Hans-localization.md)。
+第二阶段第一轮已完成：
+
+| 任务 | 内容 |
+| --- | --- |
+| P2-M0 | 编写第二阶段任务规划和详细实施计划 |
+| P2-M1 | 降噪 inventory 统计口径，过滤 telemetry、快捷键、搜索 tag、占位符和内部 id |
+| P2-M2 | 汉化 HOA onboarding、垂直标签页、Agent inbox 和 tab config 引导 |
+| P2-M3 | 汉化 AI 设置深层路径、BYO API keys 和 AWS Bedrock 凭据设置 |
+| P2-M4 | 审查 Appearance 候选；剩余项主要是搜索 tag、主题名和占位符，暂不替换 |
+| P2-M5 | 汉化终端 rewind 搜索提示和 auth-secret 删除确认框 |
+| P2-M6 | 完成命令行 release audit，GUI 自动 smoke 记录为 manual gate |
+
+详细执行记录见 [`docs/zh-Hans-localization.md`](docs/zh-Hans-localization.md) 和 [`docs/zh-Hans-localization-phase2.md`](docs/zh-Hans-localization-phase2.md)。
 
 ## 常见问题
 
