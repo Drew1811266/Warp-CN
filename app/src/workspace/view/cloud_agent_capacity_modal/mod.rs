@@ -126,12 +126,12 @@ impl CloudAgentCapacityModal {
         let neutral_bg = blended_colors::neutral_1(theme);
         let (title_text, mut explanation_text) = match self.variant {
             CloudAgentCapacityModalVariant::ConcurrentLimit => (
-                "Concurrent cloud agent limit reached",
-                "This cloud run is queued because your team has reached the maximum number of concurrent cloud agents. It will start automatically when another cloud run finishes.".to_string(),
+                "已达到并发云端 Agent 上限",
+                "由于你的团队已达到并发云端 Agent 数量上限，此云端运行已排队。其他云端运行完成后，它会自动开始。".to_string(),
             ),
             CloudAgentCapacityModalVariant::OutOfCredits => (
-                "You're out of AI credits",
-                "This cloud run stopped because your team has used all available AI credits for the current billing period.".to_string(),
+                "AI 点数已用完",
+                "由于你的团队已用完当前计费周期内的全部 AI 点数，此云端运行已停止。".to_string(),
             ),
         };
 
@@ -147,11 +147,9 @@ impl CloudAgentCapacityModal {
         if can_upgrade {
             let upgrade_suffix = match self.variant {
                 CloudAgentCapacityModalVariant::ConcurrentLimit => {
-                    " Upgrade your plan for more concurrent cloud agents."
+                    "升级方案以获得更多并发云端 Agent。"
                 }
-                CloudAgentCapacityModalVariant::OutOfCredits => {
-                    " Upgrade your plan to continue running cloud agents."
-                }
+                CloudAgentCapacityModalVariant::OutOfCredits => "升级方案以继续运行云端 Agent。",
             };
             explanation_text.push_str(upgrade_suffix);
         }
@@ -186,7 +184,7 @@ impl CloudAgentCapacityModal {
                         "Paid plans start at ${price}/month and include everything in your free trial plus:"
                     )
                 } else {
-                    "Paid plans include everything in your free trial plus:".to_string()
+                    "付费方案包含免费试用中的所有内容，并额外提供：".to_string()
                 }
             } else if let Some(pricing) = plan_pricing {
                 let price = pricing.yearly_plan_price_per_month_usd_cents / 100;
@@ -194,7 +192,7 @@ impl CloudAgentCapacityModal {
                     "The Business plan starts at ${price}/month and includes everything on your current plan plus:"
                 )
             } else {
-                "The Business plan includes everything on your current plan plus:".to_string()
+                "Business 方案包含当前方案中的所有内容，并额外提供：".to_string()
             };
 
             let pricing = FormattedTextElement::new(
@@ -214,14 +212,14 @@ impl CloudAgentCapacityModal {
             {
                 format!("{} AI credits per month", limit.separate_with_commas())
             } else {
-                "Extended AI credits per month".to_string()
+                "每月扩展 AI 点数".to_string()
             };
 
             // Benefits list based on plan type
             let mut benefits = vec![
                 format!("{} the number of concurrent cloud agents", agent_multiplier),
                 credits_text,
-                "Bring your own API key".to_string(),
+                "自带 API key".to_string(),
             ];
             for extra in extra_benefits {
                 benefits.push(extra.to_string());
@@ -276,9 +274,9 @@ impl CloudAgentCapacityModal {
         let content = content.finish();
         let cta_button = if show_cta {
             let cta_button_label = if can_upgrade {
-                "Upgrade plan"
+                "升级方案"
             } else {
-                "Open billing"
+                "打开账单"
             };
             Some(
                 appearance

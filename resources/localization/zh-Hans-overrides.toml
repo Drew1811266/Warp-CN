@@ -11873,3 +11873,63 @@ target = "删除对话失败。请退出 Agent 视图后重试。"
 path = "app/src/workspace/view.rs"
 source = "Conversation deleted"
 target = "对话已删除"
+
+[[replace]]
+path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
+source = "Concurrent cloud agent limit reached"
+target = "已达到并发云端 Agent 上限"
+
+[[replace]]
+path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
+source = "This cloud run is queued because your team has reached the maximum number of concurrent cloud agents. It will start automatically when another cloud run finishes."
+target = "由于你的团队已达到并发云端 Agent 数量上限，此云端运行已排队。其他云端运行完成后，它会自动开始。"
+
+[[replace]]
+path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
+source = "You're out of AI credits"
+target = "AI 点数已用完"
+
+[[replace]]
+path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
+source = "This cloud run stopped because your team has used all available AI credits for the current billing period."
+target = "由于你的团队已用完当前计费周期内的全部 AI 点数，此云端运行已停止。"
+
+[[replace]]
+path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
+source = " Upgrade your plan for more concurrent cloud agents."
+target = "升级方案以获得更多并发云端 Agent。"
+
+[[replace]]
+path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
+source = " Upgrade your plan to continue running cloud agents."
+target = "升级方案以继续运行云端 Agent。"
+
+[[replace]]
+path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
+source = "Paid plans include everything in your free trial plus:"
+target = "付费方案包含免费试用中的所有内容，并额外提供："
+
+[[replace]]
+path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
+source = "The Business plan includes everything on your current plan plus:"
+target = "Business 方案包含当前方案中的所有内容，并额外提供："
+
+[[replace]]
+path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
+source = "Extended AI credits per month"
+target = "每月扩展 AI 点数"
+
+[[replace]]
+path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
+source = "Bring your own API key"
+target = "自带 API key"
+
+[[replace]]
+path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
+source = "Upgrade plan"
+target = "升级方案"
+
+[[replace]]
+path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
+source = "Open billing"
+target = "打开账单"
