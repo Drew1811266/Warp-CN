@@ -11933,3 +11933,73 @@ target = "升级方案"
 path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
 source = "Open billing"
 target = "打开账单"
+
+[[replace]]
+path = "app/src/ai/aws_credentials.rs"
+source = "No AWS credentials configured"
+target = "未配置 AWS 凭据"
+
+[[replace]]
+path = "app/src/ai/aws_credentials.rs"
+source = "Failed to load AWS credentials: {msg}"
+target = "无法加载 AWS 凭据：{msg}"
+
+[[replace]]
+path = "app/src/ai/aws_credentials.rs"
+source = "The default AWS profile"
+target = "默认 AWS 配置档"
+
+[[replace]]
+path = "app/src/ai/aws_credentials.rs"
+source = "the default AWS profile"
+target = "默认 AWS 配置档"
+
+[[replace]]
+path = "app/src/ai/aws_credentials.rs"
+source = "AWS credentials were not found for {}. Log in with the AWS CLI or update your AWS credentials configuration, then refresh."
+target = "未找到 {} 的 AWS 凭据。请使用 AWS CLI 登录，或更新你的 AWS 凭据配置后刷新。"
+
+[[replace]]
+path = "app/src/ai/aws_credentials.rs"
+source = "Timed out while loading AWS credentials. Refresh and try again."
+target = "加载 AWS 凭据超时。请刷新后重试。"
+
+[[replace]]
+path = "app/src/ai/aws_credentials.rs"
+source = "{} is invalid or incomplete in your local AWS configuration. Update your AWS profile settings and credentials, then refresh."
+target = "{} 在本地 AWS 配置中无效或不完整。请更新 AWS 配置档设置和凭据后刷新。"
+
+[[replace]]
+path = "app/src/ai/aws_credentials.rs"
+source = "Unable to load AWS credentials from your configured provider. Refresh your AWS login and try again."
+target = "无法从已配置的提供方加载 AWS 凭据。请刷新 AWS 登录后重试。"
+
+[[replace]]
+path = "app/src/ai/aws_credentials.rs"
+source = "Unexpected error while loading AWS credentials. Refresh your AWS login and try again."
+target = "加载 AWS 凭据时发生意外错误。请刷新 AWS 登录后重试。"
+
+[[replace]]
+path = "app/src/ai/aws_credentials.rs"
+source = "Unable to load AWS credentials. Refresh your AWS login and try again."
+target = "无法加载 AWS 凭据。请刷新 AWS 登录后重试。"
+
+[[replace]]
+path = "app/src/settings_view/delete_environment_confirmation_dialog.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/settings_view/delete_environment_confirmation_dialog.rs"
+source = "Delete environment"
+target = "删除环境"
+
+[[replace]]
+path = "app/src/settings_view/delete_environment_confirmation_dialog.rs"
+source = "Are you sure you want to remove the {} environment?"
+target = "确定要移除 {} 环境吗？"
+
+[[replace]]
+path = "app/src/settings_view/delete_environment_confirmation_dialog.rs"
+source = "Delete environment?"
+target = "删除环境？"
