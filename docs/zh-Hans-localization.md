@@ -15,18 +15,18 @@ The script applies exact replacements inside Rust double-quoted strings. It is i
 
 ## Status
 
-Last verified release audit: 2026-05-29.
+Last verified release audit: 2026-05-30.
 
-- Manifest entries: 2349.
-- Covered areas: onboarding/auth, workspace shell, HOA onboarding, search and command entry points, settings core pages, AI settings deep paths, BYO API keys, AWS Bedrock credentials, advanced settings pages, common modals/toasts, Warp Drive surfaces, tab configs, themes, terminal sharing surfaces, rewind labels, auth-secret confirmation dialogs, and Agent management/input panels.
-- Dry-run summary: `entries: 2349`, `files: 173`, `already_applied: 2334`, `would_change: 0`, `missing: 0`.
+- Manifest entries: 2400.
+- Covered areas: onboarding/auth, workspace shell, HOA onboarding, search and command entry points, settings core pages, AI settings deep paths, BYO API keys, AWS Bedrock credentials and user-facing credential errors, Appearance command-palette actions, conversation list actions, cloud agent capacity messaging, environment deletion confirmation, advanced settings pages, common modals/toasts, Warp Drive surfaces, tab configs, themes, terminal sharing surfaces, rewind labels, auth-secret confirmation dialogs, and Agent management/input panels.
+- Dry-run summary: `entries: 2400`, `files: 176`, `already_applied: 2385`, `would_change: 0`, `missing: 0`.
 - Coverage snapshot:
   - `onboarding`: 266 covered, 55 candidates, 82.9%.
-  - `workspace`: 474 covered, 496 candidates, 48.9%.
+  - `workspace`: 495 covered, 475 candidates, 51.0%.
   - `search`: 267 covered, 40 candidates, 87.0%.
-  - `settings`: 1142 covered, 887 candidates, 56.3%.
-  - `modals`: 563 covered, 5875 candidates, 8.7%.
-  - `release`: 2590 covered, 7332 candidates, 26.1%.
+  - `settings`: 1163 covered, 867 candidates, 57.3%.
+  - `modals`: 573 covered, 5865 candidates, 8.9%.
+  - `release`: 2642 covered, 7281 candidates, 26.6%.
 - Package note: the app crate package is currently named `warp`; the older checklist label `cargo check -p app` fails in this workspace because no package named `app` exists.
 - Phase 2 command-line validation passed:
   - `python3 script/zh_apply_localization.py --dry-run --summary`
@@ -47,7 +47,45 @@ Last verified release audit: 2026-05-29.
   - `cargo check -p app` fails with `error: package ID specification 'app' did not match any packages`; use `cargo check -p warp` for the current app package.
   - Historical GUI smoke with `target/debug/bundle/osx/WarpOss.app` verified the terminal-only workspace and command palette filter chips (`文件`, `操作`, `会话`, `启动配置`).
   - Phase 2 GUI smoke was attempted on 2026-05-29. The `WarpOss` process launched, but Computer Use and AppleScript window reads timed out, `open` returned `-1712`, and the captured screenshot was black. Treat HOA onboarding, AI settings deep paths, rewind, and auth-secret confirmation as manual GUI gates until they are verified in an interactive desktop session.
+  - Phase 2 Round 2 GUI smoke was attempted on 2026-05-30. `TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open` built, bundled, prepared resources, and signed `WarpOss.app`; `open -na target/debug/bundle/osx/WarpOss.app` launched `warp-oss` and `terminal-server` processes, but Computer Use window state reads timed out. Treat Appearance command actions, conversation actions, cloud agent capacity modal, AWS credential errors, and environment deletion confirmation as manual GUI gates until verified in an interactive desktop session.
   - Interactive login/account smoke remains a manual release gate; the non-interactive bundle gate produced `target/debug/bundle/osx/WarpOss.app`.
+
+## Phase 2 Round 2 execution record
+
+Executed on 2026-05-30.
+
+| Task | Result | Evidence |
+| --- | --- | --- |
+| Round 2 implementation plan | Complete | `05b719f4 docs: plan phase 2 round 2 zh-Hans localization` |
+| Appearance command-palette actions | Complete | `81672827 feat: localize appearance command actions` |
+| Conversation list actions and delete toasts | Complete | `25d71e8c feat: localize conversation actions` |
+| Cloud agent capacity modal | Complete | `4c31e506 feat: localize cloud agent capacity modal` |
+| AWS credential errors and environment deletion confirmation | Complete | `43613337 feat: localize credential and environment dialogs` |
+
+Round 2 intentionally skipped these strings:
+
+- Appearance strings `dim inactive panes`, `focus follows mouse`, and `jump to bottom of block button`, because they also appear as settings search keyword strings in `app/src/settings_view/appearance_page.rs`; the current manifest applies exact replacements per file, so translating them would also mutate search metadata.
+- Cloud capacity dynamic strings containing `${price}/month`, `2x`, and `5x`, because they combine runtime pricing or multiplier fragments and need UI review before translation.
+- Theme names and example values such as `Aurora`, `Classic 1`, `Glow`, `Warp 1`, `{value}%`, and command/example tokens.
+
+Round 2 command-line validation passed:
+
+```bash
+python3 script/zh_apply_localization.py --dry-run --summary
+python3 script/zh_localization_inventory.py --preset onboarding --coverage
+python3 script/zh_localization_inventory.py --preset workspace --coverage
+python3 script/zh_localization_inventory.py --preset search --coverage
+python3 script/zh_localization_inventory.py --preset settings --coverage
+python3 script/zh_localization_inventory.py --preset modals --coverage
+python3 script/zh_localization_inventory.py --preset release --coverage
+cargo fmt --check
+git diff --check
+python3 -m py_compile script/zh_apply_localization.py script/zh_localization_inventory.py
+cargo check -p warp
+cargo test -p warp_search_core
+cargo test -p warp command_palette
+TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open
+```
 
 ## Apply translations after syncing upstream
 
