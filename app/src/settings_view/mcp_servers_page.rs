@@ -50,7 +50,7 @@ pub enum InstallOrigin {
     Deeplink,
 }
 
-const PAGE_TITLE_TEXT: &str = "MCP Servers";
+const PAGE_TITLE_TEXT: &str = "MCP 服务器";
 #[derive(Debug, Default, Copy, Clone)]
 pub enum MCPServersSettingsPage {
     #[default]
@@ -149,8 +149,8 @@ impl MCPServersSettingsPageView {
         ctx: &mut ViewContext<Self>,
     ) {
         let message = match server_name {
-            Some(name) => format!("Successfully logged out of {name} MCP server"),
-            None => "Successfully logged out of MCP server".to_string(),
+            Some(name) => format!("已成功退出 {name} MCP 服务器登录"),
+            None => "已成功退出 MCP 服务器登录".to_string(),
         };
         match item_id {
             ServerCardItemId::TemplatableMCP(_) => {
@@ -317,7 +317,7 @@ impl MCPServersSettingsPageView {
                 "Ignoring MCP deeplink autoinstall for '{autoinstall_param}': installation modal already open"
             );
             self.add_error_toast(
-                "Finish the current MCP install before opening another install link.".to_string(),
+                "请先完成当前 MCP 安装，再打开另一个安装链接。".to_string(),
                 ctx,
             );
             return;
@@ -332,7 +332,7 @@ impl MCPServersSettingsPageView {
             log::warn!(
                 "Unrecognized autoinstall value '{autoinstall_param}': no matching gallery item found"
             );
-            self.add_error_toast(format!("Unknown MCP server '{autoinstall_param}'"), ctx);
+            self.add_error_toast(format!("未知 MCP 服务器“{autoinstall_param}”"), ctx);
             return;
         };
 

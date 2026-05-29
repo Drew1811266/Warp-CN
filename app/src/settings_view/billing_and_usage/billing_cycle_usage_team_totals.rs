@@ -59,7 +59,7 @@ pub fn build_team_total_card_summaries(
 ) -> Vec<TeamTotalCardSummary> {
     let (overall_segments, overall_credits, overall_cost) = aggregate_segments(entries.iter());
     let mut summaries = vec![TeamTotalCardSummary {
-        title: "Overall usage",
+        title: "总体使用量",
         card_key: "__card_overall__",
         segments: overall_segments,
         total_credits: overall_credits,
@@ -83,7 +83,7 @@ pub fn build_team_total_card_summaries(
                 .filter(|e| e.usage_source == AiCreditsUsageSource::Cloud),
         );
         summaries.push(TeamTotalCardSummary {
-            title: "Local agent usage",
+            title: "本地 Agent 使用量",
             card_key: "__card_local__",
             segments: local_segments,
             total_credits: local_credits,
@@ -91,7 +91,7 @@ pub fn build_team_total_card_summaries(
             limit_cents: None,
         });
         summaries.push(TeamTotalCardSummary {
-            title: "Cloud agent usage",
+            title: "云端 Agent 使用量",
             card_key: "__card_cloud__",
             segments: cloud_segments,
             total_credits: cloud_credits,
@@ -353,7 +353,7 @@ pub fn render_team_totals_block(
 ) -> Box<dyn Element> {
     let mut column = Flex::column().with_cross_axis_alignment(CrossAxisAlignment::Stretch);
     column.add_child(
-        Container::new(render_section_subheader("Team", appearance))
+        Container::new(render_section_subheader("团队", appearance))
             .with_margin_bottom(8.)
             .finish(),
     );

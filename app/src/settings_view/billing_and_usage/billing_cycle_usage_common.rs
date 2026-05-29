@@ -93,24 +93,24 @@ pub fn cost_type_color(cost_type: &AiCreditsUsageAndCostType) -> ColorU {
 
 fn cost_type_label(cost_type: &AiCreditsUsageAndCostType) -> &'static str {
     match cost_type {
-        AiCreditsUsageAndCostType::BaseLimit => "Base",
-        AiCreditsUsageAndCostType::BonusGrant => "Add-ons",
-        AiCreditsUsageAndCostType::Payg => "Pay-as-you-go",
-        AiCreditsUsageAndCostType::AmbientBonusGrant => "Cloud-only",
-        AiCreditsUsageAndCostType::Aggregate => "Combined",
-        AiCreditsUsageAndCostType::Other(_) => "Other",
+        AiCreditsUsageAndCostType::BaseLimit => "基础",
+        AiCreditsUsageAndCostType::BonusGrant => "附加包",
+        AiCreditsUsageAndCostType::Payg => "按量付费",
+        AiCreditsUsageAndCostType::AmbientBonusGrant => "仅云端",
+        AiCreditsUsageAndCostType::Aggregate => "合计",
+        AiCreditsUsageAndCostType::Other(_) => "其他",
     }
 }
 
 fn bucket_label(bucket: &AiCreditsUsageBucket) -> &'static str {
     match bucket {
         AiCreditsUsageBucket::Ai => "AI",
-        AiCreditsUsageBucket::Compute => "Compute",
-        AiCreditsUsageBucket::Platform => "Platform",
-        AiCreditsUsageBucket::SuggestedCodeDiffs => "Suggested code diffs",
-        AiCreditsUsageBucket::Voice => "Voice",
-        AiCreditsUsageBucket::Aggregate => "Total",
-        AiCreditsUsageBucket::Other(_) => "Other",
+        AiCreditsUsageBucket::Compute => "计算",
+        AiCreditsUsageBucket::Platform => "平台",
+        AiCreditsUsageBucket::SuggestedCodeDiffs => "建议的代码差异",
+        AiCreditsUsageBucket::Voice => "语音",
+        AiCreditsUsageBucket::Aggregate => "总计",
+        AiCreditsUsageBucket::Other(_) => "其他",
     }
 }
 
@@ -286,7 +286,7 @@ pub fn render_breakdown_tooltip(
 
     column.add_child(render_tooltip_row(
         /* no swatch on the total row */ None,
-        "Total usage".to_string(),
+        "总使用量".to_string(),
         total_credits,
         total_cost_cents,
         main,
