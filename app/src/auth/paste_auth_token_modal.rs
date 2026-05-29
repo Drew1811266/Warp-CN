@@ -54,7 +54,7 @@ pub fn init(app: &mut AppContext) {
         FixedBinding::custom(
             CustomAction::Paste,
             PasteAuthTokenModalAction::PasteIntoEditor,
-            "Paste",
+            "粘贴",
             id!(PasteAuthTokenModalView::ui_name()),
         ),
         FixedBinding::standard(
@@ -121,7 +121,7 @@ impl PasteAuthTokenModalView {
                 },
                 ctx,
             );
-            editor.set_placeholder_text("Enter auth token", ctx);
+            editor.set_placeholder_text("输入认证令牌", ctx);
             editor
         });
 
@@ -238,15 +238,12 @@ impl View for PasteAuthTokenModalView {
         let input_text_color: ColorU = internal_colors::text_main(theme, input_bg_solid);
         let ui_builder = appearance.ui_builder();
 
-        let title = FormattedTextElement::from_str(
-            "Paste your auth token below",
-            appearance.ui_font_family(),
-            16.,
-        )
-        .with_color(internal_colors::text_main(theme, dialog_surface_solid))
-        .with_weight(Weight::Bold)
-        .with_line_height_ratio(1.25)
-        .finish();
+        let title =
+            FormattedTextElement::from_str("在下方粘贴认证令牌", appearance.ui_font_family(), 16.)
+                .with_color(internal_colors::text_main(theme, dialog_surface_solid))
+                .with_weight(Weight::Bold)
+                .with_line_height_ratio(1.25)
+                .finish();
 
         let close_button = ui_builder
             .close_button(24., self.close_mouse_state.clone())
@@ -266,7 +263,7 @@ impl View for PasteAuthTokenModalView {
 
         let subtitle_color = internal_colors::text_sub(theme, dialog_surface_solid);
         let subtitle = FormattedTextElement::from_str(
-            "Paste your auth token from the browser to get complete login.",
+            "粘贴浏览器中的认证令牌以完成登录。",
             appearance.ui_font_family(),
             14.,
         )
@@ -326,7 +323,7 @@ impl View for PasteAuthTokenModalView {
         let cancel_button = self.cancel_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Cancel".into()),
+                content: button::Content::Label("取消".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -341,7 +338,7 @@ impl View for PasteAuthTokenModalView {
         let continue_button = self.continue_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Continue".into()),
+                content: button::Content::Label("继续".into()),
                 theme: &button::themes::Primary,
                 options: button::Options {
                     keystroke: Some(enter),

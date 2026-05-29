@@ -34,7 +34,7 @@ pub enum ThemePickerSlideEvent {
     SyncWithOsToggled {
         enabled: bool,
     },
-    /// Emitted when the user clicks the "Privacy Settings" link on the terminal
+    /// Emitted when the user clicks the "隐私设置" link on the terminal
     /// intention theme slide. The parent orchestrator is expected to open the
     /// privacy settings (e.g. via a LoginSlideView in privacy-only mode).
     PrivacySettingsRequested,
@@ -48,7 +48,7 @@ pub enum ThemePickerSlideAction {
     ToggleSyncWithOs,
     BackClicked,
     NextClicked,
-    /// Dispatched when the user clicks the "Privacy Settings" link in the
+    /// Dispatched when the user clicks the "隐私设置" link in the
     /// terminal-intention disclaimer block below the theme options.
     PrivacySettingsClicked,
 }
@@ -194,7 +194,7 @@ impl ThemePickerSlide {
     fn render_header_text(&self, appearance: &Appearance) -> Box<dyn Element> {
         let title = appearance
             .ui_builder()
-            .paragraph("Choose a theme")
+            .paragraph("选择主题")
             .with_style(UiComponentStyles {
                 font_size: Some(36.),
                 font_weight: Some(Weight::Medium),
@@ -204,7 +204,7 @@ impl ThemePickerSlide {
             .finish();
 
         let subtitle = FormattedTextElement::from_str(
-            "Click or use arrow keys to select, Enter to confirm.",
+            "点击或使用方向键选择，按 Enter 确认。",
             appearance.ui_font_family(),
             16.,
         )
@@ -261,7 +261,7 @@ impl ThemePickerSlide {
         let back_button = self.back_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Back".into()),
+                content: button::Content::Label("返回".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -274,9 +274,9 @@ impl ThemePickerSlide {
 
         let theme_picker_last = FeatureFlag::OpenWarpNewSettingsModes.is_enabled();
         let next_label = if theme_picker_last {
-            "Get Warping"
+            "开始使用 Warp"
         } else {
-            "Next"
+            "下一步"
         };
 
         let enter = Keystroke::parse("enter").unwrap_or_default();
@@ -531,18 +531,14 @@ impl ThemePickerSlide {
             })
             .finish();
 
-        let label = Text::new(
-            "Sync light/dark theme with OS",
-            appearance.ui_font_family(),
-            14.0,
-        )
-        .with_color(internal_colors::text_sub(theme, background_for_text))
-        .with_style(Properties {
-            weight: Weight::Normal,
-            ..Default::default()
-        })
-        .with_line_height_ratio(1.0)
-        .finish();
+        let label = Text::new("跟随系统浅色/深色主题", appearance.ui_font_family(), 14.0)
+            .with_color(internal_colors::text_sub(theme, background_for_text))
+            .with_style(Properties {
+                weight: Weight::Normal,
+                ..Default::default()
+            })
+            .with_line_height_ratio(1.0)
+            .finish();
 
         Container::new(
             Flex::row()
@@ -576,7 +572,7 @@ impl ThemePickerSlide {
         let privacy_line = Flex::row()
             .with_child(
                 ui_builder
-                    .span("If you'd like to opt out of analytics, you can adjust your ")
+                    .span("如需停用分析，你可以调整")
                     .with_style(disclaimer_styles)
                     .build()
                     .finish(),
@@ -584,7 +580,7 @@ impl ThemePickerSlide {
             .with_child(
                 ui_builder
                     .link(
-                        "Privacy Settings".into(),
+                        "隐私设置".into(),
                         None,
                         Some(Box::new(|ctx| {
                             ctx.dispatch_typed_action(
@@ -603,7 +599,7 @@ impl ThemePickerSlide {
         let tos_line = Flex::row()
             .with_child(
                 ui_builder
-                    .span("By continuing, you agree to Warp's ")
+                    .span("继续即表示你同意 Warp 的")
                     .with_style(disclaimer_styles)
                     .build()
                     .finish(),
@@ -611,7 +607,7 @@ impl ThemePickerSlide {
             .with_child(
                 ui_builder
                     .link(
-                        "Terms of Service".into(),
+                        "服务条款".into(),
                         Some(TOS_URL.into()),
                         None,
                         self.tos_mouse_state.clone(),

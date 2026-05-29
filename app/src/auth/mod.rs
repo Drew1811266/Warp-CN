@@ -96,87 +96,89 @@ pub fn maybe_log_out(app: &mut AppContext) {
             || num_unsaved_files > 0)
     {
         send_telemetry_sync_from_app_ctx!(TelemetryEvent::LogOutModalShown, app);
-        let mut button_data = vec![ModalButton::for_app("Yes, log out", |ctx| {
+        let mut button_data = vec![ModalButton::for_app("是，退出登录", |ctx| {
             log_out(ctx);
         })];
 
         let mut info_text_vec: Vec<String> = vec![];
         if num_long_running_commands > 0 {
             let plural = if num_long_running_commands > 1 {
-                "processes"
+                "进程"
             } else {
-                "process"
+                "进程"
             };
             info_text_vec.push(format!(
-                "You have {num_long_running_commands} {plural} running."
+                "你有 {num_long_running_commands} 个正在运行的{plural}。"
             ));
 
-            button_data.push(ModalButton::for_app("Show running processes", move |ctx| {
-                send_telemetry_sync_from_app_ctx!(
-                    TelemetryEvent::LogOutModalCancel { nav_palette: true },
-                    ctx
-                );
-                let windowing_model = ctx.windows();
-                let window_id = if let Some(active_window_id) = windowing_model.active_window() {
-                    active_window_id
-                } else if let Some(window_id) = ctx.window_ids().collect_vec().first() {
-                    let window_id = *window_id;
-                    windowing_model.show_window_and_focus_app(window_id);
-                    window_id
-                } else {
-                    return;
-                };
+            button_data.push(ModalButton::for_app(
+                "显示运行中的进程",
+                move |ctx| {
+                    send_telemetry_sync_from_app_ctx!(
+                        TelemetryEvent::LogOutModalCancel { nav_palette: true },
+                        ctx
+                    );
+                    let windowing_model = ctx.windows();
+                    let window_id = if let Some(active_window_id) = windowing_model.active_window()
+                    {
+                        active_window_id
+                    } else if let Some(window_id) = ctx.window_ids().collect_vec().first() {
+                        let window_id = *window_id;
+                        windowing_model.show_window_and_focus_app(window_id);
+                        window_id
+                    } else {
+                        return;
+                    };
 
-                if let Some(workspaces) = ctx.views_of_type::<Workspace>(window_id) {
-                    if let Some(handle) = workspaces.first() {
-                        ctx.dispatch_typed_action_for_view(
-                            window_id,
-                            handle.id(),
-                            &WorkspaceAction::OpenPalette {
-                                mode: PaletteMode::Navigation,
-                                source: PaletteSource::LogOutModal,
-                                query: Some("running".to_owned()),
-                            },
-                        );
+                    if let Some(workspaces) = ctx.views_of_type::<Workspace>(window_id) {
+                        if let Some(handle) = workspaces.first() {
+                            ctx.dispatch_typed_action_for_view(
+                                window_id,
+                                handle.id(),
+                                &WorkspaceAction::OpenPalette {
+                                    mode: PaletteMode::Navigation,
+                                    source: PaletteSource::LogOutModal,
+                                    query: Some("running".to_owned()),
+                                },
+                            );
+                        }
                     }
-                }
-            }))
+                },
+            ))
         }
 
         if num_shared_sessions > 0 {
             let plural = if num_shared_sessions > 1 {
-                "sessions"
+                "会话"
             } else {
-                "session"
+                "会话"
             };
-            info_text_vec.push(format!("You have {num_shared_sessions} shared {plural}."));
+            info_text_vec.push(format!("你有 {num_shared_sessions} 个已共享的{plural}。"));
         }
 
         if num_unsaved_objects > 0 {
             let plural = if num_unsaved_objects > 1 {
-                "objects"
+                "对象"
             } else {
-                "object"
+                "对象"
             };
             info_text_vec.push(format!(
-                "You have {num_unsaved_objects} unsynced Warp Drive {plural}. \
-            Logging out will cause you to lose the {plural}."
+                "你有 {num_unsaved_objects} 个未同步的 Warp Drive {plural}。退出登录会导致这些{plural}丢失。"
             ));
         }
 
         if num_unsaved_files > 0 {
             let plural = if num_unsaved_files > 1 {
-                "files"
+                "文件"
             } else {
-                "file"
+                "文件"
             };
             info_text_vec.push(format!(
-                "You have {num_unsaved_files} unsaved {plural}. \
-            Logging out will cause you to lose the {plural}."
+                "你有 {num_unsaved_files} 个未保存的{plural}。退出登录会导致这些{plural}丢失。"
             ));
         }
 
-        button_data.push(ModalButton::for_app("Cancel", move |ctx| {
+        button_data.push(ModalButton::for_app("取消", move |ctx| {
             send_telemetry_sync_from_app_ctx!(
                 TelemetryEvent::LogOutModalCancel { nav_palette: false },
                 ctx
@@ -184,7 +186,7 @@ pub fn maybe_log_out(app: &mut AppContext) {
         }));
 
         let alert_data = AlertDialogWithCallbacks::for_app(
-            "Log out?",
+            "退出登录？",
             info_text_vec.join("\n"),
             button_data,
             move |ctx| {

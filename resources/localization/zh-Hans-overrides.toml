@@ -1,0 +1,1370 @@
+# Local zh-Hans string overrides for the `drew/zh-Hans-localization` branch.
+#
+# Keep entries exact and small. After syncing upstream:
+#   1. python3 script/zh_apply_localization.py --dry-run
+#   2. python3 script/zh_apply_localization.py
+
+[[replace]]
+path = "crates/onboarding/src/slides/intro_slide.rs"
+source = "Already have an account? "
+target = "已有账号？"
+
+[[replace]]
+path = "crates/onboarding/src/slides/intro_slide.rs"
+source = "Log in"
+target = "登录"
+
+[[replace]]
+path = "crates/onboarding/src/slides/intro_slide.rs"
+source = "Welcome to Warp"
+target = "欢迎使用 Warp"
+
+[[replace]]
+path = "crates/onboarding/src/slides/intro_slide.rs"
+source = "A modern terminal with state of the art agents built in."
+target = "内置先进 Agent 的现代终端。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/intro_slide.rs"
+source = "Get started"
+target = "开始使用"
+
+[[replace]]
+path = "crates/onboarding/src/slides/intention_slide.rs"
+source = "Welcome to Warp"
+target = "欢迎使用 Warp"
+
+[[replace]]
+path = "crates/onboarding/src/slides/intention_slide.rs"
+source = "How do you want to work?"
+target = "你想如何使用 Warp？"
+
+[[replace]]
+path = "crates/onboarding/src/slides/intention_slide.rs"
+source = "Build faster with AI agents"
+target = "使用 AI Agent 更快构建"
+
+[[replace]]
+path = "crates/onboarding/src/slides/intention_slide.rs"
+source = "An agent-first experience with best in class terminal support. Get terminal and agent driven development AI features like:"
+target = "Agent 优先体验，并保留一流终端能力。启用终端与 Agent 驱动开发功能："
+
+[[replace]]
+path = "crates/onboarding/src/slides/intention_slide.rs"
+source = "Just use the terminal"
+target = "只使用终端"
+
+[[replace]]
+path = "crates/onboarding/src/slides/intention_slide.rs"
+source = "No AI features"
+target = "不启用 AI 功能"
+
+[[replace]]
+path = "crates/onboarding/src/slides/intention_slide.rs"
+source = "A modern terminal optimized for speed, context, and control without AI."
+target = "一个重视速度、上下文和掌控感的现代终端，不启用 AI。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/intention_slide.rs"
+source = "Get Warping"
+target = "开始使用 Warp"
+
+[[replace]]
+path = "crates/onboarding/src/slides/intention_slide.rs"
+source = "Next"
+target = "下一步"
+
+[[replace]]
+path = "crates/onboarding/src/slides/intention_slide.rs"
+source = "Back"
+target = "返回"
+
+[[replace]]
+path = "crates/onboarding/src/slides/customize_slide.rs"
+source = "Customize your Warp"
+target = "自定义 Warp"
+
+[[replace]]
+path = "crates/onboarding/src/slides/customize_slide.rs"
+source = "Tailor your features and UI to your working style."
+target = "按你的工作方式调整功能和界面。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/customize_slide.rs"
+source = "Tab styling"
+target = "标签页样式"
+
+[[replace]]
+path = "crates/onboarding/src/slides/customize_slide.rs"
+source = "Vertical"
+target = "垂直"
+
+[[replace]]
+path = "crates/onboarding/src/slides/customize_slide.rs"
+source = "Horizontal"
+target = "水平"
+
+[[replace]]
+path = "crates/onboarding/src/slides/customize_slide.rs"
+source = "Conversation history"
+target = "对话历史"
+
+[[replace]]
+path = "crates/onboarding/src/slides/customize_slide.rs"
+source = "File explorer"
+target = "文件浏览器"
+
+[[replace]]
+path = "crates/onboarding/src/slides/customize_slide.rs"
+source = "Global file search"
+target = "全局文件搜索"
+
+[[replace]]
+path = "crates/onboarding/src/slides/customize_slide.rs"
+source = "Tools panel"
+target = "工具面板"
+
+[[replace]]
+path = "crates/onboarding/src/slides/customize_slide.rs"
+source = "Code review"
+target = "代码审查"
+
+[[replace]]
+path = "crates/onboarding/src/slides/customize_slide.rs"
+source = "Enabled"
+target = "启用"
+
+[[replace]]
+path = "crates/onboarding/src/slides/customize_slide.rs"
+source = "Disabled"
+target = "禁用"
+
+[[replace]]
+path = "crates/onboarding/src/slides/customize_slide.rs"
+source = "Next"
+target = "下一步"
+
+[[replace]]
+path = "crates/onboarding/src/slides/customize_slide.rs"
+source = "Back"
+target = "返回"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Customize your Warp Agent"
+target = "自定义 Warp Agent"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Select your in-app agent's defaults."
+target = "设置内置 Agent 的默认行为。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Default model"
+target = "默认模型"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Recommended"
+target = "推荐"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Premium"
+target = "高级"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Autonomy"
+target = "自主程度"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Set by Team Workspace"
+target = "由团队工作区设置"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Autonomy settings are configured as part of your team workspace."
+target = "自主程度设置由团队工作区统一配置。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Full"
+target = "完全"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Runs commands, writes code, and reads files without asking."
+target = "无需确认即可运行命令、写代码和读取文件。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Partial"
+target = "部分"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Can plan, read files, and execute low-risk commands. Asks before making any changes or executing sensitive commands."
+target = "可以规划、读取文件并执行低风险命令；修改文件或执行敏感命令前会请求确认。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "None"
+target = "无"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Takes no actions without your approval."
+target = "未经你批准不会执行任何操作。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Disable Warp Agent"
+target = "禁用 Warp Agent"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Upgrade for access to premium models."
+target = "升级以使用高级模型。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "State-of-the-art models require paid plans."
+target = "先进模型需要付费计划。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Upgrade"
+target = "升级"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Next"
+target = "下一步"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Back"
+target = "返回"
+
+[[replace]]
+path = "crates/onboarding/src/slides/third_party_slide.rs"
+source = "Customize third party agents"
+target = "配置第三方 Agent"
+
+[[replace]]
+path = "crates/onboarding/src/slides/third_party_slide.rs"
+source = "Select defaults for using agents like Claude Code, Codex, and Gemini."
+target = "为 Claude Code、Codex、Gemini 等 Agent 设置默认选项。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/third_party_slide.rs"
+source = "CLI agent toolbar"
+target = "CLI Agent 工具栏"
+
+[[replace]]
+path = "crates/onboarding/src/slides/third_party_slide.rs"
+source = "Notifications"
+target = "通知"
+
+[[replace]]
+path = "crates/onboarding/src/slides/third_party_slide.rs"
+source = "Enabled"
+target = "启用"
+
+[[replace]]
+path = "crates/onboarding/src/slides/third_party_slide.rs"
+source = "Disabled"
+target = "禁用"
+
+[[replace]]
+path = "crates/onboarding/src/slides/third_party_slide.rs"
+source = "Next"
+target = "下一步"
+
+[[replace]]
+path = "crates/onboarding/src/slides/third_party_slide.rs"
+source = "Back"
+target = "返回"
+
+[[replace]]
+path = "crates/onboarding/src/slides/theme_picker_slide.rs"
+source = "Choose a theme"
+target = "选择主题"
+
+[[replace]]
+path = "crates/onboarding/src/slides/theme_picker_slide.rs"
+source = "Click or use arrow keys to select, Enter to confirm."
+target = "点击或使用方向键选择，按 Enter 确认。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/theme_picker_slide.rs"
+source = "Sync light/dark theme with OS"
+target = "跟随系统浅色/深色主题"
+
+[[replace]]
+path = "crates/onboarding/src/slides/theme_picker_slide.rs"
+source = "Privacy Settings"
+target = "隐私设置"
+
+[[replace]]
+path = "crates/onboarding/src/slides/theme_picker_slide.rs"
+source = "Terms of Service"
+target = "服务条款"
+
+[[replace]]
+path = "crates/onboarding/src/slides/theme_picker_slide.rs"
+source = "Get Warping"
+target = "开始使用 Warp"
+
+[[replace]]
+path = "crates/onboarding/src/slides/theme_picker_slide.rs"
+source = "Next"
+target = "下一步"
+
+[[replace]]
+path = "crates/onboarding/src/slides/theme_picker_slide.rs"
+source = "Back"
+target = "返回"
+
+[[replace]]
+path = "crates/onboarding/src/slides/project_slide.rs"
+source = "Open a project"
+target = "打开项目"
+
+[[replace]]
+path = "crates/onboarding/src/slides/project_slide.rs"
+source = "Set up a project to optimize it for coding in Warp."
+target = "设置项目以优化在 Warp 中编码。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/project_slide.rs"
+source = "Open local folder"
+target = "打开本地文件夹"
+
+[[replace]]
+path = "crates/onboarding/src/slides/project_slide.rs"
+source = "Initialize project automatically"
+target = "自动初始化项目"
+
+[[replace]]
+path = "crates/onboarding/src/slides/project_slide.rs"
+source = "Prepares the project environment, builds an index of your code, and generates project rules—giving the agent deeper understanding and better performance."
+target = "准备项目环境、建立代码索引并生成项目规则，让 Agent 更深入理解项目并提升表现。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/project_slide.rs"
+source = "Get Warping"
+target = "开始使用 Warp"
+
+[[replace]]
+path = "crates/onboarding/src/slides/project_slide.rs"
+source = "Next"
+target = "下一步"
+
+[[replace]]
+path = "crates/onboarding/src/slides/project_slide.rs"
+source = "Back"
+target = "返回"
+
+[[replace]]
+path = "crates/onboarding/src/slides/project_slide.rs"
+source = "Skip"
+target = "跳过"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Auth Token"
+target = "认证令牌"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Get started with Warp Drive"
+target = "开始使用 Warp Drive"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Get started with AI"
+target = "开始使用 AI"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Connect your account to save and share notebooks, workflows, and more across devices."
+target = "连接账号以在多台设备间保存和共享笔记本、工作流等内容。"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Connect your account to enable AI-powered planning, coding, and automation."
+target = "连接账号以启用 AI 驱动的规划、编码和自动化。"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "By continuing, you agree to Warp's "
+target = "继续即表示你同意 Warp 的"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Terms of Service"
+target = "服务条款"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Privacy Settings"
+target = "隐私设置"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Back"
+target = "返回"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Disable Warp Drive"
+target = "禁用 Warp Drive"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Disable AI features"
+target = "禁用 AI 功能"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Continue"
+target = "继续"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Sign in on your browser to continue"
+target = "在浏览器中登录以继续"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Click here to paste your token from the browser"
+target = "点击此处粘贴浏览器中的令牌"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Are you sure you want to disable Warp Drive?"
+target = "确定要禁用 Warp Drive 吗？"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Are you sure you want to disable AI features?"
+target = "确定要禁用 AI 功能吗？"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Warp Drive lets you save workflows and knowledge across devices and share them with your team. By continuing, you won't have access to the following features:"
+target = "Warp Drive 可让你跨设备保存工作流和知识，并与团队共享。继续后，你将无法使用以下功能："
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Warp is better with AI. By continuing, you won't have access to any of the following features:"
+target = "Warp 配合 AI 会更强。继续后，你将无法使用以下功能："
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Enable Warp Drive"
+target = "启用 Warp Drive"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Enable AI features"
+target = "启用 AI 功能"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Skip for now"
+target = "暂时跳过"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Search repos"
+target = "搜索仓库"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Search tabs..."
+target = "搜索标签页..."
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Search sessions, agents, files..."
+target = "搜索会话、Agent、文件..."
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "New Tab"
+target = "新建标签页"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Tab configs"
+target = "标签页配置"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Settings"
+target = "设置"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "New session"
+target = "新会话"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "No tabs open"
+target = "没有打开的标签页"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "No tabs match your search."
+target = "没有匹配搜索的标签页。"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Terminal"
+target = "终端"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Code"
+target = "代码"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Settings"
+target = "设置"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "View options"
+target = "查看选项"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Tab configs"
+target = "标签页配置"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "View as"
+target = "查看方式"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Panes"
+target = "窗格"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Tabs"
+target = "标签页"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Focused session"
+target = "当前会话"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Summary"
+target = "摘要"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Density"
+target = "密度"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Pane title as"
+target = "窗格标题显示为"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Command / Conversation"
+target = "命令 / 对话"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Working Directory"
+target = "工作目录"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Branch"
+target = "分支"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Additional metadata"
+target = "附加元数据"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Show"
+target = "显示"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Show details on hover"
+target = "悬停时显示详情"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Let's get started."
+target = "开始使用。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Agent driven development with Warp's built-in agent"
+target = "使用 Warp 内置 Agent 进行开发"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Iterate, plan, and build with Oz: Warp's built-in agent. Available locally or in the cloud."
+target = "使用 Oz（Warp 内置 Agent）迭代、规划和构建，可在本地或云端运行。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Classic terminal with third-party agents"
+target = "经典终端与第三方 Agent"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "A modern terminal that supports third-party agents (Claude Code, Codex, Gemini CLI) and classic terminal workflows."
+target = "支持 Claude Code、Codex、Gemini CLI 等第三方 Agent 和经典终端工作流的现代终端。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Free"
+target = "免费"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Back"
+target = "返回"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Get Warping"
+target = "开始使用 Warp"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Subscribe"
+target = "订阅"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Next"
+target = "下一步"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Subscribe to access agent driven development in Warp."
+target = "订阅以使用 Warp 的 Agent 驱动开发。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "1,500 credits per month"
+target = "每月 1,500 点额度"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Access to frontier OpenAI, Anthropic, and Google models"
+target = "可使用 OpenAI、Anthropic 和 Google 的前沿模型"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Access to Reload credits and volume-based discounts"
+target = "可使用 Reload 额度和阶梯折扣"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Extended cloud agents access"
+target = "更多云端 Agent 使用额度"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Highest codebase indexing limits"
+target = "最高代码库索引额度"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Unlimited Warp Drive objects and collaboration"
+target = "不限量 Warp Drive 对象和协作"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Private email support"
+target = "私密邮件支持"
+
+[[replace]]
+path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
+source = "Unlimited cloud conversation storage"
+target = "不限量云端对话存储"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Meet the Warp input"
+target = "认识 Warp 输入框"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Your terminal input accepts both terminal commands and agent prompts and automatically detects which you're using. Use {} to lock the input to Agent mode (natural language) or Terminal mode (commands)."
+target = "Warp 输入框既可输入终端命令，也可输入 Agent 提示词，并会自动识别你的输入类型。使用 {} 可锁定为 Agent 模式（自然语言）或终端模式（命令）。"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Next"
+target = "下一步"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Talk to the agent"
+target = "与 Agent 对话"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "You can type in natural language to engage the agent. Submit the query below to start: What tests exist in this repo, how are they structured, and what do they cover?"
+target = "你可以用自然语言与 Agent 交流。提交下面的问题开始：这个仓库有哪些测试，它们如何组织，覆盖了哪些内容？"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Skip"
+target = "跳过"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Submit"
+target = "提交"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Finish"
+target = "完成"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Welcome to terminal mode"
+target = "欢迎进入终端模式"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Run commands here, just like a regular terminal. If you type a question or task using natural language, Warp can suggest opening it in agent mode. You can always override using {}."
+target = "在这里像常规终端一样运行命令。如果你用自然语言输入问题或任务，Warp 可以建议在 Agent 模式中打开。你也可以随时使用 {} 覆盖。"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "You’re in terminal mode"
+target = "你正在使用终端模式"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Enable Natural Language Detection"
+target = "启用自然语言检测"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "You're in agent mode"
+target = "你正在使用 Agent 模式"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Agent mode gives your questions and tasks their own conversation, so you can ask follow-ups without leaving your terminal workflow. Press {} to return to terminal mode at any point."
+target = "Agent 模式会为你的问题和任务创建独立对话，因此你可以继续追问而不离开终端工作流。随时按 {} 返回终端模式。"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Skip initialization"
+target = "跳过初始化"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Initialize"
+target = "初始化"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Back to terminal"
+target = "返回终端"
+
+[[replace]]
+path = "crates/onboarding/src/components/onboarding_callout.rs"
+source = "Next"
+target = "下一步"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "If you'd like to opt out of analytics and AI features, you can adjust your "
+target = "如需停用分析和 AI 功能，你可以调整"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "If you'd like to opt out of analytics, you can adjust your "
+target = "如需停用分析，你可以调整"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "If your browser hasn't launched, "
+target = "如果浏览器没有打开，"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "copy the URL"
+target = "复制 URL"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = " and open"
+target = "并打开"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "the page manually."
+target = "手动打开页面。"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Auth Token"
+target = "认证令牌"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Browser auth token"
+target = "浏览器认证令牌"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Click here to paste your token from the browser"
+target = "点击此处粘贴浏览器中的令牌"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "By continuing, you agree to Warp's "
+target = "继续即表示你同意 Warp 的"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Terms of Service"
+target = "服务条款"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Privacy Settings"
+target = "隐私设置"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "If you'd like to opt out of analytics and AI features,"
+target = "如需停用分析和 AI 功能，"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "you can adjust your "
+target = "你可以调整"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Sign up"
+target = "注册"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Already have an account? "
+target = "已有账号？"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Sign in"
+target = "登录"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Don't want to sign in right now? "
+target = "暂时不想登录？"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Skip for now"
+target = "暂时跳过"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Are you sure you want to skip login?"
+target = "确定要跳过登录吗？"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "You can sign up later, but some features, such as AI,"
+target = "你可以稍后注册，但 AI 等部分功能"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "are only available to logged-in users. "
+target = "仅登录用户可用。"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Yes, skip login"
+target = "是，跳过登录"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "In order to use Warp’s AI features or collaborate with others, please create an account."
+target = "如需使用 Warp 的 AI 功能或与他人协作，请创建账号。"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "In order to create more objects in Warp Drive, please create an account."
+target = "如需在 Warp Drive 中创建更多对象，请创建账号。"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "In order to share, please create an account."
+target = "如需分享，请创建账号。"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Welcome to Warp!"
+target = "欢迎使用 Warp！"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Sign up for Warp"
+target = "注册 Warp"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "If your browser hasn't launched, "
+target = "如果浏览器没有打开，"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "copy the URL"
+target = "复制 URL"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "and open the page manually."
+target = "并手动打开页面。"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "Privacy Settings"
+target = "隐私设置"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "Done"
+target = "完成"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "Help improve Warp"
+target = "帮助改进 Warp"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "High-level feature usage data helps Warp's product team prioritize the roadmap."
+target = "高层级功能使用数据可帮助 Warp 产品团队确定路线图优先级。"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "Learn more"
+target = "了解更多"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "Send crash reports"
+target = "发送崩溃报告"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "Crash reporting helps Warp's engineering team understand stability and improve performance."
+target = "崩溃报告可帮助 Warp 工程团队了解稳定性并提升性能。"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "Store AI conversations in the cloud"
+target = "将 AI 对话存储在云端"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "Agent conversations can be shared with others and are retained when you log in on different devices. This data is only stored for product functionality, and Warp will not use it for analytics."
+target = "Agent 对话可与他人共享，并会在你登录不同设备时保留。该数据仅用于产品功能，Warp 不会将其用于分析。"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "Agent conversations are only stored locally on your machine, are lost upon logout, and cannot be shared. Note: conversation data for ambient agents are still stored in the cloud."
+target = "Agent 对话只会存储在本机，退出登录后会丢失，且无法共享。注意：ambient agent 的对话数据仍会存储在云端。"
+
+[[replace]]
+path = "app/src/auth/paste_auth_token_modal.rs"
+source = "Paste"
+target = "粘贴"
+
+[[replace]]
+path = "app/src/auth/paste_auth_token_modal.rs"
+source = "Enter auth token"
+target = "输入认证令牌"
+
+[[replace]]
+path = "app/src/auth/paste_auth_token_modal.rs"
+source = "Paste your auth token below"
+target = "在下方粘贴认证令牌"
+
+[[replace]]
+path = "app/src/auth/paste_auth_token_modal.rs"
+source = "Paste your auth token from the browser to get complete login."
+target = "粘贴浏览器中的认证令牌以完成登录。"
+
+[[replace]]
+path = "app/src/auth/paste_auth_token_modal.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/auth/paste_auth_token_modal.rs"
+source = "Continue"
+target = "继续"
+
+[[replace]]
+path = "app/src/auth/auth_override_warning_body.rs"
+source = "It looks like you logged into a Warp account through a web browser. If you continue, any personal Warp drive objects and preferences from this anonymous session with be permanently deleted."
+target = "看起来你已通过浏览器登录了一个 Warp 账号。如果继续，此匿名会话中的个人 Warp Drive 对象和偏好设置将被永久删除。"
+
+[[replace]]
+path = "app/src/auth/auth_override_warning_body.rs"
+source = "This cannot be undone."
+target = "此操作无法撤销。"
+
+[[replace]]
+path = "app/src/auth/auth_override_warning_body.rs"
+source = "New login detected"
+target = "检测到新的登录"
+
+[[replace]]
+path = "app/src/auth/auth_override_warning_body.rs"
+source = "Delete personal Warp Drive objects and preferences?"
+target = "删除个人 Warp Drive 对象和偏好设置？"
+
+[[replace]]
+path = "app/src/auth/auth_override_warning_body.rs"
+source = "Export your data"
+target = "导出数据"
+
+[[replace]]
+path = "app/src/auth/auth_override_warning_body.rs"
+source = " to import later."
+target = "以便稍后导入。"
+
+[[replace]]
+path = "app/src/auth/auth_override_warning_body.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/auth/auth_override_warning_body.rs"
+source = "Continue"
+target = "继续"
+
+[[replace]]
+path = "app/src/auth/login_failure_notification.rs"
+source = " Not the first time? See our "
+target = " 不是第一次遇到？查看我们的"
+
+[[replace]]
+path = "app/src/auth/login_failure_notification.rs"
+source = "troubleshooting docs"
+target = "故障排查文档"
+
+[[replace]]
+path = "app/src/auth/login_failure_notification.rs"
+source = "An invalid auth token was entered into the modal."
+target = "输入的认证令牌无效。"
+
+[[replace]]
+path = "app/src/auth/login_failure_notification.rs"
+source = "Failed to log in. Try manually copying the auth token from the authentication web page and pasting into the modal."
+target = "登录失败。请尝试从认证网页手动复制认证令牌并粘贴到弹窗中。"
+
+[[replace]]
+path = "app/src/auth/login_failure_notification.rs"
+source = "Request to log in failed."
+target = "登录请求失败。"
+
+[[replace]]
+path = "app/src/auth/login_failure_notification.rs"
+source = "Request to sign up failed."
+target = "注册请求失败。"
+
+[[replace]]
+path = "app/src/auth/login_failure_notification.rs"
+source = "The redirect URL pasted did not originate from this app. Please click the button below to try again."
+target = "粘贴的重定向 URL 并非来自此应用。请点击下方按钮重试。"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "Log out?"
+target = "退出登录？"
+
+[[replace]]
+path = "app/src/auth/needs_sso_link_view.rs"
+source = "Link SSO"
+target = "关联 SSO"
+
+[[replace]]
+path = "app/src/auth/needs_sso_link_view.rs"
+source = "Your organization has enabled SSO for your account"
+target = "你的组织已为此账号启用 SSO"
+
+[[replace]]
+path = "app/src/auth/needs_sso_link_view.rs"
+source = "Click the button below to link your Warp account to your SSO provider."
+target = "点击下方按钮，将你的 Warp 账号关联到 SSO 提供方。"
+
+[[replace]]
+path = "app/src/auth/web_handoff.rs"
+source = "Loading..."
+target = "正在加载..."
+
+[[replace]]
+path = "app/src/auth/web_handoff.rs"
+source = "Error authenticating - please refresh the page"
+target = "认证出错，请刷新页面"
+
+[[replace]]
+path = "crates/onboarding/src/lib.rs"
+source = "Warp agents"
+target = "Warp Agent"
+
+[[replace]]
+path = "crates/onboarding/src/lib.rs"
+source = "Oz cloud agents platform"
+target = "Oz 云端 Agent 平台"
+
+[[replace]]
+path = "crates/onboarding/src/lib.rs"
+source = "Next command predictions"
+target = "下一条命令预测"
+
+[[replace]]
+path = "crates/onboarding/src/lib.rs"
+source = "Prompt suggestions"
+target = "提示词建议"
+
+[[replace]]
+path = "crates/onboarding/src/lib.rs"
+source = "Codebase context"
+target = "代码库上下文"
+
+[[replace]]
+path = "crates/onboarding/src/lib.rs"
+source = "Remote control with Claude Code, Codex, and other agents"
+target = "使用 Claude Code、Codex 和其他 Agent 进行远程控制"
+
+[[replace]]
+path = "crates/onboarding/src/lib.rs"
+source = "Agents over SSH"
+target = "通过 SSH 使用 Agent"
+
+[[replace]]
+path = "crates/onboarding/src/lib.rs"
+source = "Warp Drive"
+target = "Warp Drive"
+
+[[replace]]
+path = "crates/onboarding/src/lib.rs"
+source = "Session Sharing"
+target = "会话共享"
+
+[[replace]]
+path = "crates/onboarding/src/callout/view.rs"
+source = "Agent mode gives your questions and tasks their own conversation, so you can ask follow-ups without leaving your terminal workflow.nnSubmit the query below to have the agent initialize this project, or ⊗ to clear the input and start your own!"
+target = "Agent 模式会为你的问题和任务创建独立对话，因此你可以继续追问而不离开终端工作流。提交下面的查询，让 Agent 初始化此项目；或按 ⊗ 清空输入并开始自己的任务！"
+
+[[replace]]
+path = "app/src/auth/login_slide.rs"
+source = "Paste"
+target = "粘贴"
+
+[[replace]]
+path = "app/src/auth/auth_view_modal.rs"
+source = "Paste"
+target = "粘贴"
+
+[[replace]]
+path = "app/src/auth/auth_override_warning_body.rs"
+source = "Warp has detected a new login from a web browser. Press escape to cancel and continue using Warp without login."
+target = "Warp 检测到来自浏览器的新登录。按 Esc 可取消并继续以未登录状态使用 Warp。"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Sign in on your browser nto continue"
+target = "在浏览器中登录以继续"
+
+[[replace]]
+path = "app/src/auth/auth_view_body.rs"
+source = "Press enter to open your browser to Sign Up or Sign In."
+target = "按 Enter 打开浏览器进行注册或登录。"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "You are currently offline. An internet connection is required to use Warp for the first time."
+target = "你当前处于离线状态。首次使用 Warp 需要联网。"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "All of Warp’s non-cloud features work offline."
+target = "Warp 的非云端功能均可离线使用。"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "However, we require users to be online when using Warp for the first time in order to enable Warp's AI and cloud features."
+target = "但首次使用 Warp 时需要联网，以启用 Warp 的 AI 和云端功能。"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "We offer cloud features to all users, and so we need an internet connection to meter AI usage, prevent abuse, and associate cloud objects with users. If you opt to use Warp logged-out, a unique ID will be attached to an anonymous user account in order to support these features."
+target = "我们向所有用户提供云端功能，因此需要联网来计量 AI 使用量、防止滥用，并将云端对象关联到用户。如果你选择未登录使用 Warp，系统会为匿名用户账号附加唯一 ID 以支持这些功能。"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "Using Warp Offline"
+target = "离线使用 Warp"
+
+[[replace]]
+path = "app/src/auth/auth_view_shared_helpers.rs"
+source = "Dismiss"
+target = "关闭"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "Yes, log out"
+target = "是，退出登录"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "processes"
+target = "进程"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "process"
+target = "进程"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "You have {num_long_running_commands} {plural} running."
+target = "你有 {num_long_running_commands} 个正在运行的{plural}。"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "Show running processes"
+target = "显示运行中的进程"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "sessions"
+target = "会话"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "session"
+target = "会话"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "You have {num_shared_sessions} shared {plural}."
+target = "你有 {num_shared_sessions} 个已共享的{plural}。"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "objects"
+target = "对象"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "object"
+target = "对象"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "You have {num_unsaved_objects} unsynced Warp Drive {plural}. Logging out will cause you to lose the {plural}."
+target = "你有 {num_unsaved_objects} 个未同步的 Warp Drive {plural}。退出登录会导致这些{plural}丢失。"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "files"
+target = "文件"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "file"
+target = "文件"
+
+[[replace]]
+path = "app/src/auth/mod.rs"
+source = "You have {num_unsaved_files} unsaved {plural}. Logging out will cause you to lose the {plural}."
+target = "你有 {num_unsaved_files} 个未保存的{plural}。退出登录会导致这些{plural}丢失。"
+
+[[replace]]
+path = "crates/onboarding/src/agent_onboarding_view.rs"
+source = "Skip"
+target = "跳过"
+
+[[replace]]
+path = "crates/onboarding/src/model.rs"
+source = "Starting at ${}/mo"
+target = "${}/月起"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "copy the URL"
+target = "复制 URL"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Click here"
+target = "点击此处"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "If your browser hasn't launched, "
+target = "如果浏览器没有打开，"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = " and open the page manually. "
+target = "并手动打开页面。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = " to paste your token from the browser."
+target = "以粘贴浏览器中的令牌。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "Plan successfully activated. All premium models are available."
+target = "计划已成功激活。所有高级模型现已可用。"
+
+[[replace]]
+path = "crates/onboarding/src/slides/theme_picker_slide.rs"
+source = "If you'd like to opt out of analytics, you can adjust your "
+target = "如需停用分析，你可以调整"
+
+[[replace]]
+path = "crates/onboarding/src/slides/theme_picker_slide.rs"
+source = "By continuing, you agree to Warp's "
+target = "继续即表示你同意 Warp 的"

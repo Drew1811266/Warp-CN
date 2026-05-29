@@ -130,6 +130,18 @@ def replace_rust_string_literals(text: str, source: str, target: str) -> tuple[s
             index += 1
 
             if escaped:
+                if current == "\n":
+                    while index < len(text) and text[index] in " \t":
+                        index += 1
+                    escaped = False
+                    continue
+                if current == "\r":
+                    if index < len(text) and text[index] == "\n":
+                        index += 1
+                    while index < len(text) and text[index] in " \t":
+                        index += 1
+                    escaped = False
+                    continue
                 literal_chars.append(current)
                 escaped = False
                 continue
