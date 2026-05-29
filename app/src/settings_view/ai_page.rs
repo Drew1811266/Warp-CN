@@ -7547,52 +7547,48 @@ impl SettingsWidget for ApiKeysWidget {
         // Upgrade CTA if BYOK not enabled
         if !is_byo_enabled {
             let auth_state = AuthStateProvider::as_ref(app).get();
-            let upgrade_text_fragments = if let Some(team) =
-                UserWorkspaces::as_ref(app).current_team()
-            {
-                if team.billing_metadata.customer_type == CustomerType::Enterprise {
-                    vec![
-                        FormattedTextFragment::hyperlink("联系销售", "mailto:sales@warp.dev"),
-                        FormattedTextFragment::plain_text(
-                            " to enable bringing your own API keys on your Enterprise plan.",
-                        ),
-                    ]
-                } else {
-                    let current_user_email = auth_state.user_email().unwrap_or_default();
-                    let has_admin_permissions = team.has_admin_permissions(&current_user_email);
-                    let upgrade_url = UserWorkspaces::upgrade_link_for_team(team.uid);
-                    if has_admin_permissions {
+            let upgrade_text_fragments =
+                if let Some(team) = UserWorkspaces::as_ref(app).current_team() {
+                    if team.billing_metadata.customer_type == CustomerType::Enterprise {
                         vec![
-                            FormattedTextFragment::hyperlink(
-                                "Upgrade to the Build plan",
-                                upgrade_url,
+                            FormattedTextFragment::hyperlink("联系销售", "mailto:sales@warp.dev"),
+                            FormattedTextFragment::plain_text(
+                                "以在 Enterprise 方案中启用自带 API keys。",
                             ),
-                            FormattedTextFragment::plain_text(" to use your own API keys."),
                         ]
                     } else {
-                        vec![FormattedTextFragment::plain_text(
-                            "Ask your team's admin to upgrade to the Build plan to use your own API keys.",
-                        )]
+                        let current_user_email = auth_state.user_email().unwrap_or_default();
+                        let has_admin_permissions = team.has_admin_permissions(&current_user_email);
+                        let upgrade_url = UserWorkspaces::upgrade_link_for_team(team.uid);
+                        if has_admin_permissions {
+                            vec![
+                                FormattedTextFragment::hyperlink("升级到 Build 方案", upgrade_url),
+                                FormattedTextFragment::plain_text("以使用你自己的 API keys。"),
+                            ]
+                        } else {
+                            vec![FormattedTextFragment::plain_text(
+                                "请让团队管理员升级到 Build 方案，以使用你自己的 API keys。",
+                            )]
+                        }
                     }
-                }
-            } else if FeatureFlag::SoloUserByok.is_enabled()
-                && auth_state.is_anonymous_or_logged_out()
-            {
-                vec![
-                    FormattedTextFragment::hyperlink_action(
-                        "Create an account",
-                        AISettingsPageAction::SignupAnonymousUser,
-                    ),
-                    FormattedTextFragment::plain_text(" to use your own API keys."),
-                ]
-            } else {
-                let user_id = auth_state.user_id().unwrap_or_default();
-                let upgrade_url = UserWorkspaces::upgrade_link(user_id);
-                vec![
-                    FormattedTextFragment::hyperlink("Upgrade to the Build plan", upgrade_url),
-                    FormattedTextFragment::plain_text(" to use your own API keys."),
-                ]
-            };
+                } else if FeatureFlag::SoloUserByok.is_enabled()
+                    && auth_state.is_anonymous_or_logged_out()
+                {
+                    vec![
+                        FormattedTextFragment::hyperlink_action(
+                            "创建账号",
+                            AISettingsPageAction::SignupAnonymousUser,
+                        ),
+                        FormattedTextFragment::plain_text("以使用你自己的 API keys。"),
+                    ]
+                } else {
+                    let user_id = auth_state.user_id().unwrap_or_default();
+                    let upgrade_url = UserWorkspaces::upgrade_link(user_id);
+                    vec![
+                        FormattedTextFragment::hyperlink("升级到 Build 方案", upgrade_url),
+                        FormattedTextFragment::plain_text("以使用你自己的 API keys。"),
+                    ]
+                };
 
             let upgrade_text_element = FormattedTextElement::new(
                 FormattedText::new([FormattedTextLine::Line(upgrade_text_fragments)]),
@@ -7738,7 +7734,7 @@ impl AwsBedrockWidget {
         });
 
         let refresh_credentials_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Refresh", SecondaryTheme)
+            ActionButton::new("刷新", SecondaryTheme)
                 .with_icon(Icon::RefreshCw04)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
@@ -7841,16 +7837,16 @@ impl AwsBedrockWidget {
         let are_credentials_enabled = user_workspaces.is_aws_bedrock_credentials_enabled(app);
         let is_usage_enabled = is_section_enabled && are_credentials_enabled;
         let toggle_description = if is_admin_enforced {
-            "Warp loads and sends local AWS CLI credentials for Bedrock-supported models. This setting is managed by your organization.".to_string()
-        } else {
-            "Warp loads and sends local AWS CLI credentials for Bedrock-supported models."
+            "Warp 会加载并发送本地 AWS CLI 凭据，用于支持 Bedrock 的模型。此设置由你的组织管理。"
                 .to_string()
+        } else {
+            "Warp 会加载并发送本地 AWS CLI 凭据，用于支持 Bedrock 的模型。".to_string()
         };
 
         let mut column = Flex::column().with_spacing(16.).with_child(
             Flex::column()
                 .with_child(render_ai_setting_toggle::<AwsBedrockCredentialsEnabled>(
-                    "Use AWS Bedrock credentials",
+                    "使用 AWS Bedrock 凭据",
                     AISettingsPageAction::ToggleAwsBedrockCredentialsEnabled,
                     are_credentials_enabled,
                     is_toggleable,
@@ -7982,14 +7978,14 @@ impl AwsBedrockWidget {
         );
         column.add_child(render_input(
             appearance,
-            "Login Command",
+            "登录命令",
             self.aws_auth_refresh_command_editor.clone(),
             is_usage_enabled,
             app,
         ));
         column.add_child(render_input(
             appearance,
-            "AWS Profile",
+            "AWS 配置档",
             self.aws_auth_refresh_profile_editor.clone(),
             is_usage_enabled,
             app,
@@ -7998,7 +7994,7 @@ impl AwsBedrockWidget {
         let auto_login_enabled = *AISettings::as_ref(app).aws_bedrock_auto_login.value();
 
         let toggle = render_ai_setting_toggle::<AwsBedrockAutoLogin>(
-            "Automatically run login command",
+            "自动运行登录命令",
             AISettingsPageAction::ToggleAwsBedrockAutoLogin,
             auto_login_enabled,
             is_usage_enabled,
@@ -8007,7 +8003,7 @@ impl AwsBedrockWidget {
             app,
         );
         let description = render_ai_setting_description(
-            "When enabled, the login command will run automatically when AWS Bedrock credentials expire.",
+            "启用后，当 AWS Bedrock 凭据过期时会自动运行登录命令。",
             is_usage_enabled,
             app,
         );
