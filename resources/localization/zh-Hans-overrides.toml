@@ -11833,3 +11833,43 @@ target = "新标签页沿用活动标签页颜色"
 path = "app/src/settings_view/appearance_page.rs"
 source = "custom padding in alt-screen"
 target = "备用屏幕自定义内边距"
+
+[[replace]]
+path = "app/src/workspace/view/conversation_list/view.rs"
+source = "Conversations cannot be deleted while in progress."
+target = "进行中的对话无法删除。"
+
+[[replace]]
+path = "app/src/workspace/view/conversation_list/view.rs"
+source = "Conversation"
+target = "对话"
+
+[[replace]]
+path = "app/src/workspace/view/conversation_list/view.rs"
+source = "This conversation cannot be deleted"
+target = "此对话无法删除"
+
+[[replace]]
+path = "app/src/workspace/view/conversation_list/view.rs"
+source = "Share conversation"
+target = "共享对话"
+
+[[replace]]
+path = "app/src/workspace/view/conversation_list/view.rs"
+source = "Fork in new pane"
+target = "在新窗格中 fork"
+
+[[replace]]
+path = "app/src/workspace/view/conversation_list/view.rs"
+source = "Fork in new tab"
+target = "在新标签页中 fork"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Failed to delete conversation. Please exit the agent view and try again."
+target = "删除对话失败。请退出 Agent 视图后重试。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Conversation deleted"
+target = "对话已删除"

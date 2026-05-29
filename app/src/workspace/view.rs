@@ -23322,7 +23322,7 @@ impl TypedActionView for Workspace {
                         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                             toast_stack.add_ephemeral_toast(
                                 DismissibleToast::error(
-                                    "Failed to delete conversation. Please exit the agent view and try again.".to_string(),
+                                    "删除对话失败。请退出 Agent 视图后重试。".to_string(),
                                 ),
                                 window_id,
                                 ctx,
@@ -23337,7 +23337,7 @@ impl TypedActionView for Workspace {
                 send_telemetry_from_ctx!(TelemetryEvent::ConversationListItemDeleted, ctx);
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-                        DismissibleToast::success("Conversation deleted".to_string()),
+                        DismissibleToast::success("对话已删除".to_string()),
                         window_id,
                         ctx,
                     );
