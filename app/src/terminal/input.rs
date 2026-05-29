@@ -772,7 +772,7 @@ impl InputSuggestionsMode {
             InputSuggestionsMode::UserQueryMenu {
                 action: UserQueryMenuAction::Rewind,
                 ..
-            } => Some("Search queries to rewind to"),
+            } => Some("搜索要回退到的查询"),
             InputSuggestionsMode::ConversationMenu => Some("Search conversations"),
             InputSuggestionsMode::SkillMenu => Some("Search skills"),
             InputSuggestionsMode::ModelSelector => Some("Search models"),

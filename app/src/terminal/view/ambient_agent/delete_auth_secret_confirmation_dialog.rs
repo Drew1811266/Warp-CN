@@ -96,7 +96,7 @@ impl View for DeleteAuthSecretConfirmationDialog {
 
         let appearance = Appearance::as_ref(app);
         let description = format!(
-            "Are you sure you want to delete {}? This action cannot be undone. Any agents or environments referencing this secret will no longer have access to it.",
+            "确定要删除 {} 吗？此操作无法撤销。任何引用此密钥的 Agent 或环境都将无法再访问它。",
             pending_deletion.name
         );
 
