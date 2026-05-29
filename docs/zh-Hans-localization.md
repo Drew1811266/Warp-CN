@@ -77,6 +77,8 @@ python3 script/zh_apply_localization.py --dry-run --summary
 python3 script/zh_apply_localization.py
 ```
 
+The inventory script intentionally filters telemetry files, keybindings, filter tokens, placeholder-only strings, and settings search tags. These strings are not treated as untranslated UI unless they are also rendered directly in a visible control.
+
 Coverage counts are available for release tracking:
 
 ```bash
