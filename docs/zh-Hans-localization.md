@@ -34,13 +34,42 @@ cargo fmt
 
 If `--dry-run` fails, inspect the upstream file, update the matching `source` entry, and rerun the script.
 
+## Inventory workflow
+
+Use the inventory script to find remaining likely user-visible English strings before adding a new batch of replacements:
+
+```bash
+python3 script/zh_localization_inventory.py --preset onboarding > /tmp/zh-onboarding.md
+python3 script/zh_localization_inventory.py --preset workspace > /tmp/zh-workspace.md
+python3 script/zh_localization_inventory.py --preset search > /tmp/zh-search.md
+python3 script/zh_localization_inventory.py --preset settings > /tmp/zh-settings.md
+python3 script/zh_localization_inventory.py --preset modals > /tmp/zh-modals.md
+```
+
+Review only `candidate` rows. Add manifest entries in small batches, then rerun:
+
+```bash
+python3 script/zh_apply_localization.py --dry-run --summary
+python3 script/zh_apply_localization.py
+```
+
+Coverage counts are available for release tracking:
+
+```bash
+python3 script/zh_localization_inventory.py --preset onboarding --coverage
+python3 script/zh_localization_inventory.py --preset workspace --coverage
+python3 script/zh_localization_inventory.py --preset search --coverage
+python3 script/zh_localization_inventory.py --preset settings --coverage
+python3 script/zh_localization_inventory.py --preset modals --coverage
+```
+
 ## Upstream sync workflow
 
 ```bash
 git switch drew/zh-Hans-localization
 git fetch origin
 git merge origin/master
-python3 script/zh_apply_localization.py --dry-run
+python3 script/zh_apply_localization.py --dry-run --summary
 python3 script/zh_apply_localization.py
 cargo fmt
 ```
