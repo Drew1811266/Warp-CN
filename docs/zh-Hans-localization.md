@@ -17,18 +17,18 @@ The script applies exact replacements inside Rust double-quoted strings. It is i
 
 Last verified release audit: 2026-05-29.
 
-- Manifest entries: 2311.
-- Covered areas: onboarding/auth, workspace shell, search and command entry points, settings core pages, advanced settings pages, common modals/toasts, Warp Drive surfaces, tab configs, themes, terminal sharing surfaces, and Agent management/input panels.
-- Dry-run summary: `entries: 2311`, `files: 167`, `already_applied: 2296`, `would_change: 0`, `missing: 0`.
+- Manifest entries: 2349.
+- Covered areas: onboarding/auth, workspace shell, HOA onboarding, search and command entry points, settings core pages, AI settings deep paths, BYO API keys, AWS Bedrock credentials, advanced settings pages, common modals/toasts, Warp Drive surfaces, tab configs, themes, terminal sharing surfaces, rewind labels, auth-secret confirmation dialogs, and Agent management/input panels.
+- Dry-run summary: `entries: 2349`, `files: 173`, `already_applied: 2334`, `would_change: 0`, `missing: 0`.
 - Coverage snapshot:
-  - `onboarding`: 266 covered, 92 candidates, 74.3%.
-  - `workspace`: 451 covered, 529 candidates, 46.0%.
-  - `search`: 267 covered, 63 candidates, 80.9%.
-  - `settings`: 1126 covered, 946 candidates, 54.3%.
-  - `modals`: 560 covered, 6278 candidates, 8.2%.
-  - `release`: 2548 covered, 7882 candidates, 24.4%.
+  - `onboarding`: 266 covered, 55 candidates, 82.9%.
+  - `workspace`: 474 covered, 496 candidates, 48.9%.
+  - `search`: 267 covered, 40 candidates, 87.0%.
+  - `settings`: 1142 covered, 887 candidates, 56.3%.
+  - `modals`: 563 covered, 5875 candidates, 8.7%.
+  - `release`: 2590 covered, 7332 candidates, 26.1%.
 - Package note: the app crate package is currently named `warp`; the older checklist label `cargo check -p app` fails in this workspace because no package named `app` exists.
-- Passed validation:
+- Phase 2 command-line validation passed:
   - `python3 script/zh_apply_localization.py --dry-run --summary`
   - `python3 script/zh_localization_inventory.py --preset onboarding --coverage`
   - `python3 script/zh_localization_inventory.py --preset workspace --coverage`
@@ -38,14 +38,15 @@ Last verified release audit: 2026-05-29.
   - `python3 script/zh_localization_inventory.py --preset release --coverage`
   - `cargo fmt --check`
   - `git diff --check`
-  - `cargo check -p onboarding`
+  - `python3 -m py_compile script/zh_apply_localization.py script/zh_localization_inventory.py`
   - `cargo check -p warp`
   - `cargo test -p warp_search_core`
   - `cargo test -p warp command_palette`
   - `TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open`
 - Recorded failures / manual gates:
   - `cargo check -p app` fails with `error: package ID specification 'app' did not match any packages`; use `cargo check -p warp` for the current app package.
-  - GUI smoke with `target/debug/bundle/osx/WarpOss.app` verified the terminal-only workspace and command palette filter chips (`文件`, `操作`, `会话`, `启动配置`).
+  - Historical GUI smoke with `target/debug/bundle/osx/WarpOss.app` verified the terminal-only workspace and command palette filter chips (`文件`, `操作`, `会话`, `启动配置`).
+  - Phase 2 GUI smoke was attempted on 2026-05-29. The `WarpOss` process launched, but Computer Use and AppleScript window reads timed out, `open` returned `-1712`, and the captured screenshot was black. Treat HOA onboarding, AI settings deep paths, rewind, and auth-secret confirmation as manual GUI gates until they are verified in an interactive desktop session.
   - Interactive login/account smoke remains a manual release gate; the non-interactive bundle gate produced `target/debug/bundle/osx/WarpOss.app`.
 
 ## Apply translations after syncing upstream
@@ -106,8 +107,6 @@ python3 script/zh_localization_inventory.py --preset modals --coverage
 python3 script/zh_localization_inventory.py --preset release --coverage
 cargo fmt --check
 git diff --check
-cargo check -p onboarding
-cargo check -p app
 cargo check -p warp
 cargo test -p warp_search_core
 cargo test -p warp command_palette
@@ -117,9 +116,10 @@ TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open
 
 Current workspace notes:
 
-- `cargo check -p app` is retained because older planning docs used `app` as the app-crate label. In the current workspace the package is named `warp`; expect `cargo check -p app` to fail with `package ID specification 'app' did not match any packages`.
+- `cargo check -p app` is not part of the current checklist. Older planning docs used `app` as the app-crate label; in the current workspace the package is named `warp`, so `cargo check -p app` fails with `package ID specification 'app' did not match any packages`.
 - Use `TERM=xterm-256color ./script/run --dont-open` for a non-interactive bundle/build check. Without that `TERM`, `cargo-bundle` may panic while printing colored status output with `Error(Term(ColorOutOfRange), ...)`.
 - Use `./script/run` or `open -n target/debug/bundle/osx/WarpOss.app` for the interactive app smoke pass after the bundle gate is green.
+- Phase 2 local automatic GUI smoke is currently manual-gated on this machine because the app process starts but window automation times out.
 
 2026-05-29 recorded failure output:
 
@@ -202,7 +202,7 @@ The first pass focuses on high-visibility UI:
 - command palette, command search, and slash commands
 - common modals, toasts, themes, tab configs, Warp Drive, terminal sharing, and Agent management surfaces
 
-Remaining work should prioritize candidate strings surfaced by the inventory script, especially low-signal broad presets where internal protocol, test, and diagnostic literals are still intentionally filtered manually.
+Prioritize remaining work from candidate strings surfaced by the inventory script, especially low-signal broad presets where internal protocol, test, and diagnostic literals are still intentionally filtered manually.
 
 ## Build notes
 

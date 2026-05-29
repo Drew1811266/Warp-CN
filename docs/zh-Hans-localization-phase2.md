@@ -13,9 +13,9 @@
 
 这些字符串进入覆盖率分母后会拉低 `modals` 和 `release` 覆盖率，但它们不等同于真实用户界面未汉化。因此第二阶段采用“真实用户路径优先 + 工具降噪 + 可验证交付”的策略。
 
-## 2. 当前数据基线
+## 2. 第二阶段启动数据基线
 
-最近一次统计时间：2026-05-29。
+统计时间：2026-05-29，P2-M1 inventory 降噪前。
 
 | 预设 | 已覆盖 | 候选 | 覆盖率 | 第二阶段解读 |
 | --- | ---: | ---: | ---: | --- |
@@ -274,7 +274,75 @@ GUI 冒烟：
 - 打开设置页的 Appearance、AI、MCP/API keys/AWS Bedrock 相关区域。
 - 检查 HOA onboarding 或对应新功能入口，如无法触发则记录为人工 gate。
 
-## 7. 风险与缓解
+## 7. 第二阶段第一轮执行结果
+
+执行时间：2026-05-29。
+
+本轮执行的是第二阶段的第一轮可交付切片，目标是先完成工具降噪、工作区新功能引导、AI 设置深层路径和终端确认路径。更宽的 Appearance 全量清理、账号云端路径和登录态路径继续作为后续第二阶段任务推进。
+
+| 里程碑 | 结果 | 证据 |
+| --- | --- | --- |
+| P2-M0 文档与边界 | 已完成 | `15e611b9 docs: plan phase 2 zh-Hans localization` |
+| P2-M1 inventory 降噪 | 已完成 | `adead509 chore: reduce zh-Hans inventory noise` |
+| P2-M2 HOA onboarding | 已完成 | `187e2ad9 feat: localize HOA onboarding to zh-Hans` |
+| P2-M3 AI 设置深层路径 | 已完成 | `a6d38d0a feat: localize AI settings deep paths` |
+| P2-M4 Appearance 候选审查 | 已审查，暂不改源码 | 候选主要是 settings search tag、主题名、占位符和示例值；按本规划原则保留 |
+| P2-M5 终端 rewind / auth-secret 确认路径 | 已完成 | `00b23280 feat: localize terminal confirmation paths` |
+| P2-M6 发布命令行审计 | 已完成 | 本轮文档提交记录最终审计结果 |
+| P2-M6 GUI 冒烟 | manual gate | `WarpOss` 进程可启动，但 Computer Use/AppleScript 读取窗口超时，`open` 返回 `-1712`，截图为黑屏 |
+
+最终 dry-run：
+
+```text
+entries: 2349
+files: 173
+already_applied: 2334
+would_change: 0
+missing: 0
+```
+
+最终覆盖率快照：
+
+| 预设 | 已覆盖 | 候选 | 覆盖率 |
+| --- | ---: | ---: | ---: |
+| `onboarding` | 266 | 55 | 82.9% |
+| `workspace` | 474 | 496 | 48.9% |
+| `search` | 267 | 40 | 87.0% |
+| `settings` | 1142 | 887 | 56.3% |
+| `modals` | 563 | 5875 | 8.7% |
+| `release` | 2590 | 7332 | 26.1% |
+
+命令行验证已通过：
+
+```bash
+python3 script/zh_apply_localization.py --dry-run --summary
+python3 script/zh_localization_inventory.py --preset onboarding --coverage
+python3 script/zh_localization_inventory.py --preset workspace --coverage
+python3 script/zh_localization_inventory.py --preset search --coverage
+python3 script/zh_localization_inventory.py --preset settings --coverage
+python3 script/zh_localization_inventory.py --preset modals --coverage
+python3 script/zh_localization_inventory.py --preset release --coverage
+cargo fmt --check
+git diff --check
+python3 -m py_compile script/zh_apply_localization.py script/zh_localization_inventory.py
+cargo check -p warp
+cargo test -p warp_search_core
+cargo test -p warp command_palette
+TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open
+```
+
+已知命令行噪声：
+
+- `cargo check -p warp`、`cargo test -p warp command_palette` 和 `./script/run --dont-open` 仍打印既有 unused-variable warnings，集中在 `scp_fallback.rs` 和 `slash_commands/mod.rs`。
+- `./script/run --dont-open` 在本地 OSS 环境会跳过内部 channel config SSH 安装，并提示缺少 OSS `.icon` bundle；bundle 仍成功生成并签名。
+
+后续第二阶段任务：
+
+- 在真实交互式桌面会话中复验 HOA onboarding、AI settings、AWS Bedrock、rewind 和 auth-secret 删除确认框。
+- 继续处理 Appearance 中确认可见的控件文案；保留主题名、settings search tag、占位符和示例命令。
+- 继续扩展账号、云端、权限、CLI 安装、共享和破坏性确认框路径。
+
+## 8. 风险与缓解
 
 | 风险 | 影响 | 缓解 |
 | --- | --- | --- |
@@ -284,33 +352,31 @@ GUI 冒烟：
 | 模态框范围太大 | 单批 diff 不可审查 | P2-M5 只处理账号、云端、权限、常见确认框 |
 | GUI 路径需要账号 | 自动化无法覆盖 | 文档中记录 manual gate，不声称已完全验证 |
 
-## 8. 合理性复盘
+## 9. 合理性复盘
 
-### 8.1 是否解决用户提出的问题？
+### 9.1 是否解决用户提出的问题？
 
 是。用户关心 README 中低覆盖率是否意味着还处于初期。该规划明确回答：当前是第一阶段可用版，第二阶段聚焦深度覆盖和发布质量，不是从零开始。
 
-### 8.2 是否避免盲目追覆盖率？
+### 9.2 是否避免盲目追覆盖率？
 
 是。规划把 P2-M1 设为工具降噪，先改善统计口径，再处理用户路径。`modals` 和 `release` 覆盖率不会作为唯一目标。
 
-### 8.3 是否每个里程碑都可验收？
+### 9.3 是否每个里程碑都可验收？
 
 是。每个里程碑都有文件范围、目标、验收命令或人工 gate。P2-M6 还提供完整 release checklist。
 
-### 8.4 是否存在过大任务？
+### 9.4 是否存在过大任务？
 
 P2-M5 风险最大，因为 `modals` 范围极宽。规划已经将其收窄为账号、云端、权限、常见确认框，不覆盖所有 `terminal`/`ai` 深层路径。
 
-### 8.5 是否适合 Codex goal 连续执行？
+### 9.5 是否适合 Codex goal 连续执行？
 
 适合。P2-M0 到 P2-M6 是顺序依赖：先文档，再工具降噪，再按路径扩展翻译，最后发布审计。每个里程碑完成后可以用覆盖率、dry-run、compile/test 和 GUI 检查判断是否进入下一步。
 
-## 9. 结论
+## 10. 结论
 
-第二阶段规划合理，可以进入详细实施计划编写。
-
-执行时应坚持三条规则：
+第二阶段规划合理，第一轮详细实施计划已按可验证切片执行完成。后续继续推进时仍应坚持三条规则：
 
 1. 每个里程碑必须先验证再宣布完成。
 2. 不翻译会影响功能的内部 token 或配置 key。
