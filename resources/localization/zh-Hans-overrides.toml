@@ -4233,3 +4233,1668 @@ target = "终端会话 {keystroke}"
 path = "app/src/search/welcome_palette/view.rs"
 source = "Terminal session"
 target = "终端会话"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Settings"
+target = "设置"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Search"
+target = "搜索"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Agents"
+target = "Agent"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Cloud platform"
+target = "云平台"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "No settings match your search."
+target = "没有匹配搜索的设置。"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "You may want to try using different keywords or checking for any possible typos."
+target = "可以尝试使用不同关键词，或检查是否有拼写错误。"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Enable {description_suffix}"
+target = "启用 {description_suffix}"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Disable {description_suffix}"
+target = "停用 {description_suffix}"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Show initialization block"
+target = "显示初始化块"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Hide initialization block"
+target = "隐藏初始化块"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Show in-band command blocks"
+target = "显示带内命令块"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Hide in-band command blocks"
+target = "隐藏带内命令块"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "recording mode"
+target = "录制模式"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "in-band generators for new sessions"
+target = "新会话的带内生成器"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "debug network status"
+target = "调试网络状态"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "memory statistics"
+target = "内存统计"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Split pane right"
+target = "向右拆分窗格"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Split pane left"
+target = "向左拆分窗格"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Split pane down"
+target = "向下拆分窗格"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Split pane up"
+target = "向上拆分窗格"
+
+[[replace]]
+path = "app/src/settings_view/mod.rs"
+source = "Close pane"
+target = "关闭窗格"
+
+[[replace]]
+path = "app/src/settings_view/settings_file_footer.rs"
+source = "Open settings file"
+target = "打开设置文件"
+
+[[replace]]
+path = "app/src/settings_view/settings_file_footer.rs"
+source = "Open file"
+target = "打开文件"
+
+[[replace]]
+path = "app/src/settings_view/settings_file_footer.rs"
+source = "Fix with Oz"
+target = "用 Oz 修复"
+
+[[replace]]
+path = "app/src/settings_view/settings_page.rs"
+source = "Click to learn more in docs"
+target = "点击在文档中了解更多"
+
+[[replace]]
+path = "app/src/settings_view/settings_page.rs"
+source = "This setting is not synced to your other devices"
+target = "此设置不会同步到你的其他设备"
+
+[[replace]]
+path = "app/src/settings_view/settings_page.rs"
+source = "This option is enforced by your organization's settings and cannot be customized."
+target = "此选项由组织设置强制执行，无法自定义。"
+
+[[replace]]
+path = "app/src/settings_view/settings_page.rs"
+source = "Reset to default"
+target = "恢复默认"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Account"
+target = "账号"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Earn rewards by sharing Warp with friends & colleagues"
+target = "将 Warp 分享给朋友和同事即可获得奖励"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Log out"
+target = "退出登录"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Upgrade Plan"
+target = "升级套餐"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Generate Stripe Billing Portal Link"
+target = "生成 Stripe 账单门户链接"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Toggle Settings Sync"
+target = "切换设置同步"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Unknown reason"
+target = "未知原因"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Sign up"
+target = "注册"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Free"
+target = "免费"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Compare plans"
+target = "比较套餐"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Contact support"
+target = "联系支持"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Manage billing"
+target = "管理账单"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Upgrade to Turbo plan"
+target = "升级到 Turbo 套餐"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Upgrade to Lightspeed plan"
+target = "升级到 Lightspeed 套餐"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Settings sync"
+target = "设置同步"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Refer a friend"
+target = "推荐好友"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Up to date"
+target = "已是最新"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Check for updates"
+target = "检查更新"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "checking for update..."
+target = "正在检查更新..."
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "downloading update..."
+target = "正在下载更新..."
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Update available"
+target = "有可用更新"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Relaunch Warp"
+target = "重新启动 Warp"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Updating..."
+target = "正在更新..."
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Installed update"
+target = "已安装更新"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "A new version of Warp is available but can't be installed"
+target = "有新版本 Warp 可用，但无法安装"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Update Warp manually"
+target = "手动更新 Warp"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "A new version of Warp is installed but can't be launched."
+target = "新版本 Warp 已安装，但无法启动。"
+
+[[replace]]
+path = "app/src/settings_view/main_page.rs"
+source = "Version"
+target = "版本"
+
+[[replace]]
+path = "app/src/settings_view/keybindings.rs"
+source = "Search by name or by keys (ex. \"cmd d\")"
+target = "按名称或按键搜索（例如 cmd d）"
+
+[[replace]]
+path = "app/src/settings_view/keybindings.rs"
+source = "This shortcut conflicts with other keybinds"
+target = "此快捷键与其他键绑定冲突"
+
+[[replace]]
+path = "app/src/settings_view/keybindings.rs"
+source = "Default"
+target = "默认"
+
+[[replace]]
+path = "app/src/settings_view/keybindings.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/settings_view/keybindings.rs"
+source = "Clear"
+target = "清除"
+
+[[replace]]
+path = "app/src/settings_view/keybindings.rs"
+source = "Save"
+target = "保存"
+
+[[replace]]
+path = "app/src/settings_view/keybindings.rs"
+source = "Press new keyboard shortcut"
+target = "按下新的键盘快捷键"
+
+[[replace]]
+path = "app/src/settings_view/keybindings.rs"
+source = "Add your own custom keybindings to existing actions below."
+target = "为下面的现有操作添加自定义键绑定。"
+
+[[replace]]
+path = "app/src/settings_view/keybindings.rs"
+source = "Use"
+target = "使用"
+
+[[replace]]
+path = "app/src/settings_view/keybindings.rs"
+source = "to reference these keybindings in a side pane at anytime."
+target = "随时在侧边栏中查看这些键绑定。"
+
+[[replace]]
+path = "app/src/settings_view/keybindings.rs"
+source = "Keyboard shortcuts are not synced to the cloud"
+target = "键盘快捷键不会同步到云端"
+
+[[replace]]
+path = "app/src/settings_view/keybindings.rs"
+source = "Configure keyboard shortcuts"
+target = "配置键盘快捷键"
+
+[[replace]]
+path = "app/src/settings_view/keybindings.rs"
+source = "Command"
+target = "命令"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "{} (default)"
+target = "{}（默认）"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Start Input at the Top"
+target = "输入从顶部开始"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Pin Input to the Top"
+target = "将输入固定到顶部"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Pin Input to the Bottom"
+target = "将输入固定到底部"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Toggle Input Mode (Warp/Classic)"
+target = "切换输入模式（Warp/经典）"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Show code review button in tab bar"
+target = "在标签栏显示代码审查按钮"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Hide code review button in tab bar"
+target = "在标签栏隐藏代码审查按钮"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Always show tab bar"
+target = "始终显示标签栏"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Hide tab bar if fullscreen"
+target = "全屏时隐藏标签栏"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Only show tab bar on hover"
+target = "仅悬停时显示标签栏"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Themes"
+target = "主题"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Icon"
+target = "图标"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Window"
+target = "窗口"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Input"
+target = "输入"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Panes"
+target = "窗格"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Blocks"
+target = "块"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Text"
+target = "文本"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Cursor"
+target = "光标"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Tabs"
+target = "标签页"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Full-screen Apps"
+target = "全屏应用"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Pin to the bottom (Warp mode)"
+target = "固定到底部（Warp 模式）"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Pin to the top (Reverse mode)"
+target = "固定到顶部（反向模式）"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Start at the top (Classic mode)"
+target = "从顶部开始（经典模式）"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Default"
+target = "默认"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Never"
+target = "从不"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "On low-DPI displays"
+target = "在低 DPI 显示器上"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "On high-DPI displays"
+target = "在高 DPI 显示器上"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Always"
+target = "始终"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Only for named colors"
+target = "仅对命名颜色"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "When windowed"
+target = "窗口模式时"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Only on hover"
+target = "仅悬停时"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Right"
+target = "右侧"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Left"
+target = "左侧"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Create your own custom theme"
+target = "创建你自己的自定义主题"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Light"
+target = "浅色"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Dark"
+target = "深色"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Current theme"
+target = "当前主题"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Sync with OS"
+target = "跟随系统"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Automatically switch between light and dark themes when your system does."
+target = "系统切换浅色和深色主题时，自动跟随切换。"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Customize your app icon"
+target = "自定义应用图标"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Changing the app icon requires the app to be bundled."
+target = "更改应用图标需要使用已打包的应用。"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "You may need to restart Warp for MacOS to apply the preferred icon style."
+target = "你可能需要重启 Warp，macOS 才会应用所选图标样式。"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Open new windows with custom size"
+target = "以自定义尺寸打开新窗口"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Columns"
+target = "列"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Rows"
+target = "行"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Window Opacity:"
+target = "窗口不透明度："
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Transparency is not supported with your graphics drivers."
+target = "你的显卡驱动不支持透明效果。"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Window Opacity: {opacity_value}"
+target = "窗口不透明度：{opacity_value}"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "The selected graphics settings may not support rendering transparent windows."
+target = "所选图形设置可能不支持渲染透明窗口。"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = " Try changing the settings for the graphics backend or integrated GPU in Features > System."
+target = " 请尝试在功能 > 系统中更改图形后端或集成 GPU 设置。"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Window Blur Radius: {blur_value}"
+target = "窗口模糊半径：{blur_value}"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Use Window Blur (Acrylic texture)"
+target = "使用窗口模糊（亚克力纹理）"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "The selected hardware may not support rendering transparent windows."
+target = "所选硬件可能不支持渲染透明窗口。"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Tools panel visibility is consistent across tabs"
+target = "工具面板可见性在标签页间保持一致"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Input type"
+target = "输入类型"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Input position"
+target = "输入位置"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Dim inactive panes"
+target = "调暗非活动窗格"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Focus follows mouse"
+target = "焦点跟随鼠标"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Compact mode"
+target = "紧凑模式"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Show Jump to Bottom of Block button"
+target = "显示跳到块底部按钮"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Show block dividers"
+target = "显示块分隔线"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Agent font"
+target = "Agent 字体"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Match terminal"
+target = "匹配终端"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Line height"
+target = "行高"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Reset to default"
+target = "恢复默认"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Terminal font"
+target = "终端字体"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "View all available system fonts"
+target = "查看所有可用系统字体"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Font weight"
+target = "字体粗细"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Font size (px)"
+target = "字体大小（px）"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Notebook font size"
+target = "Notebook 字体大小"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Use thin strokes"
+target = "使用细笔画"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Enforce minimum contrast"
+target = "强制最小对比度"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Show ligatures in terminal"
+target = "在终端中显示连字"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Ligatures may reduce performance"
+target = "连字可能降低性能"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Cursor type"
+target = "光标类型"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Cursor type is disabled in Vim mode"
+target = "Vim 模式下会停用光标类型设置"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Blinking cursor"
+target = "光标闪烁"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Tab close button position"
+target = "标签页关闭按钮位置"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Show tab indicators"
+target = "显示标签页指示器"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Show code review button"
+target = "显示代码审查按钮"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Preserve active tab color for new tabs"
+target = "新标签页保留活动标签页颜色"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Use vertical tab layout"
+target = "使用垂直标签页布局"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Show vertical tabs panel in restored windows"
+target = "在恢复的窗口中显示垂直标签页面板"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "When enabled, reopening or restoring a window opens the vertical tabs panel even if it was closed when the window was last saved."
+target = "启用后，重新打开或恢复窗口时会打开垂直标签页面板，即使该窗口上次保存时面板处于关闭状态。"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Use latest user prompt as conversation title in tab names"
+target = "用用户最新提示作为标签页中的对话标题"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Show the latest user prompt instead of the generated conversation title for Oz and third-party agent sessions in vertical tabs."
+target = "在垂直标签页中，对 Oz 和第三方 Agent 会话显示用户最新提示，而不是生成的对话标题。"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Header toolbar layout"
+target = "标题工具栏布局"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Directory tab colors"
+target = "目录标签页颜色"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Automatically color tabs based on the directory or repo you're working in."
+target = "根据你正在使用的目录或仓库自动为标签页着色。"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Default (no color)"
+target = "默认（无颜色）"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Show the tab bar"
+target = "显示标签栏"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Use custom padding in alt-screen"
+target = "在备用屏幕中使用自定义内边距"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Uniform padding (px)"
+target = "统一内边距（px）"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Zoom"
+target = "缩放"
+
+[[replace]]
+path = "app/src/settings_view/appearance_page.rs"
+source = "Adjusts the default zoom level across all windows"
+target = "调整所有窗口的默认缩放级别"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "General"
+target = "通用"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Session"
+target = "会话"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Keys"
+target = "按键"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Text Editing"
+target = "文本编辑"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Terminal Input"
+target = "终端输入"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Terminal"
+target = "终端"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Notifications"
+target = "通知"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Workflows"
+target = "工作流"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "System"
+target = "系统"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Default"
+target = "默认"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "After all tabs"
+target = "所有标签页之后"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "After current tab"
+target = "当前标签页之后"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Pin to top"
+target = "固定到顶部"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Pin to bottom"
+target = "固定到底部"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Pin to left"
+target = "固定到左侧"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Pin to right"
+target = "固定到右侧"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Width %"
+target = "宽度 %"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Height %"
+target = "高度 %"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Autohides on loss of keyboard focus"
+target = "失去键盘焦点时自动隐藏"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "When a command takes longer than"
+target = "当命令运行时间超过"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "seconds to complete"
+target = "秒才完成时"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Keybinding"
+target = "键绑定"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Click to set global hotkey"
+target = "点击设置全局热键"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Save"
+target = "保存"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Press new keyboard shortcut"
+target = "按下新的键盘快捷键"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Change keybinding"
+target = "更改键绑定"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Active Screen"
+target = "活动屏幕"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Open links in desktop app"
+target = "在桌面应用中打开链接"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Automatically open links in desktop app whenever possible."
+target = "尽可能自动在桌面应用中打开链接。"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Restore windows, tabs, and panes on startup"
+target = "启动时恢复窗口、标签页和窗格"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Window positions won't be restored on Wayland. "
+target = "Wayland 上不会恢复窗口位置。 "
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "See docs."
+target = "查看文档。"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Show sticky command header"
+target = "显示粘性命令标题"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Show tooltip on click on links"
+target = "点击链接时显示工具提示"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Show warning before quitting/logging out"
+target = "退出或注销前显示警告"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Start Warp at login (requires macOS 13+)"
+target = "登录时启动 Warp（需要 macOS 13+）"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Start Warp at login"
+target = "登录时启动 Warp"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Quit when all windows are closed"
+target = "关闭所有窗口时退出"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Show changelog toast after updates"
+target = "更新后显示更新日志提示"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Allowed Values: 1-20"
+target = "允许值：1-20"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Lines scrolled by mouse wheel interval"
+target = "每次鼠标滚轮滚动的行数"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Supports floating point values between 1 and 20."
+target = "支持 1 到 20 之间的浮点值。"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Auto open code review panel"
+target = "自动打开代码审查面板"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "When this setting is on, the code review panel will open on the first accepted diff of a conversation"
+target = "启用后，对话中首次接受 diff 时会打开代码审查面板"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Warp is the default terminal"
+target = "Warp 是默认终端"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Make Warp the default terminal"
+target = "将 Warp 设为默认终端"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Maximum rows in a block"
+target = "块中的最大行数"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Setting the limit above 100k lines may impact performance. Maximum rows supported is {max_rows}."
+target = "将限制设置为超过 10 万行可能影响性能。支持的最大行数为 {max_rows}。"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Warp SSH Wrapper"
+target = "Warp SSH 包装器"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "This change will take effect in new sessions"
+target = "此更改将在新会话中生效"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Receive desktop notifications from Warp"
+target = "接收来自 Warp 的桌面通知"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Notify when an agent completes a task"
+target = "Agent 完成任务时通知"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Notify when a command or agent needs your attention to continue"
+target = "命令或 Agent 需要你关注才能继续时通知"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Play notification sounds"
+target = "播放通知声音"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Show in-app agent notifications"
+target = "显示应用内 Agent 通知"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Toast notifications stay visible for"
+target = "Toast 通知保持可见"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Default shell for new sessions"
+target = "新会话的默认 shell"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Working directory for new sessions"
+target = "新会话的工作目录"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Confirm before closing shared session"
+target = "关闭共享会话前确认"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Global hotkey:"
+target = "全局热键："
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Not supported on Wayland. "
+target = "Wayland 不支持。 "
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Autocomplete quotes, parentheses, and brackets"
+target = "自动补全引号、圆括号和方括号"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Code editor line numbers:"
+target = "代码编辑器行号："
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Error underlining for commands"
+target = "命令错误下划线"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Syntax highlighting for commands"
+target = "命令语法高亮"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Open completions menu as you type"
+target = "输入时打开补全菜单"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Suggest corrected commands"
+target = "建议修正后的命令"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Expand aliases as you type"
+target = "输入时展开别名"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Middle-click to paste"
+target = "中键点击粘贴"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Edit code and commands with Vim keybindings"
+target = "使用 Vim 键绑定编辑代码和命令"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Set unnamed register as system clipboard"
+target = "将未命名寄存器设为系统剪贴板"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Show Vim status bar"
+target = "显示 Vim 状态栏"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Enable '@' context menu in terminal mode"
+target = "在终端模式中启用 @ 上下文菜单"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Enable slash commands in terminal mode"
+target = "在终端模式中启用斜杠命令"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Outline codebase symbols for '@' context menu"
+target = "为 @ 上下文菜单生成代码库符号大纲"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Show terminal input message line"
+target = "显示终端输入消息行"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Show autosuggestion keybinding hint"
+target = "显示自动建议键绑定提示"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Show autosuggestion ignore button"
+target = "显示忽略自动建议按钮"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "→ accepts autosuggestions."
+target = "→ 接受自动建议。"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "{} accepts autosuggestions."
+target = "{} 接受自动建议。"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Completions open as you type."
+target = "补全会在输入时打开。"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Completions open as you type (or {})."
+target = "补全会在输入时打开（或按 {}）。"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Opening the completion menu is unbound."
+target = "打开补全菜单未绑定快捷键。"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "{} opens completion menu."
+target = "{} 打开补全菜单。"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Accept Autosuggestion"
+target = "接受自动建议"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Open Completions Menu"
+target = "打开补全菜单"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Tab key behavior"
+target = "Tab 键行为"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Ctrl+Tab behavior:"
+target = "Ctrl+Tab 行为："
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Enable Mouse Reporting"
+target = "启用鼠标报告"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Enable Scroll Reporting"
+target = "启用滚动报告"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Enable Focus Reporting"
+target = "启用焦点报告"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Use Audible Bell"
+target = "使用可听铃声"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Characters considered part of a word"
+target = "被视为单词一部分的字符"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Double-click smart selection"
+target = "双击智能选择"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Show help block in new sessions"
+target = "在新会话中显示帮助块"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Copy on select"
+target = "选择时复制"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "New tab placement"
+target = "新标签页位置"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Default mode for new sessions"
+target = "新会话默认模式"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Show Global Workflows in Command Search (ctrl-r)"
+target = "在命令搜索中显示全局工作流（ctrl-r）"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Honor linux selection clipboard"
+target = "遵循 Linux 选择剪贴板"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Whether the Linux primary clipboard should be supported."
+target = "是否支持 Linux 主剪贴板。"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Prefer rendering new windows with integrated GPU (low power)"
+target = "优先使用集成 GPU 渲染新窗口（低功耗）"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Changes will apply to new windows."
+target = "更改将应用于新窗口。"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Use Wayland for window management"
+target = "使用 Wayland 管理窗口"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Enables the use of Wayland"
+target = "启用 Wayland"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Enabling this setting disables global hotkey support. When disabled, text may be blurry if your Wayland compositor is using fraction scaling (ex: 125%)."
+target = "启用此设置会停用全局热键支持。停用时，如果你的 Wayland 合成器使用小数缩放（例如 125%），文本可能会模糊。"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Preferred graphics backend"
+target = "首选图形后端"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Current backend: {}"
+target = "当前后端：{}"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Asynchronous find"
+target = "异步查找"
+
+[[replace]]
+path = "app/src/settings_view/features_page.rs"
+source = "Use an improved implementation of find to keep the UI responsive while searching for matches on large outputs."
+target = "使用改进的查找实现，在大型输出中搜索匹配项时保持界面响应。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Privacy"
+target = "隐私"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Secret redaction"
+target = "敏感信息遮盖"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "When this setting is enabled, Warp will scan blocks, the contents of Warp Drive objects, and Oz prompts for potential sensitive information and prevent saving or sending this data to any servers. You can customize this list via regexes."
+target = "启用后，Warp 会扫描块、Warp Drive 对象内容和 Oz 提示，识别潜在敏感信息，并阻止将这些数据保存或发送到服务器。你可以通过正则表达式自定义此列表。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Custom secret redaction"
+target = "自定义敏感信息遮盖"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Use regex to define additional secrets or data you'd like to redact. This will take effect when the next command runs. You can use the inline (?i) flag as a prefix to your regex to make it case-insensitive."
+target = "使用正则表达式定义更多要遮盖的敏感信息或数据。此设置会在下一条命令运行时生效。你可以在正则前加内联 (?i) 标记，使其不区分大小写。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "App analytics help us make the product better for you. We only collect app usage metadata, never console input or output."
+target = "应用分析可帮助我们改进产品。我们只收集应用使用元数据，绝不收集控制台输入或输出。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Help improve Warp"
+target = "帮助改进 Warp"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "App analytics help us make the product better for you. We may collect certain console interactions to improve Warp's AI capabilities."
+target = "应用分析可帮助我们改进产品。我们可能会收集部分控制台交互，以改进 Warp 的 AI 能力。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "On the free tier, analytics must be enabled to use AI features."
+target = "免费套餐必须启用分析才能使用 AI 功能。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Manage your data"
+target = "管理你的数据"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "At any time, you may choose to delete your Warp account permanently. You will no longer be able to use Warp."
+target = "你可以随时选择永久删除 Warp 账号。删除后将无法继续使用 Warp。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Visit the data management page"
+target = "访问数据管理页面"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Privacy policy"
+target = "隐私政策"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Read Warp's privacy policy"
+target = "阅读 Warp 隐私政策"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Add regex pattern"
+target = "添加正则模式"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Personal"
+target = "个人"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Enterprise"
+target = "企业"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Enterprise secret redaction cannot be modified."
+target = "无法修改企业敏感信息遮盖。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "No enterprise regexes have been configured by your organization."
+target = "你的组织尚未配置企业正则表达式。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Recommended"
+target = "推荐"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Add all"
+target = "全部添加"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Enabled by your organization."
+target = "已由你的组织启用。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Secret visual redaction mode"
+target = "敏感信息视觉遮盖模式"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Choose how secrets are visually presented in the block list while keeping them searchable. This setting only affects what you see in the block list."
+target = "选择敏感信息在块列表中的视觉呈现方式，同时保持可搜索。此设置只影响你在块列表中看到的内容。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Add regex"
+target = "添加正则"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Your administrator has enabled zero data retention for your team. User generated content will never be collected."
+target = "你的管理员已为团队启用零数据保留。用户生成内容绝不会被收集。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "This setting is managed by your organization."
+target = "此设置由你的组织管理。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Read more about Warp's use of data"
+target = "进一步了解 Warp 如何使用数据"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Send crash reports"
+target = "发送崩溃报告"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Crash reports assist with debugging and stability improvements."
+target = "崩溃报告有助于调试和提升稳定性。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Store AI conversations in the cloud"
+target = "在云端存储 AI 对话"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Agent conversations can be shared with others and are retained when you log in on different devices. This data is only stored for product functionality, and Warp will not use it for analytics."
+target = "Agent 对话可以分享给他人，并会在你登录不同设备时保留。这些数据仅为产品功能而存储，Warp 不会将其用于分析。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Agent conversations are only stored locally on your machine, are lost upon logout, and cannot be shared. Note: conversation data for ambient agents are still stored in the cloud."
+target = "Agent 对话只会存储在本机，退出登录后会丢失且无法分享。注意：ambient agent 的对话数据仍会存储在云端。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "Network log console"
+target = "网络日志控制台"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "We've built a native console that allows you to view all communications from Warp to external servers to ensure you feel comfortable that your work is always kept safe."
+target = "我们内置了原生控制台，可查看 Warp 与外部服务器的所有通信，帮助你确认工作内容始终安全。"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "View network logging"
+target = "查看网络日志"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "app analytics"
+target = "应用分析"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "crash reporting"
+target = "崩溃报告"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "secret redaction"
+target = "敏感信息遮盖"
+
+[[replace]]
+path = "app/src/settings_view/privacy_page.rs"
+source = "cloud AI conversation storage"
+target = "云端 AI 对话存储"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "SSH Warpification"
+target = "SSH Warpification"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "SSH session detection for Warpification"
+target = "Warpification 的 SSH 会话检测"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "The tmux ssh wrapper works in many situations where the default one does not, but may require you to hit a button to warpify. Takes effect in new tabs."
+target = "tmux ssh 包装器可在许多默认方式无效的场景下工作，但可能需要你点击按钮来 Warpify。此设置会在新标签页中生效。"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "Controls the installation behavior for Warp's SSH extension when a remote host doesn't have it installed."
+target = "控制远程主机未安装 Warp SSH 扩展时的安装行为。"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "command (supports regex)"
+target = "命令（支持正则）"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "host (supports regex)"
+target = "主机（支持正则）"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "Subshells"
+target = "子 Shell"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "Subshells supported: bash, zsh, and fish."
+target = "支持的子 Shell：bash、zsh 和 fish。"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "Warpify your interactive SSH sessions."
+target = "Warpify 你的交互式 SSH 会话。"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "Configure whether Warp attempts to “Warpify” (add support for blocks, input modes, etc) certain shells. "
+target = "配置 Warp 是否尝试对特定 shell 执行 Warpify（添加块、输入模式等支持）。 "
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "Learn more"
+target = "了解更多"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "Warpify"
+target = "Warpify"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "Added commands"
+target = "已添加命令"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "Denylisted commands"
+target = "拒绝列表命令"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "Warpify SSH Sessions"
+target = "Warpify SSH 会话"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "Install SSH extension"
+target = "安装 SSH 扩展"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "Use Tmux Warpification"
+target = "使用 Tmux Warpification"
+
+[[replace]]
+path = "app/src/settings_view/warpify_page.rs"
+source = "Denylisted hosts"
+target = "拒绝列表主机"
