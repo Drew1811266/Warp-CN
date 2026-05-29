@@ -148,7 +148,7 @@ impl SearchItem for MatchedBinding {
         let trigger = self.binding.trigger.as_ref();
 
         format!(
-            "Selected {}, {}.",
+            "已选择 {}，{}。",
             &self
                 .binding
                 .description
@@ -161,9 +161,9 @@ impl SearchItem for MatchedBinding {
         self.binding
             .trigger
             .as_ref()
-            .map_or("Press enter to confirm.".into(), |trigger| {
+            .map_or("按 Enter 确认。".into(), |trigger| {
                 format!(
-                    "Press enter to confirm. Use {} binding to run this action in the future.",
+                    "按 Enter 确认。以后可使用 {} 快捷键运行此操作。",
                     trigger.normalized()
                 )
             })

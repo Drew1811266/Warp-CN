@@ -2538,3 +2538,1698 @@ target = "Warp 无法启动新安装的版本。"
 path = "app/src/workspace/view.rs"
 source = "Update now"
 target = "立即更新"
+
+[[replace]]
+path = "app/src/search/action/search_item.rs"
+source = "Selected {}, {}."
+target = "已选择 {}，{}。"
+
+[[replace]]
+path = "app/src/search/action/search_item.rs"
+source = "Press enter to confirm."
+target = "按 Enter 确认。"
+
+[[replace]]
+path = "app/src/search/action/search_item.rs"
+source = "Press enter to confirm. Use {} binding to run this action in the future."
+target = "按 Enter 确认。以后可使用 {} 快捷键运行此操作。"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/blocks/search_item.rs"
+source = "Just now"
+target = "刚刚"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/blocks/search_item.rs"
+source = "{} minutes ago"
+target = "{} 分钟前"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/blocks/search_item.rs"
+source = "{} hours ago"
+target = "{} 小时前"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/blocks/search_item.rs"
+source = "{} days ago"
+target = "{} 天前"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/blocks/search_item.rs"
+source = "No output"
+target = "无输出"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/code/data_source.rs"
+source = "Code search failed"
+target = "代码搜索失败"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/code/search_item.rs"
+source = "Code symbol: {} in {}:{}"
+target = "代码符号：{}，位于 {}:{}"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/diffset/data_source.rs"
+source = "uncommitted changes"
+target = "未提交的更改"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/diffset/data_source.rs"
+source = "changes vs. main branch"
+target = "相对 main 分支的更改"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/diffset/search_item.rs"
+source = "Uncommitted changes"
+target = "未提交的更改"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/diffset/search_item.rs"
+source = "Changes vs. main branch"
+target = "相对 main 分支的更改"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/diffset/search_item.rs"
+source = "Changes vs. {branch}"
+target = "相对 {branch} 的更改"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/diffset/search_item.rs"
+source = "All uncommitted changes in the working directory"
+target = "工作目录中的所有未提交更改"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/diffset/search_item.rs"
+source = "All changes compared to the main branch"
+target = "与 main 分支相比的所有更改"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/diffset/search_item.rs"
+source = "All changes compared to {branch}"
+target = "与 {branch} 相比的所有更改"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/notebooks/search_item.rs"
+source = "Untitled"
+target = "未命名"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/rules/search_item.rs"
+source = "Rule"
+target = "规则"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Files and folders"
+target = "文件和文件夹"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Commands"
+target = "命令"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Blocks"
+target = "块"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Workflows"
+target = "工作流"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Notebooks"
+target = "笔记本"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Plans"
+target = "计划"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Diffs"
+target = "差异"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Docs"
+target = "文档"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Past tasks"
+target = "历史任务"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Rules"
+target = "规则"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Servers and integrations"
+target = "服务器和集成"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Terminal"
+target = "终端"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Web"
+target = "网页"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Most recent diff"
+target = "最近的差异"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Most recent block"
+target = "最近的块"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Code"
+target = "代码"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Diff sets"
+target = "差异集"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Conversations"
+target = "对话"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Skills"
+target = "技能"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "No results found"
+target = "未找到结果"
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Loading results..."
+target = "正在加载结果..."
+
+[[replace]]
+path = "app/src/search/ai_context_menu/view.rs"
+source = "Code symbols indexing..."
+target = "正在索引代码符号..."
+
+[[replace]]
+path = "app/src/search/command_palette/conversations/data_source.rs"
+source = "Active pane conversations"
+target = "当前窗格对话"
+
+[[replace]]
+path = "app/src/search/command_palette/conversations/data_source.rs"
+source = "Other active conversations"
+target = "其他活动对话"
+
+[[replace]]
+path = "app/src/search/command_palette/conversations/data_source.rs"
+source = "Past conversations"
+target = "历史对话"
+
+[[replace]]
+path = "app/src/search/command_palette/conversations/search_item.rs"
+source = "New conversation"
+target = "新建对话"
+
+[[replace]]
+path = "app/src/search/command_palette/conversations/search_item.rs"
+source = "Fork current conversation"
+target = "分叉当前对话"
+
+[[replace]]
+path = "app/src/search/command_palette/conversations/search_item.rs"
+source = "Fork conversation"
+target = "分叉对话"
+
+[[replace]]
+path = "app/src/search/command_palette/conversations/search_item.rs"
+source = "Fork current conversation ({title})"
+target = "分叉当前对话（{title}）"
+
+[[replace]]
+path = "app/src/search/command_palette/conversations/search_item.rs"
+source = "Press enter to navigate to conversation \"{}\"."
+target = "按 Enter 导航到对话 {}。"
+
+[[replace]]
+path = "app/src/search/command_palette/conversations/search_item.rs"
+source = "Press enter to fork the current conversation into a new conversation."
+target = "按 Enter 将当前对话分叉为新对话。"
+
+[[replace]]
+path = "app/src/search/command_palette/conversations/search_item.rs"
+source = "Press enter to create a new conversation."
+target = "按 Enter 创建新对话。"
+
+[[replace]]
+path = "app/src/search/command_palette/files/search_item.rs"
+source = "Press Enter to navigate to this directory"
+target = "按 Enter 导航到此目录"
+
+[[replace]]
+path = "app/src/search/command_palette/files/search_item.rs"
+source = "Press Enter to open this file"
+target = "按 Enter 打开此文件"
+
+[[replace]]
+path = "app/src/search/command_palette/files/search_item.rs"
+source = "Create a file named {}…"
+target = "创建名为 {} 的文件…"
+
+[[replace]]
+path = "app/src/search/command_palette/files/search_item.rs"
+source = "Create file: {}"
+target = "创建文件：{}"
+
+[[replace]]
+path = "app/src/search/command_palette/files/search_item.rs"
+source = "Press Enter to create {} in the current directory"
+target = "按 Enter 在当前目录中创建 {}"
+
+[[replace]]
+path = "app/src/search/command_palette/launch_config/search_item.rs"
+source = "Selected {}."
+target = "已选择 {}。"
+
+[[replace]]
+path = "app/src/search/command_palette/launch_config/search_item.rs"
+source = "Press enter to use this launch configuration."
+target = "按 Enter 使用此启动配置。"
+
+[[replace]]
+path = "app/src/search/command_palette/navigation/render.rs"
+source = "Current"
+target = "当前"
+
+[[replace]]
+path = "app/src/search/command_palette/navigation/render.rs"
+source = "Running..."
+target = "正在运行..."
+
+[[replace]]
+path = "app/src/search/command_palette/navigation/render.rs"
+source = "Completed over 1 hour ago"
+target = "已完成，超过 1 小时前"
+
+[[replace]]
+path = "app/src/search/command_palette/navigation/render.rs"
+source = "Completed {mins} minute ago"
+target = "已完成，{mins} 分钟前"
+
+[[replace]]
+path = "app/src/search/command_palette/navigation/render.rs"
+source = "Completed {mins} minutes ago"
+target = "已完成，{mins} 分钟前"
+
+[[replace]]
+path = "app/src/search/command_palette/navigation/render.rs"
+source = "No timestamp found"
+target = "未找到时间戳"
+
+[[replace]]
+path = "app/src/search/command_palette/navigation/render.rs"
+source = "Completed"
+target = "已完成"
+
+[[replace]]
+path = "app/src/search/command_palette/navigation/render.rs"
+source = "Empty Session"
+target = "空会话"
+
+[[replace]]
+path = "app/src/search/command_palette/navigation/search_item.rs"
+source = "Selected {}. {}."
+target = "已选择 {}。{}。"
+
+[[replace]]
+path = "app/src/search/command_palette/navigation/search_item.rs"
+source = "Press enter to navigate to this session."
+target = "按 Enter 导航到此会话。"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/data_source.rs"
+source = "Create New Tab"
+target = "创建新标签页"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/data_source.rs"
+source = "Create New Window"
+target = "创建新窗口"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/data_source.rs"
+source = "Split Pane Down"
+target = "向下拆分窗格"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/data_source.rs"
+source = "Split Pane Right"
+target = "向右拆分窗格"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/data_source.rs"
+source = "Split Pane Up"
+target = "向上拆分窗格"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/data_source.rs"
+source = "Split Pane Left"
+target = "向左拆分窗格"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/new_session_option.rs"
+source = "Down"
+target = "下"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/new_session_option.rs"
+source = "Right"
+target = "右"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/new_session_option.rs"
+source = "Up"
+target = "上"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/new_session_option.rs"
+source = "Left"
+target = "左"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/new_session_option.rs"
+source = "Create New Tab: {}"
+target = "创建新标签页：{}"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/new_session_option.rs"
+source = "Create New Window: {}"
+target = "创建新窗口：{}"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/new_session_option.rs"
+source = "Split Pane {direction}: {}"
+target = "{direction}拆分窗格：{}"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/search_item.rs"
+source = "Selected {}."
+target = "已选择 {}。"
+
+[[replace]]
+path = "app/src/search/command_palette/new_session/search_item.rs"
+source = "Press enter to launch this session."
+target = "按 Enter 启动此会话。"
+
+[[replace]]
+path = "app/src/search/command_palette/tabs/search_item.rs"
+source = "[Tab {}] {}"
+target = "[标签页 {}] {}"
+
+[[replace]]
+path = "app/src/search/command_palette/tabs/search_item.rs"
+source = "Selected tab: {}."
+target = "已选择标签页：{}。"
+
+[[replace]]
+path = "app/src/search/command_palette/tabs/search_item.rs"
+source = "Press enter to navigate to tab: {}."
+target = "按 Enter 导航到标签页：{}。"
+
+[[replace]]
+path = "app/src/search/command_palette/view.rs"
+source = "Search for a command"
+target = "搜索命令"
+
+[[replace]]
+path = "app/src/search/command_palette/view.rs"
+source = "No results found"
+target = "未找到结果"
+
+[[replace]]
+path = "app/src/search/command_palette/view.rs"
+source = "Cannot switch conversations while agent is monitoring a command."
+target = "Agent 正在监控命令时无法切换对话。"
+
+[[replace]]
+path = "app/src/search/command_palette/view.rs"
+source = "Cannot start a new conversation while agent is monitoring a command."
+target = "Agent 正在监控命令时无法开始新对话。"
+
+[[replace]]
+path = "app/src/search/command_palette/warp_drive/env_var_collection_search_item.rs"
+source = "Untitled"
+target = "未命名"
+
+[[replace]]
+path = "app/src/search/command_palette/warp_drive/env_var_collection_search_item.rs"
+source = "Environment Variables: {}"
+target = "环境变量：{}"
+
+[[replace]]
+path = "app/src/search/command_palette/warp_drive/notebook_search_item.rs"
+source = "Untitled"
+target = "未命名"
+
+[[replace]]
+path = "app/src/search/command_palette/zero_state/items.rs"
+source = "Recent"
+target = "最近"
+
+[[replace]]
+path = "app/src/search/command_palette/zero_state/items.rs"
+source = "Suggested"
+target = "建议"
+
+[[replace]]
+path = "app/src/search/command_search/ai_queries/ai_queries_search_item.rs"
+source = "Ran {}"
+target = "已运行 {}"
+
+[[replace]]
+path = "app/src/search/command_search/ai_queries/ai_queries_search_item.rs"
+source = "AI query: {}"
+target = "AI 查询：{}"
+
+[[replace]]
+path = "app/src/search/command_search/env_var_collections/env_var_collection_search_item.rs"
+source = "Untitled"
+target = "未命名"
+
+[[replace]]
+path = "app/src/search/command_search/env_var_collections/env_var_collection_search_item.rs"
+source = "Environment Variables: {}"
+target = "环境变量：{}"
+
+[[replace]]
+path = "app/src/search/command_search/history/history_search_item.rs"
+source = "History item: {}"
+target = "历史项：{}"
+
+[[replace]]
+path = "app/src/search/command_search/view.rs"
+source = "Search your history, workflows, and more"
+target = "搜索历史记录、工作流等"
+
+[[replace]]
+path = "app/src/search/command_search/view.rs"
+source = "Result executed"
+target = "结果已执行"
+
+[[replace]]
+path = "app/src/search/command_search/view.rs"
+source = "Press Cmd-Up to navigate to the command's output."
+target = "按 Cmd-Up 导航到命令输出。"
+
+[[replace]]
+path = "app/src/search/command_search/view.rs"
+source = "Result accepted."
+target = "结果已接受。"
+
+[[replace]]
+path = "app/src/search/command_search/view.rs"
+source = "You can edit the command here before pressing Enter to execute it."
+target = "你可以在这里编辑命令，然后按 Enter 执行。"
+
+[[replace]]
+path = "app/src/search/command_search/view.rs"
+source = "Loading..."
+target = "正在加载..."
+
+[[replace]]
+path = "app/src/search/command_search/view.rs"
+source = "Looks like you're out of credits. Contact a team admin to upgrade for more credits."
+target = "看起来你的额度已用完。请联系团队管理员升级以获取更多额度。"
+
+[[replace]]
+path = "app/src/search/command_search/view.rs"
+source = "Upgrade"
+target = "升级"
+
+[[replace]]
+path = "app/src/search/command_search/view.rs"
+source = "Looks like you're out of credits. "
+target = "看起来你的额度已用完。"
+
+[[replace]]
+path = "app/src/search/command_search/view.rs"
+source = " for more credits."
+target = "以获取更多额度。"
+
+[[replace]]
+path = "app/src/search/command_search/view.rs"
+source = "No results found."
+target = "未找到结果。"
+
+[[replace]]
+path = "app/src/search/command_search/view.rs"
+source = "Upgrade AI Usage"
+target = "升级 AI 用量"
+
+[[replace]]
+path = "app/src/search/command_search/view.rs"
+source = "Command Search"
+target = "命令搜索"
+
+[[replace]]
+path = "app/src/search/command_search/view.rs"
+source = "Search your history, workflows, and more.  Use the Up and Down arrows to browse search results after typing.  Press Enter to accept a selected result, inserting it into the terminal input.  Press Escape to close."
+target = "搜索历史记录、工作流等。输入后使用上下方向键浏览搜索结果。按 Enter 接受选中的结果并插入到终端输入。按 Escape 关闭。"
+
+[[replace]]
+path = "app/src/search/command_search/warp_ai.rs"
+source = "Ask Warp AI for command suggestions"
+target = "向 Warp AI 请求命令建议"
+
+[[replace]]
+path = "app/src/search/command_search/warp_ai.rs"
+source = "Translate into shell command using Warp AI"
+target = "使用 Warp AI 转换为 shell 命令"
+
+[[replace]]
+path = "app/src/search/command_search/warp_ai.rs"
+source = "Warp AI: {}"
+target = "Warp AI：{}"
+
+[[replace]]
+path = "app/src/search/command_search/warp_ai.rs"
+source = "No results found. Please try again with a more specific query."
+target = "未找到结果。请尝试更具体的查询。"
+
+[[replace]]
+path = "app/src/search/command_search/warp_ai.rs"
+source = "Something went wrong. Please try again."
+target = "出了点问题。请重试。"
+
+[[replace]]
+path = "app/src/search/command_search/warp_ai.rs"
+source = "Looks like you're out of AI credits. Please try again later."
+target = "看起来你的 AI 额度已用完。请稍后重试。"
+
+[[replace]]
+path = "app/src/search/command_search/zero_state.rs"
+source = "Command Search"
+target = "命令搜索"
+
+[[replace]]
+path = "app/src/search/command_search/zero_state.rs"
+source = "I'm looking for..."
+target = "我想找..."
+
+[[replace]]
+path = "app/src/search/command_search/zero_state.rs"
+source = "Example queries"
+target = "示例查询"
+
+[[replace]]
+path = "app/src/search/external_secrets/view.rs"
+source = "Search for a secret"
+target = "搜索密钥"
+
+[[replace]]
+path = "app/src/search/external_secrets/view.rs"
+source = "No results found."
+target = "未找到结果。"
+
+[[replace]]
+path = "app/src/search/notebook_embedding/notebooks/notebook_search_item.rs"
+source = "Not visible to other users"
+target = "其他用户不可见"
+
+[[replace]]
+path = "app/src/search/notebook_embedding/view.rs"
+source = "Search for a reference"
+target = "搜索引用"
+
+[[replace]]
+path = "app/src/search/notebook_embedding/view.rs"
+source = "No results found."
+target = "未找到结果。"
+
+[[replace]]
+path = "app/src/search/notebook_embedding/workflows/workflow_search_item.rs"
+source = "Not visible to other users"
+target = "其他用户不可见"
+
+[[replace]]
+path = "app/src/search/search_bar.rs"
+source = "Loading {} suggestions"
+target = "正在加载 {} 条建议"
+
+[[replace]]
+path = "app/src/search/search_bar.rs"
+source = "Error finding results"
+target = "查找结果时出错"
+
+[[replace]]
+path = "app/src/search/search_bar.rs"
+source = "Selected {}"
+target = "已选择 {}"
+
+[[replace]]
+path = "app/src/search/search_results_menu/view.rs"
+source = "No results found"
+target = "未找到结果"
+
+[[replace]]
+path = "app/src/search/search_results_menu/view.rs"
+source = "Prompts"
+target = "提示词"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/bindings.rs"
+source = "Slash command: {}"
+target = "斜杠命令：{}"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Start a new conversation"
+target = "开始新对话"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Start a new cloud agent conversation"
+target = "开始新的云端 Agent 对话"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Add a new MCP server via the MCP settings page"
+target = "通过 MCP 设置页面添加新的 MCP 服务器"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Pull GitHub PR review comments"
+target = "拉取 GitHub PR 审查评论"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Create an Oz environment (Docker image + repos) via guided setup"
+target = "通过引导式设置创建 Oz 环境（Docker 镜像 + 仓库）"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "<optional repo paths or GitHub URLs>"
+target = "<可选仓库路径或 GitHub URL>"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Create a new docker sandbox terminal session"
+target = "创建新的 Docker 沙盒终端会话"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Have Oz walk you through creating a new coding project"
+target = "让 Oz 引导你创建新的编码项目"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "<describe what you want to build>"
+target = "<描述你想构建的内容>"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Open a skill's markdown file in Warp's built-in editor"
+target = "在 Warp 内置编辑器中打开技能的 Markdown 文件"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Invoke a skill"
+target = "调用技能"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Add new Agent prompt"
+target = "添加新的 Agent 提示词"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Add a new global rule for the agent"
+target = "为 Agent 添加新的全局规则"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Open a file in Warp's code editor"
+target = "在 Warp 代码编辑器中打开文件"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "<path/to/file[:line[:col]]> or \"@\" to search"
+target = "<文件路径[:行[:列]]> 或 @ 搜索"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Rename the current tab"
+target = "重命名当前标签页"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "<tab name>"
+target = "<标签页名称>"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Set the color of the current tab"
+target = "设置当前标签页颜色"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "<optional prompt to send in forked conversation>"
+target = "<要发送到分叉对话的可选提示词>"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Fork the current conversation in a new pane or a new tab"
+target = "在新窗格或新标签页中分叉当前对话"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Hand off this conversation to a cloud agent"
+target = "将此对话交接给云端 Agent"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "<optional follow-up prompt>"
+target = "<可选后续提示词>"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Open code review"
+target = "打开代码审查"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Index this codebase"
+target = "索引此代码库"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Index this codebase and generate an AGENTS.md file"
+target = "索引此代码库并生成 AGENTS.md 文件"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Open the project rules file (AGENTS.md)"
+target = "打开项目规则文件 (AGENTS.md)"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Open MCP servers"
+target = "打开 MCP 服务器"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Open settings file (TOML)"
+target = "打开设置文件 (TOML)"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Open the latest changelog"
+target = "打开最新变更日志"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Send feedback"
+target = "发送反馈"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Switch to another indexed repository"
+target = "切换到另一个已索引仓库"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "View all of your global and project rules"
+target = "查看所有全局和项目规则"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Start a new conversation (alias for /agent)"
+target = "开始新对话（/agent 的别名）"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Switch the base agent model"
+target = "切换基础 Agent 模型"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Switch the cloud agent execution host"
+target = "切换云端 Agent 执行主机"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Switch the cloud agent harness"
+target = "切换云端 Agent harness"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Switch the cloud agent environment"
+target = "切换云端 Agent 环境"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Switch the active execution profile"
+target = "切换当前执行配置"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Prompt the agent to do some research and create a plan for a task"
+target = "让 Agent 先做研究并为任务创建计划"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "<describe your task>"
+target = "<描述你的任务>"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Break a task into subtasks and run them in parallel with multiple agents"
+target = "将任务拆分为子任务，并使用多个 Agent 并行运行"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Free up context by summarizing convo history"
+target = "通过总结对话历史释放上下文"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "<optional custom summarization instructions>"
+target = "<可选自定义总结说明>"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Compact conversation and then send a follow-up prompt"
+target = "压缩对话后发送后续提示词"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "<prompt to send after compaction>"
+target = "<压缩后要发送的提示词>"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Queue a prompt to send after the agent finishes responding"
+target = "排队一个提示词，在 Agent 回复完成后发送"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "<prompt to send when agent is done>"
+target = "<Agent 完成后要发送的提示词>"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "<optional prompt to send after compaction>"
+target = "<压缩后要发送的可选提示词>"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Fork current conversation and compact it in the forked copy"
+target = "分叉当前对话，并在分叉副本中压缩"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Fork conversation from a specific query"
+target = "从指定查询分叉对话"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Continue this cloud conversation locally"
+target = "在本地继续此云端对话"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Open billing and usage settings"
+target = "打开账单和用量设置"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Start remote control for this session"
+target = "为此会话启动远程控制"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Toggle credit usage details"
+target = "切换额度使用详情"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Open conversation history"
+target = "打开对话历史"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Search saved prompts"
+target = "搜索已保存提示词"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Rewind to a previous point in the conversation"
+target = "回退到对话中的先前位置"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Export current conversation to clipboard in markdown format"
+target = "以 Markdown 格式将当前对话导出到剪贴板"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Export current conversation to a markdown file"
+target = "将当前对话导出到 Markdown 文件"
+
+[[replace]]
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "<optional filename>"
+target = "<可选文件名>"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Switch to next tab"
+target = "切换到下一个标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Switch to previous tab"
+target = "切换到上一个标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Create New Window"
+target = "创建新窗口"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "New File"
+target = "新建文件"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Zoom In"
+target = "放大"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Zoom Out"
+target = "缩小"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Reset Zoom"
+target = "重置缩放"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Increase font size"
+target = "增大字号"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Decrease font size"
+target = "减小字号"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Save new launch configuration"
+target = "保存新的启动配置"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Increase zoom level"
+target = "提高缩放级别"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Decrease zoom level"
+target = "降低缩放级别"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Reset zoom level to default"
+target = "将缩放级别重置为默认值"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Reset font size to default"
+target = "将字号重置为默认值"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle project explorer"
+target = "切换项目资源管理器"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Project Explorer"
+target = "项目资源管理器"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open theme picker"
+target = "打开主题选择器"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open tab configs menu"
+target = "打开标签页配置菜单"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Switch to 1st tab"
+target = "切换到第 1 个标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Switch to 2nd tab"
+target = "切换到第 2 个标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Switch to 3rd tab"
+target = "切换到第 3 个标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Switch to 4th tab"
+target = "切换到第 4 个标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Switch to 5th tab"
+target = "切换到第 5 个标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Switch to 6th tab"
+target = "切换到第 6 个标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Switch to 7th tab"
+target = "切换到第 7 个标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Switch to 8th tab"
+target = "切换到第 8 个标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Switch to last tab"
+target = "切换到最后一个标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Activate previous tab"
+target = "激活上一个标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Activate next tab"
+target = "激活下一个标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Activate previous pane"
+target = "激活上一个窗格"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Activate next pane"
+target = "激活下一个窗格"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle Mouse Reporting"
+target = "切换鼠标报告"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Create a new team notebook"
+target = "创建新的团队笔记本"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "New Team Notebook"
+target = "新建团队笔记本"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Create a new personal notebook"
+target = "创建新的个人笔记本"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "New Personal Notebook"
+target = "新建个人笔记本"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Create a new team workflow"
+target = "创建新的团队工作流"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "New Team Workflow"
+target = "新建团队工作流"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Create a new personal workflow"
+target = "创建新的个人工作流"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "New Personal Workflow"
+target = "新建个人工作流"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Create a new team folder"
+target = "创建新的团队文件夹"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "New Team Folder"
+target = "新建团队文件夹"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Create a new personal folder"
+target = "创建新的个人文件夹"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "New Personal Folder"
+target = "新建个人文件夹"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Create new tab"
+target = "创建新标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "New Cloud Agent Tab"
+target = "新建云端 Agent 标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Left Panel"
+target = "打开左侧面板"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle code review"
+target = "切换代码审查"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle Code Review"
+target = "切换代码审查"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle vertical tabs panel"
+target = "切换垂直标签页面板"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle Vertical Tabs Panel"
+target = "切换垂直标签页面板"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Left Panel: Agent conversations"
+target = "左侧面板：Agent 对话"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Left Panel: Project explorer"
+target = "左侧面板：项目资源管理器"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Left Panel: Global search"
+target = "左侧面板：全局搜索"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Left Panel: Warp Drive"
+target = "左侧面板：Warp Drive"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open global search"
+target = "打开全局搜索"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Global Search"
+target = "全局搜索"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle Warp Drive"
+target = "切换 Warp Drive"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle Agent conversation list view"
+target = "切换 Agent 对话列表视图"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Agent conversation list view"
+target = "Agent 对话列表视图"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Close focused panel"
+target = "关闭聚焦面板"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle command palette"
+target = "切换命令面板"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Command Palette"
+target = "命令面板"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Move tab left"
+target = "向左移动标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "move tab up"
+target = "向上移动标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Move tab right"
+target = "向右移动标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "move tab down"
+target = "向下移动标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle keyboard shortcuts"
+target = "切换键盘快捷键"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open keybindings editor"
+target = "打开快捷键编辑器"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle sticky command header"
+target = "切换固定命令标题"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "[a11y] Set concise accessibility announcements"
+target = "[辅助功能] 设置简洁辅助功能播报"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "[a11y] Set verbose accessibility announcements"
+target = "[辅助功能] 设置详细辅助功能播报"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Rename the current tab"
+target = "重命名当前标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Rename the current pane"
+target = "重命名当前窗格"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Quit Warp"
+target = "退出 Warp"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Close Window"
+target = "关闭窗口"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Close the current tab"
+target = "关闭当前标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Close other tabs"
+target = "关闭其他标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Close tabs to the right"
+target = "关闭右侧标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "close tabs below"
+target = "关闭下方标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle navigation palette"
+target = "切换导航面板"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Navigation Palette"
+target = "导航面板"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Launch configuration palette"
+target = "启动配置面板"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle Files Palette"
+target = "切换文件面板"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Search Warp Drive"
+target = "搜索 Warp Drive"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Install update and relaunch"
+target = "安装更新并重新启动"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Check for updates"
+target = "检查更新"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle resource center"
+target = "切换资源中心"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Export all Warp Drive objects"
+target = "导出所有 Warp Drive 对象"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Install Oz CLI command"
+target = "安装 Oz CLI 命令"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Uninstall Oz CLI command"
+target = "卸载 Oz CLI 命令"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle Warp AI"
+target = "切换 Warp AI"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Create new team environment variables"
+target = "创建新的团队环境变量"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "New Team Environment Variables"
+target = "新建团队环境变量"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Create new personal environment variables"
+target = "创建新的个人环境变量"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "New Personal Environment Variables"
+target = "新建个人环境变量"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Create a new personal prompt"
+target = "创建新的个人提示词"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "New Personal Prompt"
+target = "新建个人提示词"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Create a new team prompt"
+target = "创建新的团队提示词"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "New Team Prompt"
+target = "新建团队提示词"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Switch Focus to Left Panel"
+target = "将焦点切换到左侧面板"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Switch Focus to Right Panel"
+target = "将焦点切换到右侧面板"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Import To Personal Drive"
+target = "导入到个人 Drive"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Import To Team Drive"
+target = "导入到团队 Drive"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Copy access token to clipboard"
+target = "将访问令牌复制到剪贴板"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open repository"
+target = "打开仓库"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Repository"
+target = "打开仓库"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open AI Rules"
+target = "打开 AI 规则"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open MCP Servers"
+target = "打开 MCP 服务器"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Jump to latest agent task"
+target = "跳转到最新 Agent 任务"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle the agent management view"
+target = "切换 Agent 管理视图"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings"
+target = "打开设置"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Settings"
+target = "设置"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: Account"
+target = "打开设置：账号"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: Appearance"
+target = "打开设置：外观"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Appearance..."
+target = "外观..."
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: Features"
+target = "打开设置：功能"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: Shared Blocks"
+target = "打开设置：共享块"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: Keyboard Shortcuts"
+target = "打开设置：键盘快捷键"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Configure Keyboard Shortcuts..."
+target = "配置键盘快捷键..."
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: About"
+target = "打开设置：关于"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "About Warp"
+target = "关于 Warp"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: Teams"
+target = "打开设置：团队"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Team Settings"
+target = "打开团队设置"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: Privacy"
+target = "打开设置：隐私"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: Warpify"
+target = "打开设置：Warpify"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Configure Warpify..."
+target = "配置 Warpify..."
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: AI"
+target = "打开设置：AI"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: Billing and usage"
+target = "打开设置：账单和用量"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: Code"
+target = "打开设置：代码"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: Referrals"
+target = "打开设置：推荐"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: Environments"
+target = "打开设置：环境"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open Settings: MCP Servers"
+target = "打开设置：MCP 服务器"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Open settings file"
+target = "打开设置文件"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Invite People..."
+target = "邀请成员..."
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Join our Slack community (opens external link)"
+target = "加入我们的 Slack 社区（打开外部链接）"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Send feedback (opens external link)"
+target = "发送反馈（打开外部链接）"
+
+[[replace]]
+path = "app/src/search/welcome_palette/view.rs"
+source = "Code, build, or search for anything..."
+target = "输入代码、构建任务或搜索任何内容..."
+
+[[replace]]
+path = "app/src/search/welcome_palette/view.rs"
+source = "No results found"
+target = "未找到结果"
+
+[[replace]]
+path = "app/src/search/welcome_palette/view.rs"
+source = "Add repository {keystroke}"
+target = "添加仓库 {keystroke}"
+
+[[replace]]
+path = "app/src/search/welcome_palette/view.rs"
+source = "Add repository"
+target = "添加仓库"
+
+[[replace]]
+path = "app/src/search/welcome_palette/view.rs"
+source = "Terminal session {keystroke}"
+target = "终端会话 {keystroke}"
+
+[[replace]]
+path = "app/src/search/welcome_palette/view.rs"
+source = "Terminal session"
+target = "终端会话"

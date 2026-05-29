@@ -74,6 +74,31 @@ def _consume_char_literal(text: str, quote_index: int) -> int | None:
     return None
 
 
+def _parse_quoted_manifest_value(value: str) -> str:
+    content = value[1:-1]
+    result: list[str] = []
+    escaped = False
+
+    for char in content:
+        if escaped:
+            if char in {'"', "\\"}:
+                result.append(char)
+            else:
+                result.append("\\")
+                result.append(char)
+            escaped = False
+            continue
+        if char == "\\":
+            escaped = True
+            continue
+        result.append(char)
+
+    if escaped:
+        result.append("\\")
+
+    return "".join(result)
+
+
 def replace_rust_string_literals(text: str, source: str, target: str) -> tuple[str, int]:
     result: list[str] = []
     replaced = 0
@@ -184,7 +209,7 @@ def load_manifest(path: Path) -> list[dict[str, object]]:
 
         key, value = [part.strip() for part in line.split("=", 1)]
         if value.startswith('"') and value.endswith('"'):
-            current[key] = value[1:-1]
+            current[key] = _parse_quoted_manifest_value(value)
         elif value.isdigit():
             current[key] = int(value)
         else:

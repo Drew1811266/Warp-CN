@@ -152,7 +152,7 @@ impl SearchItem for AIQuerySearchResultItem {
             Container::new(
                 ui_builder
                     .paragraph(format!(
-                        "Ran {}",
+                        "已运行 {}",
                         format_approx_duration_from_now(self.start_time)
                     ))
                     .build()
@@ -178,6 +178,6 @@ impl SearchItem for AIQuerySearchResultItem {
     }
 
     fn accessibility_label(&self) -> String {
-        format!("AI query: {}", self.query_text)
+        format!("AI 查询：{}", self.query_text)
     }
 }

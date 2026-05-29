@@ -54,7 +54,7 @@ impl SearchItemTrait for SearchItem {
         let appearance = Appearance::as_ref(app);
 
         let title_text = Text::new_inline(
-            format!("[Tab {}] {}", self.tab.tab_index, self.tab.title),
+            format!("[标签页 {}] {}", self.tab.tab_index, self.tab.title),
             appearance.ui_font_family(),
             appearance.monospace_font_size(),
         )
@@ -99,13 +99,10 @@ impl SearchItemTrait for SearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        format!("Selected tab: {}.", self.tab.title)
+        format!("已选择标签页：{}。", self.tab.title)
     }
 
     fn accessibility_help_message(&self) -> Option<String> {
-        Some(format!(
-            "Press enter to navigate to tab: {}.",
-            self.tab.title
-        ))
+        Some(format!("按 Enter 导航到标签页：{}。", self.tab.title))
     }
 }
