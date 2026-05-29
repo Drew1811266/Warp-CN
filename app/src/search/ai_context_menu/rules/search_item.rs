@@ -170,10 +170,10 @@ impl SearchItem for RuleSearchItem {
             if !name.is_empty() {
                 name.clone()
             } else {
-                "Rule".to_string()
+                "规则".to_string()
             }
         } else {
-            "Rule".to_string()
+            "规则".to_string()
         };
 
         // Create title element

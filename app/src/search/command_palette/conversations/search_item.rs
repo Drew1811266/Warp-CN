@@ -68,7 +68,7 @@ impl ConversationSearchItem {
         Flex::row()
             .with_child(
                 Text::new_inline(
-                    "New conversation",
+                    "新建对话",
                     appearance.ui_font_family(),
                     appearance.monospace_font_size(),
                 )
@@ -89,7 +89,7 @@ impl ConversationSearchItem {
         let appearance = Appearance::as_ref(app);
 
         let action_title = Text::new_inline(
-            "Fork current conversation",
+            "分叉当前对话",
             appearance.ui_font_family(),
             appearance.monospace_font_size(),
         )
@@ -243,7 +243,7 @@ impl ConversationSearchItem {
 
             let fork_button_tool_tip = appearance
                 .ui_builder()
-                .tool_tip("Fork conversation".to_string())
+                .tool_tip("分叉对话".to_string())
                 .build();
 
             let fork_button_inner = icon_button(
@@ -421,22 +421,20 @@ impl SearchItem for ConversationSearchItem {
                 )
             }
             ConversationAction::Fork { title, .. } => {
-                format!("Fork current conversation ({title})")
+                format!("分叉当前对话（{title}）")
             }
-            ConversationAction::New => "New conversation".to_string(),
+            ConversationAction::New => "新建对话".to_string(),
         }
     }
 
     fn accessibility_help_message(&self) -> Option<String> {
         match &self.action_info {
             ConversationAction::Resume(matched_conversation) => Some(format!(
-                "Press enter to navigate to conversation \"{}\".",
+                "按 Enter 导航到对话 {}。",
                 matched_conversation.as_ref().conversation.title()
             )),
-            ConversationAction::Fork { .. } => {
-                Some("Press enter to fork the current conversation into a new conversation.".into())
-            }
-            ConversationAction::New => Some("Press enter to create a new conversation.".into()),
+            ConversationAction::Fork { .. } => Some("按 Enter 将当前对话分叉为新对话。".into()),
+            ConversationAction::New => Some("按 Enter 创建新对话。".into()),
         }
     }
 }

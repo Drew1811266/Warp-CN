@@ -104,26 +104,26 @@ pub enum AIContextMenuCategory {
 impl AIContextMenuCategory {
     pub fn name(&self) -> &'static str {
         match self {
-            AIContextMenuCategory::CurrentFolderFiles => "Files and folders",
-            AIContextMenuCategory::RepoFiles => "Files and folders",
-            AIContextMenuCategory::Commands => "Commands",
-            AIContextMenuCategory::Blocks => "Blocks",
-            AIContextMenuCategory::Workflows => "Workflows",
-            AIContextMenuCategory::Notebooks => "Notebooks",
-            AIContextMenuCategory::Plans => "Plans",
-            AIContextMenuCategory::Diffs => "Diffs",
-            AIContextMenuCategory::Docs => "Docs",
-            AIContextMenuCategory::Tasks => "Past tasks",
-            AIContextMenuCategory::Rules => "Rules",
-            AIContextMenuCategory::Servers => "Servers and integrations",
-            AIContextMenuCategory::Terminal => "Terminal",
-            AIContextMenuCategory::Web => "Web",
-            AIContextMenuCategory::RecentDiff => "Most recent diff",
-            AIContextMenuCategory::RecentBlock => "Most recent block",
-            AIContextMenuCategory::Code => "Code",
-            AIContextMenuCategory::DiffSet => "Diff sets",
-            AIContextMenuCategory::Conversations => "Conversations",
-            AIContextMenuCategory::Skills => "Skills",
+            AIContextMenuCategory::CurrentFolderFiles => "文件和文件夹",
+            AIContextMenuCategory::RepoFiles => "文件和文件夹",
+            AIContextMenuCategory::Commands => "命令",
+            AIContextMenuCategory::Blocks => "块",
+            AIContextMenuCategory::Workflows => "工作流",
+            AIContextMenuCategory::Notebooks => "笔记本",
+            AIContextMenuCategory::Plans => "计划",
+            AIContextMenuCategory::Diffs => "差异",
+            AIContextMenuCategory::Docs => "文档",
+            AIContextMenuCategory::Tasks => "历史任务",
+            AIContextMenuCategory::Rules => "规则",
+            AIContextMenuCategory::Servers => "服务器和集成",
+            AIContextMenuCategory::Terminal => "终端",
+            AIContextMenuCategory::Web => "网页",
+            AIContextMenuCategory::RecentDiff => "最近的差异",
+            AIContextMenuCategory::RecentBlock => "最近的块",
+            AIContextMenuCategory::Code => "代码",
+            AIContextMenuCategory::DiffSet => "差异集",
+            AIContextMenuCategory::Conversations => "对话",
+            AIContextMenuCategory::Skills => "技能",
         }
     }
 
@@ -1372,7 +1372,7 @@ impl AIContextMenu {
         let theme = appearance.theme();
         Container::new(
             Text::new(
-                "No results found",
+                "未找到结果",
                 appearance.ui_font_family(),
                 appearance.monospace_font_size(),
             )
@@ -1388,7 +1388,7 @@ impl AIContextMenu {
         let theme = appearance.theme();
         Container::new(
             Text::new(
-                "Loading results...",
+                "正在加载结果...",
                 appearance.ui_font_family(),
                 appearance.monospace_font_size(),
             )
@@ -1405,7 +1405,7 @@ impl AIContextMenu {
         let theme = appearance.theme();
         Container::new(
             Text::new(
-                "Code symbols indexing...",
+                "正在索引代码符号...",
                 appearance.ui_font_family(),
                 appearance.monospace_font_size(),
             )

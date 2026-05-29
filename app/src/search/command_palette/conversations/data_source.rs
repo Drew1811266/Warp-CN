@@ -29,9 +29,9 @@ enum ConversationSection {
 impl ConversationSection {
     fn title(&self) -> &'static str {
         match self {
-            ConversationSection::ActivePane => "Active pane conversations",
-            ConversationSection::OtherActive => "Other active conversations",
-            ConversationSection::Past => "Past conversations",
+            ConversationSection::ActivePane => "当前窗格对话",
+            ConversationSection::OtherActive => "其他活动对话",
+            ConversationSection::Past => "历史对话",
         }
     }
 
