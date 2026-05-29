@@ -18,20 +18,36 @@ from zh_apply_localization import (
 )
 
 
+ONBOARDING_ROOTS = ("crates/onboarding/src", "app/src/auth")
+WORKSPACE_ROOTS = ("app/src/workspace", "app/src/app_menus.rs", "app/src/menu.rs")
+SEARCH_ROOTS = ("app/src/search",)
+SETTINGS_ROOTS = ("app/src/settings_view",)
+MODALS_ROOTS = (
+    "app/src/auth",
+    "app/src/billing",
+    "app/src/themes",
+    "app/src/tab_configs",
+    "app/src/drive",
+    "app/src/terminal",
+    "app/src/ai",
+)
+RELEASE_ROOTS = tuple(
+    dict.fromkeys(
+        ONBOARDING_ROOTS
+        + WORKSPACE_ROOTS
+        + SEARCH_ROOTS
+        + SETTINGS_ROOTS
+        + MODALS_ROOTS
+    )
+)
+
 PRESETS: dict[str, tuple[str, ...]] = {
-    "onboarding": ("crates/onboarding/src", "app/src/auth"),
-    "workspace": ("app/src/workspace", "app/src/app_menus.rs", "app/src/menu.rs"),
-    "search": ("app/src/search",),
-    "settings": ("app/src/settings_view",),
-    "modals": (
-        "app/src/auth",
-        "app/src/billing",
-        "app/src/themes",
-        "app/src/tab_configs",
-        "app/src/drive",
-        "app/src/terminal",
-        "app/src/ai",
-    ),
+    "onboarding": ONBOARDING_ROOTS,
+    "workspace": WORKSPACE_ROOTS,
+    "search": SEARCH_ROOTS,
+    "settings": SETTINGS_ROOTS,
+    "modals": MODALS_ROOTS,
+    "release": RELEASE_ROOTS,
 }
 
 EXCLUDED_PATH_PARTS = (
