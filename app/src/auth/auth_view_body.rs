@@ -45,8 +45,8 @@ const TOS_URL: &str = "https://www.warp.dev/terms-of-service";
 const COMMON_BODY_UI_FONT_SIZE: f32 = 12.;
 const AUTH_MODAL_GAP: f32 = 16.;
 
-const AUTH_TOKEN_INPUT_PLACEHOLDER_TEXT: &str = "Auth Token";
-const AUTH_TOKEN_INPUT_PLACEHOLDER_TEXT_EXPERIMENTAL: &str = "Browser auth token";
+const AUTH_TOKEN_INPUT_PLACEHOLDER_TEXT: &str = "认证令牌";
+const AUTH_TOKEN_INPUT_PLACEHOLDER_TEXT_EXPERIMENTAL: &str = "浏览器认证令牌";
 
 const AUTH_TOKEN_INPUT_BORDER_RADIUS: Radius = Radius::Pixels(4.);
 
@@ -255,7 +255,7 @@ impl AuthViewBody {
             .with_child(
                 ui_builder
                     .link(
-                        "Click here to paste your token from the browser".into(),
+                        "点击此处粘贴浏览器中的令牌".into(),
                         None,
                         Some(Box::new(|ctx| {
                             ctx.dispatch_typed_action(AuthViewBodyAction::EnterToken);
@@ -328,7 +328,7 @@ impl AuthViewBody {
             Flex::row()
                 .with_child(
                     ui_builder
-                        .span("By continuing, you agree to Warp's ")
+                        .span("继续即表示你同意 Warp 的")
                         .with_style(disclaimer_styles)
                         .build()
                         .finish(),
@@ -336,7 +336,7 @@ impl AuthViewBody {
                 .with_child(
                     ui_builder
                         .link(
-                            "Terms of Service".into(),
+                            "服务条款".into(),
                             Some(TOS_URL.into()),
                             None,
                             self.mouse_state_handles.tos_mouse_state_handle.clone(),
@@ -356,7 +356,7 @@ impl AuthViewBody {
             Align::new(
                 ui_builder
                     .link(
-                        "Privacy Settings".into(),
+                        "隐私设置".into(),
                         None,
                         Some(Box::new(|ctx| {
                             ctx.dispatch_typed_action(AuthViewBodyAction::ShowOverlay(
@@ -377,7 +377,7 @@ impl AuthViewBody {
             Flex::column()
                 .with_child(
                     ui_builder
-                        .paragraph("If you'd like to opt out of analytics and AI features,")
+                        .paragraph("如需停用分析和 AI 功能，")
                         .with_style(disclaimer_styles)
                         .build()
                         .finish(),
@@ -386,7 +386,7 @@ impl AuthViewBody {
                     Flex::row()
                         .with_child(
                             ui_builder
-                                .paragraph("you can adjust your ")
+                                .paragraph("你可以调整")
                                 .with_style(disclaimer_styles)
                                 .build()
                                 .finish(),
@@ -394,7 +394,7 @@ impl AuthViewBody {
                         .with_child(
                             ui_builder
                                 .link(
-                                    "Privacy Settings".into(),
+                                    "隐私设置".into(),
                                     None,
                                     Some(Box::new(|ctx| {
                                         ctx.dispatch_typed_action(AuthViewBodyAction::ShowOverlay(
@@ -474,7 +474,7 @@ impl AuthViewBody {
                 Some(click_button_style),
                 None,
             )
-            .with_centered_text_label("Sign up".into())
+            .with_centered_text_label("注册".into())
             .build()
             .on_click(move |ctx, _, _| {
                 ctx.dispatch_typed_action(on_click_action);
@@ -484,16 +484,11 @@ impl AuthViewBody {
 
     fn render_sign_in_row(&self, ui_builder: &UiBuilder) -> Box<dyn Element> {
         Flex::row()
-            .with_child(
-                ui_builder
-                    .span("Already have an account? ")
-                    .build()
-                    .finish(),
-            )
+            .with_child(ui_builder.span("已有账号？").build().finish())
             .with_child(
                 ui_builder
                     .link(
-                        "Sign in".into(),
+                        "登录".into(),
                         None,
                         Some(Box::new(|ctx| {
                             ctx.dispatch_typed_action(AuthViewBodyAction::Login);
@@ -512,16 +507,11 @@ impl AuthViewBody {
     fn render_sign_up_later_row(&self, ui_builder: &UiBuilder) -> Box<dyn Element> {
         Container::new(
             Flex::row()
-                .with_child(
-                    ui_builder
-                        .span("Don't want to sign in right now? ")
-                        .build()
-                        .finish(),
-                )
+                .with_child(ui_builder.span("暂时不想登录？").build().finish())
                 .with_child(
                     ui_builder
                         .link(
-                            "Skip for now".into(),
+                            "暂时跳过".into(),
                             None,
                             Some(Box::new(|ctx| {
                                 ctx.dispatch_typed_action(AuthViewBodyAction::InitiateLoginLater);
@@ -543,30 +533,20 @@ impl AuthViewBody {
     fn render_sign_in_later_confirm_row(&self, ui_builder: &UiBuilder) -> Box<dyn Element> {
         Container::new(
             Flex::column()
+                .with_child(ui_builder.paragraph("确定要跳过登录吗？").build().finish())
                 .with_child(
                     ui_builder
-                        .paragraph("Are you sure you want to skip login?")
-                        .build()
-                        .finish(),
-                )
-                .with_child(
-                    ui_builder
-                        .paragraph("You can sign up later, but some features, such as AI,")
+                        .paragraph("你可以稍后注册，但 AI 等部分功能")
                         .build()
                         .finish(),
                 )
                 .with_child(
                     Flex::row()
-                        .with_child(
-                            ui_builder
-                                .span("are only available to logged-in users. ")
-                                .build()
-                                .finish(),
-                        )
+                        .with_child(ui_builder.span("仅登录用户可用。").build().finish())
                         .with_child(
                             ui_builder
                                 .link(
-                                    "Yes, skip login".into(),
+                                    "是，跳过登录".into(),
                                     None,
                                     Some(Box::new(|ctx| {
                                         ctx.dispatch_typed_action(AuthViewBodyAction::LoginLater);
@@ -603,15 +583,13 @@ impl AuthViewBody {
         };
 
         let text = match self.variant {
-            AuthViewVariant::RequireLoginCloseable  => {
-                "In order to use Warp’s AI features or collaborate with others, please create an account."
+            AuthViewVariant::RequireLoginCloseable => {
+                "如需使用 Warp 的 AI 功能或与他人协作，请创建账号。"
             }
             AuthViewVariant::HitDriveObjectLimitCloseable => {
-                "In order to create more objects in Warp Drive, please create an account."
+                "如需在 Warp Drive 中创建更多对象，请创建账号。"
             }
-            AuthViewVariant::ShareRequirementCloseable => {
-                "In order to share, please create an account."
-            }
+            AuthViewVariant::ShareRequirementCloseable => "如需分享，请创建账号。",
             _ => "",
         };
 
@@ -636,10 +614,10 @@ impl AuthViewBody {
         };
 
         let text = match self.variant {
-            AuthViewVariant::Initial => "Welcome to Warp!",
+            AuthViewVariant::Initial => "欢迎使用 Warp！",
             AuthViewVariant::RequireLoginCloseable
             | AuthViewVariant::HitDriveObjectLimitCloseable
-            | AuthViewVariant::ShareRequirementCloseable => "Sign up for Warp",
+            | AuthViewVariant::ShareRequirementCloseable => "注册 Warp",
         };
 
         ui_builder
@@ -755,7 +733,7 @@ impl AuthViewBody {
 
         let header = Container::new(
             ui_builder
-                .paragraph("Sign in on your browser \nto continue")
+                .paragraph("在浏览器中登录以继续")
                 .with_style(header_styles)
                 .build()
                 .finish(),
@@ -767,16 +745,11 @@ impl AuthViewBody {
             Flex::column()
                 .with_child(
                     Flex::row()
-                        .with_child(
-                            ui_builder
-                                .span("If your browser hasn't launched, ")
-                                .build()
-                                .finish(),
-                        )
+                        .with_child(ui_builder.span("如果浏览器没有打开，").build().finish())
                         .with_child(
                             ui_builder
                                 .link(
-                                    "copy the URL".into(),
+                                    "复制 URL".into(),
                                     None,
                                     Some(Box::new(|event_ctx| {
                                         event_ctx.dispatch_typed_action(
@@ -793,12 +766,7 @@ impl AuthViewBody {
                         )
                         .finish(),
                 )
-                .with_child(
-                    ui_builder
-                        .span("and open the page manually.")
-                        .build()
-                        .finish(),
-                )
+                .with_child(ui_builder.span("并手动打开页面。").build().finish())
                 .finish(),
         )
         .finish();
@@ -994,8 +962,8 @@ impl View for AuthViewBody {
 
     fn accessibility_contents(&self, _: &AppContext) -> Option<AccessibilityContent> {
         Some(AccessibilityContent::new(
-            "Welcome to Warp!",
-            "Press enter to open your browser to Sign Up or Sign In.",
+            "欢迎使用 Warp！",
+            "按 Enter 打开浏览器进行注册或登录。",
             WarpA11yRole::HelpRole,
         ))
     }

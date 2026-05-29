@@ -27,14 +27,14 @@ use crate::telemetry::OnboardingEvent;
 use crate::OnboardingIntention;
 
 const SUBSCRIBE_ITEMS: &[&str] = &[
-    "1,500 credits per month",
-    "Access to frontier OpenAI, Anthropic, and Google models",
-    "Access to Reload credits and volume-based discounts",
-    "Extended cloud agents access",
-    "Highest codebase indexing limits",
-    "Unlimited Warp Drive objects and collaboration",
-    "Private email support",
-    "Unlimited cloud conversation storage",
+    "每月 1,500 点额度",
+    "可使用 OpenAI、Anthropic 和 Google 的前沿模型",
+    "可使用 Reload 额度和阶梯折扣",
+    "更多云端 Agent 使用额度",
+    "最高代码库索引额度",
+    "不限量 Warp Drive 对象和协作",
+    "私密邮件支持",
+    "不限量云端对话存储",
 ];
 
 #[derive(Debug, Clone)]
@@ -103,7 +103,7 @@ impl FreeUserNoAiSlide {
     fn render_header(&self, appearance: &Appearance) -> Box<dyn Element> {
         appearance
             .ui_builder()
-            .paragraph("Let's get started.")
+            .paragraph("开始使用。")
             .with_style(UiComponentStyles {
                 font_size: Some(36.),
                 font_weight: Some(Weight::Medium),
@@ -123,8 +123,8 @@ impl FreeUserNoAiSlide {
             appearance,
             0,
             Icon::Code2,
-            "Agent driven development with Warp's built-in agent",
-            "Iterate, plan, and build with Oz: Warp's built-in agent. Available locally or in the cloud.",
+            "使用 Warp 内置 Agent 进行开发",
+            "使用 Oz（Warp 内置 Agent）迭代、规划和构建，可在本地或云端运行。",
             agent_price_badge.to_string(),
             true, // badge is green
             self.agent_mouse_state.clone(),
@@ -135,9 +135,9 @@ impl FreeUserNoAiSlide {
             appearance,
             1,
             Icon::Terminal,
-            "Classic terminal with third-party agents",
-            "A modern terminal that supports third-party agents (Claude Code, Codex, Gemini CLI) and classic terminal workflows.",
-            "Free".to_string(),
+            "经典终端与第三方 Agent",
+            "支持 Claude Code、Codex、Gemini CLI 等第三方 Agent 和经典终端工作流的现代终端。",
+            "免费".to_string(),
             false, // badge is gray
             self.classic_terminal_mouse_state.clone(),
             selected_index,
@@ -302,7 +302,7 @@ impl FreeUserNoAiSlide {
         let back_button = self.back_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Back".into()),
+                content: button::Content::Label("返回".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -318,7 +318,7 @@ impl FreeUserNoAiSlide {
             self.next_button.render(
                 appearance,
                 button::Params {
-                    content: button::Content::Label("Get Warping".into()),
+                    content: button::Content::Label("开始使用 Warp".into()),
                     theme: &button::themes::Primary,
                     options: button::Options {
                         keystroke: Some(enter),
@@ -333,7 +333,7 @@ impl FreeUserNoAiSlide {
             self.subscribe_nav_button.render(
                 appearance,
                 button::Params {
-                    content: button::Content::Label("Subscribe".into()),
+                    content: button::Content::Label("订阅".into()),
                     theme: &button::themes::Primary,
                     options: button::Options {
                         on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -347,7 +347,7 @@ impl FreeUserNoAiSlide {
             self.next_button.render(
                 appearance,
                 button::Params {
-                    content: button::Content::Label("Next".into()),
+                    content: button::Content::Label("下一步".into()),
                     theme: &button::themes::Primary,
                     options: button::Options {
                         disabled: true,
@@ -370,7 +370,7 @@ impl FreeUserNoAiSlide {
         let text_sub = internal_colors::text_sub(theme, internal_colors::neutral_2(theme));
 
         let title = FormattedTextElement::from_str(
-            "Subscribe to access agent driven development in Warp.",
+            "订阅以使用 Warp 的 Agent 驱动开发。",
             ui_font_family,
             24.,
         )
@@ -418,7 +418,7 @@ impl FreeUserNoAiSlide {
                     .with_cross_axis_alignment(CrossAxisAlignment::Center)
                     .with_child(
                         warpui::elements::Text::new_inline(
-                            "Subscribe",
+                            "订阅",
                             appearance.ui_font_family(),
                             14.,
                         )

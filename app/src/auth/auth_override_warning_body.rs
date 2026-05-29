@@ -28,15 +28,14 @@ const ACTION_BUTTON_BORDER_WIDTH: f32 = 2.;
 const ACTION_BUTTON_HORIZONTAL_PADDING: f32 = 8.;
 const ACTION_BUTTON_FONT_SIZE: f32 = 14.;
 
-const AUTH_OVERRIDE_DESCRIPTION: &str = "It looks like you logged into a Warp account through a web browser. If you continue, any personal Warp drive objects and preferences from this anonymous session with be permanently deleted.";
-const AUTH_OVERRIDE_CONFIRMATION_WARNING: &str = "This cannot be undone.";
-const AUTH_OVERRIDE_INITIAL_STEP_HEADER: &str = "New login detected";
-const AUTH_OVERRIDE_CONFIRM_CONFIRMATION_STEP_HEADER: &str =
-    "Delete personal Warp Drive objects and preferences?";
-const AUTH_OVERRIDE_BULK_EXPORT_BUTTON_LABEL: &str = "Export your data";
-const AUTH_OVERRIDE_BULK_EXPORT_DESCRIPTION: &str = " to import later.";
-const AUTH_OVERRIDE_CANCEL_BUTTON_LABEL: &str = "Cancel";
-const AUTH_OVERRIDE_CONTINUE_BUTTON_LABEL: &str = "Continue";
+const AUTH_OVERRIDE_DESCRIPTION: &str = "看起来你已通过浏览器登录了一个 Warp 账号。如果继续，此匿名会话中的个人 Warp Drive 对象和偏好设置将被永久删除。";
+const AUTH_OVERRIDE_CONFIRMATION_WARNING: &str = "此操作无法撤销。";
+const AUTH_OVERRIDE_INITIAL_STEP_HEADER: &str = "检测到新的登录";
+const AUTH_OVERRIDE_CONFIRM_CONFIRMATION_STEP_HEADER: &str = "删除个人 Warp Drive 对象和偏好设置？";
+const AUTH_OVERRIDE_BULK_EXPORT_BUTTON_LABEL: &str = "导出数据";
+const AUTH_OVERRIDE_BULK_EXPORT_DESCRIPTION: &str = "以便稍后导入。";
+const AUTH_OVERRIDE_CANCEL_BUTTON_LABEL: &str = "取消";
+const AUTH_OVERRIDE_CONTINUE_BUTTON_LABEL: &str = "继续";
 
 #[derive(Clone, Copy, Debug)]
 pub enum AuthOverrideWarningBodyAction {
@@ -376,8 +375,8 @@ impl View for AuthOverrideWarningBody {
 
     fn accessibility_contents(&self, _: &AppContext) -> Option<AccessibilityContent> {
         Some(AccessibilityContent::new(
-            "New login detected",
-            "Warp has detected a new login from a web browser. Press escape to cancel and continue using Warp without login.",
+            "检测到新的登录",
+            "Warp 检测到来自浏览器的新登录。按 Esc 可取消并继续以未登录状态使用 Warp。",
             WarpA11yRole::HelpRole,
         ))
     }
