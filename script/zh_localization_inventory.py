@@ -20,7 +20,7 @@ from zh_apply_localization import (
 
 ONBOARDING_ROOTS = ("crates/onboarding/src", "app/src/auth")
 WORKSPACE_ROOTS = ("app/src/workspace", "app/src/app_menus.rs", "app/src/menu.rs")
-SEARCH_ROOTS = ("app/src/search",)
+SEARCH_ROOTS = ("app/src/search", "crates/warp_search_core/src")
 SETTINGS_ROOTS = ("app/src/settings_view",)
 MODALS_ROOTS = (
     "app/src/auth",
