@@ -27,8 +27,8 @@ use denied_body::{DeniedBody, DeniedBodyEvent};
 use self::body::BodyEvent;
 use super::{SharedSessionActionSource, SharedSessionScrollbackType};
 
-const MODAL_HEADER: &str = "Share session";
-const SESSION_LIMIT_REACHED_HEADER: &str = "Shared session limit reached";
+const MODAL_HEADER: &str = "共享会话";
+const SESSION_LIMIT_REACHED_HEADER: &str = "已达到共享会话限制";
 
 pub struct ShareSessionModal {
     modal: ViewHandle<Modal<Body>>,

@@ -48,7 +48,7 @@ fn terminal_no_worktree() {
         true,
     );
 
-    assert_eq!(config.name, "New tab: project");
+    assert_eq!(config.name, "新建标签页: project");
     assert!(config.title.is_none());
     assert_eq!(config.panes.len(), 1);
     assert_eq!(

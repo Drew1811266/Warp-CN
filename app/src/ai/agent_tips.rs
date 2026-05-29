@@ -94,7 +94,7 @@ static DEFAULT_TIPS: LazyLock<Vec<AgentTip>> = LazyLock::new(|| {
             kind: AgentTipKind::SlashCommands,
         },
         AgentTip {
-            description: "<keybinding> to toggle natural language detection and switch between agent and terminal input.".to_string(),
+            description: "使用 <keybinding> 切换自然语言检测，并在 Agent 和终端输入之间切换。".to_string(),
             link: Some("https://docs.warp.dev/terminal/input/universal-input#input-modes".to_string()),
             binding_name: Some(SET_INPUT_MODE_AGENT_ACTION_NAME),
             action: None,
@@ -133,7 +133,7 @@ static DEFAULT_TIPS: LazyLock<Vec<AgentTip>> = LazyLock::new(|| {
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "`@` to add context from files, blocks, or Warp Drive objects to your prompt.".to_string(),
+            description: "使用 `@` 将文件、块或 Warp Drive 对象中的上下文添加到提示中。".to_string(),
             link: Some("https://docs.warp.dev/agent-platform/local-agents/agent-context/using-to-add-context".to_string()),
             binding_name: None,
             action: None,
@@ -154,21 +154,21 @@ static DEFAULT_TIPS: LazyLock<Vec<AgentTip>> = LazyLock::new(|| {
             kind: AgentTipKind::CodebaseContext,
         },
         AgentTip {
-            description: "Add agent profiles to customize permissions and models per session.".to_string(),
+            description: "添加 Agent 配置文件，为每个会话自定义权限和模型。".to_string(),
             link: Some("https://docs.warp.dev/agent-platform/capabilities/agent-profiles-permissions".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "Right-click a block to fork the conversation from that point.".to_string(),
+            description: "右键点击块，可从该位置派生对话。".to_string(),
             link: Some("https://docs.warp.dev/agent-platform/local-agents/interacting-with-agents/conversation-forking".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "Right-click a block to copy a conversation's output.".to_string(),
+            description: "右键点击块，可复制对话输出。".to_string(),
             link: Some("https://docs.warp.dev/terminal/blocks/block-actions#copy-input-output-of-block".to_string()),
             binding_name: None,
             action: None,
@@ -189,7 +189,7 @@ static DEFAULT_TIPS: LazyLock<Vec<AgentTip>> = LazyLock::new(|| {
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "<keybinding> to open the code review panel and review the agent's changes.".to_string(),
+            description: "使用 <keybinding> 打开代码审查面板并审查 Agent 的更改。".to_string(),
             link: Some("https://docs.warp.dev/code/code-review".to_string()),
             binding_name: Some(TOGGLE_RIGHT_PANEL_BINDING_NAME),
             action: None,
@@ -203,7 +203,7 @@ static DEFAULT_TIPS: LazyLock<Vec<AgentTip>> = LazyLock::new(|| {
             kind: AgentTipKind::Mcp,
         },
         AgentTip {
-            description: "`/open-mcp-servers` to view and share MCP servers with your team.".to_string(),
+            description: "使用 `/open-mcp-servers` 查看 MCP 服务器并与团队共享。".to_string(),
             link: None,
             binding_name: None,
             action: None,
@@ -238,7 +238,7 @@ static DEFAULT_TIPS: LazyLock<Vec<AgentTip>> = LazyLock::new(|| {
             kind: AgentTipKind::SlashCommands,
         },
         AgentTip {
-            description: "`/open-code-review` to open the code review panel and inspect agent-generated diffs.".to_string(),
+            description: "使用 `/open-code-review` 打开代码审查面板并检查 Agent 生成的差异。".to_string(),
             link: None,
             binding_name: None,
             action: Some(WorkspaceAction::ToggleRightPanel),
@@ -301,7 +301,7 @@ static DEFAULT_TIPS: LazyLock<Vec<AgentTip>> = LazyLock::new(|| {
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "Switch agent profiles to quickly change models and agent permissions.".to_string(),
+            description: "切换 Agent 配置文件，可快速更改模型和 Agent 权限。".to_string(),
             link: Some("https://docs.warp.dev/agent-platform/capabilities/agent-profiles-permissions".to_string()),
             binding_name: None,
             action: None,
@@ -440,7 +440,7 @@ impl WorkspaceAction {
         match self {
             WorkspaceAction::OpenPalette { .. } => Some("Open palette".to_string()),
             WorkspaceAction::OpenWarpDrive => Some("Warp Drive.".to_string()),
-            WorkspaceAction::ToggleRightPanel => Some("Show diff view".to_string()),
+            WorkspaceAction::ToggleRightPanel => Some("显示差异视图".to_string()),
             _ => None,
         }
     }

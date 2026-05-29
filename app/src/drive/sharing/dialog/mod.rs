@@ -1494,7 +1494,7 @@ impl SharingDialog {
 
             if !validation_state.duplicate_guests.is_empty() {
                 let error_text = format!(
-                    "Already shared with {}",
+                    "已与 {} 共享",
                     validation_state.duplicate_guests.iter().format(", ")
                 );
                 contents.add_child(self.render_error_message(error_text, appearance));
@@ -2604,7 +2604,7 @@ impl SharingDialog {
         .finish();
         let title = appearance
             .ui_builder()
-            .span("Share session QR code")
+            .span("共享会话二维码")
             .with_style(UiComponentStyles {
                 font_color: Some(foreground),
                 font_size: Some(style::HEADER_TEXT_SIZE),
@@ -2673,7 +2673,7 @@ impl SharingDialog {
                         self.render_footer_icon_button(
                             Icon::Copy,
                             SharingDialogAction::CopyLink,
-                            "Copy link",
+                            "复制链接",
                             self.ui_state_handles.qr_copy_button.clone(),
                             appearance,
                         ),
@@ -2757,7 +2757,7 @@ impl SharingDialog {
             .with_text_and_icon_label(
                 TextAndIcon::new(
                     TextAndIconAlignment::IconFirst,
-                    "Copy link",
+                    "复制链接",
                     Icon::Link.to_warpui_icon(copy_button_foreground),
                     MainAxisSize::Min,
                     MainAxisAlignment::SpaceBetween,

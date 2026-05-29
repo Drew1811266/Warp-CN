@@ -87,7 +87,7 @@ where
     let on_accent_bg = bg.is_some();
     let on_select = Arc::new(on_select);
 
-    let label = Text::new_inline("Session type".to_string(), appearance.ui_font_family(), 12.)
+    let label = Text::new_inline("会话类型".to_string(), appearance.ui_font_family(), 12.)
         .with_color(if on_accent_bg {
             callout_label_color(appearance)
         } else {
@@ -223,17 +223,13 @@ where
 
     let on_accent_bg = bg.is_some();
 
-    let label = Text::new_inline(
-        "Select directory".to_string(),
-        appearance.ui_font_family(),
-        12.,
-    )
-    .with_color(if on_accent_bg {
-        callout_label_color(appearance)
-    } else {
-        blended_colors::text_disabled(theme, bg_fill)
-    })
-    .finish();
+    let label = Text::new_inline("选择目录".to_string(), appearance.ui_font_family(), 12.)
+        .with_color(if on_accent_bg {
+            callout_label_color(appearance)
+        } else {
+            blended_colors::text_disabled(theme, bg_fill)
+        })
+        .finish();
 
     let home_dir = dirs::home_dir();
     let raw_path = selected_directory.to_string_lossy();
@@ -356,7 +352,7 @@ where
             if state.is_hovered() {
                 let tooltip = Container::new(
                     Text::new_inline(
-                        "Select a git repository to enable worktree support".to_string(),
+                        "选择 Git 仓库以启用 worktree 支持".to_string(),
                         font_family,
                         12.,
                     )
@@ -400,7 +396,7 @@ where
         blended_colors::text_sub(theme, theme.background())
     };
     let label = Text::new(
-        "Automatically create a worktree when opening a new tab",
+        "打开新标签页时自动创建 worktree",
         appearance.ui_font_family(),
         12.,
     )
@@ -487,9 +483,7 @@ where
             if state.is_hovered() {
                 let tooltip = Container::new(
                     Text::new_inline(
-                        "You must select that you want to automatically create a \
-                         worktree in order to select this"
-                            .to_string(),
+                        "必须先选择自动创建 worktree，才能选择此项".to_string(),
                         font_family,
                         12.,
                     )
@@ -534,7 +528,7 @@ where
     };
 
     let label = Text::new(
-        "Auto-generate worktree branch name",
+        "自动生成 worktree 分支名称",
         appearance.ui_font_family(),
         12.,
     )

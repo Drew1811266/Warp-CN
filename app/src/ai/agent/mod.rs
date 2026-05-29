@@ -167,7 +167,7 @@ pub enum FinishedAIAgentOutput {
 impl Display for FinishedAIAgentOutput {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            FinishedAIAgentOutput::Cancelled { .. } => write!(f, "Cancelled"),
+            FinishedAIAgentOutput::Cancelled { .. } => write!(f, "已取消"),
             FinishedAIAgentOutput::Error { error, .. } => write!(f, "Error: {error}"),
             FinishedAIAgentOutput::Success { output } => write!(f, "\n{output}"),
         }
@@ -256,7 +256,7 @@ pub enum AIAgentOutputStatus {
 impl Display for AIAgentOutputStatus {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            AIAgentOutputStatus::Streaming { .. } => write!(f, "Streaming..."),
+            AIAgentOutputStatus::Streaming { .. } => write!(f, "正在流式输出..."),
             AIAgentOutputStatus::Finished { finished_output } => write!(f, "{finished_output}"),
         }
     }
@@ -557,7 +557,7 @@ impl AIAgentOutput {
                 AIAgentOutputMessageType::CommentsAddressed {
                     comments: comment_ids,
                 } => {
-                    result.push(format!("Addressed {} comments", comment_ids.len()));
+                    result.push(format!("已处理 {} 条评论", comment_ids.len()));
                     last_was_action = false;
                 }
                 AIAgentOutputMessageType::Reasoning { .. } => continue,
@@ -689,18 +689,18 @@ impl Display for RenderableAIError {
                 if let Some(message) = user_display_message {
                     write!(f, "{message}")
                 } else {
-                    write!(f, "Quota limit reached.")
+                    write!(f, "已达到配额限制。")
                 }
             }
             Self::ServerOverloaded => {
-                write!(f, "Warp is currently overloaded. Please try again later.")
+                write!(f, "Warp 当前负载较高。请稍后重试。")
             }
-            Self::InternalWarpError => write!(f, "Internal Warp error."),
+            Self::InternalWarpError => write!(f, "Warp 内部错误。"),
             Self::ContextWindowExceeded(message) => {
-                write!(f, "Context window exceeded: {message}")
+                write!(f, "已超出上下文窗口：{message}")
             }
             Self::InvalidApiKey { provider, .. } => {
-                write!(f, "Invalid API key for {provider}")
+                write!(f, "{provider} 的 API 密钥无效")
             }
             Self::AwsBedrockCredentialsExpiredOrInvalid { model_name } => {
                 write!(
@@ -1793,7 +1793,7 @@ impl Display for AIAgentOutputMessage {
             },
             AIAgentOutputMessageType::CommentsAddressed {
                 comments: comment_ids,
-            } => write!(f, "Addressed {} comments", comment_ids.len())?,
+            } => write!(f, "已处理 {} 条评论", comment_ids.len())?,
             AIAgentOutputMessageType::DebugOutput { text } => write!(f, "[DEBUG] {text}")?,
             AIAgentOutputMessageType::ArtifactCreated(data) => match data {
                 ArtifactCreatedData::PullRequest { url, branch } => {

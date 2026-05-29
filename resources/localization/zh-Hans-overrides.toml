@@ -9328,3 +9328,1978 @@ target = "使用 Agent"
 path = "app/src/terminal/view/init_environment/mode_selector.rs"
 source = "Choose a locally set up project and we'll help you set up an environment based on it"
 target = "选择一个本地已设置的项目，我们会基于它帮助你设置环境"
+
+[[replace]]
+path = "app/src/drive/cloud_action_confirmation_dialog.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/drive/cloud_action_confirmation_dialog.rs"
+source = "Are you sure you want to delete this team?"
+target = "确定要删除此团队吗？"
+
+[[replace]]
+path = "app/src/drive/cloud_action_confirmation_dialog.rs"
+source = "Are you sure you want to leave this team?"
+target = "确定要离开此团队吗？"
+
+[[replace]]
+path = "app/src/drive/cloud_action_confirmation_dialog.rs"
+source = "Are you sure you want to remove this member?"
+target = "确定要移除此成员吗？"
+
+[[replace]]
+path = "app/src/drive/cloud_action_confirmation_dialog.rs"
+source = "Deleting this team will permanently delete it and all of its related content, including billing information or credits. You will not be able to restore them."
+target = "删除此团队会永久删除团队及其所有相关内容，包括账单信息或额度。你将无法恢复它们。"
+
+[[replace]]
+path = "app/src/drive/cloud_action_confirmation_dialog.rs"
+source = "You will need to be reinvited in order to rejoin."
+target = "如需重新加入，你需要再次被邀请。"
+
+[[replace]]
+path = "app/src/drive/cloud_action_confirmation_dialog.rs"
+source = "If you leave this team, you’ll lose access to any remaining reload credits tied to it. You’ll regain access to any unused, non-expired credits if you rejoin the same team later."
+target = "如果离开此团队，你将无法访问与其关联的剩余充值额度。如果之后重新加入同一团队，你将重新获得未使用且未过期额度的访问权限。"
+
+[[replace]]
+path = "app/src/drive/cloud_action_confirmation_dialog.rs"
+source = "This member will lose access to any remaining reload credits tied to this team. If they rejoin later, they’ll regain access to any unused, non-expired credits."
+target = "此成员将无法访问与此团队关联的剩余充值额度。如果之后重新加入，他们将重新获得未使用且未过期额度的访问权限。"
+
+[[replace]]
+path = "app/src/drive/cloud_action_confirmation_dialog.rs"
+source = "Yes, delete"
+target = "确认删除"
+
+[[replace]]
+path = "app/src/drive/cloud_action_confirmation_dialog.rs"
+source = "Yes, leave"
+target = "确认离开"
+
+[[replace]]
+path = "app/src/drive/cloud_action_confirmation_dialog.rs"
+source = "Leave Team"
+target = "离开团队"
+
+[[replace]]
+path = "app/src/drive/cloud_action_confirmation_dialog.rs"
+source = "Remove Member"
+target = "移除成员"
+
+[[replace]]
+path = "app/src/drive/empty_trash_confirmation_dialog.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/drive/empty_trash_confirmation_dialog.rs"
+source = "Are you sure you want to empty the trash?"
+target = "确定要清空废纸篓吗？"
+
+[[replace]]
+path = "app/src/drive/empty_trash_confirmation_dialog.rs"
+source = "This action cannot be undone."
+target = "此操作无法撤销。"
+
+[[replace]]
+path = "app/src/drive/empty_trash_confirmation_dialog.rs"
+source = "Yes, empty trash"
+target = "确认清空废纸篓"
+
+[[replace]]
+path = "app/src/drive/cloud_object_naming_dialog.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/drive/export.rs"
+source = "Open in Finder"
+target = "在 Finder 中打开"
+
+[[replace]]
+path = "app/src/drive/export.rs"
+source = "Open in folder"
+target = "在文件夹中打开"
+
+[[replace]]
+path = "app/src/drive/import/modal.rs"
+source = "Import"
+target = "导入"
+
+[[replace]]
+path = "app/src/drive/import/modal.rs"
+source = "Close"
+target = "关闭"
+
+[[replace]]
+path = "app/src/drive/import/modal.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/drive/import/modal_body.rs"
+source = "Failed to upload file to server"
+target = "无法将文件上传到服务器"
+
+[[replace]]
+path = "app/src/drive/import/modal_body.rs"
+source = "Failed to upload folder to server"
+target = "无法将文件夹上传到服务器"
+
+[[replace]]
+path = "app/src/drive/import/modal_body.rs"
+source = "Preparing..."
+target = "正在准备..."
+
+[[replace]]
+path = "app/src/drive/import/modal_body.rs"
+source = "Choose files..."
+target = "选择文件..."
+
+[[replace]]
+path = "app/src/drive/import/modal_body.rs"
+source = "Learn about file support and formatting"
+target = "了解文件支持和格式"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Share commands & knowledge with your teammates."
+target = "与队友共享命令和知识。"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Upgrade for access to more notebooks, workflows, shared sessions, and AI credits."
+target = "升级后可访问更多 Notebook、工作流、共享会话和 AI 额度。"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Shared objects have been restricted due to a subscription payment issue."
+target = "由于订阅付款问题，共享对象已受限。"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Open Team Settings"
+target = "打开团队设置"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Drag or move a personal workflow or notebook here to share it with your team."
+target = "将个人工作流或 Notebook 拖到这里或移动到这里，以与团队共享。"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Copy link"
+target = "复制链接"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Share"
+target = "共享"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Copy prompt"
+target = "复制提示"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Copy workflow text"
+target = "复制工作流文本"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Copy id"
+target = "复制 ID"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Copy variables"
+target = "复制变量"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Open on Desktop"
+target = "在桌面版中打开"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Open"
+target = "打开"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Delete forever"
+target = "永久删除"
+
+[[replace]]
+path = "app/src/drive/index.rs"
+source = "Share Object"
+target = "共享对象"
+
+[[replace]]
+path = "app/src/drive/sharing/dialog/mod.rs"
+source = "Already shared with {}"
+target = "已与 {} 共享"
+
+[[replace]]
+path = "app/src/drive/sharing/dialog/mod.rs"
+source = "Share session QR code"
+target = "共享会话二维码"
+
+[[replace]]
+path = "app/src/drive/sharing/dialog/mod.rs"
+source = "Copy link"
+target = "复制链接"
+
+[[replace]]
+path = "app/src/drive/workflows/enum_creation_dialog.rs"
+source = "Close"
+target = "关闭"
+
+[[replace]]
+path = "app/src/drive/workflows/enum_creation_dialog.rs"
+source = "Save"
+target = "保存"
+
+[[replace]]
+path = "app/src/drive/workflows/modal.rs"
+source = "Untitled workflow"
+target = "未命名工作流"
+
+[[replace]]
+path = "app/src/drive/workflows/modal.rs"
+source = "Add a description"
+target = "添加描述"
+
+[[replace]]
+path = "app/src/drive/workflows/modal.rs"
+source = "New argument"
+target = "新参数"
+
+[[replace]]
+path = "app/src/drive/workflows/modal.rs"
+source = "Description"
+target = "描述"
+
+[[replace]]
+path = "app/src/drive/workflows/modal.rs"
+source = "Default value (optional)"
+target = "默认值（可选）"
+
+[[replace]]
+path = "app/src/drive/workflows/modal.rs"
+source = "Save workflow"
+target = "保存工作流"
+
+[[replace]]
+path = "app/src/drive/workflows/modal.rs"
+source = "Autofill"
+target = "自动填充"
+
+[[replace]]
+path = "app/src/drive/workflows/modal.rs"
+source = "Loading"
+target = "正在加载"
+
+[[replace]]
+path = "app/src/drive/workflows/modal.rs"
+source = "You have unsaved changes."
+target = "你有未保存的更改。"
+
+[[replace]]
+path = "app/src/drive/workflows/modal.rs"
+source = "Keep editing"
+target = "继续编辑"
+
+[[replace]]
+path = "app/src/drive/workflows/modal.rs"
+source = "Discard changes"
+target = "放弃更改"
+
+[[replace]]
+path = "app/src/drive/workflows/modal.rs"
+source = "Trash"
+target = "移到废纸篓"
+
+[[replace]]
+path = "app/src/drive/workflows/modal.rs"
+source = "Generate a title, descriptions, or parameters with Warp AI"
+target = "使用 Warp AI 生成标题、描述或参数"
+
+[[replace]]
+path = "app/src/tab_configs/action_sidecar.rs"
+source = "Make default"
+target = "设为默认"
+
+[[replace]]
+path = "app/src/tab_configs/action_sidecar.rs"
+source = "Already the default"
+target = "已经是默认配置"
+
+[[replace]]
+path = "app/src/tab_configs/action_sidecar.rs"
+source = "Edit config"
+target = "编辑配置"
+
+[[replace]]
+path = "app/src/tab_configs/action_sidecar.rs"
+source = "Remove"
+target = "移除"
+
+[[replace]]
+path = "app/src/tab_configs/new_worktree_modal.rs"
+source = "Name can only contain letters, numbers, hyphens, and underscores"
+target = "名称只能包含字母、数字、连字符和下划线"
+
+[[replace]]
+path = "app/src/tab_configs/new_worktree_modal.rs"
+source = "New worktree"
+target = "新建 worktree"
+
+[[replace]]
+path = "app/src/tab_configs/new_worktree_modal.rs"
+source = "Select repository"
+target = "选择仓库"
+
+[[replace]]
+path = "app/src/tab_configs/new_worktree_modal.rs"
+source = "Select branch"
+target = "选择分支"
+
+[[replace]]
+path = "app/src/tab_configs/new_worktree_modal.rs"
+source = "Autogenerate worktree branch name"
+target = "自动生成 worktree 分支名称"
+
+[[replace]]
+path = "app/src/tab_configs/new_worktree_modal.rs"
+source = "Worktree branch name"
+target = "Worktree 分支名称"
+
+[[replace]]
+path = "app/src/tab_configs/new_worktree_modal.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/tab_configs/new_worktree_modal.rs"
+source = "Open"
+target = "打开"
+
+[[replace]]
+path = "app/src/tab_configs/params_modal.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/tab_configs/params_modal.rs"
+source = "Open Tab"
+target = "打开标签页"
+
+[[replace]]
+path = "app/src/tab_configs/params_modal.rs"
+source = "Enter {name}"
+target = "输入 {name}"
+
+[[replace]]
+path = "app/src/tab_configs/remove_confirmation_dialog.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/tab_configs/remove_confirmation_dialog.rs"
+source = "Remove"
+target = "移除"
+
+[[replace]]
+path = "app/src/tab_configs/remove_confirmation_dialog.rs"
+source = "Remove '{}'?"
+target = "移除“{}”？"
+
+[[replace]]
+path = "app/src/tab_configs/remove_confirmation_dialog.rs"
+source = "This tab config will be permanently deleted. This action cannot be undone."
+target = "此标签页配置将被永久删除。此操作无法撤销。"
+
+[[replace]]
+path = "app/src/tab_configs/repo_picker.rs"
+source = "+ Add new repo..."
+target = "+ 添加新仓库..."
+
+[[replace]]
+path = "app/src/tab_configs/session_config.rs"
+source = "Terminal"
+target = "终端"
+
+[[replace]]
+path = "app/src/tab_configs/session_config.rs"
+source = "Built in agent"
+target = "内置 Agent"
+
+[[replace]]
+path = "app/src/tab_configs/session_config.rs"
+source = "Worktree"
+target = "Worktree"
+
+[[replace]]
+path = "app/src/tab_configs/session_config.rs"
+source = "New tab"
+target = "新建标签页"
+
+[[replace]]
+path = "app/src/tab_configs/session_config.rs"
+source = "New worktree branch name"
+target = "新建 worktree 分支名称"
+
+[[replace]]
+path = "app/src/tab_configs/session_config_modal.rs"
+source = "Get Warping"
+target = "开始使用 Warp"
+
+[[replace]]
+path = "app/src/tab_configs/session_config_modal.rs"
+source = "Create your first tab config"
+target = "创建你的第一个标签页配置"
+
+[[replace]]
+path = "app/src/tab_configs/session_config_modal.rs"
+source = "Set up a reusable starting point for your tabs. Pick a repo, choose a session type, and optionally attach a worktree. Use it whenever you want to open a new tab with this setup."
+target = "为标签页设置可复用的起点。选择仓库、会话类型，并可选择附加 worktree。之后想用这套设置打开新标签页时即可直接使用。"
+
+[[replace]]
+path = "app/src/tab_configs/session_config_modal.rs"
+source = "Set up a reusable starting point for your tabs. Pick a repo, optionally attach a worktree, and use it whenever you want to open a new tab with this setup."
+target = "为标签页设置可复用的起点。选择仓库，并可选择附加 worktree。之后想用这套设置打开新标签页时即可直接使用。"
+
+[[replace]]
+path = "app/src/tab_configs/session_config_rendering.rs"
+source = "Session type"
+target = "会话类型"
+
+[[replace]]
+path = "app/src/tab_configs/session_config_rendering.rs"
+source = "Select directory"
+target = "选择目录"
+
+[[replace]]
+path = "app/src/tab_configs/session_config_rendering.rs"
+source = "Select a git repository to enable worktree support"
+target = "选择 Git 仓库以启用 worktree 支持"
+
+[[replace]]
+path = "app/src/tab_configs/session_config_rendering.rs"
+source = "Automatically create a worktree when opening a new tab"
+target = "打开新标签页时自动创建 worktree"
+
+[[replace]]
+path = "app/src/tab_configs/session_config_rendering.rs"
+source = "You must select that you want to automatically create a worktree in order to select this"
+target = "必须先选择自动创建 worktree，才能选择此项"
+
+[[replace]]
+path = "app/src/tab_configs/session_config_rendering.rs"
+source = "Auto-generate worktree branch name"
+target = "自动生成 worktree 分支名称"
+
+[[replace]]
+path = "app/src/tab_configs/tab_config.rs"
+source = "Worktree branch name"
+target = "Worktree 分支名称"
+
+[[replace]]
+path = "app/src/themes/theme_chooser.rs"
+source = "Themes"
+target = "主题"
+
+[[replace]]
+path = "app/src/themes/theme_chooser.rs"
+source = "Change your current theme."
+target = "更改当前主题。"
+
+[[replace]]
+path = "app/src/themes/theme_chooser.rs"
+source = "Pick a theme for when your system is in light mode."
+target = "选择系统处于浅色模式时使用的主题。"
+
+[[replace]]
+path = "app/src/themes/theme_chooser.rs"
+source = "Pick a theme for when your system is in dark mode."
+target = "选择系统处于深色模式时使用的主题。"
+
+[[replace]]
+path = "app/src/themes/theme_chooser.rs"
+source = "No matching themes!"
+target = "没有匹配的主题！"
+
+[[replace]]
+path = "app/src/themes/theme_chooser.rs"
+source = "Theme chooser. Unfortunately, theme chooser window isn't compatible with screen readers yet."
+target = "主题选择器。很遗憾，主题选择器窗口暂不兼容屏幕阅读器。"
+
+[[replace]]
+path = "app/src/themes/theme_chooser.rs"
+source = "Press escape to close."
+target = "按 Escape 关闭。"
+
+[[replace]]
+path = "app/src/themes/theme_creator_body.rs"
+source = "Automatically generate a theme based on extracted colors from an image (.png, .jpg)."
+target = "根据图片（.png、.jpg）中提取的颜色自动生成主题。"
+
+[[replace]]
+path = "app/src/themes/theme_creator_body.rs"
+source = "Select an image"
+target = "选择图片"
+
+[[replace]]
+path = "app/src/themes/theme_creator_body.rs"
+source = "Selecting image..."
+target = "正在选择图片..."
+
+[[replace]]
+path = "app/src/themes/theme_creator_body.rs"
+source = "Select a new image"
+target = "选择新图片"
+
+[[replace]]
+path = "app/src/themes/theme_creator_body.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/themes/theme_creator_body.rs"
+source = "Create theme"
+target = "创建主题"
+
+[[replace]]
+path = "app/src/themes/theme_creator_body.rs"
+source = "Failed to process selected image. Please try again with a different image."
+target = "无法处理所选图片。请换一张图片后重试。"
+
+[[replace]]
+path = "app/src/themes/theme_creator_body.rs"
+source = "Something went wrong"
+target = "出了点问题"
+
+[[replace]]
+path = "app/src/themes/theme_creator_body.rs"
+source = "Failed to process selected image due to error: {e}. Please try again with a different image."
+target = "由于错误 {e}，无法处理所选图片。请换一张图片后重试。"
+
+[[replace]]
+path = "app/src/themes/theme_creator_body.rs"
+source = "Theme name"
+target = "主题名称"
+
+[[replace]]
+path = "app/src/themes/theme_creator_body.rs"
+source = "Background color"
+target = "背景颜色"
+
+[[replace]]
+path = "app/src/themes/theme_creator_modal.rs"
+source = "Create new theme from image"
+target = "从图片创建新主题"
+
+[[replace]]
+path = "app/src/themes/theme_deletion_body.rs"
+source = "This will permanently delete the theme."
+target = "这将永久删除该主题。"
+
+[[replace]]
+path = "app/src/themes/theme_deletion_body.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/themes/theme_deletion_body.rs"
+source = "Delete theme"
+target = "删除主题"
+
+[[replace]]
+path = "app/src/themes/theme_deletion_body.rs"
+source = "Something went wrong"
+target = "出了点问题"
+
+[[replace]]
+path = "app/src/themes/theme_deletion_modal.rs"
+source = "Are you sure you want to delete this theme?"
+target = "确定要删除此主题吗？"
+
+[[replace]]
+path = "app/src/terminal/buy_credits_banner.rs"
+source = "Failed to enable auto-reload for your team. Please try again in Settings > Billing and Usage."
+target = "无法为你的团队启用自动充值。请在“设置 > 账单和使用量”中重试。"
+
+[[replace]]
+path = "app/src/terminal/buy_credits_banner.rs"
+source = "Auto reload"
+target = "自动充值"
+
+[[replace]]
+path = "app/src/terminal/buy_credits_banner.rs"
+source = "When enabled, auto reload will purchase {} credits when your credit balance gets low"
+target = "启用后，当你的额度余额不足时，自动充值会购买 {} 个额度"
+
+[[replace]]
+path = "app/src/terminal/enable_auto_reload_modal.rs"
+source = "Auto-reload settings updated"
+target = "自动充值设置已更新"
+
+[[replace]]
+path = "app/src/terminal/enable_auto_reload_modal.rs"
+source = "Failed to enable auto-reload. Please try updating your settings in Billing & usage."
+target = "无法启用自动充值。请尝试在“账单和使用量”中更新设置。"
+
+[[replace]]
+path = "app/src/terminal/enable_auto_reload_modal.rs"
+source = "When enabled, "
+target = "启用后，"
+
+[[replace]]
+path = "app/src/terminal/enable_auto_reload_modal.rs"
+source = "auto-reload"
+target = "自动充值"
+
+[[replace]]
+path = "app/src/terminal/enable_auto_reload_modal.rs"
+source = " will automatically purchase your selected package when you run out. "
+target = "会在用完时自动购买你选择的套餐。"
+
+[[replace]]
+path = "app/src/terminal/enable_auto_reload_modal.rs"
+source = "Learn more"
+target = "了解更多"
+
+[[replace]]
+path = "app/src/terminal/enable_auto_reload_modal.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/terminal/enable_auto_reload_modal.rs"
+source = "Saving..."
+target = "正在保存..."
+
+[[replace]]
+path = "app/src/terminal/enable_auto_reload_modal.rs"
+source = "Enable"
+target = "启用"
+
+[[replace]]
+path = "app/src/terminal/enable_auto_reload_modal.rs"
+source = "Oops, something went wrong; your team's data could not be found."
+target = "出了点问题：找不到你团队的数据。"
+
+[[replace]]
+path = "app/src/terminal/enable_auto_reload_modal.rs"
+source = "Enable auto reload?"
+target = "启用自动充值？"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/cloud_mode_v2_view.rs"
+source = "Commands"
+target = "命令"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/cloud_mode_v2_view.rs"
+source = "Skills"
+target = "技能"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/cloud_mode_v2_view.rs"
+source = "Prompts"
+target = "提示"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/cloud_mode_v2_view.rs"
+source = "Loading..."
+target = "正在加载..."
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/cloud_mode_v2_view.rs"
+source = "No results"
+target = "没有结果"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/cloud_mode_v2_view.rs"
+source = "Show {hidden_count} more"
+target = "再显示 {hidden_count} 个"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "{} requires AI to be enabled"
+target = "{} 需要启用 AI"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "cannot start new conversation while terminal command is running"
+target = "终端命令运行时无法开始新对话"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "Please provide a tab name after /rename-tab"
+target = "请在 /rename-tab 后提供标签页名称"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "Please provide a color after /set-tab-color ({})"
+target = "请在 /set-tab-color 后提供颜色（{}）"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "Unknown tab color '{arg}'. Use one of: {}."
+target = "未知标签页颜色“{arg}”。请使用以下之一：{}。"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "Please describe the project you want to create after /create-new-project"
+target = "请在 /create-new-project 后描述要创建的项目"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "The /open-file command is only available for local sessions"
+target = "/open-file 命令仅适用于本地会话"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "The /open-file command only works for files, not directories"
+target = "/open-file 命令只能用于文件，不能用于目录"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "File not found: {}"
+target = "找不到文件：{}"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "The /open-file command is not supported in this build"
+target = "此构建不支持 /open-file 命令"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "No active conversation to export"
+target = "没有可导出的活跃对话"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "Conversation exported to clipboard"
+target = "对话已导出到剪贴板"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "Export conversation to file unsupported in web"
+target = "网页版不支持将对话导出到文件"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "Session is already being shared"
+target = "会话已在共享"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "Cannot show conversation cost: no active conversation"
+target = "无法显示对话费用：没有活跃对话"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "Cannot show conversation cost: conversation is empty"
+target = "无法显示对话费用：对话为空"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "Cannot show conversation cost: conversation is in progress"
+target = "无法显示对话费用：对话正在进行"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "/fork requires an active conversation"
+target = "/fork 需要活跃对话"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "/continue-locally requires an active conversation"
+target = "/continue-locally 需要活跃对话"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "/continue-locally is only available for cloud Oz conversations"
+target = "/continue-locally 仅适用于云端 Oz 对话"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "/fork-and-compact requires an active conversation"
+target = "/fork-and-compact 需要活跃对话"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "/compact-and requires an active conversation"
+target = "/compact-and 需要活跃对话"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "/queue requires an active conversation"
+target = "/queue 需要活跃对话"
+
+[[replace]]
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "/queue requires a prompt argument"
+target = "/queue 需要一个提示参数"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Title (optional)"
+target = "标题（可选）"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Command and Output"
+target = "命令和输出"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Command"
+target = "命令"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Output"
+target = "输出"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Something went wrong. Please try again."
+target = "出了点问题。请重试。"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Copy"
+target = "复制"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Link copied."
+target = "链接已复制。"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Embed code copied."
+target = "嵌入代码已复制。"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Create link"
+target = "创建链接"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Get embed"
+target = "获取嵌入代码"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Creating block..."
+target = "正在创建块..."
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Error generating embed snippet"
+target = "生成嵌入片段时出错"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Manage shared blocks"
+target = "管理共享块"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Share block"
+target = "共享块"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Show prompt"
+target = "显示提示"
+
+[[replace]]
+path = "app/src/terminal/share_block_modal.rs"
+source = "Redact secrets (API keys, passwords, IP addresses, PII etc.)"
+target = "遮盖密钥（API 密钥、密码、IP 地址、个人身份信息等）"
+
+[[replace]]
+path = "app/src/terminal/shared_session/mod.rs"
+source = "Sharing link copied"
+target = "共享链接已复制"
+
+[[replace]]
+path = "app/src/terminal/shared_session/participant_avatar_view.rs"
+source = "Make editor"
+target = "设为编辑者"
+
+[[replace]]
+path = "app/src/terminal/shared_session/participant_avatar_view.rs"
+source = "Make viewer"
+target = "设为查看者"
+
+[[replace]]
+path = "app/src/terminal/shared_session/participant_avatar_view.rs"
+source = "Revoke all edit permissions"
+target = "撤销所有编辑权限"
+
+[[replace]]
+path = "app/src/terminal/shared_session/participant_avatar_view.rs"
+source = "Change role"
+target = "更改角色"
+
+[[replace]]
+path = "app/src/terminal/shared_session/role_change_modal/sharer_grant_body.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/terminal/shared_session/role_change_modal/sharer_grant_body.rs"
+source = "Make Editor"
+target = "设为编辑者"
+
+[[replace]]
+path = "app/src/terminal/shared_session/role_change_modal/sharer_grant_body.rs"
+source = "This grants the ability to execute commands on your"
+target = "这将授予代表你执行命令的"
+
+[[replace]]
+path = "app/src/terminal/shared_session/role_change_modal/sharer_grant_body.rs"
+source = "behalf. Use with caution."
+target = "能力。请谨慎使用。"
+
+[[replace]]
+path = "app/src/terminal/shared_session/role_change_modal/sharer_grant_body.rs"
+source = "Don't show again."
+target = "不再显示。"
+
+[[replace]]
+path = "app/src/terminal/shared_session/role_change_modal/sharer_response_body.rs"
+source = "Deny"
+target = "拒绝"
+
+[[replace]]
+path = "app/src/terminal/shared_session/role_change_modal/sharer_response_body.rs"
+source = "Approve"
+target = "批准"
+
+[[replace]]
+path = "app/src/terminal/shared_session/role_change_modal/sharer_response_body.rs"
+source = "Edit Requests"
+target = "编辑请求"
+
+[[replace]]
+path = "app/src/terminal/shared_session/role_change_modal/sharer_response_body.rs"
+source = "This grants the ability to execute commands on your"
+target = "这将授予代表你执行命令的"
+
+[[replace]]
+path = "app/src/terminal/shared_session/role_change_modal/sharer_response_body.rs"
+source = "behalf. Use with caution."
+target = "能力。请谨慎使用。"
+
+[[replace]]
+path = "app/src/terminal/shared_session/role_change_modal/viewer_request_body.rs"
+source = "You have requested {} mode"
+target = "你已请求 {} 模式"
+
+[[replace]]
+path = "app/src/terminal/shared_session/role_change_modal/viewer_request_body.rs"
+source = "Waiting for {}..."
+target = "正在等待 {}..."
+
+[[replace]]
+path = "app/src/terminal/shared_session/role_change_modal/viewer_request_body.rs"
+source = "Cancel request"
+target = "取消请求"
+
+[[replace]]
+path = "app/src/terminal/shared_session/share_modal/body.rs"
+source = "Share from current screen"
+target = "从当前屏幕开始共享"
+
+[[replace]]
+path = "app/src/terminal/shared_session/share_modal/body.rs"
+source = "Share from current block"
+target = "从当前块开始共享"
+
+[[replace]]
+path = "app/src/terminal/shared_session/share_modal/body.rs"
+source = "Share without scrollback"
+target = "不包含回滚内容共享"
+
+[[replace]]
+path = "app/src/terminal/shared_session/share_modal/body.rs"
+source = "Share from start of session"
+target = "从会话开始处共享"
+
+[[replace]]
+path = "app/src/terminal/shared_session/share_modal/body.rs"
+source = "Share from selected block and onwards"
+target = "从所选块及之后内容共享"
+
+[[replace]]
+path = "app/src/terminal/shared_session/share_modal/body.rs"
+source = "Start sharing"
+target = "开始共享"
+
+[[replace]]
+path = "app/src/terminal/shared_session/share_modal/body.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/terminal/shared_session/share_modal/body.rs"
+source = "Some options are disabled due to sharing size limits and the presence of agent conversations in the session"
+target = "由于共享大小限制且会话中包含 Agent 对话，部分选项已停用"
+
+[[replace]]
+path = "app/src/terminal/shared_session/share_modal/body.rs"
+source = "Some options are disabled due to sharing size limits"
+target = "由于共享大小限制，部分选项已停用"
+
+[[replace]]
+path = "app/src/terminal/shared_session/share_modal/body.rs"
+source = "Sharing without scrollback is disabled because this session has agent conversations"
+target = "此会话包含 Agent 对话，因此无法在不包含回滚内容的情况下共享"
+
+[[replace]]
+path = "app/src/terminal/shared_session/share_modal/denied_body.rs"
+source = "View plans"
+target = "查看套餐"
+
+[[replace]]
+path = "app/src/terminal/shared_session/share_modal/mod.rs"
+source = "Share session"
+target = "共享会话"
+
+[[replace]]
+path = "app/src/terminal/shared_session/share_modal/mod.rs"
+source = "Shared session limit reached"
+target = "已达到共享会话限制"
+
+[[replace]]
+path = "app/src/terminal/shared_session/sharer/network.rs"
+source = "This channel does not support session-sharing."
+target = "此渠道不支持会话共享。"
+
+[[replace]]
+path = "app/src/terminal/shared_session/sharer/network.rs"
+source = "Failed to create shared session"
+target = "无法创建共享会话"
+
+[[replace]]
+path = "app/src/terminal/shared_session/sharer/network.rs"
+source = "Session sharing usage exceeded for the day. Please try again later."
+target = "今天的会话共享使用量已超出限制。请稍后重试。"
+
+[[replace]]
+path = "app/src/terminal/shared_session/sharer/network.rs"
+source = "Session limit ({max_bytes}) exceeded. Please reshare to continue."
+target = "已超出会话限制（{max_bytes}）。请重新共享以继续。"
+
+[[replace]]
+path = "app/src/terminal/shared_session/sharer/network.rs"
+source = "Session ended due to an internal error. Please try sharing again."
+target = "由于内部错误，会话已结束。请尝试重新共享。"
+
+[[replace]]
+path = "app/src/terminal/shared_session/sharer/network.rs"
+source = "An internal error occurred. Please try sharing again."
+target = "发生内部错误。请尝试重新共享。"
+
+[[replace]]
+path = "app/src/terminal/shared_session/sharer/network.rs"
+source = "Scrollback exceeds limit. Try sharing again without scrollback."
+target = "回滚内容超出限制。请尝试不包含回滚内容重新共享。"
+
+[[replace]]
+path = "app/src/terminal/shared_session/sharer/network.rs"
+source = "You must be logged in to share sessions."
+target = "必须登录后才能共享会话。"
+
+[[replace]]
+path = "app/src/terminal/shared_session/sharer/network.rs"
+source = "Something went wrong. Please try again."
+target = "出了点问题。请重试。"
+
+[[replace]]
+path = "app/src/terminal/shared_session/sharer/network.rs"
+source = "One or more emails were not associated with Warp accounts."
+target = "一个或多个邮箱未关联 Warp 账号。"
+
+[[replace]]
+path = "app/src/terminal/shared_session/sharer/network.rs"
+source = "One or more emails have already been added to the session."
+target = "一个或多个邮箱已添加到此会话。"
+
+[[replace]]
+path = "app/src/ai/agent/comment.rs"
+source = "Invalid File Name"
+target = "无效文件名"
+
+[[replace]]
+path = "app/src/ai/agent/comment.rs"
+source = "Review Comment"
+target = "审查评论"
+
+[[replace]]
+path = "app/src/ai/agent/mod.rs"
+source = "Cancelled"
+target = "已取消"
+
+[[replace]]
+path = "app/src/ai/agent/mod.rs"
+source = "Streaming..."
+target = "正在流式输出..."
+
+[[replace]]
+path = "app/src/ai/agent/mod.rs"
+source = "Addressed {} comments"
+target = "已处理 {} 条评论"
+
+[[replace]]
+path = "app/src/ai/agent/mod.rs"
+source = "Quota limit reached."
+target = "已达到配额限制。"
+
+[[replace]]
+path = "app/src/ai/agent/mod.rs"
+source = "Warp is currently overloaded. Please try again later."
+target = "Warp 当前负载较高。请稍后重试。"
+
+[[replace]]
+path = "app/src/ai/agent/mod.rs"
+source = "Internal Warp error."
+target = "Warp 内部错误。"
+
+[[replace]]
+path = "app/src/ai/agent/mod.rs"
+source = "Context window exceeded: {message}"
+target = "已超出上下文窗口：{message}"
+
+[[replace]]
+path = "app/src/ai/agent/mod.rs"
+source = "Invalid API key for {provider}"
+target = "{provider} 的 API 密钥无效"
+
+[[replace]]
+path = "app/src/ai/agent_management/agent_management_model.rs"
+source = "Waiting for input."
+target = "正在等待输入。"
+
+[[replace]]
+path = "app/src/ai/agent_management/agent_type_selector.rs"
+source = "Choose your agent"
+target = "选择你的 Agent"
+
+[[replace]]
+path = "app/src/ai/agent_management/agent_type_selector.rs"
+source = "Suggested"
+target = "推荐"
+
+[[replace]]
+path = "app/src/ai/agent_management/agent_type_selector.rs"
+source = "Cloud agent"
+target = "云端 Agent"
+
+[[replace]]
+path = "app/src/ai/agent_management/agent_type_selector.rs"
+source = "Runs autonomously in a cloud environment you choose. Best for parallel or long-running work."
+target = "在你选择的云端环境中自主运行。最适合并行或长时间运行的工作。"
+
+[[replace]]
+path = "app/src/ai/agent_management/agent_type_selector.rs"
+source = "Local agent"
+target = "本地 Agent"
+
+[[replace]]
+path = "app/src/ai/agent_management/agent_type_selector.rs"
+source = "Runs on your machine and requires supervision. Best for quick, interactive tasks."
+target = "在你的机器上运行并需要监督。最适合快速、交互式任务。"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Visit Oz"
+target = "访问 Oz"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Getting started with Oz cloud agents"
+target = "开始使用 Oz 云端 Agent"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Start Oz cloud agents directly in Warp from an integration (Linear, Slack), with an event (GitHub, built-in schedule), or programmatically with the Oz SDK or CLI."
+target = "可以通过集成（Linear、Slack）、事件（GitHub、内置计划）或使用 Oz SDK/CLI 以编程方式，直接在 Warp 中启动 Oz 云端 Agent。"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Check out the "
+target = "查看"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Oz documentation"
+target = "Oz 文档"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = " to learn more."
+target = "以了解更多。"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Quick start: Visit oz.warp.dev for a UI-based setup experience."
+target = "快速开始：访问 oz.warp.dev 使用基于 UI 的设置体验。"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Manual setup: Create a Slack or Linear integration with the Oz CLI"
+target = "手动设置：使用 Oz CLI 创建 Slack 或 Linear 集成"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Create Environment"
+target = "创建环境"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "github link or local filepath"
+target = "GitHub 链接或本地文件路径"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "GitHub link or local filepath to the repository"
+target = "仓库的 GitHub 链接或本地文件路径"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Create Environment (CLI)"
+target = "创建环境（CLI）"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Name for the environment"
+target = "环境名称"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Docker image to use for the environment"
+target = "环境使用的 Docker 镜像"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Create Slack Integration"
+target = "创建 Slack 集成"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "ID of the environment to integrate with"
+target = "要集成的环境 ID"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Create Linear Integration"
+target = "创建 Linear 集成"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Create an environment"
+target = "创建环境"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "First, set up an environment to create an integration."
+target = "请先设置一个环境，然后再创建集成。"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Use Warp's environment setup command to have an agent help you through it. "
+target = "使用 Warp 的环境设置命令，让 Agent 协助你完成。"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Visit docs"
+target = "查看文档"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Or, supply your own existing docker image."
+target = "或者，提供你自己的现有 Docker 镜像。"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Create an integration"
+target = "创建集成"
+
+[[replace]]
+path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
+source = "Integrate Slack or Linear to assign Warp's Agent tasks with @Warp. "
+target = "集成 Slack 或 Linear，以通过 @Warp 分配 Warp Agent 任务。"
+
+[[replace]]
+path = "app/src/ai/agent_management/notifications/toast_stack.rs"
+source = "Open conversation"
+target = "打开对话"
+
+[[replace]]
+path = "app/src/ai/agent_management/notifications/view.rs"
+source = "Close"
+target = "关闭"
+
+[[replace]]
+path = "app/src/ai/agent_management/notifications/view.rs"
+source = "Mark all as read"
+target = "全部标为已读"
+
+[[replace]]
+path = "app/src/ai/agent_management/notifications/view.rs"
+source = "Notifications"
+target = "通知"
+
+[[replace]]
+path = "app/src/ai/agent_management/notifications/view.rs"
+source = "No notifications"
+target = "没有通知"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Sessions expire after one week and cannot be opened."
+target = "会话会在一周后过期，且无法打开。"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "All"
+target = "全部"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "View your agent tasks plus all shared team tasks"
+target = "查看你的 Agent 任务以及所有共享的团队任务"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Personal"
+target = "个人"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "View agent tasks you created"
+target = "查看你创建的 Agent 任务"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Get started"
+target = "开始使用"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "View Agents"
+target = "查看 Agent"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Clear filters"
+target = "清除筛选"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Clear all"
+target = "全部清除"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Search"
+target = "搜索"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "New agent"
+target = "新建 Agent"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Status"
+target = "状态"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Working"
+target = "工作中"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Done"
+target = "已完成"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Failed"
+target = "失败"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Source"
+target = "来源"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Created on"
+target = "创建时间"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Last 24 hours"
+target = "最近 24 小时"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Past 3 days"
+target = "过去 3 天"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Last week"
+target = "上周"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Has artifact"
+target = "包含产物"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Pull Request"
+target = "拉取请求"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Plan"
+target = "计划"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Screenshot"
+target = "截图"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "File"
+target = "文件"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Environment"
+target = "环境"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "None"
+target = "无"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Created by"
+target = "创建者"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Copied branch name"
+target = "已复制分支名称"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Session expired"
+target = "会话已过期"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "No session available"
+target = "没有可用会话"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Unknown"
+target = "未知"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Agent"
+target = "Agent"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Executor"
+target = "执行者"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Run time: {run_time}"
+target = "运行时间：{run_time}"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Credits used: {usage}"
+target = "已用额度：{usage}"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Runs"
+target = "运行"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Loading cloud agent runs"
+target = "正在加载云端 Agent 运行"
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "Loading agents..."
+target = "正在加载 Agent..."
+
+[[replace]]
+path = "app/src/ai/agent_management/view.rs"
+source = "No results matched your filters"
+target = "没有与筛选条件匹配的结果"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "<keybinding> to toggle natural language detection and switch between agent and terminal input."
+target = "使用 <keybinding> 切换自然语言检测，并在 Agent 和终端输入之间切换。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`@` to add context from files, blocks, or Warp Drive objects to your prompt."
+target = "使用 `@` 将文件、块或 Warp Drive 对象中的上下文添加到提示中。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Add agent profiles to customize permissions and models per session."
+target = "添加 Agent 配置文件，为每个会话自定义权限和模型。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Right-click a block to fork the conversation from that point."
+target = "右键点击块，可从该位置派生对话。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Right-click a block to copy a conversation's output."
+target = "右键点击块，可复制对话输出。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "<keybinding> to open the code review panel and review the agent's changes."
+target = "使用 <keybinding> 打开代码审查面板并审查 Agent 的更改。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`/open-mcp-servers` to view and share MCP servers with your team."
+target = "使用 `/open-mcp-servers` 查看 MCP 服务器并与团队共享。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`/open-code-review` to open the code review panel and inspect agent-generated diffs."
+target = "使用 `/open-code-review` 打开代码审查面板并检查 Agent 生成的差异。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Switch agent profiles to quickly change models and agent permissions."
+target = "切换 Agent 配置文件，可快速更改模型和 Agent 权限。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Show diff view"
+target = "显示差异视图"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "Planning document"
+target = "计划文档"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "Show version history"
+target = "显示版本历史"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "Click"
+target = "点击"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "This plan has changes the agent isn't aware of. {save_action} to stop the agent's current task and send the updated plan"
+target = "此计划包含 Agent 尚未感知的更改。{save_action} 以停止 Agent 当前任务并发送更新后的计划"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "Update Agent"
+target = "更新 Agent"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "Restore"
+target = "恢复"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "Save and auto-sync this plan to your Warp Drive"
+target = "保存并将此计划自动同步到你的 Warp Drive"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "This plan is synced to your Warp Drive and will auto save any edits you make."
+target = "此计划已同步到你的 Warp Drive，并会自动保存你做出的任何编辑。"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "Untitled"
+target = "未命名"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "Link copied to clipboard"
+target = "链接已复制到剪贴板"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "Plan ID copied to clipboard"
+target = "计划 ID 已复制到剪贴板"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "I've updated the plan."
+target = "我已更新计划。"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "Copy link"
+target = "复制链接"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "Show in Warp Drive"
+target = "在 Warp Drive 中显示"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "Save as markdown file"
+target = "另存为 Markdown 文件"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "Attach to active session"
+target = "附加到活跃会话"
+
+[[replace]]
+path = "app/src/ai/ai_document_view.rs"
+source = "Copy plan ID"
+target = "复制计划 ID"
+
+[[replace]]
+path = "app/src/ai/artifacts/mod.rs"
+source = "Downloaded {toast_filename}."
+target = "已下载 {toast_filename}。"
+
+[[replace]]
+path = "app/src/ai/artifacts/mod.rs"
+source = "Failed to download {toast_filename}."
+target = "无法下载 {toast_filename}。"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/editor.rs"
+source = "Edit agent toolbelt"
+target = "编辑 Agent 工具栏"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/editor.rs"
+source = "Edit CLI agent toolbelt"
+target = "编辑 CLI Agent 工具栏"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/editor.rs"
+source = "Available chips"
+target = "可用组件"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/environment_selector.rs"
+source = "New environment"
+target = "新建环境"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/environment_selector.rs"
+source = "Choose an environment"
+target = "选择环境"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/environment_selector.rs"
+source = "Agent environment"
+target = "Agent 环境"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Enable terminal command autodetection"
+target = "启用终端命令自动检测"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Disable terminal command autodetection"
+target = "停用终端命令自动检测"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Turn off auto-approve all agent actions"
+target = "关闭自动批准所有 Agent 操作"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Auto-approve all agent actions for this task"
+target = "自动批准此任务的所有 Agent 操作"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Fast forward is always enabled for cloud agent conversations"
+target = "云端 Agent 对话始终启用快进"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Start remote control"
+target = "启动远程控制"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Log in to use /remote-control"
+target = "登录后使用 /remote-control"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Voice input"
+target = "语音输入"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Attach file"
+target = "附加文件"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Hand off to cloud (or type &)"
+target = "交接到云端（或输入 &）"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "File explorer"
+target = "文件浏览器"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Open file explorer"
+target = "打开文件浏览器"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Rich Input"
+target = "Rich Input"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Open Rich Input"
+target = "打开 Rich Input"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Open coding agent settings"
+target = "打开编码 Agent 设置"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Enable notifications"
+target = "启用通知"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Install the Warp plugin to enable rich agent notifications within Warp"
+target = "安装 Warp 插件以在 Warp 中启用丰富的 Agent 通知"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Notifications setup instructions"
+target = "通知设置说明"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "View instructions to install the Warp plugin"
+target = "查看安装 Warp 插件的说明"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Update Warp plugin"
+target = "更新 Warp 插件"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "A new version of the Warp plugin is available"
+target = "Warp 插件有新版本可用"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Plugin update instructions"
+target = "插件更新说明"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "View instructions to update the Warp plugin"
+target = "查看更新 Warp 插件的说明"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Dismiss"
+target = "关闭"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Enable {} notifications"
+target = "启用 {} 通知"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Hide Rich Input"
+target = "隐藏 Rich Input"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Stop sharing"
+target = "停止共享"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Context window usage"
+target = "上下文窗口用量"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Could not automatically install plugin. Please click the chip again for manual installation steps."
+target = "无法自动安装插件。请再次点击组件以查看手动安装步骤。"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "See logs for details"
+target = "查看日志了解详情"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Warp plugin installed. Please restart the session to activate."
+target = "Warp 插件已安装。请重启会话以激活。"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Installing Warp plugin..."
+target = "正在安装 Warp 插件..."
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Failed to install Warp plugin"
+target = "无法安装 Warp 插件"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Warp plugin updated. Please restart the session to activate."
+target = "Warp 插件已更新。请重启会话以激活。"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Updating Warp plugin..."
+target = "正在更新 Warp 插件..."
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Failed to update Warp plugin"
+target = "无法更新 Warp 插件"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Voice input limit reached"
+target = "已达到语音输入限制"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Failed to transcribe voice input"
+target = "无法转写语音输入"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Failed to start voice input (you may need to enable Microphone access)"
+target = "无法启动语音输入（你可能需要启用麦克风访问权限）"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Voice input is enabled. You can also press and hold the `{}` key to activate voice input (configure in Settings > AI > Voice)"
+target = "语音输入已启用。你也可以按住 `{}` 键激活语音输入（在“设置 > AI > 语音”中配置）"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "{remaining_pct}% context remaining"
+target = "剩余 {remaining_pct}% 上下文"
+
+[[replace]]
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "Now using Full Terminal Agent's default model."
+target = "现在使用 Full Terminal Agent 的默认模型。"
+
+[[replace]]
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/claude.rs"
+source = "Warp plugin installed. Please run /reload-plugins to activate."
+target = "Warp 插件已安装。请运行 /reload-plugins 以激活。"
+
+[[replace]]
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/claude.rs"
+source = "Warp plugin updated. Please run /reload-plugins to activate."
+target = "Warp 插件已更新。请运行 /reload-plugins 以激活。"
+
+[[replace]]
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "Set the notification condition to \"always\" in your Codex config. Open or create ~/.codex/config.toml and add:"
+target = "在 Codex 配置中将通知条件设为“always”。打开或创建 ~/.codex/config.toml 并添加："
+
+[[replace]]
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/opencode.rs"
+source = "Install Warp Plugin for OpenCode"
+target = "为 OpenCode 安装 Warp 插件"
+
+[[replace]]
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/opencode.rs"
+source = "Add the Warp plugin to your OpenCode configuration, then restart OpenCode."
+target = "将 Warp 插件添加到 OpenCode 配置中，然后重启 OpenCode。"
+
+[[replace]]
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/opencode.rs"
+source = "Open or create your opencode.json. This can be in your project root, or the global config path:"
+target = "打开或创建 opencode.json。它可以位于项目根目录，也可以位于全局配置路径："
+
+[[replace]]
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/opencode.rs"
+source = "Restart OpenCode to activate the plugin."
+target = "重启 OpenCode 以激活插件。"
+
+[[replace]]
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/opencode.rs"
+source = "Update Warp Plugin for OpenCode"
+target = "更新 OpenCode 的 Warp 插件"
+
+[[replace]]
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/opencode.rs"
+source = "Pin the plugin to the latest version in your opencode.json. OpenCode caches plugins per version spec, so changing the pin forces it to re-fetch on restart."
+target = "在 opencode.json 中将插件固定到最新版本。OpenCode 会按版本规格缓存插件，因此更改固定版本会在重启时强制重新获取。"
+
+[[replace]]
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/opencode.rs"
+source = "Restart OpenCode to load the updated plugin."
+target = "重启 OpenCode 以加载更新后的插件。"

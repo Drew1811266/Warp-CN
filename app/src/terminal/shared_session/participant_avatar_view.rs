@@ -163,13 +163,13 @@ impl ParticipantAvatarView {
             .into_item()];
 
         match self.role {
-            Some(Role::Reader) => items.extend([MenuItemFields::new("Make editor")
+            Some(Role::Reader) => items.extend([MenuItemFields::new("设为编辑者")
                 .with_on_select_action(ParticipantAvatarAction::UpdateRole {
                     participant_id,
                     role: Role::Executor,
                 })
                 .into_item()]),
-            Some(Role::Executor) => items.extend([MenuItemFields::new("Make viewer")
+            Some(Role::Executor) => items.extend([MenuItemFields::new("设为查看者")
                 .with_on_select_action(ParticipantAvatarAction::UpdateRole {
                     participant_id,
                     role: Role::Reader,
@@ -541,7 +541,7 @@ pub fn render_revoke_all_button(
                 );
 
             stack.add_positioned_child(
-                render_tooltip("Revoke all edit permissions".to_string(), appearance),
+                render_tooltip("撤销所有编辑权限".to_string(), appearance),
                 OffsetPositioning::offset_from_parent(
                     vec2f(0., 3.),
                     ParentOffsetBounds::Unbounded,
@@ -581,12 +581,7 @@ pub fn render_viewer_role_button(
     let ui_builder = appearance.ui_builder().clone();
     let mut stack = Stack::new();
     let button = icon_button(appearance, icon, false, mouse_state_handle.clone())
-        .with_tooltip(move || {
-            ui_builder
-                .tool_tip("Change role".to_string())
-                .build()
-                .finish()
-        })
+        .with_tooltip(move || ui_builder.tool_tip("更改角色".to_string()).build().finish())
         .build()
         .on_click(|ctx, _, _| {
             // We have to dispatch a pane header action because the button is rendered in the pane header.

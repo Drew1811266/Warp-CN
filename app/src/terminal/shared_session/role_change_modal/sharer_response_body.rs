@@ -143,7 +143,7 @@ impl SharerResponseBody {
                     ButtonVariant::Outlined,
                     role_request_params.button_mouse_states.deny_button,
                 )
-                .with_centered_text_label(String::from("Deny"))
+                .with_centered_text_label(String::from("拒绝"))
                 .with_style(UiComponentStyles {
                     font_size: Some(BUTTON_FONT_SIZE),
                     font_weight: Some(Weight::Bold),
@@ -173,7 +173,7 @@ impl SharerResponseBody {
                 ButtonVariant::Outlined,
                 role_request_params.button_mouse_states.approve_button,
             )
-            .with_centered_text_label(String::from("Approve"))
+            .with_centered_text_label(String::from("批准"))
             .with_style(UiComponentStyles {
                 font_size: Some(BUTTON_FONT_SIZE),
                 font_weight: Some(Weight::Bold),
@@ -264,9 +264,9 @@ impl View for SharerResponseBody {
 
     fn render(&self, app: &AppContext) -> Box<dyn Element> {
         let appearance = Appearance::as_ref(app);
-        let header = "Edit Requests";
-        let text1 = "This grants the ability to execute commands on your";
-        let text2 = "behalf. Use with caution.";
+        let header = "编辑请求";
+        let text1 = "这将授予代表你执行命令的";
+        let text2 = "能力。请谨慎使用。";
 
         let text_body = Container::new(
             Flex::column()

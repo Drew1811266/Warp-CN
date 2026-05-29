@@ -32,20 +32,20 @@ impl ReviewComment {
         match (&self.diff.file_path, self.diff.line_number) {
             (Some(file_path), Some(line_number)) => {
                 let path_component = file_path.path_component();
-                let file_name = path_component.file_name().unwrap_or("Invalid File Name");
+                let file_name = path_component.file_name().unwrap_or("无效文件名");
                 let display_line = line_number + 1;
                 format!("{file_name}:{display_line}")
             }
             (Some(file_path), None) => {
                 let path_component = file_path.path_component();
-                let file_name = path_component.file_name().unwrap_or("Invalid File Name");
+                let file_name = path_component.file_name().unwrap_or("无效文件名");
                 file_name.to_string()
             }
             (None, _) => self
                 .head_title
                 .as_ref()
                 .cloned()
-                .unwrap_or_else(|| "Review Comment".to_string()),
+                .unwrap_or_else(|| "审查评论".to_string()),
         }
     }
 }

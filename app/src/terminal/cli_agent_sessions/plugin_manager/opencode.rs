@@ -33,12 +33,12 @@ impl CliAgentPluginManager for OpenCodePluginManager {
 
 static INSTALL_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| {
     PluginInstructions {
-        title: "Install Warp Plugin for OpenCode",
+        title: "为 OpenCode 安装 Warp 插件",
         subtitle:
-            "Add the Warp plugin to your OpenCode configuration, then restart OpenCode.",
+            "将 Warp 插件添加到 OpenCode 配置中，然后重启 OpenCode。",
         steps: &[
             PluginInstructionStep {
-                description: "Open or create your opencode.json. This can be in your project root, or the global config path:",
+                description: "打开或创建 opencode.json。它可以位于项目根目录，也可以位于全局配置路径：",
                 command: "~/.config/opencode/opencode.json",
                 executable: false,
                 link: None,
@@ -50,17 +50,17 @@ static INSTALL_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| {
                 link: None,
             },
         ],
-        post_install_notes: &["Restart OpenCode to activate the plugin."],
+        post_install_notes: &["重启 OpenCode 以激活插件。"],
     }
 });
 
 static UPDATE_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| {
     PluginInstructions {
-        title: "Update Warp Plugin for OpenCode",
-        subtitle: "Pin the plugin to the latest version in your opencode.json. OpenCode caches plugins per version spec, so changing the pin forces it to re-fetch on restart.",
+        title: "更新 OpenCode 的 Warp 插件",
+        subtitle: "在 opencode.json 中将插件固定到最新版本。OpenCode 会按版本规格缓存插件，因此更改固定版本会在重启时强制重新获取。",
         steps: &[
             PluginInstructionStep {
-                description: "Open or create your opencode.json. This can be in your project root, or the global config path:",
+                description: "打开或创建 opencode.json。它可以位于项目根目录，也可以位于全局配置路径：",
                 command: "~/.config/opencode/opencode.json",
                 executable: false,
                 link: None,
@@ -72,7 +72,7 @@ static UPDATE_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| {
                 link: None,
             },
         ],
-        post_install_notes: &["Restart OpenCode to load the updated plugin."],
+        post_install_notes: &["重启 OpenCode 以加载更新后的插件。"],
     }
 });
 

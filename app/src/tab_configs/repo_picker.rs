@@ -17,7 +17,7 @@ use crate::view_components::{DropdownItem, FilterableDropdown};
 const DEFAULT_DROPDOWN_WIDTH: f32 = 380.;
 
 /// Label for the sticky "Add new repo..." footer at the bottom of the picker.
-const ADD_NEW_REPO_LABEL: &str = "+ Add new repo...";
+const ADD_NEW_REPO_LABEL: &str = "+ 添加新仓库...";
 
 /// A filterable dropdown listing known repos (from `PersistedWorkspace`), with a
 /// sticky "+ Add new repo..." footer that is always visible even when scrolling.

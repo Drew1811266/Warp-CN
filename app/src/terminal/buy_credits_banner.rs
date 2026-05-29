@@ -217,7 +217,8 @@ impl BuyCreditsBanner {
                 if self.banner_auto_reload_update_in_flight {
                     self.banner_auto_reload_update_in_flight = false;
                     ctx.emit(BuyCreditsBannerEvent::ShowAutoReloadError {
-                        error_message: "Failed to enable auto-reload for your team. Please try again in Settings > Billing and Usage.",
+                        error_message:
+                            "无法为你的团队启用自动充值。请在“设置 > 账单和使用量”中重试。",
                     });
                     ctx.notify();
                 }
@@ -250,7 +251,7 @@ impl BuyCreditsBanner {
 
         let sub_text_color = theme.sub_text_color(theme.surface_1());
 
-        let label = Text::new_inline("Auto reload", appearance.ui_font_family(), 12.)
+        let label = Text::new_inline("自动充值", appearance.ui_font_family(), 12.)
             .with_color(sub_text_color.into())
             .finish();
 
@@ -262,7 +263,7 @@ impl BuyCreditsBanner {
             .unwrap_or(0);
 
         let tooltip_text = format!(
-            "When enabled, auto reload will purchase {} credits when your credit balance gets low",
+            "启用后，当你的额度余额不足时，自动充值会购买 {} 个额度",
             selected_credits
         );
 

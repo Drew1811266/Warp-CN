@@ -19,8 +19,8 @@ use crate::terminal::session_settings::{
 };
 use crate::{report_if_error, Appearance};
 
-const AGENT_MODAL_TITLE: &str = "Edit agent toolbelt";
-const CLI_MODAL_TITLE: &str = "Edit CLI agent toolbelt";
+const AGENT_MODAL_TITLE: &str = "编辑 Agent 工具栏";
+const CLI_MODAL_TITLE: &str = "编辑 CLI Agent 工具栏";
 
 /// Controls which set of items and settings the editor modal operates on.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -236,7 +236,7 @@ impl View for AgentToolbarInlineEditor {
         render_chip_editor_sections(
             &self.chip_configurator,
             ChipEditorSectionsConfig {
-                available_section_label: "Available chips",
+                available_section_label: "可用组件",
                 is_at_defaults: self.is_at_defaults(),
                 reset_action: AgentToolbarInlineEditorAction::ResetDefault,
                 activate_action: AgentToolbarInlineEditorAction::Activate,
@@ -386,7 +386,7 @@ impl View for AgentToolbarEditorModal {
             &self.chip_configurator,
             ChipEditorModalConfig {
                 title: self.modal_title(),
-                available_section_label: "Available chips",
+                available_section_label: "可用组件",
                 is_at_defaults: self.is_at_defaults(),
                 is_dirty: self.is_dirty,
                 cancel_action: AgentToolbarEditorAction::Cancel,
