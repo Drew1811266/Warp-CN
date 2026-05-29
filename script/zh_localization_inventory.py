@@ -67,6 +67,8 @@ SKIP_LINE_PATTERNS = (
     "log::",
     "TelemetryEvent::",
     "send_telemetry",
+    "search_tags",
+    "search_keywords",
     "id!(",
     "ui_name()",
     ".expect(",
@@ -81,6 +83,13 @@ URL_RE = re.compile(r"^[a-z][a-z0-9+.-]*:(//)?", re.IGNORECASE)
 KEY_RE = re.compile(r"^[a-zA-Z0-9_.-]+:[a-zA-Z0-9_.:-]+$")
 ALL_CAPS_RE = re.compile(r"^[A-Z0-9_./:-]+$")
 LOWER_IDENTIFIER_RE = re.compile(r"^[a-z_][a-z0-9_]*$")
+FILTER_TOKEN_RE = re.compile(r"^[a-z_]+:$")
+KEYBINDING_RE = re.compile(
+    r"^(?:cmd|ctrl|alt|shift|super|orctrl|cmdorctrl|numpad|enter|return|escape|tab|up|down|left|right|y|o|v)(?:-(?:cmd|ctrl|alt|shift|super|orctrl|cmdorctrl|numpad|enter|return|escape|tab|up|down|left|right|y|o|v))*$",
+    re.IGNORECASE,
+)
+PLACEHOLDER_ONLY_RE = re.compile(r"^(?:\{[A-Za-z0-9_:.?]+\}|%[A-Za-z](?: %[A-Za-z])*)$")
+INTERNAL_ID_WITH_PLACEHOLDER_RE = re.compile(r"^[a-z][a-z0-9_:-]*:\{[A-Za-z0-9_]+\}$")
 INTERNAL_NAME_RE = re.compile(
     r"^[A-Za-z0-9_]+(?:View|Slide|Modal|Dialog|Page|Panel|Action|Event|State|Id)$"
 )
@@ -116,7 +125,11 @@ class InventoryRow:
 
 def is_excluded_path(path: Path) -> bool:
     normalized = "/" + path.as_posix()
-    return path.name.endswith("_tests.rs") or any(part in normalized for part in EXCLUDED_PATH_PARTS)
+    return (
+        path.name.endswith("_tests.rs")
+        or path.name == "telemetry.rs"
+        or any(part in normalized for part in EXCLUDED_PATH_PARTS)
+    )
 
 
 def iter_rust_files(repo_root: Path, roots: list[str]) -> list[Path]:
@@ -256,6 +269,14 @@ def is_candidate_literal(value: str, line_text: str) -> bool:
     if ALL_CAPS_RE.match(stripped):
         return False
     if LOWER_IDENTIFIER_RE.match(stripped):
+        return False
+    if FILTER_TOKEN_RE.match(stripped):
+        return False
+    if KEYBINDING_RE.match(stripped):
+        return False
+    if PLACEHOLDER_ONLY_RE.match(stripped):
+        return False
+    if INTERNAL_ID_WITH_PLACEHOLDER_RE.match(stripped):
         return False
     if INTERNAL_NAME_RE.match(stripped):
         return False
