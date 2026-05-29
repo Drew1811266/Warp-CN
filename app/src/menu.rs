@@ -715,9 +715,9 @@ impl<A: Action + Clone> MenuItemFields<A> {
 
     pub fn toggle_pane_action(is_maximized: bool) -> Self {
         Self::new(if is_maximized {
-            "Minimize pane"
+            "最小化窗格"
         } else {
-            "Maximize pane"
+            "最大化窗格"
         })
     }
 
@@ -2540,19 +2540,19 @@ impl<A: Action + Clone> SubMenu<A> {
             Select(_) => {
                 let menu_item = match self.selected_item() {
                     Some(item) => match item {
-                        MenuItem::Item(fields) => format!("{} Selected", fields.get_a11y_text()),
+                        MenuItem::Item(fields) => format!("已选择 {}", fields.get_a11y_text()),
                         MenuItem::ItemsRow { items } => {
                             let selected_item_text = items
                                 .get(self.selected_item_index.unwrap_or_default())
                                 .map_or_else(|| "", |item| item.get_a11y_text());
-                            format!("{selected_item_text} Selected")
+                            format!("已选择 {selected_item_text}")
                         }
                         MenuItem::Separator => String::from(""),
                         MenuItem::Submenu { fields, .. } => {
-                            format!("{} Expanded", fields.get_a11y_text())
+                            format!("已展开 {}", fields.get_a11y_text())
                         }
                         MenuItem::Header { fields, .. } => {
-                            format!("{} Selected", fields.get_a11y_text())
+                            format!("已选择 {}", fields.get_a11y_text())
                         }
                     },
                     None => String::from(""),
@@ -2560,9 +2560,9 @@ impl<A: Action + Clone> SubMenu<A> {
 
                 let instructions = if matches!(self.selected_item(), Some(MenuItem::Submenu { .. }))
                 {
-                    "Press the up key or the down key to select a menu item. Press the right key to open the submenu"
+                    "按上方向键或下方向键选择菜单项。按右方向键打开子菜单"
                 } else {
-                    "Press the up key or the down key to select a menu item"
+                    "按上方向键或下方向键选择菜单项"
                 };
 
                 Custom(AccessibilityContent::new(
@@ -2572,23 +2572,23 @@ impl<A: Action + Clone> SubMenu<A> {
                 ))
             }
             OpenSubmenu => Custom(AccessibilityContent::new(
-                String::from("Submenu Expanded"),
-                "Press the right key to open the selected submenu",
+                String::from("子菜单已展开"),
+                "按右方向键打开选中的子菜单",
                 WarpA11yRole::TextRole,
             )),
             CloseSubmenu(_) => Custom(AccessibilityContent::new(
-                String::from("Submenu Closed"),
-                "Removing focus from a submenu will close the submenu",
+                String::from("子菜单已关闭"),
+                "移出子菜单焦点会关闭该子菜单",
                 WarpA11yRole::TextRole,
             )),
             Close(_) => Custom(AccessibilityContent::new(
-                String::from("Menu Closed"),
-                "Press the escape key to close the menu",
+                String::from("菜单已关闭"),
+                "按 Escape 键关闭菜单",
                 WarpA11yRole::TextRole,
             )),
             Enter => Custom(AccessibilityContent::new(
-                String::from("Action Selected"),
-                "Press the enter key to execute the selected menu item action",
+                String::from("操作已选择"),
+                "按 Enter 键执行选中菜单项的操作",
                 WarpA11yRole::TextRole,
             )),
             HoverSubmenuLeafNode { .. }
@@ -2881,7 +2881,7 @@ impl<A: Action + Clone> SubMenu<A> {
 
 impl<A: Action + Clone> View for Menu<A> {
     fn ui_name() -> &'static str {
-        "Menu"
+        "菜单"
     }
 
     fn render(&self, app: &AppContext) -> Box<dyn Element> {

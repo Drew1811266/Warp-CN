@@ -1368,3 +1368,1173 @@ target = "如需停用分析，你可以调整"
 path = "crates/onboarding/src/slides/theme_picker_slide.rs"
 source = "By continuing, you agree to Warp's "
 target = "继续即表示你同意 Warp 的"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Enable Shell Debug Mode (-x) for New Sessions"
+target = "为新会话启用 Shell 调试模式 (-x)"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Disable Shell Debug Mode (-x) for New Sessions"
+target = "为新会话停用 Shell 调试模式 (-x)"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Enable In-band Generators for New Sessions"
+target = "为新会话启用带内生成器"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Disable in-band generators for new sessions"
+target = "为新会话停用带内生成器"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Enable PTY Recording Mode (warp.pty.recording)"
+target = "启用 PTY 录制模式 (warp.pty.recording)"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Disable PTY Recording Mode (warp.pty.recording)"
+target = "停用 PTY 录制模式 (warp.pty.recording)"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Show Initialization Block"
+target = "显示初始化块"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Hide Initialization Block"
+target = "隐藏初始化块"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Show In-band Command Blocks"
+target = "显示带内命令块"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Hide In-band Command Blocks"
+target = "隐藏带内命令块"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Show Warpified SSH Blocks"
+target = "显示 Warp 化 SSH 块"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Hide Warpified SSH Blocks"
+target = "隐藏 Warp 化 SSH 块"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Export Default Settings as CSV to home dir"
+target = "将默认设置导出为 CSV 到主目录"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "New Window"
+target = "新建窗口"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Preferences"
+target = "偏好设置"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Privacy Policy..."
+target = "隐私政策..."
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Debug"
+target = "调试"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Set Warp as Default Terminal"
+target = "将 Warp 设为默认终端"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Log out"
+target = "退出登录"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Open Recent"
+target = "打开最近项目"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "File"
+target = "文件"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Use Warp's Prompt"
+target = "使用 Warp 提示符"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Copy on Select within the Terminal"
+target = "在终端中选中即复制"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Synchronize Inputs"
+target = "同步输入"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Edit"
+target = "编辑"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Toggle Mouse Reporting"
+target = "切换鼠标报告"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Toggle Scroll Reporting"
+target = "切换滚动报告"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Toggle Focus Reporting"
+target = "切换焦点报告"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Compact Mode"
+target = "紧凑模式"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "View"
+target = "视图"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Tab"
+target = "标签页"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Blocks"
+target = "块"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Drive"
+target = "Drive"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Window"
+target = "窗口"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Manually Toggle Network Status"
+target = "手动切换网络状态"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Create anonymous user"
+target = "创建匿名用户"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Send Feedback..."
+target = "发送反馈..."
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Help"
+target = "帮助"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Warp Documentation..."
+target = "Warp 文档..."
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "GitHub Issues..."
+target = "GitHub 问题..."
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Warp Slack Community..."
+target = "Warp Slack 社区..."
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Save New..."
+target = "另存为新项..."
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "New Terminal Tab"
+target = "新建终端标签页"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "New Agent Tab"
+target = "新建 Agent 标签页"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Reopen closed session"
+target = "重新打开已关闭会话"
+
+[[replace]]
+path = "app/src/app_menus.rs"
+source = "Launch Configurations"
+target = "启动配置"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "Minimize pane"
+target = "最小化窗格"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "Maximize pane"
+target = "最大化窗格"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "{} Selected"
+target = "已选择 {}"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "{selected_item_text} Selected"
+target = "已选择 {selected_item_text}"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "{} Expanded"
+target = "已展开 {}"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "Press the up key or the down key to select a menu item. Press the right key to open the submenu"
+target = "按上方向键或下方向键选择菜单项。按右方向键打开子菜单"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "Press the up key or the down key to select a menu item"
+target = "按上方向键或下方向键选择菜单项"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "Submenu Expanded"
+target = "子菜单已展开"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "Press the right key to open the selected submenu"
+target = "按右方向键打开选中的子菜单"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "Submenu Closed"
+target = "子菜单已关闭"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "Removing focus from a submenu will close the submenu"
+target = "移出子菜单焦点会关闭该子菜单"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "Menu Closed"
+target = "菜单已关闭"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "Press the escape key to close the menu"
+target = "按 Escape 键关闭菜单"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "Action Selected"
+target = "操作已选择"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "Press the enter key to execute the selected menu item action"
+target = "按 Enter 键执行选中菜单项的操作"
+
+[[replace]]
+path = "app/src/menu.rs"
+source = "Menu"
+target = "菜单"
+
+[[replace]]
+path = "app/src/workspace/action.rs"
+source = "Importing to a team drive"
+target = "正在导入到团队 Drive"
+
+[[replace]]
+path = "app/src/workspace/action.rs"
+source = "Creating a team notebook"
+target = "正在创建团队笔记本"
+
+[[replace]]
+path = "app/src/workspace/action.rs"
+source = "Creating a team workflow"
+target = "正在创建团队工作流"
+
+[[replace]]
+path = "app/src/workspace/action.rs"
+source = "Creating a team folder"
+target = "正在创建团队文件夹"
+
+[[replace]]
+path = "app/src/workspace/action.rs"
+source = "Creating a team environment variable collection"
+target = "正在创建团队环境变量集合"
+
+[[replace]]
+path = "app/src/workspace/action.rs"
+source = "Creating a team prompt"
+target = "正在创建团队提示词"
+
+[[replace]]
+path = "app/src/workspace/action.rs"
+source = "Sharing a session"
+target = "正在共享会话"
+
+[[replace]]
+path = "app/src/workspace/action.rs"
+source = "Unknown reason"
+target = "未知原因"
+
+[[replace]]
+path = "app/src/workspace/bonus_grant_notification_model.rs"
+source = "{} Reload Credits have been added to your {}."
+target = "{} 点 Reload 额度已添加到你的 {}。"
+
+[[replace]]
+path = "app/src/workspace/cli_install.rs"
+source = "Failed to execute osascript for admin privileges"
+target = "无法通过 osascript 获取管理员权限"
+
+[[replace]]
+path = "app/src/workspace/cli_install.rs"
+source = "User canceled"
+target = "用户已取消"
+
+[[replace]]
+path = "app/src/workspace/cli_install.rs"
+source = "Failed to create symlink with admin privileges: {stderr}"
+target = "使用管理员权限创建符号链接失败：{stderr}"
+
+[[replace]]
+path = "app/src/workspace/cli_install.rs"
+source = "Failed to remove file with admin privileges: {stderr}"
+target = "使用管理员权限移除文件失败：{stderr}"
+
+[[replace]]
+path = "app/src/workspace/cli_install.rs"
+source = "Failed to get current executable path"
+target = "无法获取当前可执行文件路径"
+
+[[replace]]
+path = "app/src/workspace/cli_install.rs"
+source = "Cannot install: {:?} exists but is not a symlink. Please remove it manually first."
+target = "无法安装：{:?} 已存在但不是符号链接。请先手动移除。"
+
+[[replace]]
+path = "app/src/workspace/cli_install.rs"
+source = "Failed to create symlink even with admin privileges"
+target = "即使使用管理员权限也无法创建符号链接"
+
+[[replace]]
+path = "app/src/workspace/cli_install.rs"
+source = "Cannot uninstall: {:?} exists but is not a symlink. Please remove it manually."
+target = "无法卸载：{:?} 已存在但不是符号链接。请手动移除。"
+
+[[replace]]
+path = "app/src/workspace/cli_install.rs"
+source = "Failed to remove symlink even with admin privileges"
+target = "即使使用管理员权限也无法移除符号链接"
+
+[[replace]]
+path = "app/src/workspace/close_session_confirmation_dialog.rs"
+source = "Don't show again."
+target = "不再显示。"
+
+[[replace]]
+path = "app/src/workspace/close_session_confirmation_dialog.rs"
+source = "Close session"
+target = "关闭会话"
+
+[[replace]]
+path = "app/src/workspace/close_session_confirmation_dialog.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/workspace/close_session_confirmation_dialog.rs"
+source = "Close session?"
+target = "关闭会话？"
+
+[[replace]]
+path = "app/src/workspace/close_session_confirmation_dialog.rs"
+source = "You are about to close a session that is currently being shared. Closing it will end sharing for everyone."
+target = "你将关闭一个正在共享的会话。关闭后，所有人的共享都会结束。"
+
+[[replace]]
+path = "app/src/workspace/delete_conversation_confirmation_dialog.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/workspace/delete_conversation_confirmation_dialog.rs"
+source = "Delete"
+target = "删除"
+
+[[replace]]
+path = "app/src/workspace/delete_conversation_confirmation_dialog.rs"
+source = "Delete '{}'?"
+target = "删除“{}”？"
+
+[[replace]]
+path = "app/src/workspace/delete_conversation_confirmation_dialog.rs"
+source = "Delete conversation?"
+target = "删除对话？"
+
+[[replace]]
+path = "app/src/workspace/delete_conversation_confirmation_dialog.rs"
+source = "This conversation will be permanently deleted. This action cannot be undone."
+target = "此对话将被永久删除。此操作无法撤销。"
+
+[[replace]]
+path = "app/src/workspace/header_toolbar_editor.rs"
+source = "Edit toolbar"
+target = "编辑工具栏"
+
+[[replace]]
+path = "app/src/workspace/header_toolbar_editor.rs"
+source = "Available items"
+target = "可用项目"
+
+[[replace]]
+path = "app/src/workspace/native_modal.rs"
+source = "Don't show again."
+target = "不再显示。"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "New Terminal Tab"
+target = "新建终端标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "New Agent Tab"
+target = "新建 Agent 标签页"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Turn notifications on"
+target = "打开通知"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Turn notifications off"
+target = "关闭通知"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Log out"
+target = "退出登录"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "View latest changelog"
+target = "查看最新变更日志"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "View Shared Blocks..."
+target = "查看共享块..."
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "View user docs (opens external link)"
+target = "查看用户文档（打开外部链接）"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "View Warp logs"
+target = "查看 Warp 日志"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "View privacy policy (opens external link)"
+target = "查看隐私政策（打开外部链接）"
+
+[[replace]]
+path = "app/src/workspace/mod.rs"
+source = "Toggle notification mailbox"
+target = "切换通知收件箱"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Reopen closed session"
+target = "重新打开已关闭会话"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "View Warp logs"
+target = "查看 Warp 日志"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Log out"
+target = "退出登录"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "View changelog"
+target = "查看变更日志"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "View"
+target = "查看"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Tabs panel"
+target = "标签页面板"
+
+[[replace]]
+path = "app/src/workspace/view/wasm_view.rs"
+source = "View all cloud runs"
+target = "查看所有云端运行"
+
+[[replace]]
+path = "app/src/workspace/view/wasm_view.rs"
+source = "Open in Warp"
+target = "在 Warp 中打开"
+
+[[replace]]
+path = "app/src/workspace/view/conversation_list/view.rs"
+source = "View all"
+target = "查看全部"
+
+[[replace]]
+path = "app/src/workspace/view/conversation_list/view.rs"
+source = "Delete"
+target = "删除"
+
+[[replace]]
+path = "app/src/workspace/rewind_confirmation_dialog.rs"
+source = "Rewind"
+target = "回退"
+
+[[replace]]
+path = "app/src/workspace/rewind_confirmation_dialog.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/workspace/rewind_confirmation_dialog.rs"
+source = "Rewinding does not affect files edited manually or via shell commands."
+target = "回退不会影响手动或通过 shell 命令编辑的文件。"
+
+[[replace]]
+path = "app/src/workspace/rewind_confirmation_dialog.rs"
+source = "Are you sure you want to rewind? This will restore your code and conversation to before this point, and cancel any commands the agent is currently running. A copy of the original conversation will be saved in your conversation history."
+target = "确定要回退吗？这会将你的代码和对话恢复到此点之前，并取消 Agent 当前正在运行的所有命令。原始对话的副本会保存到对话历史记录中。"
+
+[[replace]]
+path = "app/src/workspace/header_toolbar_item.rs"
+source = "Tabs Panel"
+target = "标签页面板"
+
+[[replace]]
+path = "app/src/workspace/header_toolbar_item.rs"
+source = "Tools Panel"
+target = "工具面板"
+
+[[replace]]
+path = "app/src/workspace/header_toolbar_item.rs"
+source = "Agent Management"
+target = "Agent 管理"
+
+[[replace]]
+path = "app/src/workspace/header_toolbar_item.rs"
+source = "Code Review"
+target = "代码审查"
+
+[[replace]]
+path = "app/src/workspace/header_toolbar_item.rs"
+source = "Notifications"
+target = "通知"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "New Group"
+target = "新建分组"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "1 tab"
+target = "1 个标签页"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "{member_count} tabs"
+target = "{member_count} 个标签页"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Untitled tab"
+target = "未命名标签页"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Code Diff"
+target = "代码差异"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "File"
+target = "文件"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Notebook"
+target = "笔记本"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Workflow"
+target = "工作流"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Environment Variables"
+target = "环境变量"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Environments"
+target = "环境"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Rules"
+target = "规则"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Plan"
+target = "计划"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Execution Profile"
+target = "执行配置"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Other"
+target = "其他"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Unsaved"
+target = "未保存"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "+ {hidden_count} more"
+target = "另有 {hidden_count} 项"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Tab item"
+target = "标签页项目"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Requires the GitHub CLI to be installed and authenticated"
+target = "需要安装并认证 GitHub CLI"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "PR link"
+target = "PR 链接"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "Diff stats"
+target = "差异统计"
+
+[[replace]]
+path = "app/src/workspace/view/vertical_tabs.rs"
+source = "and {extra_open_tabs} more"
+target = "以及另外 {extra_open_tabs} 项"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Update Warp"
+target = "更新 Warp"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Your app is out of date and some features may not work as expected. Please update immediately."
+target = "你的应用版本过旧，部分功能可能无法正常工作。请立即更新。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Some Warp features may not work as expected without updating immediately, but Warp is unable to perform the update."
+target = "如果不立即更新，部分 Warp 功能可能无法正常工作，但 Warp 当前无法执行更新。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Access your tab configs here."
+target = "在这里访问你的标签页配置。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Continue this local Warp Agent task in the cloud from the current conversation state."
+target = "从当前对话状态开始，在云端继续此本地 Warp Agent 任务。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Open file"
+target = "打开文件"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Failed to load conversation data."
+target = "加载对话数据失败。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Remote control link copied."
+target = "远程控制链接已复制。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Untitled pane"
+target = "未命名窗格"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Re-arrange toolbar items"
+target = "重新排列工具栏项目"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Agent"
+target = "Agent"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Terminal"
+target = "终端"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Cloud Agent"
+target = "云端 Agent"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Local Docker Sandbox"
+target = "本地 Docker 沙盒"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "New worktree config"
+target = "新建 worktree 配置"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "New tab config"
+target = "新建标签页配置"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "New tab group"
+target = "新建标签页分组"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Rename pane"
+target = "重命名窗格"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Reset pane name"
+target = "重置窗格名称"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Rename active pane"
+target = "重命名当前窗格"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Reset active pane name"
+target = "重置当前窗格名称"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Current version is {version}"
+target = "当前版本为 {version}"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Install update ({})"
+target = "安装更新 ({})"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Updating to ({})"
+target = "正在更新到 ({})"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Update Warp manually"
+target = "手动更新 Warp"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Successfully installed the Oz CLI! You can now run '{command_name}' from the command line."
+target = "已成功安装 Oz CLI！你现在可以在命令行运行 '{command_name}'。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Learn more"
+target = "了解更多"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Failed to install Oz command: {error}"
+target = "安装 Oz 命令失败：{error}"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Successfully uninstalled the Oz command."
+target = "已成功卸载 Oz 命令。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Failed to uninstall Oz command: {error}"
+target = "卸载 Oz 命令失败：{error}"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Update and relaunch Warp"
+target = "更新并重新启动 Warp"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "What's new"
+target = "新变化"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Keyboard shortcuts"
+target = "键盘快捷键"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Documentation"
+target = "文档"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Feedback"
+target = "反馈"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Slack"
+target = "Slack"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Sign up"
+target = "注册"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Billing and usage"
+target = "账单和用量"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Upgrade"
+target = "升级"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Invite a friend"
+target = "邀请好友"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = " + Add new repo"
+target = " + 添加新仓库"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Looks like you're out of AI credits."
+target = "看起来你的 AI 额度已用完。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Upgrade for more credits."
+target = "升级以获取更多额度。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Install Update"
+target = "安装更新"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Failed to load conversation."
+target = "加载对话失败。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Conversation forking failed."
+target = "对话分叉失败。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Conversation"
+target = "对话"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Warp doesn't have permission to send desktop notifications."
+target = "Warp 没有发送桌面通知的权限。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Troubleshoot notifications"
+target = "排查通知问题"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Warp updated!"
+target = "Warp 已更新！"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "New API key"
+target = "新建 API 密钥"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Starting cloud environment for this session..."
+target = "正在为此会话启动云端环境..."
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Couldn't open a cloud pane for handoff. Try again, or restart Warp if this keeps happening."
+target = "无法打开用于交接的云端窗格。请重试；如果问题持续，请重启 Warp。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "No active terminal session to hand off. Focus a pane and try again."
+target = "没有可交接的活动终端会话。请聚焦一个窗格后重试。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Cloud handoff isn't available for orchestrated agent conversations."
+target = "编排式 Agent 对话不支持云端交接。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Can't hand off while a command is running. Cancel the command or wait for it to finish."
+target = "命令运行时无法交接。请取消命令或等待其完成。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Your conversation hasn't synced to the cloud yet. Try sending another message, then hand off again."
+target = "你的对话尚未同步到云端。请再发送一条消息，然后重新交接。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "{t} (Moved to cloud)"
+target = "{t}（已移至云端）"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Couldn't start the handoff. Check your network connection and try again."
+target = "无法开始交接。请检查网络连接后重试。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Couldn't save your conversation locally. Try sending another message, then hand off again."
+target = "无法在本地保存你的对话。请再发送一条消息，然后重新交接。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Resource not found or access denied"
+target = "资源不存在或访问被拒绝"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "No terminal pane open. Open a new pane to attach as context."
+target = "没有打开的终端窗格。请打开一个新窗格以附加为上下文。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "This plan is already in context."
+target = "此计划已在上下文中。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "A command in this session is still running."
+target = "此会话中仍有命令正在运行。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Cannot open a new terminal session"
+target = "无法打开新的终端会话"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Run Agent Mode Workflow"
+target = "运行 Agent 模式工作流"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "This workflow is no longer available."
+target = "此工作流已不再可用。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Plan synced to your Warp Drive"
+target = "计划已同步到你的 Warp Drive"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Undo"
+target = "撤销"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Check out the latest version and try again."
+target = "请检出最新版本后重试。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "You {verb} mouse reporting."
+target = "你已{verb}鼠标报告。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = " Press {} to undo."
+target = " 按 {} 撤销。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Command from Warp AI"
+target = "来自 Warp AI 的命令"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Ask Warp AI to explain errors, suggest commands or write scripts."
+target = "让 Warp AI 解释错误、建议命令或编写脚本。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Agent management panel"
+target = "Agent 管理面板"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Project explorer"
+target = "项目资源管理器"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Global search"
+target = "全局搜索"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Agent conversations"
+target = "Agent 对话"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Tools panel"
+target = "工具面板"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Code review panel"
+target = "代码审查面板"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Notifications"
+target = "通知"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Warp Essentials"
+target = "Warp Essentials"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Some features may be unavailable offline"
+target = "离线时部分功能可能不可用"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Fix with Oz"
+target = "使用 Oz 修复"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Your login has expired."
+target = "你的登录已过期。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Please sign in again to restore access to cloud-based features."
+target = "请重新登录以恢复云端功能访问。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Sign in"
+target = "登录"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "A new version is available but Warp is unable to perform the update."
+target = "有新版本可用，但 Warp 无法执行更新。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Warp was unable to launch the new installed version."
+target = "Warp 无法启动新安装的版本。"
+
+[[replace]]
+path = "app/src/workspace/view.rs"
+source = "Update now"
+target = "立即更新"
