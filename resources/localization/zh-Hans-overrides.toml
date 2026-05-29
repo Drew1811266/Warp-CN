@@ -5898,3 +5898,3433 @@ target = "使用 Tmux Warpification"
 path = "app/src/settings_view/warpify_page.rs"
 source = "Denylisted hosts"
 target = "拒绝列表主机"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Let AI suggest the next command to run based on your command history, outputs, and common workflows."
+target = "让 AI 根据你的命令历史、输出和常见工作流建议下一条要运行的命令。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Let AI suggest natural language prompts, as inline banners in the input, based on recent commands and their outputs."
+target = "让 AI 根据最近的命令及其输出，在输入框中以内联横幅建议自然语言提示。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Let AI suggest code diffs and queries as inline banners in the blocklist, based on recent commands and their outputs."
+target = "让 AI 根据最近的命令及其输出，在块列表中以内联横幅建议代码 diff 和查询。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Let AI suggest natural language autosuggestions, based on recent commands and their outputs."
+target = "让 AI 根据最近的命令及其输出建议自然语言自动建议。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Let AI generate a title for your shared block based on the command and output."
+target = "让 AI 根据命令和输出为共享块生成标题。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Let AI generate commit messages and pull request titles and descriptions."
+target = "让 AI 生成提交消息以及拉取请求标题和描述。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Active AI"
+target = "启用 AI"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "terminal command autodetection in agent input"
+target = "Agent 输入中的终端命令自动检测"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "natural language detection"
+target = "自然语言检测"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "agent prompt autodetection in terminal input"
+target = "终端输入中的 Agent 提示自动检测"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Next Command"
+target = "下一条命令"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "prompt suggestions"
+target = "提示建议"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "code suggestions"
+target = "代码建议"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Show agent tips"
+target = "显示 Agent 提示"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Hide agent tips"
+target = "隐藏 Agent 提示"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Show Oz changelog in new agent conversation view"
+target = "在新 Agent 对话视图中显示 Oz 更新日志"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Hide Oz changelog in new agent conversation view"
+target = "在新 Agent 对话视图中隐藏 Oz 更新日志"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "natural language autosuggestions"
+target = "自然语言自动建议"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "shared block title generation"
+target = "共享块标题生成"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "commit and pull request generation"
+target = "提交和拉取请求生成"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "voice input"
+target = "语音输入"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Show \"Use Agent\" footer"
+target = "显示 Use Agent 页脚"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Hide \"Use Agent\" footer"
+target = "隐藏 Use Agent 页脚"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "include agent-executed commands in history"
+target = "在历史记录中包含 Agent 执行的命令"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "conversation history in tools panel"
+target = "工具面板中的对话历史"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "model picker in prompt"
+target = "提示框中的模型选择器"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "coding agent toolbar"
+target = "编码 Agent 工具栏"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Rules"
+target = "规则"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Suggested Rules"
+target = "建议规则"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Warp Drive as agent context"
+target = "将 Warp Drive 作为 Agent 上下文"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Auto-spawn servers from third-party agents"
+target = "自动从第三方 Agent 启动服务器"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Warp credit fallback"
+target = "Warp 额度兜底"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "auto show or hide Rich Input based on agent status"
+target = "根据 Agent 状态自动显示或隐藏 Rich Input"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "auto open Rich Input when a coding agent session starts"
+target = "编码 Agent 会话开始时自动打开 Rich Input"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "auto dismiss Rich Input after prompt submission"
+target = "提交提示后自动关闭 Rich Input"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "codebase index"
+target = "代码库索引"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Commands, comma separated"
+target = "命令，用逗号分隔"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "command (supports regex)"
+target = "命令（支持正则）"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Agent decides"
+target = "由 Agent 决定"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Always allow"
+target = "始终允许"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Always ask"
+target = "始终询问"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Ask on first write"
+target = "首次写入时询问"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Select MCP servers"
+target = "选择 MCP 服务器"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Add Profile"
+target = "添加配置档"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "+ Add custom model"
+target = "+ 添加自定义模型"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Add custom endpoint"
+target = "添加自定义端点"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "New Tab"
+target = "新标签页"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Split Pane"
+target = "拆分窗格"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Edit"
+target = "编辑"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Edit custom endpoint"
+target = "编辑自定义端点"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Endpoint added"
+target = "端点已添加"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Endpoint saved"
+target = "端点已保存"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Endpoint removed"
+target = "端点已移除"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Read only"
+target = "只读"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Supervised"
+target = "受监督"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Allow in specific directories"
+target = "允许指定目录"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Other"
+target = "其他"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Select coding agent"
+target = "选择编码 Agent"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Upgrade AI Usage"
+target = "升级 AI 用量"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Unknown reason"
+target = "未知原因"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Toolbar layout"
+target = "工具栏布局"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Warp Agent"
+target = "Warp Agent"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Your organization disallows AI when the active pane contains content from a remote session"
+target = "当活动窗格包含远程会话内容时，你的组织不允许使用 AI"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "To use AI features, please create an account."
+target = "要使用 AI 功能，请先创建账号。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Sign up"
+target = "注册"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Restricted due to billing issue"
+target = "因账单问题受限"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Unlimited"
+target = "无限制"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Usage"
+target = "用量"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Resets {formatted_next_refresh_time}"
+target = "{formatted_next_refresh_time} 重置"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "This is the {} limit of AI credits for your account."
+target = "这是你账号 AI 额度的{}限制。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Credits"
+target = "额度"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Upgrade"
+target = "升级"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = " to get more AI usage."
+target = " 以获取更多 AI 用量。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Compare plans"
+target = "比较套餐"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = " for more AI usage."
+target = " 以获取更多 AI 用量。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Contact support"
+target = "联系支持"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Prompt Suggestions"
+target = "提示建议"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Suggested Code Banners"
+target = "建议代码横幅"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Natural Language Autosuggestions"
+target = "自然语言自动建议"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Shared Block Title Generation"
+target = "共享块标题生成"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Commit & Pull Request Generation"
+target = "提交和拉取请求生成"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Agents"
+target = "Agent"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Set the boundaries for how your Agent operates. Choose what it can access, how much autonomy it has, and when it must ask for your approval. You can also fine-tune behavior around natural language input, codebase awareness, and more."
+target = "设置 Agent 的运行边界。选择它可以访问什么、拥有多少自主权，以及何时必须请求你的批准。你也可以微调自然语言输入、代码库感知等行为。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Profiles"
+target = "配置档"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Profiles let you define how your Agent operates — from the actions it can take and when it needs approval, to the models it uses for tasks like coding and planning. You can also scope them to individual projects."
+target = "配置档可定义 Agent 的运行方式，包括它可以执行的操作、何时需要批准，以及执行编码和规划等任务时使用的模型。你也可以将其限定到单个项目。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Models"
+target = "模型"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Context window (tokens)"
+target = "上下文窗口（tokens）"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Permissions"
+target = "权限"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Apply code diffs"
+target = "应用代码 diff"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Read files"
+target = "读取文件"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Execute commands"
+target = "执行命令"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Some of your permissions are managed by your workspace."
+target = "部分权限由你的工作区管理。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Interact with running commands"
+target = "与运行中的命令交互"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Command denylist"
+target = "命令拒绝列表"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Regular expressions to match commands that the Warp Agent should always ask permission to execute."
+target = "用于匹配 Warp Agent 执行前始终需要请求权限的命令正则表达式。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Command allowlist"
+target = "命令允许列表"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Regular expressions to match commands that can be automatically executed by the Warp Agent."
+target = "用于匹配 Warp Agent 可自动执行的命令正则表达式。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Directory allowlist"
+target = "目录允许列表"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Give the agent file access to certain directories."
+target = "授予 Agent 对特定目录的文件访问权限。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Show model picker in prompt"
+target = "在提示框中显示模型选择器"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Base model"
+target = "基础模型"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "This model serves as the primary engine behind the Warp Agent. It powers most interactions and invokes other models for tasks like planning or code generation when necessary. Warp may automatically switch to alternate models based on model availability or for auxiliary tasks such as conversation summarization."
+target = "此模型是 Warp Agent 的主要引擎，负责大多数交互，并在需要时调用其他模型完成规划或代码生成等任务。Warp 可能会根据模型可用性，或在对话摘要等辅助任务中自动切换到其他模型。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Codebase Context"
+target = "代码库上下文"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Allow the Warp Agent to generate an outline of your codebase that can be used for context. No code is ever stored on our servers. "
+target = "允许 Warp Agent 生成可用作上下文的代码库大纲。代码绝不会存储在我们的服务器上。 "
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Learn more"
+target = "了解更多"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Call MCP servers"
+target = "调用 MCP 服务器"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "You haven't added any MCP servers yet. Once you do, you'll be able to control how much autonomy the Warp Agent has when interacting with them. "
+target = "你还没有添加任何 MCP 服务器。添加后，你将能够控制 Warp Agent 与它们交互时拥有多少自主权。 "
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Add a server"
+target = "添加服务器"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "learn more about MCPs."
+target = "了解更多 MCP 信息。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "MCP allowlist"
+target = "MCP 允许列表"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Allow the Warp Agent to call these MCP servers."
+target = "允许 Warp Agent 调用这些 MCP 服务器。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "MCP denylist"
+target = "MCP 拒绝列表"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "The Warp Agent will always ask for permission before calling any MCP servers on this list."
+target = "调用此列表中的任何 MCP 服务器前，Warp Agent 都会始终请求权限。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Input"
+target = "输入"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Show input hint text"
+target = "显示输入提示文本"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Include agent-executed commands in history"
+target = "在历史记录中包含 Agent 执行的命令"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Encountered an incorrect detection? "
+target = "遇到错误检测？ "
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Let us know"
+target = "告诉我们"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Autodetect agent prompts in terminal input"
+target = "在终端输入中自动检测 Agent 提示"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Autodetect terminal commands in agent input"
+target = "在 Agent 输入中自动检测终端命令"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Enabling natural language detection will detect when natural language is written in the terminal input, and then automatically switch to Agent Mode for AI queries."
+target = "启用自然语言检测后，Warp 会检测终端输入中的自然语言，并自动切换到 Agent 模式来处理 AI 查询。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = " Encountered an incorrect input detection? "
+target = " 遇到错误输入检测？ "
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Natural language detection"
+target = "自然语言检测"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Natural language denylist"
+target = "自然语言拒绝列表"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Commands listed here will never trigger natural language detection."
+target = "此处列出的命令永远不会触发自然语言检测。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "MCP Servers"
+target = "MCP 服务器"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Add MCP servers to extend the Warp Agent's capabilities. MCP servers expose data sources or tools to agents through a standardized interface, essentially acting like plugins. "
+target = "添加 MCP 服务器以扩展 Warp Agent 的能力。MCP 服务器通过标准化接口向 Agent 暴露数据源或工具，本质上类似插件。 "
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Automatically detect and spawn MCP servers from globally-scoped third-party AI agent configuration files (e.g. in your home directory). Servers detected inside a repository are never spawned automatically and must be enabled individually from the MCP settings page. "
+target = "自动从全局范围的第三方 AI Agent 配置文件（例如主目录中）检测并启动 MCP 服务器。在仓库内检测到的服务器绝不会自动启动，必须在 MCP 设置页中逐个启用。 "
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "See supported providers."
+target = "查看支持的提供方。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Manage MCP servers"
+target = "管理 MCP 服务器"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Rules help the Warp Agent follow your conventions, whether for codebases or specific workflows. "
+target = "规则可帮助 Warp Agent 遵循你的约定，无论是代码库还是特定工作流。 "
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Let AI suggest rules to save based on your interactions."
+target = "让 AI 根据你的交互建议要保存的规则。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "The Warp Agent can leverage your Warp Drive Contents to tailor responses to your personal and team developer workflows and environments. This includes any Workflows, Notebooks, and Environment Variables."
+target = "Warp Agent 可以利用你的 Warp Drive 内容，为你个人和团队的开发工作流与环境定制响应。这包括所有工作流、Notebook 和环境变量。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Knowledge"
+target = "知识"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Manage rules"
+target = "管理规则"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Voice Input"
+target = "语音输入"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Voice input allows you to control Warp by speaking directly to your terminal (powered by "
+target = "语音输入允许你直接对终端说话来控制 Warp（由 "
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Key for Activating Voice Input"
+target = "激活语音输入的按键"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Press and hold to activate."
+target = "按住以激活。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Voice"
+target = "语音"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Show Oz changelog in new conversation view"
+target = "在新对话视图中显示 Oz 更新日志"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Shows hint to use the \"Full Terminal Use\"-enabled agent in long running commands."
+target = "在长时间运行的命令中显示提示，引导使用启用 Full Terminal Use 的 Agent。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Show conversation history in tools panel"
+target = "在工具面板中显示对话历史"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Agent thinking display"
+target = "Agent 思考显示"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Controls how reasoning/thinking traces are displayed."
+target = "控制推理/思考轨迹的显示方式。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Preferred layout when opening existing agent conversations"
+target = "打开现有 Agent 对话时的首选布局"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Show coding agent toolbar"
+target = "显示编码 Agent 工具栏"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Show a toolbar with quick actions when running coding agents like "
+target = "运行编码 Agent 时显示带快捷操作的工具栏，例如 "
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Third party CLI agents"
+target = "第三方 CLI Agent"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Auto show/hide Rich Input based on agent status"
+target = "根据 Agent 状态自动显示/隐藏 Rich Input"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Requires the Warp plugin for your coding agent"
+target = "需要为你的编码 Agent 安装 Warp 插件"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Auto open Rich Input when a coding agent session starts"
+target = "编码 Agent 会话开始时自动打开 Rich Input"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Auto dismiss Rich Input after prompt submission"
+target = "提交提示后自动关闭 Rich Input"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Commands that enable the toolbar"
+target = "启用工具栏的命令"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Add regex patterns to show the coding agent toolbar for matching commands."
+target = "添加正则模式，为匹配命令显示编码 Agent 工具栏。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "This option is enforced by your organization's settings and cannot be customized."
+target = "此选项由组织设置强制执行，无法自定义。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Enable agent attribution"
+target = "启用 Agent 署名"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Agent Attribution"
+target = "Agent 署名"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Oz can add attribution to commit messages and pull requests it creates"
+target = "Oz 可以为它创建的提交消息和拉取请求添加署名"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Computer use in Cloud Agents"
+target = "Cloud Agent 中的计算机使用"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Experimental"
+target = "实验性"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Enable computer use in cloud agent conversations started from the Warp app."
+target = "为从 Warp 应用启动的云端 Agent 对话启用计算机使用。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Cloud handoff requires cloud conversations to be enabled."
+target = "Cloud handoff 需要启用云端对话。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Cloud handoff"
+target = "Cloud handoff"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Cloud Handoff"
+target = "Cloud Handoff"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Hand off local agent conversations to a cloud agent."
+target = "将本地 Agent 对话交接给云端 Agent。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Auto-handoff before sleep"
+target = "睡眠前自动交接"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "When macOS is about to sleep, automatically moves the most recently focused running local Warp Agent conversation to Cloud Mode so it can keep working."
+target = "当 macOS 即将进入睡眠时，自动将最近聚焦且正在运行的本地 Warp Agent 对话移动到 Cloud Mode，以便继续工作。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Use & to trigger handoff"
+target = "使用 & 触发交接"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Type & as the first character to enter cloud handoff compose mode."
+target = "将 & 作为第一个字符输入，即可进入 cloud handoff 编写模式。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "OpenAI API key"
+target = "OpenAI API 密钥"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Anthropic API key"
+target = "Anthropic API 密钥"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Google API key"
+target = "Google API 密钥"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Use your own API keys from model providers for Warp Agent. You can also add custom endpoints to use third-party models. Custom endpoints must support the OpenAI-compatible Chat Completions API. API keys are stored only on your device, never on Warp's servers. They're used to make requests to your chosen model provider. Using auto models or models from providers you have not provided API keys for will consume Warp credits. "
+target = "为 Warp Agent 使用你自己的模型提供商 API 密钥。你也可以添加自定义端点来使用第三方模型。自定义端点必须支持 OpenAI 兼容的 Chat Completions API。API 密钥只存储在你的设备上，绝不会存储在 Warp 服务器上。它们用于向你选择的模型提供商发起请求。使用自动模型或未提供 API 密钥的提供商模型将消耗 Warp 额度。 "
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "By using BYOK or custom endpoints, you agree to use them only as permitted by "
+target = "使用 BYOK 或自定义端点即表示你同意仅在 "
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Warp's Terms of Service"
+target = "Warp 服务条款"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = ". BYOK and custom endpoints are intended for individual use and small teams. Companies or organizations with more than 10 employees should use Warp Business or Enterprise."
+target = " 允许的范围内使用它们。BYOK 和自定义端点面向个人和小团队。员工超过 10 人的公司或组织应使用 Warp Business 或 Enterprise。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "When enabled, agent requests may be routed to one of Warp's provided models in the event of an error. Warp will prioritize using your API keys over your Warp credits."
+target = "启用后，如果发生错误，Agent 请求可能会路由到 Warp 提供的模型之一。Warp 会优先使用你的 API 密钥，而不是 Warp 额度。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Custom inference"
+target = "自定义推理"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "API Keys"
+target = "API 密钥"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Custom endpoints"
+target = "自定义端点"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Contact sales"
+target = "联系销售"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Code"
+target = "代码"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Initialization Settings"
+target = "初始化设置"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Codebase indexing"
+target = "代码库索引"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Warp can automatically index code repositories as you navigate them, helping agents quickly understand context and provide solutions. Code is never stored on the server. If a codebase is unable to be indexed, Warp can still navigate your codebase and gain insights via grep and find tool calling."
+target = "当你浏览代码仓库时，Warp 可以自动索引它们，帮助 Agent 快速理解上下文并提供解决方案。代码永远不会存储在服务器上。如果代码库无法建立索引，Warp 仍可通过 grep 和 find 工具调用浏览代码库并获取信息。"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "To exclude specific files or directories from indexing, add them to the .warpindexingignore file in your repository directory. These files will still be accessible to AI features, but they won't be included in codebase embeddings."
+target = "要从索引中排除特定文件或目录，请将它们添加到仓库目录中的 .warpindexingignore 文件。这些文件仍可被 AI 功能访问，但不会包含在代码库嵌入中。"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Index new folders by default"
+target = "默认索引新文件夹"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "When set to true, Warp will automatically index code repositories as you navigate them - helping agents quickly understand context and provide targeted solutions."
+target = "设为 true 时，Warp 会在你浏览代码仓库时自动建立索引，帮助 Agent 快速理解上下文并提供针对性解决方案。"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Team admins have disabled codebase indexing."
+target = "团队管理员已停用代码库索引。"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Team admins have enabled codebase indexing."
+target = "团队管理员已启用代码库索引。"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "AI Features must be enabled to use codebase indexing."
+target = "必须启用 AI 功能才能使用代码库索引。"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "You have reached the maximum number of codebase indices for your plan. Delete existing indices to auto-index new codebases."
+target = "你已达到当前套餐的代码库索引数量上限。请删除现有索引以自动索引新的代码库。"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Codebase Indexing"
+target = "代码库索引"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Editor and Code Review"
+target = "编辑器与代码审查"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Index new folder"
+target = "索引新文件夹"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Code Editor and Review"
+target = "代码编辑器与审查"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Initialized / indexed folders"
+target = "已初始化 / 已索引文件夹"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "No folders have been initialized yet."
+target = "尚未初始化任何文件夹。"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Open project rules"
+target = "打开项目规则"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "No index created"
+target = "未创建索引"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Discovered {total_nodes} chunks"
+target = "已发现 {total_nodes} 个块"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Syncing - {completed_nodes} / {total_nodes}"
+target = "正在同步 - {completed_nodes} / {total_nodes}"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Syncing..."
+target = "正在同步..."
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Synced"
+target = "已同步"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Codebase too large"
+target = "代码库过大"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Stale"
+target = "已过期"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Failed"
+target = "失败"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "No index built"
+target = "未构建索引"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Index limit reached"
+target = "已达到索引上限"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Unavailable"
+target = "不可用"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Disabled"
+target = "已停用"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Queued"
+target = "已排队"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Indexing - {completed} / {total}"
+target = "正在索引 - {completed} / {total}"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Indexing - {completed}"
+target = "正在索引 - {completed}"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Indexing - 0 / {total}"
+target = "正在索引 - 0 / {total}"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Indexing..."
+target = "正在索引..."
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "LSP SERVERS"
+target = "LSP 服务器"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Installed"
+target = "已安装"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Installing..."
+target = "正在安装..."
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Checking..."
+target = "正在检查..."
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Available for download"
+target = "可下载"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Restart server"
+target = "重启服务器"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "View logs"
+target = "查看日志"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Available"
+target = "可用"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Busy"
+target = "忙碌"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Stopped"
+target = "已停止"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Not running"
+target = "未运行"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Auto open code review panel"
+target = "自动打开代码审查面板"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "When this setting is on, the code review panel will open on the first accepted diff of a conversation"
+target = "启用后，对话中首次接受 diff 时会打开代码审查面板"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Show code review button"
+target = "显示代码审查按钮"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Show a button in the top right of the window to toggle the code review panel."
+target = "在窗口右上角显示用于切换代码审查面板的按钮。"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Show diff stats on code review button"
+target = "在代码审查按钮上显示 diff 统计"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Show lines added and removed counts on the code review button."
+target = "在代码审查按钮上显示新增和删除行数。"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Project explorer"
+target = "项目资源管理器"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Adds an IDE-style project explorer / file tree to the left side tools panel."
+target = "在左侧工具面板中添加 IDE 风格的项目资源管理器 / 文件树。"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Global file search"
+target = "全局文件搜索"
+
+[[replace]]
+path = "app/src/settings_view/code_page.rs"
+source = "Adds global file search to the left side tools panel."
+target = "在左侧工具面板中添加全局文件搜索。"
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Edit"
+target = "编辑"
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Auto"
+target = "自动"
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Base model:"
+target = "基础模型："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Full terminal use:"
+target = "完整终端使用："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Computer use:"
+target = "计算机使用："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Apply code diffs:"
+target = "应用代码 diff："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Read files:"
+target = "读取文件："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Execute commands:"
+target = "执行命令："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Interact with running commands:"
+target = "与运行中的命令交互："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Ask questions:"
+target = "提问："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Run agents:"
+target = "运行 Agent："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Call MCP servers:"
+target = "调用 MCP 服务器："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Call web tools:"
+target = "调用 Web 工具："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Auto-sync plans to Warp Drive:"
+target = "自动同步计划到 Warp Drive："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "None"
+target = "无"
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Agent decides"
+target = "由 Agent 决定"
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Always allow"
+target = "始终允许"
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Always ask"
+target = "始终询问"
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Ask on first write"
+target = "首次写入时询问"
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Unknown"
+target = "未知"
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Never"
+target = "从不"
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Never ask"
+target = "从不询问"
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Ask unless auto-approve"
+target = "除非自动批准，否则询问"
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "On"
+target = "开"
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Off"
+target = "关"
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Directory allowlist:"
+target = "目录允许列表："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Command allowlist:"
+target = "命令允许列表："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "Command denylist:"
+target = "命令拒绝列表："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "MCP allowlist:"
+target = "MCP 允许列表："
+
+[[replace]]
+path = "app/src/settings_view/execution_profile_view.rs"
+source = "MCP denylist:"
+target = "MCP 拒绝列表："
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers_page.rs"
+source = "MCP Servers"
+target = "MCP 服务器"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers_page.rs"
+source = "Successfully logged out of {name} MCP server"
+target = "已成功退出 {name} MCP 服务器登录"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers_page.rs"
+source = "Successfully logged out of MCP server"
+target = "已成功退出 MCP 服务器登录"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers_page.rs"
+source = "Finish the current MCP install before opening another install link."
+target = "请先完成当前 MCP 安装，再打开另一个安装链接。"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers_page.rs"
+source = "Unknown MCP server '{autoinstall_param}'"
+target = "未知 MCP 服务器“{autoinstall_param}”"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/destructive_mcp_confirmation_dialog.rs"
+source = "Delete MCP server?"
+target = "删除 MCP 服务器？"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/destructive_mcp_confirmation_dialog.rs"
+source = "This will uninstall and remove this MCP server from all your devices."
+target = "这会从你的所有设备上卸载并移除此 MCP 服务器。"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/destructive_mcp_confirmation_dialog.rs"
+source = "Delete MCP"
+target = "删除 MCP"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/destructive_mcp_confirmation_dialog.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/destructive_mcp_confirmation_dialog.rs"
+source = "Delete shared MCP server?"
+target = "删除共享的 MCP 服务器？"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/destructive_mcp_confirmation_dialog.rs"
+source = "This will not only delete this MCP server for yourself, but also uninstall and remove this MCP server from Warp and across all of your teammates' devices."
+target = "这不仅会为你自己删除此 MCP 服务器，还会从 Warp 以及所有队友的设备上卸载并移除它。"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/destructive_mcp_confirmation_dialog.rs"
+source = "Remove shared MCP server from team?"
+target = "从团队中移除共享的 MCP 服务器？"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/destructive_mcp_confirmation_dialog.rs"
+source = "This will uninstall and remove this MCP server from Warp and across all of your teammates' devices."
+target = "这会从 Warp 以及所有队友的设备上卸载并移除此 MCP 服务器。"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/destructive_mcp_confirmation_dialog.rs"
+source = "Remove from team"
+target = "从团队移除"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/edit_page.rs"
+source = "Save"
+target = "保存"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/edit_page.rs"
+source = "Edit Variables"
+target = "编辑变量"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/edit_page.rs"
+source = "Delete MCP"
+target = "删除 MCP"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/edit_page.rs"
+source = "Remove from team"
+target = "从团队移除"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/edit_page.rs"
+source = "Only team admins and the creator of the MCP server can edit the MCP server."
+target = "只有团队管理员和 MCP 服务器创建者可以编辑此 MCP 服务器。"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/edit_page.rs"
+source = "Add New MCP Server"
+target = "添加新的 MCP 服务器"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/edit_page.rs"
+source = "Edit {name} MCP Server"
+target = "编辑 {name} MCP 服务器"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/edit_page.rs"
+source = "Edit MCP Server"
+target = "编辑 MCP 服务器"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/edit_page.rs"
+source = "Log out"
+target = "退出登录"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/edit_page.rs"
+source = "This MCP server contains secrets. Visit Settings > Privacy to modify your secret redaction settings."
+target = "此 MCP 服务器包含密钥。请前往“设置 > 隐私”修改密钥遮盖设置。"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/edit_page.rs"
+source = "No MCP Server specified."
+target = "未指定 MCP 服务器。"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/edit_page.rs"
+source = "Cannot add multiple MCP servers while editing a single server."
+target = "编辑单个服务器时无法添加多个 MCP 服务器。"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/edit_page.rs"
+source = "This server is not an installation and cannot be unshared"
+target = "此服务器不是安装项，无法取消共享"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/installation_modal.rs"
+source = "Install {name}"
+target = "安装 {name}"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/installation_modal.rs"
+source = "Shared from team"
+target = "来自团队共享"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/installation_modal.rs"
+source = "From another device"
+target = "来自另一台设备"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/installation_modal.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/installation_modal.rs"
+source = "Install"
+target = "安装"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/installation_modal.rs"
+source = "No MCP server selected"
+target = "未选择 MCP 服务器"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Add MCP servers to extend the Warp Agent's capabilities. MCP servers expose data sources or tools to agents through a standardized interface, essentially acting like plugins. Add a custom server, or use the presets to get started with popular servers. You can also find team servers that have been shared with you here. "
+target = "添加 MCP 服务器以扩展 Warp Agent 的能力。MCP 服务器通过标准化接口向 Agent 暴露数据源或工具，本质上类似插件。你可以添加自定义服务器，或使用预设快速开始使用热门服务器。也可以在这里找到共享给你的团队服务器。 "
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Once you add a MCP server, it will be shown here."
+target = "添加 MCP 服务器后，它会显示在这里。"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "No search results found"
+target = "未找到搜索结果"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Search MCP Servers"
+target = "搜索 MCP 服务器"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Add"
+target = "添加"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Available to install"
+target = "可安装"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "MCP server updated"
+target = "MCP 服务器已更新"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Auto-spawn servers from third-party agents"
+target = "从第三方 Agent 自动启动服务器"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Automatically detect and spawn MCP servers from globally-scoped third-party AI agent configuration files (e.g. in your home directory). Servers detected inside a repository are never spawned automatically and must be enabled individually in the \"Detected from\" sections below. "
+target = "自动从全局范围的第三方 AI Agent 配置文件（例如主目录中）检测并启动 MCP 服务器。在仓库内检测到的服务器绝不会自动启动，必须在下方“检测自”区域中逐个启用。 "
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "See supported providers."
+target = "查看支持的提供方。"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Learn more."
+target = "了解更多。"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "My MCPs"
+target = "我的 MCP"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Shared by Warp and {name}"
+target = "由 Warp 和 {name} 共享"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Shared by Warp and from other devices"
+target = "由 Warp 和其他设备共享"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Shared from Warp"
+target = "来自 Warp 共享"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Detected from {}"
+target = "检测自 {}"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Detected from config file"
+target = "检测自配置文件"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Shared by: {creator}"
+target = "共享者：{creator}"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "Shared by a team member"
+target = "由团队成员共享"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/list_page.rs"
+source = "From another device"
+target = "来自另一台设备"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "Offline"
+target = "离线"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "Starting server..."
+target = "正在启动服务器..."
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "Authenticating..."
+target = "正在认证..."
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "Shutting down..."
+target = "正在关闭..."
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "No tools available"
+target = "没有可用工具"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "{} tools available"
+target = "{} 个工具可用"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "Could not find cloud template"
+target = "找不到云端模板"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "Show logs"
+target = "显示日志"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "Log out"
+target = "退出登录"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "Share server"
+target = "共享服务器"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "Edit"
+target = "编辑"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "View logs"
+target = "查看日志"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "Edit config"
+target = "编辑配置"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "Set up"
+target = "设置"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/server_card.rs"
+source = "Server update available"
+target = "服务器有可用更新"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/update_modal.rs"
+source = "Server"
+target = "服务器"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/update_modal.rs"
+source = "Update {name}"
+target = "更新 {name}"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/update_modal.rs"
+source = "This server has {} updates available, which would you like to proceed with?"
+target = "此服务器有 {} 个可用更新，你想继续哪一个？"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/update_modal.rs"
+source = "another device"
+target = "另一台设备"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/update_modal.rs"
+source = "a team member"
+target = "团队成员"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/update_modal.rs"
+source = "Update from {publisher_string}"
+target = "从 {publisher_string} 更新"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/update_modal.rs"
+source = "Update from {name}"
+target = "从 {name} 更新"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/update_modal.rs"
+source = "Version {new_version}"
+target = "版本 {new_version}"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/update_modal.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/update_modal.rs"
+source = "Update"
+target = "更新"
+
+[[replace]]
+path = "app/src/settings_view/mcp_servers/update_modal.rs"
+source = "No updates available"
+target = "没有可用更新"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Environments"
+target = "环境"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Environments define where your ambient agents run. Set one up in minutes via GitHub (recommended), Warp-assisted setup, or manual configuration."
+target = "环境定义你的 ambient agent 在哪里运行。你可以通过 GitHub（推荐）、Warp 辅助设置或手动配置在几分钟内完成设置。"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Last edited: {}"
+target = "上次编辑：{}"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Last used: {}"
+target = "上次使用：{}"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Last used: never"
+target = "上次使用：从未"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Search environments..."
+target = "搜索环境..."
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Successfully updated environment"
+target = "环境已成功更新"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Successfully created environment"
+target = "环境已成功创建"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Environment deleted successfully"
+target = "环境已成功删除"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Successfully shared environment"
+target = "环境已成功共享"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Failed to share environment with team"
+target = "无法与团队共享环境"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Unable to create environment: not logged in."
+target = "无法创建环境：尚未登录。"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Unable to save: environment no longer exists."
+target = "无法保存：环境已不存在。"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Unable to share environment: you are not currently on a team."
+target = "无法共享环境：你当前不在团队中。"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Unable to share environment: environment is not yet synced."
+target = "无法共享环境：环境尚未同步。"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "No environments match your search."
+target = "没有与搜索匹配的环境。"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Personal"
+target = "个人"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Shared by Warp and {}"
+target = "由 Warp 和 {} 共享"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Shared by Warp and your team"
+target = "由 Warp 和你的团队共享"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Loading..."
+target = "正在加载..."
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Retry"
+target = "重试"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Authorize"
+target = "授权"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Get started"
+target = "开始使用"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Launch agent"
+target = "启动 Agent"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Quick setup"
+target = "快速设置"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Suggested"
+target = "推荐"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Select the GitHub repositories you’d like to work with and we’ll suggest a base image and config"
+target = "选择你想使用的 GitHub 仓库，我们会建议基础镜像和配置"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Use the agent"
+target = "使用 Agent"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Choose a locally set up project and we’ll help you set up an environment based on it"
+target = "选择一个本地已设置的项目，我们会基于它帮助你设置环境"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "You haven’t set up any environments yet."
+target = "你还没有设置任何环境。"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Choose how you’d like to set up your environment:"
+target = "选择你想如何设置环境："
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Setup commands: {}"
+target = "设置命令：{}"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "View my runs"
+target = "查看我的运行"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Share"
+target = "共享"
+
+[[replace]]
+path = "app/src/settings_view/environments_page.rs"
+source = "Edit"
+target = "编辑"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "Add repo"
+target = "添加仓库"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "Create environment"
+target = "创建环境"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "Selected repos"
+target = "已选择仓库"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "No repos selected yet"
+target = "尚未选择仓库"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "Available indexed repos"
+target = "可用的已索引仓库"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "Loading locally indexed repos…"
+target = "正在加载本地已索引仓库…"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "No locally indexed repos found yet. Index a repo, then try again."
+target = "尚未找到本地已索引仓库。请先索引一个仓库，然后重试。"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "Local repo selection is unavailable in this build."
+target = "此构建中无法选择本地仓库。"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "All locally indexed repos are already selected."
+target = "所有本地已索引仓库都已选择。"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "Selected folder is not a Git repository: {path}"
+target = "所选文件夹不是 Git 仓库：{path}"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "Select locally indexed repos to provide context for the environment creation agent."
+target = "选择本地已索引仓库，为环境创建 Agent 提供上下文。"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "Select repos to provide context for the environment creation agent."
+target = "选择仓库，为环境创建 Agent 提供上下文。"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "Select repos for your environment"
+target = "为你的环境选择仓库"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Browse GitHub repos..."
+target = "浏览 GitHub 仓库..."
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Docker image"
+target = "Docker 镜像"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Press Enter or click the submit button to add each command."
+target = "按 Enter 或点击提交按钮以添加每条命令。"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Environment name"
+target = "环境名称"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Docker image reference"
+target = "Docker 镜像引用"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Setup commands run independently. Each command runs from the workspace root (/workspace). If a command depends on the previous one, combine them with &&."
+target = "设置命令会独立运行。每条命令都从工作区根目录（/workspace）运行。如果某条命令依赖上一条，请用 && 将它们合并。"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Enter repos (owner/repo format)"
+target = "输入仓库（owner/repo 格式）"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Paste repo URL(s)"
+target = "粘贴仓库 URL"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Create"
+target = "创建"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Delete environment"
+target = "删除环境"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Create environment"
+target = "创建环境"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Save"
+target = "保存"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Save environment"
+target = "保存环境"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Couldn't load GitHub repos. You can paste repo URL(s), or retry."
+target = "无法加载 GitHub 仓库。你可以粘贴仓库 URL，或重试。"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Failed to suggest a Docker image"
+target = "无法建议 Docker 镜像"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Share with team"
+target = "与团队共享"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Personal environments cannot be used with external integrations or team API keys. For the best experience, use shared environments."
+target = "个人环境不能与外部集成或团队 API 密钥一起使用。为获得最佳体验，请使用共享环境。"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Edit environment"
+target = "编辑环境"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Setup command(s)"
+target = "设置命令"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Description"
+target = "描述"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "{char_count} / {DESCRIPTION_MAX_CHARS} characters"
+target = "{char_count} / {DESCRIPTION_MAX_CHARS} 个字符"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Repo(s)"
+target = "仓库"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Loading..."
+target = "正在加载..."
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Auth with GitHub"
+target = "使用 GitHub 授权"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Failed to load GitHub repositories"
+target = "无法加载 GitHub 仓库"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Retry"
+target = "重试"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Type owner/repo and press Enter to add, or select from dropdown."
+target = "输入 owner/repo 并按 Enter 添加，或从下拉菜单中选择。"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Missing a repo?"
+target = "缺少某个仓库？"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Configure access on GitHub"
+target = "在 GitHub 上配置访问权限"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "No repositories found"
+target = "未找到仓库"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Generating…"
+target = "正在生成…"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Suggest image"
+target = "建议镜像"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Warp will suggest a Docker image based on your selected repositories."
+target = "Warp 会根据你选择的仓库建议 Docker 镜像。"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Authenticate"
+target = "认证"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "You need to grant access to your GitHub repos to suggest a Docker image"
+target = "需要授予 GitHub 仓库访问权限，才能建议 Docker 镜像"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Launch agent"
+target = "启动 Agent"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "We couldn't find a good match. We recommend using a custom Docker image for these repos."
+target = "我们找不到合适的匹配项。建议为这些仓库使用自定义 Docker 镜像。"
+
+[[replace]]
+path = "app/src/settings_view/update_environment_form.rs"
+source = "Name"
+target = "名称"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Search API keys"
+target = "搜索 API 密钥"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "New API key"
+target = "新建 API 密钥"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Save your key"
+target = "保存你的密钥"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "API key deleted"
+target = "API 密钥已删除"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Documentation."
+target = "文档。"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Oz Cloud API Keys"
+target = "Oz Cloud API 密钥"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "+ Create API Key"
+target = "+ 创建 API 密钥"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Name"
+target = "名称"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Key"
+target = "密钥"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Scope"
+target = "范围"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Created"
+target = "已创建"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Last used"
+target = "上次使用"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Expires at"
+target = "过期时间"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Never"
+target = "永不"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Personal"
+target = "个人"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Team"
+target = "团队"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Agent"
+target = "Agent"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "No API Keys"
+target = "没有 API 密钥"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "Create a key to manage external access to Warp"
+target = "创建密钥以管理对 Warp 的外部访问"
+
+[[replace]]
+path = "app/src/settings_view/platform_page.rs"
+source = "No API keys match your search"
+target = "没有与搜索匹配的 API 密钥"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "This API key is tied to your user and can make requests against your Warp account."
+target = "此 API 密钥与你的用户绑定，可以向你的 Warp 账号发起请求。"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "This API key is tied to your team and can make requests on behalf of your team."
+target = "此 API 密钥与你的团队绑定，可以代表你的团队发起请求。"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "This API key is tied to an agent and can make requests on behalf of the agent."
+target = "此 API 密钥与某个 Agent 绑定，可以代表该 Agent 发起请求。"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "1 day"
+target = "1 天"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "30 days"
+target = "30 天"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "90 days"
+target = "90 天"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Never"
+target = "永不"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Warp API Key"
+target = "Warp API 密钥"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Personal"
+target = "个人"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Team"
+target = "团队"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Agent"
+target = "Agent"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Failed to load agents. Please close and try again."
+target = "无法加载 Agent。请关闭后重试。"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Please select an agent."
+target = "请选择一个 Agent。"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Unable to create a team API key because there is no current team."
+target = "无法创建团队 API 密钥，因为当前没有团队。"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Failed to create API key. Please try again."
+target = "无法创建 API 密钥。请重试。"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "This secret key is shown only once. Copy and store it securely."
+target = "此密钥只会显示一次。请复制并安全保存。"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Copied"
+target = "已复制"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Copy"
+target = "复制"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Done"
+target = "完成"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Name"
+target = "名称"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Creating…"
+target = "正在创建…"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Create key"
+target = "创建密钥"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Type"
+target = "类型"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "No agents available. Create one first."
+target = "没有可用 Agent。请先创建一个。"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Create agent"
+target = "创建 Agent"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Expiration"
+target = "过期时间"
+
+[[replace]]
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Secret key copied."
+target = "密钥已复制。"
+
+[[replace]]
+path = "app/src/settings_view/platform/expire_api_key_button.rs"
+source = "Failed to delete API key. Please try again."
+target = "无法删除 API 密钥。请重试。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_common.rs"
+source = "Base"
+target = "基础"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_common.rs"
+source = "Add-ons"
+target = "附加包"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_common.rs"
+source = "Pay-as-you-go"
+target = "按量付费"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_common.rs"
+source = "Cloud-only"
+target = "仅云端"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_common.rs"
+source = "Combined"
+target = "合计"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_common.rs"
+source = "Other"
+target = "其他"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_common.rs"
+source = "Compute"
+target = "计算"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_common.rs"
+source = "Platform"
+target = "平台"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_common.rs"
+source = "Suggested code diffs"
+target = "建议的代码差异"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_common.rs"
+source = "Voice"
+target = "语音"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_common.rs"
+source = "Total"
+target = "总计"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_common.rs"
+source = "Total usage"
+target = "总使用量"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_rows.rs"
+source = "All"
+target = "全部"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_rows.rs"
+source = "Local"
+target = "本地"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_rows.rs"
+source = "Cloud"
+target = "云端"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_rows.rs"
+source = "Your usage"
+target = "你的使用量"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_rows.rs"
+source = "Other members"
+target = "其他成员"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_rows.rs"
+source = "Unknown"
+target = "未知"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_rows.rs"
+source = "This is an automated agent on your team."
+target = "这是你团队中的自动化 Agent。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_rows.rs"
+source = "Members"
+target = "成员"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "Usage"
+target = "使用量"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "Upgrade to Build"
+target = "升级到 Build"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "to see team-level credit usage."
+target = "以查看团队级额度使用量。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "Upgrade to Business"
+target = "升级到 Business"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "to see per-user credit attribution."
+target = "以查看按用户归因的额度使用量。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "Upgrade to Enterprise"
+target = "升级到 Enterprise"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "to see fine-grained credit attribution and set per-user spend limits."
+target = "以查看精细额度归因并设置按用户的支出限制。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "Open the admin panel"
+target = "打开管理面板"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "to set per-user spend limits."
+target = "以设置按用户的支出限制。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "Base"
+target = "基础"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "Add-ons"
+target = "附加包"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "Pay-as-you-go"
+target = "按量付费"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "Cloud-only"
+target = "仅云端"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "Combined"
+target = "合计"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_section.rs"
+source = "Other team members' usage across add-on, pay-as-you-go, and cloud-only credits."
+target = "其他团队成员在附加包、按量付费和仅云端额度中的使用量。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_team_totals.rs"
+source = "Overall usage"
+target = "总体使用量"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_team_totals.rs"
+source = "Local agent usage"
+target = "本地 Agent 使用量"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_team_totals.rs"
+source = "Cloud agent usage"
+target = "云端 Agent 使用量"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/billing_cycle_usage_team_totals.rs"
+source = "Team"
+target = "团队"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/overage_limit_modal.rs"
+source = "Please enter a valid currency amount"
+target = "请输入有效的货币金额"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/overage_limit_modal.rs"
+source = "Please enter a price between $0.01 and $10,000,000"
+target = "请输入 $0.01 到 $10,000,000 之间的价格"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/overage_limit_modal.rs"
+source = "Warp will prevent use of premium models when this dollar limit is reached. Resets on a monthly basis."
+target = "达到此美元限制后，Warp 将阻止使用高级模型。每月重置。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/overage_limit_modal.rs"
+source = "Note that AI credits made near your chosen limit may exceed it by a few dollars."
+target = "请注意，在接近你选择的限制时产生的 AI 额度费用可能会超出几美元。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/overage_limit_modal.rs"
+source = "Update"
+target = "更新"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/overage_limit_modal.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage/usage_history_model.rs"
+source = "Failed to fetch conversation usage"
+target = "无法获取对话使用量"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "View details on overage usage"
+target = "查看超额使用详情"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Enable premium model usage overages"
+target = "启用高级模型超额使用"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Premium model usage overages are enabled"
+target = "已启用高级模型超额使用"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Premium model usage overages are not enabled"
+target = "未启用高级模型超额使用"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Continue using premium models beyond your plan's limits. Usage is charged in $20 increments up to your spending limit, with any remaining balance charged on your scheduled billing date."
+target = "在套餐限制之外继续使用高级模型。使用量会按 $20 为单位计费，直到达到你的支出限制，剩余余额会在计划账单日扣费。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Ask a team admin to enable overages for more AI usage."
+target = "请团队管理员启用超额使用，以获得更多 AI 使用量。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "A to Z"
+target = "A 到 Z"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Z to A"
+target = "Z 到 A"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Usage ascending"
+target = "使用量升序"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Usage descending"
+target = "使用量降序"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Auto reload is disabled, as the next reload would exceed your monthly spend limit. Increase your limit to use auto reload."
+target = "自动充值已停用，因为下一次充值会超过你的月度支出限制。提高限制后即可使用自动充值。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Restricted due to billing issue. Update your payment method to purchase add-on credits."
+target = "因账单问题受限。请更新付款方式以购买附加额度。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Auto reload is disabled due to recent failed reload. Please update your payment method and try again."
+target = "由于最近充值失败，自动充值已停用。请更新付款方式并重试。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Overview"
+target = "概览"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Usage History"
+target = "使用历史"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Usage reporting is currently limited"
+target = "当前使用量报告受限"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Enterprise credit usage isn't fully available in this view yet. For the most accurate spend tracking, "
+target = "此视图尚未完整支持 Enterprise 额度使用量。若要获得最准确的支出跟踪，请"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "visit the admin panel"
+target = "访问管理面板"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Enterprise credit usage isn't fully available in this view yet. Contact a team admin for detailed usage reporting."
+target = "此视图尚未完整支持 Enterprise 额度使用量。请联系团队管理员获取详细使用量报告。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Add-on credits are purchased in prepaid packages that roll over each billing cycle and expire after one year. The more you purchase, the better the per-credit rate. Once your base plan credits are used, add-on credits will be consumed."
+target = "附加额度以预付包形式购买，会在每个账单周期结转，并在一年后过期。购买越多，单个额度价格越低。基础套餐额度用完后，将开始消耗附加额度。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Purchased add-on credits are shared across your team."
+target = "购买的附加额度会在你的团队中共享。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Cloud agent trial"
+target = "云端 Agent 试用"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "{discount}% off"
+target = "{discount}% 折扣"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Overage spending limit"
+target = "超额支出限制"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Monthly spending limit"
+target = "月度支出限制"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Load more"
+target = "加载更多"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Failed to update workspace settings"
+target = "无法更新工作区设置"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Successfully purchased add-on credits"
+target = "已成功购买附加额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Billing and usage"
+target = "账单和使用量"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Upgrade Plan"
+target = "升级套餐"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Generate Stripe Billing Portal Link"
+target = "生成 Stripe 账单门户链接"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Unknown reason"
+target = "未知原因"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "1 credit remaining"
+target = "剩余 1 个额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "{} credits remaining"
+target = "剩余 {} 个额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "New agent"
+target = "新建 Agent"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Buy more"
+target = "购买更多"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Not set"
+target = "未设置"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Sets the monthly overage spending limit beyond the plan amount"
+target = "设置超过套餐金额的月度超额支出限制"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Monthly overage spending limit"
+target = "月度超额支出限制"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Add-on credits"
+target = "附加额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Switch to the Build plan"
+target = "切换到 Build 套餐"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = " to purchase add-on credits."
+target = "以购买附加额度。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Upgrade to the Build plan"
+target = "升级到 Build 套餐"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Contact your Account Executive for more add-on credits."
+target = "请联系你的客户经理获取更多附加额度。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Contact a team admin to purchase add-on credits."
+target = "请联系团队管理员购买附加额度。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Sets the monthly limit spent on add-on credits"
+target = "设置附加额度的月度支出限制"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Monthly spend limit"
+target = "月度支出限制"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Purchased this month"
+target = "本月已购买"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "1 credit"
+target = "1 个额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "{} credits"
+target = "{} 个额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "your selected"
+target = "你选择的"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Auto reload"
+target = "自动充值"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "When enabled, auto reload will automatically purchase {auto_reload_amount} credits when your add-on credit balance reaches 100 credits remaining."
+target = "启用后，当你的附加额度余额达到剩余 100 个额度时，自动充值会自动购买 {auto_reload_amount} 个额度。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Buy"
+target = "购买"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "One-time purchase"
+target = "一次性购买"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Reloading would exceed your monthly limit. "
+target = "充值会超过你的月度限制。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Increase your limit"
+target = "提高你的限制"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = " to continue."
+target = "以继续。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "0 credits"
+target = "0 个额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Total overages"
+target = "超额总计"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Usage resets on {formatted_date}"
+target = "使用量将在 {formatted_date} 重置"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Your credit limit is prorated because you joined midway through the billing cycle."
+target = "由于你在账单周期中途加入，你的额度限制已按比例折算。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "This credit limit is prorated because this user joined midway through the billing cycle."
+target = "由于此用户在账单周期中途加入，此额度限制已按比例折算。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Restricted due to billing issue"
+target = "因账单问题受限"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Credits"
+target = "额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "This is the {refresh_duration} limit of AI credits for your account."
+target = "这是你账号的 {refresh_duration} AI 额度限制。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Last 30 days"
+target = "最近 30 天"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "No usage history"
+target = "没有使用历史"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Kick off an agent task to view usage history here."
+target = "启动一个 Agent 任务后，可在这里查看使用历史。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Resets {formatted_next_refresh_time}"
+target = "重置时间：{formatted_next_refresh_time}"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Sort by"
+target = "排序方式"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Usage"
+target = "使用量"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Team total"
+target = "团队总计"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Manage billing"
+target = "管理账单"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = " to regain access to AI features."
+target = "以恢复访问 AI 功能。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Contact your team admin to resolve billing issues."
+target = "请联系团队管理员解决账单问题。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = " for a more flexible pricing model."
+target = "以获得更灵活的定价模型。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "bring your own key"
+target = "自带密钥"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = " for increased access to AI features."
+target = "以获得更多 AI 功能访问权限。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Upgrade to Turbo plan"
+target = "升级到 Turbo 套餐"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Upgrade to Lightspeed plan"
+target = "升级到 Lightspeed 套餐"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Upgrade"
+target = "升级"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = " to get more AI usage."
+target = "以获得更多 AI 使用量。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Upgrade to Max"
+target = "升级到 Max"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = " for more AI credits."
+target = "以获得更多 AI 额度。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Switch to Business"
+target = "切换到 Business"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = " for security features like SSO and automatically applied zero data retention."
+target = "以获得 SSO 和自动应用零数据保留等安全功能。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Upgrade to Enterprise"
+target = "升级到 Enterprise"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = " for custom limits and dedicated support."
+target = "以获得自定义限制和专属支持。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Contact support"
+target = "联系支持"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = " for more AI usage."
+target = "以获得更多 AI 使用量。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = " for more credits and access to more models."
+target = "以获得更多额度并访问更多模型。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Sign up"
+target = "注册"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Free"
+target = "免费"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Compare plans"
+target = "比较套餐"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Plan"
+target = "套餐"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page.rs"
+source = "Open admin panel"
+target = "打开管理面板"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Add-on credits are purchased in prepaid packages that roll over each billing cycle and expire after one year. The more you purchase, the better the per-credit rate. Once your base plan credits are used, add-on credits will be consumed."
+target = "附加额度以预付包形式购买，会在每个账单周期结转，并在一年后过期。购买越多，单个额度价格越低。基础套餐额度用完后，将开始消耗附加额度。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Purchased add-on credits are added to your personal balance."
+target = "购买的附加额度会添加到你的个人余额。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Auto-reload is enabled"
+target = "自动充值已启用"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Restricted due to billing issue. Update your payment method to purchase add-on credits."
+target = "因账单问题受限。请更新付款方式以购买附加额度。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Restricted due to billing issue. Contact your team admin to update their payment method."
+target = "因账单问题受限。请联系团队管理员更新付款方式。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Auto reload is disabled due to recent failed reload. Please update your payment method and try again."
+target = "由于最近充值失败，自动充值已停用。请更新付款方式并重试。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Auto reload is disabled due to recent failed reload. Contact your team admin to update their payment method."
+target = "由于最近充值失败，自动充值已停用。请联系团队管理员更新付款方式。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Cloud agent trial"
+target = "云端 Agent 试用"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Monthly spending limit"
+target = "月度支出限制"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Load more"
+target = "加载更多"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Failed to update workspace settings"
+target = "无法更新工作区设置"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Successfully purchased add-on credits"
+target = "已成功购买附加额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Plan"
+target = "套餐"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Manage billing"
+target = "管理账单"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Open admin panel"
+target = "打开管理面板"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Free"
+target = "免费"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Compare plans"
+target = "比较套餐"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Base credits"
+target = "基础额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Personal credits"
+target = "个人额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Team credits"
+target = "团队额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Balance"
+target = "余额"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "1 credit remaining"
+target = "剩余 1 个额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "{} credits remaining"
+target = "剩余 {} 个额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "New agent"
+target = "新建 Agent"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Buy more"
+target = "购买更多"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Upgrade to Build"
+target = "升级到 Build"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "{} credits"
+target = "{} 个额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "selected credit amount"
+target = "已选择的额度数量"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "When any member on your team’s credit balance reaches 100 credits remaining, automatically purchase {auto_reload_credit_amount}."
+target = "当你团队中任一成员的额度余额达到剩余 100 个额度时，自动购买 {auto_reload_credit_amount}。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Auto-reload is paused because the next reload would exceed your monthly spend limit. Increase your limit to continue using auto-reload."
+target = "自动充值已暂停，因为下一次充值会超过你的月度支出限制。提高限制后即可继续使用自动充值。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Auto-reload is paused because the next reload would exceed your team’s monthly spend limit. Contact a team admin to increase it."
+target = "自动充值已暂停，因为下一次充值会超过团队的月度支出限制。请联系团队管理员提高限制。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "This purchase would exceed your monthly limit. Increase your limit to continue."
+target = "此次购买会超过你的月度限制。请提高限制后继续。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "This purchase would exceed your team’s monthly spend limit. Contact a team admin to increase it."
+target = "此次购买会超过团队的月度支出限制。请联系团队管理员提高限制。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Your admin has enabled auto-reload for add-on credits. When your personal add-on credit balance runs low, Warp will automatically purchase {credits} credits for {price} and add them to your balance."
+target = "你的管理员已为附加额度启用自动充值。当你的个人附加额度余额不足时，Warp 会自动以 {price} 购买 {credits} 个额度并添加到你的余额。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Your admin has enabled auto-reload for add-on credits. When your personal add-on credit balance runs low, Warp will automatically purchase add-on credits and add them to your balance."
+target = "你的管理员已为附加额度启用自动充值。当你的个人附加额度余额不足时，Warp 会自动购买附加额度并添加到你的余额。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = " to purchase add-on credits."
+target = "以购买附加额度。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Contact your Account Executive for more add-on credits."
+target = "请联系你的客户经理获取更多附加额度。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Contact a team admin to enable add-on credits."
+target = "请联系团队管理员启用附加额度。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Buy credits"
+target = "购买额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Sets the monthly limit spent on add-on credits"
+target = "设置附加额度的月度支出限制"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Monthly spend limit"
+target = "月度支出限制"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Purchased this month"
+target = "本月已购买"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "1 credit"
+target = "1 个额度"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "One-time purchase"
+target = "一次性购买"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Auto-reload"
+target = "自动充值"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Last 30 days"
+target = "最近 30 天"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "No usage history"
+target = "没有使用历史"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Kick off an agent task to view usage history here."
+target = "启动一个 Agent 任务后，可在这里查看使用历史。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Billing and usage v2"
+target = "账单和使用量 v2"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Unable to enable auto-reload until pricing options load."
+target = "价格选项加载完成前，无法启用自动充值。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "your selected"
+target = "你选择的"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Auto-reload enabled. We'll refill with {credits} credits when your balance runs low."
+target = "自动充值已启用。余额不足时，我们会补充 {credits} 个额度。"
+
+[[replace]]
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "Auto-reload disabled."
+target = "自动充值已停用。"
+
+[[replace]]
+path = "app/src/terminal/view/init_environment/mode_selector.rs"
+source = "Choose how you'd like to set up your environment"
+target = "选择你想如何设置环境"
+
+[[replace]]
+path = "app/src/terminal/view/init_environment/mode_selector.rs"
+source = "Suggested"
+target = "推荐"
+
+[[replace]]
+path = "app/src/terminal/view/init_environment/mode_selector.rs"
+source = "Quick setup"
+target = "快速设置"
+
+[[replace]]
+path = "app/src/terminal/view/init_environment/mode_selector.rs"
+source = "Select the GitHub repositories you'd like to work with and we'll suggest a base image and config"
+target = "选择你想使用的 GitHub 仓库，我们会建议基础镜像和配置"
+
+[[replace]]
+path = "app/src/terminal/view/init_environment/mode_selector.rs"
+source = "Use the agent"
+target = "使用 Agent"
+
+[[replace]]
+path = "app/src/terminal/view/init_environment/mode_selector.rs"
+source = "Choose a locally set up project and we'll help you set up an environment based on it"
+target = "选择一个本地已设置的项目，我们会基于它帮助你设置环境"
