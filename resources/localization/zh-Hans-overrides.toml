@@ -11668,3 +11668,68 @@ target = "新增"
 path = "app/src/workspace/hoa_onboarding/welcome_banner.rs"
 source = "Introducing universal agent support: level up any coding agent with Warp"
 target = "介绍通用 Agent 支持：用 Warp 强化任何编码 Agent"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Upgrade to the Build plan"
+target = "升级到 Build 方案"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = " to use your own API keys."
+target = "以使用你自己的 API keys。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = " to enable bringing your own API keys on your Enterprise plan."
+target = "以在 Enterprise 方案中启用自带 API keys。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Ask your team's admin to upgrade to the Build plan to use your own API keys."
+target = "请让团队管理员升级到 Build 方案，以使用你自己的 API keys。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Create an account"
+target = "创建账号"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Refresh"
+target = "刷新"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Warp loads and sends local AWS CLI credentials for Bedrock-supported models. This setting is managed by your organization."
+target = "Warp 会加载并发送本地 AWS CLI 凭据，用于支持 Bedrock 的模型。此设置由你的组织管理。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Warp loads and sends local AWS CLI credentials for Bedrock-supported models."
+target = "Warp 会加载并发送本地 AWS CLI 凭据，用于支持 Bedrock 的模型。"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Use AWS Bedrock credentials"
+target = "使用 AWS Bedrock 凭据"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Login Command"
+target = "登录命令"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "AWS Profile"
+target = "AWS 配置档"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "Automatically run login command"
+target = "自动运行登录命令"
+
+[[replace]]
+path = "app/src/settings_view/ai_page.rs"
+source = "When enabled, the login command will run automatically when AWS Bedrock credentials expire."
+target = "启用后，当 AWS Bedrock 凭据过期时会自动运行登录命令。"
