@@ -52,7 +52,7 @@ use crate::workspace::view::conversation_list::item::{
 };
 use crate::workspace::{ToastStack, WorkspaceAction};
 
-const VIEW_ALL_LABEL: &str = "View all";
+const VIEW_ALL_LABEL: &str = "查看全部";
 /// Maximum number of past items to show before the user toggles "view all".
 const INITIAL_MAX_PAST_ITEMS: usize = 10;
 
@@ -925,7 +925,7 @@ impl TypedActionView for ConversationListView {
                         return;
                     };
 
-                    let mut delete_item = MenuItemFields::new("Delete")
+                    let mut delete_item = MenuItemFields::new("删除")
                         .with_override_text_color(Appearance::as_ref(ctx).theme().ansi_fg_red())
                         .with_on_select_action(ConversationListViewAction::DeleteFromOverflowMenu {
                             conversation_id,

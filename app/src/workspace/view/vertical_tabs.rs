@@ -2466,18 +2466,15 @@ fn render_grouped_tabs_header(
     .with_height(VERTICAL_TABS_ICON_SIZE)
     .finish();
 
-    let title_text = group
-        .name
-        .clone()
-        .unwrap_or_else(|| "New Group".to_string());
+    let title_text = group.name.clone().unwrap_or_else(|| "新建分组".to_string());
     let title_element: Box<dyn Element> = Text::new_inline(title_text, font_family, 12.)
         .with_clip(ClipConfig::ellipsis())
         .with_color(main_text_color.into())
         .finish();
     let subtitle_text = if member_count == 1 {
-        "1 tab".to_string()
+        "1 个标签页".to_string()
     } else {
-        format!("{member_count} tabs")
+        format!("{member_count} 个标签页")
     };
     let subtitle = Text::new_inline(subtitle_text, font_family, 10.)
         .with_clip(ClipConfig::ellipsis())
@@ -2695,7 +2692,7 @@ fn render_group_header(props: GroupHeaderProps<'_>, app: &AppContext) -> Box<dyn
     let theme = appearance.theme();
     let title = pane_group.display_title(app);
     let title = if title.is_empty() {
-        "Untitled tab".to_string()
+        "未命名标签页".to_string()
     } else {
         title
     };
@@ -3014,17 +3011,17 @@ impl TypedPane<'_> {
         match self {
             TypedPane::Terminal(_) => "终端",
             TypedPane::Code(_) => "代码",
-            TypedPane::CodeDiff => "Code Diff",
-            TypedPane::File => "File",
-            TypedPane::Notebook { .. } => "Notebook",
-            TypedPane::Workflow { .. } => "Workflow",
+            TypedPane::CodeDiff => "代码差异",
+            TypedPane::File => "文件",
+            TypedPane::Notebook { .. } => "笔记本",
+            TypedPane::Workflow { .. } => "工作流",
             TypedPane::Settings => "设置",
-            TypedPane::EnvVarCollection => "Environment Variables",
-            TypedPane::EnvironmentManagement => "Environments",
-            TypedPane::AIFact => "Rules",
-            TypedPane::AIDocument => "Plan",
-            TypedPane::ExecutionProfileEditor => "Execution Profile",
-            TypedPane::Other => "Other",
+            TypedPane::EnvVarCollection => "环境变量",
+            TypedPane::EnvironmentManagement => "环境",
+            TypedPane::AIFact => "规则",
+            TypedPane::AIDocument => "计划",
+            TypedPane::ExecutionProfileEditor => "执行配置",
+            TypedPane::Other => "其他",
         }
     }
 
@@ -3034,7 +3031,7 @@ impl TypedPane<'_> {
                 .file_view(app)
                 .as_ref(app)
                 .contains_unsaved_changes(app)
-                .then(|| "Unsaved".to_string()),
+                .then(|| "未保存".to_string()),
             TypedPane::Terminal(_)
             | TypedPane::CodeDiff
             | TypedPane::File
@@ -4245,7 +4242,7 @@ fn render_summary_overflow_line(
     appearance: &Appearance,
 ) -> Box<dyn Element> {
     Text::new_inline(
-        format!("+ {hidden_count} more"),
+        format!("另有 {hidden_count} 项"),
         appearance.ui_font_family(),
         10.,
     )
@@ -5105,7 +5102,7 @@ pub(super) fn render_settings_popup(
 
     let tab_item_header = Container::new(
         Text::new_inline(
-            "Tab item".to_string(),
+            "标签页项目".to_string(),
             appearance.ui_font_family(),
             SETTINGS_POPUP_MENU_ITEM_FONT_SIZE,
         )
@@ -5342,14 +5339,14 @@ pub(super) fn render_settings_popup(
             let pr_link_info_tooltip = if show_pr_link && pr_validation_suppressed {
                 Some(ShowToggleInfoTooltip {
                     mouse_state: state.show_pr_link_info_tooltip_mouse_state.clone(),
-                    tooltip_text: "Requires the GitHub CLI to be installed and authenticated",
+                    tooltip_text: "需要安装并认证 GitHub CLI",
                 })
             } else {
                 None
             };
 
             popup_col.add_child(render_show_toggle_option(
-                "PR link",
+                "PR 链接",
                 show_pr_link,
                 state.show_pr_link_mouse_state.clone(),
                 WorkspaceAction::ToggleVerticalTabsShowPrLink,
@@ -5358,7 +5355,7 @@ pub(super) fn render_settings_popup(
                 theme,
             ));
             popup_col.add_child(render_show_toggle_option(
-                "Diff stats",
+                "差异统计",
                 show_diff_stats,
                 state.show_diff_stats_mouse_state.clone(),
                 WorkspaceAction::ToggleVerticalTabsShowDiffStats,
@@ -6186,7 +6183,7 @@ fn render_code_detail_section(
 
     if extra_open_tabs > 0 {
         section.add_child(render_detail_wrapping_text(
-            format!("and {extra_open_tabs} more"),
+            format!("以及另外 {extra_open_tabs} 项"),
             12.,
             text_colors.sub,
             None,
