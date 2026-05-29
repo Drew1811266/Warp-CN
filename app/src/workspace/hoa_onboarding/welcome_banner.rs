@@ -27,23 +27,24 @@ struct FeatureItem {
 const FEATURE_ITEMS: &[FeatureItem] = &[
     FeatureItem {
         icon: Icon::LayoutAlt01,
-        title: "Vertical tabs",
-        description: "Rich tab titles and metadata like git branch, worktree, and PR. Fully customizable.",
+        title: "垂直标签页",
+        description:
+            "显示丰富的标签页标题和元数据，例如 Git 分支、worktree 和 PR，并支持完全自定义。",
     },
     FeatureItem {
         icon: Icon::Sliders,
-        title: "Tab configs",
-        description: "Tab-level schema to set your directory, startup commands, theme, and worktree with one click",
+        title: "标签页配置",
+        description: "用标签页级配置一键设置目录、启动命令、主题和 worktree",
     },
     FeatureItem {
         icon: Icon::Inbox,
-        title: "Agent inbox",
-        description: "Notifications when any agent needs your attention, also accessible in a central inbox",
+        title: "Agent 收件箱",
+        description: "当任何 Agent 需要你关注时发送通知，也可在统一收件箱中查看",
     },
     FeatureItem {
         icon: Icon::MessageCheckSquare,
-        title: "Native code review",
-        description: "Send inline comments from Warp's code review directly to Claude Code, Codex, or OpenCode",
+        title: "原生代码审查",
+        description: "从 Warp 代码审查中直接将行内评论发送给 Claude Code、Codex 或 OpenCode",
     },
 ];
 
@@ -84,7 +85,7 @@ pub fn render_welcome_banner(
     );
 
     // "New" badge
-    let text = Text::new_inline("New".to_string(), appearance.ui_font_family(), 14.)
+    let text = Text::new_inline("新增".to_string(), appearance.ui_font_family(), 14.)
         .with_color(PhenomenonStyle::modal_badge_text())
         .finish();
     let badge = ConstrainedBox::new(
@@ -105,7 +106,7 @@ pub fn render_welcome_banner(
 
     // Title
     let title = Text::new(
-        "Introducing universal agent support: level up any coding agent with Warp",
+        "介绍通用 Agent 支持：用 Warp 强化任何编码 Agent",
         appearance.ui_font_family(),
         20.,
     )

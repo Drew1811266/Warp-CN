@@ -11558,3 +11558,113 @@ target = "在 opencode.json 中将插件固定到最新版本。OpenCode 会按�
 path = "app/src/terminal/cli_agent_sessions/plugin_manager/opencode.rs"
 source = "Restart OpenCode to load the updated plugin."
 target = "重启 OpenCode 以加载更新后的插件。"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/hoa_onboarding_flow.rs"
+source = "See what's new"
+target = "查看新增内容"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/hoa_onboarding_flow.rs"
+source = "Next"
+target = "下一步"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/hoa_onboarding_flow.rs"
+source = "Dismiss"
+target = "关闭"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/hoa_onboarding_flow.rs"
+source = "Finish"
+target = "完成"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/hoa_onboarding_flow.rs"
+source = "Switch back to horizontal tabs"
+target = "切回水平标签页"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/hoa_onboarding_flow.rs"
+source = "Introducing vertical tabs - the new default"
+target = "介绍垂直标签页：新的默认布局"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/hoa_onboarding_flow.rs"
+source = "Vertical tabs show all open agent and terminal panes, grouped by tab. Customize what information you want to see to support your workflow."
+target = "垂直标签页会按标签页分组显示所有打开的 Agent 和终端窗格。你可以自定义显示信息，以匹配自己的工作流。"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/hoa_onboarding_flow.rs"
+source = "Meet your new agent inbox"
+target = "认识新的 Agent 收件箱"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/hoa_onboarding_flow.rs"
+source = "Learn more"
+target = "了解更多"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/hoa_onboarding_flow.rs"
+source = "Warp pipes through notifications from any CLI coding agent into a unified notification center that works across all coding agents and harnesses. "
+target = "Warp 会把任何 CLI 编码 Agent 的通知汇总到统一通知中心，可跨所有编码 Agent 和执行环境使用。"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/tab_config_step.rs"
+source = "Create your first tab config"
+target = "创建你的第一个标签页配置"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/tab_config_step.rs"
+source = "Set up a reusable starting point for your tabs. Pick a repo, choose a session type, and optionally attach a worktree. Use it whenever you want to open a tab with this setup."
+target = "为标签页设置可复用的起点。选择仓库、会话类型，并可选附加 worktree。之后想用这套设置打开标签页时即可直接使用。"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/welcome_banner.rs"
+source = "Vertical tabs"
+target = "垂直标签页"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/welcome_banner.rs"
+source = "Rich tab titles and metadata like git branch, worktree, and PR. Fully customizable."
+target = "显示丰富的标签页标题和元数据，例如 Git 分支、worktree 和 PR，并支持完全自定义。"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/welcome_banner.rs"
+source = "Tab configs"
+target = "标签页配置"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/welcome_banner.rs"
+source = "Tab-level schema to set your directory, startup commands, theme, and worktree with one click"
+target = "用标签页级配置一键设置目录、启动命令、主题和 worktree"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/welcome_banner.rs"
+source = "Agent inbox"
+target = "Agent 收件箱"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/welcome_banner.rs"
+source = "Notifications when any agent needs your attention, also accessible in a central inbox"
+target = "当任何 Agent 需要你关注时发送通知，也可在统一收件箱中查看"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/welcome_banner.rs"
+source = "Native code review"
+target = "原生代码审查"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/welcome_banner.rs"
+source = "Send inline comments from Warp's code review directly to Claude Code, Codex, or OpenCode"
+target = "从 Warp 代码审查中直接将行内评论发送给 Claude Code、Codex 或 OpenCode"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/welcome_banner.rs"
+source = "New"
+target = "新增"
+
+[[replace]]
+path = "app/src/workspace/hoa_onboarding/welcome_banner.rs"
+source = "Introducing universal agent support: level up any coding agent with Warp"
+target = "介绍通用 Agent 支持：用 Warp 强化任何编码 Agent"

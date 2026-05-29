@@ -207,7 +207,7 @@ impl HoaOnboardingFlow {
         });
 
         let cta_button = ctx.add_view(|_ctx| {
-            ActionButton::new("See what's new", HoaWelcomeModalButtonTheme)
+            ActionButton::new("查看新增内容", HoaWelcomeModalButtonTheme)
                 .with_full_width(true)
                 .on_click(|ctx| ctx.dispatch_typed_action(HoaOnboardingAction::AdvanceFromWelcome))
         });
@@ -215,7 +215,7 @@ impl HoaOnboardingFlow {
         let enter = Keystroke::parse("enter").unwrap_or_default();
 
         let next_vtabs_button = ctx.add_view(|ctx| {
-            ActionButton::new("Next", HoaPrimaryButtonTheme)
+            ActionButton::new("下一步", HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter.clone()), ctx)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(HoaOnboardingAction::AdvanceFromVerticalTabs)
@@ -223,19 +223,19 @@ impl HoaOnboardingFlow {
         });
 
         let dismiss_vtabs_button = ctx.add_view(|ctx| {
-            ActionButton::new("Dismiss", HoaPrimaryButtonTheme)
+            ActionButton::new("关闭", HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter.clone()), ctx)
                 .on_click(|ctx| ctx.dispatch_typed_action(HoaOnboardingAction::Dismiss))
         });
 
         let next_inbox_button = ctx.add_view(|ctx| {
-            ActionButton::new("Next", HoaPrimaryButtonTheme)
+            ActionButton::new("下一步", HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter.clone()), ctx)
                 .on_click(|ctx| ctx.dispatch_typed_action(HoaOnboardingAction::AdvanceFromInbox))
         });
 
         let finish_button = ctx.add_view(|ctx| {
-            ActionButton::new("Finish", HoaPrimaryButtonTheme)
+            ActionButton::new("完成", HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter), ctx)
                 .on_click(|ctx| ctx.dispatch_typed_action(HoaOnboardingAction::Finish))
         });
@@ -424,7 +424,7 @@ impl HoaOnboardingFlow {
             .finish();
 
         let checkbox_label = Text::new_inline(
-            "Switch back to horizontal tabs".to_string(),
+            "切回水平标签页".to_string(),
             appearance.ui_font_family(),
             12.,
         )
@@ -445,8 +445,8 @@ impl HoaOnboardingFlow {
         };
 
         self.render_callout_content(
-            "Introducing vertical tabs - the new default",
-            "Vertical tabs show all open agent and terminal panes, grouped by tab. Customize what information you want to see to support your workflow.",
+            "介绍垂直标签页：新的默认布局",
+            "垂直标签页会按标签页分组显示所有打开的 Agent 和终端窗格。你可以自定义显示信息，以匹配自己的工作流。",
             Some(checkbox_row),
             button,
             appearance,
@@ -454,18 +454,14 @@ impl HoaOnboardingFlow {
     }
 
     fn render_inbox_callout(&self, appearance: &Appearance) -> Box<dyn Element> {
-        let title = Text::new(
-            "Meet your new agent inbox",
-            appearance.ui_font_family(),
-            16.,
-        )
-        .with_color(callout_title_color(appearance))
-        .with_style(Properties::default().weight(Weight::Bold))
-        .finish();
+        let title = Text::new("认识新的 Agent 收件箱", appearance.ui_font_family(), 16.)
+            .with_color(callout_title_color(appearance))
+            .with_style(Properties::default().weight(Weight::Bold))
+            .finish();
 
         // Build the description with an inline "Learn more" hyperlink.
         let learn_more_fragment = FormattedTextFragment {
-            text: "Learn more".into(),
+            text: "了解更多".into(),
             styles: FormattedTextStyles {
                 underline: true,
                 hyperlink: Some(Hyperlink::Url(
@@ -477,7 +473,7 @@ impl HoaOnboardingFlow {
 
         let formatted = FormattedText::new([FormattedTextLine::Line(vec![
             FormattedTextFragment::plain_text(
-                "Warp pipes through notifications from any CLI coding agent into a unified notification center that works across all coding agents and harnesses. ",
+                "Warp 会把任何 CLI 编码 Agent 的通知汇总到统一通知中心，可跨所有编码 Agent 和执行环境使用。",
             ),
             learn_more_fragment,
         ])]);
