@@ -7,6 +7,7 @@ import argparse
 import re
 import signal
 import sys
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -336,6 +337,14 @@ def print_coverage(preset: str | None, rows: list[InventoryRow]) -> None:
     print(f"coverage: {coverage:.1f}%")
 
 
+def print_top_paths(rows: list[InventoryRow], limit: int) -> None:
+    counts = Counter(row.path.as_posix() for row in rows if row.status == "candidate")
+    print("| candidates | path |")
+    print("| ---: | --- |")
+    for path, count in counts.most_common(limit):
+        print(f"| {count} | `{path}` |")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Inventory zh-Hans localization candidates")
     parser.add_argument("roots", nargs="*", help="Rust file or directory roots to scan")
@@ -346,7 +355,23 @@ def parse_args() -> argparse.Namespace:
         help="Path to the TOML replacement manifest, relative to the repo root",
     )
     parser.add_argument("--coverage", action="store_true", help="Print coverage counts instead of rows")
-    return parser.parse_args()
+    parser.add_argument(
+        "--status",
+        choices=("candidate", "covered-source", "covered-target"),
+        help="Only print rows with this status",
+    )
+    parser.add_argument(
+        "--top-paths",
+        type=int,
+        metavar="N",
+        help="Print the top N paths by candidate count instead of row details",
+    )
+    args = parser.parse_args()
+    if args.coverage and args.top_paths is not None:
+        parser.error("--coverage cannot be combined with --top-paths")
+    if args.top_paths is not None and args.top_paths < 1:
+        parser.error("--top-paths must be greater than 0")
+    return args
 
 
 def main() -> int:
@@ -370,7 +395,11 @@ def main() -> int:
 
     if args.coverage:
         print_coverage(args.preset, rows)
+    elif args.top_paths is not None:
+        print_top_paths(rows, args.top_paths)
     else:
+        if args.status is not None:
+            rows = [row for row in rows if row.status == args.status]
         print_markdown(rows)
     return 0
 
