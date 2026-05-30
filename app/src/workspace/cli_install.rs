@@ -29,7 +29,7 @@ fn create_symlink_with_admin(source: &Path, target: &Path) -> Result<()> {
 
     // Use osascript to run the ln command with admin privileges, with a custom prompt
     let script = format!(
-        "do shell script \"ln -sf {escaped_source} {escaped_target}\" with prompt \"Warp needs administrator privileges to install the command in /usr/local/bin.\" with administrator privileges"
+        "do shell script \"ln -sf {escaped_source} {escaped_target}\" with prompt \"Warp 需要管理员权限才能将命令安装到 /usr/local/bin。\" with administrator privileges"
     );
 
     log::debug!("Creating symlink with admin privileges");
@@ -43,7 +43,7 @@ fn create_symlink_with_admin(source: &Path, target: &Path) -> Result<()> {
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
         if stderr.contains("用户已取消") || stderr.contains("cancelled") {
-            return Err(anyhow!("Installation cancelled by user."));
+            return Err(anyhow!("用户已取消安装。"));
         }
         return Err(anyhow!("使用管理员权限创建符号链接失败：{stderr}"));
     }
@@ -63,7 +63,7 @@ fn remove_file_with_admin(target: &Path) -> Result<()> {
     let escaped_target = ShellFamily::Posix.shell_escape(target_str);
 
     let script = format!(
-        "do shell script \"rm {escaped_target}\" with prompt \"Warp needs administrator privileges to uninstall the command from /usr/local/bin.\" with administrator privileges"
+        "do shell script \"rm {escaped_target}\" with prompt \"Warp 需要管理员权限才能从 /usr/local/bin 卸载该命令。\" with administrator privileges"
     );
 
     log::debug!("Removing file with admin privileges");
@@ -77,7 +77,7 @@ fn remove_file_with_admin(target: &Path) -> Result<()> {
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
         if stderr.contains("用户已取消") || stderr.contains("cancelled") {
-            return Err(anyhow!("Uninstallation cancelled by user."));
+            return Err(anyhow!("用户已取消卸载。"));
         }
         return Err(anyhow!("使用管理员权限移除文件失败：{stderr}"));
     }

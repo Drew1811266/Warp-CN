@@ -52,7 +52,7 @@ impl View for TransferOwnershipConfirmationModal {
 
         let description_text = Text::new(
             format!(
-                "Are you sure you want to transfer team ownership to {}? You will no longer be the owner and will not be able to take any administrative actions for this team.",
+                "确定要将团队所有权转让给 {} 吗？你将不再是所有者，也无法对此团队执行任何管理操作。",
                 email
             ),
             appearance.ui_font_family(),
@@ -73,7 +73,7 @@ impl View for TransferOwnershipConfirmationModal {
                 appearance
                     .ui_builder()
                     .button(ButtonVariant::Secondary, self.cancel_mouse_state.clone())
-                    .with_text_label("Cancel".to_string())
+                    .with_text_label("取消".to_string())
                     .with_style(button_style)
                     .build()
                     .on_click(|ctx, _, _| {
@@ -86,7 +86,7 @@ impl View for TransferOwnershipConfirmationModal {
                     appearance
                         .ui_builder()
                         .button(ButtonVariant::Accent, self.confirm_mouse_state.clone())
-                        .with_text_label("Transfer".to_string())
+                        .with_text_label("转让".to_string())
                         .with_style(button_style)
                         .build()
                         .on_click(|ctx, _, _| {

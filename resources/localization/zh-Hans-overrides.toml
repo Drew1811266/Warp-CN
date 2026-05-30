@@ -12663,3 +12663,58 @@ target = "对话 ID"
 path = "app/src/ai/conversation_details_panel.rs"
 source = "Run ID"
 target = "运行 ID"
+
+[[replace]]
+path = "app/src/workspace/cli_install.rs"
+source = "do shell script \"ln -sf {escaped_source} {escaped_target}\" with prompt \"Warp needs administrator privileges to install the command in /usr/local/bin.\" with administrator privileges"
+target = "do shell script \"ln -sf {escaped_source} {escaped_target}\" with prompt \"Warp 需要管理员权限才能将命令安装到 /usr/local/bin。\" with administrator privileges"
+
+[[replace]]
+path = "app/src/workspace/cli_install.rs"
+source = "do shell script \"rm {escaped_target}\" with prompt \"Warp needs administrator privileges to uninstall the command from /usr/local/bin.\" with administrator privileges"
+target = "do shell script \"rm {escaped_target}\" with prompt \"Warp 需要管理员权限才能从 /usr/local/bin 卸载该命令。\" with administrator privileges"
+
+[[replace]]
+path = "app/src/workspace/cli_install.rs"
+source = "Installation cancelled by user."
+target = "用户已取消安装。"
+
+[[replace]]
+path = "app/src/workspace/cli_install.rs"
+source = "Uninstallation cancelled by user."
+target = "用户已取消卸载。"
+
+[[replace]]
+path = "app/src/settings_view/remove_custom_endpoint_confirmation_dialog.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/settings_view/remove_custom_endpoint_confirmation_dialog.rs"
+source = "Remove endpoint"
+target = "移除端点"
+
+[[replace]]
+path = "app/src/settings_view/remove_custom_endpoint_confirmation_dialog.rs"
+source = "Are you sure you want to remove this endpoint? You won't be able to use its models in your agent sessions moving forward."
+target = "确定要移除此端点吗？之后你将无法在 Agent 会话中使用它的模型。"
+
+[[replace]]
+path = "app/src/settings_view/remove_custom_endpoint_confirmation_dialog.rs"
+source = "Remove endpoint?"
+target = "移除端点？"
+
+[[replace]]
+path = "app/src/settings_view/transfer_ownership_confirmation_modal.rs"
+source = "Are you sure you want to transfer team ownership to {}? You will no longer be the owner and will not be able to take any administrative actions for this team."
+target = "确定要将团队所有权转让给 {} 吗？你将不再是所有者，也无法对此团队执行任何管理操作。"
+
+[[replace]]
+path = "app/src/settings_view/transfer_ownership_confirmation_modal.rs"
+source = "Cancel"
+target = "取消"
+
+[[replace]]
+path = "app/src/settings_view/transfer_ownership_confirmation_modal.rs"
+source = "Transfer"
+target = "转让"
