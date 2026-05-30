@@ -148,7 +148,7 @@ impl FreeTierLimitHitModal {
                         .with_child(
                             Container::new(
                                 FormattedTextElement::from_str(
-                                    "You’re out of credits",
+                                    "你的额度已用完",
                                     appearance.ui_font_family(),
                                     24.,
                                 )
@@ -165,7 +165,7 @@ impl FreeTierLimitHitModal {
                         .with_child(
                             Container::new(
                                 FormattedTextElement::from_str(
-                                    "To continue using AI, please upgrade your plan.",
+                                    "若要继续使用 AI，请升级你的方案。",
                                     appearance.ui_font_family(),
                                     14.,
                                 )
@@ -182,9 +182,9 @@ impl FreeTierLimitHitModal {
                             Container::new({
                                 let benefits_text = if let Some(plan) = Self::get_build_plan_details(app) {
                                     let price = plan.monthly_plan_price_per_month_usd_cents / 100;
-                                    format!("The Build plan is ${price}/month which includes everything in the free tier plus:")
+                                    format!("Build 方案为 ${price}/月，包含免费层级的所有内容，并额外提供：")
                                 } else {
-                                    "The Build plan includes everything in the free tier plus:".to_string()
+                                    "Build 方案包含免费层级的所有内容，并额外提供：".to_string()
                                 };
                                 let formatted_text = FormattedText::new([FormattedTextLine::Line(vec![
                                     FormattedTextFragment::plain_text(benefits_text),
@@ -206,9 +206,9 @@ impl FreeTierLimitHitModal {
                             Container::new({
                                 let credits_text = if let Some(plan) = Self::get_build_plan_details(app) {
                                     let limit = plan.request_limit.unwrap_or(1500);
-                                    format!("{} Credits per month", limit.separate_with_commas())
+                                    format!("每月 {} 点额度", limit.separate_with_commas())
                                 } else {
-                                    "Extended Credits per month".to_string()
+                                    "每月扩展额度".to_string()
                                 };
                                 Self::render_checklist_item_dynamic(credits_text, appearance, theme)
                             })
@@ -218,7 +218,7 @@ impl FreeTierLimitHitModal {
                         .with_child(
                             Container::new(
                                 Self::render_checklist_item_dynamic(
-                                    "Access to frontier OpenAI, Anthropic, and Google models".to_string(),
+                                    "访问前沿 OpenAI、Anthropic 和 Google 模型".to_string(),
                                     appearance,
                                     theme,
                                 )
@@ -229,9 +229,9 @@ impl FreeTierLimitHitModal {
                         .with_child(
                             Container::new({
                                 let formatted_text = FormattedText::new([FormattedTextLine::Line(vec![
-                                    FormattedTextFragment::plain_text("Access to "),
+                                    FormattedTextFragment::plain_text("可使用 "),
                                     FormattedTextFragment::hyperlink(
-                                        "Reload Credits".to_string(),
+                                        "Reload 额度".to_string(),
                                         "https://docs.warp.dev/support-and-community/plans-and-billing/add-on-credits".to_string(),
                                     ),
                                 ])]);
@@ -274,7 +274,7 @@ impl FreeTierLimitHitModal {
                             Container::new({
                                 let formatted_text = FormattedText::new([FormattedTextLine::Line(vec![
                                     FormattedTextFragment::hyperlink(
-                                        "Extended cloud agents access".to_string(),
+                                        "扩展云端 Agent 访问权限".to_string(),
                                         "https://www.warp.dev/oz".to_string(),
                                     ),
                                 ])]);
@@ -328,7 +328,7 @@ impl FreeTierLimitHitModal {
                                 width: Some(296.),
                                 ..Default::default()
                             })
-                            .with_centered_text_label("Upgrade plan".to_string())
+                            .with_centered_text_label("升级方案".to_string())
                             .build()
                             .with_cursor(Cursor::PointingHand)
                             .on_click(move |ctx, _, _| {

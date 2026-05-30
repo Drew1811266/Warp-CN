@@ -12218,3 +12218,188 @@ target = "随时随地编排任何 Agent"
 path = "app/src/workspace/view/orchestration_launch_modal/view.rs"
 source = "We've made major improvements to Warp's cloud agent orchestration platform, Oz."
 target = "我们对 Warp 的云端 Agent 编排平台 Oz 做了重大改进。"
+
+[[replace]]
+path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
+source = "You’re out of credits"
+target = "你的额度已用完"
+
+[[replace]]
+path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
+source = "To continue using AI, please upgrade your plan."
+target = "若要继续使用 AI，请升级你的方案。"
+
+[[replace]]
+path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
+source = "The Build plan is ${price}/month which includes everything in the free tier plus:"
+target = "Build 方案为 ${price}/月，包含免费层级的所有内容，并额外提供："
+
+[[replace]]
+path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
+source = "The Build plan includes everything in the free tier plus:"
+target = "Build 方案包含免费层级的所有内容，并额外提供："
+
+[[replace]]
+path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
+source = "{} Credits per month"
+target = "每月 {} 点额度"
+
+[[replace]]
+path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
+source = "Extended Credits per month"
+target = "每月扩展额度"
+
+[[replace]]
+path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
+source = "Access to frontier OpenAI, Anthropic, and Google models"
+target = "访问前沿 OpenAI、Anthropic 和 Google 模型"
+
+[[replace]]
+path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
+source = "Access to "
+target = "可使用 "
+
+[[replace]]
+path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
+source = "Reload Credits"
+target = "Reload 额度"
+
+[[replace]]
+path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
+source = "Extended cloud agents access"
+target = "扩展云端 Agent 访问权限"
+
+[[replace]]
+path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
+source = "Upgrade plan"
+target = "升级方案"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Failed to enable auto-reload. Please try updating your settings in Billing & usage."
+target = "无法启用自动充值。请尝试在“账单与用量”中更新设置。"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "${} / {} credits"
+target = "${} / {} 点额度"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Auto-reload"
+target = "自动充值"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Saving..."
+target = "正在保存..."
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Get Started"
+target = "开始使用"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Use auto-reload to never miss a beat."
+target = "使用自动充值，避免中断。"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Auto-reload will automatically purchase credits at your selected rate when your account balance reaches 100 credits. Your monthly spend limit is set at your legacy plan's monthly cost and can be updated in Settings > Billing & usage."
+target = "当你的账号余额降至 100 点额度时，自动充值会按你选择的档位自动购买额度。你的月度支出限制会设置为旧方案的月度费用，并可在“设置 > 账单与用量”中更新。"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Welcome to the New Business Plan"
+target = "欢迎使用新的 Business 方案"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Welcome to Warp Build"
+target = "欢迎使用 Warp Build"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Your workspace has been updated to the new Warp Business Plan as the legacy Business plan is sunset."
+target = "由于旧版 Business 方案即将下线，你的工作区已更新到新的 Warp Business 方案。"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Your workspace has been updated to the Warp Build Plan as the legacy Pro, Turbo, and Lightspeed plans are sunset."
+target = "由于旧版 Pro、Turbo 和 Lightspeed 方案即将下线，你的工作区已更新到 Warp Build 方案。"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "The new Business plan is a primarily usage-based plan, starting at:"
+target = "新的 Business 方案主要按用量计费，起价为："
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Warp Build is a primarily usage-based plan, starting at:"
+target = "Warp Build 主要按用量计费，起价为："
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "${} per user per month"
+target = "每位用户每月 ${}"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "${} per user per month for annual plans"
+target = "年度方案每位用户每月 ${}"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "The new Business plan comes with:"
+target = "新的 Business 方案包含："
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Build comes with:"
+target = "Build 包含："
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "{} base credits per month"
+target = "每月 {} 点基础额度"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Access to Reload credits and volume-based discounts"
+target = "可使用 Reload 额度和基于用量的折扣"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Bring your own API key"
+target = "自带 API key"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "SAML-based SSO"
+target = "基于 SAML 的 SSO"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Automatically enforced team-wide Zero Data Retention"
+target = "自动强制执行团队范围的零数据保留"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "And more..."
+target = "以及更多..."
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Learn more on our "
+target = "在我们的 "
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "pricing page"
+target = "价格页面"
+
+[[replace]]
+path = "app/src/workspace/view/build_plan_migration_modal.rs"
+source = "Oops, something went wrong; your team data could not be found."
+target = "出错了，无法找到你的团队数据。"
