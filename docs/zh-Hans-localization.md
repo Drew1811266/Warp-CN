@@ -11,22 +11,22 @@ For a maintainable local fork, this branch keeps translations in:
 - `resources/localization/zh-Hans-overrides.toml`
 - `script/zh_apply_localization.py`
 
-The script applies exact replacements inside Rust double-quoted strings. It is idempotent: already translated strings are accepted, while missing source/target pairs report upstream drift.
+The script applies exact replacements inside Rust string literals, including raw strings used for static pane content. It is idempotent: already translated strings are accepted, while missing source/target pairs report upstream drift.
 
 ## Status
 
 Last verified release audit: 2026-05-30.
 
-- Manifest entries: 2543.
-- Covered areas: onboarding/auth, workspace shell, HOA onboarding, search and command entry points, settings core pages, AI settings deep paths, BYO API keys, AWS Bedrock credentials and user-facing credential errors, Appearance command-palette actions, conversation list actions, cloud agent capacity messaging, environment deletion confirmation, launch modals, credit and plan modals, Agent tips, conversation details panel, CLI admin prompts, destructive confirmation dialogs, advanced settings pages, common modals/toasts, Warp Drive surfaces, tab configs, themes, terminal sharing surfaces, rewind labels, auth-secret confirmation dialogs, and Agent management/input panels.
-- Dry-run summary: `entries: 2543`, `files: 184`, `already_applied: 2528`, `would_change: 0`, `missing: 0`.
+- Manifest entries: 2556.
+- Covered areas: onboarding/auth, workspace shell, Warp on Web home, HOA onboarding, search and command entry points, settings core pages, AI settings deep paths, BYO API keys, AWS Bedrock credentials and user-facing credential errors, Appearance command-palette actions, conversation list actions, cloud agent capacity messaging, environment deletion confirmation, launch modals, credit and plan modals, Agent tips, Agent status/error residue, conversation details panel, CLI admin prompts, destructive confirmation dialogs, advanced settings pages, common modals/toasts, Warp Drive surfaces, tab configs, themes, terminal sharing surfaces, rewind labels, auth-secret confirmation dialogs, environment modal fallbacks, and Agent management/input panels.
+- Dry-run summary: `entries: 2556`, `files: 186`, `already_applied: 2541`, `would_change: 0`, `missing: 0`.
 - Coverage snapshot:
   - `onboarding`: 266 covered, 55 candidates, 82.9%.
-  - `workspace`: 582 covered, 392 candidates, 59.8%.
-  - `search`: 267 covered, 40 candidates, 87.0%.
-  - `settings`: 1170 covered, 860 candidates, 57.6%.
-  - `modals`: 626 covered, 5813 candidates, 9.7%.
-  - `release`: 2789 covered, 7139 candidates, 28.1%.
+  - `workspace`: 584 covered, 391 candidates, 59.9%.
+  - `search`: 267 covered, 26 candidates, 91.1%.
+  - `settings`: 1172 covered, 856 candidates, 57.8%.
+  - `modals`: 635 covered, 5371 candidates, 10.6%.
+  - `release`: 2802 covered, 6678 candidates, 29.6%.
 - Package note: the app crate package is currently named `warp`; the older checklist label `cargo check -p app` fails in this workspace because no package named `app` exists.
 - Phase 2 command-line validation passed:
   - `python3 script/zh_apply_localization.py --dry-run --summary`
@@ -49,6 +49,7 @@ Last verified release audit: 2026-05-30.
   - Phase 2 GUI smoke was attempted on 2026-05-29. The `WarpOss` process launched, but Computer Use and AppleScript window reads timed out, `open` returned `-1712`, and the captured screenshot was black. Treat HOA onboarding, AI settings deep paths, rewind, and auth-secret confirmation as manual GUI gates until they are verified in an interactive desktop session.
   - Phase 2 Round 2 GUI smoke was attempted on 2026-05-30. `TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open` built, bundled, prepared resources, and signed `WarpOss.app`; `open -na target/debug/bundle/osx/WarpOss.app` launched `warp-oss` and `terminal-server` processes, but Computer Use window state reads timed out. Treat Appearance command actions, conversation actions, cloud agent capacity modal, AWS credential errors, and environment deletion confirmation as manual GUI gates until verified in an interactive desktop session.
   - Phase 2 Round 3 GUI smoke was attempted on 2026-05-30. `TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open` built, bundled, prepared resources, and signed `WarpOss.app`; `open -n target/debug/bundle/osx/WarpOss.app` launched `warp-oss` and `terminal-server` processes, but Computer Use window state reads timed out. Treat launch modals, credit and plan modals, Agent tips, conversation details panel, CLI admin prompts, remove endpoint confirmation, and transfer ownership confirmation as manual GUI gates until verified in an interactive desktop session.
+  - Phase 2 Round 4 GUI smoke was attempted on 2026-05-30. `TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open` built, bundled, prepared resources, and signed `WarpOss.app`; `open -n target/debug/bundle/osx/WarpOss.app` launched `warp-oss` and `terminal-server` processes. Computer Use successfully read the window state and confirmed Chinese menu labels, the global search placeholder, and the `新会话` entry. Treat Warp on Web home, Agent status labels, Agent error residue, and environment modal fallback paths as manual GUI gates until those specific states are triggered in an interactive desktop session.
   - Interactive login/account smoke remains a manual release gate; the non-interactive bundle gate produced `target/debug/bundle/osx/WarpOss.app`.
 
 ## Phase 2 Round 2 execution record
@@ -149,6 +150,57 @@ Round 3 notes:
 - `open -na target/debug/bundle/osx/WarpOss.app` treats the path as an application name and fails. Use `open -n target/debug/bundle/osx/WarpOss.app` for the local bundle path.
 - Automatic GUI inspection remains manual-gated because Computer Use timed out while reading the running `WarpOss` window state.
 
+## Phase 2 Round 4 execution record
+
+Executed on 2026-05-30.
+
+Round 4 shifted the next slice from broad translation to release-quality audit work: inventory review modes, conservative denominator cleanup, raw-string manifest support, Warp on Web home copy, Agent status/error residue, and Agent Assisted Environment fallbacks.
+
+| Task | Result | Evidence |
+| --- | --- | --- |
+| Round 4 implementation plan | Complete | `9e2f93a3 docs: plan phase 2 round 4 zh-Hans localization` |
+| Inventory review modes | Complete | `436d526d chore: add zh-Hans inventory review modes` |
+| Inventory noise filters | Complete | `1926d03a chore: refine zh-Hans inventory noise filters` |
+| Warp on Web home | Complete | `da976cff feat: localize Warp on Web home` |
+| Agent status residue | Complete | `a3e004fc feat: localize agent status residue` |
+| Environment modal fallbacks | Complete | `67ce0d9f feat: localize environment modal fallbacks` |
+
+Round 4 final dry-run:
+
+```text
+entries: 2556
+files: 186
+already_applied: 2541
+would_change: 0
+missing: 0
+```
+
+Round 4 final coverage snapshot:
+
+| Preset | Covered | Candidates | Coverage |
+| --- | ---: | ---: | ---: |
+| `onboarding` | 266 | 55 | 82.9% |
+| `workspace` | 584 | 391 | 59.9% |
+| `search` | 267 | 26 | 91.1% |
+| `settings` | 1172 | 856 | 57.8% |
+| `modals` | 635 | 5371 | 10.6% |
+| `release` | 2802 | 6678 | 29.6% |
+
+Round 4 top remaining candidate paths:
+
+| Preset | Top paths |
+| --- | --- |
+| `workspace` | `app/src/workspace/view.rs` (119), `app/src/workspace/mod.rs` (66), `app/src/workspace/tab_settings.rs` (54) |
+| `settings` | `app/src/settings_view/features_page.rs` (182), `app/src/settings_view/mod.rs` (172), `app/src/settings_view/teams_page.rs` (146) |
+| `modals` | `app/src/terminal/view.rs` (334), `app/src/terminal/view/action.rs` (182), `app/src/terminal/input.rs` (159) |
+
+Round 4 notes:
+
+- `script/zh_localization_inventory.py` now supports `--status` and `--top-paths` for candidate review.
+- `script/zh_apply_localization.py` now supports escaped `\n` in manifest values and raw string replacement, used by `app/src/workspace/home.rs`.
+- The low `modals` coverage remains dominated by terminal and Agent internals; Round 4 documents exact non-UI exclusions instead of translating protocol/schema strings for coverage.
+- GUI automation successfully read the app window in Round 4 and confirmed the base workspace chrome is Chinese. The deeper Round 4 states remain manual GUI gates because they were not triggered in this smoke pass.
+
 ## Apply translations after syncing upstream
 
 ```bash
@@ -169,6 +221,14 @@ python3 script/zh_localization_inventory.py --preset workspace > /tmp/zh-workspa
 python3 script/zh_localization_inventory.py --preset search > /tmp/zh-search.md
 python3 script/zh_localization_inventory.py --preset settings > /tmp/zh-settings.md
 python3 script/zh_localization_inventory.py --preset modals > /tmp/zh-modals.md
+```
+
+Use focused review modes before editing broad presets:
+
+```bash
+python3 script/zh_localization_inventory.py --preset workspace --status candidate
+python3 script/zh_localization_inventory.py --preset settings --status covered-target
+python3 script/zh_localization_inventory.py --preset modals --top-paths 20
 ```
 
 Review only `candidate` rows. Add manifest entries in small batches, then rerun:
@@ -207,6 +267,7 @@ python3 script/zh_localization_inventory.py --preset modals --coverage
 python3 script/zh_localization_inventory.py --preset release --coverage
 cargo fmt --check
 git diff --check
+python3 -m py_compile script/zh_apply_localization.py script/zh_localization_inventory.py
 cargo check -p warp
 cargo test -p warp_search_core
 cargo test -p warp command_palette
