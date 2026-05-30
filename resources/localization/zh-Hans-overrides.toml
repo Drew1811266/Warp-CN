@@ -12728,3 +12728,48 @@ target = "欢迎使用网页版 Warp"
 path = "app/src/workspace/home.rs"
 source = "\nWelcome to Warp on Web - your browser-based home for Warp! \nUse Warp on Web to:\n* Join Shared Sessions\n* Create, View, and Edit Warp Drive Objects\n* Manage your Warp Settings\n\nWarp on Web can also be used by your teammates and peers who don't have Warp downloaded yet to view your shared sessions, notebooks, and workflows."
 target = "\n欢迎使用网页版 Warp，这是你在浏览器中的 Warp 主页！\n你可以使用网页版 Warp：\n* 加入共享会话\n* 创建、查看和编辑 Warp Drive 对象\n* 管理 Warp 设置\n\n尚未下载 Warp 的团队成员和协作者，也可以通过网页版 Warp 查看你共享的会话、Notebook 和工作流。"
+
+[[replace]]
+path = "app/src/ai/agent/conversation.rs"
+source = "In progress"
+target = "进行中"
+
+[[replace]]
+path = "app/src/ai/agent/conversation.rs"
+source = "Done"
+target = "已完成"
+
+[[replace]]
+path = "app/src/ai/agent/conversation.rs"
+source = "Error"
+target = "错误"
+
+[[replace]]
+path = "app/src/ai/agent/conversation.rs"
+source = "Cancelled"
+target = "已取消"
+
+[[replace]]
+path = "app/src/ai/agent/conversation.rs"
+source = "Blocked"
+target = "已阻止"
+
+[[replace]]
+path = "app/src/ai/agent/mod.rs"
+source = "Error: {error}"
+target = "错误：{error}"
+
+[[replace]]
+path = "app/src/ai/agent/mod.rs"
+source = "AWS Bedrock credentials expired or invalid for {model_name}"
+target = "AWS Bedrock 凭据已过期，或对 {model_name} 无效"
+
+[[replace]]
+path = "app/src/ai/agent/mod.rs"
+source = "Web search failed for: {query}"
+target = "网页搜索失败：{query}"
+
+[[replace]]
+path = "app/src/ai/agent/mod.rs"
+source = "Web fetch failed"
+target = "网页获取失败"
