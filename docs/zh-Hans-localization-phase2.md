@@ -481,6 +481,50 @@ Round 3 合理性复盘：
 - 覆盖率提升主要来自 workspace 和 release 聚合口径，符合真实用户路径优先原则；`modals` 仍作为趋势指标而不是唯一目标。
 - GUI 自动化仍受本机窗口读取限制影响，因此继续记录 manual gate，没有把进程启动等同于视觉验收。
 
+## 7.3 第二阶段 Round 4 inventory 降噪记录
+
+执行时间：2026-05-30。
+
+Round 4 首个工程任务是先改进审计口径，而不是继续追 `modals` 覆盖率。新增的 inventory review modes 支持按状态筛选和按路径聚合候选数，便于先判断某个候选池是否真实对应用户界面。
+
+本轮新增的 review commands：
+
+```bash
+python3 script/zh_localization_inventory.py --preset workspace --status candidate
+python3 script/zh_localization_inventory.py --preset settings --status covered-target
+python3 script/zh_localization_inventory.py --preset modals --top-paths 20
+```
+
+Round 4 降噪前后快照：
+
+| 预设 | 降噪前已覆盖 | 降噪前候选 | 降噪前覆盖率 | 降噪后已覆盖 | 降噪后候选 | 降噪后覆盖率 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `workspace` | 582 | 392 | 59.8% | 582 | 392 | 59.8% |
+| `settings` | 1170 | 860 | 57.6% | 1170 | 856 | 57.7% |
+| `modals` | 626 | 5813 | 9.7% | 626 | 5367 | 10.4% |
+| `release` | 2789 | 7139 | 28.1% | 2789 | 6675 | 29.5% |
+
+额外影响：`search` 候选从 40 降至 26，原因是新增的 `.context(`、`bail!(`、`ensure!(` 和日志宏过滤移除了错误上下文和诊断路径；这属于统计分母变化，不代表新增翻译。
+
+精确排除清单：
+
+| 路径 | 排除原因 |
+| --- | --- |
+| `app/src/ai/agent/conversation_yaml.rs` | YAML 导出文件名、字段名和 schema 模板，例如 `tool_call_id`、`artifact_uid`、`exit_code`，不是普通 UI 文案。 |
+| `app/src/themes/theme.rs` | 主题名称、主题枚举说明和 Base16/custom theme 元数据；主题名需要保留原文。 |
+| `app/src/terminal/model/ansi/mod.rs` | ANSI/OSC/parser 诊断、escape sequence、payload debug 文本和协议 marker。 |
+| `app/src/terminal/model/ansi/dcs_hooks.rs` | DCS hook 协议名和 hook 解析错误，属于终端协议内部字段。 |
+
+后续规则：新增排除路径前必须先用 `python3 script/zh_localization_inventory.py <path> --status candidate` 查看候选内容，并在本文件记录为什么它不是用户可见 UI。不能为了提高覆盖率隐藏按钮、标题、说明、toast、dialog 或真实错误提示。
+
+Round 4 当前仍保留的主要候选热点：
+
+| 预设 | 主要热点 | 解读 |
+| --- | --- | --- |
+| `workspace` | `app/src/workspace/view.rs`、`app/src/workspace/mod.rs`、`app/src/workspace/tab_settings.rs` | 仍混有菜单、toast、调试断言、worktree 诊断和内部命令文本，需要继续按真实 UI 审核。 |
+| `settings` | `app/src/settings_view/features_page.rs`、`app/src/settings_view/mod.rs`、`app/src/settings_view/teams_page.rs` | 很多候选是搜索词、feature metadata 和团队管理深层路径，后续不能直接批量翻译。 |
+| `modals` | `app/src/terminal/view.rs`、`app/src/terminal/view/action.rs`、`app/src/terminal/input.rs`、`app/src/ai/agent/mod.rs` | 终端、Agent transcript 模板和低层错误仍占大头，需要按路径继续分类。 |
+
 ## 8. 风险与缓解
 
 | 风险 | 影响 | 缓解 |

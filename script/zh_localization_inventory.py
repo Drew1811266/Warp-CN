@@ -58,6 +58,15 @@ EXCLUDED_PATH_PARTS = (
     "/resources/bundled/",
 )
 
+EXCLUDED_EXACT_PATHS = {
+    # Reviewed Round 4 non-UI sources: serialization/schema data, theme ids,
+    # and terminal protocol/parser internals.
+    "app/src/ai/agent/conversation_yaml.rs",
+    "app/src/themes/theme.rs",
+    "app/src/terminal/model/ansi/mod.rs",
+    "app/src/terminal/model/ansi/dcs_hooks.rs",
+}
+
 SKIP_LINE_PATTERNS = (
     "#[cfg",
     "cfg!(",
@@ -76,6 +85,16 @@ SKIP_LINE_PATTERNS = (
     "debug_assert",
     "panic!",
     "anyhow!",
+    "tracing::",
+    "debug!(",
+    "info!(",
+    "warn!(",
+    "error!(",
+    "println!(",
+    "eprintln!(",
+    ".context(",
+    "bail!(",
+    "ensure!(",
     "format_err!",
     "Error::",
 )
@@ -129,6 +148,7 @@ def is_excluded_path(path: Path) -> bool:
     return (
         path.name.endswith("_tests.rs")
         or path.name == "telemetry.rs"
+        or path.as_posix() in EXCLUDED_EXACT_PATHS
         or any(part in normalized for part in EXCLUDED_PATH_PARTS)
     )
 
