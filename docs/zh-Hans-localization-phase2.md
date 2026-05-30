@@ -340,7 +340,7 @@ TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open
 
 - 在真实交互式桌面会话中复验 HOA onboarding、AI settings、AWS Bedrock、rewind 和 auth-secret 删除确认框。
 - 继续处理 Appearance 中确认可见的控件文案；保留主题名、settings search tag、占位符和示例命令。
-- 继续扩展账号、云端、权限、CLI 安装、共享和破坏性确认框路径。
+- 继续扩展账号、云端、权限、共享和低频破坏性确认框路径；CLI 管理员权限提示、移除 endpoint 和转让团队所有权确认框已在 Round 3 覆盖。
 
 ## 7.1 第二阶段 Round 2 执行结果
 
@@ -410,6 +410,76 @@ Round 2 合理性复盘：
 - 每个切片都先 dry-run，再应用，再用覆盖率、字符串检查、格式检查和 `cargo check -p warp` 审核后提交。
 - 没有为了提高覆盖率翻译 settings search tag、动态价格、倍率、主题名或示例值。
 - GUI 自动化仍受本机窗口读取限制影响，因此没有声称这些路径已经完成视觉验收，而是继续作为 manual gate。
+
+## 7.2 第二阶段 Round 3 执行结果
+
+执行时间：2026-05-30。
+
+Round 3 是第二阶段继续向发布质量推进的一组切片，重点覆盖用户在 Agent 发布介绍、额度/方案、Agent tips、conversation details、CLI 安装权限和破坏性确认中直接看到的英文。
+
+| 任务 | 结果 | 证据 |
+| --- | --- | --- |
+| Round 3 实施计划 | 已完成 | `9fa400ff docs: plan phase 2 round 3 zh-Hans localization` |
+| Launch modals | 已完成 | `524db95b feat: localize launch modals` |
+| 额度和方案弹窗 | 已完成 | `9511f730 feat: localize credit and plan modals` |
+| Agent tips | 已完成 | `d3e7a2c6 feat: localize agent tips` |
+| Conversation details panel | 已完成 | `c551a024 feat: localize conversation details panel` |
+| CLI 和破坏性确认提示 | 已完成 | `b046da1f feat: localize cli and confirmation prompts` |
+| 发布命令行审计 | 已完成 | dry-run、coverage、fmt、diff、py_compile、cargo check、cargo test 和 bundle gate 均通过 |
+| GUI 自动冒烟 | manual gate | `WarpOss` 主进程和 `terminal-server` 进程可启动，但 Computer Use 读取窗口状态超时 |
+
+Round 3 最终 dry-run：
+
+```text
+entries: 2543
+files: 184
+already_applied: 2528
+would_change: 0
+missing: 0
+```
+
+Round 3 最终覆盖率快照：
+
+| 预设 | 已覆盖 | 候选 | 覆盖率 |
+| --- | ---: | ---: | ---: |
+| `onboarding` | 266 | 55 | 82.9% |
+| `workspace` | 582 | 392 | 59.8% |
+| `search` | 267 | 40 | 87.0% |
+| `settings` | 1170 | 860 | 57.6% |
+| `modals` | 626 | 5813 | 9.7% |
+| `release` | 2789 | 7139 | 28.1% |
+
+Round 3 命令行验证已通过：
+
+```bash
+python3 script/zh_apply_localization.py --dry-run --summary
+python3 script/zh_localization_inventory.py --preset onboarding --coverage
+python3 script/zh_localization_inventory.py --preset workspace --coverage
+python3 script/zh_localization_inventory.py --preset search --coverage
+python3 script/zh_localization_inventory.py --preset settings --coverage
+python3 script/zh_localization_inventory.py --preset modals --coverage
+python3 script/zh_localization_inventory.py --preset release --coverage
+cargo fmt --check
+git diff --check
+python3 -m py_compile script/zh_apply_localization.py script/zh_localization_inventory.py
+cargo check -p warp
+cargo test -p warp_search_core
+cargo test -p warp command_palette
+TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open
+```
+
+Round 3 保留项和 manual gate：
+
+- Launch modals、额度/方案弹窗、Agent tips、conversation details panel、CLI 权限提示、移除 endpoint 和转让团队所有权确认框仍需要在真实交互式桌面会话中做视觉复验。
+- `modals` 覆盖率仍偏低，因为该预设包含大量低频 AI/终端/云端/诊断路径；Round 3 没有为了拉高覆盖率翻译内部协议、日志、测试或示例 token。
+- AppleScript 管理员权限提示中包含内层双引号，应用后必须确认 Rust 字符串仍保留 `\"` 转义。本轮已通过 `cargo fmt --check`、`git diff --check` 和 `cargo check -p warp` 验证。
+
+Round 3 合理性复盘：
+
+- 任务切片比 P2-M5 更窄，全部围绕用户可见、可审查的界面和提示，不做全仓散改。
+- 每个里程碑均先 dry-run，再应用，再执行 focused grep、格式检查、编译检查，并在通过后提交。
+- 覆盖率提升主要来自 workspace 和 release 聚合口径，符合真实用户路径优先原则；`modals` 仍作为趋势指标而不是唯一目标。
+- GUI 自动化仍受本机窗口读取限制影响，因此继续记录 manual gate，没有把进程启动等同于视觉验收。
 
 ## 8. 风险与缓解
 

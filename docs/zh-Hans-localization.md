@@ -17,16 +17,16 @@ The script applies exact replacements inside Rust double-quoted strings. It is i
 
 Last verified release audit: 2026-05-30.
 
-- Manifest entries: 2400.
-- Covered areas: onboarding/auth, workspace shell, HOA onboarding, search and command entry points, settings core pages, AI settings deep paths, BYO API keys, AWS Bedrock credentials and user-facing credential errors, Appearance command-palette actions, conversation list actions, cloud agent capacity messaging, environment deletion confirmation, advanced settings pages, common modals/toasts, Warp Drive surfaces, tab configs, themes, terminal sharing surfaces, rewind labels, auth-secret confirmation dialogs, and Agent management/input panels.
-- Dry-run summary: `entries: 2400`, `files: 176`, `already_applied: 2385`, `would_change: 0`, `missing: 0`.
+- Manifest entries: 2543.
+- Covered areas: onboarding/auth, workspace shell, HOA onboarding, search and command entry points, settings core pages, AI settings deep paths, BYO API keys, AWS Bedrock credentials and user-facing credential errors, Appearance command-palette actions, conversation list actions, cloud agent capacity messaging, environment deletion confirmation, launch modals, credit and plan modals, Agent tips, conversation details panel, CLI admin prompts, destructive confirmation dialogs, advanced settings pages, common modals/toasts, Warp Drive surfaces, tab configs, themes, terminal sharing surfaces, rewind labels, auth-secret confirmation dialogs, and Agent management/input panels.
+- Dry-run summary: `entries: 2543`, `files: 184`, `already_applied: 2528`, `would_change: 0`, `missing: 0`.
 - Coverage snapshot:
   - `onboarding`: 266 covered, 55 candidates, 82.9%.
-  - `workspace`: 495 covered, 475 candidates, 51.0%.
+  - `workspace`: 582 covered, 392 candidates, 59.8%.
   - `search`: 267 covered, 40 candidates, 87.0%.
-  - `settings`: 1163 covered, 867 candidates, 57.3%.
-  - `modals`: 573 covered, 5865 candidates, 8.9%.
-  - `release`: 2642 covered, 7281 candidates, 26.6%.
+  - `settings`: 1170 covered, 860 candidates, 57.6%.
+  - `modals`: 626 covered, 5813 candidates, 9.7%.
+  - `release`: 2789 covered, 7139 candidates, 28.1%.
 - Package note: the app crate package is currently named `warp`; the older checklist label `cargo check -p app` fails in this workspace because no package named `app` exists.
 - Phase 2 command-line validation passed:
   - `python3 script/zh_apply_localization.py --dry-run --summary`
@@ -48,6 +48,7 @@ Last verified release audit: 2026-05-30.
   - Historical GUI smoke with `target/debug/bundle/osx/WarpOss.app` verified the terminal-only workspace and command palette filter chips (`文件`, `操作`, `会话`, `启动配置`).
   - Phase 2 GUI smoke was attempted on 2026-05-29. The `WarpOss` process launched, but Computer Use and AppleScript window reads timed out, `open` returned `-1712`, and the captured screenshot was black. Treat HOA onboarding, AI settings deep paths, rewind, and auth-secret confirmation as manual GUI gates until they are verified in an interactive desktop session.
   - Phase 2 Round 2 GUI smoke was attempted on 2026-05-30. `TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open` built, bundled, prepared resources, and signed `WarpOss.app`; `open -na target/debug/bundle/osx/WarpOss.app` launched `warp-oss` and `terminal-server` processes, but Computer Use window state reads timed out. Treat Appearance command actions, conversation actions, cloud agent capacity modal, AWS credential errors, and environment deletion confirmation as manual GUI gates until verified in an interactive desktop session.
+  - Phase 2 Round 3 GUI smoke was attempted on 2026-05-30. `TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open` built, bundled, prepared resources, and signed `WarpOss.app`; `open -n target/debug/bundle/osx/WarpOss.app` launched `warp-oss` and `terminal-server` processes, but Computer Use window state reads timed out. Treat launch modals, credit and plan modals, Agent tips, conversation details panel, CLI admin prompts, remove endpoint confirmation, and transfer ownership confirmation as manual GUI gates until verified in an interactive desktop session.
   - Interactive login/account smoke remains a manual release gate; the non-interactive bundle gate produced `target/debug/bundle/osx/WarpOss.app`.
 
 ## Phase 2 Round 2 execution record
@@ -86,6 +87,67 @@ cargo test -p warp_search_core
 cargo test -p warp command_palette
 TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open
 ```
+
+## Phase 2 Round 3 execution record
+
+Executed on 2026-05-30.
+
+Round 3 continued the second-stage cleanup by targeting launch modals, plan/credit billing modals, Agent tips, conversation details metadata, CLI administrator prompts, and destructive confirmation dialogs.
+
+| Task | Result | Evidence |
+| --- | --- | --- |
+| Round 3 implementation plan | Complete | `9fa400ff docs: plan phase 2 round 3 zh-Hans localization` |
+| Launch modals | Complete | `524db95b feat: localize launch modals` |
+| Credit and plan modals | Complete | `9511f730 feat: localize credit and plan modals` |
+| Agent tips | Complete | `d3e7a2c6 feat: localize agent tips` |
+| Conversation details panel | Complete | `c551a024 feat: localize conversation details panel` |
+| CLI prompts and destructive confirmations | Complete | `b046da1f feat: localize cli and confirmation prompts` |
+
+Round 3 final dry-run:
+
+```text
+entries: 2543
+files: 184
+already_applied: 2528
+would_change: 0
+missing: 0
+```
+
+Round 3 final coverage snapshot:
+
+| Preset | Covered | Candidates | Coverage |
+| --- | ---: | ---: | ---: |
+| `onboarding` | 266 | 55 | 82.9% |
+| `workspace` | 582 | 392 | 59.8% |
+| `search` | 267 | 40 | 87.0% |
+| `settings` | 1170 | 860 | 57.6% |
+| `modals` | 626 | 5813 | 9.7% |
+| `release` | 2789 | 7139 | 28.1% |
+
+Round 3 command-line validation passed:
+
+```bash
+python3 script/zh_apply_localization.py --dry-run --summary
+python3 script/zh_localization_inventory.py --preset onboarding --coverage
+python3 script/zh_localization_inventory.py --preset workspace --coverage
+python3 script/zh_localization_inventory.py --preset search --coverage
+python3 script/zh_localization_inventory.py --preset settings --coverage
+python3 script/zh_localization_inventory.py --preset modals --coverage
+python3 script/zh_localization_inventory.py --preset release --coverage
+cargo fmt --check
+git diff --check
+python3 -m py_compile script/zh_apply_localization.py script/zh_localization_inventory.py
+cargo check -p warp
+cargo test -p warp_search_core
+cargo test -p warp command_palette
+TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open
+```
+
+Round 3 notes:
+
+- The AppleScript CLI install/uninstall prompts require escaped inner quotes in Rust string literals. The manifest entry is valid TOML, and the applied Rust code was manually checked so `cargo fmt --check` and `cargo check -p warp` both pass.
+- `open -na target/debug/bundle/osx/WarpOss.app` treats the path as an application name and fails. Use `open -n target/debug/bundle/osx/WarpOss.app` for the local bundle path.
+- Automatic GUI inspection remains manual-gated because Computer Use timed out while reading the running `WarpOss` window state.
 
 ## Apply translations after syncing upstream
 
