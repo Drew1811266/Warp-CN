@@ -12773,3 +12773,13 @@ target = "网页搜索失败：{query}"
 path = "app/src/ai/agent/mod.rs"
 source = "Web fetch failed"
 target = "网页获取失败"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "(unknown)"
+target = "（未知）"
+
+[[replace]]
+path = "app/src/settings_view/agent_assisted_environment_modal.rs"
+source = "No directory selected"
+target = "未选择目录"
