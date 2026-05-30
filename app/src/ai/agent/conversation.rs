@@ -4146,11 +4146,11 @@ pub enum ConversationStatus {
 impl std::fmt::Display for ConversationStatus {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ConversationStatus::InProgress => write!(f, "In progress"),
-            ConversationStatus::Success => write!(f, "Done"),
-            ConversationStatus::Error => write!(f, "Error"),
-            ConversationStatus::Cancelled => write!(f, "Cancelled"),
-            ConversationStatus::Blocked { .. } => write!(f, "Blocked"),
+            ConversationStatus::InProgress => write!(f, "进行中"),
+            ConversationStatus::Success => write!(f, "已完成"),
+            ConversationStatus::Error => write!(f, "错误"),
+            ConversationStatus::Cancelled => write!(f, "已取消"),
+            ConversationStatus::Blocked { .. } => write!(f, "已阻止"),
         }
     }
 }

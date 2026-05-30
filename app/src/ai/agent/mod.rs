@@ -168,7 +168,7 @@ impl Display for FinishedAIAgentOutput {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             FinishedAIAgentOutput::Cancelled { .. } => write!(f, "已取消"),
-            FinishedAIAgentOutput::Error { error, .. } => write!(f, "Error: {error}"),
+            FinishedAIAgentOutput::Error { error, .. } => write!(f, "错误：{error}"),
             FinishedAIAgentOutput::Success { output } => write!(f, "\n{output}"),
         }
     }
@@ -703,10 +703,7 @@ impl Display for RenderableAIError {
                 write!(f, "{provider} 的 API 密钥无效")
             }
             Self::AwsBedrockCredentialsExpiredOrInvalid { model_name } => {
-                write!(
-                    f,
-                    "AWS Bedrock credentials expired or invalid for {model_name}"
-                )
+                write!(f, "AWS Bedrock 凭据已过期，或对 {model_name} 无效")
             }
             Self::Other { error_message, .. } => write!(f, "{error_message}"),
         }
@@ -1780,7 +1777,7 @@ impl Display for AIAgentOutputMessage {
                 WebSearchStatus::Success { query, pages } => {
                     write!(f, "Searched web for: {query} ({} results)", pages.len())?
                 }
-                WebSearchStatus::Error { query } => write!(f, "Web search failed for: {query}")?,
+                WebSearchStatus::Error { query } => write!(f, "网页搜索失败：{query}")?,
             },
             AIAgentOutputMessageType::WebFetch(status) => match status {
                 WebFetchStatus::Fetching { urls } => {
@@ -1789,7 +1786,7 @@ impl Display for AIAgentOutputMessage {
                 WebFetchStatus::Success { pages } => {
                     write!(f, "Fetched {} web pages", pages.len())?
                 }
-                WebFetchStatus::Error => write!(f, "Web fetch failed")?,
+                WebFetchStatus::Error => write!(f, "网页获取失败")?,
             },
             AIAgentOutputMessageType::CommentsAddressed {
                 comments: comment_ids,
