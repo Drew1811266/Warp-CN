@@ -12553,3 +12553,113 @@ target = "Warp Drive。"
 path = "app/src/ai/agent_tips.rs"
 source = "Hold <keybinding> to speak your prompt directly to the agent."
 target = "按住 <keybinding> 可直接对 Agent 说出你的提示词。"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Conversation"
+target = "对话"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Cloud agent run"
+target = "云端 Agent 运行"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Copy"
+target = "复制"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Continue locally"
+target = "在本地继续"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Fork this conversation locally"
+target = "在本地 fork 此对话"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "View in Oz"
+target = "在 Oz 中查看"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "View this run in the Oz web app"
+target = "在 Oz Web 应用中查看此次运行"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Copied branch name"
+target = "已复制分支名称"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Created by {} • {}"
+target = "由 {} 创建 • {}"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Error"
+target = "错误"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Status"
+target = "状态"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Open in Oz"
+target = "在 Oz 中打开"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Open in GitHub"
+target = "在 GitHub 中打开"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Initial query"
+target = "初始查询"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Artifacts"
+target = "产物"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Environment setup commands"
+target = "环境设置命令"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Environment details"
+target = "环境详情"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Name: {environment_name}"
+target = "名称：{environment_name}"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Image"
+target = "镜像"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Directory"
+target = "目录"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Conversation ID"
+target = "对话 ID"
+
+[[replace]]
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Run ID"
+target = "运行 ID"
