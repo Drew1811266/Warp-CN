@@ -12718,3 +12718,13 @@ target = "取消"
 path = "app/src/settings_view/transfer_ownership_confirmation_modal.rs"
 source = "Transfer"
 target = "转让"
+
+[[replace]]
+path = "app/src/workspace/home.rs"
+source = "Welcome to Warp on Web"
+target = "欢迎使用网页版 Warp"
+
+[[replace]]
+path = "app/src/workspace/home.rs"
+source = "\nWelcome to Warp on Web - your browser-based home for Warp! \nUse Warp on Web to:\n* Join Shared Sessions\n* Create, View, and Edit Warp Drive Objects\n* Manage your Warp Settings\n\nWarp on Web can also be used by your teammates and peers who don't have Warp downloaded yet to view your shared sessions, notebooks, and workflows."
+target = "\n欢迎使用网页版 Warp，这是你在浏览器中的 Warp 主页！\n你可以使用网页版 Warp：\n* 加入共享会话\n* 创建、查看和编辑 Warp Drive 对象\n* 管理 Warp 设置\n\n尚未下载 Warp 的团队成员和协作者，也可以通过网页版 Warp 查看你共享的会话、Notebook 和工作流。"

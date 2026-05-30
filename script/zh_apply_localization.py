@@ -81,8 +81,9 @@ def _parse_quoted_manifest_value(value: str) -> str:
 
     for char in content:
         if escaped:
-            if char in {'"', "\\"}:
-                result.append(char)
+            escape_map = {'"': '"', "\\": "\\", "n": "\n", "r": "\r", "t": "\t"}
+            if char in escape_map:
+                result.append(escape_map[char])
             else:
                 result.append("\\")
                 result.append(char)
@@ -97,6 +98,32 @@ def _parse_quoted_manifest_value(value: str) -> str:
         result.append("\\")
 
     return "".join(result)
+
+
+def _parse_multiline_manifest_value(
+    path: Path,
+    lines: list[str],
+    line_index: int,
+    value: str,
+) -> tuple[str, int]:
+    content = value[3:]
+    parts: list[str] = []
+
+    while True:
+        closing_index = content.find('"""')
+        if closing_index != -1:
+            trailing = content[closing_index + 3 :].strip()
+            if trailing:
+                line_number = line_index + 1
+                raise ValueError(f"{path}:{line_number}: unexpected content after multiline value")
+            parts.append(content[:closing_index])
+            return "".join(parts), line_index
+
+        parts.append(content)
+        line_index += 1
+        if line_index >= len(lines):
+            raise ValueError(f"{path}:{line_index}: unterminated multiline value")
+        content = "\n" + lines[line_index]
 
 
 def replace_rust_string_literals(text: str, source: str, target: str) -> tuple[str, int]:
@@ -141,7 +168,20 @@ def replace_rust_string_literals(text: str, source: str, target: str) -> tuple[s
         raw_hash_count = _raw_string_hash_count_before_quote(text, index)
         if raw_hash_count is not None:
             raw_end = _consume_raw_string(text, index, raw_hash_count)
-            result.append(text[index:raw_end])
+            terminator = '"' + ("#" * raw_hash_count)
+            if text[raw_end - len(terminator) : raw_end] != terminator:
+                result.append(text[index:raw_end])
+                index = raw_end
+                continue
+
+            literal = text[index + 1 : raw_end - len(terminator)]
+            if literal == source:
+                result.append('"')
+                result.append(target)
+                result.append(terminator)
+                replaced += 1
+            else:
+                result.append(text[index:raw_end])
             index = raw_end
             continue
 
@@ -194,13 +234,19 @@ def load_manifest(path: Path) -> list[dict[str, object]]:
     replacements: list[dict[str, object]] = []
     current: dict[str, object] | None = None
 
-    for line_number, raw_line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+    lines = path.read_text(encoding="utf-8").splitlines()
+    line_index = 0
+    while line_index < len(lines):
+        raw_line = lines[line_index]
+        line_number = line_index + 1
         line = raw_line.strip()
         if not line or line.startswith("#"):
+            line_index += 1
             continue
         if line == "[[replace]]":
             current = {"__line": line_number}
             replacements.append(current)
+            line_index += 1
             continue
         if current is None:
             raise ValueError(f"{path}:{line_number}: expected [[replace]] before key/value entries")
@@ -208,12 +254,15 @@ def load_manifest(path: Path) -> list[dict[str, object]]:
             raise ValueError(f"{path}:{line_number}: expected key = value")
 
         key, value = [part.strip() for part in line.split("=", 1)]
-        if value.startswith('"') and value.endswith('"'):
+        if value.startswith('"""'):
+            current[key], line_index = _parse_multiline_manifest_value(path, lines, line_index, value)
+        elif value.startswith('"') and value.endswith('"'):
             current[key] = _parse_quoted_manifest_value(value)
         elif value.isdigit():
             current[key] = int(value)
         else:
             raise ValueError(f"{path}:{line_number}: only quoted strings and integers are supported")
+        line_index += 1
 
     seen: dict[tuple[str, str], int] = {}
     for replacement in replacements:
