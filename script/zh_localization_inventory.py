@@ -221,7 +221,20 @@ def extract_string_literals(path: Path) -> list[Literal]:
 
         raw_hash_count = _raw_string_hash_count_before_quote(text, index)
         if raw_hash_count is not None:
-            index = _consume_raw_string(text, index, raw_hash_count)
+            raw_end = _consume_raw_string(text, index, raw_hash_count)
+            terminator = '"' + ("#" * raw_hash_count)
+            if text[raw_end - len(terminator) : raw_end] == terminator:
+                line = line_for_index(line_starts, index)
+                line_text = lines[line - 1] if line - 1 < len(lines) else ""
+                literals.append(
+                    Literal(
+                        path=path,
+                        line=line,
+                        value=text[index + 1 : raw_end - len(terminator)],
+                        line_text=line_text,
+                    )
+                )
+            index = raw_end
             continue
 
         start = index
