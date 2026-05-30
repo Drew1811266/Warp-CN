@@ -12403,3 +12403,153 @@ target = "价格页面"
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
 source = "Oops, something went wrong; your team data could not be found."
 target = "出错了，无法找到你的团队数据。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`/` to open the slash-command menu and access quick agent actions."
+target = "使用 `/` 打开斜杠命令菜单并访问快速 Agent 操作。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`/plan` <prompt> to create a plan for the agent before executing."
+target = "使用 `/plan` <prompt> 先为 Agent 创建计划再执行。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "<keybinding> to open the Command Palette and access Warp actions and shortcuts."
+target = "使用 <keybinding> 打开命令面板，访问 Warp 操作和快捷键。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Store reusable workflows, notebooks, and prompts in your"
+target = "将可复用的工作流、Notebook 和提示词存入你的"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Enter a new prompt to redirect the agent while it's running."
+target = "输入新的提示词，可在 Agent 运行时重定向它。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "<keybinding> to attach the prior command output as agent context."
+target = "使用 <keybinding> 将上一条命令输出附加为 Agent 上下文。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`/init` to index the repo so the agent can understand your codebase."
+target = "使用 `/init` 索引仓库，让 Agent 理解你的代码库。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Drag an image into the pane to attach it as agent context."
+target = "将图片拖入窗格，可作为 Agent 上下文附加。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Prompt the agent to control interactive tools like node, python, postgres, gdb, or vim."
+target = "提示 Agent 控制 node、python、postgres、gdb 或 vim 等交互式工具。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`/add-mcp` to add an MCP server to your workspace."
+target = "使用 `/add-mcp` 向工作区添加 MCP 服务器。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`/create-environment` to turn a repo into a remote docker environment an agent can run in."
+target = "使用 `/create-environment` 将仓库转换为 Agent 可运行的远程 Docker 环境。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`/add-prompt` to create a reusable prompt for repeatable workflows."
+target = "使用 `/add-prompt` 创建可复用提示词，以支持重复工作流。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`/add-rule` to create a global agent rule."
+target = "使用 `/add-rule` 创建全局 Agent 规则。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`/fork` to create a fresh copy of the current conversation, optionally with a new prompt."
+target = "使用 `/fork` 创建当前对话的新副本，并可附加新的提示词。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`/new` to start a new agent conversation with clean context."
+target = "使用 `/new` 以干净上下文开始新的 Agent 对话。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`/compact` to summarize the current conversation and free up space in the context window."
+target = "使用 `/compact` 总结当前对话，并释放上下文窗口空间。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`/usage` to show your current AI credits usage."
+target = "使用 `/usage` 查看当前 AI 额度用量。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Use the `oz` command to run an Oz agent in headless mode, useful for remote machines."
+target = "使用 `oz` 命令以 headless 模式运行 Oz Agent，适合远程机器。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Right-click selected text to attach it as agent context."
+target = "右键点击选中文本，可将其附加为 Agent 上下文。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Use `AGENTS.md` or `CLAUDE.md` to apply project-scoped rules."
+target = "使用 `AGENTS.md` 或 `CLAUDE.md` 应用项目范围规则。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Paste a URL to attach that webpage as context for the agent."
+target = "粘贴 URL，可将该网页作为 Agent 上下文附加。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Warpify a remote SSH session to enable Oz inside that environment."
+target = "Warpify 远程 SSH 会话，以便在该环境中启用 Oz。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "`/init` to generate a `WARP.md` file and define project rules for the agent."
+target = "使用 `/init` 生成 `WARP.md` 文件，并为 Agent 定义项目规则。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "<keybinding> to auto-approve the agent's commands and diffs for the rest of the session."
+target = "使用 <keybinding> 在本会话剩余时间内自动批准 Agent 的命令和 diff。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Type `&` or use the handoff chip to move a local conversation to the cloud."
+target = "输入 `&` 或使用 handoff chip 将本地对话移至云端。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Enable desktop notifications to get an alert when an agent needs your attention."
+target = "启用桌面通知，当 Agent 需要你关注时即可收到提醒。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "<keybinding> to cancel the current agent task."
+target = "使用 <keybinding> 取消当前 Agent 任务。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Open palette"
+target = "打开面板"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Warp Drive."
+target = "Warp Drive。"
+
+[[replace]]
+path = "app/src/ai/agent_tips.rs"
+source = "Hold <keybinding> to speak your prompt directly to the agent."
+target = "按住 <keybinding> 可直接对 Agent 说出你的提示词。"
