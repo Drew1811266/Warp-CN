@@ -316,9 +316,7 @@ impl ConversationDetailsData {
                 ai_conversation_id: None,
                 status: Some(conversation.status().clone()),
             },
-            title: conversation
-                .title()
-                .unwrap_or_else(|| "Conversation".to_string()),
+            title: conversation.title().unwrap_or_else(|| "对话".to_string()),
             creator,
             executor: None,
             created_at,
@@ -509,7 +507,7 @@ impl ConversationDetailsData {
                 environment_id: None,
                 conversation_id: None,
             },
-            title: "Cloud agent run".to_string(),
+            title: "云端 Agent 运行".to_string(),
             creator: None,
             executor: None,
             created_at: None,
@@ -600,7 +598,7 @@ pub fn init(app: &mut AppContext) {
     app.register_fixed_bindings([FixedBinding::custom(
         CustomAction::Copy,
         ConversationDetailsPanelAction::CopySelectedText,
-        "Copy",
+        "复制",
         id!(ConversationDetailsPanel::ui_name()) & !id!("IMEOpen"),
     )]);
 }
@@ -618,7 +616,7 @@ pub struct ConversationDetailsPanel {
     show_open_button: bool,
     #[cfg(not(target_family = "wasm"))]
     continue_locally_button: ViewHandle<ActionButton>,
-    /// Text button "View in Oz" shown next to "Continue locally".
+    /// Text button "在 Oz 中查看" shown next to "在本地继续".
     open_in_oz_button: ViewHandle<ActionButton>,
     /// Tracks when each copy button was last clicked (for checkmark feedback).
     copy_feedback_times: HashMap<CopyButtonKind, Instant>,
@@ -643,16 +641,16 @@ impl ConversationDetailsPanel {
 
         #[cfg(not(target_family = "wasm"))]
         let continue_locally_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Continue locally", PrimaryTheme)
-                .with_tooltip("Fork this conversation locally")
+            ActionButton::new("在本地继续", PrimaryTheme)
+                .with_tooltip("在本地 fork 此对话")
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(ConversationDetailsPanelAction::ContinueLocally);
                 })
         });
         let open_in_oz_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("View in Oz", SecondaryTheme)
-                .with_tooltip("View this run in the Oz web app")
+            ActionButton::new("在 Oz 中查看", SecondaryTheme)
+                .with_tooltip("在 Oz Web 应用中查看此次运行")
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(ConversationDetailsPanelAction::OpenInOz);
@@ -764,7 +762,7 @@ impl ConversationDetailsPanel {
 
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                    let toast = DismissibleToast::default("Copied branch name".to_string());
+                    let toast = DismissibleToast::default("已复制分支名称".to_string());
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
             }
@@ -982,7 +980,7 @@ impl ConversationDetailsPanel {
 
         let created_text = Text::new(
             format!(
-                "Created by {} • {}",
+                "由 {} 创建 • {}",
                 creator.display_name,
                 format_approx_duration_from_now(created_at)
             ),
@@ -1084,7 +1082,7 @@ impl ConversationDetailsPanel {
         let ui_font_size = appearance.ui_font_size();
 
         let label_text = Text::new(
-            "Error".to_string(),
+            "错误".to_string(),
             appearance.ui_font_family(),
             ui_font_size,
         )
@@ -1124,7 +1122,7 @@ impl ConversationDetailsPanel {
 
         // Section header
         let header = Text::new(
-            "Status".to_string(),
+            "状态".to_string(),
             appearance.ui_font_family(),
             ui_font_size,
         )
@@ -1277,7 +1275,7 @@ impl ConversationDetailsPanel {
         let oz_link = appearance
             .ui_builder()
             .link(
-                "Open in Oz".to_string(),
+                "在 Oz 中打开".to_string(),
                 Some(skill_url),
                 None,
                 self.mouse_states.skill_link.clone(),
@@ -1313,7 +1311,7 @@ impl ConversationDetailsPanel {
                 let source_link = appearance
                     .ui_builder()
                     .link(
-                        "Open in GitHub".to_string(),
+                        "在 GitHub 中打开".to_string(),
                         Some(github_url),
                         None,
                         self.mouse_states.skill_source_link.clone(),
@@ -1334,7 +1332,7 @@ impl ConversationDetailsPanel {
         if trimmed.is_empty() {
             return None;
         }
-        Some(self.render_simple_field("Initial query", trimmed, appearance))
+        Some(self.render_simple_field("初始查询", trimmed, appearance))
     }
 
     fn render_artifacts_section(&self, appearance: &Appearance) -> Option<Box<dyn Element>> {
@@ -1345,7 +1343,7 @@ impl ConversationDetailsPanel {
         let ui_font_size = appearance.ui_font_size();
 
         let label_text = Text::new(
-            "Artifacts".to_string(),
+            "产物".to_string(),
             appearance.ui_font_family(),
             ui_font_size,
         )
@@ -1384,7 +1382,7 @@ impl ConversationDetailsPanel {
         let ui_font_size = appearance.ui_font_size();
 
         let header_text = Text::new(
-            "Environment setup commands".to_string(),
+            "环境设置命令".to_string(),
             appearance.ui_font_family(),
             ui_font_size,
         )
@@ -1449,7 +1447,7 @@ impl ConversationDetailsPanel {
 
         // Section header
         let header = Text::new(
-            "Environment details".to_string(),
+            "环境详情".to_string(),
             appearance.ui_font_family(),
             ui_font_size,
         )
@@ -1484,7 +1482,7 @@ impl ConversationDetailsPanel {
             };
 
         let name_text = Text::new(
-            format!("Name: {environment_name}"),
+            format!("名称：{environment_name}"),
             appearance.ui_font_family(),
             ui_font_size,
         )
@@ -1511,7 +1509,7 @@ impl ConversationDetailsPanel {
 
         section.add_child(
             Container::new(render_copyable_field(
-                "Image",
+                "镜像",
                 &docker_image,
                 CopyButtonKind::DockerImage,
                 ConversationDetailsPanelAction::CopyDockerImage,
@@ -1853,7 +1851,7 @@ impl View for ConversationDetailsPanel {
                 if let Some(directory) = directory {
                     content.add_child(
                         Container::new(self.render_field_with_copy(
-                            "Directory",
+                            "目录",
                             directory,
                             ConversationDetailsPanelAction::CopyDirectory,
                             CopyButtonKind::Directory,
@@ -1868,7 +1866,7 @@ impl View for ConversationDetailsPanel {
                 if let Some(id) = conversation_id {
                     content.add_child(
                         Container::new(self.render_field_with_copy(
-                            "Conversation ID",
+                            "对话 ID",
                             id,
                             ConversationDetailsPanelAction::CopyConversationId,
                             CopyButtonKind::ConversationId,
@@ -1886,7 +1884,7 @@ impl View for ConversationDetailsPanel {
                 if let Some(directory) = directory {
                     content.add_child(
                         Container::new(self.render_field_with_copy(
-                            "Directory",
+                            "目录",
                             directory,
                             ConversationDetailsPanelAction::CopyDirectory,
                             CopyButtonKind::Directory,
@@ -1900,7 +1898,7 @@ impl View for ConversationDetailsPanel {
                 if let Some(task_id) = task_id {
                     content.add_child(
                         Container::new(self.render_field_with_copy(
-                            "Run ID",
+                            "运行 ID",
                             &task_id.to_string(),
                             ConversationDetailsPanelAction::CopyRunId,
                             CopyButtonKind::RunId,
