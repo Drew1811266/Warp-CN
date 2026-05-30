@@ -66,21 +66,22 @@ struct FeatureItem {
 const FEATURE_ITEMS: &[FeatureItem] = &[
     FeatureItem {
         icon: Icon::Cloud,
-        title: "Run any agent harness in the cloud",
-        description: "Use Oz to spin up Claude Code or Codex agents in the cloud; Oz will help you track and steer the agents.",
+        title: "在云端运行任何 Agent harness",
+        description:
+            "使用 Oz 在云端启动 Claude Code 或 Codex Agent；Oz 会帮助你跟踪并引导这些 Agent。",
         badge: None,
     },
     FeatureItem {
         icon: Icon::Atom,
-        title: "Multi-agent orchestration",
-        description: "Warp Agents will now orchestrate swarms of subagents, allowing you to parallelize tasks.",
+        title: "多 Agent 编排",
+        description: "Warp Agent 现在可以编排多个子 Agent，让你并行处理任务。",
         badge: None,
     },
     FeatureItem {
         icon: Icon::Cognition,
-        title: "Agent Memory",
-        description: "Agents will now store and access long-term memories, enabling self-improvement over time.",
-        badge: Some("Research preview"),
+        title: "Agent 记忆",
+        description: "Agent 现在可以存储并访问长期记忆，从而随着时间自我改进。",
+        badge: Some("研究预览"),
     },
 ];
 
@@ -184,7 +185,7 @@ impl OrchestrationLaunchModal {
         });
 
         let learn_more_button = ctx.add_view(|_ctx| {
-            ActionButton::new("Learn more", LearnMoreButtonTheme)
+            ActionButton::new("了解更多", LearnMoreButtonTheme)
                 .with_icon(Icon::LinkExternal)
                 .with_full_width(true)
                 .on_click(|ctx| {
@@ -193,7 +194,7 @@ impl OrchestrationLaunchModal {
         });
 
         let go_to_warp_button = ctx.add_view(|_ctx| {
-            ActionButton::new("Close", CtaButtonTheme)
+            ActionButton::new("关闭", CtaButtonTheme)
                 .with_full_width(true)
                 .on_click(|ctx| ctx.dispatch_typed_action(OrchestrationLaunchModalAction::Close))
         });
@@ -247,7 +248,7 @@ impl OrchestrationLaunchModal {
     fn render_badge(appearance: &Appearance) -> Box<dyn Element> {
         let text_color = modal_terminal_magenta(appearance);
         let background_color = modal_terminal_magenta_overlay_1(appearance);
-        let text = Text::new_inline("New".to_string(), appearance.ui_font_family(), 14.)
+        let text = Text::new_inline("新增".to_string(), appearance.ui_font_family(), 14.)
             .with_color(text_color)
             .finish();
         ConstrainedBox::new(
@@ -268,19 +269,15 @@ impl OrchestrationLaunchModal {
     }
 
     fn render_title(appearance: &Appearance) -> Box<dyn Element> {
-        Text::new(
-            "Orchestrate any agent, anywhere",
-            appearance.ui_font_family(),
-            20.,
-        )
-        .with_color(modal_text_main(appearance))
-        .with_style(Properties::default().weight(Weight::Semibold))
-        .finish()
+        Text::new("随时随地编排任何 Agent", appearance.ui_font_family(), 20.)
+            .with_color(modal_text_main(appearance))
+            .with_style(Properties::default().weight(Weight::Semibold))
+            .finish()
     }
 
     fn render_description(appearance: &Appearance) -> Box<dyn Element> {
         Text::new(
-            "We've made major improvements to Warp's cloud agent orchestration platform, Oz.",
+            "我们对 Warp 的云端 Agent 编排平台 Oz 做了重大改进。",
             appearance.ui_font_family(),
             14.,
         )
