@@ -23,8 +23,8 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 
 | 项目 | 状态 |
 | --- | --- |
-| 翻译清单条目 | `2543` |
-| 已纳入清单的源码文件 | `184` |
+| 翻译清单条目 | `2556` |
+| 已纳入清单的源码文件 | `186` |
 | dry-run 校验 | `missing: 0` |
 | 主要构建包 | `warp` |
 | 可运行 bundle | `target/debug/bundle/osx/WarpOss.app` |
@@ -35,17 +35,17 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 | 预设 | 已覆盖 | 候选 | 覆盖率 |
 | --- | ---: | ---: | ---: |
 | `onboarding` | 266 | 55 | 82.9% |
-| `workspace` | 582 | 392 | 59.8% |
-| `search` | 267 | 40 | 87.0% |
-| `settings` | 1170 | 860 | 57.6% |
-| `modals` | 626 | 5813 | 9.7% |
-| `release` | 2789 | 7139 | 28.1% |
+| `workspace` | 584 | 391 | 59.9% |
+| `search` | 267 | 26 | 91.1% |
+| `settings` | 1172 | 856 | 57.8% |
+| `modals` | 635 | 5371 | 10.6% |
+| `release` | 2802 | 6678 | 29.6% |
 
 这些数字来自仓库内的本地化 inventory 脚本。覆盖率不是“整仓中文化百分比”，而是对选定高可见源代码区域中“可能用户可见字符串”的粗略审计指标。
 
 ## 已汉化范围
 
-第一阶段已完成 M0-M8 里程碑。第二阶段第一轮深度覆盖、Round 2 和 Round 3 切片也已完成，重点把审计口径降噪，并补齐 HOA onboarding、AI 设置深层路径、BYO API keys、AWS Bedrock、终端 rewind、auth-secret 删除确认、Appearance 命令面板开关、会话列表操作、云端 Agent 容量弹窗、AWS 凭据错误、环境删除确认、launch modals、额度/方案弹窗、Agent tips、conversation details panel、CLI 管理员权限提示和破坏性确认文案。
+第一阶段已完成 M0-M8 里程碑。第二阶段第一轮深度覆盖、Round 2、Round 3 和 Round 4 切片也已完成，重点把审计口径降噪，并补齐 HOA onboarding、AI 设置深层路径、BYO API keys、AWS Bedrock、终端 rewind、auth-secret 删除确认、Appearance 命令面板开关、会话列表操作、云端 Agent 容量弹窗、AWS 凭据错误、环境删除确认、launch modals、额度/方案弹窗、Agent tips、conversation details panel、CLI 管理员权限提示、破坏性确认文案、Warp on Web home、Agent 状态/错误残留和环境弹窗 fallback 文案。
 
 当前重点覆盖以下路径：
 
@@ -63,6 +63,7 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 - Appearance 命令面板动作标签、会话列表菜单/删除 toast、云端 Agent 容量与点数提示、AWS 凭据错误和环境删除确认框。
 - Oz / OpenWarp / orchestration launch modals、额度耗尽和 Build 方案迁移弹窗。
 - Agent tips、conversation details panel、CLI 安装/卸载管理员权限提示、移除 endpoint 和转让团队所有权确认框。
+- Warp on Web home、Agent conversation 状态标签、AWS Bedrock 凭据错误、web search/fetch 失败提示和 Agent Assisted Environment fallback 文案。
 
 历史 GUI 冒烟测试已确认：
 
@@ -71,7 +72,7 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 - 全局搜索占位符显示中文。
 - 命令面板占位符和筛选标签显示中文，例如 `文件`、`操作`、`会话`、`启动配置`。
 
-第二阶段本机自动 GUI 冒烟已多次尝试。2026-05-30 的 `WarpOss` bundle 构建、签名和进程启动通过；Round 3 使用 `open -n target/debug/bundle/osx/WarpOss.app` 可启动主进程和 `terminal-server`，但 Computer Use 读取窗口状态超时，仍需要在交互式桌面会话中人工复验 HOA onboarding、AI 设置、Appearance、会话菜单、云端 Agent 容量弹窗、launch modals、额度/方案弹窗、Agent tips、conversation details、CLI 权限提示、rewind、auth-secret 和环境删除确认框。
+第二阶段本机自动 GUI 冒烟已多次尝试。2026-05-30 的 `WarpOss` bundle 构建、签名和进程启动通过；Round 4 使用 `open -n target/debug/bundle/osx/WarpOss.app` 可启动主进程和 `terminal-server`，Computer Use 已能读取窗口状态，并确认菜单栏、搜索占位符和“新会话”等基础工作区入口显示中文。HOA onboarding、AI 设置、Appearance、会话菜单、云端 Agent 容量弹窗、launch modals、额度/方案弹窗、Agent tips、conversation details、CLI 权限提示、Warp on Web home、Agent 状态标签、环境 fallback、rewind、auth-secret 和环境删除确认框仍需要在可触发对应状态的交互式桌面会话中复验。
 
 ## 仍未完整覆盖的范围
 
@@ -79,7 +80,7 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 
 - 没有运行时语言切换开关。汉化是源码级替换，构建出的应用默认显示简体中文。
 - 登录、账号、云端额度、团队计费等路径需要真实账号和服务状态，部分仍是人工 release gate。
-- `modals` 预设覆盖率偏低，因为它包含大量 AI、终端、云端、错误、诊断和低频路径。
+- `modals` 预设覆盖率偏低；Round 4 审计后确认它仍主要由 Agent/terminal 内部模板、终端协议、诊断和低频路径主导。
 - 一些英文词保留原文，例如 `Warp`、`Agent`、`Notebook`、`MCP`、`GitHub`、`CLI` 等产品或技术名词。
 - 部分命令语法保持英文，例如 `history:`、`files:`、`workflows:`，这是为了不破坏用户输入和过滤器解析逻辑。
 - 部分动态或搜索相关字符串继续保留，例如 `${price}/month`、`2x`、`5x`、主题名、设置搜索关键词，以及会影响搜索 tag 的 Appearance 英文关键词。
@@ -137,9 +138,9 @@ python3 script/zh_apply_localization.py --dry-run --summary
 期望输出类似：
 
 ```text
-entries: 2543
-files: 184
-already_applied: 2528
+entries: 2556
+files: 186
+already_applied: 2541
 would_change: 0
 missing: 0
 ```
@@ -223,6 +224,14 @@ python3 script/zh_localization_inventory.py --preset workspace > /tmp/zh-workspa
 python3 script/zh_localization_inventory.py --preset search > /tmp/zh-search.md
 python3 script/zh_localization_inventory.py --preset settings > /tmp/zh-settings.md
 python3 script/zh_localization_inventory.py --preset modals > /tmp/zh-modals.md
+```
+
+Round 4 之后也可以先看候选热点或只看候选行：
+
+```bash
+python3 script/zh_localization_inventory.py --preset workspace --status candidate
+python3 script/zh_localization_inventory.py --preset settings --status covered-target
+python3 script/zh_localization_inventory.py --preset modals --top-paths 20
 ```
 
 只优先处理 `candidate` 行。`covered-source` 和 `covered-target` 表示清单中已有对应记录。

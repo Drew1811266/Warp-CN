@@ -481,11 +481,20 @@ Round 3 合理性复盘：
 - 覆盖率提升主要来自 workspace 和 release 聚合口径，符合真实用户路径优先原则；`modals` 仍作为趋势指标而不是唯一目标。
 - GUI 自动化仍受本机窗口读取限制影响，因此继续记录 manual gate，没有把进程启动等同于视觉验收。
 
-## 7.3 第二阶段 Round 4 inventory 降噪记录
+## 7.3 第二阶段 Round 4 执行结果
 
 执行时间：2026-05-30。
 
-Round 4 首个工程任务是先改进审计口径，而不是继续追 `modals` 覆盖率。新增的 inventory review modes 支持按状态筛选和按路径聚合候选数，便于先判断某个候选池是否真实对应用户界面。
+Round 4 是一次 audit-first 切片：先改进审计口径，而不是继续追 `modals` 覆盖率；随后补齐少量确认可见的英文残留，包括 Warp on Web home、Agent 状态标签、AWS Bedrock/web search/web fetch 错误和 Agent Assisted Environment fallback 文案。
+
+| 任务 | 结果 | 证据 |
+| --- | --- | --- |
+| Round 4 实施计划 | 已完成 | `9e2f93a3 docs: plan phase 2 round 4 zh-Hans localization` |
+| Inventory review modes | 已完成 | `436d526d chore: add zh-Hans inventory review modes` |
+| Inventory 降噪与排除清单 | 已完成 | `1926d03a chore: refine zh-Hans inventory noise filters` |
+| Warp on Web home | 已完成 | `da976cff feat: localize Warp on Web home` |
+| Agent 状态和错误残留 | 已完成 | `a3e004fc feat: localize agent status residue` |
+| 环境弹窗 fallback | 已完成 | `67ce0d9f feat: localize environment modal fallbacks` |
 
 本轮新增的 review commands：
 
@@ -524,6 +533,60 @@ Round 4 当前仍保留的主要候选热点：
 | `workspace` | `app/src/workspace/view.rs`、`app/src/workspace/mod.rs`、`app/src/workspace/tab_settings.rs` | 仍混有菜单、toast、调试断言、worktree 诊断和内部命令文本，需要继续按真实 UI 审核。 |
 | `settings` | `app/src/settings_view/features_page.rs`、`app/src/settings_view/mod.rs`、`app/src/settings_view/teams_page.rs` | 很多候选是搜索词、feature metadata 和团队管理深层路径，后续不能直接批量翻译。 |
 | `modals` | `app/src/terminal/view.rs`、`app/src/terminal/view/action.rs`、`app/src/terminal/input.rs`、`app/src/ai/agent/mod.rs` | 终端、Agent transcript 模板和低层错误仍占大头，需要按路径继续分类。 |
+
+Round 4 最终 dry-run：
+
+```text
+entries: 2556
+files: 186
+already_applied: 2541
+would_change: 0
+missing: 0
+```
+
+Round 4 最终覆盖率快照：
+
+| 预设 | 已覆盖 | 候选 | 覆盖率 |
+| --- | ---: | ---: | ---: |
+| `onboarding` | 266 | 55 | 82.9% |
+| `workspace` | 584 | 391 | 59.9% |
+| `search` | 267 | 26 | 91.1% |
+| `settings` | 1172 | 856 | 57.8% |
+| `modals` | 635 | 5371 | 10.6% |
+| `release` | 2802 | 6678 | 29.6% |
+
+Round 4 最终剩余候选热点：
+
+| 预设 | Top paths |
+| --- | --- |
+| `workspace` | `app/src/workspace/view.rs` (119), `app/src/workspace/mod.rs` (66), `app/src/workspace/tab_settings.rs` (54) |
+| `settings` | `app/src/settings_view/features_page.rs` (182), `app/src/settings_view/mod.rs` (172), `app/src/settings_view/teams_page.rs` (146) |
+| `modals` | `app/src/terminal/view.rs` (334), `app/src/terminal/view/action.rs` (182), `app/src/terminal/input.rs` (159) |
+
+Round 4 命令行验证已通过：
+
+```bash
+python3 script/zh_apply_localization.py --dry-run --summary
+python3 script/zh_localization_inventory.py --preset onboarding --coverage
+python3 script/zh_localization_inventory.py --preset workspace --coverage
+python3 script/zh_localization_inventory.py --preset search --coverage
+python3 script/zh_localization_inventory.py --preset settings --coverage
+python3 script/zh_localization_inventory.py --preset modals --coverage
+python3 script/zh_localization_inventory.py --preset release --coverage
+cargo fmt --check
+git diff --check
+python3 -m py_compile script/zh_apply_localization.py script/zh_localization_inventory.py
+cargo check -p warp
+cargo test -p warp_search_core
+cargo test -p warp command_palette
+TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open
+```
+
+Round 4 保留项和 manual gate：
+
+- Warp on Web home、Agent 状态标签、Agent 错误残留和环境弹窗 fallback 仍需要真实交互式桌面会话做视觉复验。
+- 本机 `WarpOss` 进程可启动，Computer Use 已能读取窗口状态，并确认菜单栏、全局搜索占位符和 `新会话` 入口显示中文；本轮没有触发 Warp on Web home、Agent 状态标签或环境 fallback 对应状态，因此这些深层路径继续记录为 manual gate。
+- `modals` 仍低覆盖，但 top paths 显示它主要由 terminal view/input/action 和 Agent transcript 模板主导，后续应继续分类处理，而不是批量翻译内部字符串。
 
 ## 8. 风险与缓解
 
