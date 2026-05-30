@@ -23,8 +23,8 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 
 | 项目 | 状态 |
 | --- | --- |
-| 翻译清单条目 | `2400` |
-| 已纳入清单的源码文件 | `176` |
+| 翻译清单条目 | `2543` |
+| 已纳入清单的源码文件 | `184` |
 | dry-run 校验 | `missing: 0` |
 | 主要构建包 | `warp` |
 | 可运行 bundle | `target/debug/bundle/osx/WarpOss.app` |
@@ -35,17 +35,17 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 | 预设 | 已覆盖 | 候选 | 覆盖率 |
 | --- | ---: | ---: | ---: |
 | `onboarding` | 266 | 55 | 82.9% |
-| `workspace` | 495 | 475 | 51.0% |
+| `workspace` | 582 | 392 | 59.8% |
 | `search` | 267 | 40 | 87.0% |
-| `settings` | 1163 | 867 | 57.3% |
-| `modals` | 573 | 5865 | 8.9% |
-| `release` | 2642 | 7281 | 26.6% |
+| `settings` | 1170 | 860 | 57.6% |
+| `modals` | 626 | 5813 | 9.7% |
+| `release` | 2789 | 7139 | 28.1% |
 
 这些数字来自仓库内的本地化 inventory 脚本。覆盖率不是“整仓中文化百分比”，而是对选定高可见源代码区域中“可能用户可见字符串”的粗略审计指标。
 
 ## 已汉化范围
 
-第一阶段已完成 M0-M8 里程碑。第二阶段第一轮深度覆盖和 Round 2 切片也已完成，重点把审计口径降噪，并补齐 HOA onboarding、AI 设置深层路径、BYO API keys、AWS Bedrock、终端 rewind、auth-secret 删除确认、Appearance 命令面板开关、会话列表操作、云端 Agent 容量弹窗、AWS 凭据错误和环境删除确认文案。
+第一阶段已完成 M0-M8 里程碑。第二阶段第一轮深度覆盖、Round 2 和 Round 3 切片也已完成，重点把审计口径降噪，并补齐 HOA onboarding、AI 设置深层路径、BYO API keys、AWS Bedrock、终端 rewind、auth-secret 删除确认、Appearance 命令面板开关、会话列表操作、云端 Agent 容量弹窗、AWS 凭据错误、环境删除确认、launch modals、额度/方案弹窗、Agent tips、conversation details panel、CLI 管理员权限提示和破坏性确认文案。
 
 当前重点覆盖以下路径：
 
@@ -61,6 +61,8 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 - AI 设置中的 Build 方案提示、自带 API keys、AWS Bedrock 凭据和登录命令设置。
 - 终端 rewind 搜索提示和 auth-secret 删除确认说明。
 - Appearance 命令面板动作标签、会话列表菜单/删除 toast、云端 Agent 容量与点数提示、AWS 凭据错误和环境删除确认框。
+- Oz / OpenWarp / orchestration launch modals、额度耗尽和 Build 方案迁移弹窗。
+- Agent tips、conversation details panel、CLI 安装/卸载管理员权限提示、移除 endpoint 和转让团队所有权确认框。
 
 历史 GUI 冒烟测试已确认：
 
@@ -69,7 +71,7 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 - 全局搜索占位符显示中文。
 - 命令面板占位符和筛选标签显示中文，例如 `文件`、`操作`、`会话`、`启动配置`。
 
-第二阶段本机自动 GUI 冒烟已尝试。2026-05-30 的 `WarpOss` bundle 构建、签名和进程启动通过，但 Computer Use 读取窗口状态超时，仍需要在交互式桌面会话中人工复验 HOA onboarding、AI 设置、Appearance、会话菜单、云端 Agent 容量弹窗、rewind、auth-secret 和环境删除确认框。
+第二阶段本机自动 GUI 冒烟已多次尝试。2026-05-30 的 `WarpOss` bundle 构建、签名和进程启动通过；Round 3 使用 `open -n target/debug/bundle/osx/WarpOss.app` 可启动主进程和 `terminal-server`，但 Computer Use 读取窗口状态超时，仍需要在交互式桌面会话中人工复验 HOA onboarding、AI 设置、Appearance、会话菜单、云端 Agent 容量弹窗、launch modals、额度/方案弹窗、Agent tips、conversation details、CLI 权限提示、rewind、auth-secret 和环境删除确认框。
 
 ## 仍未完整覆盖的范围
 
@@ -135,9 +137,9 @@ python3 script/zh_apply_localization.py --dry-run --summary
 期望输出类似：
 
 ```text
-entries: 2400
-files: 176
-already_applied: 2385
+entries: 2543
+files: 184
+already_applied: 2528
 would_change: 0
 missing: 0
 ```
@@ -330,6 +332,17 @@ cargo check -p warp
 | 会话列表操作 | `25d71e8c feat: localize conversation actions` |
 | 云端 Agent 容量弹窗 | `4c31e506 feat: localize cloud agent capacity modal` |
 | AWS 凭据与环境删除确认 | `43613337 feat: localize credential and environment dialogs` |
+
+第二阶段 Round 3 已完成：
+
+| 任务 | 内容 |
+| --- | --- |
+| Round 3 计划 | `9fa400ff docs: plan phase 2 round 3 zh-Hans localization` |
+| Launch modals | `524db95b feat: localize launch modals` |
+| 额度和方案弹窗 | `9511f730 feat: localize credit and plan modals` |
+| Agent tips | `d3e7a2c6 feat: localize agent tips` |
+| Conversation details panel | `c551a024 feat: localize conversation details panel` |
+| CLI 和确认提示 | `b046da1f feat: localize cli and confirmation prompts` |
 
 详细执行记录见 [`docs/zh-Hans-localization.md`](docs/zh-Hans-localization.md) 和 [`docs/zh-Hans-localization-phase2.md`](docs/zh-Hans-localization-phase2.md)。
 
