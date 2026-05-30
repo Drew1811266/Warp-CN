@@ -351,7 +351,7 @@ impl AgentAssistedEnvironmentModal {
             let name = repo_path
                 .file_name()
                 .and_then(|s| s.to_str())
-                .unwrap_or("(unknown)")
+                .unwrap_or("（未知）")
                 .to_string();
 
             let path_text = home_relative_path(repo_path);
@@ -586,9 +586,11 @@ impl AgentAssistedEnvironmentModal {
         ctx.open_file_picker(
             move |paths_result, ctx| {
                 let result = paths_result.and_then(|paths| {
-                    paths.into_iter().next().map(PathBuf::from).ok_or_else(|| {
-                        FilePickerError::DialogFailed("No directory selected".to_string())
-                    })
+                    paths
+                        .into_iter()
+                        .next()
+                        .map(PathBuf::from)
+                        .ok_or_else(|| FilePickerError::DialogFailed("未选择目录".to_string()))
                 });
 
                 ctx.dispatch_typed_action_for_view(
