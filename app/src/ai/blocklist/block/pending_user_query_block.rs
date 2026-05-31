@@ -169,7 +169,7 @@ impl View for PendingUserQueryBlock {
         .finish();
 
         let queued_badge = Text::new(
-            "Queued",
+            "排队中",
             appearance.ui_font_family(),
             appearance.monospace_font_size().max(4.) - 2.,
         )

@@ -1,0 +1,71 @@
+# Ignore rules for zh-Hans localization inventory.
+#
+# Keep this conservative. Add new entries only after reviewing candidates with:
+#   python3 script/zh_localization_inventory.py <path> --status candidate
+# Do not hide visible labels, buttons, descriptions, toasts, dialogs, or user-facing errors.
+
+path_parts = [
+  "/tests/",
+  "/test_data/",
+  "/models/onnx/",
+  "/resources/bundled/",
+]
+
+exact_paths = [
+  # Reviewed Round 4 non-UI sources: serialization/schema data, theme ids,
+  # and terminal protocol/parser internals.
+  "app/src/ai/agent/conversation_yaml.rs",
+  "app/src/themes/theme.rs",
+  # Reviewed P4-M4: debug/display labels for terminal action enum variants,
+  # not rendered as end-user UI copy.
+  "app/src/terminal/view/action.rs",
+  "app/src/terminal/model/ansi/mod.rs",
+  "app/src/terminal/model/ansi/dcs_hooks.rs",
+]
+
+line_patterns = [
+  "#[cfg",
+  "cfg!(",
+  "feature =",
+  "target_family",
+  "#[serde",
+  "serde(",
+  "log::",
+  "TelemetryEvent::",
+  "send_telemetry",
+  "search_tags",
+  "search_keywords",
+  "id!(",
+  "ui_name()",
+  ".expect(",
+  "debug_assert",
+  "panic!",
+  "anyhow!",
+  "tracing::",
+  "debug!(",
+  "info!(",
+  "warn!(",
+  "error!(",
+  "println!(",
+  "eprintln!(",
+  ".context(",
+  "bail!(",
+  "ensure!(",
+  "format_err!",
+  "Error::",
+]
+
+literal_patterns = []
+
+internal_words = [
+  "darwin",
+  "default_as_true",
+  "integration_tests",
+  "linux",
+  "local_fs",
+  "macos",
+  "test",
+  "unknown",
+  "wasm",
+  "windows",
+]

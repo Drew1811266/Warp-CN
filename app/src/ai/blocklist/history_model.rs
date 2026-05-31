@@ -2787,10 +2787,10 @@ impl AIQueryHistoryOutputStatus {
     /// Returns a string representation of the output status.
     pub(crate) fn display_text(&self) -> &'static str {
         match self {
-            AIQueryHistoryOutputStatus::Completed => "Completed successfully",
-            AIQueryHistoryOutputStatus::Pending => "Pending",
-            AIQueryHistoryOutputStatus::Cancelled => "Cancelled by user",
-            AIQueryHistoryOutputStatus::Failed => "Failed",
+            AIQueryHistoryOutputStatus::Completed => "已成功完成",
+            AIQueryHistoryOutputStatus::Pending => "等待中",
+            AIQueryHistoryOutputStatus::Cancelled => "用户已取消",
+            AIQueryHistoryOutputStatus::Failed => "失败",
         }
     }
 

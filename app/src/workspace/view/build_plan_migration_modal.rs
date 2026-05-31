@@ -593,7 +593,7 @@ impl BuildPlanMigrationModal {
         );
 
         let byok =
-            Self::create_bullet_item("自带 API key".to_string(), font_family, 14., text_color);
+            Self::create_bullet_item("自带 API 密钥".to_string(), font_family, 14., text_color);
 
         let mut features_list = Flex::column()
             .with_cross_axis_alignment(CrossAxisAlignment::Start)

@@ -19,13 +19,18 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 
 ## 当前状态
 
-最近一次 release audit：`2026-05-30`
+最近一次 release audit：`2026-05-31`
 
 | 项目 | 状态 |
 | --- | --- |
-| 翻译清单条目 | `2556` |
-| 已纳入清单的源码文件 | `186` |
+| 当前版本 | `0.12` |
+| 翻译清单条目 | `2662` |
+| 已纳入清单的源码文件 | `197` |
 | dry-run 校验 | `missing: 0` |
+| metadata 覆盖 | `key/context/status/expected_count: 150 (5.6%)` |
+| Phase 9 RC6 判断 | `ready-for-local-use` |
+| 当前执行重点 | Phase 9：RC6 完成，等待真实隔离账号 public-RC 证据 |
+| 下一步 | 提供真实隔离测试账号后，按 `GUI-WS-06` runbook 不带 fixture env 复验；fixture 已通过但不能替代 public-RC 真实账号证据 |
 | 主要构建包 | `warp` |
 | 可运行 bundle | `target/debug/bundle/osx/WarpOss.app` |
 | 主要维护文档 | [`docs/zh-Hans-localization.md`](docs/zh-Hans-localization.md) |
@@ -35,11 +40,11 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 | 预设 | 已覆盖 | 候选 | 覆盖率 |
 | --- | ---: | ---: | ---: |
 | `onboarding` | 266 | 55 | 82.9% |
-| `workspace` | 584 | 391 | 59.9% |
+| `workspace` | 598 | 377 | 61.3% |
 | `search` | 267 | 26 | 91.1% |
-| `settings` | 1172 | 856 | 57.8% |
-| `modals` | 635 | 5371 | 10.6% |
-| `release` | 2802 | 6678 | 29.6% |
+| `settings` | 1201 | 827 | 59.2% |
+| `modals` | 679 | 5145 | 11.7% |
+| `release` | 2890 | 6408 | 31.1% |
 
 这些数字来自仓库内的本地化 inventory 脚本。覆盖率不是“整仓中文化百分比”，而是对选定高可见源代码区域中“可能用户可见字符串”的粗略审计指标。
 
@@ -72,7 +77,9 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 - 全局搜索占位符显示中文。
 - 命令面板占位符和筛选标签显示中文，例如 `文件`、`操作`、`会话`、`启动配置`。
 
-第二阶段本机自动 GUI 冒烟已多次尝试。2026-05-30 的 `WarpOss` bundle 构建、签名和进程启动通过；Round 4 使用 `open -n target/debug/bundle/osx/WarpOss.app` 可启动主进程和 `terminal-server`，Computer Use 已能读取窗口状态，并确认菜单栏、搜索占位符和“新会话”等基础工作区入口显示中文。HOA onboarding、AI 设置、Appearance、会话菜单、云端 Agent 容量弹窗、launch modals、额度/方案弹窗、Agent tips、conversation details、CLI 权限提示、Warp on Web home、Agent 状态标签、环境 fallback、rewind、auth-secret 和环境删除确认框仍需要在可触发对应状态的交互式桌面会话中复验。
+第二阶段本机自动 GUI 冒烟已多次尝试。2026-05-30 的 `WarpOss` bundle 构建、签名和进程启动通过；Round 4 使用 `open -n target/debug/bundle/osx/WarpOss.app` 可启动主进程和 `terminal-server`，Computer Use 已能读取窗口状态，并确认菜单栏、搜索占位符和“新会话”等基础工作区入口显示中文。Phase 6 RC3 已成功刷新上游 stable refs，并通过命令行、测试和 bundle gate，但当轮 GUI 自动化受阻。Phase 7 RC4 已恢复 `zh-rc4` profile 下的当前周期 GUI 基础证据，确认菜单栏、命令面板、设置 shell、标签页右键菜单和新建终端入口显示中文。Phase 8 RC5 已重新刷新 upstream refs，并通过完整命令行、测试和 bundle gate；判断为 `ready-for-local-use`。Phase 9 RC6 已通过 manifest、导出、Python/Rust focused tests、`cargo check -p warp` 和 bundle gate，并完成 debug-only fixture GUI 证据：in-memory `zh-smoke-delete-endpoint` 能显示、编辑、取消删除并最终删除，且发现并修复了编辑弹窗 `Remove` 漏项。它仍不是公开 RC：P9-M5 没有真实隔离测试账号，fixture 证据不会替代真实账号 public-RC 证据。
+
+GUI 复验状态现在维护在 [`docs/zh-Hans-gui-smoke-matrix.md`](docs/zh-Hans-gui-smoke-matrix.md)。发布前不要只依据进程启动或 bundle gate 判断 GUI 通过；需要按矩阵记录已验证路径和 manual gate。
 
 ## 仍未完整覆盖的范围
 
@@ -95,9 +102,27 @@ Warp 当前大量 UI 文案仍是 Rust 源码中的内联字符串。为了降�
 | 文件 | 用途 |
 | --- | --- |
 | [`resources/localization/zh-Hans-overrides.toml`](resources/localization/zh-Hans-overrides.toml) | 翻译清单，每条记录指定文件、源字符串和目标中文 |
+| [`resources/localization/zh-Hans-inventory-ignore.toml`](resources/localization/zh-Hans-inventory-ignore.toml) | inventory 忽略规则，记录非 UI 路径、行模式和内部词 |
+| [`resources/localization/zh-Hans-glossary.toml`](resources/localization/zh-Hans-glossary.toml) | 术语表规则，记录保留词、固定译法和禁用译法 |
 | [`script/zh_apply_localization.py`](script/zh_apply_localization.py) | 将清单中的翻译应用到 Rust 字符串字面量 |
 | [`script/zh_localization_inventory.py`](script/zh_localization_inventory.py) | 扫描可能仍需汉化的候选字符串，并生成覆盖率 |
+| [`script/zh_export_locale.py`](script/zh_export_locale.py) | 将 manifest 导出为迁移友好的 JSON/YAML locale 雏形 |
 | [`docs/zh-Hans-localization.md`](docs/zh-Hans-localization.md) | 详细维护记录、验证命令、已知失败和 release gate |
+| [`docs/zh-Hans-localization-phase4.md`](docs/zh-Hans-localization-phase4.md) | Phase 4 发布质量、高价值残留和 release candidate 规划 |
+| [`docs/zh-Hans-localization-phase5.md`](docs/zh-Hans-localization-phase5.md) | Phase 5 发布硬化、GUI manual gate 收敛和 RC2 规划 |
+| [`docs/zh-Hans-localization-phase6.md`](docs/zh-Hans-localization-phase6.md) | Phase 6 public-RC readiness、上游刷新和 GUI 证据规划 |
+| [`docs/zh-Hans-localization-phase7.md`](docs/zh-Hans-localization-phase7.md) | Phase 7 GUI 证据恢复、隔离 profile 审计和 RC4 public-RC gate |
+| [`docs/zh-Hans-localization-phase8.md`](docs/zh-Hans-localization-phase8.md) | Phase 8 隔离测试账号、custom endpoint destructive confirmation 和 RC5 public-RC gate |
+| [`docs/zh-Hans-localization-phase9.md`](docs/zh-Hans-localization-phase9.md) | Phase 9 隔离测试账号 runbook、debug-only custom inference fixture 和 RC6 证据边界 |
+| [`docs/zh-Hans-custom-inference-test-account.md`](docs/zh-Hans-custom-inference-test-account.md) | `GUI-WS-06` public-RC 复验所需隔离测试账号、一次性 endpoint 和证据要求 |
+| [`docs/zh-Hans-modal-candidate-classification.md`](docs/zh-Hans-modal-candidate-classification.md) | `modals`/terminal/Agent 候选分类，记录非 UI 噪声和后续翻译切片 |
+| [`docs/zh-Hans-gui-smoke-matrix.md`](docs/zh-Hans-gui-smoke-matrix.md) | GUI 冒烟矩阵，记录已验证路径、manual gate 和账号/状态依赖 |
+| [`docs/zh-Hans-upstream-sync.md`](docs/zh-Hans-upstream-sync.md) | 上游 stable 同步流程，记录基线选择、漂移修复和发布 gate |
+| [`docs/zh-Hans-release-candidate-2026-05-30.md`](docs/zh-Hans-release-candidate-2026-05-30.md) | Phase 4 release candidate gate、测试输出摘要和已知限制 |
+| [`docs/zh-Hans-release-candidate-2026-05-30-rc2.md`](docs/zh-Hans-release-candidate-2026-05-30-rc2.md) | Phase 5 RC2 gate、发布边界、阻塞项和本地使用判断 |
+| [`docs/zh-Hans-release-candidate-2026-05-31-rc3.md`](docs/zh-Hans-release-candidate-2026-05-31-rc3.md) | Phase 6 RC3 gate、public-RC 判断和下一步 GUI blocker |
+| [`docs/zh-Hans-release-candidate-2026-05-31-rc4.md`](docs/zh-Hans-release-candidate-2026-05-31-rc4.md) | Phase 7 RC4 gate、当前周期 GUI 证据和 destructive confirmation blocker |
+| [`docs/zh-Hans-release-candidate-2026-05-31-rc5.md`](docs/zh-Hans-release-candidate-2026-05-31-rc5.md) | Phase 8 RC5 gate、上游 freshness 复核和 no-test-account blocker |
 
 翻译应用脚本具备幂等性：
 
@@ -138,9 +163,9 @@ python3 script/zh_apply_localization.py --dry-run --summary
 期望输出类似：
 
 ```text
-entries: 2556
-files: 186
-already_applied: 2541
+entries: 2661
+files: 197
+already_applied: 2646
 would_change: 0
 missing: 0
 ```
@@ -187,6 +212,9 @@ open -n target/debug/bundle/osx/WarpOss.app
 推荐在发布或同步上游后运行：
 
 ```bash
+python3 script/zh_apply_localization.py --validate-manifest
+python3 script/zh_apply_localization.py --check-glossary
+python3 script/zh_apply_localization.py --metadata-summary
 python3 script/zh_apply_localization.py --dry-run --summary
 python3 script/zh_localization_inventory.py --preset onboarding --coverage
 python3 script/zh_localization_inventory.py --preset workspace --coverage
@@ -194,8 +222,13 @@ python3 script/zh_localization_inventory.py --preset search --coverage
 python3 script/zh_localization_inventory.py --preset settings --coverage
 python3 script/zh_localization_inventory.py --preset modals --coverage
 python3 script/zh_localization_inventory.py --preset release --coverage
+python3 script/zh_export_locale.py --format json > /tmp/zh-CN.json
+python3 script/zh_export_locale.py --format yaml > /tmp/zh-CN.yaml
 cargo fmt --check
 git diff --check
+python3 script/test_zh_apply_localization.py
+python3 script/test_zh_localization_inventory.py
+python3 script/test_zh_export_locale.py
 cargo check -p warp
 cargo test -p warp_search_core
 cargo test -p warp command_palette
@@ -236,6 +269,12 @@ python3 script/zh_localization_inventory.py --preset modals --top-paths 20
 
 只优先处理 `candidate` 行。`covered-source` 和 `covered-target` 表示清单中已有对应记录。
 
+inventory 默认读取 `resources/localization/zh-Hans-inventory-ignore.toml`。新增忽略规则前，先直接审查目标路径并在配置注释或维护文档中说明它为什么不是用户可见 UI：
+
+```bash
+python3 script/zh_localization_inventory.py app/src/example.rs --status candidate
+```
+
 ### 2. 添加翻译条目
 
 在 `resources/localization/zh-Hans-overrides.toml` 中增加条目：
@@ -247,15 +286,34 @@ source = "English text"
 target = "中文文本"
 ```
 
+Phase 3 开始，新增条目可以逐步补充元数据，方便后续迁移到官方 locale：
+
+```toml
+[[replace]]
+key = "workspace.example.open"
+path = "app/src/example.rs"
+source = "Open"
+target = "打开"
+context = "Example toolbar action"
+status = "active"
+preserve_terms = ["Warp"]
+notes = "Keep product names in English."
+expected_count = 1
+```
+
 注意：
 
 - `path` 必须是仓库根目录下的相对路径。
 - `source` 必须精确匹配 Rust 双引号字符串字面量。
+- `status` 只允许 `active`、`needs-review`、`deprecated`、`blocked`。
+- `key` 是未来 locale 迁移用的稳定 ID；当前旧条目可以暂时没有 `key`。
 - 不要翻译内部协议字段、遥测事件名、配置 key、命令过滤语法，除非确认它们是 UI 文案。
 
 ### 3. 应用并验证
 
 ```bash
+python3 script/zh_apply_localization.py --validate-manifest
+python3 script/zh_apply_localization.py --check-glossary
 python3 script/zh_apply_localization.py --dry-run --summary
 python3 script/zh_apply_localization.py
 cargo fmt
@@ -278,12 +336,24 @@ github  https://github.com/Drew1811266/Warp-CN.git
 
 ```bash
 git switch drew/zh-Hans-localization
-git fetch origin
-git merge origin/master
+git fetch origin --tags
+UPSTREAM_BASE=<tag-or-commit>
+git merge "$UPSTREAM_BASE"
+python3 script/zh_apply_localization.py --validate-manifest
+python3 script/zh_apply_localization.py --check-glossary
 python3 script/zh_apply_localization.py --dry-run --summary
 python3 script/zh_apply_localization.py
 cargo fmt
 cargo check -p warp
+```
+
+完整流程见 [`docs/zh-Hans-upstream-sync.md`](docs/zh-Hans-upstream-sync.md)。用户发布版应跟随 stable tag、release branch 或明确记录的上游 commit；`origin/master` 只作为预检基线，不应无记录地直接发布。
+
+未来迁移官方 locale 时，可以先从当前 manifest 导出 JSON/YAML 雏形：
+
+```bash
+python3 script/zh_export_locale.py --format json > /tmp/zh-CN.json
+python3 script/zh_export_locale.py --format yaml > /tmp/zh-CN.yaml
 ```
 
 如果上游变更导致 dry-run 出现 `missing`，说明某些英文源字符串已经被上游修改或移动。处理方式：
@@ -303,6 +373,8 @@ cargo check -p warp
 - 命令、快捷键、路径、环境变量、配置文件名保留原样。
 - 句末标点尽量与上下文一致，长说明使用中文全角标点。
 - 不为了覆盖率翻译内部实现字符串。
+
+术语表规则在 `resources/localization/zh-Hans-glossary.toml` 中维护。当前规则先覆盖保留词、少量高频固定译法和禁用译法；历史条目中已存在的合理变体应先记录，再逐步收敛，避免一次性制造大量误报。
 
 ## 里程碑回顾
 
@@ -354,6 +426,122 @@ cargo check -p warp
 | CLI 和确认提示 | `b046da1f feat: localize cli and confirmation prompts` |
 
 详细执行记录见 [`docs/zh-Hans-localization.md`](docs/zh-Hans-localization.md) 和 [`docs/zh-Hans-localization-phase2.md`](docs/zh-Hans-localization-phase2.md)。
+
+第三阶段已完成：
+
+| 任务 | 内容 |
+| --- | --- |
+| P3-M0 | 建立 Phase 3 资产化与发布流程固化规划 |
+| P3-M1 | 支持 manifest v2 元数据和 `--validate-manifest` 校验 |
+| P3-M2 | 外置 inventory ignore 规则 |
+| P3-M3 | 建立术语表和 `--check-glossary` 校验 |
+| P3-M4 | 建立 GUI 冒烟矩阵 |
+| P3-M5 | 建立上游 stable 适配流程 |
+| P3-M6 | 建立 JSON/YAML locale 导出雏形 |
+
+Phase 3 详细规划见 [`docs/zh-Hans-localization-phase3.md`](docs/zh-Hans-localization-phase3.md)。
+
+第四阶段已规划：
+
+| 任务 | 内容 |
+| --- | --- |
+| P4-M0 | 建立 Phase 4 发布质量与高价值残留收敛规划 |
+| P4-M1 | 补齐高价值 manifest v2 元数据 |
+| P4-M2 | 审查并小批量收敛 workspace 残留 |
+| P4-M3 | 审查 settings 残留并强化术语表 |
+| P4-M4 | 分类 modals/terminal/Agent 候选并降噪 |
+| P4-M5 | 推进 GUI 冒烟矩阵实测 |
+| P4-M6 | 形成 release candidate 打包和发布说明 |
+| P4-M7 | 做上游 stable 同步演练 |
+
+Phase 4 详细规划见 [`docs/zh-Hans-localization-phase4.md`](docs/zh-Hans-localization-phase4.md)。
+
+第五阶段已规划：
+
+| 任务 | 内容 |
+| --- | --- |
+| P5-M0 | 建立 Phase 5 发布硬化入口和基线复核 |
+| P5-M1 | 刷新上游 stable 基线 |
+| P5-M2 | 建立 GUI 复验 profile 和证据流程 |
+| P5-M3 | 用安全对象复验 destructive confirmation |
+| P5-M4 | 拆分账号、Billing、Cloud 和 Agent 状态门禁 |
+| P5-M5 | 推进 Terminal/Agent 用户可见小切片 |
+| P5-M6 | 强化 manifest 迁移资产 |
+| P5-M7 | 形成 RC2 打包和发布说明 |
+| P5-M8 | 做发布决策 |
+
+Phase 5 详细规划见 [`docs/zh-Hans-localization-phase5.md`](docs/zh-Hans-localization-phase5.md)。
+
+第六阶段已完成：
+
+| 任务 | 状态 | 内容 |
+| --- | --- | --- |
+| P6-M0 | 完成 | 建立 Phase 6 public-RC readiness 基线 |
+| P6-M1 | 完成 | 刷新上游 stable refs；最新 stable 仍为 `v0.2026.05.27.09.22.stable_00` |
+| P6-M2 | 完成 | Bundle 可构建并启动进程，但当前 GUI 自动化状态为 `automation-blocked` |
+| P6-M3 | 完成 | destructive confirmation 未验证，但三条候选路径均已记录具体 blocker |
+| P6-M4 | 完成 | 拆分账号、Billing、Cloud 和 Agent 状态 fixture 策略 |
+| P6-M5 | 完成 | 完成 `terminal.view.notifications` 用户可见小切片 |
+| P6-M6 | 完成 | 增加 `--metadata-summary --json` release 自动化 guardrail |
+| P6-M7 | 完成 | 形成 RC3 gate；结论为 `ready-for-local-use`，不是 public RC |
+
+Phase 6 详细规划见 [`docs/zh-Hans-localization-phase6.md`](docs/zh-Hans-localization-phase6.md)。
+
+Phase 6 RC3 记录见 [`docs/zh-Hans-release-candidate-2026-05-31-rc3.md`](docs/zh-Hans-release-candidate-2026-05-31-rc3.md)。
+
+第七阶段已完成：
+
+| 任务 | 状态 | 内容 |
+| --- | --- | --- |
+| P7-M0 | 完成 | 建立 Phase 7 入口基线并摘录 RC3 GUI blocker |
+| P7-M1 | 完成 | 审计 `WARP_DATA_PROFILE` 与 macOS 路径隔离边界 |
+| P7-M2 | 完成 | 恢复 `zh-rc4` profile 下的可交互 `WarpOss` GUI，并采集日志/截图 |
+| P7-M3 | 完成 | 选择安全恢复路径和 GUI profile 设置 |
+| P7-M4 | 完成 | 复跑当前周期基础工作区、设置、命令面板和标签页右键菜单 GUI smoke |
+| P7-M5 | 受阻 | `GUI-WS-06` 因 logged-out 状态隐藏 `自定义推理` UI，未创建或删除 endpoint |
+| P7-M6 | 延期 | 因 P7-M5 未通过，额外低风险状态门禁明确延期 |
+| P7-M7 | 完成 | 形成 RC4 gate；结论为 `ready-for-local-use`，不是 public RC |
+
+Phase 7 详细规划见 [`docs/zh-Hans-localization-phase7.md`](docs/zh-Hans-localization-phase7.md)。
+
+Phase 7 RC4 记录见 [`docs/zh-Hans-release-candidate-2026-05-31-rc4.md`](docs/zh-Hans-release-candidate-2026-05-31-rc4.md)。
+
+第八阶段已执行：
+
+| 任务 | 状态 | 内容 |
+| --- | --- | --- |
+| P8-M0 | 完成 | Phase 8 入口 gate 通过，RC4 blocker 已摘录 |
+| P8-M1 | 完成 | `git fetch origin --tags` 通过；最新 stable 仍为 `v0.2026.05.27.09.22.stable_00` |
+| P8-M2 | 完成 | 证据路径为 `no-test-account`；不使用主账号、不猜测凭据 |
+| P8-M3 | 延期 | 因无隔离测试账号，未启动 logged-in `zh-rc5` profile |
+| P8-M4 | 延期 | 因无 logged-in profile，未采集 RC5 logged-in GUI smoke |
+| P8-M5 | 延期 | 未创建 `zh-smoke-delete-endpoint` |
+| P8-M6 | 延期 | 未打开或确认 remove endpoint destructive dialog |
+| P8-M7 | 完成 | 形成 RC5 gate；结论为 `ready-for-local-use`，不是 public RC |
+| P8-M8 | 完成 | 无遗留 GUI 进程，`WARP_DATA_PROFILE` 已清空，未创建一次性 endpoint |
+
+Phase 8 详细规划见 [`docs/zh-Hans-localization-phase8.md`](docs/zh-Hans-localization-phase8.md)。
+
+Phase 8 RC5 记录见 [`docs/zh-Hans-release-candidate-2026-05-31-rc5.md`](docs/zh-Hans-release-candidate-2026-05-31-rc5.md)。
+
+第九阶段已规划：
+
+| 任务 | 状态 | 内容 |
+| --- | --- | --- |
+| P9-M0 | 完成 | 建立 Phase 9 入口基线，复述 RC5 的 `no-test-account` blocker |
+| P9-M1 | 完成 | 创建隔离测试账号 runbook，明确 disposable endpoint 和证据要求 |
+| P9-M2 | 完成 | 复核 custom inference gate，记录 debug-only fixture 证据边界 |
+| P9-M3 | 完成 | 实现 `WARP_CN_CUSTOM_INFERENCE_SMOKE=1` debug-only UI gate |
+| P9-M4 | 完成 | 用 in-memory fixture 验证 endpoint 列表、编辑、取消删除、最终删除路径的中文 UI，并修复 `Remove` 漏项 |
+| P9-M5 | 完成 | 未提供真实隔离测试账号；不带 fixture env 的路径仍不能解除 public-RC blocker |
+| P9-M6 | 完成 | RC6 gate 全部通过，生成 `ready-for-local-use` release decision |
+| P9-M7 | 完成 | 审计 GUI 进程、LaunchServices env、Keychain 残留和 debug-only fixture gate |
+
+Phase 9 详细规划见 [`docs/zh-Hans-localization-phase9.md`](docs/zh-Hans-localization-phase9.md)。
+
+Phase 9 RC6 记录见 [`docs/zh-Hans-release-candidate-2026-05-31-rc6.md`](docs/zh-Hans-release-candidate-2026-05-31-rc6.md)。
+
+Superpowers 执行入口见 [`docs/superpowers/plans/2026-05-31-zh-Hans-phase9-custom-inference-evidence.md`](docs/superpowers/plans/2026-05-31-zh-Hans-phase9-custom-inference-evidence.md)。
 
 ## 常见问题
 

@@ -219,7 +219,7 @@ impl CloudAgentCapacityModal {
             let mut benefits = vec![
                 format!("{} the number of concurrent cloud agents", agent_multiplier),
                 credits_text,
-                "自带 API key".to_string(),
+                "自带 API 密钥".to_string(),
             ];
             for extra in extra_benefits {
                 benefits.push(extra.to_string());

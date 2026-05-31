@@ -378,71 +378,132 @@ target = "跳过"
 path = "app/src/auth/login_slide.rs"
 source = "Auth Token"
 target = "认证令牌"
+key = "auth.login.auth_token_placeholder"
+context = "Auth token input placeholder on the login slide."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = "Get started with Warp Drive"
 target = "开始使用 Warp Drive"
+key = "auth.login.warp_drive_heading"
+context = "Login slide heading for the Warp Drive onboarding path."
+status = "active"
+preserve_terms = ["Warp Drive"]
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = "Get started with AI"
 target = "开始使用 AI"
+key = "auth.login.ai_heading"
+context = "Login slide heading for the AI onboarding path."
+status = "active"
+preserve_terms = ["AI"]
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = "Connect your account to save and share notebooks, workflows, and more across devices."
 target = "连接账号以在多台设备间保存和共享笔记本、工作流等内容。"
+key = "auth.login.warp_drive_description"
+context = "Login slide description for account sync and Warp Drive features."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = "Connect your account to enable AI-powered planning, coding, and automation."
 target = "连接账号以启用 AI 驱动的规划、编码和自动化。"
+key = "auth.login.ai_description"
+context = "Login slide description for enabling AI features."
+status = "active"
+preserve_terms = ["AI"]
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = "By continuing, you agree to Warp's "
 target = "继续即表示你同意 Warp 的"
+key = "auth.login.terms_prefix"
+context = "Terms of service disclaimer prefix on the login slide."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = "Terms of Service"
 target = "服务条款"
+key = "auth.login.terms_of_service"
+context = "Terms of service link label on the login slide."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = "Privacy Settings"
 target = "隐私设置"
+key = "auth.login.privacy_settings"
+context = "Privacy settings link and heading on the login slide."
+status = "active"
+expected_count = 2
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = "Back"
 target = "返回"
+key = "auth.login.back"
+context = "Back button label across login slide steps."
+status = "active"
+expected_count = 3
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = "Disable Warp Drive"
 target = "禁用 Warp Drive"
+key = "auth.login.disable_warp_drive"
+context = "Skip-login confirmation title/action for disabling Warp Drive."
+status = "active"
+preserve_terms = ["Warp Drive"]
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = "Disable AI features"
 target = "禁用 AI 功能"
+key = "auth.login.disable_ai"
+context = "Skip-login confirmation title/action for disabling AI features."
+status = "active"
+preserve_terms = ["AI"]
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = "Continue"
 target = "继续"
+key = "auth.login.continue"
+context = "Primary continue button on the login slide."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = "Sign in on your browser to continue"
 target = "在浏览器中登录以继续"
+key = "auth.login.browser_continue"
+context = "Browser-open login step heading after launching authentication in a browser."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = "Click here to paste your token from the browser"
 target = "点击此处粘贴浏览器中的令牌"
+key = "auth.login.paste_token_link"
+context = "Link that reveals auth token paste input on the browser login step."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
@@ -478,6 +539,10 @@ target = "启用 AI 功能"
 path = "app/src/auth/login_slide.rs"
 source = "Skip for now"
 target = "暂时跳过"
+key = "auth.login.skip_for_now"
+context = "Secondary action allowing users to skip login during onboarding."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/workspace/view.rs"
@@ -490,14 +555,23 @@ source = "Search tabs..."
 target = "搜索标签页..."
 
 [[replace]]
+key = "workspace.view.search_sessions_agents_files_placeholder"
 path = "app/src/workspace/view.rs"
 source = "Search sessions, agents, files..."
 target = "搜索会话、Agent、文件..."
+context = "Workspace top-level search placeholder covering sessions, Agent conversations, and files."
+status = "active"
+preserve_terms = ["Agent"]
+expected_count = 1
 
 [[replace]]
+key = "workspace.view.new_tab"
 path = "app/src/workspace/view.rs"
 source = "New Tab"
 target = "新建标签页"
+context = "Workspace tab creation action."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/workspace/view.rs"
@@ -505,14 +579,22 @@ source = "Tab configs"
 target = "标签页配置"
 
 [[replace]]
+key = "workspace.view.settings"
 path = "app/src/workspace/view.rs"
 source = "Settings"
 target = "设置"
+context = "Workspace user/menu entry for opening settings."
+status = "active"
+expected_count = 1
 
 [[replace]]
+key = "workspace.vertical_tabs.new_session"
 path = "app/src/workspace/view/vertical_tabs.rs"
 source = "New session"
 target = "新会话"
+context = "Vertical tabs empty/new session action, covered by GUI smoke."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/workspace/view/vertical_tabs.rs"
@@ -1008,31 +1090,55 @@ target = "Agent 对话只会存储在本机，退出登录后会丢失，且无�
 path = "app/src/auth/paste_auth_token_modal.rs"
 source = "Paste"
 target = "粘贴"
+key = "auth.token_modal.paste_binding"
+context = "Paste action label/keybinding in the auth token modal."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/paste_auth_token_modal.rs"
 source = "Enter auth token"
 target = "输入认证令牌"
+key = "auth.token_modal.input_placeholder"
+context = "Auth token modal input placeholder."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/paste_auth_token_modal.rs"
 source = "Paste your auth token below"
 target = "在下方粘贴认证令牌"
+key = "auth.token_modal.title"
+context = "Auth token modal title."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/paste_auth_token_modal.rs"
 source = "Paste your auth token from the browser to get complete login."
 target = "粘贴浏览器中的认证令牌以完成登录。"
+key = "auth.token_modal.description"
+context = "Auth token modal explanatory text."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/paste_auth_token_modal.rs"
 source = "Cancel"
 target = "取消"
+key = "auth.token_modal.cancel"
+context = "Auth token modal cancel button."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/paste_auth_token_modal.rs"
 source = "Continue"
 target = "继续"
+key = "auth.token_modal.continue"
+context = "Auth token modal primary continue button."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/auth_override_warning_body.rs"
@@ -1078,36 +1184,64 @@ target = "继续"
 path = "app/src/auth/login_failure_notification.rs"
 source = " Not the first time? See our "
 target = " 不是第一次遇到？查看我们的"
+key = "auth.login_failure.troubleshooting_prefix"
+context = "Login failure notification text before the troubleshooting docs link."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_failure_notification.rs"
 source = "troubleshooting docs"
 target = "故障排查文档"
+key = "auth.login_failure.troubleshooting_docs"
+context = "Login failure notification troubleshooting documentation link label."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_failure_notification.rs"
 source = "An invalid auth token was entered into the modal."
 target = "输入的认证令牌无效。"
+key = "auth.login_failure.invalid_token"
+context = "Login failure notification shown after an invalid pasted auth token."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_failure_notification.rs"
 source = "Failed to log in. Try manually copying the auth token from the authentication web page and pasting into the modal."
 target = "登录失败。请尝试从认证网页手动复制认证令牌并粘贴到弹窗中。"
+key = "auth.login_failure.manual_token_retry"
+context = "Login failure notification recommending manual auth token copy/paste."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_failure_notification.rs"
 source = "Request to log in failed."
 target = "登录请求失败。"
+key = "auth.login_failure.login_request_failed"
+context = "Login failure notification for a failed login request."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_failure_notification.rs"
 source = "Request to sign up failed."
 target = "注册请求失败。"
+key = "auth.login_failure.signup_request_failed"
+context = "Login failure notification for a failed signup request."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/login_failure_notification.rs"
 source = "The redirect URL pasted did not originate from this app. Please click the button below to try again."
 target = "粘贴的重定向 URL 并非来自此应用。请点击下方按钮重试。"
+key = "auth.login_failure.invalid_redirect_origin"
+context = "Login failure notification shown when a pasted redirect URL does not match this app."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/auth/mod.rs"
@@ -2025,9 +2159,13 @@ source = "Workflow"
 target = "工作流"
 
 [[replace]]
+key = "workspace.vertical_tabs.environment_variables"
 path = "app/src/workspace/view/vertical_tabs.rs"
 source = "Environment Variables"
 target = "环境变量"
+context = "Vertical tabs item type label for environment variable tabs."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/workspace/view/vertical_tabs.rs"
@@ -4050,14 +4188,22 @@ source = "Left Panel: Warp Drive"
 target = "左侧面板：Warp Drive"
 
 [[replace]]
+key = "workspace.actions.open_global_search"
 path = "app/src/workspace/mod.rs"
 source = "Open global search"
 target = "打开全局搜索"
+context = "Workspace command palette action for opening global search."
+status = "active"
+expected_count = 1
 
 [[replace]]
+key = "workspace.actions.global_search"
 path = "app/src/workspace/mod.rs"
 source = "Global Search"
 target = "全局搜索"
+context = "Workspace command palette display label for global search."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/workspace/mod.rs"
@@ -4080,14 +4226,22 @@ source = "Close focused panel"
 target = "关闭聚焦面板"
 
 [[replace]]
+key = "workspace.actions.toggle_command_palette"
 path = "app/src/workspace/mod.rs"
 source = "Toggle command palette"
 target = "切换命令面板"
+context = "Workspace action for showing or hiding the command palette."
+status = "active"
+expected_count = 1
 
 [[replace]]
+key = "workspace.actions.command_palette"
 path = "app/src/workspace/mod.rs"
 source = "Command Palette"
 target = "命令面板"
+context = "Workspace command palette display label, covered by GUI smoke."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/workspace/mod.rs"
@@ -4330,14 +4484,22 @@ source = "Toggle the agent management view"
 target = "切换 Agent 管理视图"
 
 [[replace]]
+key = "workspace.settings.open_settings"
 path = "app/src/workspace/mod.rs"
 source = "Open Settings"
 target = "打开设置"
+context = "Workspace action for opening the settings window."
+status = "active"
+expected_count = 1
 
 [[replace]]
+key = "workspace.settings.settings"
 path = "app/src/workspace/mod.rs"
 source = "Settings"
 target = "设置"
+context = "Workspace settings command/menu label."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/workspace/mod.rs"
@@ -4345,9 +4507,13 @@ source = "Open Settings: Account"
 target = "打开设置：账号"
 
 [[replace]]
+key = "workspace.settings.open_appearance"
 path = "app/src/workspace/mod.rs"
 source = "Open Settings: Appearance"
 target = "打开设置：外观"
+context = "Workspace command palette action for opening Appearance settings."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/workspace/mod.rs"
@@ -4365,9 +4531,13 @@ source = "Open Settings: Shared Blocks"
 target = "打开设置：共享块"
 
 [[replace]]
+key = "workspace.settings.open_keyboard_shortcuts"
 path = "app/src/workspace/mod.rs"
 source = "Open Settings: Keyboard Shortcuts"
 target = "打开设置：键盘快捷键"
+context = "Workspace command palette action for opening keyboard shortcut settings."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/workspace/mod.rs"
@@ -4410,14 +4580,23 @@ source = "Configure Warpify..."
 target = "配置 Warpify..."
 
 [[replace]]
+key = "workspace.settings.open_ai"
 path = "app/src/workspace/mod.rs"
 source = "Open Settings: AI"
 target = "打开设置：AI"
+context = "Workspace command palette action for opening AI settings."
+status = "active"
+preserve_terms = ["AI"]
+expected_count = 1
 
 [[replace]]
+key = "workspace.settings.open_billing_usage"
 path = "app/src/workspace/mod.rs"
 source = "Open Settings: Billing and usage"
 target = "打开设置：账单和用量"
+context = "Workspace command palette action for opening Billing and usage settings."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/workspace/mod.rs"
@@ -11677,17 +11856,17 @@ target = "升级到 Build 方案"
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = " to use your own API keys."
-target = "以使用你自己的 API keys。"
+target = "以使用你自己的 API 密钥。"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = " to enable bringing your own API keys on your Enterprise plan."
-target = "以在 Enterprise 方案中启用自带 API keys。"
+target = "以在 Enterprise 方案中启用自带 API 密钥。"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Ask your team's admin to upgrade to the Build plan to use your own API keys."
-target = "请让团队管理员升级到 Build 方案，以使用你自己的 API keys。"
+target = "请让团队管理员升级到 Build 方案，以使用你自己的 API 密钥。"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
@@ -11746,8 +11925,40 @@ target = "当前状态（不回退）"
 
 [[replace]]
 path = "app/src/terminal/view/ambient_agent/delete_auth_secret_confirmation_dialog.rs"
+source = "Cancel"
+target = "取消"
+key = "ambient_agent.auth_secret_delete.cancel"
+context = "Cancel button in the managed auth secret deletion confirmation dialog."
+status = "active"
+expected_count = 1
+
+[[replace]]
+path = "app/src/terminal/view/ambient_agent/delete_auth_secret_confirmation_dialog.rs"
+source = "Delete"
+target = "删除"
+key = "ambient_agent.auth_secret_delete.confirm"
+context = "Danger confirmation button in the managed auth secret deletion confirmation dialog."
+status = "active"
+expected_count = 1
+
+[[replace]]
+path = "app/src/terminal/view/ambient_agent/delete_auth_secret_confirmation_dialog.rs"
 source = "Are you sure you want to delete {}? This action cannot be undone. Any agents or environments referencing this secret will no longer have access to it."
 target = "确定要删除 {} 吗？此操作无法撤销。任何引用此密钥的 Agent 或环境都将无法再访问它。"
+key = "ambient_agent.auth_secret_delete.description"
+context = "Destructive confirmation copy for deleting a managed auth secret used by Agents or environments."
+status = "active"
+preserve_terms = ["Agent"]
+expected_count = 1
+
+[[replace]]
+path = "app/src/terminal/view/ambient_agent/delete_auth_secret_confirmation_dialog.rs"
+source = "Delete secret"
+target = "删除密钥"
+key = "ambient_agent.auth_secret_delete.title"
+context = "Title of the managed auth secret deletion confirmation dialog."
+status = "active"
+expected_count = 1
 
 [[replace]]
 path = "app/src/settings_view/appearance_page.rs"
@@ -11922,7 +12133,7 @@ target = "每月扩展 AI 点数"
 [[replace]]
 path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
 source = "Bring your own API key"
-target = "自带 API key"
+target = "自带 API 密钥"
 
 [[replace]]
 path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
@@ -12372,7 +12583,7 @@ target = "可使用 Reload 额度和基于用量的折扣"
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
 source = "Bring your own API key"
-target = "自带 API key"
+target = "自带 API 密钥"
 
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
@@ -12783,3 +12994,940 @@ target = "（未知）"
 path = "app/src/settings_view/agent_assisted_environment_modal.rs"
 source = "No directory selected"
 target = "未选择目录"
+
+[[replace]]
+key = "workspace.right_panel.toggle_maximize_code_review_panel"
+path = "app/src/workspace/view/right_panel.rs"
+source = "Toggle Maximize Code Review Panel"
+target = "切换最大化代码审查面板"
+context = "Keyboard shortcut/action label for maximizing or restoring the code review right panel."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.right_panel.maximize"
+path = "app/src/workspace/view/right_panel.rs"
+source = "Maximize"
+target = "最大化"
+context = "Right panel maximize button tooltip."
+status = "active"
+expected_count = 2
+
+[[replace]]
+key = "workspace.right_panel.minimize"
+path = "app/src/workspace/view/right_panel.rs"
+source = "Minimize"
+target = "最小化"
+context = "Right panel restore/minimize button tooltip."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.right_panel.open_repository"
+path = "app/src/workspace/view/right_panel.rs"
+source = "Open repository"
+target = "打开仓库"
+context = "Right panel code review empty-state button."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.right_panel.open_repository_tooltip"
+path = "app/src/workspace/view/right_panel.rs"
+source = "Navigate to a repo and initialize it for coding"
+target = "前往仓库并初始化用于编码"
+context = "Tooltip for the right panel Open repository button."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.right_panel.close_panel"
+path = "app/src/workspace/view/right_panel.rs"
+source = "Close panel"
+target = "关闭面板"
+context = "Right panel close button tooltip."
+status = "active"
+expected_count = 2
+
+[[replace]]
+key = "workspace.right_panel.code_review_title"
+path = "app/src/workspace/view/right_panel.rs"
+source = "Code review"
+target = "代码审查"
+context = "Right panel header title for code review."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.banner.app_out_of_date"
+path = "app/src/workspace/view.rs"
+source = "Your app is out of date and needs to update."
+target = "你的应用版本过旧，需要更新。"
+context = "Workspace update warning banner description."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.banner.restart_update_now"
+path = "app/src/workspace/view.rs"
+source = "Restart app and update now"
+target = "立即重启并更新应用"
+context = "Workspace update warning banner primary action."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.banner.more_info"
+path = "app/src/workspace/view.rs"
+source = "More info"
+target = "更多信息"
+context = "Workspace banner secondary information button."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.oz.command_from_oz"
+path = "app/src/workspace/view.rs"
+source = "Command from Oz"
+target = "来自 Oz 的命令"
+context = "Workflow title for commands suggested by Oz/Agent mode."
+status = "active"
+preserve_terms = ["Oz"]
+expected_count = 1
+
+[[replace]]
+key = "workspace.ai.upgrade_usage"
+path = "app/src/workspace/view.rs"
+source = "Upgrade AI Usage"
+target = "升级 AI 用量"
+context = "Login-gated AI usage upgrade action title."
+status = "active"
+preserve_terms = ["AI"]
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.description"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "Provide your endpoint details below. You can add as many models from the endpoint as you'd like and can also provide aliases for the model picker in your input."
+target = "在下方提供端点详情。你可以从该端点添加任意数量的模型，也可以为输入框中的模型选择器提供别名。"
+context = "Custom inference endpoint modal description."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.endpoint_name"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "Endpoint name"
+target = "端点名称"
+context = "Custom inference endpoint form label."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.endpoint_url"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "Endpoint URL"
+target = "端点 URL"
+context = "Custom inference endpoint form label."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.api_key"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "API key"
+target = "API 密钥"
+context = "Custom inference endpoint form label."
+status = "active"
+preserve_terms = ["API"]
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.model_name"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "Model name"
+target = "模型名称"
+context = "Custom inference endpoint model row label."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.model_alias"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "Model alias (optional)"
+target = "模型别名（可选）"
+context = "Custom inference endpoint model row label."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.add_model"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "+ Add model"
+target = "+ 添加模型"
+context = "Custom inference endpoint add model button."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.cancel"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "Cancel"
+target = "取消"
+context = "Custom inference endpoint cancel button."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.save"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "Save"
+target = "保存"
+context = "Custom inference endpoint save button."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.remove_endpoint"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "Remove"
+target = "移除"
+context = "Custom inference endpoint edit modal remove button."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.add_endpoint"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "Add endpoint"
+target = "添加端点"
+context = "Custom inference endpoint creation button."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.invalid_url"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "Invalid URL"
+target = "无效 URL"
+context = "Custom inference endpoint URL validation error."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.url_https_required"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "URL must use HTTPS"
+target = "URL 必须使用 HTTPS"
+context = "Custom inference endpoint URL validation error."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.url_host_required"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "URL must include a host"
+target = "URL 必须包含主机"
+context = "Custom inference endpoint URL validation error."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.custom_inference.url_no_private_host"
+path = "app/src/settings_view/custom_inference_modal.rs"
+source = "URL must not use a local or private host"
+target = "URL 不能使用本地或私有主机"
+context = "Custom inference endpoint URL validation error."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.team_name"
+path = "app/src/settings_view/teams_page.rs"
+source = "Team name"
+target = "团队名称"
+context = "Team creation form placeholder."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.create_description"
+path = "app/src/settings_view/teams_page.rs"
+source = "When you create a team, you can collaborate on agent-driven development by sharing cloud agent runs, environments, automations, and artifacts. You can also create a shared knowledge store for teammates and agents alike."
+target = "创建团队后，你可以通过共享云端 Agent 运行、环境、自动化和产物来协作进行 Agent 驱动开发。你还可以为团队成员和 Agent 创建共享知识库。"
+context = "Team creation page description."
+status = "active"
+preserve_terms = ["Agent"]
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.leave_team"
+path = "app/src/settings_view/teams_page.rs"
+source = "Leave team"
+target = "离开团队"
+context = "Team settings destructive action button."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.delete_team"
+path = "app/src/settings_view/teams_page.rs"
+source = "Delete team"
+target = "删除团队"
+context = "Team settings destructive action button."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.create"
+path = "app/src/settings_view/teams_page.rs"
+source = "Create"
+target = "创建"
+context = "Team creation button."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.domains_placeholder"
+path = "app/src/settings_view/teams_page.rs"
+source = "Domains, comma separated"
+target = "域名，用逗号分隔"
+context = "Team invite domain restrictions input placeholder."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.emails_placeholder"
+path = "app/src/settings_view/teams_page.rs"
+source = "Emails, comma separated"
+target = "邮箱，用逗号分隔"
+context = "Team invite email input placeholder."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.set"
+path = "app/src/settings_view/teams_page.rs"
+source = "Set"
+target = "设置"
+context = "Team domain restriction apply button."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.invite"
+path = "app/src/settings_view/teams_page.rs"
+source = "Invite"
+target = "邀请"
+context = "Team email invite button."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.invalid_domains"
+path = "app/src/settings_view/teams_page.rs"
+source = "Some of the provided domains are invalid, or have already been added."
+target = "部分域名无效，或已经添加。"
+context = "Team invite domain validation message."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.invite_links_admin_help"
+path = "app/src/settings_view/teams_page.rs"
+source = "As an admin, you can choose whether to enable or disable the ability for team members to invite others by invitation link."
+target = "作为管理员，你可以选择是否允许团队成员通过邀请链接邀请其他人。"
+context = "Team invite link settings explanatory text."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.invite_links_domain_restriction_help"
+path = "app/src/settings_view/teams_page.rs"
+source = "Restrict by domain — only allow users with emails at specific domains to join your team through the invite link."
+target = "按域名限制：只允许特定域名邮箱的用户通过邀请链接加入你的团队。"
+context = "Team invite link domain restriction explanatory text."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.email_invite_expiry"
+path = "app/src/settings_view/teams_page.rs"
+source = "Email invitations are valid for 7 days."
+target = "邮件邀请有效期为 7 天。"
+context = "Team email invite expiry note."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.invalid_emails"
+path = "app/src/settings_view/teams_page.rs"
+source = "Some of the provided email addresses are invalid, already invited, or members of the team."
+target = "部分邮箱地址无效、已邀请，或已经是团队成员。"
+context = "Team email invite validation message."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "settings.teams.offline"
+path = "app/src/settings_view/teams_page.rs"
+source = "You are offline."
+target = "你当前离线。"
+context = "Team settings offline state message."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.share_session"
+path = "app/src/tab.rs"
+source = "Share session"
+target = "共享会话"
+context = "Vertical tab context menu item for opening the share session modal."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.stop_sharing"
+path = "app/src/tab.rs"
+source = "Stop sharing"
+target = "停止共享"
+context = "Vertical tab context menu item for stopping the focused shared session."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.stop_sharing_all"
+path = "app/src/tab.rs"
+source = "Stop sharing all"
+target = "停止全部共享"
+context = "Vertical tab context menu item for stopping all shared sessions in a tab."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.copy_link"
+path = "app/src/tab.rs"
+source = "Copy link"
+target = "复制链接"
+context = "Vertical tab context menu item for copying a shared session link."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.copy_tab_title"
+path = "app/src/tab.rs"
+source = "Copy tab title"
+target = "复制标签页标题"
+context = "Vertical tab context menu item for copying tab metadata."
+status = "active"
+expected_count = 2
+
+[[replace]]
+key = "workspace.tab_menu.copy_pane_title"
+path = "app/src/tab.rs"
+source = "Copy pane title"
+target = "复制窗格标题"
+context = "Vertical tab context menu item for copying pane metadata."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.copy_branch"
+path = "app/src/tab.rs"
+source = "Copy branch"
+target = "复制分支"
+context = "Vertical tab context menu item for copying the current git branch."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.copy_working_directory"
+path = "app/src/tab.rs"
+source = "Copy working directory"
+target = "复制工作目录"
+context = "Vertical tab context menu item for copying the current working directory."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.copy_pull_request_link"
+path = "app/src/tab.rs"
+source = "Copy pull request link"
+target = "复制拉取请求链接"
+context = "Vertical tab context menu item for copying a pull request link."
+status = "active"
+preserve_terms = ["pull request"]
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.rename_tab"
+path = "app/src/tab.rs"
+source = "Rename tab"
+target = "重命名标签页"
+context = "Vertical tab context menu item for renaming a tab."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.reset_tab_name"
+path = "app/src/tab.rs"
+source = "Reset tab name"
+target = "重置标签页名称"
+context = "Vertical tab context menu item for clearing a custom tab name."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.move_tab_down"
+path = "app/src/tab.rs"
+source = "Move Tab Down"
+target = "下移标签页"
+context = "Vertical tab context menu item for moving a tab down."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.move_tab_right"
+path = "app/src/tab.rs"
+source = "Move Tab Right"
+target = "右移标签页"
+context = "Horizontal tab context menu item for moving a tab right."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.move_tab_up"
+path = "app/src/tab.rs"
+source = "Move Tab Up"
+target = "上移标签页"
+context = "Vertical tab context menu item for moving a tab up."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.move_tab_left"
+path = "app/src/tab.rs"
+source = "Move Tab Left"
+target = "左移标签页"
+context = "Horizontal tab context menu item for moving a tab left."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.close_tab"
+path = "app/src/tab.rs"
+source = "Close tab"
+target = "关闭标签页"
+context = "Vertical tab context menu item for closing the selected tab."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.close_other_tabs"
+path = "app/src/tab.rs"
+source = "Close other tabs"
+target = "关闭其他标签页"
+context = "Vertical tab context menu item for closing tabs except the selected one."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.close_tabs_below"
+path = "app/src/tab.rs"
+source = "Close Tabs Below"
+target = "关闭下方标签页"
+context = "Vertical tab context menu item for closing tabs below the selected tab."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.close_tabs_to_right"
+path = "app/src/tab.rs"
+source = "Close Tabs to the Right"
+target = "关闭右侧标签页"
+context = "Horizontal tab context menu item for closing tabs to the right."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.save_as_new_config"
+path = "app/src/tab.rs"
+source = "Save as new config"
+target = "另存为新配置"
+context = "Vertical tab context menu item for saving the current tab configuration."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.new_group_with_tab"
+path = "app/src/tab.rs"
+source = "New group with tab"
+target = "用此标签页新建分组"
+context = "Grouped tabs context menu item for creating a new group from the selected tab."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "workspace.tab_menu.move_to_group"
+path = "app/src/tab.rs"
+source = "Move to group"
+target = "移动到分组"
+context = "Grouped tabs context menu submenu label for moving a tab into a group."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.conversation_status.queued"
+path = "app/src/ai/agent_conversations_model.rs"
+source = "Queued"
+target = "排队中"
+context = "Agent conversation/task status label shown in conversation lists and details."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.conversation_status.pending"
+path = "app/src/ai/agent_conversations_model.rs"
+source = "Pending"
+target = "等待中"
+context = "Agent conversation/task status label shown in conversation lists and details."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.conversation_status.claimed"
+path = "app/src/ai/agent_conversations_model.rs"
+source = "Claimed"
+target = "已分配"
+context = "Agent conversation/task status label shown in conversation lists and details."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.conversation_status.in_progress"
+path = "app/src/ai/agent_conversations_model.rs"
+source = "In progress"
+target = "进行中"
+context = "Agent conversation/task status label shown in conversation lists and details."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.conversation_status.done"
+path = "app/src/ai/agent_conversations_model.rs"
+source = "Done"
+target = "已完成"
+context = "Agent conversation/task status label shown in conversation lists and details."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.conversation_status.failed"
+path = "app/src/ai/agent_conversations_model.rs"
+source = "Failed"
+target = "失败"
+context = "Agent conversation/task status label shown in conversation lists and details."
+status = "active"
+expected_count = 2
+
+[[replace]]
+key = "agent.conversation_status.error"
+path = "app/src/ai/agent_conversations_model.rs"
+source = "Error"
+target = "错误"
+context = "Agent conversation/task status label shown in conversation lists and details."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.conversation_status.blocked"
+path = "app/src/ai/agent_conversations_model.rs"
+source = "Blocked"
+target = "已阻塞"
+context = "Agent conversation/task status label shown in conversation lists and details."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.conversation_status.cancelled"
+path = "app/src/ai/agent_conversations_model.rs"
+source = "Cancelled"
+target = "已取消"
+context = "Agent conversation/task status label shown in conversation lists and details."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.ambient_task_state.queued"
+path = "app/src/ai/ambient_agents/task.rs"
+source = "Queued"
+target = "排队中"
+context = "Ambient Agent task status label shown in task and management surfaces."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.ambient_task_state.pending"
+path = "app/src/ai/ambient_agents/task.rs"
+source = "Pending"
+target = "等待中"
+context = "Ambient Agent task status label shown in task and management surfaces."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.ambient_task_state.claimed"
+path = "app/src/ai/ambient_agents/task.rs"
+source = "Claimed"
+target = "已分配"
+context = "Ambient Agent task status label shown in task and management surfaces."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.ambient_task_state.in_progress"
+path = "app/src/ai/ambient_agents/task.rs"
+source = "In progress"
+target = "进行中"
+context = "Ambient Agent task status label shown in task and management surfaces."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.ambient_task_state.done"
+path = "app/src/ai/ambient_agents/task.rs"
+source = "Done"
+target = "已完成"
+context = "Ambient Agent task status label shown in task and management surfaces."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.ambient_task_state.failed"
+path = "app/src/ai/ambient_agents/task.rs"
+source = "Failed"
+target = "失败"
+context = "Ambient Agent task status label shown in task and management surfaces."
+status = "active"
+expected_count = 2
+
+[[replace]]
+key = "agent.ambient_task_state.error"
+path = "app/src/ai/ambient_agents/task.rs"
+source = "Error"
+target = "错误"
+context = "Ambient Agent task status label shown in task and management surfaces."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.ambient_task_state.blocked"
+path = "app/src/ai/ambient_agents/task.rs"
+source = "Blocked"
+target = "已阻塞"
+context = "Ambient Agent task status label shown in task and management surfaces."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.ambient_task_state.cancelled"
+path = "app/src/ai/ambient_agents/task.rs"
+source = "Cancelled"
+target = "已取消"
+context = "Ambient Agent task status label shown in task and management surfaces."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.pending_user_query.queued_badge"
+path = "app/src/ai/blocklist/block/pending_user_query_block.rs"
+source = "Queued"
+target = "排队中"
+context = "Badge shown under a pending user query block."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.history_status.completed"
+path = "app/src/ai/blocklist/history_model.rs"
+source = "Completed successfully"
+target = "已成功完成"
+context = "Agent history output status label."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.history_status.pending"
+path = "app/src/ai/blocklist/history_model.rs"
+source = "Pending"
+target = "等待中"
+context = "Agent history output status label."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.history_status.cancelled"
+path = "app/src/ai/blocklist/history_model.rs"
+source = "Cancelled by user"
+target = "用户已取消"
+context = "Agent history output status label."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "agent.history_status.failed"
+path = "app/src/ai/blocklist/history_model.rs"
+source = "Failed"
+target = "失败"
+context = "Agent history output status label."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.trigger.long_running_command"
+path = "app/src/terminal/view.rs"
+source = "Warp can notify you when long-running commands finish."
+target = "Warp 可以在长时间运行的命令完成时通知你。"
+context = "Inline notification discovery banner copy for long-running terminal commands."
+status = "active"
+preserve_terms = ["Warp"]
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.trigger.agent_task_completed"
+path = "app/src/terminal/view.rs"
+source = "Warp can notify you when an agent finishes responding."
+target = "Warp 可以在 Agent 完成响应时通知你。"
+context = "Inline notification discovery banner copy for completed Agent responses."
+status = "active"
+preserve_terms = ["Warp", "Agent"]
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.trigger.needs_attention"
+path = "app/src/terminal/view.rs"
+source = "Warp can notify you when a command or agent needs your attention."
+target = "Warp 可以在命令或 Agent 需要你注意时通知你。"
+context = "Inline notification discovery banner copy for commands or Agent tasks that need attention."
+status = "active"
+preserve_terms = ["Warp", "Agent"]
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.trigger.password_prompt"
+path = "app/src/terminal/view.rs"
+source = "Warp can notify you when you're prompted to enter a password."
+target = "Warp 可以在需要输入密码时通知你。"
+context = "Inline notification discovery banner copy for password prompt notifications."
+status = "active"
+preserve_terms = ["Warp"]
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.discovery.learn_more"
+path = "app/src/terminal/view/inline_banner/notifications_discovery.rs"
+source = "Learn more"
+target = "了解更多"
+context = "Secondary button in the terminal notification discovery banner."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.discovery.troubleshoot"
+path = "app/src/terminal/view/inline_banner/notifications_discovery.rs"
+source = "Troubleshoot"
+target = "排查问题"
+context = "Secondary troubleshooting button in the terminal notification discovery banner."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.discovery.dismissed"
+path = "app/src/terminal/view/inline_banner/notifications_discovery.rs"
+source = "We won't show this banner again, but you can always go to Settings to enable notifications."
+target = "我们不会再显示此横幅，但你随时可以前往设置启用通知。"
+context = "Terminal notification discovery banner text after the user dismisses notification setup."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.discovery.disabled"
+path = "app/src/terminal/view/inline_banner/notifications_discovery.rs"
+source = "Notifications were turned off, but you can always go to Settings to enable notifications."
+target = "通知已关闭，但你随时可以前往设置重新启用。"
+context = "Terminal notification discovery banner text after notifications are disabled."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.discovery.enable"
+path = "app/src/terminal/view/inline_banner/notifications_discovery.rs"
+source = "Enable"
+target = "启用"
+context = "Primary button in the terminal notification discovery banner."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.discovery.success"
+path = "app/src/terminal/view/inline_banner/notifications_discovery.rs"
+source = "Success! You are now ready to receive desktop notifications."
+target = "已启用！你现在可以接收桌面通知。"
+context = "Terminal notification discovery banner text after notification permission succeeds."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.discovery.permission_denied"
+path = "app/src/terminal/view/inline_banner/notifications_discovery.rs"
+source = "Warp was denied permissions to send you notifications."
+target = "Warp 的通知发送权限已被拒绝。"
+context = "Terminal notification discovery banner text when macOS denies notification permission."
+status = "active"
+preserve_terms = ["Warp"]
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.discovery.permission_error"
+path = "app/src/terminal/view/inline_banner/notifications_discovery.rs"
+source = "Something went wrong while requesting permissions."
+target = "请求权限时出现问题。"
+context = "Terminal notification discovery banner text when requesting notification permission fails."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.discovery.allow_reminder"
+path = "app/src/terminal/view/inline_banner/notifications_discovery.rs"
+source = "Don't forget to 'Allow' the permissions request to finish setting up notifications."
+target = "请记得在权限请求中点按“允许”，以完成通知设置。"
+context = "Terminal notification discovery banner reminder to accept the macOS permission prompt."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.discovery.configure"
+path = "app/src/terminal/view/inline_banner/notifications_discovery.rs"
+source = "Configure notifications"
+target = "配置通知"
+context = "Secondary button in the terminal notification discovery banner."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.error.set_permissions"
+path = "app/src/terminal/view/inline_banner/notifications_error.rs"
+source = "Set permissions"
+target = "设置权限"
+context = "Primary button in the terminal notification error banner."
+status = "active"
+expected_count = 1
+
+[[replace]]
+key = "terminal.notifications.error.troubleshoot"
+path = "app/src/terminal/view/inline_banner/notifications_error.rs"
+source = "Troubleshoot"
+target = "排查问题"
+context = "Secondary troubleshooting button in the terminal notification error banner."
+status = "active"
+expected_count = 1

@@ -7,6 +7,13 @@ use warpui_extras::secure_storage::{self, AppContextExt};
 pub use crate::aws_credentials::{AwsCredentials, AwsCredentialsState};
 
 const SECURE_STORAGE_KEY: &str = "AiApiKeys";
+pub const CUSTOM_INFERENCE_SMOKE_ENV_VAR: &str = "WARP_CN_CUSTOM_INFERENCE_SMOKE";
+const CUSTOM_INFERENCE_SMOKE_ENDPOINT_NAME: &str = "zh-smoke-delete-endpoint";
+const CUSTOM_INFERENCE_SMOKE_ENDPOINT_URL: &str = "https://example.com";
+const CUSTOM_INFERENCE_SMOKE_API_KEY: &str = "sk-zh-smoke-dummy-key";
+const CUSTOM_INFERENCE_SMOKE_MODEL_NAME: &str = "zh-smoke-model";
+const CUSTOM_INFERENCE_SMOKE_MODEL_ALIAS: &str = "zh-smoke";
+const CUSTOM_INFERENCE_SMOKE_CONFIG_KEY: &str = "00000000-0000-4000-8000-000000000009";
 
 /// Emitted when user-provided API keys are updated in-memory.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -103,7 +110,8 @@ pub struct ApiKeyManager {
 
 impl ApiKeyManager {
     pub fn new(ctx: &mut ModelContext<Self>) -> Self {
-        let keys = Self::load_keys_from_secure_storage(ctx);
+        let mut keys = Self::load_keys_from_secure_storage(ctx);
+        apply_custom_inference_smoke_fixture(&mut keys, custom_inference_smoke_override_enabled());
         Self {
             keys,
             aws_credentials_state: AwsCredentialsState::Missing,
@@ -367,6 +375,9 @@ impl ApiKeyManager {
     }
 
     fn write_keys_to_secure_storage(&mut self, ctx: &mut ModelContext<Self>) {
+        if custom_inference_smoke_override_enabled() {
+            return;
+        }
         let json = match serde_json::to_string(&self.keys) {
             Ok(json) => json,
             Err(e) => {
@@ -399,6 +410,37 @@ impl Entity for ApiKeyManager {
 }
 
 impl SingletonEntity for ApiKeyManager {}
+
+pub fn custom_inference_smoke_override_enabled() -> bool {
+    let smoke_override = std::env::var(CUSTOM_INFERENCE_SMOKE_ENV_VAR).ok();
+    custom_inference_smoke_override_value_is_enabled(smoke_override.as_deref())
+}
+
+pub fn custom_inference_smoke_override_value_is_enabled(value: Option<&str>) -> bool {
+    cfg!(debug_assertions) && value == Some("1")
+}
+
+fn apply_custom_inference_smoke_fixture(keys: &mut ApiKeys, enabled: bool) {
+    if !enabled
+        || keys
+            .custom_endpoints
+            .iter()
+            .any(|endpoint| endpoint.name == CUSTOM_INFERENCE_SMOKE_ENDPOINT_NAME)
+    {
+        return;
+    }
+
+    keys.custom_endpoints.push(CustomEndpoint {
+        name: CUSTOM_INFERENCE_SMOKE_ENDPOINT_NAME.to_string(),
+        url: CUSTOM_INFERENCE_SMOKE_ENDPOINT_URL.to_string(),
+        api_key: CUSTOM_INFERENCE_SMOKE_API_KEY.to_string(),
+        models: vec![CustomEndpointModel {
+            name: CUSTOM_INFERENCE_SMOKE_MODEL_NAME.to_string(),
+            alias: Some(CUSTOM_INFERENCE_SMOKE_MODEL_ALIAS.to_string()),
+            config_key: CUSTOM_INFERENCE_SMOKE_CONFIG_KEY.to_string(),
+        }],
+    });
+}
 
 #[cfg(test)]
 #[path = "api_keys_tests.rs"]

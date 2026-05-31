@@ -1,4 +1,4 @@
-use ::ai::api_keys::{ApiKeyManager, ApiKeys};
+use ::ai::api_keys::{custom_inference_smoke_override_enabled, ApiKeyManager, ApiKeys};
 use enum_iterator::all;
 use itertools::Itertools;
 use pathfinder_geometry::vector::vec2f;
@@ -1521,8 +1521,11 @@ impl AISettingsPageView {
         });
 
         // Custom inference
-        let custom_inference_controls_enabled =
-            is_any_ai_enabled && UserWorkspaces::as_ref(ctx).is_custom_inference_enabled(ctx);
+        let custom_inference_smoke_override_enabled =
+            Self::custom_inference_smoke_override_enabled();
+        let custom_inference_controls_enabled = (is_any_ai_enabled
+            && UserWorkspaces::as_ref(ctx).is_custom_inference_enabled(ctx))
+            || custom_inference_smoke_override_enabled;
         let custom_inference_add_button = ctx.add_typed_action_view(|_| {
             ActionButton::new("+ 添加自定义模型", SecondaryTheme)
                 .with_size(ButtonSize::Small)
@@ -1763,10 +1766,17 @@ impl AISettingsPageView {
             })
             .collect()
     }
+    fn custom_inference_smoke_override_enabled() -> bool {
+        custom_inference_smoke_override_enabled()
+    }
+
     fn can_use_custom_inference_controls(app: &AppContext) -> bool {
-        FeatureFlag::CustomInferenceEndpoints.is_enabled()
-            && AISettings::as_ref(app).is_any_ai_enabled(app)
-            && UserWorkspaces::as_ref(app).is_custom_inference_enabled(app)
+        let smoke_override_enabled = Self::custom_inference_smoke_override_enabled();
+
+        (FeatureFlag::CustomInferenceEndpoints.is_enabled() || smoke_override_enabled)
+            && (AISettings::as_ref(app).is_any_ai_enabled(app) || smoke_override_enabled)
+            && (UserWorkspaces::as_ref(app).is_custom_inference_enabled(app)
+                || smoke_override_enabled)
     }
 
     fn show_add_custom_endpoint_modal(&mut self, ctx: &mut ViewContext<Self>) {
@@ -7446,10 +7456,15 @@ impl SettingsWidget for ApiKeysWidget {
         let is_byo_enabled = UserWorkspaces::as_ref(app).is_byo_api_key_enabled(app);
         let is_custom_inference_enabled =
             UserWorkspaces::as_ref(app).is_custom_inference_enabled(app);
+        let custom_inference_smoke_override_enabled =
+            AISettingsPageView::custom_inference_smoke_override_enabled();
         let provider_keys_enabled = is_any_ai_enabled && is_byo_enabled;
-        let custom_inference_controls_enabled = is_any_ai_enabled && is_custom_inference_enabled;
-        let custom_inference_flag_on = FeatureFlag::CustomInferenceEndpoints.is_enabled();
-        let show_custom_inference = custom_inference_flag_on && is_custom_inference_enabled;
+        let custom_inference_controls_enabled = (is_any_ai_enabled && is_custom_inference_enabled)
+            || custom_inference_smoke_override_enabled;
+        let custom_inference_flag_on = FeatureFlag::CustomInferenceEndpoints.is_enabled()
+            || custom_inference_smoke_override_enabled;
+        let show_custom_inference = custom_inference_flag_on
+            && (is_custom_inference_enabled || custom_inference_smoke_override_enabled);
 
         let mut column = Flex::column().with_child(render_separator(appearance));
 
@@ -7553,7 +7568,7 @@ impl SettingsWidget for ApiKeysWidget {
                         vec![
                             FormattedTextFragment::hyperlink("联系销售", "mailto:sales@warp.dev"),
                             FormattedTextFragment::plain_text(
-                                "以在 Enterprise 方案中启用自带 API keys。",
+                                "以在 Enterprise 方案中启用自带 API 密钥。",
                             ),
                         ]
                     } else {
@@ -7563,11 +7578,11 @@ impl SettingsWidget for ApiKeysWidget {
                         if has_admin_permissions {
                             vec![
                                 FormattedTextFragment::hyperlink("升级到 Build 方案", upgrade_url),
-                                FormattedTextFragment::plain_text("以使用你自己的 API keys。"),
+                                FormattedTextFragment::plain_text("以使用你自己的 API 密钥。"),
                             ]
                         } else {
                             vec![FormattedTextFragment::plain_text(
-                                "请让团队管理员升级到 Build 方案，以使用你自己的 API keys。",
+                                "请让团队管理员升级到 Build 方案，以使用你自己的 API 密钥。",
                             )]
                         }
                     }
@@ -7579,14 +7594,14 @@ impl SettingsWidget for ApiKeysWidget {
                             "创建账号",
                             AISettingsPageAction::SignupAnonymousUser,
                         ),
-                        FormattedTextFragment::plain_text("以使用你自己的 API keys。"),
+                        FormattedTextFragment::plain_text("以使用你自己的 API 密钥。"),
                     ]
                 } else {
                     let user_id = auth_state.user_id().unwrap_or_default();
                     let upgrade_url = UserWorkspaces::upgrade_link(user_id);
                     vec![
                         FormattedTextFragment::hyperlink("升级到 Build 方案", upgrade_url),
-                        FormattedTextFragment::plain_text("以使用你自己的 API keys。"),
+                        FormattedTextFragment::plain_text("以使用你自己的 API 密钥。"),
                     ]
                 };
 

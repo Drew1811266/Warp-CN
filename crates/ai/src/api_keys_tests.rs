@@ -155,6 +155,46 @@ fn has_custom_endpoints_true_when_present() {
     assert!(keys.has_custom_endpoints());
 }
 
+#[test]
+fn custom_inference_smoke_override_requires_exact_one() {
+    assert!(custom_inference_smoke_override_value_is_enabled(Some("1")));
+    assert!(!custom_inference_smoke_override_value_is_enabled(Some(
+        "true"
+    )));
+    assert!(!custom_inference_smoke_override_value_is_enabled(Some("0")));
+    assert!(!custom_inference_smoke_override_value_is_enabled(None));
+}
+
+#[test]
+fn custom_inference_smoke_fixture_adds_disposable_endpoint_once() {
+    let mut keys = ApiKeys::default();
+    apply_custom_inference_smoke_fixture(&mut keys, true);
+    apply_custom_inference_smoke_fixture(&mut keys, true);
+
+    assert_eq!(keys.custom_endpoints.len(), 1);
+    let endpoint = &keys.custom_endpoints[0];
+    assert_eq!(endpoint.name, CUSTOM_INFERENCE_SMOKE_ENDPOINT_NAME);
+    assert_eq!(endpoint.url, CUSTOM_INFERENCE_SMOKE_ENDPOINT_URL);
+    assert_eq!(endpoint.api_key, CUSTOM_INFERENCE_SMOKE_API_KEY);
+    assert_eq!(endpoint.models.len(), 1);
+    assert_eq!(endpoint.models[0].name, CUSTOM_INFERENCE_SMOKE_MODEL_NAME);
+    assert_eq!(
+        endpoint.models[0].alias.as_deref(),
+        Some(CUSTOM_INFERENCE_SMOKE_MODEL_ALIAS)
+    );
+    assert_eq!(
+        endpoint.models[0].config_key,
+        CUSTOM_INFERENCE_SMOKE_CONFIG_KEY
+    );
+}
+
+#[test]
+fn custom_inference_smoke_fixture_does_not_add_when_disabled() {
+    let mut keys = ApiKeys::default();
+    apply_custom_inference_smoke_fixture(&mut keys, false);
+    assert!(keys.custom_endpoints.is_empty());
+}
+
 // ── custom_model_providers_for_request ──────────────────────────
 
 #[test]

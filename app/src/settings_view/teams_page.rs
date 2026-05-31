@@ -82,18 +82,18 @@ use crate::workspaces::workspace::{
 
 const TEAM_MEMBERS_HEADER_POSITION_ID: &str = "team_settings:team_members_header";
 // Styling for team create page
-const TEAM_NAME_EDITOR_PLACEHOLDER_TEXT: &str = "Team name";
+const TEAM_NAME_EDITOR_PLACEHOLDER_TEXT: &str = "团队名称";
 const CREATE_TEAM_BUTTON_LEFT_PADDING: f32 = 10.;
-const CREATE_TEAM_DESCRIPTION: &str = "When you create a team, you can collaborate on agent-driven development by sharing cloud agent runs, environments, automations, and artifacts. You can also create a shared knowledge store for teammates and agents alike.";
+const CREATE_TEAM_DESCRIPTION: &str = "创建团队后，你可以通过共享云端 Agent 运行、环境、自动化和产物来协作进行 Agent 驱动开发。你还可以为团队成员和 Agent 创建共享知识库。";
 
 // Styling for team management page
-const LEAVE_TEAM_BUTTON_LABEL: &str = "Leave team";
-const DELETE_TEAM_BUTTON_LABEL: &str = "Delete team";
-const CREATE_TEAM_BUTTON_LABEL: &str = "Create";
-const APPROVE_DOMAINS_PLACEHOLDER: &str = "Domains, comma separated";
-const EMAILS_PLACEHOLDER: &str = "Emails, comma separated";
-const APPROVE_DOMAINS_BUTTON_LABEL: &str = "Set";
-const SEND_EMAIL_INVITES_BUTTON_LABEL: &str = "Invite";
+const LEAVE_TEAM_BUTTON_LABEL: &str = "离开团队";
+const DELETE_TEAM_BUTTON_LABEL: &str = "删除团队";
+const CREATE_TEAM_BUTTON_LABEL: &str = "创建";
+const APPROVE_DOMAINS_PLACEHOLDER: &str = "域名，用逗号分隔";
+const EMAILS_PLACEHOLDER: &str = "邮箱，用逗号分隔";
+const APPROVE_DOMAINS_BUTTON_LABEL: &str = "设置";
+const SEND_EMAIL_INVITES_BUTTON_LABEL: &str = "邀请";
 const BUTTON_WIDTH: f32 = 82.;
 const BUTTON_HEIGHT: f32 = 40.;
 const COPY_LINK_LEFT_PADDING: f32 = 7.;
@@ -107,18 +107,17 @@ const SUBSECTION_HEADER_FONT_SIZE: f32 = 18.;
 const SUBSUBSECTION_HEADER_FONT_SIZE: f32 = 14.;
 
 const INVITE_LINK_PREFIX: &str = "/team/";
-const INVALID_DOMAINS_INSTRUCTIONS: &str =
-    "Some of the provided domains are invalid, or have already been added.";
+const INVALID_DOMAINS_INSTRUCTIONS: &str = "部分域名无效，或已经添加。";
 
-const INVITE_LINK_TOGGLE_INSTRUCTIONS: &str = "As an admin, you can choose whether to enable or disable the ability for team members to invite others by invitation link.";
+const INVITE_LINK_TOGGLE_INSTRUCTIONS: &str =
+    "作为管理员，你可以选择是否允许团队成员通过邀请链接邀请其他人。";
 const INVITE_LINK_DOMAIN_RESTRICTIONS_INSTRUCTIONS: &str =
-    "Restrict by domain — only allow users with emails at specific domains to join your team through the invite link.";
+    "按域名限制：只允许特定域名邮箱的用户通过邀请链接加入你的团队。";
 
-const INVITE_BY_EMAIL_EXPIRY_INSTRUCTIONS: &str = "Email invitations are valid for 7 days.";
-const INVALID_EMAILS_INSTRUCTIONS: &str =
-    "Some of the provided email addresses are invalid, already invited, or members of the team.";
+const INVITE_BY_EMAIL_EXPIRY_INSTRUCTIONS: &str = "邮件邀请有效期为 7 天。";
+const INVALID_EMAILS_INSTRUCTIONS: &str = "部分邮箱地址无效、已邀请，或已经是团队成员。";
 
-const OFFLINE_TEXT: &str = "You are offline.";
+const OFFLINE_TEXT: &str = "你当前离线。";
 
 const MAX_CHIP_WIDTH: f32 = 280.;
 

@@ -1,0 +1,39 @@
+# Glossary rules for Warp CN zh-Hans localization.
+#
+# These rules are intentionally conservative. They catch terms that should stay
+# stable across the overlay manifest without trying to enforce every possible
+# wording choice.
+
+preserve_terms = [
+  "Warp",
+  "Warp Drive",
+  "Warp Agent",
+  "Agent",
+  "MCP",
+  "CLI",
+  "GitHub",
+  "AWS Bedrock",
+  "Oz",
+  "Codex",
+  "Claude Code",
+  "Gemini",
+]
+
+required_translations = [
+  "Settings => 设置",
+  "Command Palette => 命令面板",
+  "Command Search => 命令搜索",
+  "Billing and usage => 账单",
+  "Environment Variables => 环境变量",
+  "Keyboard shortcuts => 键盘快捷键",
+  "Endpoint => 端点",
+  "API key => API 密钥",
+  "Model => 模型",
+  "Team => 团队",
+  "Teams => 团队",
+]
+
+forbidden_targets = [
+  # The current project style keeps Agent as the product term.
+  "智能体",
+]

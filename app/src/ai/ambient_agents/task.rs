@@ -589,16 +589,16 @@ impl AmbientAgentTaskState {
 impl std::fmt::Display for AmbientAgentTaskState {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            AmbientAgentTaskState::Queued => write!(f, "Queued"),
-            AmbientAgentTaskState::Pending => write!(f, "Pending"),
-            AmbientAgentTaskState::Claimed => write!(f, "Claimed"),
-            AmbientAgentTaskState::InProgress => write!(f, "In progress"),
-            AmbientAgentTaskState::Succeeded => write!(f, "Done"),
-            AmbientAgentTaskState::Failed => write!(f, "Failed"),
-            AmbientAgentTaskState::Error => write!(f, "Error"),
-            AmbientAgentTaskState::Blocked => write!(f, "Blocked"),
-            AmbientAgentTaskState::Cancelled => write!(f, "Cancelled"),
-            AmbientAgentTaskState::Unknown => write!(f, "Failed"),
+            AmbientAgentTaskState::Queued => write!(f, "排队中"),
+            AmbientAgentTaskState::Pending => write!(f, "等待中"),
+            AmbientAgentTaskState::Claimed => write!(f, "已分配"),
+            AmbientAgentTaskState::InProgress => write!(f, "进行中"),
+            AmbientAgentTaskState::Succeeded => write!(f, "已完成"),
+            AmbientAgentTaskState::Failed => write!(f, "失败"),
+            AmbientAgentTaskState::Error => write!(f, "错误"),
+            AmbientAgentTaskState::Blocked => write!(f, "已阻塞"),
+            AmbientAgentTaskState::Cancelled => write!(f, "已取消"),
+            AmbientAgentTaskState::Unknown => write!(f, "失败"),
         }
     }
 }

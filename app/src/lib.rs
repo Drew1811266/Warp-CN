@@ -1080,15 +1080,19 @@ pub(crate) fn initialize_app(
     let data_domain = ChannelState::data_domain();
 
     // Register an implementation of the secure storage service.
-    cfg_if::cfg_if! {
-        if #[cfg(feature = "integration_tests")] {
-            warpui_extras::secure_storage::register_noop(&data_domain, ctx);
-        } else if #[cfg(any(target_os = "linux", target_os = "freebsd"))] {
-            warpui_extras::secure_storage::register_with_fallback(&data_domain, warp_core::paths::state_dir(), ctx)
-        } else if #[cfg(target_os = "windows")] {
-            warpui_extras::secure_storage::register_with_dir(&data_domain, warp_core::paths::state_dir(), ctx)
-        } else {
-            warpui_extras::secure_storage::register(&data_domain, ctx);
+    if ::ai::api_keys::custom_inference_smoke_override_enabled() {
+        warpui_extras::secure_storage::register_noop(&data_domain, ctx);
+    } else {
+        cfg_if::cfg_if! {
+            if #[cfg(feature = "integration_tests")] {
+                warpui_extras::secure_storage::register_noop(&data_domain, ctx);
+            } else if #[cfg(any(target_os = "linux", target_os = "freebsd"))] {
+                warpui_extras::secure_storage::register_with_fallback(&data_domain, warp_core::paths::state_dir(), ctx)
+            } else if #[cfg(target_os = "windows")] {
+                warpui_extras::secure_storage::register_with_dir(&data_domain, warp_core::paths::state_dir(), ctx)
+            } else {
+                warpui_extras::secure_storage::register(&data_domain, ctx);
+            }
         }
     }
 

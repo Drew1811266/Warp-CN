@@ -9,8 +9,25 @@ of being silently missed.
 from __future__ import annotations
 
 import argparse
+import json
 import sys
+from dataclasses import dataclass
 from pathlib import Path
+
+
+STRING_FIELDS = {"path", "source", "target", "key", "context", "status", "notes"}
+INTEGER_FIELDS = {"expected_count"}
+STRING_ARRAY_FIELDS = {"preserve_terms"}
+ALLOWED_FIELDS = STRING_FIELDS | INTEGER_FIELDS | STRING_ARRAY_FIELDS
+ALLOWED_STATUSES = {"active", "needs-review", "deprecated", "blocked"}
+DEFAULT_GLOSSARY_CONFIG = "resources/localization/zh-Hans-glossary.toml"
+
+
+@dataclass(frozen=True)
+class GlossaryConfig:
+    preserve_terms: tuple[str, ...] = ()
+    required_translations: tuple[tuple[str, str], ...] = ()
+    forbidden_targets: tuple[str, ...] = ()
 
 
 def _is_identifier_char(char: str) -> bool:
@@ -98,6 +115,134 @@ def _parse_quoted_manifest_value(value: str) -> str:
         result.append("\\")
 
     return "".join(result)
+
+
+def _parse_string_array_manifest_value(path: Path, line_number: int, value: str) -> list[str]:
+    if not value.startswith("[") or not value.endswith("]"):
+        raise ValueError(f"{path}:{line_number}: expected inline string array")
+
+    content = value[1:-1].strip()
+    if not content:
+        return []
+
+    result: list[str] = []
+    index = 0
+    while index < len(content):
+        while index < len(content) and content[index].isspace():
+            index += 1
+
+        if index >= len(content):
+            break
+        if content[index] != '"':
+            raise ValueError(f"{path}:{line_number}: array values must be quoted strings")
+
+        start = index
+        index += 1
+        escaped = False
+        while index < len(content):
+            char = content[index]
+            index += 1
+            if escaped:
+                escaped = False
+                continue
+            if char == "\\":
+                escaped = True
+                continue
+            if char == '"':
+                result.append(_parse_quoted_manifest_value(content[start:index]))
+                break
+        else:
+            raise ValueError(f"{path}:{line_number}: unterminated quoted array value")
+
+        while index < len(content) and content[index].isspace():
+            index += 1
+        if index >= len(content):
+            break
+        if content[index] != ",":
+            raise ValueError(f"{path}:{line_number}: expected comma between array values")
+        index += 1
+
+    return result
+
+
+def _strip_toml_comment(line: str) -> str:
+    result: list[str] = []
+    escaped = False
+    in_string = False
+
+    for char in line:
+        if escaped:
+            result.append(char)
+            escaped = False
+            continue
+        if char == "\\" and in_string:
+            result.append(char)
+            escaped = True
+            continue
+        if char == '"':
+            result.append(char)
+            in_string = not in_string
+            continue
+        if char == "#" and not in_string:
+            break
+        result.append(char)
+
+    return "".join(result).strip()
+
+
+def _bracket_delta_outside_strings(line: str) -> int:
+    delta = 0
+    escaped = False
+    in_string = False
+
+    for char in line:
+        if escaped:
+            escaped = False
+            continue
+        if char == "\\" and in_string:
+            escaped = True
+            continue
+        if char == '"':
+            in_string = not in_string
+            continue
+        if in_string:
+            continue
+        if char == "[":
+            delta += 1
+        elif char == "]":
+            delta -= 1
+
+    return delta
+
+
+def _normalize_multiline_arrays(lines: list[str]) -> list[tuple[int, str]]:
+    normalized: list[tuple[int, str]] = []
+    pending_line_number = 0
+    pending_parts: list[str] = []
+    bracket_depth = 0
+
+    for index, raw_line in enumerate(lines, start=1):
+        line = _strip_toml_comment(raw_line)
+        if not line:
+            continue
+
+        if bracket_depth == 0:
+            pending_line_number = index
+            pending_parts = [line]
+        else:
+            pending_parts.append(line)
+
+        bracket_depth += _bracket_delta_outside_strings(line)
+        if bracket_depth < 0:
+            raise ValueError(f"line {index}: unexpected closing bracket")
+        if bracket_depth == 0:
+            normalized.append((pending_line_number, " ".join(pending_parts)))
+            pending_parts = []
+
+    if bracket_depth != 0:
+        raise ValueError(f"line {pending_line_number}: unterminated array")
+
+    return normalized
 
 
 def _parse_multiline_manifest_value(
@@ -254,14 +399,20 @@ def load_manifest(path: Path) -> list[dict[str, object]]:
             raise ValueError(f"{path}:{line_number}: expected key = value")
 
         key, value = [part.strip() for part in line.split("=", 1)]
-        if value.startswith('"""'):
+        if key not in ALLOWED_FIELDS:
+            raise ValueError(f"{path}:{line_number}: unknown manifest field {key!r}")
+        if key in STRING_ARRAY_FIELDS:
+            current[key] = _parse_string_array_manifest_value(path, line_number, value)
+        elif key in INTEGER_FIELDS:
+            if not value.isdigit():
+                raise ValueError(f"{path}:{line_number}: {key} must be an integer")
+            current[key] = int(value)
+        elif value.startswith('"""'):
             current[key], line_index = _parse_multiline_manifest_value(path, lines, line_index, value)
         elif value.startswith('"') and value.endswith('"'):
             current[key] = _parse_quoted_manifest_value(value)
-        elif value.isdigit():
-            current[key] = int(value)
         else:
-            raise ValueError(f"{path}:{line_number}: only quoted strings and integers are supported")
+            raise ValueError(f"{path}:{line_number}: {key} must be a quoted string")
         line_index += 1
 
     seen: dict[tuple[str, str], int] = {}
@@ -281,6 +432,187 @@ def load_manifest(path: Path) -> list[dict[str, object]]:
             seen[key] = line_number
 
     return replacements
+
+
+def _parse_required_translation(raw_value: str, path: Path, line_number: int) -> tuple[str, str]:
+    if "=>" not in raw_value:
+        raise ValueError(f"{path}:{line_number}: required_translations values must use 'source => target'")
+    source, target = [part.strip() for part in raw_value.split("=>", 1)]
+    if not source or not target:
+        raise ValueError(f"{path}:{line_number}: required_translations values must not be empty")
+    return source, target
+
+
+def load_glossary_config(path: Path) -> GlossaryConfig:
+    if not path.exists():
+        raise ValueError(f"{path}: glossary config does not exist")
+
+    fields: dict[str, tuple[str, ...]] = {
+        "preserve_terms": (),
+        "required_translations": (),
+        "forbidden_targets": (),
+    }
+    lines = path.read_text(encoding="utf-8").splitlines()
+    try:
+        entries = _normalize_multiline_arrays(lines)
+    except ValueError as error:
+        raise ValueError(f"{path}:{error}") from error
+
+    for line_number, line in entries:
+        if "=" not in line:
+            raise ValueError(f"{path}:{line_number}: expected key = value")
+        key, value = [part.strip() for part in line.split("=", 1)]
+        if key not in fields:
+            raise ValueError(f"{path}:{line_number}: unknown glossary field {key!r}")
+        fields[key] = tuple(_parse_string_array_manifest_value(path, line_number, value))
+
+    required_translations = tuple(
+        _parse_required_translation(value, path, 1)
+        for value in fields["required_translations"]
+    )
+
+    return GlossaryConfig(
+        preserve_terms=fields["preserve_terms"],
+        required_translations=required_translations,
+        forbidden_targets=fields["forbidden_targets"],
+    )
+
+
+def check_glossary(
+    replacements: list[dict[str, object]],
+    glossary: GlossaryConfig,
+) -> list[str]:
+    errors: list[str] = []
+
+    for index, replacement in enumerate(replacements, start=1):
+        source = replacement.get("source")
+        target = replacement.get("target")
+        if not isinstance(source, str) or not isinstance(target, str):
+            continue
+
+        line_number = replacement.get("__line")
+        location = f"replacement #{index}"
+        if isinstance(line_number, int):
+            location = f"replacement #{index} at line {line_number}"
+
+        for term in glossary.preserve_terms:
+            if term in source and term not in target:
+                errors.append(f"{location}: missing preserved term {term!r} in target")
+
+        for source_term, target_term in glossary.required_translations:
+            if source_term in source and target_term not in target:
+                errors.append(
+                    f"{location}: expected translation {target_term!r} for source term {source_term!r}"
+                )
+
+        for forbidden_target in glossary.forbidden_targets:
+            if forbidden_target in target:
+                errors.append(f"{location}: forbidden target term {forbidden_target!r}")
+
+    return errors
+
+
+def validate_manifest(replacements: list[dict[str, object]]) -> list[str]:
+    errors: list[str] = []
+    seen_keys: dict[str, int] = {}
+
+    for index, replacement in enumerate(replacements, start=1):
+        line_number = replacement.get("__line")
+        location = f"replacement #{index}"
+        if isinstance(line_number, int):
+            location = f"replacement #{index} at line {line_number}"
+
+        for required_field in ("path", "source", "target"):
+            if not isinstance(replacement.get(required_field), str):
+                errors.append(f"{location}: missing required string field {required_field!r}")
+
+        key = replacement.get("key")
+        if key is not None:
+            if not isinstance(key, str) or not key.strip():
+                errors.append(f"{location}: key must be a non-empty string")
+            elif key in seen_keys:
+                errors.append(
+                    f"{location}: duplicate key {key!r}; first declared at line {seen_keys[key]}"
+                )
+            elif isinstance(line_number, int):
+                seen_keys[key] = line_number
+
+        status = replacement.get("status")
+        if status is not None and status not in ALLOWED_STATUSES:
+            allowed = ", ".join(sorted(ALLOWED_STATUSES))
+            errors.append(f"{location}: invalid status {status!r}; expected one of: {allowed}")
+
+        preserve_terms = replacement.get("preserve_terms")
+        if preserve_terms is not None and (
+            not isinstance(preserve_terms, list)
+            or any(not isinstance(term, str) or not term for term in preserve_terms)
+        ):
+            errors.append(f"{location}: preserve_terms must be an array of non-empty strings")
+
+        expected_count = replacement.get("expected_count")
+        if expected_count is not None and (
+            not isinstance(expected_count, int) or expected_count < 1
+        ):
+            errors.append(f"{location}: expected_count must be a positive integer")
+
+    return errors
+
+
+def metadata_summary(replacements: list[dict[str, object]]) -> dict[str, int]:
+    summary = {
+        "entries": len(replacements),
+        "key": 0,
+        "context": 0,
+        "status": 0,
+        "preserve_terms": 0,
+        "notes": 0,
+        "expected_count": 0,
+    }
+
+    for replacement in replacements:
+        for field in ("key", "context", "status", "notes"):
+            value = replacement.get(field)
+            if isinstance(value, str) and value.strip():
+                summary[field] += 1
+
+        preserve_terms = replacement.get("preserve_terms")
+        if isinstance(preserve_terms, list) and preserve_terms:
+            summary["preserve_terms"] += 1
+
+        expected_count = replacement.get("expected_count")
+        if isinstance(expected_count, int):
+            summary["expected_count"] += 1
+
+    return summary
+
+
+def metadata_summary_report(replacements: list[dict[str, object]]) -> dict[str, object]:
+    summary = metadata_summary(replacements)
+    entries = summary["entries"]
+    report: dict[str, object] = {"entries": entries}
+    for field in ("key", "context", "status", "preserve_terms", "notes", "expected_count"):
+        count = summary[field]
+        percentage = (count / entries * 100) if entries else 0.0
+        report[field] = {"count": count, "percent": round(percentage, 1)}
+    return report
+
+
+def print_metadata_summary(
+    replacements: list[dict[str, object]],
+    *,
+    json_output: bool = False,
+) -> None:
+    if json_output:
+        print(json.dumps(metadata_summary_report(replacements), ensure_ascii=False, indent=2))
+        return
+
+    summary = metadata_summary(replacements)
+    entries = summary["entries"]
+    print(f"entries: {entries}")
+    for field in ("key", "context", "status", "preserve_terms", "notes", "expected_count"):
+        count = summary[field]
+        percentage = (count / entries * 100) if entries else 0.0
+        print(f"{field}: {count} ({percentage:.1f}%)")
 
 
 def apply_replacements(
@@ -369,7 +701,34 @@ def main() -> int:
     )
     parser.add_argument("--dry-run", action="store_true", help="Validate replacements without writing files")
     parser.add_argument("--summary", action="store_true", help="Print replacement status counts")
+    parser.add_argument(
+        "--validate-manifest",
+        action="store_true",
+        help="Validate manifest schema and metadata without applying replacements",
+    )
+    parser.add_argument(
+        "--glossary-config",
+        default=DEFAULT_GLOSSARY_CONFIG,
+        help="Path to zh-Hans glossary config, relative to the repo root",
+    )
+    parser.add_argument(
+        "--check-glossary",
+        action="store_true",
+        help="Validate manifest translations against the zh-Hans glossary",
+    )
+    parser.add_argument(
+        "--metadata-summary",
+        action="store_true",
+        help="Print manifest v2 metadata coverage counts without applying replacements",
+    )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Print machine-readable JSON output. Currently supported with --metadata-summary.",
+    )
     args = parser.parse_args()
+    if args.json and not args.metadata_summary:
+        parser.error("--json is currently supported only with --metadata-summary")
 
     repo_root = Path(__file__).resolve().parents[1]
     manifest_path = repo_root / args.manifest
@@ -378,6 +737,34 @@ def main() -> int:
     except ValueError as error:
         print(error, file=sys.stderr)
         return 1
+
+    if args.validate_manifest:
+        errors = validate_manifest(replacements)
+        if errors:
+            for error in errors:
+                print(error, file=sys.stderr)
+            return 1
+        print("manifest validation passed")
+        return 0
+
+    if args.check_glossary:
+        try:
+            glossary = load_glossary_config(repo_root / args.glossary_config)
+        except ValueError as error:
+            print(error, file=sys.stderr)
+            return 1
+        errors = check_glossary(replacements, glossary)
+        if errors:
+            for error in errors:
+                print(error, file=sys.stderr)
+            return 1
+        print("glossary check passed")
+        return 0
+
+    if args.metadata_summary:
+        print_metadata_summary(replacements, json_output=args.json)
+        return 0
+
     failures = apply_replacements(repo_root, replacements, args.dry_run, args.summary)
     return 1 if failures else 0
 

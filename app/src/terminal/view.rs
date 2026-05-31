@@ -777,17 +777,11 @@ impl NotificationsTrigger {
     pub fn discovery_banner_copy(&self) -> &'static str {
         match self {
             NotificationsTrigger::LongRunningCommand(..) => {
-                "Warp can notify you when long-running commands finish."
+                "Warp 可以在长时间运行的命令完成时通知你。"
             }
-            NotificationsTrigger::AgentTaskCompleted(..) => {
-                "Warp can notify you when an agent finishes responding."
-            }
-            NotificationsTrigger::NeedsAttention => {
-                "Warp can notify you when a command or agent needs your attention."
-            }
-            NotificationsTrigger::PasswordPrompt => {
-                "Warp can notify you when you're prompted to enter a password."
-            }
+            NotificationsTrigger::AgentTaskCompleted(..) => "Warp 可以在 Agent 完成响应时通知你。",
+            NotificationsTrigger::NeedsAttention => "Warp 可以在命令或 Agent 需要你注意时通知你。",
+            NotificationsTrigger::PasswordPrompt => "Warp 可以在需要输入密码时通知你。",
         }
     }
 

@@ -51,54 +51,6 @@ PRESETS: dict[str, tuple[str, ...]] = {
     "release": RELEASE_ROOTS,
 }
 
-EXCLUDED_PATH_PARTS = (
-    "/tests/",
-    "/test_data/",
-    "/models/onnx/",
-    "/resources/bundled/",
-)
-
-EXCLUDED_EXACT_PATHS = {
-    # Reviewed Round 4 non-UI sources: serialization/schema data, theme ids,
-    # and terminal protocol/parser internals.
-    "app/src/ai/agent/conversation_yaml.rs",
-    "app/src/themes/theme.rs",
-    "app/src/terminal/model/ansi/mod.rs",
-    "app/src/terminal/model/ansi/dcs_hooks.rs",
-}
-
-SKIP_LINE_PATTERNS = (
-    "#[cfg",
-    "cfg!(",
-    "feature =",
-    "target_family",
-    "#[serde",
-    "serde(",
-    "log::",
-    "TelemetryEvent::",
-    "send_telemetry",
-    "search_tags",
-    "search_keywords",
-    "id!(",
-    "ui_name()",
-    ".expect(",
-    "debug_assert",
-    "panic!",
-    "anyhow!",
-    "tracing::",
-    "debug!(",
-    "info!(",
-    "warn!(",
-    "error!(",
-    "println!(",
-    "eprintln!(",
-    ".context(",
-    "bail!(",
-    "ensure!(",
-    "format_err!",
-    "Error::",
-)
-
 URL_RE = re.compile(r"^[a-z][a-z0-9+.-]*:(//)?", re.IGNORECASE)
 KEY_RE = re.compile(r"^[a-zA-Z0-9_.-]+:[a-zA-Z0-9_.:-]+$")
 ALL_CAPS_RE = re.compile(r"^[A-Z0-9_./:-]+$")
@@ -113,18 +65,16 @@ INTERNAL_ID_WITH_PLACEHOLDER_RE = re.compile(r"^[a-z][a-z0-9_:-]*:\{[A-Za-z0-9_]
 INTERNAL_NAME_RE = re.compile(
     r"^[A-Za-z0-9_]+(?:View|Slide|Modal|Dialog|Page|Panel|Action|Event|State|Id)$"
 )
-INTERNAL_WORDS = {
-    "darwin",
-    "default_as_true",
-    "integration_tests",
-    "linux",
-    "local_fs",
-    "macos",
-    "test",
-    "unknown",
-    "wasm",
-    "windows",
-}
+DEFAULT_IGNORE_CONFIG = "resources/localization/zh-Hans-inventory-ignore.toml"
+
+
+@dataclass(frozen=True)
+class InventoryIgnoreConfig:
+    path_parts: tuple[str, ...] = ()
+    exact_paths: tuple[str, ...] = ()
+    line_patterns: tuple[str, ...] = ()
+    literal_patterns: tuple[str, ...] = ()
+    internal_words: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -143,17 +93,177 @@ class InventoryRow:
     literal: str
 
 
-def is_excluded_path(path: Path) -> bool:
+def _strip_toml_comment(line: str) -> str:
+    result: list[str] = []
+    escaped = False
+    in_string = False
+
+    for char in line:
+        if escaped:
+            result.append(char)
+            escaped = False
+            continue
+        if char == "\\" and in_string:
+            result.append(char)
+            escaped = True
+            continue
+        if char == '"':
+            result.append(char)
+            in_string = not in_string
+            continue
+        if char == "#" and not in_string:
+            break
+        result.append(char)
+
+    return "".join(result).strip()
+
+
+def _parse_toml_string_array(path: Path, key: str, value: str, line_number: int) -> tuple[str, ...]:
+    if not value.startswith("[") or not value.endswith("]"):
+        raise ValueError(f"{path}:{line_number}: {key} must be an inline string array")
+
+    content = value[1:-1].strip()
+    if not content:
+        return ()
+
+    result: list[str] = []
+    index = 0
+    while index < len(content):
+        while index < len(content) and content[index].isspace():
+            index += 1
+        if index >= len(content):
+            break
+        if content[index] != '"':
+            raise ValueError(f"{path}:{line_number}: {key} values must be quoted strings")
+
+        index += 1
+        escaped = False
+        value_chars: list[str] = []
+        while index < len(content):
+            char = content[index]
+            index += 1
+            if escaped:
+                escape_map = {'"': '"', "\\": "\\", "n": "\n", "r": "\r", "t": "\t"}
+                value_chars.append(escape_map.get(char, "\\" + char))
+                escaped = False
+                continue
+            if char == "\\":
+                escaped = True
+                continue
+            if char == '"':
+                result.append("".join(value_chars))
+                break
+            value_chars.append(char)
+        else:
+            raise ValueError(f"{path}:{line_number}: unterminated string in {key}")
+
+        while index < len(content) and content[index].isspace():
+            index += 1
+        if index >= len(content):
+            break
+        if content[index] != ",":
+            raise ValueError(f"{path}:{line_number}: expected comma in {key}")
+        index += 1
+
+    return tuple(result)
+
+
+def _bracket_delta_outside_strings(line: str) -> int:
+    delta = 0
+    escaped = False
+    in_string = False
+
+    for char in line:
+        if escaped:
+            escaped = False
+            continue
+        if char == "\\" and in_string:
+            escaped = True
+            continue
+        if char == '"':
+            in_string = not in_string
+            continue
+        if in_string:
+            continue
+        if char == "[":
+            delta += 1
+        elif char == "]":
+            delta -= 1
+
+    return delta
+
+
+def _normalize_multiline_arrays(lines: list[str]) -> list[tuple[int, str]]:
+    normalized: list[tuple[int, str]] = []
+    pending_line_number = 0
+    pending_parts: list[str] = []
+    bracket_depth = 0
+
+    for index, raw_line in enumerate(lines, start=1):
+        line = _strip_toml_comment(raw_line)
+        if not line:
+            continue
+
+        if bracket_depth == 0:
+            pending_line_number = index
+            pending_parts = [line]
+        else:
+            pending_parts.append(line)
+
+        bracket_depth += _bracket_delta_outside_strings(line)
+        if bracket_depth < 0:
+            raise ValueError(f"line {index}: unexpected closing bracket")
+        if bracket_depth == 0:
+            normalized.append((pending_line_number, " ".join(pending_parts)))
+            pending_parts = []
+
+    if bracket_depth != 0:
+        raise ValueError(f"line {pending_line_number}: unterminated array")
+
+    return normalized
+
+
+def load_ignore_config(path: Path) -> InventoryIgnoreConfig:
+    if not path.exists():
+        return InventoryIgnoreConfig()
+
+    fields: dict[str, tuple[str, ...]] = {
+        "path_parts": (),
+        "exact_paths": (),
+        "line_patterns": (),
+        "literal_patterns": (),
+        "internal_words": (),
+    }
+    lines = path.read_text(encoding="utf-8").splitlines()
+    try:
+        entries = _normalize_multiline_arrays(lines)
+    except ValueError as error:
+        raise ValueError(f"{path}:{error}") from error
+
+    for line_number, line in entries:
+        if "=" not in line:
+            raise ValueError(f"{path}:{line_number}: expected key = value")
+        key, value = [part.strip() for part in line.split("=", 1)]
+        if key not in fields:
+            raise ValueError(f"{path}:{line_number}: unknown ignore config field {key!r}")
+        fields[key] = _parse_toml_string_array(path, key, value, line_number)
+
+    return InventoryIgnoreConfig(**fields)
+
+
+def is_excluded_path(path: Path, ignore_config: InventoryIgnoreConfig | None = None) -> bool:
+    if ignore_config is None:
+        ignore_config = InventoryIgnoreConfig()
     normalized = "/" + path.as_posix()
     return (
         path.name.endswith("_tests.rs")
         or path.name == "telemetry.rs"
-        or path.as_posix() in EXCLUDED_EXACT_PATHS
-        or any(part in normalized for part in EXCLUDED_PATH_PARTS)
+        or path.as_posix() in ignore_config.exact_paths
+        or any(part in normalized for part in ignore_config.path_parts)
     )
 
 
-def iter_rust_files(repo_root: Path, roots: list[str]) -> list[Path]:
+def iter_rust_files(repo_root: Path, roots: list[str], ignore_config: InventoryIgnoreConfig) -> list[Path]:
     files: list[Path] = []
     for root in roots:
         path = repo_root / root
@@ -161,12 +271,12 @@ def iter_rust_files(repo_root: Path, roots: list[str]) -> list[Path]:
             print(f"{root}: path does not exist", file=sys.stderr)
             continue
         if path.is_file():
-            if path.suffix == ".rs" and not is_excluded_path(path.relative_to(repo_root)):
+            if path.suffix == ".rs" and not is_excluded_path(path.relative_to(repo_root), ignore_config):
                 files.append(path)
             continue
         for candidate in path.rglob("*.rs"):
             rel_path = candidate.relative_to(repo_root)
-            if not is_excluded_path(rel_path):
+            if not is_excluded_path(rel_path, ignore_config):
                 files.append(candidate)
     return sorted(set(files))
 
@@ -290,7 +400,13 @@ def load_manifest_sets(repo_root: Path, manifest: str) -> tuple[set[tuple[str, s
     return sources, targets
 
 
-def is_candidate_literal(value: str, line_text: str) -> bool:
+def is_candidate_literal(
+    value: str,
+    line_text: str,
+    ignore_config: InventoryIgnoreConfig | None = None,
+) -> bool:
+    if ignore_config is None:
+        ignore_config = InventoryIgnoreConfig()
     stripped = value.strip()
     if len(stripped) < 2:
         return False
@@ -314,21 +430,28 @@ def is_candidate_literal(value: str, line_text: str) -> bool:
         return False
     if INTERNAL_NAME_RE.match(stripped):
         return False
-    if stripped in INTERNAL_WORDS:
+    if stripped in ignore_config.internal_words:
+        return False
+    if any(re.search(pattern, stripped) for pattern in ignore_config.literal_patterns):
         return False
     if stripped.endswith(".rs"):
         return False
     if ("/" in stripped or "\\" in stripped) and " " not in stripped:
         return False
-    if any(pattern in line_text for pattern in SKIP_LINE_PATTERNS):
+    if any(pattern in line_text for pattern in ignore_config.line_patterns):
         return False
     return True
 
 
-def build_inventory(repo_root: Path, roots: list[str], manifest: str) -> list[InventoryRow]:
+def build_inventory(
+    repo_root: Path,
+    roots: list[str],
+    manifest: str,
+    ignore_config: InventoryIgnoreConfig,
+) -> list[InventoryRow]:
     source_set, target_set = load_manifest_sets(repo_root, manifest)
     rows: list[InventoryRow] = []
-    for file_path in iter_rust_files(repo_root, roots):
+    for file_path in iter_rust_files(repo_root, roots, ignore_config):
         rel_path = file_path.relative_to(repo_root)
         rel_string = rel_path.as_posix()
         for literal in extract_string_literals(file_path):
@@ -337,7 +460,7 @@ def build_inventory(repo_root: Path, roots: list[str], manifest: str) -> list[In
                 status = "covered-source"
             elif key in target_set:
                 status = "covered-target"
-            elif is_candidate_literal(literal.value, literal.line_text):
+            elif is_candidate_literal(literal.value, literal.line_text, ignore_config):
                 status = "candidate"
             else:
                 continue
@@ -387,6 +510,11 @@ def parse_args() -> argparse.Namespace:
         default="resources/localization/zh-Hans-overrides.toml",
         help="Path to the TOML replacement manifest, relative to the repo root",
     )
+    parser.add_argument(
+        "--ignore-config",
+        default=DEFAULT_IGNORE_CONFIG,
+        help="Path to inventory ignore config, relative to the repo root",
+    )
     parser.add_argument("--coverage", action="store_true", help="Print coverage counts instead of rows")
     parser.add_argument(
         "--status",
@@ -421,7 +549,8 @@ def main() -> int:
 
     repo_root = Path(__file__).resolve().parents[1]
     try:
-        rows = build_inventory(repo_root, roots, args.manifest)
+        ignore_config = load_ignore_config(repo_root / args.ignore_config)
+        rows = build_inventory(repo_root, roots, args.manifest, ignore_config)
     except ValueError as error:
         print(error, file=sys.stderr)
         return 1
