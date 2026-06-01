@@ -1056,7 +1056,7 @@ impl ShareBlockModal {
 
             let redact_secrets_description = appearance
                 .ui_builder()
-                .span("遮盖密钥（API 密钥、密码、IP 地址、个人身份信息等）".to_string())
+                .span("遮盖敏感信息（API 密钥、密码、IP 地址、个人身份信息等）".to_string())
                 .build()
                 .with_margin_left(4.)
                 .finish();

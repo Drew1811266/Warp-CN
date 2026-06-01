@@ -24,8 +24,8 @@ const REMOVE_TEAM_MEMBER_TITLE_TEXT: &str = "确定要移除此成员吗？";
 const DELETE_TEAM_BODY_TEXT: &str =
     "删除此团队会永久删除团队及其所有相关内容，包括账单信息或额度。你将无法恢复它们。";
 const LEAVE_TEAM_BODY_TEXT: &str = "如需重新加入，你需要再次被邀请。";
-const LEAVE_TEAM_RELOAD_CREDITS_BODY_TEXT: &str = "如果离开此团队，你将无法访问与其关联的剩余充值额度。如果之后重新加入同一团队，你将重新获得未使用且未过期额度的访问权限。";
-const REMOVE_TEAM_MEMBER_RELOAD_CREDITS_BODY_TEXT: &str = "此成员将无法访问与此团队关联的剩余充值额度。如果之后重新加入，他们将重新获得未使用且未过期额度的访问权限。";
+const LEAVE_TEAM_RELOAD_CREDITS_BODY_TEXT: &str = "如果离开此团队，你将无法访问与其关联的剩余 Reload 额度。如果之后重新加入同一团队，你将重新获得未使用且未过期额度的访问权限。";
+const REMOVE_TEAM_MEMBER_RELOAD_CREDITS_BODY_TEXT: &str = "此成员将无法访问与此团队关联的剩余 Reload 额度。如果之后重新加入，他们将重新获得未使用且未过期额度的访问权限。";
 
 const DELETE_TEAM_CONFIRM_TEXT: &str = "确认删除";
 const LEAVE_TEAM_CONFIRM_TEXT: &str = "确认离开";

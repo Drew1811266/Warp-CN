@@ -880,9 +880,9 @@ impl BillingAndUsagePageV2View {
             .finish();
 
         let credits_text = if credits_remaining == 1 {
-            "剩余 1 个额度".to_string()
+            "剩余 1 点额度".to_string()
         } else {
-            format!("剩余 {} 个额度", credits_remaining.separate_with_commas())
+            format!("剩余 {} 点额度", credits_remaining.separate_with_commas())
         };
         let credits_label = Text::new_inline(credits_text, appearance.ui_font_family(), 12.)
             .with_color(blended_colors::text_sub(theme, theme.surface_1()))
@@ -1117,10 +1117,10 @@ impl BillingAndUsagePageV2View {
             })
             .unwrap_or_default();
         let auto_reload_credit_amount = selected_credit_option
-            .map(|o| format!("{} 个额度", o.credits.separate_with_commas()))
+            .map(|o| format!("{} 点额度", o.credits.separate_with_commas()))
             .unwrap_or_else(|| "已选择的额度数量".to_string());
         let auto_reload_tooltip_text = format!(
-            "当你团队中任一成员的额度余额达到剩余 100 个额度时，自动购买 {auto_reload_credit_amount}。"
+            "当你团队中任一成员的额度余额达到剩余 100 点额度时，自动购买 {auto_reload_credit_amount}。"
         );
         let warning_text = if delinquent && has_admin_permissions {
             Some(ADDON_CREDITS_DELINQUENT_WARNING_STRING)
@@ -1171,7 +1171,7 @@ impl BillingAndUsagePageV2View {
                     let credits = option.credits.separate_with_commas();
                     let price = format!("${:.2}", option.price_usd_cents as f64 / 100.0);
                     format!(
-                        "你的管理员已为附加额度启用自动充值。当你的个人附加额度余额不足时，Warp 会自动以 {price} 购买 {credits} 个额度并添加到你的余额。"
+                        "你的管理员已为附加额度启用自动充值。当你的个人附加额度余额不足时，Warp 会自动以 {price} 购买 {credits} 点额度并添加到你的余额。"
                     )
                 }
                 None => {
@@ -1446,9 +1446,9 @@ impl BillingAndUsagePageV2View {
             .finish();
 
         let credits_text = if credits_purchased == 1 {
-            "1 个额度".to_string()
+            "1 点额度".to_string()
         } else {
-            format!("{} 个额度", credits_purchased.separate_with_commas())
+            format!("{} 点额度", credits_purchased.separate_with_commas())
         };
 
         let credits_component = Container::new(
@@ -1824,7 +1824,7 @@ impl BillingAndUsagePageV2View {
                 )
                 .with_child(
                     Container::new(
-                        Text::new("没有使用历史", appearance.ui_font_family(), 14.)
+                        Text::new("没有使用记录", appearance.ui_font_family(), 14.)
                             .with_color(blended_colors::text_sub(
                                 appearance.theme(),
                                 appearance.theme().surface_1(),
@@ -1836,7 +1836,7 @@ impl BillingAndUsagePageV2View {
                 )
                 .with_child(
                     Text::new(
-                        "启动一个 Agent 任务后，可在这里查看使用历史。",
+                        "启动一个 Agent 任务后，可在这里查看使用记录。",
                         appearance.ui_font_family(),
                         14.,
                     )
@@ -2098,7 +2098,7 @@ impl TypedActionView for BillingAndUsagePageV2View {
                     let credits = auto_reload_denomination_credits
                         .map(|c| c.separate_with_commas())
                         .unwrap_or_else(|| "你选择的".to_string());
-                    format!("自动充值已启用。余额不足时，我们会补充 {credits} 个额度。")
+                    format!("自动充值已启用。余额不足时，我们会补充 {credits} 点额度。")
                 } else {
                     "自动充值已停用。".to_string()
                 });

@@ -135,7 +135,7 @@ impl ProjectSlide {
 
         let subtitle = appearance
             .ui_builder()
-            .paragraph("设置项目以优化在 Warp 中编码。")
+            .paragraph("设置项目，让它更适合在 Warp 中编码。")
             .with_style(UiComponentStyles {
                 font_size: Some(20.),
                 font_weight: Some(Weight::Normal),

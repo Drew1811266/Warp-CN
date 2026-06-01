@@ -164,7 +164,7 @@ impl Body {
         {
             "从当前块开始共享"
         } else {
-            "不包含回滚内容共享"
+            "共享时不包含回滚内容"
         };
 
         let mut options = vec![
@@ -334,7 +334,7 @@ impl View for Body {
         } else if disabled_count > 1 {
             // Multiple options disabled - mention both reasons if agent conversations exist
             if self.has_agent_conversations {
-                Some("由于共享大小限制且会话中包含 Agent 对话，部分选项已停用")
+                Some("由于共享大小限制以及会话中包含 Agent 对话，部分选项已停用")
             } else {
                 Some("由于共享大小限制，部分选项已停用")
             }

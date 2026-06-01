@@ -4150,7 +4150,7 @@ impl std::fmt::Display for ConversationStatus {
             ConversationStatus::Success => write!(f, "已完成"),
             ConversationStatus::Error => write!(f, "错误"),
             ConversationStatus::Cancelled => write!(f, "已取消"),
-            ConversationStatus::Blocked { .. } => write!(f, "已阻止"),
+            ConversationStatus::Blocked { .. } => write!(f, "已阻塞"),
         }
     }
 }

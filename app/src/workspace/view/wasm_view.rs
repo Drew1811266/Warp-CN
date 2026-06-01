@@ -59,7 +59,7 @@ impl Workspace {
     ) -> ViewHandle<ActionButton> {
         let url = build_oz_runs_url();
         ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("查看所有云端运行", SecondaryTheme).on_click(move |ctx| {
+            ActionButton::new("查看所有云端运行记录", SecondaryTheme).on_click(move |ctx| {
                 ctx.dispatch_typed_action(WorkspaceAction::OpenLink(url.clone()));
             })
         })

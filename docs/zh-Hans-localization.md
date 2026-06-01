@@ -18,18 +18,18 @@ The script applies exact replacements inside Rust string literals, including raw
 
 Last verified release audit: 2026-05-31.
 
-- Manifest entries: 2661.
+- Manifest entries: 2664.
 - Covered areas: onboarding/auth, workspace shell, Warp on Web home, HOA onboarding, search and command entry points, settings core pages, AI settings deep paths, BYO API keys, AWS Bedrock credentials and user-facing credential errors, Appearance command-palette actions, conversation list actions, cloud agent capacity messaging, environment deletion confirmation, launch modals, credit and plan modals, Agent tips, Agent status/error residue, conversation details panel, CLI admin prompts, destructive confirmation dialogs, advanced settings pages, common modals/toasts, Warp Drive surfaces, tab configs, themes, terminal sharing surfaces, terminal notification banners, rewind labels, auth-secret confirmation dialogs, environment modal fallbacks, Agent management/input panels, custom inference endpoint settings, team invite basics, and vertical tab context menus.
-- Dry-run summary: `entries: 2661`, `files: 197`, `already_applied: 2646`, `would_change: 0`, `missing: 0`.
-- Metadata summary: `key/context/status/expected_count: 149 (5.6%)`.
+- Dry-run summary: `entries: 2664`, `files: 198`, `already_applied: 2649`, `would_change: 0`, `missing: 0`.
+- Metadata summary: `key/context/status/expected_count: 150 (5.6%)`.
 - Phase 3 status: manifest v2 metadata validation, external inventory ignore rules, glossary checks, GUI smoke matrix, upstream stable sync, and JSON/YAML locale export prototype are in place. Current v1 entries remain valid, and new entries may add `key`, `context`, `status`, `preserve_terms`, `notes`, and `expected_count` metadata for future locale migration.
 - Coverage snapshot:
-  - `onboarding`: 266 covered, 55 candidates, 82.9%.
-  - `workspace`: 598 covered, 377 candidates, 61.3%.
-  - `search`: 267 covered, 26 candidates, 91.1%.
-  - `settings`: 1201 covered, 827 candidates, 59.2%.
-  - `modals`: 679 covered, 5145 candidates, 11.7%.
-  - `release`: 2889 covered, 6409 candidates, 31.1%.
+  - `onboarding`: 266 covered, 54 candidates, 83.1%.
+  - `workspace`: 598 covered, 352 candidates, 62.9%.
+  - `search`: 269 covered, 0 candidates, 100.0%.
+  - `settings`: 1202 covered, 823 candidates, 59.4%.
+  - `modals`: 679 covered, 5025 candidates, 11.9%.
+  - `release`: 2892 covered, 6233 candidates, 31.7%.
 - Package note: the app crate package is currently named `warp`; the older checklist label `cargo check -p app` fails in this workspace because no package named `app` exists.
 - Phase 2 command-line validation passed:
   - `python3 script/zh_apply_localization.py --dry-run --summary`
@@ -81,6 +81,63 @@ Upstream stable sync is documented in `docs/zh-Hans-upstream-sync.md`. Use that 
 The current Phase 8 RC5 record is `docs/zh-Hans-release-candidate-2026-05-31-rc5.md`. The Phase 7 RC4 record remains in `docs/zh-Hans-release-candidate-2026-05-31-rc4.md`, the Phase 6 RC3 record remains in `docs/zh-Hans-release-candidate-2026-05-31-rc3.md`, the Phase 5 RC2 record remains in `docs/zh-Hans-release-candidate-2026-05-30-rc2.md`, and the earlier Phase 4 release-candidate record remains in `docs/zh-Hans-release-candidate-2026-05-30.md`.
 
 The locale export prototype does not replace the source-level overlay. It serializes the manifest into migration-friendly JSON/YAML so the translation asset can be converted later if Warp adopts a first-party locale format.
+
+## Phase 10 plan
+
+Phase 10 establishes the translation review and functional safety system. It does not chase broad coverage first; it defines how every existing and future translation should be reviewed for semantic accuracy, terminology consistency, UI fit, and behavioral safety.
+
+Primary Phase 10 documents:
+
+- `docs/zh-Hans-localization-phase10.md`: review architecture, severity model, low-load gate, release-only heavy gate, and exit criteria.
+- `docs/zh-Hans-review-checklist.md`: per-entry and per-module checklist for reviewers.
+- `docs/zh-Hans-module-review-matrix.md`: module ownership, risk class, status, review focus, and required evidence.
+- `docs/zh-Hans-functional-risk-register.md`: command/search/telemetry/storage/protocol/log/test/billing/auth string risk rules.
+- `docs/zh-Hans-evidence-policy.md`: GUI evidence, screenshot, log, fixture, and public-RC promotion policy.
+- `docs/zh-Hans-review-baseline-2026-05-31.md`: low-load validation record for the review-system baseline.
+
+Phase 10 low-load baseline passed on 2026-05-31:
+
+```text
+manifest validation passed
+glossary check passed
+entries: 2662
+files: 197
+already_applied: 2647
+would_change: 0
+missing: 0
+release coverage: 2890/6408 = 31.1%
+Python localization tests: 18 passed
+git diff --check: passed
+```
+
+Heavy Rust and bundle gates are release-only in Phase 10 unless product source changes require them. This keeps routine translation review from saturating the machine.
+
+## Phase 11 module review
+
+Phase 11 executes the Phase 10 review system module by module.
+
+First module review:
+
+- `docs/zh-Hans-module-review-search-2026-06-01.md`
+- Scope: search, command palette, command search, slash command menu, AI context menu search surfaces, and `warp_search_core` search labels.
+- Result: `reviewed-low-load`.
+- Search preset moved from `267 covered / 26 candidates / 91.1%` to `269 covered / 0 candidates / 100.0%`.
+- Fixes: directional split-pane label, conversation title punctuation in accessibility help, natural-language search example, command search setting description, and reviewed ignore rules for internal search noise.
+- Remaining issue: English accessibility-label prefixes in search are tracked as `P11-SEARCH-A11Y-01` and need a dedicated accessibility-label slice with targeted Rust test updates.
+
+## Phase 12 full translation audit
+
+Phase 12 is the full manifest audit requested after P11. It reviews every translation entry in batches and records whether each batch is accepted, fixed, blocked, or needs follow-up.
+
+Tracking file:
+
+- `docs/zh-Hans-full-translation-audit.md`
+
+Current status:
+
+- `P12-S01` search batch is complete via the P11 search review.
+- `P12-W01` workspace core is the active batch.
+- Heavy build gates remain release-only; routine audit batches use low-load manifest, inventory, export, Python test, `cargo fmt --check`, and `git diff --check` gates.
 
 ## Phase 7 plan
 

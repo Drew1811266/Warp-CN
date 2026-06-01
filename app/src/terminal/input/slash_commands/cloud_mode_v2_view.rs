@@ -114,7 +114,7 @@ impl Section {
         match self {
             Self::Commands => "命令",
             Self::Skills => "技能",
-            Self::Prompts => "提示",
+            Self::Prompts => "提示词",
         }
     }
 

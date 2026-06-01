@@ -66,7 +66,7 @@ struct FeatureItem {
 const FEATURE_ITEMS: &[FeatureItem] = &[
     FeatureItem {
         icon: Icon::Cloud,
-        title: "在云端运行任何 Agent harness",
+        title: "在云端运行任何 Agent 执行框架",
         description:
             "使用 Oz 在云端启动 Claude Code 或 Codex Agent；Oz 会帮助你跟踪并引导这些 Agent。",
         badge: None,

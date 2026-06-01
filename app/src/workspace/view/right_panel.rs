@@ -453,7 +453,7 @@ impl RightPanelView {
         let open_repository_button = ctx.add_typed_action_view(|_| {
             ActionButton::new("打开仓库", NakedTheme)
                 .with_size(crate::view_components::action_button::ButtonSize::Small)
-                .with_tooltip("前往仓库并初始化用于编码")
+                .with_tooltip("前往仓库并初始化，以便编码使用")
                 .with_tooltip_alignment(TooltipAlignment::Center)
                 .on_click(|ctx| ctx.dispatch_typed_action(RightPanelAction::OpenRepository))
         });

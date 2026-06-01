@@ -1041,7 +1041,7 @@ impl AgentSlide {
             .finish();
 
         // Secondary subtext: muted, normal weight.
-        let subtitle = Text::new("先进模型需要付费计划。", ui_font_family, 12.0)
+        let subtitle = Text::new("前沿模型需要付费计划。", ui_font_family, 12.0)
             .with_color(internal_colors::text_sub(theme, background_for_text))
             .with_style(Properties {
                 weight: Weight::Normal,
@@ -1200,7 +1200,7 @@ impl AgentSlide {
             .with_child(copy_url_link)
             .with_child(
                 ui_builder
-                    .span("并手动打开页面。")
+                    .span(" 并手动打开页面。")
                     .with_style(text_styles)
                     .build()
                     .finish(),

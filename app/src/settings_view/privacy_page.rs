@@ -1712,7 +1712,7 @@ impl SettingsWidget for CloudConversationStorageWidget {
 
         Flex::column()
             .with_child(render_body_item::<PrivacyPageAction>(
-                "在云端存储 AI 对话".into(),
+                "将 AI 对话存储在云端".into(),
                 None,
                 LocalOnlyIconState::Hidden,
                 toggle_state,
@@ -1724,9 +1724,9 @@ impl SettingsWidget for CloudConversationStorageWidget {
                 ui_builder
                     .paragraph(
                         if is_checked {
-                            "Agent 对话可以分享给他人，并会在你登录不同设备时保留。这些数据仅为产品功能而存储，Warp 不会将其用于分析。"
+                            "Agent 对话可与他人共享，并会在你登录不同设备时保留。该数据仅用于产品功能，Warp 不会将其用于分析。"
                         } else {
-                            "Agent 对话只会存储在本机，退出登录后会丢失且无法分享。注意：ambient agent 的对话数据仍会存储在云端。"
+                            "Agent 对话只会存储在本机，退出登录后会丢失，且无法共享。注意：Ambient Agent 的对话数据仍会存储在云端。"
                         }
                         .to_owned(),
                     )

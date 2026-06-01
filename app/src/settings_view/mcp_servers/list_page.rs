@@ -1262,7 +1262,7 @@ impl MCPServersListPageView {
 
                 if !owned_server_cards.is_empty() {
                     page.add_child(self.render_server_cards_section(
-                        "我的 MCP",
+                        "我的 MCP 服务器",
                         &owned_server_cards,
                         appearance,
                         app,

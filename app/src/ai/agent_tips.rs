@@ -133,7 +133,7 @@ static DEFAULT_TIPS: LazyLock<Vec<AgentTip>> = LazyLock::new(|| {
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "使用 `@` 将文件、块或 Warp Drive 对象中的上下文添加到提示中。".to_string(),
+            description: "使用 `@` 将文件、块或 Warp Drive 对象中的上下文添加到提示词中。".to_string(),
             link: Some("https://docs.warp.dev/agent-platform/local-agents/agent-context/using-to-add-context".to_string()),
             binding_name: None,
             action: None,
@@ -322,7 +322,7 @@ static DEFAULT_TIPS: LazyLock<Vec<AgentTip>> = LazyLock::new(|| {
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "输入 `&` 或使用 handoff chip 将本地对话移至云端。".to_string(),
+            description: "输入 `&` 或使用 Handoff 组件将本地对话移至云端。".to_string(),
             link: None,
             binding_name: None,
             action: None,
@@ -438,7 +438,7 @@ impl AITip for AgentTip {
 impl WorkspaceAction {
     pub fn display_text(&self) -> Option<String> {
         match self {
-            WorkspaceAction::OpenPalette { .. } => Some("打开面板".to_string()),
+            WorkspaceAction::OpenPalette { .. } => Some("打开命令面板".to_string()),
             WorkspaceAction::OpenWarpDrive => Some("Warp Drive。".to_string()),
             WorkspaceAction::ToggleRightPanel => Some("显示差异视图".to_string()),
             _ => None,

@@ -30,6 +30,7 @@ line_patterns = [
   "target_family",
   "#[serde",
   "serde(",
+  "toml_path:",
   "log::",
   "TelemetryEvent::",
   "send_telemetry",
@@ -49,13 +50,33 @@ line_patterns = [
   "println!(",
   "eprintln!(",
   ".context(",
+  "with_context(",
   "bail!(",
   "ensure!(",
   "format_err!",
   "Error::",
 ]
 
-literal_patterns = []
+literal_patterns = [
+  "^<block:\\{\\}>$",
+  "^\\{truncated\\}\\.\\.\\.$",
+  "^none>$",
+  "^--porcelain$",
+  "^(ExternalSecretsMenu|EmbeddingSearchMenu|SearchBar|WelcomePalette)$",
+  "^Warp Drive$",
+  "^OpenProjectConvo action unexpectedly handled in command palette for project: \\{project_name\\}$",
+  "^Notebook in search results has neither a name nor command match result\\.$",
+  "^Unable to convert session working directory into OS-native path$",
+  "^Ignoring duplicate results for source \\{data_source_id:\\?\\} that was already marked finished$",
+  "^command `\\{\\}` sets both TERMINAL_VIEW and AGENT_VIEW, which is unsatisfiable$",
+  "^duplicate slash command name: \\{name\\}$",
+  "^hint should mention `\\{lower\\}`$",
+  "^hint should mention `none`$",
+  "^/orchestrate deploy services$",
+  "^deploy services$",
+  "^just a normal query$",
+  "^/planning something$",
+]
 
 internal_words = [
   "darwin",

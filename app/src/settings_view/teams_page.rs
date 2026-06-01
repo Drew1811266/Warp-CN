@@ -84,7 +84,7 @@ const TEAM_MEMBERS_HEADER_POSITION_ID: &str = "team_settings:team_members_header
 // Styling for team create page
 const TEAM_NAME_EDITOR_PLACEHOLDER_TEXT: &str = "团队名称";
 const CREATE_TEAM_BUTTON_LEFT_PADDING: f32 = 10.;
-const CREATE_TEAM_DESCRIPTION: &str = "创建团队后，你可以通过共享云端 Agent 运行、环境、自动化和产物来协作进行 Agent 驱动开发。你还可以为团队成员和 Agent 创建共享知识库。";
+const CREATE_TEAM_DESCRIPTION: &str = "创建团队后，你可以通过共享云端 Agent 运行记录、环境、自动化和产物来协作进行 Agent 驱动开发。你还可以为团队成员和 Agent 创建共享知识库。";
 
 // Styling for team management page
 const LEAVE_TEAM_BUTTON_LABEL: &str = "离开团队";

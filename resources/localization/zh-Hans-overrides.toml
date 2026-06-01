@@ -232,7 +232,7 @@ target = "升级以使用高级模型。"
 [[replace]]
 path = "crates/onboarding/src/slides/agent_slide.rs"
 source = "State-of-the-art models require paid plans."
-target = "先进模型需要付费计划。"
+target = "前沿模型需要付费计划。"
 
 [[replace]]
 path = "crates/onboarding/src/slides/agent_slide.rs"
@@ -337,7 +337,7 @@ target = "打开项目"
 [[replace]]
 path = "crates/onboarding/src/slides/project_slide.rs"
 source = "Set up a project to optimize it for coding in Warp."
-target = "设置项目以优化在 Warp 中编码。"
+target = "设置项目，让它更适合在 Warp 中编码。"
 
 [[replace]]
 path = "crates/onboarding/src/slides/project_slide.rs"
@@ -784,7 +784,7 @@ target = "不限量 Warp Drive 对象和协作"
 [[replace]]
 path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
 source = "Private email support"
-target = "私密邮件支持"
+target = "专属邮件支持"
 
 [[replace]]
 path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
@@ -904,12 +904,12 @@ target = "复制 URL"
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = " and open"
-target = "并打开"
+target = " 并手动打开"
 
 [[replace]]
 path = "app/src/auth/login_slide.rs"
 source = "the page manually."
-target = "手动打开页面。"
+target = "该页面。"
 
 [[replace]]
 path = "app/src/auth/auth_view_body.rs"
@@ -1054,7 +1054,7 @@ target = "帮助改进 Warp"
 [[replace]]
 path = "app/src/auth/auth_view_shared_helpers.rs"
 source = "High-level feature usage data helps Warp's product team prioritize the roadmap."
-target = "高层级功能使用数据可帮助 Warp 产品团队确定路线图优先级。"
+target = "概括性的功能使用数据可帮助 Warp 产品团队确定路线图优先级。"
 
 [[replace]]
 path = "app/src/auth/auth_view_shared_helpers.rs"
@@ -1084,7 +1084,7 @@ target = "Agent 对话可与他人共享，并会在你登录不同设备时保�
 [[replace]]
 path = "app/src/auth/auth_view_shared_helpers.rs"
 source = "Agent conversations are only stored locally on your machine, are lost upon logout, and cannot be shared. Note: conversation data for ambient agents are still stored in the cloud."
-target = "Agent 对话只会存储在本机，退出登录后会丢失，且无法共享。注意：ambient agent 的对话数据仍会存储在云端。"
+target = "Agent 对话只会存储在本机，退出登录后会丢失，且无法共享。注意：Ambient Agent 的对话数据仍会存储在云端。"
 
 [[replace]]
 path = "app/src/auth/paste_auth_token_modal.rs"
@@ -1481,7 +1481,7 @@ target = "如果浏览器没有打开，"
 [[replace]]
 path = "crates/onboarding/src/slides/agent_slide.rs"
 source = " and open the page manually. "
-target = "并手动打开页面。"
+target = " 并手动打开页面。"
 
 [[replace]]
 path = "crates/onboarding/src/slides/agent_slide.rs"
@@ -1711,7 +1711,7 @@ target = "Warp Slack 社区..."
 [[replace]]
 path = "app/src/app_menus.rs"
 source = "Save New..."
-target = "另存为新项..."
+target = "保存为新启动配置..."
 
 [[replace]]
 path = "app/src/app_menus.rs"
@@ -2056,7 +2056,7 @@ target = "标签页面板"
 [[replace]]
 path = "app/src/workspace/view/wasm_view.rs"
 source = "View all cloud runs"
-target = "查看所有云端运行"
+target = "查看所有云端运行记录"
 
 [[replace]]
 path = "app/src/workspace/view/wasm_view.rs"
@@ -2925,7 +2925,7 @@ target = "分叉当前对话（{title}）"
 [[replace]]
 path = "app/src/search/command_palette/conversations/search_item.rs"
 source = "Press enter to navigate to conversation \"{}\"."
-target = "按 Enter 导航到对话 {}。"
+target = "按 Enter 导航到对话“{}”。"
 
 [[replace]]
 path = "app/src/search/command_palette/conversations/search_item.rs"
@@ -3085,7 +3085,7 @@ target = "创建新窗口：{}"
 [[replace]]
 path = "app/src/search/command_palette/new_session/new_session_option.rs"
 source = "Split Pane {direction}: {}"
-target = "{direction}拆分窗格：{}"
+target = "向{direction}拆分窗格：{}"
 
 [[replace]]
 path = "app/src/search/command_palette/new_session/search_item.rs"
@@ -3245,7 +3245,7 @@ target = "搜索基础模型"
 [[replace]]
 path = "crates/warp_search_core/src/data_source.rs"
 source = "Search full terminal use models"
-target = "搜索完整终端使用模型"
+target = "搜索 Full Terminal Use 模型"
 
 [[replace]]
 path = "crates/warp_search_core/src/data_source.rs"
@@ -3370,12 +3370,12 @@ target = "基础模型"
 [[replace]]
 path = "crates/warp_search_core/src/data_source.rs"
 source = "full terminal use models"
-target = "完整终端使用模型"
+target = "Full Terminal Use 模型"
 
 [[replace]]
 path = "crates/warp_search_core/src/data_source.rs"
 source = "current directory conversations"
-target = "当前目录对话"
+target = "当前目录中的对话"
 
 [[replace]]
 path = "app/src/search/command_palette/view.rs"
@@ -3441,6 +3441,11 @@ target = "历史项：{}"
 path = "app/src/search/command_search/view.rs"
 source = "Search your history, workflows, and more"
 target = "搜索历史记录、工作流等"
+
+[[replace]]
+path = "app/src/search/command_search/settings.rs"
+source = "Whether to show global workflows in universal search results."
+target = "是否在全局搜索结果中显示全局工作流。"
 
 [[replace]]
 path = "app/src/search/command_search/view.rs"
@@ -3546,6 +3551,11 @@ target = "命令搜索"
 path = "app/src/search/command_search/zero_state.rs"
 source = "I'm looking for..."
 target = "我想找..."
+
+[[replace]]
+path = "app/src/search/command_search/zero_state.rs"
+source = "# find \"foo\" in files"
+target = "# 在文件中查找 \"foo\""
 
 [[replace]]
 path = "app/src/search/command_search/zero_state.rs"
@@ -5436,7 +5446,7 @@ target = "启用后，重新打开或恢复窗口时会打开垂直标签页面�
 [[replace]]
 path = "app/src/settings_view/appearance_page.rs"
 source = "Use latest user prompt as conversation title in tab names"
-target = "用用户最新提示作为标签页中的对话标题"
+target = "用用户最新提示词作为标签页中的对话标题"
 
 [[replace]]
 path = "app/src/settings_view/appearance_page.rs"
@@ -5666,7 +5676,7 @@ target = "点击链接时显示工具提示"
 [[replace]]
 path = "app/src/settings_view/features_page.rs"
 source = "Show warning before quitting/logging out"
-target = "退出或注销前显示警告"
+target = "退出应用或退出登录前显示警告"
 
 [[replace]]
 path = "app/src/settings_view/features_page.rs"
@@ -6196,17 +6206,17 @@ target = "崩溃报告有助于调试和提升稳定性。"
 [[replace]]
 path = "app/src/settings_view/privacy_page.rs"
 source = "Store AI conversations in the cloud"
-target = "在云端存储 AI 对话"
+target = "将 AI 对话存储在云端"
 
 [[replace]]
 path = "app/src/settings_view/privacy_page.rs"
 source = "Agent conversations can be shared with others and are retained when you log in on different devices. This data is only stored for product functionality, and Warp will not use it for analytics."
-target = "Agent 对话可以分享给他人，并会在你登录不同设备时保留。这些数据仅为产品功能而存储，Warp 不会将其用于分析。"
+target = "Agent 对话可与他人共享，并会在你登录不同设备时保留。该数据仅用于产品功能，Warp 不会将其用于分析。"
 
 [[replace]]
 path = "app/src/settings_view/privacy_page.rs"
 source = "Agent conversations are only stored locally on your machine, are lost upon logout, and cannot be shared. Note: conversation data for ambient agents are still stored in the cloud."
-target = "Agent 对话只会存储在本机，退出登录后会丢失且无法分享。注意：ambient agent 的对话数据仍会存储在云端。"
+target = "Agent 对话只会存储在本机，退出登录后会丢失，且无法共享。注意：Ambient Agent 的对话数据仍会存储在云端。"
 
 [[replace]]
 path = "app/src/settings_view/privacy_page.rs"
@@ -6256,7 +6266,7 @@ target = "Warpification 的 SSH 会话检测"
 [[replace]]
 path = "app/src/settings_view/warpify_page.rs"
 source = "The tmux ssh wrapper works in many situations where the default one does not, but may require you to hit a button to warpify. Takes effect in new tabs."
-target = "tmux ssh 包装器可在许多默认方式无效的场景下工作，但可能需要你点击按钮来 Warpify。此设置会在新标签页中生效。"
+target = "tmux SSH 包装器可在许多默认方式无效的场景下工作，但可能需要你点击按钮来 Warpify。此设置会在新标签页中生效。"
 
 [[replace]]
 path = "app/src/settings_view/warpify_page.rs"
@@ -6311,7 +6321,7 @@ target = "已添加命令"
 [[replace]]
 path = "app/src/settings_view/warpify_page.rs"
 source = "Denylisted commands"
-target = "拒绝列表命令"
+target = "命令拒绝列表"
 
 [[replace]]
 path = "app/src/settings_view/warpify_page.rs"
@@ -6331,7 +6341,7 @@ target = "使用 Tmux Warpification"
 [[replace]]
 path = "app/src/settings_view/warpify_page.rs"
 source = "Denylisted hosts"
-target = "拒绝列表主机"
+target = "主机拒绝列表"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
@@ -6341,7 +6351,7 @@ target = "让 AI 根据你的命令历史、输出和常见工作流建议下一
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Let AI suggest natural language prompts, as inline banners in the input, based on recent commands and their outputs."
-target = "让 AI 根据最近的命令及其输出，在输入框中以内联横幅建议自然语言提示。"
+target = "让 AI 根据最近的命令及其输出，在输入框中以内联横幅建议自然语言提示词。"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
@@ -6391,7 +6401,7 @@ target = "下一条命令"
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "prompt suggestions"
-target = "提示建议"
+target = "提示词建议"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
@@ -6676,7 +6686,7 @@ target = "用量"
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Resets {formatted_next_refresh_time}"
-target = "{formatted_next_refresh_time} 重置"
+target = "将于 {formatted_next_refresh_time} 重置"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
@@ -6716,12 +6726,12 @@ target = "联系支持"
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Prompt Suggestions"
-target = "提示建议"
+target = "提示词建议"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Suggested Code Banners"
-target = "建议代码横幅"
+target = "代码建议横幅"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
@@ -6951,7 +6961,7 @@ target = "自然语言检测"
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Natural language denylist"
-target = "自然语言拒绝列表"
+target = "自然语言检测拒绝列表"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
@@ -6991,7 +7001,7 @@ target = "规则可帮助 Warp Agent 遵循你的约定，无论是代码库还�
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Let AI suggest rules to save based on your interactions."
-target = "让 AI 根据你的交互建议要保存的规则。"
+target = "让 AI 根据你的交互建议可保存的规则。"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
@@ -7051,7 +7061,7 @@ target = "在工具面板中显示对话历史"
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Agent thinking display"
-target = "Agent 思考显示"
+target = "Agent 思考过程显示"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
@@ -7131,7 +7141,7 @@ target = "Oz 可以为它创建的提交消息和拉取请求添加署名"
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Computer use in Cloud Agents"
-target = "Cloud Agent 中的计算机使用"
+target = "云端 Agent 中的计算机使用"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
@@ -7146,12 +7156,12 @@ target = "为从 Warp 应用启动的云端 Agent 对话启用计算机使用。
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Cloud handoff requires cloud conversations to be enabled."
-target = "Cloud handoff 需要启用云端对话。"
+target = "Cloud Handoff 需要启用云端对话。"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Cloud handoff"
-target = "Cloud handoff"
+target = "Cloud Handoff"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
@@ -7181,7 +7191,7 @@ target = "使用 & 触发交接"
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Type & as the first character to enter cloud handoff compose mode."
-target = "将 & 作为第一个字符输入，即可进入 cloud handoff 编写模式。"
+target = "将 & 作为第一个字符输入，即可进入 Cloud Handoff 编写模式。"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
@@ -7241,7 +7251,7 @@ target = "自定义端点"
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Contact sales"
-target = "联系销售"
+target = "联系销售团队"
 
 [[replace]]
 path = "app/src/settings_view/code_page.rs"
@@ -7896,7 +7906,7 @@ target = "了解更多。"
 [[replace]]
 path = "app/src/settings_view/mcp_servers/list_page.rs"
 source = "My MCPs"
-target = "我的 MCP"
+target = "我的 MCP 服务器"
 
 [[replace]]
 path = "app/src/settings_view/mcp_servers/list_page.rs"
@@ -8076,7 +8086,7 @@ target = "环境"
 [[replace]]
 path = "app/src/settings_view/environments_page.rs"
 source = "Environments define where your ambient agents run. Set one up in minutes via GitHub (recommended), Warp-assisted setup, or manual configuration."
-target = "环境定义你的 ambient agent 在哪里运行。你可以通过 GitHub（推荐）、Warp 辅助设置或手动配置在几分钟内完成设置。"
+target = "环境定义你的 Ambient Agent 在哪里运行。你可以通过 GitHub（推荐）、Warp 辅助设置或手动配置在几分钟内完成设置。"
 
 [[replace]]
 path = "app/src/settings_view/environments_page.rs"
@@ -9056,7 +9066,7 @@ target = "概览"
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
 source = "Usage History"
-target = "使用历史"
+target = "使用记录"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
@@ -9146,12 +9156,12 @@ target = "未知原因"
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
 source = "1 credit remaining"
-target = "剩余 1 个额度"
+target = "剩余 1 点额度"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
 source = "{} credits remaining"
-target = "剩余 {} 个额度"
+target = "剩余 {} 点额度"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
@@ -9226,12 +9236,12 @@ target = "本月已购买"
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
 source = "1 credit"
-target = "1 个额度"
+target = "1 点额度"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
 source = "{} credits"
-target = "{} 个额度"
+target = "{} 点额度"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
@@ -9246,7 +9256,7 @@ target = "自动充值"
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
 source = "When enabled, auto reload will automatically purchase {auto_reload_amount} credits when your add-on credit balance reaches 100 credits remaining."
-target = "启用后，当你的附加额度余额达到剩余 100 个额度时，自动充值会自动购买 {auto_reload_amount} 个额度。"
+target = "启用后，当你的附加额度余额达到剩余 100 点额度时，自动充值会自动购买 {auto_reload_amount} 点额度。"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
@@ -9276,7 +9286,7 @@ target = "以继续。"
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
 source = "0 credits"
-target = "0 个额度"
+target = "0 点额度"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
@@ -9311,7 +9321,7 @@ target = "额度"
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
 source = "This is the {refresh_duration} limit of AI credits for your account."
-target = "这是你账号的 {refresh_duration} AI 额度限制。"
+target = "这是你账号 AI 额度的{refresh_duration}限制。"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
@@ -9321,12 +9331,12 @@ target = "最近 30 天"
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
 source = "No usage history"
-target = "没有使用历史"
+target = "没有使用记录"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
 source = "Kick off an agent task to view usage history here."
-target = "启动一个 Agent 任务后，可在这里查看使用历史。"
+target = "启动一个 Agent 任务后，可在这里查看使用记录。"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
@@ -9371,7 +9381,7 @@ target = "以获得更灵活的定价模型。"
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
 source = "bring your own key"
-target = "自带密钥"
+target = "自带 API 密钥"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
@@ -9576,12 +9586,12 @@ target = "余额"
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
 source = "1 credit remaining"
-target = "剩余 1 个额度"
+target = "剩余 1 点额度"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
 source = "{} credits remaining"
-target = "剩余 {} 个额度"
+target = "剩余 {} 点额度"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
@@ -9601,7 +9611,7 @@ target = "升级到 Build"
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
 source = "{} credits"
-target = "{} 个额度"
+target = "{} 点额度"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
@@ -9611,7 +9621,7 @@ target = "已选择的额度数量"
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
 source = "When any member on your team’s credit balance reaches 100 credits remaining, automatically purchase {auto_reload_credit_amount}."
-target = "当你团队中任一成员的额度余额达到剩余 100 个额度时，自动购买 {auto_reload_credit_amount}。"
+target = "当你团队中任一成员的额度余额达到剩余 100 点额度时，自动购买 {auto_reload_credit_amount}。"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
@@ -9636,7 +9646,7 @@ target = "此次购买会超过团队的月度支出限制。请联系团队管�
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
 source = "Your admin has enabled auto-reload for add-on credits. When your personal add-on credit balance runs low, Warp will automatically purchase {credits} credits for {price} and add them to your balance."
-target = "你的管理员已为附加额度启用自动充值。当你的个人附加额度余额不足时，Warp 会自动以 {price} 购买 {credits} 个额度并添加到你的余额。"
+target = "你的管理员已为附加额度启用自动充值。当你的个人附加额度余额不足时，Warp 会自动以 {price} 购买 {credits} 点额度并添加到你的余额。"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
@@ -9681,7 +9691,7 @@ target = "本月已购买"
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
 source = "1 credit"
-target = "1 个额度"
+target = "1 点额度"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
@@ -9701,12 +9711,12 @@ target = "最近 30 天"
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
 source = "No usage history"
-target = "没有使用历史"
+target = "没有使用记录"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
 source = "Kick off an agent task to view usage history here."
-target = "启动一个 Agent 任务后，可在这里查看使用历史。"
+target = "启动一个 Agent 任务后，可在这里查看使用记录。"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
@@ -9726,7 +9736,7 @@ target = "你选择的"
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
 source = "Auto-reload enabled. We'll refill with {credits} credits when your balance runs low."
-target = "自动充值已启用。余额不足时，我们会补充 {credits} 个额度。"
+target = "自动充值已启用。余额不足时，我们会补充 {credits} 点额度。"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page_v2.rs"
@@ -9796,12 +9806,12 @@ target = "如需重新加入，你需要再次被邀请。"
 [[replace]]
 path = "app/src/drive/cloud_action_confirmation_dialog.rs"
 source = "If you leave this team, you’ll lose access to any remaining reload credits tied to it. You’ll regain access to any unused, non-expired credits if you rejoin the same team later."
-target = "如果离开此团队，你将无法访问与其关联的剩余充值额度。如果之后重新加入同一团队，你将重新获得未使用且未过期额度的访问权限。"
+target = "如果离开此团队，你将无法访问与其关联的剩余 Reload 额度。如果之后重新加入同一团队，你将重新获得未使用且未过期额度的访问权限。"
 
 [[replace]]
 path = "app/src/drive/cloud_action_confirmation_dialog.rs"
 source = "This member will lose access to any remaining reload credits tied to this team. If they rejoin later, they’ll regain access to any unused, non-expired credits."
-target = "此成员将无法访问与此团队关联的剩余充值额度。如果之后重新加入，他们将重新获得未使用且未过期额度的访问权限。"
+target = "此成员将无法访问与此团队关联的剩余 Reload 额度。如果之后重新加入，他们将重新获得未使用且未过期额度的访问权限。"
 
 [[replace]]
 path = "app/src/drive/cloud_action_confirmation_dialog.rs"
@@ -9936,7 +9946,7 @@ target = "共享"
 [[replace]]
 path = "app/src/drive/index.rs"
 source = "Copy prompt"
-target = "复制提示"
+target = "复制提示词"
 
 [[replace]]
 path = "app/src/drive/index.rs"
@@ -10376,7 +10386,7 @@ target = "自动充值"
 [[replace]]
 path = "app/src/terminal/buy_credits_banner.rs"
 source = "When enabled, auto reload will purchase {} credits when your credit balance gets low"
-target = "启用后，当你的额度余额不足时，自动充值会购买 {} 个额度"
+target = "启用后，当你的额度余额不足时，自动充值会购买 {} 点额度"
 
 [[replace]]
 path = "app/src/terminal/enable_auto_reload_modal.rs"
@@ -10446,7 +10456,7 @@ target = "技能"
 [[replace]]
 path = "app/src/terminal/input/slash_commands/cloud_mode_v2_view.rs"
 source = "Prompts"
-target = "提示"
+target = "提示词"
 
 [[replace]]
 path = "app/src/terminal/input/slash_commands/cloud_mode_v2_view.rs"
@@ -10581,7 +10591,7 @@ target = "/queue 需要活跃对话"
 [[replace]]
 path = "app/src/terminal/input/slash_commands/mod.rs"
 source = "/queue requires a prompt argument"
-target = "/queue 需要一个提示参数"
+target = "/queue 需要一个提示词参数"
 
 [[replace]]
 path = "app/src/terminal/share_block_modal.rs"
@@ -10661,7 +10671,7 @@ target = "显示提示"
 [[replace]]
 path = "app/src/terminal/share_block_modal.rs"
 source = "Redact secrets (API keys, passwords, IP addresses, PII etc.)"
-target = "遮盖密钥（API 密钥、密码、IP 地址、个人身份信息等）"
+target = "遮盖敏感信息（API 密钥、密码、IP 地址、个人身份信息等）"
 
 [[replace]]
 path = "app/src/terminal/shared_session/mod.rs"
@@ -10766,7 +10776,7 @@ target = "从当前块开始共享"
 [[replace]]
 path = "app/src/terminal/shared_session/share_modal/body.rs"
 source = "Share without scrollback"
-target = "不包含回滚内容共享"
+target = "共享时不包含回滚内容"
 
 [[replace]]
 path = "app/src/terminal/shared_session/share_modal/body.rs"
@@ -10791,7 +10801,7 @@ target = "取消"
 [[replace]]
 path = "app/src/terminal/shared_session/share_modal/body.rs"
 source = "Some options are disabled due to sharing size limits and the presence of agent conversations in the session"
-target = "由于共享大小限制且会话中包含 Agent 对话，部分选项已停用"
+target = "由于共享大小限制以及会话中包含 Agent 对话，部分选项已停用"
 
 [[replace]]
 path = "app/src/terminal/shared_session/share_modal/body.rs"
@@ -10976,7 +10986,7 @@ target = "可以通过集成（Linear、Slack）、事件（GitHub、内置计�
 [[replace]]
 path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
 source = "Check out the "
-target = "查看"
+target = "查看 "
 
 [[replace]]
 path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
@@ -10986,7 +10996,7 @@ target = "Oz 文档"
 [[replace]]
 path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
 source = " to learn more."
-target = "以了解更多。"
+target = " 以了解更多。"
 
 [[replace]]
 path = "app/src/ai/agent_management/cloud_setup_guide_view.rs"
@@ -11286,12 +11296,12 @@ target = "已用额度：{usage}"
 [[replace]]
 path = "app/src/ai/agent_management/view.rs"
 source = "Runs"
-target = "运行"
+target = "运行记录"
 
 [[replace]]
 path = "app/src/ai/agent_management/view.rs"
 source = "Loading cloud agent runs"
-target = "正在加载云端 Agent 运行"
+target = "正在加载云端 Agent 运行记录"
 
 [[replace]]
 path = "app/src/ai/agent_management/view.rs"
@@ -11311,7 +11321,7 @@ target = "使用 <keybinding> 切换自然语言检测，并在 Agent 和终端�
 [[replace]]
 path = "app/src/ai/agent_tips.rs"
 source = "`@` to add context from files, blocks, or Warp Drive objects to your prompt."
-target = "使用 `@` 将文件、块或 Warp Drive 对象中的上下文添加到提示中。"
+target = "使用 `@` 将文件、块或 Warp Drive 对象中的上下文添加到提示词中。"
 
 [[replace]]
 path = "app/src/ai/agent_tips.rs"
@@ -11366,12 +11376,12 @@ target = "显示版本历史"
 [[replace]]
 path = "app/src/ai/ai_document_view.rs"
 source = "Click"
-target = "点击"
+target = "点击“更新 Agent”"
 
 [[replace]]
 path = "app/src/ai/ai_document_view.rs"
 source = "This plan has changes the agent isn't aware of. {save_action} to stop the agent's current task and send the updated plan"
-target = "此计划包含 Agent 尚未感知的更改。{save_action} 以停止 Agent 当前任务并发送更新后的计划"
+target = "此计划包含 Agent 尚未感知的更改。{save_action} 可停止 Agent 当前任务并发送更新后的计划"
 
 [[replace]]
 path = "app/src/ai/ai_document_view.rs"
@@ -11851,7 +11861,7 @@ target = "介绍通用 Agent 支持：用 Warp 强化任何编码 Agent"
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Upgrade to the Build plan"
-target = "升级到 Build 方案"
+target = "升级到 Build 套餐"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
@@ -11861,12 +11871,12 @@ target = "以使用你自己的 API 密钥。"
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = " to enable bringing your own API keys on your Enterprise plan."
-target = "以在 Enterprise 方案中启用自带 API 密钥。"
+target = "以在 Enterprise 套餐中启用自带 API 密钥。"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
 source = "Ask your team's admin to upgrade to the Build plan to use your own API keys."
-target = "请让团队管理员升级到 Build 方案，以使用你自己的 API 密钥。"
+target = "请让团队管理员升级到 Build 套餐，以使用你自己的 API 密钥。"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
@@ -12098,37 +12108,37 @@ target = "由于你的团队已达到并发云端 Agent 数量上限，此云端
 [[replace]]
 path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
 source = "You're out of AI credits"
-target = "AI 点数已用完"
+target = "AI 额度已用完"
 
 [[replace]]
 path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
 source = "This cloud run stopped because your team has used all available AI credits for the current billing period."
-target = "由于你的团队已用完当前计费周期内的全部 AI 点数，此云端运行已停止。"
+target = "由于你的团队已用完当前计费周期内的全部 AI 额度，此云端运行已停止。"
 
 [[replace]]
 path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
 source = " Upgrade your plan for more concurrent cloud agents."
-target = "升级方案以获得更多并发云端 Agent。"
+target = "升级套餐以获得更多并发云端 Agent。"
 
 [[replace]]
 path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
 source = " Upgrade your plan to continue running cloud agents."
-target = "升级方案以继续运行云端 Agent。"
+target = "升级套餐以继续运行云端 Agent。"
 
 [[replace]]
 path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
 source = "Paid plans include everything in your free trial plus:"
-target = "付费方案包含免费试用中的所有内容，并额外提供："
+target = "付费套餐包含免费试用中的所有内容，并额外提供："
 
 [[replace]]
 path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
 source = "The Business plan includes everything on your current plan plus:"
-target = "Business 方案包含当前方案中的所有内容，并额外提供："
+target = "Business 套餐包含当前套餐中的所有内容，并额外提供："
 
 [[replace]]
 path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
 source = "Extended AI credits per month"
-target = "每月扩展 AI 点数"
+target = "每月扩展 AI 额度"
 
 [[replace]]
 path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
@@ -12138,7 +12148,7 @@ target = "自带 API 密钥"
 [[replace]]
 path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
 source = "Upgrade plan"
-target = "升级方案"
+target = "升级套餐"
 
 [[replace]]
 path = "app/src/workspace/view/cloud_agent_capacity_modal/mod.rs"
@@ -12373,7 +12383,7 @@ target = "你和整个社区都可以使用 Agent-first 工作流参与构建 Wa
 [[replace]]
 path = "app/src/workspace/view/orchestration_launch_modal/view.rs"
 source = "Run any agent harness in the cloud"
-target = "在云端运行任何 Agent harness"
+target = "在云端运行任何 Agent 执行框架"
 
 [[replace]]
 path = "app/src/workspace/view/orchestration_launch_modal/view.rs"
@@ -12438,17 +12448,17 @@ target = "你的额度已用完"
 [[replace]]
 path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
 source = "To continue using AI, please upgrade your plan."
-target = "若要继续使用 AI，请升级你的方案。"
+target = "若要继续使用 AI，请升级你的套餐。"
 
 [[replace]]
 path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
 source = "The Build plan is ${price}/month which includes everything in the free tier plus:"
-target = "Build 方案为 ${price}/月，包含免费层级的所有内容，并额外提供："
+target = "Build 套餐为 ${price}/月，包含免费套餐的所有内容，并额外提供："
 
 [[replace]]
 path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
 source = "The Build plan includes everything in the free tier plus:"
-target = "Build 方案包含免费层级的所有内容，并额外提供："
+target = "Build 套餐包含免费套餐的所有内容，并额外提供："
 
 [[replace]]
 path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
@@ -12463,7 +12473,7 @@ target = "每月扩展额度"
 [[replace]]
 path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
 source = "Access to frontier OpenAI, Anthropic, and Google models"
-target = "访问前沿 OpenAI、Anthropic 和 Google 模型"
+target = "可使用 OpenAI、Anthropic 和 Google 的前沿模型"
 
 [[replace]]
 path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
@@ -12478,12 +12488,12 @@ target = "Reload 额度"
 [[replace]]
 path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
 source = "Extended cloud agents access"
-target = "扩展云端 Agent 访问权限"
+target = "更多云端 Agent 使用额度"
 
 [[replace]]
 path = "app/src/workspace/view/free_tier_limit_hit_modal.rs"
 source = "Upgrade plan"
-target = "升级方案"
+target = "升级套餐"
 
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
@@ -12518,12 +12528,12 @@ target = "使用自动充值，避免中断。"
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
 source = "Auto-reload will automatically purchase credits at your selected rate when your account balance reaches 100 credits. Your monthly spend limit is set at your legacy plan's monthly cost and can be updated in Settings > Billing & usage."
-target = "当你的账号余额降至 100 点额度时，自动充值会按你选择的档位自动购买额度。你的月度支出限制会设置为旧方案的月度费用，并可在“设置 > 账单与用量”中更新。"
+target = "当你的账号余额降至 100 点额度时，自动充值会按你选择的档位自动购买额度。你的月度支出限制会设置为旧套餐的月度费用，并可在“设置 > 账单与用量”中更新。"
 
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
 source = "Welcome to the New Business Plan"
-target = "欢迎使用新的 Business 方案"
+target = "欢迎使用新的 Business 套餐"
 
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
@@ -12533,17 +12543,17 @@ target = "欢迎使用 Warp Build"
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
 source = "Your workspace has been updated to the new Warp Business Plan as the legacy Business plan is sunset."
-target = "由于旧版 Business 方案即将下线，你的工作区已更新到新的 Warp Business 方案。"
+target = "由于旧版 Business 套餐即将下线，你的工作区已更新到新的 Warp Business 套餐。"
 
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
 source = "Your workspace has been updated to the Warp Build Plan as the legacy Pro, Turbo, and Lightspeed plans are sunset."
-target = "由于旧版 Pro、Turbo 和 Lightspeed 方案即将下线，你的工作区已更新到 Warp Build 方案。"
+target = "由于旧版 Pro、Turbo 和 Lightspeed 套餐即将下线，你的工作区已更新到 Warp Build 套餐。"
 
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
 source = "The new Business plan is a primarily usage-based plan, starting at:"
-target = "新的 Business 方案主要按用量计费，起价为："
+target = "新的 Business 套餐主要按用量计费，起价为："
 
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
@@ -12558,12 +12568,12 @@ target = "每位用户每月 ${}"
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
 source = "${} per user per month for annual plans"
-target = "年度方案每位用户每月 ${}"
+target = "年度套餐每位用户每月 ${}"
 
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
 source = "The new Business plan comes with:"
-target = "新的 Business 方案包含："
+target = "新的 Business 套餐包含："
 
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
@@ -12578,7 +12588,7 @@ target = "每月 {} 点基础额度"
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
 source = "Access to Reload credits and volume-based discounts"
-target = "可使用 Reload 额度和基于用量的折扣"
+target = "可使用 Reload 额度和阶梯折扣"
 
 [[replace]]
 path = "app/src/workspace/view/build_plan_migration_modal.rs"
@@ -12738,7 +12748,7 @@ target = "使用 <keybinding> 在本会话剩余时间内自动批准 Agent 的�
 [[replace]]
 path = "app/src/ai/agent_tips.rs"
 source = "Type `&` or use the handoff chip to move a local conversation to the cloud."
-target = "输入 `&` 或使用 handoff chip 将本地对话移至云端。"
+target = "输入 `&` 或使用 Handoff 组件将本地对话移至云端。"
 
 [[replace]]
 path = "app/src/ai/agent_tips.rs"
@@ -12753,7 +12763,7 @@ target = "使用 <keybinding> 取消当前 Agent 任务。"
 [[replace]]
 path = "app/src/ai/agent_tips.rs"
 source = "Open palette"
-target = "打开面板"
+target = "打开命令面板"
 
 [[replace]]
 path = "app/src/ai/agent_tips.rs"
@@ -12963,7 +12973,7 @@ target = "已取消"
 [[replace]]
 path = "app/src/ai/agent/conversation.rs"
 source = "Blocked"
-target = "已阻止"
+target = "已阻塞"
 
 [[replace]]
 path = "app/src/ai/agent/mod.rs"
@@ -13035,7 +13045,7 @@ expected_count = 1
 key = "workspace.right_panel.open_repository_tooltip"
 path = "app/src/workspace/view/right_panel.rs"
 source = "Navigate to a repo and initialize it for coding"
-target = "前往仓库并初始化用于编码"
+target = "前往仓库并初始化，以便编码使用"
 context = "Tooltip for the right panel Open repository button."
 status = "active"
 expected_count = 1
@@ -13254,7 +13264,7 @@ expected_count = 1
 key = "settings.teams.create_description"
 path = "app/src/settings_view/teams_page.rs"
 source = "When you create a team, you can collaborate on agent-driven development by sharing cloud agent runs, environments, automations, and artifacts. You can also create a shared knowledge store for teammates and agents alike."
-target = "创建团队后，你可以通过共享云端 Agent 运行、环境、自动化和产物来协作进行 Agent 驱动开发。你还可以为团队成员和 Agent 创建共享知识库。"
+target = "创建团队后，你可以通过共享云端 Agent 运行记录、环境、自动化和产物来协作进行 Agent 驱动开发。你还可以为团队成员和 Agent 创建共享知识库。"
 context = "Team creation page description."
 status = "active"
 preserve_terms = ["Agent"]
@@ -13453,10 +13463,10 @@ expected_count = 1
 key = "workspace.tab_menu.copy_pull_request_link"
 path = "app/src/tab.rs"
 source = "Copy pull request link"
-target = "复制拉取请求链接"
+target = "复制 PR 链接"
 context = "Vertical tab context menu item for copying a pull request link."
 status = "active"
-preserve_terms = ["pull request"]
+preserve_terms = ["PR"]
 expected_count = 1
 
 [[replace]]

@@ -48,6 +48,17 @@ Phase 5 开始，GUI 冒烟记录必须区分三类证据：
 - 不使用真实主账号做团队所有权转让、计费、额度、云端 Agent 等高风险测试。
 - macOS 权限弹窗默认不授权，除非该轮测试明确需要对应权限；权限弹窗本身只记录为环境事件。
 
+## Phase 10 证据卫生规则
+
+Phase 10 起，GUI 证据还必须遵守 `docs/zh-Hans-evidence-policy.md`：
+
+- 不再提交原始全屏桌面截图或录屏。
+- 优先记录 Computer Use/accessibility tree 中看到的中文锚点。
+- 截图只作为辅助证据，提交前必须裁剪或脱敏。
+- 账号、邮箱、团队名、API key、token、magic link、本地路径、浏览器状态和无关系统弹窗必须脱敏。
+- debug-only fixture 证据只能标记为 `fixture-verified`，不能升级为 public-RC `verified`。
+- 已经进入 Git 历史的早期截图需要单独的历史清理任务；普通后续删除不能从已发布 tag/history 中移除它们。
+
 ## Phase 7 profile isolation audit
 
 审计日期：2026-05-31。

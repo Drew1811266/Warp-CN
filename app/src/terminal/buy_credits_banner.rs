@@ -263,7 +263,7 @@ impl BuyCreditsBanner {
             .unwrap_or(0);
 
         let tooltip_text = format!(
-            "启用后，当你的额度余额不足时，自动充值会购买 {} 个额度",
+            "启用后，当你的额度余额不足时，自动充值会购买 {} 点额度",
             selected_credits
         );
 

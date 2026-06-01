@@ -86,7 +86,7 @@ const RESTRICTED_BILLING_USAGE_WARNING_STRING: &str =
     "由于最近充值失败，自动充值已停用。请更新付款方式并重试。";
 
 const OVERVIEW_TAB_TEXT: &str = "概览";
-const USAGE_HISTORY_TAB_TEXT: &str = "使用历史";
+const USAGE_HISTORY_TAB_TEXT: &str = "使用记录";
 
 const ENTERPRISE_USAGE_CALLOUT_HEADER: &str = "当前使用量报告受限";
 const ENTERPRISE_USAGE_CALLOUT_BODY_ADMIN_PREFIX: &str =
@@ -1101,9 +1101,9 @@ impl BillingAndUsagePageView {
             .finish();
 
         let credits_text = if credits_remaining == 1 {
-            "剩余 1 个额度".to_string()
+            "剩余 1 点额度".to_string()
         } else {
-            format!("剩余 {} 个额度", credits_remaining.separate_with_commas())
+            format!("剩余 {} 点额度", credits_remaining.separate_with_commas())
         };
         let credits_label = Text::new_inline(credits_text, appearance.ui_font_family(), 12.)
             .with_color(blended_colors::text_sub(theme, theme.surface_1()))
@@ -1809,9 +1809,9 @@ impl BillingAndUsagePageView {
                     .finish();
 
                 let credits_text = if credits_purchased == 1 {
-                    "1 个额度".to_string()
+                    "1 点额度".to_string()
                 } else {
-                    format!("{} 个额度", credits_purchased.separate_with_commas())
+                    format!("{} 点额度", credits_purchased.separate_with_commas())
                 };
 
                 let credits_component = Container::new(
@@ -1896,7 +1896,7 @@ impl BillingAndUsagePageView {
             appearance,
             auto_reload_switch,
             Some(format!(
-                "启用后，当你的附加额度余额达到剩余 100 个额度时，自动充值会自动购买 {auto_reload_amount} 个额度。"
+                "启用后，当你的附加额度余额达到剩余 100 点额度时，自动充值会自动购买 {auto_reload_amount} 点额度。"
             )),
         ))
         .with_padding_right(-TOGGLE_BUTTON_RIGHT_PADDING)
@@ -2130,17 +2130,17 @@ impl BillingAndUsagePageView {
             if let (Some(count), Some(cost)) = (total_overages_count, total_overages_cost) {
                 if count == 1 {
                     (
-                        "1 个额度".to_string(),
+                        "1 点额度".to_string(),
                         format!("${:.2}", cost as f64 / 100.0),
                     )
                 } else {
                     (
-                        format!("{} 个额度", count.separate_with_commas()),
+                        format!("{} 点额度", count.separate_with_commas()),
                         format!("${:.2}", cost as f64 / 100.0),
                     )
                 }
             } else {
-                ("0 个额度".to_string(), "$0.00".to_string())
+                ("0 点额度".to_string(), "$0.00".to_string())
             };
 
         let mut left_side_component =
@@ -2342,7 +2342,7 @@ impl BillingAndUsagePageView {
             .finish()
         } else {
             let header = "额度";
-            let description = format!("这是你账号的 {refresh_duration} AI 额度限制。");
+            let description = format!("这是你账号 AI 额度的{refresh_duration}限制。");
 
             let request_usage_description = FormattedTextElement::from_str(
                 description,
@@ -2596,7 +2596,7 @@ impl BillingAndUsagePageView {
                 )
                 .with_child(
                     Container::new(
-                        Text::new("没有使用历史", appearance.ui_font_family(), 14.)
+                        Text::new("没有使用记录", appearance.ui_font_family(), 14.)
                             .with_color(blended_colors::text_sub(
                                 appearance.theme(),
                                 appearance.theme().surface_1(),
@@ -2608,7 +2608,7 @@ impl BillingAndUsagePageView {
                 )
                 .with_child(
                     Text::new(
-                        "启动一个 Agent 任务后，可在这里查看使用历史。",
+                        "启动一个 Agent 任务后，可在这里查看使用记录。",
                         appearance.ui_font_family(),
                         14.,
                     )
@@ -3076,7 +3076,7 @@ impl BillingAndUsagePageView {
                             if team.billing_metadata.is_byo_api_key_enabled() {
                                 fragments.push(FormattedTextFragment::plain_text(" or "));
                                 fragments.push(FormattedTextFragment::hyperlink_action(
-                                    "自带密钥",
+                                    "自带 API 密钥",
                                     BillingAndUsagePageAction::NavigateToByokSettings,
                                 ));
                             }
@@ -3142,7 +3142,7 @@ impl BillingAndUsagePageView {
             if UserWorkspaces::as_ref(app).is_byo_api_key_enabled(app) {
                 fragments.push(FormattedTextFragment::plain_text(" or "));
                 fragments.push(FormattedTextFragment::hyperlink_action(
-                    "自带密钥",
+                    "自带 API 密钥",
                     BillingAndUsagePageAction::NavigateToByokSettings,
                 ));
             }

@@ -430,7 +430,7 @@ impl SearchItem for ConversationSearchItem {
     fn accessibility_help_message(&self) -> Option<String> {
         match &self.action_info {
             ConversationAction::Resume(matched_conversation) => Some(format!(
-                "按 Enter 导航到对话 {}。",
+                "按 Enter 导航到对话“{}”。",
                 matched_conversation.as_ref().conversation.title()
             )),
             ConversationAction::Fork { .. } => Some("按 Enter 将当前对话分叉为新对话。".into()),

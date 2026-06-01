@@ -83,7 +83,7 @@ const ITEM_VERTICAL_SPACING: f32 = 24.;
 const BUILT_IN_TEXT_INPUT_MARGIN: f32 = 10.;
 const SPACE_AFTER_TEXT_INPUT: f32 = ITEM_VERTICAL_SPACING - BUILT_IN_TEXT_INPUT_MARGIN;
 
-const SSH_TMUX_WARPIFICATION_DESCRIPTION: &str = "tmux ssh 包装器可在许多默认方式无效的场景下工作，但可能需要你点击按钮来 Warpify。此设置会在新标签页中生效。";
+const SSH_TMUX_WARPIFICATION_DESCRIPTION: &str = "tmux SSH 包装器可在许多默认方式无效的场景下工作，但可能需要你点击按钮来 Warpify。此设置会在新标签页中生效。";
 
 const SSH_EXTENSION_INSTALL_MODE_DESCRIPTION: &str =
     "控制远程主机未安装 Warp SSH 扩展时的安装行为。";
@@ -616,7 +616,7 @@ impl SubshellsWidget {
 
         column.add_child(
             view.build_input_list(
-                "拒绝列表命令",
+                "命令拒绝列表",
                 &warpify_settings.subshell_command_denylist,
                 &view.remove_denylisted_command_button_states,
                 WarpifyPageAction::RemoveDenylistedCommand,
@@ -812,7 +812,7 @@ impl SettingsWidget for SSHWidget {
                     let warpify_settings = WarpifySettings::as_ref(app);
                     column.add_child(
                         view.build_input_list(
-                            "拒绝列表主机",
+                            "主机拒绝列表",
                             &warpify_settings.ssh_hosts_denylist,
                             &view.remove_denylisted_ssh_button_states,
                             WarpifyPageAction::RemoveDenylistedSshHost,

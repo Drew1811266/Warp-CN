@@ -258,7 +258,7 @@ impl QueryFilter {
             QueryFilter::StaticSlashCommands => "搜索静态斜杠命令",
             QueryFilter::Skills => "搜索技能",
             QueryFilter::BaseModels => "搜索基础模型",
-            QueryFilter::FullTerminalUseModels => "搜索完整终端使用模型",
+            QueryFilter::FullTerminalUseModels => "搜索 Full Terminal Use 模型",
             QueryFilter::CurrentDirectoryConversations => "搜索当前目录中的对话",
         }
     }
@@ -322,8 +322,8 @@ impl QueryFilter {
             QueryFilter::StaticSlashCommands => "斜杠命令",
             QueryFilter::Skills => "技能",
             QueryFilter::BaseModels => "基础模型",
-            QueryFilter::FullTerminalUseModels => "完整终端使用模型",
-            QueryFilter::CurrentDirectoryConversations => "当前目录对话",
+            QueryFilter::FullTerminalUseModels => "Full Terminal Use 模型",
+            QueryFilter::CurrentDirectoryConversations => "当前目录中的对话",
         }
     }
 

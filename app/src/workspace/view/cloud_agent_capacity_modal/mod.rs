@@ -130,8 +130,8 @@ impl CloudAgentCapacityModal {
                 "由于你的团队已达到并发云端 Agent 数量上限，此云端运行已排队。其他云端运行完成后，它会自动开始。".to_string(),
             ),
             CloudAgentCapacityModalVariant::OutOfCredits => (
-                "AI 点数已用完",
-                "由于你的团队已用完当前计费周期内的全部 AI 点数，此云端运行已停止。".to_string(),
+                "AI 额度已用完",
+                "由于你的团队已用完当前计费周期内的全部 AI 额度，此云端运行已停止。".to_string(),
             ),
         };
 
@@ -147,9 +147,9 @@ impl CloudAgentCapacityModal {
         if can_upgrade {
             let upgrade_suffix = match self.variant {
                 CloudAgentCapacityModalVariant::ConcurrentLimit => {
-                    "升级方案以获得更多并发云端 Agent。"
+                    "升级套餐以获得更多并发云端 Agent。"
                 }
-                CloudAgentCapacityModalVariant::OutOfCredits => "升级方案以继续运行云端 Agent。",
+                CloudAgentCapacityModalVariant::OutOfCredits => "升级套餐以继续运行云端 Agent。",
             };
             explanation_text.push_str(upgrade_suffix);
         }
@@ -184,7 +184,7 @@ impl CloudAgentCapacityModal {
                         "Paid plans start at ${price}/month and include everything in your free trial plus:"
                     )
                 } else {
-                    "付费方案包含免费试用中的所有内容，并额外提供：".to_string()
+                    "付费套餐包含免费试用中的所有内容，并额外提供：".to_string()
                 }
             } else if let Some(pricing) = plan_pricing {
                 let price = pricing.yearly_plan_price_per_month_usd_cents / 100;
@@ -192,7 +192,7 @@ impl CloudAgentCapacityModal {
                     "The Business plan starts at ${price}/month and includes everything on your current plan plus:"
                 )
             } else {
-                "Business 方案包含当前方案中的所有内容，并额外提供：".to_string()
+                "Business 套餐包含当前套餐中的所有内容，并额外提供：".to_string()
             };
 
             let pricing = FormattedTextElement::new(
@@ -212,7 +212,7 @@ impl CloudAgentCapacityModal {
             {
                 format!("{} AI credits per month", limit.separate_with_commas())
             } else {
-                "每月扩展 AI 点数".to_string()
+                "每月扩展 AI 额度".to_string()
             };
 
             // Benefits list based on plan type
@@ -274,7 +274,7 @@ impl CloudAgentCapacityModal {
         let content = content.finish();
         let cta_button = if show_cta {
             let cta_button_label = if can_upgrade {
-                "升级方案"
+                "升级套餐"
             } else {
                 "打开账单"
             };

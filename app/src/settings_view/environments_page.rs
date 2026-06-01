@@ -80,7 +80,7 @@ use {
 };
 
 const PAGE_TITLE_TEXT: &str = "环境";
-const PAGE_DESCRIPTION_TEXT: &str = "环境定义你的 ambient agent 在哪里运行。你可以通过 GitHub（推荐）、Warp 辅助设置或手动配置在几分钟内完成设置。";
+const PAGE_DESCRIPTION_TEXT: &str = "环境定义你的 Ambient Agent 在哪里运行。你可以通过 GitHub（推荐）、Warp 辅助设置或手动配置在几分钟内完成设置。";
 const CARD_BORDER_WIDTH: f32 = 1.;
 const CARD_PADDING: f32 = 16.;
 const CARD_SPACING: f32 = 12.;

@@ -16928,9 +16928,9 @@ impl Workspace {
             });
 
         let verb = if prev_mouse_reporting_enabled {
-            "disabled"
+            "关闭"
         } else {
-            "enabled"
+            "开启"
         };
         let mut message = format!("你已{verb}鼠标报告。");
         if let Some(keystroke) =

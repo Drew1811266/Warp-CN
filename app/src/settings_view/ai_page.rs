@@ -156,7 +156,7 @@ const CONTEXT_WINDOW_INPUT_BOX_WIDTH: f32 = 120.;
 const NEXT_COMMAND_DESCRIPTION: &str =
     "让 AI 根据你的命令历史、输出和常见工作流建议下一条要运行的命令。";
 const PROMPT_SUGGESTIONS_DESCRIPTION: &str =
-    "让 AI 根据最近的命令及其输出，在输入框中以内联横幅建议自然语言提示。";
+    "让 AI 根据最近的命令及其输出，在输入框中以内联横幅建议自然语言提示词。";
 const SUGGESTED_CODE_BANNERS_DESCRIPTION: &str =
     "让 AI 根据最近的命令及其输出，在块列表中以内联横幅建议代码 diff 和查询。";
 const NATURAL_LANGUAGE_AUTOSUGGESTIONS: &str = "让 AI 根据最近的命令及其输出建议自然语言自动建议。";
@@ -239,7 +239,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     );
     ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(
         vec![ToggleSettingActionPair::new(
-            "提示建议",
+            "提示词建议",
             builder(SettingsAction::AI(
                 AISettingsPageAction::TogglePromptSuggestions,
             )),
@@ -4160,7 +4160,7 @@ impl SettingsWidget for UsageWidget {
                 .with_child(
                     appearance
                         .ui_builder()
-                        .paragraph(format!("{formatted_next_refresh_time} 重置"))
+                        .paragraph(format!("将于 {formatted_next_refresh_time} 重置"))
                         .with_style(UiComponentStyles {
                             font_color: Some(blended_colors::text_sub(
                                 appearance.theme(),
@@ -4364,7 +4364,7 @@ impl ActiveAIWidget {
         Flex::column()
             .with_child(
                 render_ai_setting_toggle::<AgentModeQuerySuggestionsEnabled>(
-                    "提示建议",
+                    "提示词建议",
                     AISettingsPageAction::TogglePromptSuggestions,
                     *ai_settings.prompt_suggestions_enabled_internal,
                     is_toggleable,
@@ -4391,7 +4391,7 @@ impl ActiveAIWidget {
         Flex::column()
             .with_child(
                 render_ai_setting_toggle::<AgentModeQuerySuggestionsEnabled>(
-                    "建议代码横幅",
+                    "代码建议横幅",
                     AISettingsPageAction::ToggleCodeSuggestions,
                     *ai_settings.code_suggestions_enabled_internal,
                     is_toggleable,
@@ -5775,7 +5775,7 @@ impl AIInputWidget {
 
         section
             .with_child(render_ai_setting_label::<AICommandDenylist>(
-                "自然语言拒绝列表".to_owned(),
+                "自然语言检测拒绝列表".to_owned(),
                 is_toggleable,
                 &view.local_only_icon_tooltip_states,
                 app,
@@ -6019,7 +6019,7 @@ impl AIFactWidget {
         );
 
         let description = render_ai_setting_description(
-            "让 AI 根据你的交互建议要保存的规则。",
+            "让 AI 根据你的交互建议可保存的规则。",
             ai_settings.is_any_ai_enabled(app),
             app,
         );
@@ -6329,7 +6329,7 @@ impl SettingsWidget for OtherAIWidget {
 
         column.add_child(render_dropdown_item(
             appearance,
-            "Agent 思考显示",
+            "Agent 思考过程显示",
             Some("控制推理/思考轨迹的显示方式。"),
             None,
             LocalOnlyIconState::for_setting(
@@ -6842,7 +6842,7 @@ impl SettingsWidget for CloudAgentComputerUseWidget {
 
         let toggle_row = build_toggle_element(
             render_body_item_label::<AISettingsPageAction>(
-                "Cloud Agent 中的计算机使用".to_string(),
+                "云端 Agent 中的计算机使用".to_string(),
                 Some(styles::header_font_color(!is_disabled, app)),
                 None,
                 LocalOnlyIconState::Hidden,
@@ -6913,7 +6913,7 @@ impl SettingsWidget for CloudHandoffWidget {
         let is_force_disabled = !is_any_ai_enabled || cloud_convos_off;
 
         let tooltip_text = if cloud_convos_off {
-            "Cloud handoff 需要启用云端对话。"
+            "Cloud Handoff 需要启用云端对话。"
         } else {
             ""
         };
@@ -6942,7 +6942,7 @@ impl SettingsWidget for CloudHandoffWidget {
 
         let handoff_row = build_toggle_element(
             render_body_item_label::<AISettingsPageAction>(
-                "Cloud handoff".to_string(),
+                "Cloud Handoff".to_string(),
                 Some(styles::header_font_color(!is_force_disabled, app)),
                 None,
                 LocalOnlyIconState::Hidden,
@@ -7030,7 +7030,7 @@ impl SettingsWidget for CloudHandoffWidget {
 
             column.add_child(ampersand_row);
             column.add_child(render_ai_setting_description(
-                "将 & 作为第一个字符输入，即可进入 cloud handoff 编写模式。",
+                "将 & 作为第一个字符输入，即可进入 Cloud Handoff 编写模式。",
                 true,
                 app,
             ));
@@ -7562,48 +7562,49 @@ impl SettingsWidget for ApiKeysWidget {
         // Upgrade CTA if BYOK not enabled
         if !is_byo_enabled {
             let auth_state = AuthStateProvider::as_ref(app).get();
-            let upgrade_text_fragments =
-                if let Some(team) = UserWorkspaces::as_ref(app).current_team() {
-                    if team.billing_metadata.customer_type == CustomerType::Enterprise {
-                        vec![
-                            FormattedTextFragment::hyperlink("联系销售", "mailto:sales@warp.dev"),
-                            FormattedTextFragment::plain_text(
-                                "以在 Enterprise 方案中启用自带 API 密钥。",
-                            ),
-                        ]
-                    } else {
-                        let current_user_email = auth_state.user_email().unwrap_or_default();
-                        let has_admin_permissions = team.has_admin_permissions(&current_user_email);
-                        let upgrade_url = UserWorkspaces::upgrade_link_for_team(team.uid);
-                        if has_admin_permissions {
-                            vec![
-                                FormattedTextFragment::hyperlink("升级到 Build 方案", upgrade_url),
-                                FormattedTextFragment::plain_text("以使用你自己的 API 密钥。"),
-                            ]
-                        } else {
-                            vec![FormattedTextFragment::plain_text(
-                                "请让团队管理员升级到 Build 方案，以使用你自己的 API 密钥。",
-                            )]
-                        }
-                    }
-                } else if FeatureFlag::SoloUserByok.is_enabled()
-                    && auth_state.is_anonymous_or_logged_out()
-                {
+            let upgrade_text_fragments = if let Some(team) =
+                UserWorkspaces::as_ref(app).current_team()
+            {
+                if team.billing_metadata.customer_type == CustomerType::Enterprise {
                     vec![
-                        FormattedTextFragment::hyperlink_action(
-                            "创建账号",
-                            AISettingsPageAction::SignupAnonymousUser,
+                        FormattedTextFragment::hyperlink("联系销售团队", "mailto:sales@warp.dev"),
+                        FormattedTextFragment::plain_text(
+                            "以在 Enterprise 套餐中启用自带 API 密钥。",
                         ),
-                        FormattedTextFragment::plain_text("以使用你自己的 API 密钥。"),
                     ]
                 } else {
-                    let user_id = auth_state.user_id().unwrap_or_default();
-                    let upgrade_url = UserWorkspaces::upgrade_link(user_id);
-                    vec![
-                        FormattedTextFragment::hyperlink("升级到 Build 方案", upgrade_url),
-                        FormattedTextFragment::plain_text("以使用你自己的 API 密钥。"),
-                    ]
-                };
+                    let current_user_email = auth_state.user_email().unwrap_or_default();
+                    let has_admin_permissions = team.has_admin_permissions(&current_user_email);
+                    let upgrade_url = UserWorkspaces::upgrade_link_for_team(team.uid);
+                    if has_admin_permissions {
+                        vec![
+                            FormattedTextFragment::hyperlink("升级到 Build 套餐", upgrade_url),
+                            FormattedTextFragment::plain_text("以使用你自己的 API 密钥。"),
+                        ]
+                    } else {
+                        vec![FormattedTextFragment::plain_text(
+                            "请让团队管理员升级到 Build 套餐，以使用你自己的 API 密钥。",
+                        )]
+                    }
+                }
+            } else if FeatureFlag::SoloUserByok.is_enabled()
+                && auth_state.is_anonymous_or_logged_out()
+            {
+                vec![
+                    FormattedTextFragment::hyperlink_action(
+                        "创建账号",
+                        AISettingsPageAction::SignupAnonymousUser,
+                    ),
+                    FormattedTextFragment::plain_text("以使用你自己的 API 密钥。"),
+                ]
+            } else {
+                let user_id = auth_state.user_id().unwrap_or_default();
+                let upgrade_url = UserWorkspaces::upgrade_link(user_id);
+                vec![
+                    FormattedTextFragment::hyperlink("升级到 Build 套餐", upgrade_url),
+                    FormattedTextFragment::plain_text("以使用你自己的 API 密钥。"),
+                ]
+            };
 
             let upgrade_text_element = FormattedTextElement::new(
                 FormattedText::new([FormattedTextLine::Line(upgrade_text_fragments)]),

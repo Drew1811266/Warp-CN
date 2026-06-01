@@ -362,7 +362,7 @@ impl BuildPlanMigrationModal {
         );
 
         let description = Self::create_text(
-            "当你的账号余额降至 100 点额度时，自动充值会按你选择的档位自动购买额度。你的月度支出限制会设置为旧方案的月度费用，并可在“设置 > 账单与用量”中更新。".to_string(),
+            "当你的账号余额降至 100 点额度时，自动充值会按你选择的档位自动购买额度。你的月度支出限制会设置为旧套餐的月度费用，并可在“设置 > 账单与用量”中更新。".to_string(),
             appearance.ui_font_family(),
             14.,
             blended_colors::text_sub(theme, blended_colors::neutral_4(theme)),
@@ -514,7 +514,7 @@ impl BuildPlanMigrationModal {
             .unwrap_or((2000, 1800));
 
         let title_text = if is_business {
-            "欢迎使用新的 Business 方案"
+            "欢迎使用新的 Business 套餐"
         } else {
             "欢迎使用 Warp Build"
         };
@@ -528,16 +528,16 @@ impl BuildPlanMigrationModal {
         );
 
         let intro_text = if is_business {
-            "由于旧版 Business 方案即将下线，你的工作区已更新到新的 Warp Business 方案。"
+            "由于旧版 Business 套餐即将下线，你的工作区已更新到新的 Warp Business 套餐。"
         } else {
-            "由于旧版 Pro、Turbo 和 Lightspeed 方案即将下线，你的工作区已更新到 Warp Build 方案。"
+            "由于旧版 Pro、Turbo 和 Lightspeed 套餐即将下线，你的工作区已更新到 Warp Build 套餐。"
         };
 
         let intro = Self::create_text(intro_text.to_string(), font_family, 14., text_color, None);
 
         let pricing_header = Self::create_text(
             if is_business {
-                "新的 Business 方案主要按用量计费，起价为："
+                "新的 Business 套餐主要按用量计费，起价为："
             } else {
                 "Warp Build 主要按用量计费，起价为："
             }
@@ -556,7 +556,7 @@ impl BuildPlanMigrationModal {
         );
 
         let price_annual = Self::create_bullet_item(
-            format!("年度方案每位用户每月 ${}", base_plan_prices.1 / 100),
+            format!("年度套餐每位用户每月 ${}", base_plan_prices.1 / 100),
             font_family,
             14.,
             text_color,
@@ -564,7 +564,7 @@ impl BuildPlanMigrationModal {
 
         let features_header = Self::create_text(
             if is_business {
-                "新的 Business 方案包含："
+                "新的 Business 套餐包含："
             } else {
                 "Build 包含："
             }
@@ -586,7 +586,7 @@ impl BuildPlanMigrationModal {
         );
 
         let reload_credits = Self::create_bullet_item(
-            "可使用 Reload 额度和基于用量的折扣".to_string(),
+            "可使用 Reload 额度和阶梯折扣".to_string(),
             font_family,
             14.,
             text_color,

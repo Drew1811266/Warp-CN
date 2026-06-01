@@ -707,7 +707,7 @@ impl LoginSlideView {
                     )
                     .with_child(
                         ui_builder
-                            .span("并打开")
+                            .span(" 并手动打开")
                             .with_style(sub_text_styles)
                             .build()
                             .finish(),
@@ -716,7 +716,7 @@ impl LoginSlideView {
             )
             .with_child(
                 ui_builder
-                    .span("手动打开页面。")
+                    .span("该页面。")
                     .with_style(sub_text_styles)
                     .build()
                     .finish(),

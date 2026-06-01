@@ -1896,7 +1896,7 @@ impl AgentManagementView {
 
         let build_header = |use_expanded: bool| {
             let title = Text::new_inline(
-                "运行",
+                "运行记录",
                 appearance.ui_font_family(),
                 appearance.ui_font_size() + 4.,
             )
@@ -2006,7 +2006,7 @@ impl AgentManagementView {
             let mut stack = Stack::new().with_child(loading_icon);
             if mouse_state.is_hovered() {
                 let tooltip = ui_builder
-                    .tool_tip(String::from("正在加载云端 Agent 运行"))
+                    .tool_tip(String::from("正在加载云端 Agent 运行记录"))
                     .build()
                     .finish();
                 stack.add_positioned_overlay_child(
@@ -2029,7 +2029,7 @@ impl AgentManagementView {
         let theme = appearance.theme();
 
         let title = Text::new_inline(
-            "运行",
+            "运行记录",
             appearance.ui_font_family(),
             appearance.ui_font_size() + 4.,
         )

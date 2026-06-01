@@ -24,13 +24,13 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 | 项目 | 状态 |
 | --- | --- |
 | 当前版本 | `0.12` |
-| 翻译清单条目 | `2662` |
-| 已纳入清单的源码文件 | `197` |
+| 翻译清单条目 | `2664` |
+| 已纳入清单的源码文件 | `198` |
 | dry-run 校验 | `missing: 0` |
 | metadata 覆盖 | `key/context/status/expected_count: 150 (5.6%)` |
 | Phase 9 RC6 判断 | `ready-for-local-use` |
-| 当前执行重点 | Phase 9：RC6 完成，等待真实隔离账号 public-RC 证据 |
-| 下一步 | 提供真实隔离测试账号后，按 `GUI-WS-06` runbook 不带 fixture env 复验；fixture 已通过但不能替代 public-RC 真实账号证据 |
+| 当前执行重点 | Phase 11：实际模块审查执行，`search` 已完成低负载审查 |
+| 下一步 | 继续审查 `workspace` 模块；真实隔离账号 public-RC 证据仍按 `GUI-WS-06` runbook 单独推进 |
 | 主要构建包 | `warp` |
 | 可运行 bundle | `target/debug/bundle/osx/WarpOss.app` |
 | 主要维护文档 | [`docs/zh-Hans-localization.md`](docs/zh-Hans-localization.md) |
@@ -39,12 +39,12 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端的�
 
 | 预设 | 已覆盖 | 候选 | 覆盖率 |
 | --- | ---: | ---: | ---: |
-| `onboarding` | 266 | 55 | 82.9% |
-| `workspace` | 598 | 377 | 61.3% |
-| `search` | 267 | 26 | 91.1% |
-| `settings` | 1201 | 827 | 59.2% |
-| `modals` | 679 | 5145 | 11.7% |
-| `release` | 2890 | 6408 | 31.1% |
+| `onboarding` | 266 | 54 | 83.1% |
+| `workspace` | 598 | 352 | 62.9% |
+| `search` | 269 | 0 | 100.0% |
+| `settings` | 1202 | 823 | 59.4% |
+| `modals` | 679 | 5025 | 11.9% |
+| `release` | 2892 | 6233 | 31.7% |
 
 这些数字来自仓库内的本地化 inventory 脚本。覆盖率不是“整仓中文化百分比”，而是对选定高可见源代码区域中“可能用户可见字符串”的粗略审计指标。
 
@@ -114,6 +114,14 @@ Warp 当前大量 UI 文案仍是 Rust 源码中的内联字符串。为了降�
 | [`docs/zh-Hans-localization-phase7.md`](docs/zh-Hans-localization-phase7.md) | Phase 7 GUI 证据恢复、隔离 profile 审计和 RC4 public-RC gate |
 | [`docs/zh-Hans-localization-phase8.md`](docs/zh-Hans-localization-phase8.md) | Phase 8 隔离测试账号、custom endpoint destructive confirmation 和 RC5 public-RC gate |
 | [`docs/zh-Hans-localization-phase9.md`](docs/zh-Hans-localization-phase9.md) | Phase 9 隔离测试账号 runbook、debug-only custom inference fixture 和 RC6 证据边界 |
+| [`docs/zh-Hans-localization-phase10.md`](docs/zh-Hans-localization-phase10.md) | Phase 10 翻译质量、功能安全、证据卫生和低负载审查门禁 |
+| [`docs/zh-Hans-review-checklist.md`](docs/zh-Hans-review-checklist.md) | 每条翻译和每个模块的审查清单、风险问题和低负载命令 gate |
+| [`docs/zh-Hans-module-review-matrix.md`](docs/zh-Hans-module-review-matrix.md) | 各模块的审查范围、风险等级、证据要求和当前状态 |
+| [`docs/zh-Hans-module-review-search-2026-06-01.md`](docs/zh-Hans-module-review-search-2026-06-01.md) | Phase 11 search/命令面板模块实际审查记录、修复项和剩余无障碍文案问题 |
+| [`docs/zh-Hans-full-translation-audit.md`](docs/zh-Hans-full-translation-audit.md) | Phase 12 全量逐条翻译审查台账、批次计划和逐批结论 |
+| [`docs/zh-Hans-functional-risk-register.md`](docs/zh-Hans-functional-risk-register.md) | 命令、搜索、遥测、协议、日志、计费、鉴权等高风险字符串处理规则 |
+| [`docs/zh-Hans-evidence-policy.md`](docs/zh-Hans-evidence-policy.md) | GUI 截图、日志、可访问性文本和 fixture 证据的保存/晋级规则 |
+| [`docs/zh-Hans-review-baseline-2026-05-31.md`](docs/zh-Hans-review-baseline-2026-05-31.md) | Phase 10 低负载审查体系自检记录 |
 | [`docs/zh-Hans-custom-inference-test-account.md`](docs/zh-Hans-custom-inference-test-account.md) | `GUI-WS-06` public-RC 复验所需隔离测试账号、一次性 endpoint 和证据要求 |
 | [`docs/zh-Hans-modal-candidate-classification.md`](docs/zh-Hans-modal-candidate-classification.md) | `modals`/terminal/Agent 候选分类，记录非 UI 噪声和后续翻译切片 |
 | [`docs/zh-Hans-gui-smoke-matrix.md`](docs/zh-Hans-gui-smoke-matrix.md) | GUI 冒烟矩阵，记录已验证路径、manual gate 和账号/状态依赖 |

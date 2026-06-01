@@ -468,7 +468,7 @@ pub fn render_privacy_settings_toggles<A: Action + Clone + 'static>(
 
     let telemetry_description = render_description(
         appearance,
-        "高层级功能使用数据可帮助 Warp 产品团队确定路线图优先级。".into(),
+        "概括性的功能使用数据可帮助 Warp 产品团队确定路线图优先级。".into(),
     );
 
     let telemetry_link = Flex::row()
@@ -545,7 +545,7 @@ pub fn render_privacy_settings_toggles<A: Action + Clone + 'static>(
         if PrivacySettings::as_ref(app).is_cloud_conversation_storage_enabled {
             "Agent 对话可与他人共享，并会在你登录不同设备时保留。该数据仅用于产品功能，Warp 不会将其用于分析。"
         } else {
-            "Agent 对话只会存储在本机，退出登录后会丢失，且无法共享。注意：ambient agent 的对话数据仍会存储在云端。"
+            "Agent 对话只会存储在本机，退出登录后会丢失，且无法共享。注意：Ambient Agent 的对话数据仍会存储在云端。"
         }
         .into(),
     );

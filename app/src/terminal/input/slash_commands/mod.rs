@@ -1018,7 +1018,7 @@ impl Input {
                 };
 
                 let Some(prompt) = argument.filter(|a| !a.is_empty()).cloned() else {
-                    show_error_toast("/queue 需要一个提示参数".to_owned(), ctx);
+                    show_error_toast("/queue 需要一个提示词参数".to_owned(), ctx);
                     return true;
                 };
 

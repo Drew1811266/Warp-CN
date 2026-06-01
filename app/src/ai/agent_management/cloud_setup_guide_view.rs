@@ -167,7 +167,7 @@ impl CloudSetupGuideView {
         // Documentation link line.
         let docs_line = Flex::row()
             .with_child(
-                Text::new_inline("查看", appearance.ui_font_family(), subtitle_font_size)
+                Text::new_inline("查看 ", appearance.ui_font_family(), subtitle_font_size)
                     .with_color(theme.nonactive_ui_text_color().into_solid())
                     .finish(),
             )
@@ -193,7 +193,7 @@ impl CloudSetupGuideView {
             )
             .with_child(
                 Text::new_inline(
-                    "以了解更多。",
+                    " 以了解更多。",
                     appearance.ui_font_family(),
                     subtitle_font_size,
                 )

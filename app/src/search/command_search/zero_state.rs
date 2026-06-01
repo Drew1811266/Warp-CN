@@ -22,7 +22,7 @@ lazy_static! {
         ("history: git checkout", QueryFilter::History),
         ("workflows: run dev server", QueryFilter::Workflows),
         (
-            "# find \"foo\" in files",
+            "# 在文件中查找 \"foo\"",
             QueryFilter::NaturalLanguage
         ),
         (

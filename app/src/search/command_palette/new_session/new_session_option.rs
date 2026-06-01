@@ -88,7 +88,7 @@ impl NewSessionOption {
                 format!("创建新窗口：{}", shell.short_name())
             }
             NewSessionConfig::Split(direction, shell) => {
-                format!("{direction}拆分窗格：{}", shell.short_name())
+                format!("向{direction}拆分窗格：{}", shell.short_name())
             }
         };
         Self {

@@ -4575,7 +4575,7 @@ impl DriveIndex {
                         let workflow: Option<&CloudWorkflow> = object.into();
                         let workflow = workflow.expect("Object is workflow");
                         let label = if workflow.model().data.is_agent_mode_workflow() {
-                            "复制提示"
+                            "复制提示词"
                         } else {
                             "复制工作流文本"
                         };

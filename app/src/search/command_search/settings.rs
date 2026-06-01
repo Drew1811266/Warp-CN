@@ -9,6 +9,6 @@ define_settings_group!(CommandSearchSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "workflows.show_global_workflows_in_universal_search",
-        description: "Whether to show global workflows in universal search results.",
+        description: "是否在全局搜索结果中显示全局工作流。",
     },
 ]);
