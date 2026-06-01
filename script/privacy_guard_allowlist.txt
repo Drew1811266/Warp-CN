@@ -1,0 +1,3 @@
+# Explicitly reviewed media exceptions for privacy_guard.py.
+# Keep this list narrow. Do not add raw screenshots, screen recordings, GUI smoke
+# evidence, logs, traces, or unredacted desktop captures.

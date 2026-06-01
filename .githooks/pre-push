@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+
+repo_root="$(git rev-parse --show-toplevel)"
+tmp_input="$(mktemp)"
+trap 'rm -f "$tmp_input"' EXIT
+cat > "$tmp_input"
+
+python3 "$repo_root/script/privacy_guard.py" --pre-push < "$tmp_input"
+
+command -v git-lfs >/dev/null 2>&1 || {
+  printf >&2 "\n%s\n\n" "This repository is configured for Git LFS but 'git-lfs' was not found on your path."
+  exit 2
+}
+git lfs pre-push "$@" < "$tmp_input"
