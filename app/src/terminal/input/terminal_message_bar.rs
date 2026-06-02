@@ -174,7 +174,7 @@ impl MessageProvider<TerminalMessageArgs<'_>> for ErroredBlockMessageProducer {
         Some(Message::new(vec![
             MessageItem::keystroke(keystroke),
             MessageItem::text(format!(
-                " attach `{}` output as agent context",
+                " 将 `{}` 输出附加为 Agent 上下文",
                 truncated_command_for_block(&block.command_to_string())
             )),
         ]))
@@ -202,7 +202,7 @@ impl MessageProvider<TerminalMessageArgs<'_>> for AgentMessageProducer {
                     key: "enter".to_owned(),
                     ..Default::default()
                 }),
-                MessageItem::text(" new conversation"),
+                MessageItem::text(" 新建对话"),
             ])
             .with_color(message_magenta(theme)),
         )
@@ -233,7 +233,7 @@ impl MessageProvider<TerminalMessageArgs<'_>> for PlanMessageProducer {
                     key: "enter".to_owned(),
                     ..Default::default()
                 }),
-                MessageItem::text(" plan with agent"),
+                MessageItem::text(" 用 Agent 规划"),
             ])
             .with_color(message_magenta(theme)),
         )
@@ -255,7 +255,7 @@ impl MessageProvider<TerminalMessageArgs<'_>> for ContinueConversationMessagePro
         let keystroke = keybinding_name_to_keystroke(commands::CONVERSATIONS.name, args.app)?;
         Some(Message::new(vec![
             MessageItem::keystroke(keystroke),
-            MessageItem::text(" to continue conversation"),
+            MessageItem::text(" 继续对话"),
         ]))
     }
 }
@@ -342,11 +342,11 @@ impl MessageProvider<TerminalMessageArgs<'_>> for DefaultMessageProducer {
         if let Some(keystroke) = keystroke {
             Some(Message::new(vec![
                 MessageItem::keystroke(keystroke),
-                MessageItem::text(" new /agent conversation"),
+                MessageItem::text(" 新建 /agent 对话"),
             ]))
         } else {
             Some(Message::new(vec![MessageItem::text(
-                "/agent for new conversation",
+                "使用 /agent 新建对话",
             )]))
         }
     }
@@ -361,13 +361,13 @@ impl MessageProvider<Option<&AcceptHistoryItem>> for InlineHistoryMessageProduce
         });
         let items = match selected {
             Some(AcceptHistoryItem::Command { .. }) => {
-                vec![enter, MessageItem::text(" to execute")]
+                vec![enter, MessageItem::text(" 执行")]
             }
             Some(AcceptHistoryItem::AIPrompt { .. }) => {
-                vec![enter, MessageItem::text(" to send")]
+                vec![enter, MessageItem::text(" 发送")]
             }
             Some(AcceptHistoryItem::Conversation { title, .. }) => {
-                vec![enter, MessageItem::text(format!(" to open '{title}'"))]
+                vec![enter, MessageItem::text(format!(" 打开“{title}”"))]
             }
             None => {
                 vec![MessageItem::text("")]
@@ -400,9 +400,9 @@ impl MessageTransformer<TerminalMessageArgs<'_>> for AutodetectedPromptMessageTr
                     });
 
             message.items.extend([
-                MessageItem::text(" (autodetected) "),
+                MessageItem::text("（自动检测）"),
                 MessageItem::keystroke(set_terminal_mode_keystroke),
-                MessageItem::text(" to override"),
+                MessageItem::text(" 覆盖"),
             ]);
         }
         message.set_color(message_magenta(Appearance::as_ref(args.app).theme()));
@@ -427,13 +427,13 @@ impl MessageTransformer<TerminalMessageArgs<'_>> for AttachedBlocksMessageTransf
         };
 
         if context_block_ids.len() == 1 {
-            message.append_text(format!(" with `{}` attached", block_command).as_str());
+            message.append_text(format!(" 已附加 `{}`", block_command).as_str());
         } else {
             let text = if context_block_ids.len() == 2 {
-                format!(" with `{}` and 1 other command attached", block_command)
+                format!(" 已附加 `{}` 和另外 1 条命令", block_command)
             } else {
                 format!(
-                    " with `{}` and {} other commands attached",
+                    " 已附加 `{}` 和另外 {} 条命令",
                     block_command,
                     context_block_ids.len().saturating_sub(1)
                 )
@@ -453,7 +453,7 @@ impl MessageTransformer<TerminalMessageArgs<'_>> for AttachedTextSelectionMessag
         {
             return false;
         }
-        message.append_text(" with text selection attached");
+        message.append_text(" 已附加文本选择");
         true
     }
 }

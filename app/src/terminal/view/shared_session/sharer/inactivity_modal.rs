@@ -149,7 +149,7 @@ impl InactivityModalBody {
 
     fn render_countdown(&self, appearance: &Appearance) -> Box<dyn Element> {
         let text = format!(
-            "Sharing will end in {}:{:02} due to inactivity.",
+            "由于长时间无活动，共享将在 {}:{:02} 后结束。",
             self.duration.as_secs() / 60,
             self.duration.as_secs() % 60,
         );
@@ -179,7 +179,7 @@ impl InactivityModalBody {
                     font_weight: Some(Weight::Bold),
                     ..Default::default()
                 })
-                .with_centered_text_label(String::from("Stop sharing"))
+                .with_centered_text_label(String::from("停止共享"))
                 .build()
                 .with_cursor(Cursor::PointingHand)
                 .on_click(move |ctx, _, _| {
@@ -205,7 +205,7 @@ impl InactivityModalBody {
                 font_weight: Some(Weight::Bold),
                 ..Default::default()
             })
-            .with_centered_text_label(String::from("Continue sharing"))
+            .with_centered_text_label(String::from("继续共享"))
             .build()
             .with_cursor(Cursor::PointingHand)
             .on_click(move |ctx, _, _| {
@@ -231,17 +231,13 @@ impl View for InactivityModalBody {
         let countdown = self.render_countdown(appearance);
 
         let header = Container::new(
-            Text::new_inline(
-                "Are you still there?",
-                appearance.ui_font_family(),
-                HEADER_FONT_SIZE,
-            )
-            .with_color(blended_colors::text_main(
-                appearance.theme(),
-                appearance.theme().background(),
-            ))
-            .with_style(Properties::default().weight(Weight::Bold))
-            .finish(),
+            Text::new_inline("你还在吗？", appearance.ui_font_family(), HEADER_FONT_SIZE)
+                .with_color(blended_colors::text_main(
+                    appearance.theme(),
+                    appearance.theme().background(),
+                ))
+                .with_style(Properties::default().weight(Weight::Bold))
+                .finish(),
         )
         .with_padding_bottom(8.)
         .finish();

@@ -113,7 +113,7 @@ type PtyController = writeable_pty::PtyController<mio_channel::Sender<Message>>;
 type RemoteServerController =
     writeable_pty::remote_server_controller::RemoteServerController<mio_channel::Sender<Message>>;
 
-const ACL_UPDATE_FAILURE_RESPONSE: &str = "Something went wrong. Please try again.";
+const ACL_UPDATE_FAILURE_RESPONSE: &str = "出现问题。请重试。";
 
 /// Whether the given CRDT operation should be dropped when broadcasting
 /// sharer input to viewers. In ambient agent sessions the sharer is a
@@ -1671,7 +1671,7 @@ impl TerminalManager {
 
                 terminal_view.update(ctx, |view, ctx| {
                     view.show_persistent_toast(
-                        "Something went wrong. Please try sharing again.".to_string(),
+                        "出现问题。请重新尝试共享。".to_string(),
                         ToastFlavor::Error,
                         ctx,
                     );
@@ -2050,7 +2050,7 @@ impl TerminalManager {
                     }
                     LinkAccessLevelUpdateResponse::Error => {
                         let reason_string =
-                            "Failed to update permissions for shared session".to_owned();
+                            "无法更新共享会话权限".to_owned();
                         view.show_persistent_toast(reason_string, ToastFlavor::Error, ctx);
                     }
                 });

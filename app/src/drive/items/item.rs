@@ -433,13 +433,13 @@ impl<'a> WarpDriveRow<'a> {
             Owner::User { user_uid } => {
                 match UserProfiles::as_ref(app).displayable_identifier_for_uid(user_uid) {
                     Some(user) => owner_label.push_str(&user),
-                    None => owner_label.push_str("unknown user"),
+                    None => owner_label.push_str("未知用户"),
                 }
             }
             Owner::Team { team_uid, .. } => owner_label.push_str(
                 UserWorkspaces::as_ref(app)
                     .team_from_uid(team_uid)
-                    .map_or("unknown team", |team| &team.name),
+                    .map_or("未知团队", |team| &team.name),
             ),
         }
 
@@ -644,7 +644,7 @@ impl<'a> WarpDriveRow<'a> {
         Span::new(
             self.item
                 .display_name()
-                .unwrap_or_else(|| "Untitled".to_string()),
+                .unwrap_or_else(|| "未命名".to_string()),
             style,
         )
         .build()

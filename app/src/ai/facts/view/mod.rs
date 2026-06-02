@@ -31,7 +31,7 @@ mod style;
 use rule::*;
 use rule_editor::*;
 
-const OFFLINE_TEXT: &str = "You are offline. Some rules will be read only.";
+const OFFLINE_TEXT: &str = "你已离线。部分规则将为只读。";
 
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
 pub enum AIFactPage {
@@ -45,8 +45,8 @@ pub enum AIFactPage {
 impl std::fmt::Display for AIFactPage {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            AIFactPage::Rules => write!(f, "Rules"),
-            AIFactPage::RuleEditor { .. } => write!(f, "Rule Editor"),
+            AIFactPage::Rules => write!(f, "规则"),
+            AIFactPage::RuleEditor { .. } => write!(f, "规则编辑器"),
         }
     }
 }

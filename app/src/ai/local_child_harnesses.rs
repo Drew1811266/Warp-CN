@@ -7,8 +7,8 @@ pub(crate) fn local_child_harness_disabled_message(harness: Harness) -> Option<&
     }
 
     match harness {
-        Harness::Claude => Some("Local Claude Code child agents are temporarily disabled."),
-        Harness::Codex => Some("Local Codex child agents are temporarily disabled."),
+        Harness::Claude => Some("本地 Claude Code 子 Agent 暂时已停用。"),
+        Harness::Codex => Some("本地 Codex 子 Agent 暂时已停用。"),
         Harness::Oz | Harness::OpenCode | Harness::Gemini | Harness::Unknown => None,
     }
 }

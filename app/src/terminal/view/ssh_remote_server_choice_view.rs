@@ -74,10 +74,9 @@ impl SshRemoteServerChoiceView {
         let buttons = ctx.add_typed_action_view(|_| {
             KeyboardNavigableButtons::new(vec![
                 rich_navigation_button(
-                    "Install Warp's SSH extension".to_string(),
+                    "安装 Warp 的 SSH 扩展".to_string(),
                     Some(
-                        "Install Warp's extension to enable agent features like file browsing, \
-                         code review, and intelligent command completions in this session."
+                        "安装 Warp 扩展，在此会话中启用文件浏览、代码审查和智能命令补全等 Agent 功能。"
                             .to_string(),
                     ),
                     /* recommended */ true,
@@ -85,10 +84,9 @@ impl SshRemoteServerChoiceView {
                     SshRemoteServerChoiceViewAction::Install,
                 ),
                 rich_navigation_button(
-                    "Continue without installing".to_string(),
+                    "不安装并继续".to_string(),
                     Some(
-                        "You'll still get a Warpified experience just without the coding \
-                         features."
+                        "你仍然可以获得 Warpify 后的体验，只是没有编码功能。"
                             .to_string(),
                     ),
                     /* recommended */ false,
@@ -120,7 +118,7 @@ impl SshRemoteServerChoiceView {
         // Match the Figma design: a plain title row, no icon / chevron /
         // action buttons. `HeaderConfig` without an `interaction_mode` set
         // renders exactly that.
-        HeaderConfig::new("Choose your experience for this remote session:", app)
+        HeaderConfig::new("选择此远程会话的体验：", app)
             .with_corner_radius_override(CornerRadius::with_top(Radius::Pixels(
                 PROMPT_BORDER_RADIUS,
             )))
@@ -155,7 +153,7 @@ impl SshRemoteServerChoiceView {
 
         let checkbox_label =
             Hoverable::new(self.do_not_ask_again_label_mouse_state.clone(), move |_| {
-                Text::new("Don't ask me this again", ui_font_family, footer_font_size)
+                Text::new("不再询问", ui_font_family, footer_font_size)
                     .with_color(muted_color)
                     .finish()
             })
@@ -175,7 +173,7 @@ impl SshRemoteServerChoiceView {
         let manage_settings_link = appearance
             .ui_builder()
             .link(
-                "Manage Warpify settings".into(),
+                "管理 Warpify 设置".into(),
                 None,
                 Some(Box::new(|ctx| {
                     ctx.dispatch_typed_action(SshRemoteServerChoiceViewAction::OpenWarpifySettings);

@@ -56,7 +56,7 @@ fn build_row_state(
     let edit_button = ctx.add_typed_action_view(move |_| {
         ActionButton::new("", NakedTheme)
             .with_icon(TerminalIcon::Pencil)
-            .with_tooltip("Edit queued prompt")
+            .with_tooltip("编辑排队提示")
             .with_size(ButtonSize::XSmall)
             .on_click(move |ctx| {
                 ctx.dispatch_typed_action(QueuedPromptsPanelAction::StartEditingRow(query_id));
@@ -65,7 +65,7 @@ fn build_row_state(
     let delete_button = ctx.add_typed_action_view(move |_| {
         ActionButton::new("", NakedTheme)
             .with_icon(TerminalIcon::Trash)
-            .with_tooltip("Delete queued prompt")
+            .with_tooltip("删除排队提示")
             .with_size(ButtonSize::XSmall)
             .on_click(move |ctx| {
                 ctx.dispatch_typed_action(QueuedPromptsPanelAction::DeleteRow(query_id));
@@ -837,5 +837,5 @@ fn render_row(props: RenderRowProps<'_>) -> Box<dyn Element> {
 
 /// Returns the user-visible header label for `count` queued prompts.
 fn header_label_text(count: usize) -> String {
-    format!("{count} queued")
+    format!("{count} 个排队中")
 }

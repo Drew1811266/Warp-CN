@@ -248,31 +248,29 @@ impl PromptRenderHelper {
         if let Some(pending_session_id) = model.pending_session_id() {
             if let Some(state) = sessions.remote_server_setup_state(pending_session_id) {
                 return match state {
-                    RemoteServerSetupState::Checking => "Starting shell...".to_string(),
+                    RemoteServerSetupState::Checking => "正在启动 shell...".to_string(),
                     RemoteServerSetupState::Installing {
                         progress_percent: Some(p),
-                    } => format!("Installing Warp SSH Extension... ({p}%)"),
+                    } => format!("正在安装 Warp SSH 扩展...（{p}%）"),
                     RemoteServerSetupState::Installing {
                         progress_percent: None,
-                    } => "Installing Warp SSH Extension...".to_string(),
-                    RemoteServerSetupState::Updating => {
-                        "Updating Warp SSH Extension...".to_string()
-                    }
-                    RemoteServerSetupState::Initializing => "Initializing...".to_string(),
-                    RemoteServerSetupState::Ready => "Starting shell...".to_string(),
+                    } => "正在安装 Warp SSH 扩展...".to_string(),
+                    RemoteServerSetupState::Updating => "正在更新 Warp SSH 扩展...".to_string(),
+                    RemoteServerSetupState::Initializing => "正在初始化...".to_string(),
+                    RemoteServerSetupState::Ready => "正在启动 shell...".to_string(),
                     // Failed and Unsupported both fall back to the legacy SSH
                     // flow, so we render the same generic prompt as a normal
                     // SSH session that doesn't have the remote-server extension.
                     RemoteServerSetupState::Failed { .. }
-                    | RemoteServerSetupState::Unsupported { .. } => "Starting shell...".to_string(),
+                    | RemoteServerSetupState::Unsupported { .. } => "正在启动 shell...".to_string(),
                 };
             }
         }
 
         if !sessions.is_empty() {
-            "Starting shell...".to_string()
+            "正在启动 shell...".to_string()
         } else {
-            format!("Starting {}...", model.shell_launch_state().display_name())
+            format!("正在启动 {}...", model.shell_launch_state().display_name())
         }
     }
 
@@ -431,7 +429,7 @@ impl PromptRenderHelper {
             let prompt = PromptAndPadding {
                 element: PromptAndPaddingElement::Text(Box::new(
                     Text::new_inline(
-                        "Loading prompt...",
+                        "正在加载提示符...",
                         appearance.monospace_font_family(),
                         appearance.monospace_font_size(),
                     )

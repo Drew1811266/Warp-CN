@@ -313,9 +313,7 @@ impl MCPServersSettingsPageView {
         // current modal contents with a different template. See product
         // invariant 7 in specs/GH686/product.md.
         if self.installation_modal_state.is_open() {
-            log::warn!(
-                "Ignoring MCP deeplink autoinstall for '{autoinstall_param}': installation modal already open"
-            );
+            log::warn!("忽略 {autoinstall_param} 的 MCP deeplink 自动安装：安装 modal 已打开");
             self.add_error_toast(
                 "请先完成当前 MCP 安装，再打开另一个安装链接。".to_string(),
                 ctx,
@@ -329,9 +327,7 @@ impl MCPServersSettingsPageView {
             .into_iter()
             .find(|item| item.title().to_lowercase() == autoinstall_lower);
         let Some(gallery_server) = gallery_server else {
-            log::warn!(
-                "Unrecognized autoinstall value '{autoinstall_param}': no matching gallery item found"
-            );
+            log::warn!("无法识别 autoinstall 值 {autoinstall_param}：未找到匹配的 gallery 项");
             self.add_error_toast(format!("未知 MCP 服务器“{autoinstall_param}”"), ctx);
             return;
         };
@@ -344,7 +340,7 @@ impl MCPServersSettingsPageView {
             .any(|installation| installation.gallery_uuid() == Some(gallery_uuid));
         if already_installed {
             log::info!(
-                "Gallery MCP server '{}' is already installed, skipping autoinstall",
+                "Gallery MCP server {} 已安装，跳过自动安装",
                 gallery_server.title()
             );
             return;
@@ -353,14 +349,12 @@ impl MCPServersSettingsPageView {
         let instructions = gallery_server.instructions_in_markdown().cloned();
         let gallery_title = gallery_server.title().to_string();
         let Ok(templatable_mcp_server) = TemplatableMCPServer::try_from(gallery_server) else {
-            log::warn!(
-                "Failed to convert gallery item '{autoinstall_param}' to TemplatableMCPServer"
-            );
+            log::warn!("无法将 gallery 项 {autoinstall_param} 转换为 TemplatableMCPServer");
             // Invariant 5 (specs/GH686/product.md): the match succeeded but the
             // gallery entry cannot be turned into a valid template. Surface the
             // failure to the user rather than silently returning.
             self.add_error_toast(
-                format!("MCP server '{gallery_title}' cannot be installed from this link."),
+                format!("无法从此链接安装 MCP server {gallery_title}。"),
                 ctx,
             );
             return;
@@ -573,7 +567,7 @@ impl SettingsWidget for MCPServersSettingsWidget {
     type View = MCPServersSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "mcp servers"
+        "mcp server 服务器"
     }
 
     fn render(

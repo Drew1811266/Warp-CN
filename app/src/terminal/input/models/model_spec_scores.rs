@@ -18,11 +18,13 @@ use crate::terminal::input::inline_menu::styles as inline_styles;
 const CORNER_RADIUS: f32 = 4.0;
 const ROW_SPACING: f32 = 12.0;
 
-pub const MODEL_SPECS_TITLE: &str = "Model Specs";
-pub const MODEL_SPECS_DESCRIPTION: &str = "Warp's benchmarks for how well a model performs in our harness, the rate at which it consumes credits, and task speed.";
+pub const MODEL_SPECS_TITLE: &str = "模型规格";
+pub const MODEL_SPECS_DESCRIPTION: &str =
+    "Warp 基准测试会衡量模型在我们的 harness 中的表现、消耗点数的速率和任务速度。";
 
-pub const REASONING_LEVEL_TITLE: &str = "Reasoning level";
-pub const REASONING_LEVEL_DESCRIPTION: &str = "Increased reasoning levels consume more credits and have higher latency, but higher performance for complicated tasks.";
+pub const REASONING_LEVEL_TITLE: &str = "推理等级";
+pub const REASONING_LEVEL_DESCRIPTION: &str =
+    "更高的推理等级会消耗更多点数并带来更高延迟，但在复杂任务上表现更好。";
 
 pub enum CostRow {
     Bar {
@@ -50,7 +52,7 @@ pub fn render_model_spec_scores(
     app: &AppContext,
 ) -> Box<dyn Element> {
     let mut rows = vec![render_score_row(
-        "Intelligence",
+        "智能程度",
         ScoreRowKind::Bar {
             value: spec.as_ref().map(|spec| spec.quality),
         },
@@ -60,7 +62,7 @@ pub fn render_model_spec_scores(
     )];
 
     rows.push(render_score_row(
-        "Speed",
+        "速度",
         ScoreRowKind::Bar {
             value: spec.as_ref().map(|spec| spec.speed),
         },
@@ -72,7 +74,7 @@ pub fn render_model_spec_scores(
     match cost_row {
         CostRow::Bar { value } => {
             rows.push(render_score_row(
-                "Cost",
+                "费用",
                 ScoreRowKind::Bar { value },
                 None,
                 layout.bg_bar_color,
@@ -85,7 +87,7 @@ pub fn render_model_spec_scores(
             manage_button,
         } => {
             rows.push(render_score_row(
-                "Cost",
+                "费用",
                 ScoreRowKind::BilledToProvider {
                     label,
                     manage_button,

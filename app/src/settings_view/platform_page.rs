@@ -489,7 +489,7 @@ impl PlatformPageWidget {
         appearance: &Appearance,
     ) -> Box<dyn Element> {
         let text = vec![
-            FormattedTextFragment::plain_text("Create and manage API keys to allow other Oz cloud agents to access your Warp account.\nFor more information, visit the "),
+            FormattedTextFragment::plain_text("创建和管理 API 密钥，允许其他 Oz 云端 Agent 访问你的 Warp 账号。n如需更多信息，请访问 "),
             FormattedTextFragment::hyperlink("文档。", API_KEY_DOCS_URL),
         ];
 

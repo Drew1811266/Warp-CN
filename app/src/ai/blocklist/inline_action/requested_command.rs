@@ -69,22 +69,22 @@ use crate::view_components::compactible_split_action_button::CompactibleSplitAct
 /// For horizontal padding, use [`INLINE_ACTION_HORIZONTAL_PADDING`] for consistency.
 pub const REQUESTED_COMMAND_BODY_VERTICAL_PADDING: f32 = 16.;
 
-const REQUESTED_COMMAND_REJECT_LABEL: &str = "Reject";
-const REQUESTED_COMMAND_ACCEPT_LABEL: &str = "Run";
-const REQUESTED_COMMAND_EDIT_LABEL: &str = "Edit";
-const REQUESTED_COMMAND_MINIMIZE_LABEL: &str = "Done";
+const REQUESTED_COMMAND_REJECT_LABEL: &str = "拒绝";
+const REQUESTED_COMMAND_ACCEPT_LABEL: &str = "运行";
+const REQUESTED_COMMAND_EDIT_LABEL: &str = "编辑";
+const REQUESTED_COMMAND_MINIMIZE_LABEL: &str = "完成";
 
-const LOADING_MESSAGE: &str = "Generating command...";
-const COMMAND_WAITING_FOR_USER_MESSAGE: &str = "OK if I run this command and read the output?";
-const MCP_TOOL_WAITING_FOR_USER_MESSAGE: &str = "OK if I call this MCP tool?";
-const MONITORING_COMMAND_MESSAGE: &str = "Agent is monitoring command...";
-const AGENT_NEEDS_INPUT_MESSAGE: &str = "Agent needs your input to continue";
-const USER_TOOK_CONTROL_COMMAND_MESSAGE: &str = "User is in control.";
-const USER_STOPPED_CLI_SUBAGENT_COMMAND_MESSAGE: &str = "Paused agent. User is in control.";
-const AGENT_REQUESTED_USER_TAKE_CONTROL_COMMAND_MESSAGE: &str = "User in control";
-const AGENT_ERRORED_COMMAND_MESSAGE: &str = "Agent ran into an issue. Take over control.";
-pub const VIEWING_COMMAND_DETAIL_MESSAGE: &str = "Viewing command detail";
-const VIEWING_MCP_TOOL_DETAIL_MESSAGE: &str = "Viewing MCP tool call detail";
+const LOADING_MESSAGE: &str = "正在生成命令...";
+const COMMAND_WAITING_FOR_USER_MESSAGE: &str = "可以运行此命令并读取输出吗？";
+const MCP_TOOL_WAITING_FOR_USER_MESSAGE: &str = "可以调用此 MCP 工具吗？";
+const MONITORING_COMMAND_MESSAGE: &str = "Agent 正在监控命令...";
+const AGENT_NEEDS_INPUT_MESSAGE: &str = "Agent 需要你的输入才能继续";
+const USER_TOOK_CONTROL_COMMAND_MESSAGE: &str = "用户正在控制。";
+const USER_STOPPED_CLI_SUBAGENT_COMMAND_MESSAGE: &str = "已暂停 Agent。用户正在控制。";
+const AGENT_REQUESTED_USER_TAKE_CONTROL_COMMAND_MESSAGE: &str = "用户控制中";
+const AGENT_ERRORED_COMMAND_MESSAGE: &str = "Agent 遇到问题。请接管控制。";
+pub const VIEWING_COMMAND_DETAIL_MESSAGE: &str = "正在查看命令详情";
+const VIEWING_MCP_TOOL_DETAIL_MESSAGE: &str = "正在查看 MCP 工具调用详情";
 
 const EDIT_COMMAND_ACTION_NAME: &str = "requested_command:edit";
 
@@ -150,7 +150,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         EDIT_COMMAND_ACTION_NAME,
-        "Edit requested command",
+        "编辑请求的命令",
         RequestedCommandViewAction::OpenEditMode,
     )
     .with_key_binding(cmd_or_ctrl_shift("e"))
@@ -601,7 +601,7 @@ impl RequestedCommandView {
             .with_on_select_action(RequestedCommandViewAction::Accept)
             .into_item();
 
-            let auto_item = MenuItemFields::new_with_label("Auto-approve", auto_keystroke.as_str())
+            let auto_item = MenuItemFields::new_with_label("自动批准", auto_keystroke.as_str())
                 .with_on_select_action(RequestedCommandViewAction::AcceptAndAutoExecute)
                 .into_item();
 
@@ -651,7 +651,7 @@ impl RequestedCommandView {
                 citations_padding,
                 app,
             )
-            .map(|citation| ("Copied from", citation))
+            .map(|citation| ("复制自", citation))
         } else {
             // Otherwise, we render all the citations (if any) and mention that the command was derived from them.
             render_citation_chips(
@@ -661,7 +661,7 @@ impl RequestedCommandView {
                 citations_padding,
                 app,
             )
-            .map(|citations| ("Derived from", citations))
+            .map(|citations| ("派生自", citations))
         };
 
         let citations_footer = citations_footer_props.map(|(prefix, suffix)| {
@@ -702,7 +702,7 @@ impl RequestedCommandView {
             ) if show_for_action_id == &self.action_id => {
                 *shown.lock() = true;
                 Some(render_autonomy_checkbox_setting_speedbump_footer(
-                    "Always allow Oz to execute read-only commands (relies on model)",
+                    "始终允许 Oz 执行只读命令（依赖模型）",
                     *checked,
                     AIBlockAction::ToggleAutoexecuteReadonlyCommandsSpeedbumpCheckbox,
                     self.autoexecute_readonly_commands_speedbump_checkbox_handle
@@ -759,7 +759,7 @@ impl RequestedCommandView {
                 )
                 .with_child(
                     Text::new(
-                        "Your profile is set to always ask for permission to execute commands.",
+                        "你的配置文件设置为执行命令时始终请求许可。",
                         appearance.ui_font_family(),
                         font_size,
                     )
@@ -774,7 +774,7 @@ impl RequestedCommandView {
                             appearance
                                 .ui_builder()
                                 .link(
-                                    "Manage command execution setting".into(),
+                                    "管理命令执行设置".into(),
                                     None,
                                     Some(Box::new(move |ctx| {
                                         ctx.dispatch_typed_action(
@@ -1437,11 +1437,11 @@ impl View for RequestedCommandView {
                 // If we have a result, show the JSON response.
                 let result_text = match result {
                     CallMCPToolResult::Success { result } => serde_json::to_string_pretty(result)
-                        .unwrap_or_else(|_| "Error formatting JSON".to_string()),
+                        .unwrap_or_else(|_| "格式化 JSON 时出错".to_string()),
                     CallMCPToolResult::Error(error) => {
                         format!("Error: {error}")
                     }
-                    CallMCPToolResult::Cancelled => "Tool call was cancelled".to_string(),
+                    CallMCPToolResult::Cancelled => "工具调用已取消".to_string(),
                 };
                 format!("{command_text}\n\nResponse: {result_text}")
             } else if self.is_header_expanded {

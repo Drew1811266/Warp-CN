@@ -194,7 +194,7 @@ impl RequestFileEditsExecutor {
                         .iter()
                         .filter_map(|err| match err.as_ref() {
                             FileSaveError::IOError { error, path } => {
-                                Some(format!("Failed to save file {path:?}: {error}"))
+                                Some(format!("保存文件 {path:?} 失败：{error}"))
                             }
                             _ => None,
                         })
@@ -357,8 +357,8 @@ impl RequestFileEditsExecutor {
             }
             Err(err) => {
                 safe_warn!(
-                    safe: ("Failed to generate diffs"),
-                    full: ("Failed to generate diffs {err:?}")
+                    safe: ("生成 diff 失败"),
+                    full: ("生成 diff 失败：{err:?}")
                 );
                 self.diff_application_failures.insert(id, err);
                 return;

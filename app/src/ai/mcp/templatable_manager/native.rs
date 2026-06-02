@@ -103,12 +103,9 @@ enum LegacyToTemplatableMCPConversionError {
 impl fmt::Display for LegacyToTemplatableMCPConversionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Self::TemplateAlreadyExists => write!(f, "templatable MCP server already exists"),
-            Self::NoDBConnection => write!(f, "failed to connect to database"),
-            Self::InstallationFailed => write!(
-                f,
-                "created template successfully, but could not create installation"
-            ),
+            Self::TemplateAlreadyExists => write!(f, "可模板化 MCP server 已存在"),
+            Self::NoDBConnection => write!(f, "连接数据库失败"),
+            Self::InstallationFailed => write!(f, "模板已成功创建，但无法创建安装项"),
         }
     }
 }
@@ -117,41 +114,36 @@ impl fmt::Display for LegacyToTemplatableMCPConversionError {
 fn error_to_user_message(error: &rmcp::RmcpError) -> String {
     match error {
         rmcp::RmcpError::ClientInitialize(err) => {
-            format!("Failed to initialize client: {}", err)
+            format!("初始化客户端失败：{}", err)
         }
         rmcp::RmcpError::ServerInitialize(err) => {
-            format!("Failed to initialize server: {}", err)
+            format!("初始化 server 失败：{}", err)
         }
         rmcp::RmcpError::TransportCreation { error, .. } => {
-            format!("Failed to establish connection: {}", error)
+            format!("建立连接失败：{}", error)
         }
         rmcp::RmcpError::Runtime(err) => {
-            format!("Runtime error: {}", err)
+            format!("运行时错误：{}", err)
         }
         rmcp::RmcpError::Service(err) => match err {
             rmcp::ServiceError::McpError(_) => {
-                "Server returned an error. Please check server logs for details.".to_string()
+                "Server 返回错误。请查看 server 日志了解详情。".to_string()
             }
             rmcp::ServiceError::TransportSend(_) => {
-                "Failed to send data to server. Connection may have been lost.".to_string()
+                "向 server 发送数据失败。连接可能已丢失。".to_string()
             }
-            rmcp::ServiceError::TransportClosed => {
-                "Connection closed unexpectedly. The server may have crashed.".to_string()
-            }
+            rmcp::ServiceError::TransportClosed => "连接意外关闭。Server 可能已崩溃。".to_string(),
             rmcp::ServiceError::UnexpectedResponse => {
-                "Server sent an unexpected response. The server may be incompatible.".to_string()
+                "Server 返回了意外响应。该 server 可能不兼容。".to_string()
             }
             rmcp::ServiceError::Cancelled { reason } => format!(
-                "Operation was cancelled with reason: {}",
-                reason.clone().unwrap_or("Unknown reason".to_string())
+                "操作已取消，原因：{}",
+                reason.clone().unwrap_or("未知原因".to_string())
             ),
             rmcp::ServiceError::Timeout { timeout } => {
-                format!(
-                    "Connection timed out after {} seconds. The server may be unresponsive.",
-                    timeout.as_secs()
-                )
+                format!("连接在 {} 秒后超时。Server 可能无响应。", timeout.as_secs())
             }
-            _ => format!("Service error: {}", err),
+            _ => format!("服务错误：{}", err),
         },
         // The enum is marked as non-exhaustive, so we need a catch-all.
         _ => {
@@ -717,7 +709,7 @@ impl TemplatableMCPServerManager {
                     if mode.is_reconnect() {
                         self.notify_reconnect_waiters(
                             installation_uuid,
-                            Err("Template contains no servers".to_string()),
+                            Err("模板不包含 server".to_string()),
                         );
                     }
                     return;
@@ -754,7 +746,7 @@ impl TemplatableMCPServerManager {
                     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
                             DismissibleToast::error(
-                                "PATH required to launch MCP server. Please open a new terminal session to autopopulate PATH."
+                                "启动 MCP server 需要 PATH。请打开新的终端会话以自动填充 PATH。"
                                     .to_string(),
                             ),
                             window_id,
@@ -766,7 +758,7 @@ impl TemplatableMCPServerManager {
                 if mode.is_reconnect() {
                     self.notify_reconnect_waiters(
                         installation_uuid,
-                        Err("PATH not available".to_string()),
+                        Err("PATH 不可用".to_string()),
                     );
                 }
                 return;
@@ -1598,10 +1590,7 @@ impl TemplatableMCPServerManager {
             .get(&installation_uuid)
             .cloned()
         else {
-            self.notify_reconnect_waiters(
-                installation_uuid,
-                Err("Installation not found".to_string()),
-            );
+            self.notify_reconnect_waiters(installation_uuid, Err("未找到安装项".to_string()));
             return;
         };
 
@@ -1739,7 +1728,7 @@ async fn spawn_server(
     logger: SimpleLogger,
     auth_context: AuthContext,
 ) -> Result<TemplatableMCPServerInfo, rmcp::RmcpError> {
-    logger.log("[note] Attention! There may be sensitive information (such as API keys) in these logs. Make sure to redact any secrets before sharing with others.".to_string());
+    logger.log("[note] 注意！这些日志中可能包含敏感信息（例如 API 密钥）。与他人共享前，请务必遮盖所有密钥。".to_string());
 
     let mut is_authenticated_transport = false;
     let service = match transport_type {
@@ -1795,9 +1784,7 @@ async fn spawn_server(
             .spawn()
             .map_err(|err| {
                 if err.kind() == std::io::ErrorKind::NotFound {
-                    let cwd_display = cwd_for_log
-                        .as_deref()
-                        .unwrap_or("<inherited from Warp's process cwd>");
+                    let cwd_display = cwd_for_log.as_deref().unwrap_or("<继承自 Warp 进程 cwd>");
                     logger.log(format!(
                         "[error] MCP: Failed to spawn '{server_name}': command '{command_for_log}' \
                          not found (cwd: {cwd_display}). If your MCP server depends on a specific \
@@ -1990,7 +1977,7 @@ async fn determine_transport(
 
     fn unexpected_error(status: reqwest::StatusCode) -> rmcp::RmcpError {
         rmcp::RmcpError::transport_creation::<ReqwestHttpTransport>(format!(
-            "Unexpected status code: {status}"
+            "意外的状态码：{status}"
         ))
     }
     match send_initialize_request(url, headers, None).await? {
@@ -1999,7 +1986,7 @@ async fn determine_transport(
         StatusCode::UNAUTHORIZED => {
             if !FeatureFlag::McpOauth.is_enabled() {
                 return Err(rmcp::RmcpError::transport_creation::<ReqwestHttpTransport>(
-                    "Server requires authentication, which is not yet supported.".to_string(),
+                    "Server 需要认证，但当前尚不支持。".to_string(),
                 ));
             }
 
@@ -2024,7 +2011,7 @@ async fn determine_transport(
                             ToastStack::handle(ctx).update(ctx, |stack, ctx| {
                                 stack.add_ephemeral_toast(
                                     DismissibleToast::default(format!(
-                                        "Successfully authenticated {server_name} MCP server"
+                                        "已成功认证 {server_name} MCP server"
                                     )),
                                     active_window_id,
                                     ctx,

@@ -24,8 +24,8 @@ use crate::workspace::tab_settings::{
     DirectoryTabColor, DirectoryTabColors, TabSettings, TabSettingsChangedEvent,
 };
 
-const ADD_DIRECTORY_LABEL: &str = "+ Add directory…";
-const BUTTON_LABEL: &str = "Add directory color";
+const ADD_DIRECTORY_LABEL: &str = "+ 添加目录…";
+const BUTTON_LABEL: &str = "添加目录颜色";
 const MENU_WIDTH: f32 = 340.;
 
 /// A dropdown used by the Directory tab colors settings widget, with a button fallback

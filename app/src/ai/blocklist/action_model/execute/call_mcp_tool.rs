@@ -104,7 +104,7 @@ impl CallMCPToolExecutor {
 
             let serde_json::Value::Object(mut arguments) = input.clone() else {
                 return ActionExecution::Sync(AIAgentActionResultType::CallMCPTool(
-                    CallMCPToolResult::Error("MCP server tool input not an object".to_owned()),
+                    CallMCPToolResult::Error("MCP 服务器工具输入不是对象".to_owned()),
                 ));
             };
 
@@ -134,7 +134,7 @@ impl CallMCPToolExecutor {
 
             let Some(reconnecting_peer) = templatable_peer else {
                 return ActionExecution::Sync(AIAgentActionResultType::CallMCPTool(
-                    CallMCPToolResult::Error("MCP server for tool not found".to_owned()),
+                    CallMCPToolResult::Error("未找到该工具对应的 MCP 服务器".to_owned()),
                 ));
             };
 
@@ -234,7 +234,7 @@ fn handle_call_tool_result(
                             .collect_vec()
                             .join("\n");
                         if content_str.is_empty() {
-                            "MCP tool call returned an error.".to_string()
+                            "MCP 工具调用返回错误。".to_string()
                         } else {
                             content_str
                         }

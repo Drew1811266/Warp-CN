@@ -36,7 +36,7 @@ impl TryFrom<UploadArtifactArgs> for FileArtifactUploadRequest {
 
     fn try_from(value: UploadArtifactArgs) -> Result<Self> {
         let run_id = match value.run_id {
-            Some(run_id) => Some(parse_run_id(&run_id, "Invalid run ID")?),
+            Some(run_id) => Some(parse_run_id(&run_id, "无效的运行 ID")?),
             None => None,
         };
 
@@ -212,7 +212,7 @@ impl FileArtifactUploader {
             .await
             .with_context(|| {
                 format!(
-                    "Failed to load conversation '{}' to resolve artifact upload headers",
+                    "加载对话 '{}' 以解析 artifact 上传头失败",
                     conversation_id.as_str()
                 )
             })?;
@@ -220,7 +220,7 @@ impl FileArtifactUploader {
         let metadata = single_conversation_metadata(conversation_id.as_str(), metadata)
             .with_context(|| {
                 format!(
-                    "Failed to load conversation '{}' to resolve artifact upload headers",
+                    "加载对话 '{}' 以解析 artifact 上传头失败",
                     conversation_id.as_str()
                 )
             })?;
@@ -292,9 +292,9 @@ fn load_env_run_id() -> Result<Option<String>> {
     match env::var(OZ_RUN_ID_ENV_VAR) {
         Ok(run_id) => Ok(Some(run_id)),
         Err(env::VarError::NotPresent) => Ok(None),
-        Err(env::VarError::NotUnicode(_)) => Err(anyhow!(
-            "{OZ_RUN_ID_ENV_VAR} is set but is not valid Unicode"
-        )),
+        Err(env::VarError::NotUnicode(_)) => {
+            Err(anyhow!("{OZ_RUN_ID_ENV_VAR} 已设置，但不是有效的 Unicode"))
+        }
     }
 }
 
@@ -303,7 +303,7 @@ fn resolve_env_run_id(env_run_id: Option<String>) -> Result<AmbientAgentTaskId> 
         bail!("{OZ_RUN_ID_ENV_VAR} is not set");
     };
 
-    parse_run_id(&run_id, "Invalid OZ_RUN_ID")
+    parse_run_id(&run_id, "无效的 OZ_RUN_ID")
 }
 
 fn resolve_upload_association_from_sources(
@@ -354,7 +354,7 @@ fn resolve_upload_association_from_sources(
                 };
 
                 return Err(anyhow!(
-                    "Failed to resolve artifact upload association for conversation '{}': {conversation_err}; also failed to use {OZ_RUN_ID_ENV_VAR}: {env_err}",
+                    "无法解析对话 '{}' 的 artifact 上传关联：{conversation_err}；同时使用 {OZ_RUN_ID_ENV_VAR} 失败：{env_err}",
                     conversation_id.as_str()
                 ));
             }
@@ -363,7 +363,7 @@ fn resolve_upload_association_from_sources(
 
     let ambient_task_id = resolve_env_run_id(env_run_id).map_err(|env_err| {
         anyhow!(
-            "Failed to resolve artifact upload association: no usable --run-id or --conversation-id was provided, and {OZ_RUN_ID_ENV_VAR}: {env_err}"
+            "无法解析 artifact 上传关联：未提供可用的 --run-id 或 --conversation-id，且 {OZ_RUN_ID_ENV_VAR}：{env_err}"
         )
     })?;
 

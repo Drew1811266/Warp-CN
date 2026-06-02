@@ -25,7 +25,8 @@ use crate::server::server_api::harness_support::ResolvePromptRequest;
 use crate::server::server_api::ServerApi;
 use crate::terminal::CLIAgent;
 
-const CLAUDE_WAKE_PROMPT: &str = "New lead-agent messages are available. Read the latest lead-agent updates and continue the task accordingly.";
+const CLAUDE_WAKE_PROMPT: &str =
+    "有新的主 Agent 消息可用。请阅读最新的主 Agent 更新，并据此继续任务。";
 pub(super) const CLAUDE_WAKE_PROMPT_FILE_NAME: &str = "wake-turn-prompt.txt";
 const CLAUDE_WAKE_EXTERNALLY_MANAGED_LISTENER_ENV_VARS: &[&str] = &[
     "OZ_MESSAGE_LISTENER_MANAGED_EXTERNALLY",

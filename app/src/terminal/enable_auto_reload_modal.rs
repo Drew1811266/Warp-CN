@@ -152,7 +152,7 @@ impl EnableAutoReloadModalBody {
             .enumerate()
             .map(|(index, option)| {
                 let primary_text = format!(
-                    "${:.0} / {} credits",
+                    "${:.0} / {} 点数",
                     option.price_usd_cents as f32 / 100.,
                     option.credits
                 );

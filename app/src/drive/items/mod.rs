@@ -63,7 +63,7 @@ impl WarpDriveItemId {
             Self::Space(space) => {
                 warp_drive_section_header_position_id(&DriveIndexSection::Space(*space))
             }
-            Self::Trash => "Trash".to_string(),
+            Self::Trash => "废纸篓".to_string(),
         }
     }
 }

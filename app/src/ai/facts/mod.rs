@@ -54,7 +54,7 @@ impl StringModel for AIFact {
     type CloudObjectType = CloudAIFact;
 
     fn model_type_name(&self) -> &'static str {
-        "Rule"
+        "规则"
     }
 
     fn should_enforce_revisions() -> bool {

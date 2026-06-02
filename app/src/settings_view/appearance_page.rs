@@ -166,7 +166,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "jump to bottom of block button",
+            "跳转到块底部按钮",
             builder(SettingsAction::AppearancePageToggle(
                 AppearancePageAction::ToggleJumpToBottomOfBlockButton,
             )),
@@ -197,7 +197,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     );
 
     toggle_binding_pairs.push(ToggleSettingActionPair::new(
-        "dim inactive panes",
+        "调暗非活动窗格",
         builder(SettingsAction::AppearancePageToggle(
             AppearancePageAction::ToggleDimInactivePanes,
         )),
@@ -336,7 +336,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "focus follows mouse",
+            "焦点跟随鼠标",
             builder(SettingsAction::AppearancePageToggle(
                 AppearancePageAction::ToggleFocusPaneOnHover,
             )),
@@ -2661,7 +2661,7 @@ impl SettingsWidget for CreateCustomThemeWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "create theme create custom theme"
+        "创建主题 创建自定义主题"
     }
 
     fn render(
@@ -2788,7 +2788,7 @@ impl SettingsWidget for ThemeSelectWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "sync with os theme themes background backgrounds color colors customize"
+        "跟随系统主题 主题 背景 颜色 自定义"
     }
 
     fn render(
@@ -2880,7 +2880,7 @@ impl SettingsWidget for CustomAppIconWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "customize custom app icon icons"
+        "自定义 app 图标 图标"
     }
 
     fn render(
@@ -2961,7 +2961,7 @@ impl SettingsWidget for CustomWindowSizeWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "open windows with custom size"
+        "以自定义大小打开窗口"
     }
 
     fn render(
@@ -3084,7 +3084,7 @@ impl SettingsWidget for WindowOpacityWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "window opacity transparency"
+        "窗口不透明度 透明度"
     }
 
     fn render(
@@ -3208,7 +3208,7 @@ impl SettingsWidget for WindowBlurWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "window blur radius"
+        "窗口模糊半径"
     }
 
     fn render(
@@ -3275,7 +3275,7 @@ impl SettingsWidget for WindowBlurTextureWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "window blur texture acrylic"
+        "窗口模糊纹理 亚克力"
     }
 
     fn render(
@@ -3338,7 +3338,7 @@ impl SettingsWidget for ToolsPanelStateScopeWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "left tools panel open closed across tabs file tree project explorer global search warp drive conversation list"
+        "左侧工具面板 打开 关闭 跨标签页 文件树 项目资源管理器 全局搜索 Warp Drive 对话列表"
     }
 
     fn render(
@@ -3391,7 +3391,7 @@ impl SettingsWidget for InputTypeWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "input type warp universal classic style prompt terminal ai developer mode interface shell chips ps1"
+        "输入类型 Warp 通用 经典 样式 提示符 终端 AI 开发者模式 界面 shell chips ps1"
     }
 
     fn render(
@@ -3445,7 +3445,7 @@ impl SettingsWidget for InputModeWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "input mode input position pinned top bottom classic waterfall reverse"
+        "输入模式 输入位置 固定 顶部 底部 经典 瀑布流 反向"
     }
 
     fn render(
@@ -3480,7 +3480,7 @@ impl SettingsWidget for PromptWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "prompt ps1 terminal warp shell custom"
+        "提示符 ps1 终端 Warp shell 自定义"
     }
 
     fn render(
@@ -3568,7 +3568,7 @@ impl SettingsWidget for DimInactivePanesWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "dim inactive panes"
+        "调暗非活动窗格"
     }
 
     fn render(
@@ -3611,7 +3611,7 @@ impl SettingsWidget for FocusFollowsMouseWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "focus follows mouse"
+        "焦点跟随鼠标"
     }
 
     fn render(
@@ -3654,7 +3654,7 @@ impl SettingsWidget for CompactModeWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "compact mode spacing padding"
+        "紧凑模式 间距 内边距"
     }
 
     fn render(
@@ -3702,7 +3702,7 @@ impl SettingsWidget for JumpToBottomOfBlockWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "jump to bottom of block button"
+        "跳转到块底部按钮"
     }
 
     fn render(
@@ -3751,7 +3751,7 @@ impl SettingsWidget for ShowBlockDividersWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "show block dividers"
+        "显示块分隔线"
     }
 
     fn render(
@@ -3796,7 +3796,7 @@ impl SettingsWidget for AIFontWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "text agent ai font family font size monospace"
+        "文本 Agent AI 字体 字族 字号 等宽"
     }
 
     fn render(
@@ -3957,7 +3957,7 @@ impl SettingsWidget for TerminalFontWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "text terminal font family font size line height monospace"
+        "文本 终端 字体 字族 字号 行高 等宽"
     }
 
     fn render(
@@ -4123,7 +4123,7 @@ impl SettingsWidget for NotebookFontSizeWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "text notebook font size"
+        "文本 Notebook 字号"
     }
 
     fn render(
@@ -4215,7 +4215,7 @@ impl SettingsWidget for ThinStrokesWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "text thin strokes high dpi"
+        "文本 细笔画 高 dpi"
     }
 
     fn render(
@@ -4248,7 +4248,7 @@ impl SettingsWidget for MinimumContrastWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "text minimum contrast high"
+        "文本 最低对比度 高"
     }
 
     fn render(
@@ -4284,7 +4284,7 @@ impl SettingsWidget for LigaturesWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "text font ligatures"
+        "文本 字体连字"
     }
 
     fn render(
@@ -4346,7 +4346,7 @@ impl SettingsWidget for CursorTypeWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "cursor shape cursor type block bar beam underline"
+        "光标形状 光标类型 块 条 竖线 下划线"
     }
 
     fn render(
@@ -4419,7 +4419,7 @@ impl SettingsWidget for BlinkingCursorWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "blinking cursor"
+        "闪烁光标"
     }
 
     fn render(
@@ -4462,7 +4462,7 @@ impl SettingsWidget for TabCloseButtonPositionWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "tab bar close button position left right"
+        "标签栏 关闭按钮 位置 左 右"
     }
 
     fn render(
@@ -4497,7 +4497,7 @@ impl SettingsWidget for TabIndicatorWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "tab indicator"
+        "标签指示器"
     }
 
     fn render(
@@ -4542,7 +4542,7 @@ impl SettingsWidget for CodeReviewButtonWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "code review button tab bar"
+        "代码审查按钮 标签栏"
     }
 
     fn render(
@@ -4587,7 +4587,7 @@ impl SettingsWidget for PreserveActiveTabColorWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "tab color preserve new inherit active"
+        "标签页颜色 保留 新建 继承 活动"
     }
 
     fn render(
@@ -4632,7 +4632,7 @@ impl SettingsWidget for VerticalTabsWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "vertical tabs sidebar layout"
+        "垂直标签页 侧边栏 布局"
     }
 
     fn render(
@@ -4677,7 +4677,7 @@ impl SettingsWidget for ShowVerticalTabPanelInRestoredWindowsWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "vertical tabs panel restore window session snapshot"
+        "垂直标签页面板 恢复窗口 会话快照"
     }
 
     fn render(
@@ -4727,7 +4727,7 @@ impl SettingsWidget for UseLatestUserPromptAsConversationTitleInTabNamesWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "latest user prompt conversation title tab names vertical tabs oz third-party agent"
+        "最新用户提示 对话标题 标签页名称 垂直标签页 Oz 第三方 Agent"
     }
 
     fn render(
@@ -4778,7 +4778,7 @@ impl SettingsWidget for EditToolbarWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "edit toolbar header panel buttons configure arrange layout chip chips rearrange re-arrange customize"
+        "编辑工具栏 标题面板 按钮 配置 排列 布局 chip chips 重新排列 自定义"
     }
 
     fn render(
@@ -4879,7 +4879,7 @@ impl SettingsWidget for DirectoryTabColorsWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "directory tab color folder codebase repo"
+        "目录 标签页颜色 文件夹 代码库 repo"
     }
 
     fn render(
@@ -5031,7 +5031,7 @@ impl SettingsWidget for ZenModeWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "zen mode minimal tab bar window decoration"
+        "禅模式 极简 标签栏 窗口装饰"
     }
 
     fn render(
@@ -5067,7 +5067,7 @@ impl SettingsWidget for AltScreenPaddingWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "alt screen padding border space vim"
+        "备用屏幕 内边距 边框 空间 vim"
     }
 
     fn render(
@@ -5173,7 +5173,7 @@ impl SettingsWidget for ZoomLevelWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "zoom level zoom size scale"
+        "缩放级别 缩放大小 比例"
     }
 
     fn render(

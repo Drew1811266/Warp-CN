@@ -42,11 +42,11 @@ struct SecretInfo {
 impl TableFormat for SecretInfo {
     fn header() -> Vec<Cell> {
         vec![
-            Cell::new("Name"),
-            Cell::new("Scope"),
-            Cell::new("Type"),
-            Cell::new("Created"),
-            Cell::new("Updated"),
+            Cell::new("名称"),
+            Cell::new("范围"),
+            Cell::new("类型"),
+            Cell::new("创建时间"),
+            Cell::new("更新时间"),
         ]
     }
 
@@ -314,7 +314,7 @@ fn delete_secret(ctx: &mut AppContext, args: DeleteSecretArgs) -> Result<()> {
                 if !io::stdin().is_terminal() {
                     super::report_fatal_error(
                         anyhow::anyhow!(
-                            "Refusing to delete secret without confirmation in non-interactive mode (use --force to bypass)"
+                            "非交互模式下拒绝在未经确认时删除 secret（使用 --force 可绕过）"
                         ),
                         ctx,
                     );
@@ -326,27 +326,28 @@ fn delete_secret(ctx: &mut AppContext, args: DeleteSecretArgs) -> Result<()> {
                     Owner::Team { .. } => "team",
                 };
 
-                let should_delete = match Confirm::new(&format!("Delete {scope} secret '{name}'?"))
-                    .with_default(false)
-                    .with_help_message("This action cannot be undone")
-                    .prompt()
-                {
-                    Ok(should_delete) => should_delete,
-                    Err(InquireError::OperationCanceled | InquireError::OperationInterrupted) => {
-                        ctx
-                            .terminate_app(TerminationMode::ForceTerminate, None);
-                        return;
-                    }
-                    Err(err) => {
-                        super::report_fatal_error(err.into(), ctx);
-                        return;
-                    }
-                };
+                let should_delete =
+                    match Confirm::new(&format!("要删除 {scope} secret '{name}' 吗？"))
+                        .with_default(false)
+                        .with_help_message("此操作无法撤销")
+                        .prompt()
+                    {
+                        Ok(should_delete) => should_delete,
+                        Err(
+                            InquireError::OperationCanceled | InquireError::OperationInterrupted,
+                        ) => {
+                            ctx.terminate_app(TerminationMode::ForceTerminate, None);
+                            return;
+                        }
+                        Err(err) => {
+                            super::report_fatal_error(err.into(), ctx);
+                            return;
+                        }
+                    };
 
                 if !should_delete {
                     println!("Deletion cancelled");
-                    ctx
-                        .terminate_app(TerminationMode::ForceTerminate, None);
+                    ctx.terminate_app(TerminationMode::ForceTerminate, None);
                     return;
                 }
             }
@@ -355,8 +356,7 @@ fn delete_secret(ctx: &mut AppContext, args: DeleteSecretArgs) -> Result<()> {
             ctx.spawn(delete_future, move |_, result, ctx| match result {
                 Ok(()) => {
                     println!("Secret '{name}' deleted");
-                    ctx
-                        .terminate_app(TerminationMode::ForceTerminate, None);
+                    ctx.terminate_app(TerminationMode::ForceTerminate, None);
                 }
                 Err(err) => {
                     super::report_fatal_error(err, ctx);
@@ -527,16 +527,15 @@ fn list_secrets(
 /// Read a raw secret string from either the provided file or stdin.
 fn read_simple_secret_value(args: &ValueArgs) -> Result<Option<String>> {
     if let Some(value_file) = args.value_file.as_ref() {
-        let value = fs::read_to_string(value_file).with_context(|| {
-            format!("Failed to read secret value from: {}", value_file.display())
-        })?;
+        let value = fs::read_to_string(value_file)
+            .with_context(|| format!("无法从以下位置读取 secret 值：{}", value_file.display()))?;
         if value.is_empty() {
             Ok(None)
         } else {
             Ok(Some(value))
         }
     } else if io::stdin().is_terminal() {
-        let result = Password::new("Secret value:")
+        let result = Password::new("Secret 值：")
             .with_display_toggle_enabled()
             .without_confirmation()
             .prompt();
@@ -593,14 +592,14 @@ fn make_secret_value_from_gql_type(
         ManagedSecretType::AnthropicBedrockAccessKey => {
             // Bedrock access key secrets cannot be updated through the generic raw-string path.
             Err(anyhow::anyhow!(
-                "Bedrock access key secrets cannot be updated via `--value`; re-create the secret instead"
+                "Bedrock access key secret 无法通过 `--value` 更新；请重新创建该 secret"
             ))
         }
         ManagedSecretType::AnthropicBedrockApiKey => {
             // Bedrock secrets cannot be updated through the generic raw-string path.
             // The caller should use the dedicated Bedrock creation flow instead.
             Err(anyhow::anyhow!(
-                "Bedrock API key secrets cannot be updated via `--value`; re-create the secret instead"
+                "Bedrock API 密钥 secret 无法通过 `--value` 更新；请重新创建该 secret"
             ))
         }
         ManagedSecretType::OpenaiApiKey => Ok(ManagedSecretValue::openai_api_key(raw, None)),
@@ -642,8 +641,8 @@ fn read_openai_api_key_secret_value(
                 // Non-interactive: leave the base URL unset rather than prompting or failing.
                 None
             } else {
-                match inquire::Text::new("OpenAI base URL (optional, press Enter to skip):")
-                    .with_help_message("e.g. https://us.api.openai.com/v1 for a regional endpoint")
+                match inquire::Text::new("OpenAI base URL（可选，按 Enter 跳过）：")
+                    .with_help_message("例如 https://us.api.openai.com/v1 用作区域端点")
                     .prompt()
                 {
                     Ok(value) => {
@@ -676,10 +675,10 @@ fn read_bedrock_secret_value(
         _ => {
             if !io::stdin().is_terminal() {
                 return Err(anyhow::anyhow!(
-                    "Bedrock secrets require --bedrock-api-key and --region in non-interactive mode"
+                    "非交互模式下，Bedrock secret 需要 --bedrock-api-key 和 --region"
                 ));
             }
-            let result = Password::new("Bedrock API key:")
+            let result = Password::new("Bedrock API 密钥：")
                 .with_display_toggle_enabled()
                 .without_confirmation()
                 .prompt();
@@ -699,10 +698,10 @@ fn read_bedrock_secret_value(
         _ => {
             if !io::stdin().is_terminal() {
                 return Err(anyhow::anyhow!(
-                    "Bedrock secrets require --bedrock-api-key and --region in non-interactive mode"
+                    "非交互模式下，Bedrock secret 需要 --bedrock-api-key 和 --region"
                 ));
             }
-            let result = inquire::Text::new("AWS Region:").prompt();
+            let result = inquire::Text::new("AWS 区域：").prompt();
             match result {
                 Ok(value) if !value.is_empty() => value,
                 Ok(_) => return Ok(None),
@@ -732,7 +731,7 @@ fn read_bedrock_access_key_secret_value(
 ) -> Result<Option<ManagedSecretValue>> {
     // Error message used for all three required fields when running non-interactively.
     // --session-token is intentionally omitted because it is optional.
-    const NON_INTERACTIVE_REQUIRED_MSG: &str = "Bedrock access key secrets require --access-key-id, --secret-access-key, and --region in non-interactive mode";
+    const NON_INTERACTIVE_REQUIRED_MSG: &str = "非交互模式下，Bedrock access key secret 需要 --access-key-id、--secret-access-key 和 --region";
 
     let access_key_id = match access_key_id {
         Some(v) if !v.is_empty() => v,
@@ -740,7 +739,7 @@ fn read_bedrock_access_key_secret_value(
             if !io::stdin().is_terminal() {
                 return Err(anyhow::anyhow!(NON_INTERACTIVE_REQUIRED_MSG));
             }
-            match inquire::Text::new("AWS Access Key ID:").prompt() {
+            match inquire::Text::new("AWS Access Key ID：").prompt() {
                 Ok(value) if !value.is_empty() => value,
                 Ok(_) => return Ok(None),
                 Err(InquireError::OperationCanceled | InquireError::OperationInterrupted) => {
@@ -757,7 +756,7 @@ fn read_bedrock_access_key_secret_value(
             if !io::stdin().is_terminal() {
                 return Err(anyhow::anyhow!(NON_INTERACTIVE_REQUIRED_MSG));
             }
-            match Password::new("AWS Secret Access Key:")
+            match Password::new("AWS Secret Access Key：")
                 .with_display_toggle_enabled()
                 .without_confirmation()
                 .prompt()
@@ -783,7 +782,7 @@ fn read_bedrock_access_key_secret_value(
                 // persistent IAM credentials do not need a session token.
                 None
             } else {
-                match Password::new("AWS Session Token (optional, press Enter to skip):")
+                match Password::new("AWS Session Token（可选，按 Enter 跳过）：")
                     .with_display_toggle_enabled()
                     .without_confirmation()
                     .prompt()
@@ -806,7 +805,7 @@ fn read_bedrock_access_key_secret_value(
             if !io::stdin().is_terminal() {
                 return Err(anyhow::anyhow!(NON_INTERACTIVE_REQUIRED_MSG));
             }
-            match inquire::Text::new("AWS Region:").prompt() {
+            match inquire::Text::new("AWS 区域：").prompt() {
                 Ok(value) if !value.is_empty() => value,
                 Ok(_) => return Ok(None),
                 Err(InquireError::OperationCanceled | InquireError::OperationInterrupted) => {
@@ -847,11 +846,11 @@ fn find_secret_type(
 
 fn format_secret_type(type_: &ManagedSecretType) -> String {
     match type_ {
-        ManagedSecretType::RawValue => "Raw Value".to_string(),
+        ManagedSecretType::RawValue => "原始值".to_string(),
         ManagedSecretType::Dotenvx => "dotenvx".to_string(),
-        ManagedSecretType::AnthropicApiKey => "Anthropic API Key".to_string(),
+        ManagedSecretType::AnthropicApiKey => "Anthropic API 密钥".to_string(),
         ManagedSecretType::AnthropicBedrockAccessKey => "Anthropic Bedrock Access Key".to_string(),
-        ManagedSecretType::AnthropicBedrockApiKey => "Anthropic Bedrock API Key".to_string(),
-        ManagedSecretType::OpenaiApiKey => "OpenAI API Key".to_string(),
+        ManagedSecretType::AnthropicBedrockApiKey => "Anthropic Bedrock API 密钥".to_string(),
+        ManagedSecretType::OpenaiApiKey => "OpenAI API 密钥".to_string(),
     }
 }

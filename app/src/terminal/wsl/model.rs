@@ -113,8 +113,8 @@ impl WslInfo {
 
 #[derive(thiserror::Error, Debug)]
 enum Error {
-    #[error("Error opening the main key: {0:#}")]
+    #[error("打开主键失败：{0:#}")]
     MainKey(#[source] WindowsError),
-    #[error("Could not iterate through distributions: {0:#}")]
+    #[error("无法遍历发行版：{0:#}")]
     DistributionIterator(#[source] WindowsError),
 }

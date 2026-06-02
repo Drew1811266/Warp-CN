@@ -574,7 +574,7 @@ fn connection_label_from_user_and_host(user: &str, host: Option<&str>) -> String
         (false, Some(host)) => format!("{user}@{host}"),
         (false, None) => user.to_string(),
         (true, Some(host)) => host.to_string(),
-        (true, None) => "Remote host".to_string(),
+        (true, None) => "远程主机".to_string(),
     }
 }
 
@@ -650,6 +650,6 @@ mod tests {
             connection_label_from_user_and_host("", Some("ssh-testing")),
             "ssh-testing"
         );
-        assert_eq!(connection_label_from_user_and_host("", None), "Remote host");
+        assert_eq!(connection_label_from_user_and_host("", None), "远程主机");
     }
 }

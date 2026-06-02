@@ -274,9 +274,9 @@ pub(crate) fn validate_cli_installed(
     install_docs_url: Option<&str>,
 ) -> Result<(), AgentDriverError> {
     if resolve_executable(cli).is_none() {
-        let mut reason = format!("'{cli}' CLI not found on your machine.");
+        let mut reason = format!("本机未找到“{cli}”CLI。");
         if let Some(url) = install_docs_url {
-            reason.push_str(&format!(" Install it first: {url}"));
+            reason.push_str(&format!("请先安装：{url}"));
         }
         return Err(AgentDriverError::HarnessSetupFailed {
             harness: cli.into(),
@@ -552,14 +552,10 @@ pub(super) fn write_temp_file(
         .suffix(suffix)
         .tempfile()
         .map_err(|e| {
-            AgentDriverError::ConfigBuildFailed(anyhow::anyhow!(
-                "Failed to create temp file '{prefix}': {e}"
-            ))
+            AgentDriverError::ConfigBuildFailed(anyhow::anyhow!("创建临时文件“{prefix}”失败：{e}"))
         })?;
     file.write_all(content.as_bytes()).map_err(|e| {
-        AgentDriverError::ConfigBuildFailed(anyhow::anyhow!(
-            "Failed to write temp file '{prefix}': {e}"
-        ))
+        AgentDriverError::ConfigBuildFailed(anyhow::anyhow!("写入临时文件“{prefix}”失败：{e}"))
     })?;
     Ok(file)
 }
@@ -574,9 +570,7 @@ pub(crate) async fn upload_block_snapshot(
     let target = client
         .get_block_snapshot_upload_target(&conversation_id)
         .await
-        .with_context(|| {
-            format!("Unable to get block upload slot for conversation {conversation_id}")
-        })?;
+        .with_context(|| format!("无法获取会话 {conversation_id} 的块上传槽位"))?;
 
     let body = block
         .to_json()

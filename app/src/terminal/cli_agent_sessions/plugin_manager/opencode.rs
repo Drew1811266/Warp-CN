@@ -31,27 +31,24 @@ impl CliAgentPluginManager for OpenCodePluginManager {
     }
 }
 
-static INSTALL_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| {
-    PluginInstructions {
-        title: "为 OpenCode 安装 Warp 插件",
-        subtitle:
-            "将 Warp 插件添加到 OpenCode 配置中，然后重启 OpenCode。",
-        steps: &[
-            PluginInstructionStep {
-                description: "打开或创建 opencode.json。它可以位于项目根目录，也可以位于全局配置路径：",
-                command: "~/.config/opencode/opencode.json",
-                executable: false,
-                link: None,
-            },
-            PluginInstructionStep {
-                description: "Add \"@warp-dot-dev/opencode-warp\" to the \"plugin\" array in the top-level JSON object:",
-                command: "\"plugin\": [\"@warp-dot-dev/opencode-warp\"]",
-                executable: false,
-                link: None,
-            },
-        ],
-        post_install_notes: &["重启 OpenCode 以激活插件。"],
-    }
+static INSTALL_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| PluginInstructions {
+    title: "为 OpenCode 安装 Warp 插件",
+    subtitle: "将 Warp 插件添加到 OpenCode 配置中，然后重启 OpenCode。",
+    steps: &[
+        PluginInstructionStep {
+            description: "打开或创建 opencode.json。它可以位于项目根目录，也可以位于全局配置路径：",
+            command: "~/.config/opencode/opencode.json",
+            executable: false,
+            link: None,
+        },
+        PluginInstructionStep {
+            description: "将 @warp-dot-dev/opencode-warp 添加到顶层 JSON 对象的 plugin 数组中：",
+            command: "\"plugin\": [\"@warp-dot-dev/opencode-warp\"]",
+            executable: false,
+            link: None,
+        },
+    ],
+    post_install_notes: &["重启 OpenCode 以激活插件。"],
 });
 
 static UPDATE_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| {
@@ -66,7 +63,7 @@ static UPDATE_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| {
                 link: None,
             },
             PluginInstructionStep {
-                description: "Replace the existing \"@warp-dot-dev/opencode-warp\" entry in the \"plugin\" array with the explicit version:",
+                description: "将 plugin 数组中现有的 @warp-dot-dev/opencode-warp 条目替换为显式版本：",
                 command: "\"plugin\": [\"@warp-dot-dev/opencode-warp@0.1.5\"]",
                 executable: false,
                 link: None,

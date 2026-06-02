@@ -73,11 +73,11 @@ impl AgentProgress {
 
     pub fn setup_status_text(&self) -> &'static str {
         if self.harness_started_at.is_some() {
-            "Starting Environment (Step 3/3)"
+            "正在启动环境（步骤 3/3）"
         } else if self.claimed_at.is_some() {
-            "Creating Environment (Step 2/3)"
+            "正在创建环境（步骤 2/3）"
         } else {
-            "Connecting to Host (Step 1/3)"
+            "正在连接主机（步骤 1/3）"
         }
     }
 }
@@ -1302,7 +1302,7 @@ impl AmbientAgentViewModel {
                         | AmbientAgentTaskState::Unknown => {
                             let error = status_message
                                 .map(|msg| msg.message)
-                                .unwrap_or_else(|| "Cloud agent failed".to_string());
+                                .unwrap_or_else(|| "云端 Agent 失败".to_string());
                             self.handle_spawn_error(error, ctx);
                         }
                     }

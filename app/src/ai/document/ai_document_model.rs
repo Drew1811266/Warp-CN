@@ -87,7 +87,7 @@ impl AIDocumentUserEditStatus {
     }
 }
 
-const PLAN_FOLDER_NAME: &str = "Plans";
+const PLAN_FOLDER_NAME: &str = "计划";
 
 /// Represents a document queued for creation in Warp Drive.
 #[derive(Debug, Clone)]

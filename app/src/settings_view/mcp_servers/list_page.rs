@@ -665,9 +665,7 @@ impl MCPServersListPageView {
                         let log_path = logs::log_file_path_from_uuid(&template_uuid);
                         self.open_logs_for_server(&log_path, ctx);
                     } else {
-                        log::error!(
-                            "Could not find template_uuid for installation {installation_uuid}"
-                        );
+                        log::error!("找不到安装 {installation_uuid} 的 template_uuid");
                     }
                 }
                 ServerCardItemId::FileBasedMCP(uuid) => {
@@ -735,9 +733,7 @@ impl MCPServersListPageView {
             ServerCardEvent::InstallServerUpdate(item_id) => {
                 let ServerCardItemId::TemplatableMCPInstallation(installation_uuid) = item_id
                 else {
-                    log::error!(
-                        "Install server update is only supported for templatable MCP installations"
-                    );
+                    log::error!("安装服务器更新仅支持可模板化的 MCP 安装");
                     return;
                 };
                 self.start_server_update(*installation_uuid, ctx);
@@ -792,9 +788,7 @@ impl MCPServersListPageView {
         let installation =
             TemplatableMCPServerManager::as_ref(ctx).get_installed_server(&installation_uuid);
         let Some(installation) = installation else {
-            log::warn!(
-                "Failed to update MCP server: Could not find installation {installation_uuid}"
-            );
+            log::warn!("更新 MCP server 失败：找不到安装 {installation_uuid}");
             return;
         };
         let local_templatable_mcp_server = installation.templatable_mcp_server();
@@ -806,7 +800,7 @@ impl MCPServersListPageView {
                     .cloned();
                 let Some(latest_templatable_mcp_server) = latest_templatable_mcp_server else {
                     log::warn!(
-                        "Failed to update MCP server: Could not find templatable MCP server for installation {installation_uuid}"
+                        "更新 MCP server 失败：找不到安装 {installation_uuid} 对应的可模板化 MCP server"
                     );
                     return;
                 };
@@ -816,9 +810,7 @@ impl MCPServersListPageView {
                     return;
                 }
                 if local_templatable_mcp_server.version > latest_templatable_mcp_server.version {
-                    log::warn!(
-                        "Failed to update MCP server: Installed server is ahead of the latest template"
-                    );
+                    log::warn!("更新 MCP server 失败：已安装 server 领先于最新模板");
                     return;
                 }
 
@@ -828,9 +820,7 @@ impl MCPServersListPageView {
                     ctx,
                 );
                 // We do not have to update the cloud template, because this update came from a cloud template
-                log::info!(
-                    "Successfully updated server {installation_uuid} with the newest cloud template."
-                );
+                log::info!("已使用最新云端模板更新 server {installation_uuid}。");
 
                 // Show the toast that the server updated, even though we don't update the cloud template in this case
                 let window_id = ctx.window_id();
@@ -846,7 +836,7 @@ impl MCPServersListPageView {
                 }) = local_templatable_mcp_server.gallery_data
                 else {
                     log::warn!(
-                        "Failed to update MCP server to newest gallery version: Installed server is not from the MCP gallery."
+                        "将 MCP server 更新到最新 gallery 版本失败：已安装 server 不来自 MCP gallery。"
                     );
                     return;
                 };
@@ -854,20 +844,20 @@ impl MCPServersListPageView {
                     MCPGalleryManager::as_ref(ctx).get_gallery_item(gallery_item_id)
                 else {
                     log::warn!(
-                        "Failed to update MCP server to newest gallery version: Could not find gallery item with uuid {gallery_item_id}"
+                        "将 MCP server 更新到最新 gallery 版本失败：找不到 uuid 为 {gallery_item_id} 的 gallery 项。"
                     );
                     return;
                 };
 
                 if installed_gallery_version == gallery_item.version() {
                     log::warn!(
-                        "Failed to update MCP server to newest gallery version: Installed server is up to date"
+                        "将 MCP server 更新到最新 gallery 版本失败：已安装 server 已是最新。"
                     );
                     return;
                 }
                 if installed_gallery_version > gallery_item.version() {
                     log::warn!(
-                        "Failed to update MCP server to newest gallery version: Installed server is ahead of the latest gallery item"
+                        "将 MCP server 更新到最新 gallery 版本失败：已安装 server 领先于最新 gallery 项。"
                     );
                     return;
                 }
@@ -876,7 +866,7 @@ impl MCPServersListPageView {
                     MCPGalleryManager::as_ref(ctx).get_templatable_mcp_server(gallery_item_id)
                 else {
                     log::warn!(
-                        "Failed to update MCP server to newest gallery version: Could not find newest gallery item"
+                        "将 MCP server 更新到最新 gallery 版本失败：找不到最新 gallery 项。"
                     );
                     return;
                 };
@@ -894,9 +884,7 @@ impl MCPServersListPageView {
                 TemplatableMCPServerManager::handle(ctx).update(ctx, |templatable_manager, ctx| {
                     templatable_manager.update_templatable_mcp_server(new_template, ctx);
                 });
-                log::info!(
-                    "Successfully updated server {installation_uuid} with the newest gallery template."
-                );
+                log::info!("已使用最新 gallery 模板更新 server {installation_uuid}。");
                 // We don't need to manually show a toast, because it will appear once the cloud template update goes through
             }
         };
@@ -910,9 +898,7 @@ impl MCPServersListPageView {
     ) {
         let installation_uuid = installation.uuid();
         if installation.template_uuid() != new_templatable_mcp_server.uuid {
-            log::warn!(
-                "Unable to update installation: installation template uuid differs from the new template uuid."
-            );
+            log::warn!("无法更新安装：安装模板 uuid 与新模板 uuid 不同。");
             return;
         }
 
@@ -950,9 +936,7 @@ impl MCPServersListPageView {
     fn install_from_gallery(&mut self, gallery_uuid: Uuid, ctx: &mut ViewContext<Self>) {
         let gallery_server = MCPGalleryManager::as_ref(ctx).get_gallery_item(gallery_uuid);
         let Some(gallery_server) = gallery_server else {
-            log::warn!(
-                "Could not install gallery item {gallery_uuid}: Unable to find gallery item with matching id."
-            );
+            log::warn!("无法安装 gallery 项 {gallery_uuid}：找不到匹配 id 的 gallery 项。");
             return;
         };
 
@@ -1348,9 +1332,7 @@ impl MCPServersListPageView {
                     owned_server_cards.push(server_card.clone());
                 }
                 ServerCardItemId::GalleryMCP(_) => {
-                    log::warn!(
-                        "Received an unexpected gallery server card when separating server cards by installed."
-                    );
+                    log::warn!("按已安装状态拆分 server 卡片时收到了意外的 gallery server 卡片。");
                 }
             }
         }

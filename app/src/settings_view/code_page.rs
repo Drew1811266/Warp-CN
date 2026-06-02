@@ -90,8 +90,7 @@ const INDEXING_DISABLED_GLOBAL_AI_TEXT: &str = "必须启用 AI 功能才能使�
 const CODEBASE_INDEX_LIMIT_REACHED: &str =
     "你已达到当前套餐的代码库索引数量上限。请删除现有索引以自动索引新的代码库。";
 #[cfg(not(target_family = "wasm"))]
-const REMOTE_CODEBASE_INDEX_LIMIT_REACHED_FAILURE: &str =
-    "maximum number of codebase indexes has been reached";
+const REMOTE_CODEBASE_INDEX_LIMIT_REACHED_FAILURE: &str = "已达到代码库索引数量上限";
 
 /// Identifies which subpage of the Code settings the user is viewing.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -150,7 +149,7 @@ mod tests {
     #[test]
     fn remote_index_limit_failure_is_detected_from_status_message() {
         let status = remote_status_with_failure(Some(
-            "Cannot index remote codebase because the maximum number of codebase indexes has been reached.",
+            "已达到代码库索引数量上限，无法为远程代码库建立索引。",
         ));
 
         assert!(remote_codebase_index_limit_reached(&status));
@@ -158,9 +157,7 @@ mod tests {
 
     #[test]
     fn other_unavailable_failures_are_not_index_limit_failures() {
-        let status = remote_status_with_failure(Some(
-            "Cannot index remote codebase because indexing did not start.",
-        ));
+        let status = remote_status_with_failure(Some("索引未启动，无法为远程代码库建立索引。"));
 
         assert!(!remote_codebase_index_limit_reached(&status));
     }
@@ -945,7 +942,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     if FeatureFlag::FullSourceCodeEmbedding.is_enabled() {
         ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(
             vec![ToggleSettingActionPair::new(
-                "codebase index",
+                "代码库索引",
                 builder(SettingsAction::Code(
                     CodeSettingsPageAction::ToggleCodebaseContext,
                 )),
@@ -957,7 +954,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
         ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(
             vec![ToggleSettingActionPair::new(
-                "auto-indexing",
+                "自动索引",
                 builder(SettingsAction::Code(
                     CodeSettingsPageAction::ToggleAutoIndexing,
                 )),
@@ -972,7 +969,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(
             vec![
                 ToggleSettingActionPair::new(
-                    "auto open code review panel",
+                    "自动打开代码审查面板",
                     builder(SettingsAction::Code(
                         CodeSettingsPageAction::ToggleAutoOpenCodeReviewPane,
                     )),
@@ -980,7 +977,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                     flags::AUTO_OPEN_CODE_REVIEW_PANE_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    "code review button",
+                    "代码审查按钮",
                     builder(SettingsAction::Code(
                         CodeSettingsPageAction::ToggleCodeReviewPanel,
                     )),
@@ -988,7 +985,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                     flags::SHOW_CODE_REVIEW_BUTTON_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    "diff stats on code review button",
+                    "代码审查按钮上的 diff 统计",
                     builder(SettingsAction::Code(
                         CodeSettingsPageAction::ToggleShowCodeReviewDiffStats,
                     )),
@@ -996,7 +993,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                     flags::SHOW_CODE_REVIEW_DIFF_STATS_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    "project explorer",
+                    "项目资源管理器",
                     builder(SettingsAction::Code(
                         CodeSettingsPageAction::ToggleProjectExplorer,
                     )),
@@ -1004,7 +1001,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                     flags::SHOW_PROJECT_EXPLORER,
                 ),
                 ToggleSettingActionPair::new(
-                    "global file search",
+                    "全局文件搜索",
                     builder(SettingsAction::Code(
                         CodeSettingsPageAction::ToggleGlobalSearch,
                     )),
@@ -1027,7 +1024,7 @@ impl SettingsWidget for CodePageWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "code coding codebase repository index indexing indices context path lsp language server"
+        "code coding 代码库 仓库 索引 indexing 上下文 路径 lsp language server"
     }
 
     fn render(
@@ -2493,7 +2490,7 @@ impl SettingsWidget for CodebaseIndexingCategorizedWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "codebase index indexing repository code context embedding auto-index lsp language server"
+        "代码库 索引 indexing 仓库 code 上下文 embedding 自动索引 lsp language server"
     }
 
     fn render(
@@ -2617,7 +2614,7 @@ impl SettingsWidget for ExternalEditorCodeWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "code editor open files markdown AI conversations layout pane tab"
+        "代码编辑器 打开文件 markdown AI 会话 布局 窗格 标签页"
     }
 
     fn render(
@@ -2643,7 +2640,7 @@ impl SettingsWidget for AutoOpenCodeReviewPaneCodeWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "oz auto open code review pane panel agent mode change first time accepted diff view conversation"
+        "oz 自动打开代码审查窗格 面板 Agent 模式 首次接受 diff 视图 会话"
     }
 
     fn render(
@@ -2719,7 +2716,7 @@ impl SettingsWidget for CodeReviewPanelToggleWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "code review panel right side diff git"
+        "代码审查面板 右侧 diff git"
     }
 
     fn render(
@@ -2759,7 +2756,7 @@ impl SettingsWidget for CodeReviewDiffStatsToggleWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "code review diff stats lines added removed counts"
+        "代码审查 diff 统计 新增 删除 行数"
     }
 
     fn render(
@@ -2801,7 +2798,7 @@ impl SettingsWidget for ProjectExplorerToggleWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "project explorer file tree left panel tools"
+        "项目资源管理器 文件树 左侧面板 工具"
     }
 
     fn render(
@@ -2841,7 +2838,7 @@ impl SettingsWidget for GlobalSearchToggleWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "global search file search left panel tools"
+        "全局搜索 文件搜索 左侧面板 工具"
     }
 
     fn render(

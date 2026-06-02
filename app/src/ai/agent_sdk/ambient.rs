@@ -328,7 +328,7 @@ impl AmbientAgentRunner {
             if args.attachment_paths.len() > MAX_ATTACHMENT_COUNT_FOR_CLOUD_QUERY {
                 super::report_fatal_error(
                     anyhow::anyhow!(
-                        "Too many attachments. Maximum {} attachments allowed, but {} were provided.",
+                        "附件过多。最多允许 {} 个附件，但提供了 {} 个。",
                         MAX_ATTACHMENT_COUNT_FOR_CLOUD_QUERY,
                         args.attachment_paths.len()
                     ),
@@ -839,7 +839,7 @@ impl AmbientAgentRunner {
             // Title (wrapped, single cell)
             if !task.title.is_empty() {
                 let title_cell = crate::ai::agent_sdk::text_layout::render_labeled_wrapped_field(
-                    "Title",
+                    "标题",
                     &task.title,
                     MAX_LINE_WIDTH,
                 );
@@ -847,7 +847,7 @@ impl AmbientAgentRunner {
             }
 
             if let Some(executor) = task.executor_display_name() {
-                table.add_row(vec![format!("Executed as: {executor}")]);
+                table.add_row(vec![format!("执行身份：{executor}")]);
             }
 
             // Agent config snapshot (if available)
@@ -864,7 +864,7 @@ impl AmbientAgentRunner {
             // Status message (if available) - single multi-line cell
             if let Some(status_msg) = &task.status_message {
                 let status_cell = crate::ai::agent_sdk::text_layout::render_labeled_wrapped_field(
-                    "Status",
+                    "状态",
                     &status_msg.message,
                     MAX_LINE_WIDTH,
                 );
@@ -912,7 +912,7 @@ impl AmbientAgentRunner {
                     title,
                     ..
                 } => {
-                    let plan_title = title.as_deref().unwrap_or("Untitled Plan");
+                    let plan_title = title.as_deref().unwrap_or("未命名计划");
                     lines.push(format!("  Plan: {}", plan_title));
                     if let Some(id) = notebook_uid {
                         lines.push(format!(
@@ -927,7 +927,7 @@ impl AmbientAgentRunner {
                     description,
                     ..
                 } => {
-                    let desc = description.as_deref().unwrap_or("No description");
+                    let desc = description.as_deref().unwrap_or("无描述");
                     lines.push(format!("  Screenshot: {} ({})", artifact_uid, desc));
                 }
                 Artifact::File {
@@ -975,9 +975,7 @@ fn ensure_stream_output_format(output_format: OutputFormat) -> anyhow::Result<()
         return Ok(());
     }
 
-    Err(anyhow!(
-        "Streaming commands require `--output-format ndjson`"
-    ))
+    Err(anyhow!("流式命令需要 `--output-format ndjson`"))
 }
 
 fn stream_retry_backoff(failures: usize) -> Duration {
@@ -1239,11 +1237,11 @@ where
         OutputFormat::Pretty | OutputFormat::Text => {
             writeln!(
                 &mut output,
-                "Sent {} message(s).",
+                "已发送 {} 条消息。",
                 response.message_ids.len()
             )?;
             if !response.message_ids.is_empty() {
-                writeln!(&mut output, "Message IDs:")?;
+                writeln!(&mut output, "消息 ID：")?;
                 for message_id in &response.message_ids {
                     writeln!(&mut output, "- {message_id}")?;
                 }
@@ -1273,18 +1271,18 @@ where
         OutputFormat::Json => super::output::write_json(response, &mut output),
         OutputFormat::Ndjson => super::output::write_json_line(response, &mut output),
         OutputFormat::Pretty | OutputFormat::Text => {
-            writeln!(&mut output, "Message ID: {}", response.message_id)?;
+            writeln!(&mut output, "消息 ID：{}", response.message_id)?;
             writeln!(&mut output, "From: {}", response.sender_run_id)?;
             writeln!(&mut output, "Subject: {}", response.subject)?;
-            writeln!(&mut output, "Sent At: {}", response.sent_at)?;
+            writeln!(&mut output, "发送时间：{}", response.sent_at)?;
             writeln!(
                 &mut output,
-                "Delivered At: {}",
+                "送达时间：{}",
                 format_optional_timestamp(response.delivered_at.as_deref())
             )?;
             writeln!(
                 &mut output,
-                "Read At: {}",
+                "读取时间：{}",
                 format_optional_timestamp(response.read_at.as_deref())
             )?;
             writeln!(&mut output)?;
@@ -1320,7 +1318,7 @@ where
         OutputFormat::Json => super::output::write_json(&result, &mut output),
         OutputFormat::Ndjson => super::output::write_json_line(&result, &mut output),
         OutputFormat::Pretty | OutputFormat::Text => {
-            writeln!(&mut output, "Marked message delivered: {message_id}")?;
+            writeln!(&mut output, "已将消息标记为已送达：{message_id}")?;
             Ok(())
         }
     }

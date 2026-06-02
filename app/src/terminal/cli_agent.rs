@@ -407,9 +407,7 @@ impl CLIAgent {
 /// inlining the full diff.
 pub fn build_review_prompt(review: &AgentReviewCommentBatch) -> String {
     let mut text = String::from(
-        "Please address the following code review comments. \
-         Run `git diff` (or `git diff HEAD`) to see the full context of any changes, \
-         especially for deleted lines.\n",
+        "请处理以下代码审查评论。运行 `git diff`（或 `git diff HEAD`）查看所有更改的完整上下文，尤其是已删除的行。n",
     );
 
     for comment in &review.comments {
@@ -457,7 +455,7 @@ pub fn build_review_prompt(review: &AgentReviewCommentBatch) -> String {
                     path
                 }
             }
-            AttachedReviewCommentTarget::General => "General".to_string(),
+            AttachedReviewCommentTarget::General => "通用".to_string(),
         };
         text.push_str(&format!("\n- {location}: {body}"));
     }

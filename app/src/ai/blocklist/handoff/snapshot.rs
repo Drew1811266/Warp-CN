@@ -70,9 +70,7 @@ pub(crate) fn try_upload_result_from_proto(
 ) -> Result<HandoffUploadResult, anyhow::Error> {
     if !resp.success {
         let error_msg = resp.error.unwrap_or_default();
-        return Err(anyhow::anyhow!(
-            "Remote handoff snapshot failed: {error_msg}"
-        ));
+        return Err(anyhow::anyhow!("远程交接快照失败：{error_msg}"));
     }
     match resp.initial_snapshot_token {
         Some(token_str) => {

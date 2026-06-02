@@ -133,7 +133,7 @@ pub struct AuthSecretFtuxView {
 
 impl AuthSecretFtuxView {
     pub fn new(harness: Harness, ctx: &mut ViewContext<Self>) -> Self {
-        let name_editor = make_single_line_editor(Some("e.g. My API Key"), false, ctx);
+        let name_editor = make_single_line_editor(Some("例如：我的 API 密钥"), false, ctx);
 
         ctx.subscribe_to_view(&name_editor, |me, _, event, ctx| {
             me.handle_form_editor_nav(0, event, ctx);
@@ -208,7 +208,7 @@ impl AuthSecretFtuxView {
                         state.is_saving = false;
                         state.pending_name = None;
                         let window_id = ctx.window_id();
-                        let message = format!("Failed to save API key: {error}");
+                        let message = format!("保存 API 密钥失败：{error}");
                         ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                             ts.add_ephemeral_toast(
                                 DismissibleToast::error(message),
@@ -606,7 +606,7 @@ impl AuthSecretFtuxView {
         if trimmed_name.is_empty() {
             HarnessAvailabilityModel::handle(ctx).update(ctx, |_model, ctx| {
                 ctx.emit(HarnessAvailabilityEvent::AuthSecretCreationFailed {
-                    error: "Please enter a name for the secret.".to_string(),
+                    error: "请输入密钥名称。".to_string(),
                 });
             });
             return;
@@ -683,7 +683,7 @@ impl AuthSecretFtuxView {
         ctx: &mut ViewContext<Self>,
     ) {
         let window_id = ctx.window_id();
-        let message = format!("API key '{name}' saved.");
+        let message = format!("API 密钥“{name}”已保存。");
         ToastStack::handle(ctx).update(ctx, |ts, ctx| {
             ts.add_ephemeral_toast(DismissibleToast::default(message), window_id, ctx);
         });
@@ -701,10 +701,10 @@ impl AuthSecretFtuxView {
 
         let main_text = {
             let description = if self.current_type_info().is_some() {
-                "Enter your credentials below.".to_string()
+                "请在下方输入凭据。".to_string()
             } else {
                 let display_name = harness_display::display_name(self.harness);
-                format!("Select an API key type to use {display_name} in the cloud with Oz.")
+                format!("选择用于在云端通过 Oz 使用 {display_name} 的 API 密钥类型。")
             };
             Text::new_inline(description, font_family, DESCRIPTION_FONT_SIZE)
                 .with_color(theme.foreground().into())
@@ -713,7 +713,7 @@ impl AuthSecretFtuxView {
         };
 
         let privacy_text = Text::new_inline(
-            "Your credentials are encrypted end-to-end. ".to_string(),
+            "你的凭据已进行端到端加密。".to_string(),
             font_family,
             TYPE_DESCRIPTION_FONT_SIZE,
         )
@@ -726,8 +726,7 @@ impl AuthSecretFtuxView {
             .current_type_info()
             .map(|info| info.learn_more_url)
             .unwrap_or_else(|| learn_more_url_for_harness(self.harness));
-        let learn_more_label =
-            format!("Learn more about authentication for {harness_name} in Warp.");
+        let learn_more_label = format!("了解 {harness_name} 在 Warp 中的认证方式。");
         let learn_more = Hoverable::new(self.learn_more_mouse_state.clone(), move |state| {
             let color = if state.is_hovered() {
                 accent_color
@@ -834,7 +833,7 @@ impl AuthSecretFtuxView {
         let theme = appearance.theme();
         let label_color = internal_colors::text_sub(theme, theme.surface_1());
         let label = Text::new_inline(
-            "Share with team".to_string(),
+            "与团队共享".to_string(),
             appearance.ui_font_family(),
             TYPE_DESCRIPTION_FONT_SIZE,
         )
@@ -861,7 +860,7 @@ impl AuthSecretFtuxView {
             .with_spacing(FORM_FIELD_SPACING);
 
         column.add_child(
-            Container::new(self.render_field_label("NAME", app))
+            Container::new(self.render_field_label("名称", app))
                 .with_padding_top(CONTENT_SECTION_SPACING)
                 .finish(),
         );
@@ -869,7 +868,7 @@ impl AuthSecretFtuxView {
 
         for (idx, field) in info.fields.iter().enumerate() {
             let label = if field.optional {
-                format!("{} (optional)", field.label)
+                format!("{}（可选）", field.label)
             } else {
                 field.label.to_string()
             };
@@ -928,9 +927,9 @@ impl AuthSecretFtuxView {
         row.add_child(Expanded::new(1., Empty::new().finish()).finish());
 
         let (label, action) = if self.creation_state.is_some() {
-            ("Back", AuthSecretFtuxAction::Back)
+            ("返回", AuthSecretFtuxAction::Back)
         } else {
-            ("Cancel", AuthSecretFtuxAction::Cancel)
+            ("取消", AuthSecretFtuxAction::Cancel)
         };
         row.add_child(self.render_button(
             label,
@@ -942,7 +941,7 @@ impl AuthSecretFtuxView {
 
         let accent_fill = Appearance::as_ref(app).theme().accent();
         row.add_child(self.render_button(
-            "Continue",
+            "继续",
             self.continue_mouse_state.clone(),
             Some(accent_fill),
             AuthSecretFtuxAction::Continue,

@@ -143,8 +143,8 @@ pub enum MenuVariant {
 impl std::fmt::Debug for MenuVariant {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Fixed => write!(f, "Fixed"),
-            Self::Scrollable(_) => write!(f, "Scrollable"),
+            Self::Fixed => write!(f, "固定"),
+            Self::Scrollable(_) => write!(f, "可滚动"),
         }
     }
 }
@@ -200,9 +200,9 @@ pub enum MenuItemLabel {
 impl std::fmt::Debug for MenuItemLabel {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Text(arg0) => f.debug_tuple("Text").field(arg0).finish(),
+            Self::Text(arg0) => f.debug_tuple("文本").field(arg0).finish(),
             Self::MultilineText { label, max_lines } => f
-                .debug_struct("MultilineText")
+                .debug_struct("多行文本")
                 .field("label", label)
                 .field("max_lines", max_lines)
                 .finish(),
@@ -211,7 +211,7 @@ impl std::fmt::Debug for MenuItemLabel {
                 color,
                 alt_text,
             } => f
-                .debug_struct("Icon")
+                .debug_struct("图标")
                 .field("path", path)
                 .field("color", color)
                 .field("alt_text", alt_text)
@@ -220,7 +220,7 @@ impl std::fmt::Debug for MenuItemLabel {
                 primary_text,
                 secondary_text,
             } => f
-                .debug_struct("LabeledText")
+                .debug_struct("带标签文本")
                 .field("primary_text", primary_text)
                 .field("secondary_text", secondary_text)
                 .finish(),
@@ -228,11 +228,11 @@ impl std::fmt::Debug for MenuItemLabel {
                 primary_text,
                 secondary_text,
             } => f
-                .debug_struct("StackedText")
+                .debug_struct("堆叠文本")
                 .field("primary_text", primary_text)
                 .field("secondary_text", secondary_text)
                 .finish(),
-            Self::Custom { .. } => f.debug_tuple("Custom").finish(),
+            Self::Custom { .. } => f.debug_tuple("自定义").finish(),
         }
     }
 }
@@ -1484,7 +1484,7 @@ pub enum MenuItem<A: Action + Clone = ()> {
 }
 
 impl<A: Action + Clone> MenuItem<A> {
-    #[deprecated(note = "Submenus are not ready for use yet.")]
+    #[deprecated(note = "子菜单尚未可用。")]
     pub fn submenu<T: Into<String>>(label: T, items: Vec<MenuItem<A>>) -> Self {
         let menu = SubMenu::new(items);
         MenuItem::Submenu {

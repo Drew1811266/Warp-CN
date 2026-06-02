@@ -111,7 +111,7 @@ impl AvailableShell {
 
     pub fn short_name(&self) -> Cow<'_, str> {
         match self.state.as_ref() {
-            Config::SystemDefault => Cow::from("Default"),
+            Config::SystemDefault => Cow::from("默认"),
             Config::KnownLocal(LocalConfig { command, .. })
             | Config::MSYS2(LocalConfig { command, .. }) => match command.as_str() {
                 "bash" => Cow::from("Bash"),
@@ -122,25 +122,25 @@ impl AvailableShell {
                 _ => Cow::from(command),
             },
             Config::Wsl { distro } => Cow::from(distro),
-            Config::Custom(_) => Cow::from("Custom"),
-            Config::DockerSandbox { .. } => Cow::from("Docker Sandbox"),
+            Config::Custom(_) => Cow::from("自定义"),
+            Config::DockerSandbox { .. } => Cow::from("Docker 沙盒"),
         }
     }
 
     pub fn details(&self) -> Cow<'_, str> {
         match self.state.as_ref() {
-            Config::SystemDefault => Cow::from("System default shell"),
+            Config::SystemDefault => Cow::from("系统默认 Shell"),
             Config::KnownLocal(LocalConfig {
                 executable_path, ..
             })
             | Config::MSYS2(LocalConfig {
                 executable_path, ..
             }) => Cow::from(format!("{}", executable_path.display())),
-            Config::Wsl { .. } => Cow::from("Windows Subsystem for Linux"),
+            Config::Wsl { .. } => Cow::from("适用于 Linux 的 Windows 子系统"),
             Config::Custom(LocalConfig {
                 executable_path, ..
             }) => Cow::from(format!("Custom: {}", executable_path.display())),
-            Config::DockerSandbox { .. } => Cow::from("Docker Sandbox"),
+            Config::DockerSandbox { .. } => Cow::from("Docker 沙盒"),
         }
     }
 
@@ -148,11 +148,11 @@ impl AvailableShell {
     pub fn telemetry_value(&self) -> String {
         // NOTE: These explicitly do not log the shell path or wsl name, as those can contain PII.
         match self.state.as_ref() {
-            Config::SystemDefault => "SystemDefault".to_string(),
+            Config::SystemDefault => "系统默认".to_string(),
             Config::KnownLocal(config) | Config::MSYS2(config) => config.command.clone(),
             Config::Wsl { .. } => "WSL".to_string(),
-            Config::Custom(_) => "Custom".to_string(),
-            Config::DockerSandbox { .. } => "DockerSandbox".to_string(),
+            Config::Custom(_) => "自定义".to_string(),
+            Config::DockerSandbox { .. } => "Docker 沙盒".to_string(),
         }
     }
 
@@ -174,16 +174,16 @@ impl AvailableShell {
     /// the executable.
     fn long_name(&self) -> String {
         match &self.state.as_ref() {
-            Config::SystemDefault => "Default".to_string(),
+            Config::SystemDefault => "默认".to_string(),
             Config::KnownLocal(LocalConfig {
                 executable_path, ..
             }) => format!("{} ({})", self.short_name(), executable_path.display()),
             Config::Wsl { distro } => distro.to_string(),
-            Config::Custom(LocalConfig { command, .. }) => format!("Custom ({command})"),
+            Config::Custom(LocalConfig { command, .. }) => format!("自定义（{command}）"),
             Config::MSYS2(LocalConfig {
                 executable_path, ..
             }) => format!("{} ({})", self.short_name(), executable_path.display()),
-            Config::DockerSandbox { .. } => "Docker Sandbox".to_string(),
+            Config::DockerSandbox { .. } => "Docker 沙盒".to_string(),
         }
     }
 

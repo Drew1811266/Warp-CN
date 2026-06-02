@@ -29,12 +29,12 @@ const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_PADDING: f32 = 12.;
 const BUTTON_MARGIN_BETWEEN: f32 = 8.;
 
-const NOTEBOOK_TITLE: &str = "Notebook name";
-const FOLDER_TITLE: &str = "Folder name";
-const ENV_VAR_COLLECTION_TITLE: &str = "Collection name";
-const CREATE_BUTTON_TEXT: &str = "Create";
+const NOTEBOOK_TITLE: &str = "Notebook 名称";
+const FOLDER_TITLE: &str = "文件夹名称";
+const ENV_VAR_COLLECTION_TITLE: &str = "集合名称";
+const CREATE_BUTTON_TEXT: &str = "创建";
 const CANCEL_BUTTON_TEXT: &str = "取消";
-const RENAME_BUTTON_TEXT: &str = "Rename";
+const RENAME_BUTTON_TEXT: &str = "重命名";
 
 /// Struct holding necessary information and states for the dialog
 /// that opens when creating or updating a folder or notebook.

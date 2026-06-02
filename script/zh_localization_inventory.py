@@ -57,7 +57,8 @@ ALL_CAPS_RE = re.compile(r"^[A-Z0-9_./:-]+$")
 LOWER_IDENTIFIER_RE = re.compile(r"^[a-z_][a-z0-9_]*$")
 FILTER_TOKEN_RE = re.compile(r"^[a-z_]+:$")
 KEYBINDING_RE = re.compile(
-    r"^(?:cmd|ctrl|alt|shift|super|orctrl|cmdorctrl|numpad|enter|return|escape|tab|up|down|left|right|y|o|v)(?:-(?:cmd|ctrl|alt|shift|super|orctrl|cmdorctrl|numpad|enter|return|escape|tab|up|down|left|right|y|o|v))*$",
+    r"^(?:cmd|ctrl|alt|shift|super|meta|orctrl|cmdorctrl|numpad|enter|return|escape|tab|up|down|left|right|pageup|pagedown|numpadenter|y|o|v)(?:-(?:cmd|ctrl|alt|shift|super|meta|orctrl|cmdorctrl|numpad|enter|return|escape|tab|up|down|left|right|pageup|pagedown|numpadenter|y|o|v))*$"
+    r"|^(?:(?:cmd|ctrl|alt|shift|super|meta|orctrl|cmdorctrl|numpad)-)+(?:[a-z0-9]+|enter|return|escape|tab|up|down|left|right|pageup|pagedown|numpadenter|\{\}|[{}()[\]<>=,+?-])$",
     re.IGNORECASE,
 )
 PLACEHOLDER_ONLY_RE = re.compile(r"^(?:\{[A-Za-z0-9_:.?]+\}|%[A-Za-z](?: %[A-Za-z])*)$")

@@ -571,11 +571,11 @@ impl AIAgentOutput {
                 AIAgentOutputMessageType::ArtifactCreated(_) => continue,
                 AIAgentOutputMessageType::SkillInvoked(_) => continue,
                 AIAgentOutputMessageType::MessagesReceivedFromAgents { messages } => {
-                    result.push(format!("Received {} messages", messages.len()));
+                    result.push(format!("已收到 {} 条消息", messages.len()));
                     last_was_action = false;
                 }
                 AIAgentOutputMessageType::EventsFromAgents { event_ids } => {
-                    result.push(format!("Received {} agent events", event_ids.len()));
+                    result.push(format!("已收到 {} 个 Agent 事件", event_ids.len()));
                     last_was_action = false;
                 }
             }
@@ -1771,21 +1771,19 @@ impl Display for AIAgentOutputMessage {
             AIAgentOutputMessageType::Subagent(subagent) => write!(f, "Subagent: {subagent}")?,
             AIAgentOutputMessageType::WebSearch(status) => match status {
                 WebSearchStatus::Searching { query } => match query {
-                    Some(q) => write!(f, "Searching web for: {q}")?,
-                    None => write!(f, "Searching web")?,
+                    Some(q) => write!(f, "正在搜索网页：{q}")?,
+                    None => write!(f, "正在搜索网页")?,
                 },
                 WebSearchStatus::Success { query, pages } => {
-                    write!(f, "Searched web for: {query} ({} results)", pages.len())?
+                    write!(f, "已搜索网页：{query}（{} 个结果）", pages.len())?
                 }
                 WebSearchStatus::Error { query } => write!(f, "网页搜索失败：{query}")?,
             },
             AIAgentOutputMessageType::WebFetch(status) => match status {
                 WebFetchStatus::Fetching { urls } => {
-                    write!(f, "Fetching {} web pages...", urls.len())?
+                    write!(f, "正在获取 {} 个网页...", urls.len())?
                 }
-                WebFetchStatus::Success { pages } => {
-                    write!(f, "Fetched {} web pages", pages.len())?
-                }
+                WebFetchStatus::Success { pages } => write!(f, "已获取 {} 个网页", pages.len())?,
                 WebFetchStatus::Error => write!(f, "网页获取失败")?,
             },
             AIAgentOutputMessageType::CommentsAddressed {
@@ -1794,10 +1792,10 @@ impl Display for AIAgentOutputMessage {
             AIAgentOutputMessageType::DebugOutput { text } => write!(f, "[DEBUG] {text}")?,
             AIAgentOutputMessageType::ArtifactCreated(data) => match data {
                 ArtifactCreatedData::PullRequest { url, branch } => {
-                    write!(f, "Created PR: {url} (branch: {branch})")?
+                    write!(f, "已创建 PR：{url}（分支：{branch}）")?
                 }
                 ArtifactCreatedData::Screenshot { artifact_uid, .. } => {
-                    write!(f, "Screenshot captured (artifact: {artifact_uid})")?
+                    write!(f, "已捕获截图（artifact：{artifact_uid}）")?
                 }
                 ArtifactCreatedData::File {
                     artifact_uid,
@@ -1805,17 +1803,17 @@ impl Display for AIAgentOutputMessage {
                     ..
                 } => write!(
                     f,
-                    "File artifact uploaded: {filepath} (artifact: {artifact_uid})"
+                    "已上传文件 artifact：{filepath}（artifact：{artifact_uid}）"
                 )?,
             },
             AIAgentOutputMessageType::SkillInvoked(invoked_skill) => {
                 write!(f, "Skill Invoked: {}", invoked_skill.name)?
             }
             AIAgentOutputMessageType::MessagesReceivedFromAgents { messages } => {
-                write!(f, "Received {} messages", messages.len())?
+                write!(f, "已收到 {} 条消息", messages.len())?
             }
             AIAgentOutputMessageType::EventsFromAgents { event_ids } => {
-                write!(f, "Received {} agent events", event_ids.len())?
+                write!(f, "已收到 {} 个 Agent 事件", event_ids.len())?
             }
         }
 

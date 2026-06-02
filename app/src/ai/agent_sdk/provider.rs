@@ -46,7 +46,7 @@ impl ProviderCommandRunner {
                 && provider_type.allowed_in_personal_context()
             {
                 return Err(anyhow::anyhow!(
-                    "Provider '{}' must be setup for either a team or personal account",
+                    "提供商 '{}' 必须为团队或个人账户完成设置",
                     provider_type.slug()
                 ));
             }
@@ -103,7 +103,7 @@ impl ProviderCommandRunner {
                 }
 
                 let allowed_str = allowed_for.join(", ");
-                let status = "❌ Not Connected".to_string(); // TODO(bens): get this from gql
+                let status = "❌ 未连接".to_string(); // TODO(bens): get this from gql
 
                 ProviderInfo {
                     name,
@@ -139,10 +139,10 @@ struct ProviderInfo {
 impl TableFormat for ProviderInfo {
     fn header() -> Vec<Cell> {
         vec![
-            Cell::new("NAME"),
-            Cell::new("SLUG"),
-            Cell::new("ALLOWED FOR"),
-            Cell::new("STATUS"),
+            Cell::new("名称"),
+            Cell::new("标识"),
+            Cell::new("允许范围"),
+            Cell::new("状态"),
         ]
     }
 

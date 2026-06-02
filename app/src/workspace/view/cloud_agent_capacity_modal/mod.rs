@@ -180,17 +180,13 @@ impl CloudAgentCapacityModal {
             let pricing_text = if customer_type == CustomerType::Free {
                 if let Some(pricing) = plan_pricing {
                     let price = pricing.yearly_plan_price_per_month_usd_cents / 100;
-                    format!(
-                        "Paid plans start at ${price}/month and include everything in your free trial plus:"
-                    )
+                    format!("付费方案 ${price}/月起，包含免费试用中的所有内容，并额外提供：")
                 } else {
                     "付费套餐包含免费试用中的所有内容，并额外提供：".to_string()
                 }
             } else if let Some(pricing) = plan_pricing {
                 let price = pricing.yearly_plan_price_per_month_usd_cents / 100;
-                format!(
-                    "The Business plan starts at ${price}/month and includes everything on your current plan plus:"
-                )
+                format!("Business 方案 ${price}/月起，包含当前方案中的所有内容，并额外提供：")
             } else {
                 "Business 套餐包含当前套餐中的所有内容，并额外提供：".to_string()
             };
@@ -210,14 +206,14 @@ impl CloudAgentCapacityModal {
             // Credits text from plan pricing
             let credits_text = if let Some(limit) = plan_pricing.and_then(|plan| plan.request_limit)
             {
-                format!("{} AI credits per month", limit.separate_with_commas())
+                format!("每月 {} AI 点数", limit.separate_with_commas())
             } else {
                 "每月扩展 AI 额度".to_string()
             };
 
             // Benefits list based on plan type
             let mut benefits = vec![
-                format!("{} the number of concurrent cloud agents", agent_multiplier),
+                format!("{} 并发云端 Agent 数量", agent_multiplier),
                 credits_text,
                 "自带 API 密钥".to_string(),
             ];

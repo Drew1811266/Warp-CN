@@ -96,7 +96,7 @@ impl View for NewEnvironmentButtonView {
                     .with_spacing(4.)
                     .with_child(
                         Text::new(
-                            "New environment",
+                            "新建环境",
                             appearance.ui_font_family(),
                             appearance.ui_font_size(),
                         )

@@ -89,7 +89,7 @@ impl ThirdPartyHarness for ClaudeHarness {
             // weekly, Opus, etc.) all hit.
             "You've hit your",
             // Invalid or malformed API key.
-            "Invalid API key",
+            "API 密钥无效",
             "This organization has been disabled",
             "belongs to a disabled organization",
             // OAuth / login state.
@@ -660,22 +660,14 @@ fn prepare_claude_config(
             responses.approved.push(suffix.to_owned());
         }
     }
-    write_json_file(
-        claude_json_path,
-        &claude_config,
-        "Failed to serialize Claude config",
-    )?;
+    write_json_file(claude_json_path, &claude_config, "序列化 Claude 配置失败")?;
     Ok(())
 }
 
 fn prepare_claude_settings(claude_settings_path: &Path) -> Result<()> {
     let mut settings: ClaudeSettings = read_json_file_or_default(claude_settings_path)?;
     settings.skip_dangerous_mode_permission_prompt = true;
-    write_json_file(
-        claude_settings_path,
-        &settings,
-        "Failed to serialize Claude settings",
-    )?;
+    write_json_file(claude_settings_path, &settings, "序列化 Claude 设置失败")?;
     Ok(())
 }
 

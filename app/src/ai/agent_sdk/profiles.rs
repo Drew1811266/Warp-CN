@@ -45,7 +45,7 @@ impl ProfilesCommandRunner {
                     let name = profile.data().display_name().to_string();
                     let id = match profile.sync_id() {
                         Some(SyncId::ServerId(server_id)) => server_id.to_string(),
-                        _ => "Unsynced".to_string(),
+                        _ => "未同步".to_string(),
                     };
                     ProfileInfo { id, name }
                 })
@@ -72,7 +72,7 @@ struct ProfileInfo {
 
 impl TableFormat for ProfileInfo {
     fn header() -> Vec<Cell> {
-        vec![Cell::new("ID"), Cell::new("Name")]
+        vec![Cell::new("ID"), Cell::new("名称")]
     }
 
     fn row(&self) -> Vec<Cell> {

@@ -27,7 +27,7 @@ impl StringModel for AmbientAgentEnvironment {
     type CloudObjectType = CloudAmbientAgentEnvironment;
 
     fn model_type_name(&self) -> &'static str {
-        "Cloud environment"
+        "云环境"
     }
 
     fn should_enforce_revisions() -> bool {

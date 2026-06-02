@@ -712,9 +712,9 @@ pub enum BlockSelectionCardinality {
 impl BlockSelectionCardinality {
     pub fn as_keymap_context_value(&self) -> &'static str {
         match self {
-            BlockSelectionCardinality::None => "None",
-            BlockSelectionCardinality::One => "One",
-            BlockSelectionCardinality::Many => "Many",
+            BlockSelectionCardinality::None => "无",
+            BlockSelectionCardinality::One => "一个",
+            BlockSelectionCardinality::Many => "多个",
         }
     }
 }
@@ -1391,7 +1391,7 @@ impl TerminalModel {
                     tx.try_send(OrderedTerminalEventType::AgentConversationReplayStarted)
                 {
                     log::warn!(
-                        "Failed to send OrderedTerminalEventType::AgentConversationReplayStarted: {e}"
+                        "发送 OrderedTerminalEventType::AgentConversationReplayStarted 失败：{e}"
                     );
                 }
             }
@@ -1404,7 +1404,7 @@ impl TerminalModel {
                 if let Err(e) = tx.try_send(OrderedTerminalEventType::AgentConversationReplayEnded)
                 {
                     log::warn!(
-                        "Failed to send OrderedTerminalEventType::AgentConversationReplayEnded: {e}"
+                        "发送 OrderedTerminalEventType::AgentConversationReplayEnded 失败：{e}"
                     );
                 }
             }
@@ -2128,9 +2128,7 @@ impl TerminalModel {
         first_scrollback_block_index: BlockIndex,
     ) {
         if !self.shared_session_status.is_sharer() {
-            log::warn!(
-                "Tried to disable secret obfuscation without being a shared session creator."
-            );
+            log::warn!("尝试在不是共享会话创建者的情况下禁用 secret 混淆。");
             return;
         }
 
@@ -3652,16 +3650,16 @@ fn validate_and_decode_in_band_command_output_to_bytes(
 
 #[derive(thiserror::Error, Debug)]
 enum InBandCommandOutputDecodingError {
-    #[error("Missing content length header.")]
+    #[error("缺少 content length header。")]
     NoContentLengthHeader,
-    #[error("DCS content length header is corrupted: {0:?}")]
+    #[error("DCS content length header 已损坏：{0:?}")]
     ContentLengthHeaderCorrupted(ParseIntError),
-    #[error("Content length header does not match length of received content. Actual: {actual_length}, expected: {expected_length}")]
+    #[error("content length header 与收到的内容长度不匹配。实际：{actual_length}，预期：{expected_length}")]
     ContentLengthMismatch {
         actual_length: usize,
         expected_length: usize,
     },
-    #[error("Failed to hex-decode the DCS payload: {0:?}")]
+    #[error("对 DCS payload 执行 hex 解码失败：{0:?}")]
     HexDecodingFailure(FromHexError),
 }
 

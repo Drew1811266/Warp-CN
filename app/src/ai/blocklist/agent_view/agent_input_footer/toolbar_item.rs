@@ -116,18 +116,18 @@ impl AgentToolbarItemKind {
 
     pub fn display_label(&self) -> &'static str {
         match self {
-            Self::ContextChip(_) => "Context Chip",
-            Self::ModelSelector => "Model Selector",
-            Self::NLDToggle => "Autodetection",
-            Self::VoiceInput => "Voice Input",
-            Self::FileAttach => "Attach File",
-            Self::ContextWindowUsage => "Context Usage",
-            Self::FileExplorer => "File Explorer",
-            Self::RichInput => "Rich Input",
+            Self::ContextChip(_) => "上下文标签",
+            Self::ModelSelector => "模型选择器",
+            Self::NLDToggle => "自动检测",
+            Self::VoiceInput => "语音输入",
+            Self::FileAttach => "附加文件",
+            Self::ContextWindowUsage => "上下文用量",
+            Self::FileExplorer => "文件浏览器",
+            Self::RichInput => "富文本输入",
             Self::ShareSession => "/remote-control",
-            Self::Settings => "Settings",
-            Self::FastForwardToggle => "Fast Forward",
-            Self::HandoffToCloud => "Hand off to cloud",
+            Self::Settings => "设置",
+            Self::FastForwardToggle => "快进",
+            Self::HandoffToCloud => "交给云端",
         }
     }
 

@@ -60,9 +60,9 @@ pub fn login(ctx: &mut AppContext) -> Result<()> {
                     // Device auth failed.
                     let err_msg = match event {
                         AuthManagerEvent::AuthFailed(err) => {
-                            format!("Authentication failed: {err:#}")
+                            format!("身份验证失败：{err:#}")
                         }
-                        _ => "Authentication failed".to_string(),
+                        _ => "身份验证失败".to_string(),
                     };
                     ctx.terminate_app(
                         TerminationMode::ForceTerminate,
@@ -78,9 +78,7 @@ pub fn login(ctx: &mut AppContext) -> Result<()> {
                 if let Some(url) = verification_url_complete {
                     println!("To log in, open this URL in your browser:\n{url}");
                 } else {
-                    println!(
-                        "To log in, visit {verification_url} and enter this code: {user_code}"
-                    );
+                    println!("要登录，请访问 {verification_url} 并输入此代码：{user_code}");
                 }
             }
             _ => {}

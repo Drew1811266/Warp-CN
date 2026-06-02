@@ -259,15 +259,11 @@ pub async fn make_authenticated_client(
     if is_headless {
         if is_file_based {
             log::warn!(
-                "File-based MCP server {uuid} requires OAuth authentication; \
-                 skipping in headless mode. To use this server, authenticate it \
-                 in the Warp desktop app first."
+                "基于文件的 MCP 服务器 {uuid} 需要 OAuth 认证；正在无头模式下跳过。要使用此服务器，请先在 Warp 桌面应用中完成认证。"
             );
         }
         return Err(AuthError::AuthorizationFailed(
-            "MCP server requires OAuth authentication. Please authenticate this server in the \
-             Warp desktop app first, then try again."
-                .to_string(),
+            "MCP 服务器需要 OAuth 认证。请先在 Warp 桌面应用中认证此服务器，然后重试。".to_string(),
         ));
     }
 
@@ -352,7 +348,7 @@ pub async fn make_authenticated_client(
         CallbackResult::Success { code, csrf_token } => (code, csrf_token),
         CallbackResult::Error { error } => {
             return Err(AuthError::AuthorizationFailed(
-                error.as_deref().unwrap_or("unknown error").to_string(),
+                error.as_deref().unwrap_or("未知错误").to_string(),
             ));
         }
     };

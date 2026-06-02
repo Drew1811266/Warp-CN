@@ -12,6 +12,22 @@
 | manifest | `resources/localization/zh-Hans-overrides.toml` |
 | GUI 矩阵 | `docs/zh-Hans-gui-smoke-matrix.md` |
 
+RC16 预检备注（2026-06-02）：
+
+- 当前执行分支为 `codex/zh-Hans-followup-localization`。
+- 该分支没有配置 upstream tracking branch。
+- RC16 低负载预检默认不执行 `git fetch origin --tags`。
+- 在用户明确要求刷新上游前，不 merge、不 rebase、不切换分支。
+- 当前 manifest drift gate 为 `missing: 0`、`would_change: 0`。
+
+RC17 freshness 规则（2026-06-02）：
+
+- RC17 必须显式决定是否刷新上游，不能把 freshness 当成隐含通过。
+- 如果当前分支没有 upstream tracking branch，记录该状态并跳过 fetch。
+- 如果用户明确批准 fetch，先单独运行 `git fetch origin --tags` 并记录精确基线。
+- fetch 步骤不得同时执行 merge、rebase 或 branch switch。
+- 任何上游移动后，必须重新运行 manifest validation 和 dry-run summary。
+
 ## 1. 发布策略
 
 用户发布版只跟随 **stable 或明确选定的上游基线**。不要追着上游 dev/nightly 每天发布中文构建版。

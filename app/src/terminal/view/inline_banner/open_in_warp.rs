@@ -47,9 +47,7 @@ impl OpenInWarpBannerState {
 /// Given an openable file, format a file-specific title for the Open in Warp banner.
 fn file_title_text(openable_path: &OpenablePath) -> String {
     match openable_path.file_type {
-        OpenableFileType::Markdown => {
-            "Did you know that Warp can directly display Markdown files?".to_string()
-        }
+        OpenableFileType::Markdown => "你知道 Warp 可以直接显示 Markdown 文件吗？".to_string(),
         OpenableFileType::Code | OpenableFileType::Text => {
             cfg_if::cfg_if! {
                 if #[cfg(not(target_family = "wasm"))] {
@@ -59,13 +57,13 @@ fn file_title_text(openable_path: &OpenablePath) -> String {
 
                     match language.as_ref().map(|language| language.display_name()) {
                         Some(display_name) => {
-                            format!("Did you know that Warp can directly edit {display_name} files?")
+                            format!("你知道 Warp 可以直接编辑 {display_name} 文件吗？")
                         }
-                        None => "Did you know that Warp can directly edit code?".to_string(),
+                        None => "你知道 Warp 可以直接编辑代码吗？".to_string(),
                     }
                 } else {
                     // The `languages` crate is not available on WASM, so use a fallback message.
-                    "Did you know that Warp can directly edit code?".to_string()
+                    "你知道 Warp 可以直接编辑代码吗？".to_string()
                 }
             }
         }
@@ -78,8 +76,8 @@ pub fn render_open_in_warp_banner(
     appearance: &Appearance,
 ) -> Box<dyn Element> {
     let button_text = match state.target.file_type {
-        OpenableFileType::Markdown => "View in Warp",
-        OpenableFileType::Code | OpenableFileType::Text => "Edit in Warp",
+        OpenableFileType::Markdown => "在 Warp 中查看",
+        OpenableFileType::Code | OpenableFileType::Text => "在 Warp 中编辑",
     };
 
     let open_button = InlineBannerTextButton {
@@ -98,7 +96,7 @@ pub fn render_open_in_warp_banner(
     };
 
     let learn_more_button = InlineBannerTextButton {
-        text: "Learn more".to_string(),
+        text: "了解更多".to_string(),
         text_color: appearance.theme().active_ui_text_color().into_solid(),
         button_state: InlineBannerButtonState {
             on_click_event: TerminalAction::OpenInWarpBanner(OpenInWarpBannerAction::LearnMore),

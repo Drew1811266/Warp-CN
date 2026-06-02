@@ -102,43 +102,39 @@ use crate::workspaces::workspace::CustomerType;
 
 pub const STATUS_ICON_SIZE_DELTA: f32 = 4.;
 pub const STATUS_FOOTER_VERTICAL_PADDING: f32 = 4.;
-pub const WAITING_FOR_USER_INPUT_MESSAGE: &str = "Agent waiting for instructions...";
+pub const WAITING_FOR_USER_INPUT_MESSAGE: &str = "Agent 正在等待指令...";
 const IMAGE_SOURCE_LINK_LINE_INDEX: usize = 1;
 
-const ERROR_APOLOGY_TEXT: &str = "I'm sorry, I couldn't complete that request.";
-const INTERNAL_WARP_ERROR: &str = "Internal Warp error.";
+const ERROR_APOLOGY_TEXT: &str = "抱歉，我无法完成该请求。";
+const INTERNAL_WARP_ERROR: &str = "内部 Warp 错误。";
 
-pub const LOAD_OUTPUT_MESSAGE: &str = "Warping...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_ADJUSTING: &str = "Adjusting tasks...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_PASSIVE_CODE_GEN: &str = "Generating fix...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_CREATING_DIFF: &str = "Creating diff...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_PREPARING_QUESTION: &str = "Preparing question...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_GENERATING_PLAN: &str = "Generating plan...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_UPDATING_PLAN: &str = "Updating plan...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_CONVERSATION: &str = "Summarizing conversation...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_TOOL_CALL_RESULT: &str =
-    "Summarizing command output...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_SEARCH_CODEBASE: &str = "Searching codebase...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_READING_FILES: &str = "Reading files...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_GREP: &str = "Grepping...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_FILE_GLOB: &str = "Finding files...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_RUNNING_COMMAND: &str = "Executing command...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_WRITING_TO_COMMAND: &str = "Writing command input...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_WAITING_FOR_COMMAND_COMPLETION: &str =
-    "Waiting for command to exit...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_WEB_SEARCH: &str = "Searching the web...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_FETCHING_REVIEW_COMMENTS: &str = "Fetching PR comments...";
+pub const LOAD_OUTPUT_MESSAGE: &str = "正在 Warp...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_ADJUSTING: &str = "正在调整任务...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_PASSIVE_CODE_GEN: &str = "正在生成修复...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_CREATING_DIFF: &str = "正在创建 diff...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_PREPARING_QUESTION: &str = "正在准备问题...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_GENERATING_PLAN: &str = "正在生成计划...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_UPDATING_PLAN: &str = "正在更新计划...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_CONVERSATION: &str = "正在总结对话...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_TOOL_CALL_RESULT: &str = "正在总结命令输出...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_SEARCH_CODEBASE: &str = "正在搜索代码库...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_READING_FILES: &str = "正在读取文件...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_GREP: &str = "正在 Grep...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_FILE_GLOB: &str = "正在查找文件...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_RUNNING_COMMAND: &str = "正在执行命令...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_WRITING_TO_COMMAND: &str = "正在写入命令输入...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_WAITING_FOR_COMMAND_COMPLETION: &str = "正在等待命令退出...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_WEB_SEARCH: &str = "正在搜索网页...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_FETCHING_REVIEW_COMMENTS: &str = "正在获取 PR 评论...";
 
 #[cfg(feature = "local_fs")]
 pub(crate) type ResolvedBlocklistImageSources = HashMap<String, Option<AssetSource>>;
 
 pub const BLOCKED_ACTION_MESSAGE_FOR_WRITE_TO_LONG_RUNNING_SHELL_COMMAND: &str =
-    "Can I write the following to this running command?";
-pub const BLOCKED_ACTION_MESSAGE_FOR_READING_FILES: &str = "Grant access to the following files?";
-pub const BLOCKED_ACTION_MESSAGE_FOR_SEARCHING_CODEBASE: &str =
-    "Grant access to the following repository?";
-pub const BLOCKED_ACTION_MESSAGE_FOR_GREP_OR_FILE_GLOB: &str =
-    "OK if I search the files in this directory?";
+    "可以将以下内容写入这个正在运行的命令吗？";
+pub const BLOCKED_ACTION_MESSAGE_FOR_READING_FILES: &str = "允许访问以下文件吗？";
+pub const BLOCKED_ACTION_MESSAGE_FOR_SEARCHING_CODEBASE: &str = "允许访问以下仓库吗？";
+pub const BLOCKED_ACTION_MESSAGE_FOR_GREP_OR_FILE_GLOB: &str = "可以搜索此目录中的文件吗？";
 
 const BLOCKLIST_VISUAL_SECTION_HEIGHT_LINE_MULTIPLIER: f32 = 10.0;
 const INLINE_IMAGE_HEIGHT: f32 = 164.;
@@ -345,10 +341,10 @@ pub fn render_warping_indicator<V: View>(
             }
             Some(AIAgentActionType::Grep { .. }) => LOAD_OUTPUT_MESSAGE_FOR_GREP.to_owned(),
             Some(AIAgentActionType::CallMCPTool { name, .. }) => {
-                format!("Calling \"{name}\" MCP tool...")
+                format!("正在调用 “{name}” MCP 工具...")
             }
             Some(AIAgentActionType::ReadMCPResource { name, .. }) => {
-                format!("Reading \"{name}\" MCP resource...")
+                format!("正在读取 “{name}” MCP 资源...")
             }
             Some(AIAgentActionType::FileGlob { .. })
             | Some(AIAgentActionType::FileGlobV2 { .. }) => {
@@ -397,11 +393,11 @@ pub fn render_warping_indicator<V: View>(
                         if let Some(remaining) = next_check_remaining {
                             let secs = remaining.as_secs();
                             let formatted = if secs < 60 {
-                                format!("{secs}s")
+                                format!("{secs}秒")
                             } else {
                                 format!("{}m", secs / 60)
                             };
-                            let suffix = format!(" · Next check in {formatted}");
+                            let suffix = format!(" · 下次检查将在 {formatted} 后");
 
                             // Keep the base message constant so the shimmering animation
                             // isn't interrupted every time the countdown ticks. The
@@ -437,8 +433,8 @@ pub fn render_warping_indicator<V: View>(
     if let Some(take_over_button_props) = props.take_over_lrc_control_button {
         has_buttons = true;
         buttons_row.add_child(render_switch_control_to_user_button(
-            "Take over",
-            "Take over control of the command",
+            "接管",
+            "接管命令控制权",
             take_over_button_props,
             appearance,
         ));
@@ -665,9 +661,9 @@ pub fn render_warping_indicator_base(
 pub fn format_elapsed_seconds(elapsed: std::time::Duration) -> String {
     let total_seconds = elapsed.as_secs();
     if total_seconds == 1 {
-        "1 second".to_string()
+        "1 秒".to_string()
     } else {
-        format!("{total_seconds} seconds")
+        format!("{total_seconds} 秒")
     }
 }
 
@@ -748,9 +744,9 @@ fn render_hide_responses_button(
 ) -> Box<dyn Element> {
     let theme = appearance.theme();
     let button_text = if should_hide_responses {
-        "Show responses"
+        "显示回复"
     } else {
-        "Hide responses"
+        "隐藏回复"
     };
     let text = Container::new(
         Text::new(
@@ -764,9 +760,9 @@ fn render_hide_responses_button(
     .finish();
 
     let tooltip_text = if should_hide_responses {
-        "Show agent responses"
+        "显示 Agent 回复"
     } else {
-        "Hide agent responses"
+        "隐藏 Agent 回复"
     };
 
     render_warping_indicator_button(
@@ -830,7 +826,7 @@ fn render_stop_button(props: ButtonProps, appearance: &Appearance) -> Box<dyn El
         appearance,
         stop_icon,
         props.keystroke,
-        "Stop agent task".to_string(),
+        "停止 Agent 任务".to_string(),
         props.is_active,
         false,
         |ctx: &mut EventContext<'_>| {
@@ -858,9 +854,9 @@ fn render_queue_next_prompt_button(
     .finish();
 
     let tooltip_text = if props.is_active {
-        "Auto-queue is on: your next prompt will be queued"
+        "自动排队已开启：你的下一条提示将加入队列"
     } else {
-        "Auto-queue next prompt while agent is responding"
+        "Agent 回复时自动排队下一条提示"
     };
 
     render_warping_indicator_button(
@@ -902,11 +898,11 @@ fn render_auto_approve_button(
     .finish();
 
     let tooltip_text = if props.is_locked {
-        "Fast forward is always enabled for cloud agent conversations"
+        "云端 Agent 对话始终启用快进"
     } else if is_active {
-        "Turn off auto-approve all agent actions"
+        "关闭自动批准所有 Agent 操作"
     } else {
-        "Auto-approve all agent actions for this task"
+        "自动批准此任务的所有 Agent 操作"
     };
 
     render_warping_indicator_button(
@@ -960,7 +956,7 @@ fn render_force_refresh_inline(
         // Mirror `render_output_status_text` exactly: same `Text` configuration plus
         // the `Container::with_margin_top(1.)` wrapper so this sits on the same
         // baseline as the adjacent `Last seen by agent ...` text.
-        let text = Text::new(" · Check now".to_string(), font_family, font_size)
+        let text = Text::new(" · 立即检查".to_string(), font_family, font_size)
             .with_color(color)
             .with_style(Properties::default())
             .with_clip(ClipConfig::end())
@@ -974,7 +970,7 @@ fn render_force_refresh_inline(
         let mut stack = Stack::new().with_child(text_with_margin);
         if state.is_hovered() {
             let tool_tip = ui_builder
-                .tool_tip("Ask the agent to check this command now, skipping its timer.".to_owned())
+                .tool_tip("让 Agent 立即检查此命令，跳过计时器。".to_owned())
                 .build()
                 .finish();
             stack.add_positioned_overlay_child(
@@ -2148,7 +2144,7 @@ fn render_mermaid_diagram_section<A: Action>(
         .finish();
 
     render_visual_card(
-        "Mermaid diagram".to_string(),
+        "Mermaid 图表".to_string(),
         Icon::Dataflow,
         Container::new(mermaid_canvas)
             .with_background(theme.background())
@@ -3000,13 +2996,11 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
                     .to_string();
 
                 format!(
-                    "{ERROR_APOLOGY_TEXT}\n\nYou've reached your credit limit. Your credit limit resets on {formatted_next_refresh_time}.",
+                    "{ERROR_APOLOGY_TEXT}nn你已达到点数上限。点数上限将在 {formatted_next_refresh_time} 重置。",
                 )
             }
         }
-        RenderableAIError::ServerOverloaded => {
-            "Warp is currently overloaded. Please try again later.".to_string()
-        }
+        RenderableAIError::ServerOverloaded => "Warp 当前负载过高。请稍后再试。".to_string(),
         RenderableAIError::InternalWarpError => {
             format!("{ERROR_APOLOGY_TEXT}\n\n{INTERNAL_WARP_ERROR}")
         }
@@ -3017,11 +3011,9 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
         } => {
             if *will_attempt_resume {
                 if *waiting_for_network {
-                    format!(
-                        "{error_message}\n\nWill resume conversation when network connectivity is restored..."
-                    )
+                    format!("{error_message}nn网络连接恢复后将继续对话...")
                 } else {
-                    format!("{error_message}\n\nAttempting to resume conversation...")
+                    format!("{error_message}nn正在尝试继续对话...")
                 }
             } else {
                 format!("{ERROR_APOLOGY_TEXT}\n\n{error_message}")
@@ -3052,8 +3044,7 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
             }
             // Fallback for contexts that don't have the stateful view (e.g. CLI subagent)
             format!(
-                "{ERROR_APOLOGY_TEXT}\n\nAWS credentials expired or missing for {model_name}. \
-                 Please refresh your AWS credentials."
+                "{ERROR_APOLOGY_TEXT}nn用于 {model_name} 的 AWS 凭据已过期或缺失。请刷新 AWS 凭据。"
             )
         }
     };
@@ -3120,20 +3111,13 @@ fn render_invalid_api_key_error(
     .with_height(icon_size(app))
     .finish();
 
-    let alert_text = Text::new(
-        "Provided API key is not valid",
-        appearance.ui_font_family(),
-        14.,
-    )
-    .with_color(error_color(appearance.theme()))
-    .with_selectable(false)
-    .finish();
+    let alert_text = Text::new("提供的 API 密钥无效", appearance.ui_font_family(), 14.)
+        .with_color(error_color(appearance.theme()))
+        .with_selectable(false)
+        .finish();
 
     let detail_text = Text::new(
-        format!(
-            "Failed to authenticate with {provider} when using {model_name}. \
-                     Double-check that your API key is correct."
-        ),
+        format!("使用 {model_name} 时未能通过 {provider} 认证。请再次确认 API 密钥是否正确。"),
         appearance.ui_font_family(),
         14.,
     )
@@ -3162,12 +3146,12 @@ fn render_invalid_api_key_error(
             background: Some(internal_colors::fg_overlay_3(theme).into()),
             ..Default::default()
         })
-        .with_text_label("Edit API Keys".to_string())
+        .with_text_label("编辑 API 密钥".to_string())
         .with_cursor(Some(Cursor::PointingHand))
         .build()
         .on_click(move |ctx, _, _| {
             ctx.dispatch_typed_action(WorkspaceAction::ShowSettingsPageWithSearch {
-                search_query: "api keys".to_string(),
+                search_query: "API 密钥".to_string(),
                 section: Some(SettingsSection::WarpAgent),
             });
         })
@@ -3295,7 +3279,7 @@ pub(crate) fn render_debug_footer<V: View>(
                     warpui::ui_components::button::ButtonVariant::Text,
                     props.submit_issue_button_handle,
                 )
-                .with_centered_text_label("Send Feedback".to_string())
+                .with_centered_text_label("发送反馈".to_string())
                 .with_style(submit_button_style)
                 .with_hovered_styles(submit_button_hover_style)
                 .with_clicked_styles(submit_button_hover_style)
@@ -3311,7 +3295,7 @@ pub(crate) fn render_debug_footer<V: View>(
 
     // render the conversation's debug id so screenshots automatically show the debug id
     let debug_text = Text::new(
-        format!("Debug information: {debug_info}"),
+        format!("调试信息：{debug_info}"),
         appearance.ui_font_family(),
         appearance.monospace_font_size(),
     )
@@ -3355,7 +3339,7 @@ pub(crate) fn render_debug_footer<V: View>(
     })
     .finish();
     let copy_button_with_tooltip = appearance.ui_builder().tool_tip_on_element(
-        "Copy debug ID".to_string(),
+        "复制调试 ID".to_string(),
         props.debug_copy_button_handle,
         copy_button,
         warpui::elements::ParentAnchor::TopRight,

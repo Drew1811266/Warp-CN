@@ -8,7 +8,7 @@ use serde::{Deserialize, Deserializer, Serialize};
 #[derive(Debug, Clone, Default, PartialEq, Eq, schemars::JsonSchema)]
 #[schemars(
     with = "Option<String>",
-    description = "Shell to start terminal sessions with. Use null for the system default, or one of \"bash\", \"zsh\", \"fish\", \"pwsh\", or a custom shell command/path."
+    description = "用于启动终端会话的 Shell。使用 null 表示系统默认值，也可以使用 'bash'、'zsh'、'fish'、'pwsh' 之一，或自定义 Shell 命令/路径。"
 )]
 pub enum StartupShell {
     #[default]

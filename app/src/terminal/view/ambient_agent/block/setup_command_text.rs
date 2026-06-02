@@ -184,9 +184,9 @@ impl View for CloudModeSetupTextBlock {
                             .setup_command_state()
                             .is_running(self.group_id)
                         {
-                            "Running setup commands..."
+                            "正在运行设置命令..."
                         } else {
-                            "Ran setup commands"
+                            "已运行设置命令"
                         },
                         appearance.ai_font_family(),
                         appearance.monospace_font_size(),

@@ -49,7 +49,7 @@ pub fn render_cloud_mode_loading_screen(
         // Add link at the end if it exists
         if let Some(link_target) = tip.link() {
             fragments.push(FormattedTextFragment::plain_text(" "));
-            fragments.push(FormattedTextFragment::hyperlink("Learn more", link_target));
+            fragments.push(FormattedTextFragment::hyperlink("了解更多", link_target));
         }
 
         let formatted_text = FormattedText::new(vec![FormattedTextLine::Line(fragments)]);
@@ -154,7 +154,7 @@ fn render_tier_limits_footer(
     }
 
     let mut fragments = vec![FormattedTextFragment::plain_text(format!(
-        "Your agent is currently running on a {} machine. ",
+        "你的 Agent 当前正在一台 {} 规格的机器上运行。",
         specs
     ))];
 
@@ -163,9 +163,9 @@ fn render_tier_limits_footer(
         .current_team()
         .map(|team| UserWorkspaces::upgrade_link_for_team(team.uid))?;
 
-    fragments.push(FormattedTextFragment::hyperlink("Upgrade", upgrade_url));
+    fragments.push(FormattedTextFragment::hyperlink("升级", upgrade_url));
     fragments.push(FormattedTextFragment::plain_text(
-        " for more powerful cloud agents.",
+        "以使用更强大的云端 Agent。",
     ));
 
     let formatted_text = FormattedText::new(vec![FormattedTextLine::Line(fragments)]);
@@ -233,7 +233,7 @@ pub fn render_cloud_mode_error_screen(
 
     // Error title text
     let title_text = Text::new(
-        "Failed to start environment",
+        "环境启动失败",
         appearance.ui_font_family(),
         appearance.monospace_font_size() + 2.,
     )
@@ -323,7 +323,7 @@ pub fn render_cloud_mode_github_auth_required_screen(
 
     // Title text - "GitHub Authentication Required"
     let title_text = Text::new(
-        "GitHub Authentication Required",
+        "需要 GitHub 身份验证",
         appearance.ui_font_family(),
         appearance.monospace_font_size() + 2.,
     )
@@ -333,7 +333,7 @@ pub fn render_cloud_mode_github_auth_required_screen(
 
     // Message text - "Please authenticate with GitHub to continue"
     let message_text = Text::new(
-        "Please authenticate with GitHub to continue",
+        "请通过 GitHub 身份验证后继续",
         appearance.ui_font_family(),
         appearance.monospace_font_size(),
     )
@@ -345,7 +345,7 @@ pub fn render_cloud_mode_github_auth_required_screen(
     let auth_button = appearance
         .ui_builder()
         .button(ButtonVariant::Accent, auth_button_mouse_state.clone())
-        .with_centered_text_label("Authenticate with GitHub".to_string())
+        .with_centered_text_label("使用 GitHub 验证身份".to_string())
         .build()
         .on_click(move |_, app, _| {
             app.open_url(&auth_url_clone);
@@ -410,7 +410,7 @@ pub fn render_cloud_mode_cancelled_screen(appearance: &Appearance) -> Box<dyn El
 
     // Title text - "Cloud Agent Run Cancelled"
     let title_text = Text::new(
-        "Cloud Agent Run Cancelled",
+        "云端 Agent 运行已取消",
         appearance.ui_font_family(),
         appearance.monospace_font_size() + 2.,
     )
@@ -420,7 +420,7 @@ pub fn render_cloud_mode_cancelled_screen(appearance: &Appearance) -> Box<dyn El
 
     // Subtitle text - "No cloud environment was started"
     let subtitle_text = Text::new(
-        "No cloud environment was started",
+        "未启动云环境",
         appearance.ui_font_family(),
         appearance.monospace_font_size(),
     )

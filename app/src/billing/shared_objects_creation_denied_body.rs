@@ -17,15 +17,20 @@ const BUTTON_PADDING: f32 = 12.;
 const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_BORDER_RADIUS: f32 = 4.;
 
-const DEFAULT_DELINQUENT_ADMIN_MODAL_SUBHEADER: &str = "Shared drive objects have been restricted due to a subscription payment issue.\n\nPlease update your payment information to restore access.";
-const DEFAULT_DELINQUENT_ADMIN_ENTERPRISE_MODAL_SUBHEADER: &str = "Shared drive objects have been restricted due to a subscription payment issue.\n\nPlease contact support@warp.dev to restore access.";
-const DEFAULT_DELINQUENT_MODAL_SUBHEADER: &str = "Shared drive objects have been restricted due to a subscription payment issue.\n\nPlease contact a team admin to restore access.";
-const DEFAULT_ADMIN_PROSUMER_MODAL_SUBHEADER: &str = "Warp's Pro plan comes with a limited number of shared drive objects.\n\nFor access to unlimited shared drive objects, upgrade to the Turbo plan.";
-const DEFAULT_PROSUMER_MODAL_SUBHEADER: &str = "Warp's Pro plan comes with a limited number of shared drive objects.\n\nFor access to unlimited shared drive objects, contact a team admin to upgrade to the Turbo plan.";
-const DEFAULT_ADMIN_MODAL_SUBHEADER: &str = "Warp's free plan comes with a limited number of shared drive objects.\n\nFor access to unlimited shared drive objects, upgrade to a paid plan.";
-const DEFAULT_MODAL_SUBHEADER: &str = "Warp's free plan comes with a limited number of shared drive objects.\n\nFor access to unlimited shared drive objects, contact a team admin to upgrade to a paid plan.";
-const VIEW_PLANS_TEXT: &str = "Compare plans";
-const MANAGE_BILLING_BUTTON_TEXT: &str = "Manage billing";
+const DEFAULT_DELINQUENT_ADMIN_MODAL_SUBHEADER: &str =
+    "由于订阅付款问题，共享 drive 对象已受限。nn请更新付款信息以恢复访问。";
+const DEFAULT_DELINQUENT_ADMIN_ENTERPRISE_MODAL_SUBHEADER: &str =
+    "由于订阅付款问题，共享 drive 对象已受限。nn请联系 support@warp.dev 恢复访问。";
+const DEFAULT_DELINQUENT_MODAL_SUBHEADER: &str =
+    "由于订阅付款问题，共享 drive 对象已受限。nn请联系团队管理员恢复访问。";
+const DEFAULT_ADMIN_PROSUMER_MODAL_SUBHEADER: &str =
+    "Warp Pro 方案包含的共享 drive 对象数量有限。nn如需无限共享 drive 对象，请升级到 Turbo 方案。";
+const DEFAULT_PROSUMER_MODAL_SUBHEADER: &str = "Warp Pro 方案包含的共享 drive 对象数量有限。nn如需无限共享 drive 对象，请联系团队管理员升级到 Turbo 方案。";
+const DEFAULT_ADMIN_MODAL_SUBHEADER: &str =
+    "Warp 免费方案包含的共享 drive 对象数量有限。nn如需无限共享 drive 对象，请升级到付费方案。";
+const DEFAULT_MODAL_SUBHEADER: &str = "Warp 免费方案包含的共享 drive 对象数量有限。nn如需无限共享 drive 对象，请联系团队管理员升级到付费方案。";
+const VIEW_PLANS_TEXT: &str = "比较方案";
+const MANAGE_BILLING_BUTTON_TEXT: &str = "管理账单";
 
 #[derive(Default)]
 struct MouseStateHandles {
@@ -96,20 +101,20 @@ impl View for SharedObjectsCreationDeniedBody {
                 match (self.is_delinquent_due_to_payment_issue, self.has_admin_permissions, self.customer_type) {
                     (true, true, _) => {
                         if is_stripe_paid_plan {
-                            format!("Shared {object_type}s have been restricted due to a subscription payment issue.\n\nPlease update your payment information to restore access.")
+                            format!("由于订阅付款问题，共享 {object_type} 已受限。nn请更新付款信息以恢复访问。")
                         } else {
-                            format!("Shared {object_type}s have been restricted due to a subscription payment issue.\n\nPlease contact support@warp.dev to restore access.")
+                            format!("由于订阅付款问题，共享 {object_type} 已受限。nn请联系 support@warp.dev 恢复访问。")
                         }
                     },
-                    (true, false, _) => format!("Shared {object_type}s have been restricted due to a subscription payment issue.\n\nPlease contact a team admin to restore access."),
+                    (true, false, _) => format!("由于订阅付款问题，共享 {object_type} 已受限。nn请联系团队管理员恢复访问。"),
                     (false, true, CustomerType::Prosumer) => {
-                        format!("Warp's Pro plan comes with a limited number of shared {object_type}s.\n\nFor access to unlimited shared {object_type}s, upgrade to the Build plan.")
+                        format!("Warp Pro 方案包含的共享 {object_type} 数量有限。nn如需无限共享 {object_type}，请升级到 Build 方案。")
                     }
                     (false, false, CustomerType::Prosumer) => {
-                        format!("Warp's Pro plan comes with a limited number of shared {object_type}s.\n\nFor access to unlimited shared {object_type}s, contact a team admin to upgrade to the Build plan.")
+                        format!("Warp Pro 方案包含的共享 {object_type} 数量有限。nn如需无限共享 {object_type}，请联系团队管理员升级到 Build 方案。")
                     }
-                    (false, true, _) => format!("Warp's free plan comes with a limited number of shared {object_type}s.\n\nFor access to unlimited shared {object_type}s, upgrade to a paid plan."),
-                    (false, false, _) => format!("Warp's free plan comes with a limited number of shared {object_type}s.\n\nFor access to unlimited shared {object_type}s, contact a team admin to upgrade to a paid plan."),
+                    (false, true, _) => format!("Warp 免费方案包含的共享 {object_type} 数量有限。nn如需无限共享 {object_type}，请升级到付费方案。"),
+                    (false, false, _) => format!("Warp 免费方案包含的共享 {object_type} 数量有限。nn如需无限共享 {object_type}，请联系团队管理员升级到付费方案。"),
                 }
             }
             _ => match (

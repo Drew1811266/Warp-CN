@@ -36,7 +36,7 @@ pub(super) fn render_todos(
 
     // Add collapsible header.
     let id = id.clone();
-    let mut header_config = HeaderConfig::new("Tasks", app)
+    let mut header_config = HeaderConfig::new("任务", app)
         .with_interaction_mode(InteractionMode::ManuallyExpandable(
             ExpandedConfig::new(state.is_expanded, state.header_toggle_mouse_state.clone())
                 .with_toggle_callback(move |ctx| {
@@ -60,7 +60,7 @@ pub(super) fn render_todos(
     let is_list_outdated = has_cancelled_todo
         || todos.len() != conversation.active_todo_list().map_or(0, |list| list.len());
     if is_list_outdated {
-        header_config = header_config.with_badge("Outdated".to_string());
+        header_config = header_config.with_badge("已过期".to_string());
     }
 
     let header_element = header_config.render(app);
@@ -187,14 +187,14 @@ pub(super) fn render_completed_todo_items(
         if i == 0 {
             if let Some((index, list_len)) = index_and_len {
                 completed_text += format!(
-                    "Completed {} ({}/{})",
+                    "已完成 {}（{}/{}）",
                     completed_item.title,
                     index + 1,
                     list_len
                 )
                 .as_str()
             } else {
-                completed_text += format!("Completed {}", completed_item.title).as_str()
+                completed_text += format!("已完成 {}", completed_item.title).as_str()
             }
         } else if let Some((index, list_len)) = index_and_len {
             completed_text +=

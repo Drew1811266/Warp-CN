@@ -418,16 +418,16 @@ impl BuyCreditsBanner {
 
         // Banner text with title and description based on admin status
         let banner_description = if has_admin_permissions {
-            "Your monthly spend limit has been reached. Increase it to continue."
+            "你的每月支出上限已达到。提高上限后才能继续。"
         } else {
-            "Contact a team admin to increase monthly limit."
+            "请联系团队管理员提高每月上限。"
         };
 
         let banner_text = Flex::column()
             .with_children([
                 appearance
                     .ui_builder()
-                    .paragraph("Monthly limit reached")
+                    .paragraph("已达到每月上限")
                     .with_style(UiComponentStyles {
                         font_size: Some(14.),
                         ..Default::default()
@@ -478,7 +478,7 @@ impl BuyCreditsBanner {
                     }),
                     ..Default::default()
                 })
-                .with_text_label("Manage billing".to_string())
+                .with_text_label("管理账单".to_string())
                 .build()
                 .on_click(|ctx, _, _| {
                     ctx.dispatch_typed_action(Action::ManageBilling);
@@ -563,7 +563,7 @@ impl BuyCreditsBanner {
         let make_banner_text = || {
             let mut banner_text_children = vec![appearance
                 .ui_builder()
-                .paragraph("Out of credits")
+                .paragraph("点数已用完")
                 .with_style(UiComponentStyles {
                     font_size: Some(14.),
                     ..Default::default()
@@ -578,8 +578,8 @@ impl BuyCreditsBanner {
                     FormattedTextFragment::plain_text(
                         "Purchasing these credits would take you over your monthly spend limit. ",
                     ),
-                    FormattedTextFragment::hyperlink_action("Increase it", Action::ManageBilling),
-                    FormattedTextFragment::plain_text(" to continue."),
+                    FormattedTextFragment::hyperlink_action("提高上限", Action::ManageBilling),
+                    FormattedTextFragment::plain_text("以继续。"),
                 ];
 
                 let formatted_warning = FormattedTextElement::new(
@@ -607,9 +607,9 @@ impl BuyCreditsBanner {
             } else {
                 // Default message when not at limit
                 let banner_description = if has_admin_permissions {
-                    "Add more credits to your account to continue using Oz agents."
+                    "向你的账号添加更多点数，以继续使用 Oz Agent。"
                 } else {
-                    "Contact a team admin to purchase more credits to continue."
+                    "请联系团队管理员购买更多点数以继续。"
                 };
 
                 banner_text_children.push(
@@ -648,9 +648,9 @@ impl BuyCreditsBanner {
                 || would_purchase_exceed_limit;
 
             let button_text = if self.purchase_addon_credits_loading {
-                "Buying…".to_string()
+                "正在购买…".to_string()
             } else {
-                "Buy".to_string()
+                "购买".to_string()
             };
 
             let button_font_color = buy_button_disabled.then_some(

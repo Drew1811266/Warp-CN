@@ -48,8 +48,7 @@ impl SyncDataSource for ProfileSelectorDataSource {
             results.push(QueryResult::from(
                 ProfileSearchItem::new_manage_profiles_item(),
             ));
-        } else if let Some(match_result) =
-            match_indices_case_insensitive("manage profiles", &query_text)
+        } else if let Some(match_result) = match_indices_case_insensitive("管理配置档", &query_text)
         {
             let score = match_result.score;
             results.push(QueryResult::from(

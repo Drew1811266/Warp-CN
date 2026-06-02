@@ -28,15 +28,15 @@ const CODEBASE_INDEX_SYNC_TIMEOUT: Duration = Duration::from_secs(60);
 
 #[derive(Debug, thiserror::Error)]
 pub enum PrepareEnvironmentError {
-    #[error("Invalid runtime state - please file a bug report.")]
+    #[error("运行时状态无效，请提交 bug 报告。")]
     InvalidRuntimeState,
-    #[error("Failed to clone {repo_name}")]
+    #[error("克隆 {repo_name} 失败")]
     CloneRepo { repo_name: String },
-    #[error("Failed to run setup command: {command}")]
+    #[error("运行设置命令失败：{command}")]
     SetupCommand { command: String },
-    #[error("Failed to change directory into {repo_name}")]
+    #[error("切换到 {repo_name} 目录失败")]
     ChangeDirectory { repo_name: String },
-    #[error("Terminal driver error while preparing environment: {source}")]
+    #[error("准备环境时终端驱动出错：{source}")]
     TerminalDriver { source: AgentDriverError },
 }
 
@@ -170,8 +170,8 @@ async fn prepare_environment_impl(
                 for command in setup_commands {
                     let command_for_error = command.clone();
                     safe_info!(
-                        safe: ("Running setup command"),
-                        full: ("Running setup command: {command}")
+                        safe: ("正在运行设置命令"),
+                        full: ("正在运行设置命令：{command}")
                     );
 
                     let exit_code = execute_command(command, spawner).await?;
@@ -183,14 +183,12 @@ async fn prepare_environment_impl(
 
                     let working_dir_string = working_dir.to_string_lossy().to_string();
                     if let Err(error) = cd_in_terminal(working_dir_string, spawner).await {
-                        log::warn!(
-                            "Failed to reset working directory after setup command: {error}"
-                        );
+                        log::warn!("设置命令完成后重置工作目录失败：{error}");
                     }
 
                     safe_info!(
-                        safe: ("Successfully completed setup command"),
-                        full: ("Successfully completed setup command: {command_for_error}")
+                        safe: ("设置命令已成功完成"),
+                        full: ("设置命令已成功完成：{command_for_error}")
                     );
                 }
 
@@ -216,8 +214,8 @@ async fn prepare_environment_impl(
     // This way, it doesn't have to locate the correct repo to work on.
     if let Some(repo_name) = single_repo_name(github_repos) {
         safe_info!(
-            safe: ("Changing directory into single repository"),
-            full: ("Changing directory into single repository: {repo_name}")
+            safe: ("正在切换到单一仓库目录"),
+            full: ("正在切换到单一仓库目录：{repo_name}")
         );
         let exit_code = cd_in_terminal(repo_name.clone(), spawner).await?;
         if exit_code != 0.into() {
@@ -251,9 +249,7 @@ fn record_codebase_indexing(
             .await
             .is_err()
         {
-            log::warn!(
-                "Timed out waiting for codebase index sync; continuing without guaranteed codebase context",
-            );
+            log::warn!("等待代码库索引同步超时；将继续执行，但无法保证代码库上下文完整。",);
         }
         let _ = spawner
             .spawn(|_, ctx| {
@@ -296,15 +292,15 @@ pub(super) async fn clone_repo(
 
     if dir_exists {
         safe_warn!(
-            safe: ("We already have a directory with the same repository name in the terminal working directory, skipping clone..."),
+            safe: ("终端工作目录中已存在同名仓库目录，跳过克隆..."),
             full: (
-            "We already have a directory with the name {} in the terminal working directory, skipping clone...",
+            "终端工作目录中已存在名为 {} 的目录，跳过克隆...",
             repo.repo)
         );
     } else {
         safe_info!(
-            safe: ("Cloning repository via terminal"),
-            full: ("Cloning repository via terminal: {repo_name}")
+            safe: ("正在通过终端克隆仓库"),
+            full: ("正在通过终端克隆仓库：{repo_name}")
         );
 
         let exit_code = execute_command(command, spawner).await?;
@@ -315,8 +311,8 @@ pub(super) async fn clone_repo(
         }
 
         safe_info!(
-            safe: ("Successfully cloned repository"),
-            full: ("Successfully cloned: {repo_name}")
+            safe: ("仓库已成功克隆"),
+            full: ("已成功克隆：{repo_name}")
         );
     }
 
@@ -346,9 +342,9 @@ pub(super) async fn ensure_repo_cloned(
     // stat paths that only exist inside the sandbox.
     if is_sandbox {
         safe_info!(
-            safe: ("Skipping local repo detection for sandbox-only working directory"),
+            safe: ("仅沙盒工作目录，跳过本地仓库检测"),
             full: (
-                "Skipping local repo detection and indexing for sandbox-only working directory {}",
+                "仅沙盒工作目录 {}，跳过本地仓库检测和索引",
                 working_dir.display()
             )
         );
@@ -370,8 +366,8 @@ pub(super) async fn ensure_repo_cloned(
         // before the agent's first query.
         if detect_future.await.is_none() {
             safe_warn!(
-                safe: ("Repository detection returned no path"),
-                full: ("Repository detection returned no path for {}", repo_dir.display())
+                safe: ("仓库检测未返回路径"),
+                full: ("仓库检测未返回 {} 的路径", repo_dir.display())
             );
         }
     }
@@ -386,50 +382,42 @@ async fn subscribe_to_codebase_index_events(
     spawner
         .spawn(move |_, ctx| {
             let repo_channels = Arc::clone(&repo_channels);
-            ctx.subscribe_to_model(
-                &CodebaseIndexManager::handle(ctx),
-                move |_, event, ctx| {
-                    if !matches!(
-                        event,
-                        CodebaseIndexManagerEvent::SyncStateUpdated { .. }
-                    ) {
-                        return;
+            ctx.subscribe_to_model(&CodebaseIndexManager::handle(ctx), move |_, event, ctx| {
+                if !matches!(event, CodebaseIndexManagerEvent::SyncStateUpdated { .. }) {
+                    return;
+                }
+
+                let manager = CodebaseIndexManager::as_ref(ctx);
+                let mut repos_to_notify = Vec::new();
+                let mut channels = repo_channels
+                    .lock()
+                    .expect("repo channel map lock should not be poisoned");
+
+                for repo in channels.keys() {
+                    let Some(status) = manager.get_codebase_index_status_for_path(repo, ctx) else {
+                        continue;
+                    };
+
+                    if status.has_synced_version() {
+                        repos_to_notify.push(repo.clone());
+                        continue;
                     }
 
-                    let manager = CodebaseIndexManager::as_ref(ctx);
-                    let mut repos_to_notify = Vec::new();
-                    let mut channels = repo_channels
-                        .lock()
-                        .expect("repo channel map lock should not be poisoned");
-
-                    for repo in channels.keys() {
-                        let Some(status) =
-                            manager.get_codebase_index_status_for_path(repo, ctx)
-                        else {
-                            continue;
-                        };
-
-                        if status.has_synced_version() {
-                            repos_to_notify.push(repo.clone());
-                            continue;
-                        }
-
-                        if !status.has_pending() && status.last_sync_successful() == Some(false) {
-                            safe_warn!(
-                                safe: ("Codebase index sync failed for a repo; unblocking environment setup"),
-                                full: ("Codebase index sync failed for {repo:?}; unblocking environment setup")
-                            );
-                            repos_to_notify.push(repo.clone());
-                        }
+                    if !status.has_pending() && status.last_sync_successful() == Some(false) {
+                        safe_warn!(
+                            safe: ("某个仓库的代码库索引同步失败；继续环境设置。"),
+                            full: ("{repo:?} 的代码库索引同步失败；继续环境设置。")
+                        );
+                        repos_to_notify.push(repo.clone());
                     }
+                }
 
-                    for repo in repos_to_notify {
-                        if let Some(tx) = channels.remove(&repo) {
-                            let _ = tx.send(());
-                        }
+                for repo in repos_to_notify {
+                    if let Some(tx) = channels.remove(&repo) {
+                        let _ = tx.send(());
                     }
-                },
-            );
+                }
+            });
         })
         .await
         .map_err(|_| PrepareEnvironmentError::InvalidRuntimeState)
@@ -444,8 +432,8 @@ async fn index_repo_codebase(
     let repo_path = working_dir.join(repo_name);
 
     safe_info!(
-        safe: ("Trying to index repository for codebase context"),
-        full: ("Trying to index {:?} for codebase context", repo_path)
+        safe: ("正在为代码库上下文索引仓库"),
+        full: ("正在为代码库上下文索引 {:?}", repo_path)
     );
 
     let repo_path_for_spawn = repo_path.clone();
@@ -461,15 +449,15 @@ async fn index_repo_codebase(
             match status {
                 Some(status) if status.has_synced_version() => {
                     safe_info!(
-                        safe: ("Not waiting on codebase index for repository; we have one already"),
-                        full: ("Not waiting on codebase index for {:?}, we have one already", repo_path_for_spawn)
+                        safe: ("不再等待仓库的代码库索引；已有可用索引。"),
+                        full: ("不再等待 {:?} 的代码库索引；已有可用索引。", repo_path_for_spawn)
                     );
                     None
                 }
                 _ => {
                     safe_info!(
-                        safe: ("Waiting on codebase index for repository"),
-                        full: ("Waiting on codebase index for {:?}", repo_path_for_spawn)
+                        safe: ("正在等待仓库的代码库索引"),
+                        full: ("正在等待 {:?} 的代码库索引", repo_path_for_spawn)
                     );
                     let (tx, rx) = oneshot::channel::<()>();
                     repo_channels

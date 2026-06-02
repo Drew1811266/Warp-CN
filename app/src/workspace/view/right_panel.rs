@@ -93,12 +93,12 @@ enum ReviewTerminalUnavailableReason {
 impl ReviewTerminalUnavailableReason {
     fn label(&self) -> &'static str {
         match self {
-            Self::NoSelectedRepo => "no repo is selected for code review",
-            Self::SessionPathUnavailable => "session cwd is unavailable or not local",
-            Self::SessionOutsideSelectedRepo => "session cwd is not inside selected repo",
-            Self::AIDisabled => "AI is disabled for Warp review destinations",
-            Self::TerminalExecuting => "terminal is currently executing a command",
-            Self::InputBoxNotVisible => "terminal input box is not visible",
+            Self::NoSelectedRepo => "未选择用于代码审查的仓库",
+            Self::SessionPathUnavailable => "会话 cwd 不可用或不是本地路径",
+            Self::SessionOutsideSelectedRepo => "会话 cwd 不在所选仓库内",
+            Self::AIDisabled => "Warp 审查目标已禁用 AI",
+            Self::TerminalExecuting => "终端当前正在执行命令",
+            Self::InputBoxNotVisible => "终端输入框不可见",
         }
     }
 }
@@ -299,7 +299,7 @@ impl CodeReviewState {
                 .map(|repo_path| {
                     let display_name = self
                         .get_repo_display_name(repo_path, ctx)
-                        .unwrap_or_else(|| "Unknown".to_string());
+                        .unwrap_or_else(|| "未知".to_string());
                     DropdownItem::new(
                         display_name,
                         RightPanelAction::SelectRepo {

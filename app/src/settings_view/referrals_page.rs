@@ -36,30 +36,30 @@ use crate::{safe_info, send_telemetry_from_ctx};
 
 const HEADER_FONT_SIZE: f32 = 18.;
 const HEADER_MARGIN_BOTTOM: f32 = 32.;
-const HEADER_TEXT: &str = "Invite a friend to Warp";
-const ANONYMOUS_USER_HEADER_TEXT: &str = "Sign up to participate in Warp's referral program";
+const HEADER_TEXT: &str = "邀请朋友使用 Warp";
+const ANONYMOUS_USER_HEADER_TEXT: &str = "注册参加 Warp 推荐计划";
 
 const INVITE_FIELD_LABEL_BOTTOM_MARGIN: f32 = 8.;
 
 const LINK_BOTTOM_MARGIN: f32 = 12.;
 const LINK_TEXT_PADDING: f32 = 10.;
 const LINK_CORNER_RADIUS: Radius = Radius::Pixels(4.);
-const LINK_ERROR_TEXT: &str = "Failed to load referral code.";
+const LINK_ERROR_TEXT: &str = "加载推荐码失败。";
 
 const BUTTON_WIDTH: f32 = 98.;
 const BUTTON_HEIGHT: f32 = 36.;
 const BUTTON_LEFT_MARGIN: f32 = 8.;
 const BUTTON_FONT_SIZE: f32 = 12.;
-const LINK_BUTTON_TEXT: &str = "Copy link";
-const EMAIL_BUTTON_TEXT: &str = "Send";
-const EMAIL_BUTTON_SENDING_TEXT: &str = "Sending...";
-const LOADING_TEXT: &str = "Loading...";
+const LINK_BUTTON_TEXT: &str = "复制链接";
+const EMAIL_BUTTON_TEXT: &str = "发送";
+const EMAIL_BUTTON_SENDING_TEXT: &str = "正在发送...";
+const LOADING_TEXT: &str = "正在加载...";
 
-const LINK_COPIED_TOAST: &str = "Link copied.";
-const EMAIL_SUCCESS_TOAST: &str = "Successfully sent emails.";
-const EMAIL_FAILURE_TOAST: &str = "Failed to send emails. Please try again.";
+const LINK_COPIED_TOAST: &str = "链接已复制。";
+const EMAIL_SUCCESS_TOAST: &str = "电子邮件发送成功。";
+const EMAIL_FAILURE_TOAST: &str = "电子邮件发送失败。请重试。";
 
-const REWARD_INTRO: &str = "Get exclusive Warp goodies when you refer someone*";
+const REWARD_INTRO: &str = "推荐他人即可获得专属 Warp 周边*";
 const REWARD_INTRO_FONT_SIZE: f32 = 14.;
 const REWARD_SECTION_VERTICAL_SPACING: f32 = 24.;
 
@@ -81,8 +81,8 @@ const METER_TOP_MARGIN: f32 = 16.;
 const METER_RIGHT_MARGIN: f32 = 12.;
 
 const CLAIMED_REFERRALS_LABEL_HORIZONTAL_SPACING: f32 = 4.;
-const CLAIMED_REFERRALS_COUNT_LABEL_SINGULAR: &str = "Current referral";
-const CLAIMED_REFERRALS_COUNT_LABEL_PLURAL: &str = "Current referrals";
+const CLAIMED_REFERRALS_COUNT_LABEL_SINGULAR: &str = "当前推荐";
+const CLAIMED_REFERRALS_COUNT_LABEL_PLURAL: &str = "当前推荐";
 const CLAIMED_REFERRALS_LABEL_WIDTH: f32 = 52.;
 const CLAIMED_REFERRALS_LABEL_FONT_SIZE: f32 = 14.;
 const CLAIMED_REFERRALS_COUNT_FONT_SIZE: f32 = 48.;
@@ -90,7 +90,7 @@ const CLAIMED_REFERRAL_COUNT_LEFT_MARGIN: f32 = 40.;
 
 const CLAIMED_REFERRAL_CLIP: usize = 999;
 
-const TERMS_LINK_TEXT: &str = "Certain restrictions apply.";
+const TERMS_LINK_TEXT: &str = "受部分限制约束。";
 const TERMS_URL: &str =
     "https://docs.warp.dev/support-and-community/community/refer-a-friend#referral-program-terms-and-conditions";
 const TERMS_CONTACT_TEXT: &str =
@@ -149,21 +149,21 @@ lazy_static! {
             icon_path: "bundled/svg/referral-theme.svg",
             icon_width: 64.,
             icon_height: 64.,
-            label: "Exclusive theme".to_owned(),
+            label: "专属主题".to_owned(),
         },
         Reward {
             required_referral_count: 5,
             icon_path: "bundled/svg/referral-keycaps.svg",
             icon_width: 56.,
             icon_height: 56.,
-            label: "Keycaps + stickers".to_owned(),
+            label: "键帽 + 贴纸".to_owned(),
         },
         Reward {
             required_referral_count: 10,
             icon_path: "bundled/svg/referral-tshirt.svg",
             icon_width: 64.,
             icon_height: 64.,
-            label: "T-shirt".to_owned(),
+            label: "T 恤".to_owned(),
         },
         Reward {
             required_referral_count: 20,
@@ -177,28 +177,28 @@ lazy_static! {
             icon_path: "bundled/svg/referral-hat.svg",
             icon_width: 64.,
             icon_height: 64.,
-            label: "Baseball cap".to_owned(),
+            label: "棒球帽".to_owned(),
         },
         Reward {
             required_referral_count: 50,
             icon_path: "bundled/svg/referral-hoodie.svg",
             icon_width: 64.,
             icon_height: 64.,
-            label: "Hoodie".to_owned(),
+            label: "连帽衫".to_owned(),
         },
         Reward {
             required_referral_count: 75,
             icon_path: "bundled/svg/referral-hydroflask.svg",
             icon_width: 48.,
             icon_height: 48.,
-            label: "Premium Hydro Flask".to_owned(),
+            label: "高级 Hydro Flask".to_owned(),
         },
         Reward {
             required_referral_count: 100,
             icon_path: "bundled/svg/referral-backpack.svg",
             icon_width: 50.,
             icon_height: 50.,
-            label: "Backpack".to_owned(),
+            label: "背包".to_owned(),
         },
     ];
 }
@@ -330,8 +330,8 @@ impl ReferralsPageView {
                     ctx.notify();
                 });
                 safe_info!(
-                    safe: ("Successfully sent {} invites", successful.len()),
-                    full: ("Successfully sent invites to: {:?}", successful)
+                    safe: ("已成功发送 {} 个邀请", successful.len()),
+                    full: ("已成功向以下对象发送邀请：{:?}", successful)
                 );
                 ctx.emit(ReferralsPageEvent::ShowToast {
                     message: EMAIL_SUCCESS_TOAST.to_owned(),
@@ -446,9 +446,9 @@ impl From<ViewHandle<ReferralsPageView>> for SettingsPageViewHandle {
 }
 #[derive(Error, Debug)]
 enum EmailValidationError {
-    #[error("Email is empty")]
+    #[error("电子邮件为空")]
     Empty,
-    #[error("Email is invalid: {0}")]
+    #[error("电子邮件无效：{0}")]
     Invalid(String),
 }
 
@@ -458,7 +458,7 @@ impl EmailValidationError {
         match self {
             EmailValidationError::Empty => "Please enter an email.".to_owned(),
             EmailValidationError::Invalid(invalid_email) => {
-                format!("Please ensure the following email is valid: {invalid_email}")
+                format!("请确保以下电子邮件有效：{invalid_email}")
             }
         }
     }
@@ -620,12 +620,12 @@ impl ReferralsWidget {
     ) -> Box<dyn Element> {
         Flex::column()
             .with_child(
-                Container::new(self.render_label("Link", appearance))
+                Container::new(self.render_label("链接", appearance))
                     .with_padding_top(PAGE_PADDING)
                     .finish(),
             )
             .with_child(self.render_link_row(view, appearance))
-            .with_child(self.render_label("Email", appearance))
+            .with_child(self.render_label("电子邮件", appearance))
             .with_child(self.render_email_row(view, appearance))
             .finish()
     }
@@ -651,7 +651,7 @@ impl ReferralsWidget {
                 self.sign_up_button_mouse_state.clone(),
             )
             .with_style(button_styles)
-            .with_text_label("Sign up".to_owned())
+            .with_text_label("注册".to_owned())
             .build()
             .on_click(move |ctx, _, _| {
                 ctx.dispatch_typed_action(ReferralsPageAction::SignupAnonymousUser);
@@ -1112,7 +1112,7 @@ impl SettingsWidget for ReferralsWidget {
     type View = ReferralsPageView;
 
     fn search_terms(&self) -> &str {
-        "referrals invites"
+        "推荐 邀请"
     }
 
     fn render(

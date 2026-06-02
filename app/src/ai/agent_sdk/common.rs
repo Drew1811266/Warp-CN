@@ -50,7 +50,7 @@ pub fn validate_agent_mode_base_model_id(
             .collect::<Vec<_>>()
             .join(", ");
         Err(anyhow::anyhow!(
-            "Unknown model id '{model_id}'. Try one of: {suggestions}"
+            "未知模型 ID {model_id}。可尝试：{suggestions}"
         ))
     }
 }
@@ -68,7 +68,7 @@ pub(super) fn set_ambient_task_context_from_run_id(
     ctx: &AppContext,
     run_id: &str,
 ) -> anyhow::Result<AmbientAgentTaskId> {
-    let task_id = parse_ambient_task_id(run_id, "Invalid run ID")?;
+    let task_id = parse_ambient_task_id(run_id, "无效的运行 ID")?;
     ServerApiProvider::handle(ctx)
         .as_ref(ctx)
         .get()
@@ -165,7 +165,7 @@ pub(super) async fn fetch_and_validate_conversation_harness(
         .next()
         .ok_or_else(|| {
             AgentDriverError::ConversationLoadFailed(format!(
-                "conversation {conversation_id} not found or not accessible"
+                "会话 {conversation_id} 不存在或无法访问"
             ))
         })?;
 
@@ -184,8 +184,8 @@ pub(super) async fn fetch_and_validate_conversation_harness(
 pub fn format_owner(owner: &Owner) -> &'static str {
     // TODO: For potentially-shared objects, consider looking up the particular user/team name.
     match owner {
-        Owner::User { .. } => "Personal",
-        Owner::Team { .. } => "Team",
+        Owner::User { .. } => "个人",
+        Owner::Team { .. } => "团队",
     }
 }
 
@@ -193,11 +193,11 @@ pub fn format_owner(owner: &Owner) -> &'static str {
 #[derive(Debug, thiserror::Error)]
 pub enum ResolveConfigurationError {
     /// The user canceled the operation, and we should exit.
-    #[error("Operation canceled")]
+    #[error("操作已取消")]
     Canceled,
-    #[error("{id} is not a valid {kind} identifier")]
+    #[error("{id} 不是有效的 {kind} 标识符")]
     InvalidId { id: String, kind: &'static str },
-    #[error("{kind} {id} not found")]
+    #[error("未找到 {kind} {id}")]
     ObjectNotFound { id: String, kind: &'static str },
     #[error(transparent)]
     Other(anyhow::Error),
@@ -261,7 +261,7 @@ Without an environment, the agent will not be able to access private repositorie
                 )));
             }
 
-            let prompt = "Select an environment to run the agent in (or 'No environment'):";
+            let prompt = "选择运行 Agent 的环境（或选择无环境）：";
 
             let choice = Select::new(prompt, options).prompt();
 
@@ -271,7 +271,7 @@ Without an environment, the agent will not be able to access private repositorie
                     Err(ResolveConfigurationError::Canceled)
                 }
                 Err(err) => Err(ResolveConfigurationError::Other(anyhow::anyhow!(
-                    "Error selecting environment: {err}"
+                    "选择环境出错：{err}"
                 ))),
             }
         }
@@ -319,10 +319,9 @@ Without an environment, the agent will not be able to access private repositorie
 impl fmt::Display for EnvironmentChoice {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            EnvironmentChoice::None => write!(
-                f,
-                "No environment (agent will not be able to access private repositories or create pull requests)",
-            ),
+            EnvironmentChoice::None => {
+                write!(f, "无环境（Agent 将无法访问私有仓库或创建拉取请求）",)
+            }
             EnvironmentChoice::Environment { id, name } => write!(f, "{name} ({id})"),
         }
     }
@@ -335,15 +334,14 @@ mod tests {
     #[test]
     fn parse_ambient_task_id_accepts_valid_ids() {
         let task_id =
-            parse_ambient_task_id("550e8400-e29b-41d4-a716-446655440000", "Invalid run ID")
-                .unwrap();
+            parse_ambient_task_id("550e8400-e29b-41d4-a716-446655440000", "无效的运行 ID").unwrap();
 
         assert_eq!(task_id.to_string(), "550e8400-e29b-41d4-a716-446655440000");
     }
 
     #[test]
     fn parse_ambient_task_id_preserves_error_prefix() {
-        let err = parse_ambient_task_id("not-a-run-id", "Invalid run ID").unwrap_err();
+        let err = parse_ambient_task_id("not-a-run-id", "无效的运行 ID").unwrap_err();
 
         assert!(err.to_string().contains("Invalid run ID 'not-a-run-id'"));
     }

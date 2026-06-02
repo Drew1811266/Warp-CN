@@ -905,7 +905,7 @@ impl AIDocumentView {
             .iter()
             .map(|entry| {
                 let label = if let Some(from_version) = entry.restored_from {
-                    format!("{} (restored from {})", entry.version, from_version)
+                    format!("{}（从 {} 恢复）", entry.version, from_version)
                 } else {
                     entry.version.to_string()
                 };

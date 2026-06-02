@@ -24,10 +24,10 @@ const PROVIDER_BUTTON_ICON_TEXT_GAP: f32 = 8.;
 /// Text to use as a label throughout the app for user interactions that will attach selected
 /// block(s) or text selections to a new AI query.
 pub static ATTACH_AS_AGENT_MODE_CONTEXT_TEXT: LazyLock<&'static str> =
-    LazyLock::new(|| "Attach as agent context");
+    LazyLock::new(|| "附加为 Agent 上下文");
 
 /// Label we use for the the command palette action to create a new local Oz agent pane.
-pub static NEW_AGENT_PANE_LABEL: LazyLock<&'static str> = LazyLock::new(|| "New Agent Pane");
+pub static NEW_AGENT_PANE_LABEL: LazyLock<&'static str> = LazyLock::new(|| "新建 Agent 面板");
 
 /// Claude/Anthropic brand color (official brand orange #D97757).
 /// Reference: https://github.com/anthropics/skills/blob/main/skills/brand-guidelines/SKILL.md
@@ -78,7 +78,7 @@ pub fn render_ai_follow_up_icon(
             let tooltip_background = appearance.theme().tooltip_background();
             let tool_tip = appearance
                 .ui_builder()
-                .tool_tip("Follow up with existing conversation".to_owned())
+                .tool_tip("在现有对话中跟进".to_owned())
                 .with_style(UiComponentStyles {
                     font_size: Some(12.),
                     background: Some(warpui::elements::Fill::Solid(tooltip_background)),
@@ -147,12 +147,12 @@ pub fn format_credits(credits: f32) -> String {
     if credits.fract() < 0.1 {
         let whole = credits.trunc() as i32;
         if whole == 1 {
-            format!("{whole} credit")
+            format!("{whole} 个点数")
         } else {
-            format!("{whole} credits")
+            format!("{whole} 个点数")
         }
     } else {
-        format!("{credits:.1} credits")
+        format!("{credits:.1} 个点数")
     }
 }
 

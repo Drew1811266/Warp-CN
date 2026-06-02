@@ -62,11 +62,11 @@ pub enum GetRelevantFilesRequestTarget {
 }
 #[derive(Debug, thiserror::Error)]
 pub enum GetRelevantFilesError {
-    #[error("Repo outline is still being computed.")]
+    #[error("仓库大纲仍在计算中。")]
     Pending,
-    #[error("Failed to create outline.")]
+    #[error("创建大纲失败。")]
     CreateFailed,
-    #[error("Failed to create outline.")]
+    #[error("创建大纲失败。")]
     Missing,
 }
 
@@ -259,9 +259,7 @@ impl GetRelevantFilesController {
                         return Ok(());
                     }
                     Err(e) => {
-                        log::info!(
-                            "Failed to initiate full source code search: {e}, falling back to outline-based search"
-                        );
+                        log::info!("无法启动完整源代码搜索：{e}，正在回退到基于大纲的搜索");
                     }
                 }
             }

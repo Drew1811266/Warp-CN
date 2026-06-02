@@ -280,7 +280,7 @@ impl SearchItem for InlineHistoryItem {
         match &self.item_type {
             HistoryItemType::Conversation { title, .. } => format!("Conversation: {title}"),
             HistoryItemType::Command { command, .. } => format!("Command: {command}"),
-            HistoryItemType::AIPrompt { query_text } => format!("AI prompt: {query_text}"),
+            HistoryItemType::AIPrompt { query_text } => format!("AI 提示：{query_text}"),
         }
     }
 }

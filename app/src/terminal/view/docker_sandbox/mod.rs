@@ -222,7 +222,7 @@ impl TerminalView {
                     .await
                     .is_err()
                 {
-                    return Err("Timed out waiting for Warp Drive to sync for docker sandbox");
+                    return Err("等待 Warp Drive 同步 Docker 沙盒超时");
                 }
 
                 // Wait for the terminal session to bootstrap.
@@ -233,7 +233,7 @@ impl TerminalView {
 
                 if let Err(e) = bootstrap_future.await {
                     log::error!("Docker sandbox bootstrap failed: {e}");
-                    return Err("terminal bootstrap failed");
+                    return Err("终端引导失败");
                 }
 
                 // Look up the environment by hardcoded ID.
@@ -248,7 +248,7 @@ impl TerminalView {
                     })
                     .await
                     .map_err(|_| "view dropped")?
-                    .ok_or("environment not found")?;
+                    .ok_or("未找到环境")?;
 
                 // Prepare the environment (clone repos, run setup commands, index codebases).
                 let prepare_future = spawner
@@ -267,7 +267,7 @@ impl TerminalView {
 
                 prepare_future.await.map_err(|e| {
                     log::error!("Docker sandbox environment preparation failed: {e}");
-                    "environment preparation failed"
+                    "环境准备失败"
                 })?;
 
                 // Keep the TerminalDriver model alive for the entire duration of

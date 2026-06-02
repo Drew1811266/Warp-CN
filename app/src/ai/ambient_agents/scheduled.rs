@@ -213,9 +213,8 @@ impl ScheduledAgentManager {
                                 let _ = tx.send(Ok(()));
                             }
                             OperationSuccessType::Failure => {
-                                let _ = tx.send(Err(anyhow::anyhow!(
-                                    "Failed to delete scheduled ambient agent"
-                                )));
+                                let _ =
+                                    tx.send(Err(anyhow::anyhow!("删除定时 Ambient Agent 失败")));
                             }
                             OperationSuccessType::Denied(ref message) => {
                                 let _ =
@@ -226,9 +225,7 @@ impl ScheduledAgentManager {
                                     tx.send(Err(anyhow::anyhow!("Deletion rejected by server")));
                             }
                             OperationSuccessType::FeatureNotAvailable => {
-                                let _ = tx.send(Err(anyhow::anyhow!(
-                                    "Scheduled ambient agents not available"
-                                )));
+                                let _ = tx.send(Err(anyhow::anyhow!("定时 Ambient Agent 不可用")));
                             }
                         }
                     }
@@ -300,7 +297,7 @@ impl ScheduledAgentManager {
     ) -> impl Future<Output = anyhow::Result<()>> + Send + 'static {
         self.modify_schedule(
             schedule_id,
-            "Failed to pause schedule",
+            "暂停计划失败",
             |config| config.enabled = false,
             ctx,
         )
@@ -314,7 +311,7 @@ impl ScheduledAgentManager {
     ) -> impl Future<Output = anyhow::Result<()>> + Send + 'static {
         self.modify_schedule(
             schedule_id,
-            "Failed to unpause schedule",
+            "恢复计划失败",
             |config| config.enabled = true,
             ctx,
         )
@@ -329,7 +326,7 @@ impl ScheduledAgentManager {
     ) -> impl Future<Output = anyhow::Result<()>> + Send + 'static {
         self.modify_schedule(
             schedule_id,
-            "Failed to update schedule",
+            "更新计划失败",
             move |config| {
                 if let Some(new_name) = params.name {
                     config.name = new_name;
@@ -414,9 +411,7 @@ impl ScheduledAgentManager {
                 if schedule.metadata().has_pending_online_only_change()
                     || schedule.metadata().pending_changes_statuses.pending_delete
                 {
-                    let _ = tx.send(Err(anyhow::anyhow!(
-                        "Cannot delete schedule with pending changes"
-                    )));
+                    let _ = tx.send(Err(anyhow::anyhow!("有待处理更改，无法删除计划")));
                 } else {
                     self.pending_deletes.insert(schedule_id, tx);
                     UpdateManager::handle(ctx).update(ctx, |update_manager, ctx| {

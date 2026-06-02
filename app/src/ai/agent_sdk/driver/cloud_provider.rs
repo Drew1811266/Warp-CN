@@ -15,7 +15,7 @@ mod gcp;
 pub(crate) type Result<T> = std::result::Result<T, CloudProviderSetupError>;
 
 #[derive(Debug, thiserror::Error)]
-#[error("{provider_name} setup failed")]
+#[error("{provider_name} 设置失败")]
 pub(crate) struct CloudProviderSetupError {
     provider_name: &'static str,
     #[source]

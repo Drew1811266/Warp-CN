@@ -256,13 +256,13 @@ pub struct EnvironmentFormCopy {
 impl EnvironmentFormCopy {
     pub fn orchestration_modal() -> Self {
         Self {
-            name_placeholder: "e.g., dev-env",
+            name_placeholder: "例如，dev-env",
             repos_placeholder_authed: "浏览 GitHub 仓库...",
             repos_placeholder_unauthed: REPOS_PLACEHOLDER_UNAUTHED,
             docker_image_label: "Docker 镜像",
-            docker_image_placeholder: "e.g., node:20-alpine",
+            docker_image_placeholder: "例如，node:20-alpine",
             description_placeholder: DESCRIPTION_PLACEHOLDER,
-            setup_commands_placeholder: "e.g., node start",
+            setup_commands_placeholder: "例如，node start",
             setup_commands_helper: "按 Enter 或点击提交按钮以添加每条命令。",
             show_description_character_count: false,
         }
@@ -276,9 +276,9 @@ impl Default for EnvironmentFormCopy {
             repos_placeholder_authed: REPOS_PLACEHOLDER_AUTHED,
             repos_placeholder_unauthed: REPOS_PLACEHOLDER_UNAUTHED,
             docker_image_label: "Docker 镜像引用",
-            docker_image_placeholder: "e.g. python:3.11, node:20-alpine",
+            docker_image_placeholder: "例如，python:3.11、node:20-alpine",
             description_placeholder: DESCRIPTION_PLACEHOLDER,
-            setup_commands_placeholder: "e.g. cd my-repo && pip install -r requirements.txt",
+            setup_commands_placeholder: "例如，cd my-repo && pip install -r requirements.txt",
             setup_commands_helper: "设置命令会独立运行。每条命令都从工作区根目录（/workspace）运行。如果某条命令依赖上一条，请用 && 将它们合并。",
             show_description_character_count: true,
         }
@@ -361,7 +361,7 @@ pub struct UpdateEnvironmentForm {
 }
 
 const DESCRIPTION_MAX_CHARS: usize = 240;
-const DESCRIPTION_PLACEHOLDER: &str = "e.g., this environment is for all front end focused agents";
+const DESCRIPTION_PLACEHOLDER: &str = "例如，此环境适用于所有专注前端的 Agent";
 const REPOS_PLACEHOLDER_AUTHED: &str = "输入仓库（owner/repo 格式）";
 const REPOS_PLACEHOLDER_UNAUTHED: &str = "粘贴仓库 URL";
 const FORM_FIELD_SPACING: f32 = 20.;
@@ -1239,7 +1239,7 @@ impl UpdateEnvironmentForm {
                 .map(|fetched_at| fetched_at.elapsed())
             {
                 debug!(
-                    "Refreshing GitHub auth URL after {:.0}s (threshold {:.0}s)",
+                    "{:.0}s 后刷新 GitHub auth URL（阈值 {:.0}s）",
                     elapsed.as_secs_f64(),
                     AUTH_URL_REFRESH_THRESHOLD.as_secs_f64()
                 );
@@ -1563,7 +1563,7 @@ impl UpdateEnvironmentForm {
                             };
                         }
                         warp_graphql::queries::suggest_cloud_environment_image::SuggestCloudEnvironmentImageResult::Unknown => {
-                            let error_message = "Unknown response from suggestCloudEnvironmentImage".to_string();
+                            let error_message = "suggestCloudEnvironmentImage 返回未知响应".to_string();
                             send_telemetry_from_ctx!(
                                 CloudAgentTelemetryEvent::ImageSuggestionFailed {
                                     error: error_message.clone(),
@@ -1577,7 +1577,7 @@ impl UpdateEnvironmentForm {
                         }
                     },
                     Err(e) => {
-                        let error_message = format!("Failed to suggest a Docker image: {}", e);
+                        let error_message = format!("建议 Docker 镜像失败：{}", e);
                         send_telemetry_from_ctx!(
                             CloudAgentTelemetryEvent::ImageSuggestionFailed {
                                 error: error_message.clone(),
@@ -2958,7 +2958,7 @@ impl UpdateEnvironmentForm {
                 let ui_builder = appearance.ui_builder().clone();
                 move || {
                     ui_builder
-                        .tool_tip(format!("Open image at {docker_hub_url}"))
+                        .tool_tip(format!("在 {docker_hub_url} 打开镜像"))
                         .build()
                         .finish()
                 }

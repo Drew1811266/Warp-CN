@@ -19,12 +19,12 @@ use crate::terminal::TerminalModel;
 use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
 
-const AGENT_PROMPT_TO_INTERACT_MESSAGE: &str = "Prompt agent to interact with";
-const AGENT_WAITING_ON_INSTRUCTIONS_MESSAGE: &str = "Agent is waiting on instructions";
-const AGENT_WAITING_FOR_COMMAND_TO_EXIT_MESSAGE: &str = "Agent is waiting for command to exit";
-const AGENT_BLOCKED_MESSAGE: &str = "Agent needs your permission to continue";
-const AGENT_IN_CONTROL_MESSAGE: &str = "Agent is in control";
-const USER_IN_CONTROL_MESSAGE: &str = "User is in control";
+const AGENT_PROMPT_TO_INTERACT_MESSAGE: &str = "提示 Agent 交互";
+const AGENT_WAITING_ON_INSTRUCTIONS_MESSAGE: &str = "Agent 正在等待指令";
+const AGENT_WAITING_FOR_COMMAND_TO_EXIT_MESSAGE: &str = "Agent 正在等待命令退出";
+const AGENT_BLOCKED_MESSAGE: &str = "Agent 需要你的许可才能继续";
+const AGENT_IN_CONTROL_MESSAGE: &str = "Agent 正在控制";
+const USER_IN_CONTROL_MESSAGE: &str = "用户正在控制";
 
 /// A header rendered as rich content above the active block when Agent View is in inline mode.
 pub struct InlineAgentViewHeader {
@@ -125,7 +125,7 @@ impl View for InlineAgentViewHeader {
             let message = if let Some(command) = top_level_command.as_deref() {
                 format!("{AGENT_PROMPT_TO_INTERACT_MESSAGE} `{command}`")
             } else {
-                format!("{AGENT_PROMPT_TO_INTERACT_MESSAGE} the running command")
+                format!("{AGENT_PROMPT_TO_INTERACT_MESSAGE} 正在运行的命令")
             };
             return HeaderConfig::new(message, app)
                 .with_icon(icon)

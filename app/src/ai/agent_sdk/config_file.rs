@@ -59,12 +59,7 @@ pub fn load_config_file(path: &Path) -> anyhow::Result<LoadedAgentConfigSnapshot
             .with_context(|| format!("Invalid YAML in config file '{}'", path.display()))?,
         _ => parse_json(&contents)
             .or_else(|_| parse_yaml(&contents))
-            .with_context(|| {
-                format!(
-                    "Failed to parse config file '{}' as JSON or YAML",
-                    path.display()
-                )
-            })?,
+            .with_context(|| format!("无法将配置文件 '{}' 解析为 JSON 或 YAML", path.display()))?,
     };
 
     if let Some(mcp_servers) = &file.mcp_servers {
@@ -78,9 +73,7 @@ pub fn load_config_file(path: &Path) -> anyhow::Result<LoadedAgentConfigSnapshot
 /// WASM builds don't use CLI command execution / local file access.
 #[cfg(target_family = "wasm")]
 pub fn load_config_file(_path: &Path) -> anyhow::Result<LoadedAgentConfigSnapshotFile> {
-    Err(anyhow::anyhow!(
-        "Config files are not supported in WASM builds"
-    ))
+    Err(anyhow::anyhow!("WASM 构建不支持配置文件"))
 }
 
 fn parse_json(input: &str) -> anyhow::Result<AgentConfigSnapshotFile> {
@@ -93,7 +86,8 @@ fn parse_yaml(input: &str) -> anyhow::Result<AgentConfigSnapshotFile> {
 }
 
 fn supported_keys_context() -> String {
-    "Supported keys: name, environment_id, model_id, base_prompt, mcp_servers, host, computer_use_enabled".to_string()
+    "支持的键：name、environment_id、model_id、base_prompt、mcp_servers、host、computer_use_enabled"
+        .to_string()
 }
 
 /// Convert an unwrapped `mcp_servers` map into runtime MCP specs for AgentDriver.

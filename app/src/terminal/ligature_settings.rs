@@ -12,7 +12,7 @@ define_settings_group!(LigatureSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "appearance.text.ligature_rendering_enabled",
-        description: "Whether to render font ligatures in the terminal.",
+        description: "是否在终端中渲染字体连字。",
     },
 ]);
 

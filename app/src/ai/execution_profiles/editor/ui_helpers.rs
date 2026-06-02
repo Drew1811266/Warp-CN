@@ -62,8 +62,7 @@ fn nice_step(raw: f64) -> f64 {
 
 use crate::settings_view::{render_input_list, render_separator, InputListItem};
 
-pub const WORKSPACE_OVERRIDE_TOOLTIP_MESSAGE: &str =
-    "This option is enforced by your organization's settings and cannot be customized.";
+pub const WORKSPACE_OVERRIDE_TOOLTIP_MESSAGE: &str = "此选项由你的组织设置强制执行，无法自定义。";
 pub fn render_header_section(
     appearance: &Appearance,
     profile_name_editor: &ViewHandle<EditorView>,
@@ -87,7 +86,7 @@ pub fn render_header_section(
 
     if is_default_profile {
         column.add_child(render_info_section(
-            "Default profile name cannot be changed.",
+            "默认配置文件名称无法更改。",
             None,
             appearance,
         ));
@@ -99,7 +98,7 @@ pub fn render_header_section(
 }
 
 fn render_header_title(appearance: &Appearance) -> Box<dyn Element> {
-    Text::new_inline("Edit Profile", appearance.ui_font_family(), 16.)
+    Text::new_inline("编辑配置文件", appearance.ui_font_family(), 16.)
         .with_style(Properties::default().weight(Weight::Bold))
         .with_color(appearance.theme().active_ui_text_color().into())
         .finish()
@@ -107,7 +106,7 @@ fn render_header_title(appearance: &Appearance) -> Box<dyn Element> {
 
 fn render_header_name_label(appearance: &Appearance) -> Box<dyn Element> {
     Container::new(
-        Text::new("Name", appearance.ui_font_family(), 13.)
+        Text::new("名称", appearance.ui_font_family(), 13.)
             .with_color(appearance.theme().active_ui_text_color().into())
             .finish(),
     )
@@ -255,8 +254,8 @@ pub fn render_models_section(
         .with_child(render_section_label("MODELS", appearance))
         .with_child(render_filterable_dropdown_row(
             appearance,
-            "Base model",
-            "This model serves as the primary engine behind the agent. It powers most interactions and invokes other models for tasks like planning or code generation when necessary. Warp may automatically switch to alternate models based on model availability or for auxiliary tasks such as conversation summarization.",
+            "基础模型",
+            "此模型是 Agent 背后的主要引擎。它负责大多数交互，并在需要时调用其他模型完成规划或代码生成等任务。Warp 可能会根据模型可用性，或为对话摘要等辅助任务自动切换到备用模型。",
             &view.base_model_dropdown,
         ));
 
@@ -266,16 +265,16 @@ pub fn render_models_section(
 
     column = column.with_child(render_filterable_dropdown_row(
         appearance,
-        "Full terminal use model",
-        "The model used when the agent operates inside interactive terminal applications like database shells, debuggers, REPLs, or dev servers—reading live output and writing commands to the PTY.",
+        "完整终端使用模型",
+        "当 Agent 在数据库 shell、调试器、REPL 或开发服务器等交互式终端应用中操作时使用的模型，用于读取实时输出并向 PTY 写入命令。",
         &view.full_terminal_use_model_dropdown,
     ));
 
     if FeatureFlag::LocalComputerUse.is_enabled() {
         column.add_child(render_filterable_dropdown_row(
             appearance,
-            "Computer use model",
-            "The model used when the agent takes control of your computer to interact with graphical applications through mouse movements, clicks, and keyboard input.",
+            "电脑使用模型",
+            "当 Agent 接管你的电脑并通过鼠标移动、点击和键盘输入与图形应用交互时使用的模型。",
             &view.computer_use_model_dropdown,
         ));
     }
@@ -304,17 +303,13 @@ fn render_context_window_row(
     let min = cw.min;
     let max = cw.max;
 
-    let label = Text::new(
-        "Context window".to_string(),
-        appearance.ui_font_family(),
-        13.,
-    )
-    .with_color(appearance.theme().active_ui_text_color().into())
-    .finish();
+    let label = Text::new("上下文窗口".to_string(), appearance.ui_font_family(), 13.)
+        .with_color(appearance.theme().active_ui_text_color().into())
+        .finish();
     let min_label_text = min.separate_with_commas();
     let max_label_text = max.separate_with_commas();
     let desc = Text::new(
-        "The base model's working memory — how many tokens of your conversation, code, and documents it can consider at once. Larger windows enable longer conversations and more coherent responses over bigger codebases, at the cost of higher latency and compute usage.".to_string(),
+        "基础模型的工作记忆，即它一次可以考虑多少对话、代码和文档 token。更大的窗口可以支持更长的对话，并在更大的代码库上给出更连贯的响应，但会增加延迟和计算用量。".to_string(),
         appearance.ui_font_family(),
         11.,
     )
@@ -441,7 +436,7 @@ pub fn render_permissions_section(
         render_permission_row(
             appearance,
             Icon::Code2,
-            "Apply code diffs",
+            "应用代码 diff",
             &view.apply_code_diffs_dropdown,
             profile_data.apply_code_diffs.description(),
             !ai_settings.is_code_diffs_permissions_editable(app),
@@ -452,7 +447,7 @@ pub fn render_permissions_section(
         render_permission_row(
             appearance,
             Icon::Notebook,
-            "Read files",
+            "读取文件",
             &view.read_files_dropdown,
             profile_data.read_files.description(),
             !ai_settings.is_read_files_permissions_editable(app),
@@ -476,7 +471,7 @@ pub fn render_permissions_section(
     column.add_child(render_permission_row(
         appearance,
         Icon::Terminal,
-        "Execute commands",
+        "执行命令",
         &view.execute_commands_dropdown,
         profile_data.execute_commands.description(),
         !ai_settings.is_execute_commands_permissions_editable(app),
@@ -513,7 +508,7 @@ pub fn render_permissions_section(
     column.add_child(render_permission_row(
         appearance,
         Icon::Workflow,
-        "Interact with running commands",
+        "与正在运行的命令交互",
         &view.write_to_pty_dropdown,
         profile_data.write_to_pty.description(),
         !ai_settings.is_write_to_pty_permissions_editable(app),
@@ -526,7 +521,7 @@ pub fn render_permissions_section(
         column.add_child(render_permission_row(
             appearance,
             Icon::Laptop,
-            "Computer use",
+            "电脑使用",
             &view.computer_use_dropdown,
             profile_data.computer_use.description(),
             !ai_settings.is_computer_use_permissions_editable(app),
@@ -539,7 +534,7 @@ pub fn render_permissions_section(
     column.add_child(render_permission_row(
         appearance,
         Icon::MessageText,
-        "Ask questions",
+        "提问",
         &view.ask_user_question_dropdown,
         profile_data.ask_user_question.description(),
         !ai_settings.is_ask_user_question_permissions_editable(app),
@@ -550,7 +545,7 @@ pub fn render_permissions_section(
     column.add_child(render_permission_row(
         appearance,
         Icon::Atom,
-        "Run orchestrated agents",
+        "运行编排 Agent",
         &view.run_agents_dropdown,
         profile_data.run_agents.description(),
         !ai_settings.is_run_agents_permissions_editable(app),
@@ -562,7 +557,7 @@ pub fn render_permissions_section(
     column.add_child(render_permission_row(
         appearance,
         Icon::Dataflow,
-        "Call MCP servers",
+        "调用 MCP 服务器",
         &view.call_mcp_servers_dropdown,
         profile_data.mcp_permissions.description(),
         !ai_settings.is_mcp_permission_editable(app), // Use MCP override for this permission
@@ -709,8 +704,8 @@ fn render_directory_allowlist_section(
     let is_editable = ai_settings.is_directory_allowlist_editable(app);
 
     render_list_section(
-        "Directory allowlist",
-        "Give the agent file access to certain directories.",
+        "目录允许列表",
+        "授予 Agent 对特定目录的文件访问权限。",
         &profile_data.directory_allowlist,
         &view.directory_allowlist_mouse_state_handles,
         Some(&view.directory_allowlist_editor),
@@ -734,8 +729,8 @@ fn render_command_allowlist_section(
     let is_editable = ai_settings.is_command_allowlist_editable(app);
 
     render_list_section(
-        "Command allowlist",
-        "Regular expressions to match commands that can be automatically executed by Oz.",
+        "命令允许列表",
+        "用于匹配 Oz 可自动执行命令的正则表达式。",
         &profile_data.command_allowlist,
         &view.command_allowlist_mouse_state_handles,
         Some(&view.command_allowlist_editor),
@@ -800,8 +795,8 @@ fn render_command_denylist_section(
     );
 
     let mut column = Flex::column().with_child(create_section_header(
-        "Command denylist",
-        "Regular expressions to match commands that Oz should always ask permission to execute.",
+        "命令拒绝列表",
+        "用于匹配 Oz 始终需要请求许可才能执行的命令的正则表达式。",
         appearance,
     ));
     column = column.with_child(list);
@@ -814,7 +809,7 @@ fn render_command_denylist_section(
 fn display_mcp_name(uuid: &Uuid, app: &AppContext) -> String {
     TemplatableMCPServerManager::get_mcp_name(uuid, app).unwrap_or({
         log::warn!("Expected a name for MCP server {uuid} but could not find one.");
-        format!("MCP Server {uuid}")
+        format!("MCP 服务器 {uuid}")
     })
 }
 
@@ -828,8 +823,8 @@ fn render_mcp_allowlist_section(
     let is_editable = ai_settings.is_mcp_permission_editable(app);
 
     render_list_section(
-        "MCP allowlist",
-        "MCP servers that are allowed to be called by Oz.",
+        "MCP 允许列表",
+        "允许 Oz 调用的 MCP 服务器。",
         &profile_data.mcp_allowlist,
         &view.mcp_allowlist_mouse_state_handles,
         None,
@@ -854,8 +849,8 @@ fn render_mcp_denylist_section(
     let is_editable = ai_settings.is_mcp_permission_editable(app);
 
     render_list_section(
-        "MCP denylist",
-        "MCP servers that are not allowed to be called by Oz.",
+        "MCP 拒绝列表",
+        "不允许 Oz 调用的 MCP 服务器。",
         &profile_data.mcp_denylist,
         &view.mcp_denylist_mouse_state_handles,
         None,
@@ -888,17 +883,12 @@ pub fn render_plan_auto_sync_toggle(
     .with_margin_right(8.)
     .finish();
 
-    let label_elem = Text::new(
-        "Plan auto-sync".to_string(),
-        appearance.ui_font_family(),
-        13.,
-    )
-    .with_color(appearance.theme().active_ui_text_color().into())
-    .finish();
+    let label_elem = Text::new("计划自动同步".to_string(), appearance.ui_font_family(), 13.)
+        .with_color(appearance.theme().active_ui_text_color().into())
+        .finish();
 
     let desc_elem = Text::new(
-        "The plans this agent creates will be automatically added and synced to Warp Drive."
-            .to_string(),
+        "此 Agent 创建的计划会自动添加并同步到 Warp Drive。".to_string(),
         appearance.ui_font_family(),
         11.,
     )
@@ -963,7 +953,7 @@ pub fn render_web_search_toggle(
     .finish();
 
     let label_elem = Text::new(
-        "Call web tools".to_string(),
+        "调用 Web 工具".to_string(),
         appearance.ui_font_family(),
         13.,
     )
@@ -971,7 +961,7 @@ pub fn render_web_search_toggle(
     .finish();
 
     let desc_elem = Text::new(
-        "The agent may use web search when helpful for completing tasks.".to_string(),
+        "当有助于完成任务时，Agent 可以使用网页搜索。".to_string(),
         appearance.ui_font_family(),
         11.,
     )

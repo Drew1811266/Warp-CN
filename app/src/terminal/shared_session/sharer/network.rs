@@ -715,9 +715,7 @@ impl Network {
         let (Some(session_id), Some(reconnect_token)) =
             (self.session_id, self.reconnect_token.clone())
         else {
-            log::error!(
-                "Cannot reconnect to session as sharer without session_id, and reconnect_token"
-            );
+            log::error!("缺少 session_id 和 reconnect_token，无法以共享者身份重新连接到会话");
             return;
         };
         let Some(reconnect_endpoint) = connect_endpoint(format!("/sessions/{session_id}/resume"))
@@ -804,7 +802,7 @@ impl Network {
                             "outcome=transport_retries_exhausted",
                         );
                         log::warn!(
-                            "Failed to reconnect to shared session, and retries exhausted: {e}"
+                            "重新连接共享会话失败，重试次数已用尽：{e}"
                         );
                         network.close_without_reconnection();
                         ctx.emit(NetworkEvent::FailedToReconnect);
@@ -864,7 +862,7 @@ impl Network {
                     // to get a possibly-more explicit reason.
                     ctx.emit(NetworkEvent::FailedToCreateSharedSession {
                         reason: FailedToInitializeSessionReason::InternalServerError {
-                            details: "Websocket closed before starting session".to_string(),
+                            details: "会话启动前 Websocket 已关闭".to_string(),
                         },
                         cause: None,
                     });

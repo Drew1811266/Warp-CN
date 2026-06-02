@@ -14,6 +14,31 @@
 | `automation-blocked` | 应用可启动，但窗口读取或截图自动化受本机环境限制。 |
 | `needs-trigger` | 需要构造特定产品状态、错误状态或 feature flag 才能验证。 |
 | `not-started` | 尚未开始 GUI 复验。 |
+| `blocked-no-isolated-account` | public-RC 行需要隔离测试账号；当前没有可用账号或不能使用主账号。 |
+| `blocked-no-backend-fixture` | public-RC 行需要后端、计费、AWS、容量或错误状态 fixture；当前未提供。 |
+| `blocked-no-disposable-object` | public-RC 行需要精确命名的 disposable endpoint/environment/secret/team；当前对象不存在或未确认。 |
+| `ready-with-prerequisites` | 执行步骤已定义，但必须先满足对应前置条件。 |
+| `verified-current-cycle` | 当前 RC 周期已用合规证据验证。 |
+
+## RC20 public-RC blocker registry
+
+RC20 起，以下三类 public-RC blocked 状态的机器可读来源是：
+
+```text
+resources/localization/zh-Hans-public-rc-blockers.toml
+script/zh_public_rc_status.py
+```
+
+当前 registry 总数为 11：
+
+```text
+blocked-no-isolated-account: 3
+blocked-no-backend-fixture: 5
+blocked-no-disposable-object: 3
+```
+
+矩阵中的 blocked 行不能只靠 fixture 或源码检查升级；必须同时更新
+registry、阶段记录和对应的 redacted GUI/backend/account 证据。
 
 ## 前置检查
 
@@ -143,37 +168,182 @@ Add a debug_assertions-only env-gated override controlled by WARP_CN_CUSTOM_INFE
 - 不使用主账号，不猜测登录凭据，不删除除 `zh-smoke-delete-endpoint` 之外的 endpoint。
 - Fixture endpoint 只在当前 debug 进程内存中存在；重启后只有再次带上 env gate 才会重新播种。
 
+## Phase 76 public-RC evidence dry-run package
+
+审计日期：2026-06-02。
+
+Phase 76 没有启动 GUI，也没有触碰账号、后端、账单、云环境、团队、
+managed secret、自定义端点或任何 destructive state。该阶段只把 public-RC
+剩余 blocker 的证据采集流程整理成可执行包。
+
+证据目录：
+
+- `docs/gui-smoke-artifacts/phase76/`
+
+默认 profile：
+
+```text
+zh-rc15-public-rc-dry-run
+```
+
+状态保持：
+
+| Row | Phase 76 status | Evidence requirement |
+| --- | --- | --- |
+| `GUI-AUTH-01` | `blocked-until-isolated-account` | 需要隔离测试账号和浏览器 callback。 |
+| `GUI-SET-03` | `blocked-until-isolated-account-state` | 需要能看到 AI settings、Build plan、API key、自定义推理的隔离账号状态。 |
+| `GUI-SET-04` | `blocked-until-disposable-aws-profile` | 需要 disposable AWS/Bedrock profile 或明确 fixture。 |
+| `GUI-SET-05` | `blocked-until-invalid-credential-fixture` | 需要不会访问真实凭据的 invalid Bedrock fixture。 |
+| `GUI-SET-06` | `blocked-until-disposable-environment` | 需要名为 `zh-smoke-delete-environment` 的 disposable cloud environment。 |
+| `GUI-WS-04` | `blocked-until-disposable-secret` | 需要名为 `zh-smoke-delete-secret` 的 disposable managed auth secret。 |
+| `GUI-WS-06` | `fixture-verified-only` | fixture 已验证渲染；public RC 仍需要不带 fixture env 的隔离账号路径。 |
+| `GUI-WS-07` | `blocked-until-disposable-team` | 需要名为 `zh-smoke-public-rc-team` 的 disposable owner test team 和明确批准。 |
+| `GUI-BILL-01` | `blocked-until-safe-billing-state` | 需要不会购买/消耗真实额度的 billing fixture 或测试账号状态。 |
+| `GUI-BILL-02` | `blocked-until-backend-billing-state` | 需要 backend test team 的 Build plan migration 状态。 |
+| `GUI-CLOUD-01` | `blocked-until-capacity-fixture` | 需要 cloud capacity/quota fixture 或 backend test state。 |
+
+Phase 76 不能把任何行升级为 `verified`。后续只有在 cropped/redacted
+截图、accessibility anchors、cleanup proof 全部满足且证据类型为
+`real-account-evidence` 时，public-RC 行才能升级。
+
+## Phase 83 RC16 public-RC prerequisites
+
+审计日期：2026-06-02。
+
+Phase 83 没有启动 GUI，也没有触碰账号、后端、账单、云环境、团队、
+managed secret、自定义端点或任何 destructive state。它只把 RC16
+public-RC 行整理为精确前置条件。
+
+主文档：
+
+- `docs/zh-Hans-public-rc-prerequisites-rc16.md`
+
+| Row | Phase 83 status | Required prerequisite |
+| --- | --- | --- |
+| `GUI-AUTH-01` | `blocked-no-isolated-account` | 隔离 browser-login 测试账号。 |
+| `GUI-SET-03` | `blocked-no-isolated-account` | 可见 AI settings、Build plan、API key、自定义推理和模型 UI 的隔离账号。 |
+| `GUI-SET-04` | `blocked-no-backend-fixture` | Disposable AWS/Bedrock profile 或明确 fixture。 |
+| `GUI-SET-05` | `blocked-no-backend-fixture` | 不会访问真实凭据的 invalid Bedrock fixture。 |
+| `GUI-SET-06` | `blocked-no-disposable-object` | 精确命名为 `zh-smoke-delete-environment` 的 disposable cloud environment。 |
+| `GUI-WS-04` | `blocked-no-disposable-object` | 精确命名为 `zh-smoke-delete-secret` 的 disposable managed auth secret。 |
+| `GUI-WS-06` | `blocked-no-isolated-account` | custom inference enabled 的隔离账号和 `zh-smoke-delete-endpoint`。 |
+| `GUI-WS-07` | `blocked-no-disposable-object` | 精确命名为 `zh-smoke-public-rc-team` 的 owner test team 和明确批准。 |
+| `GUI-BILL-01` | `blocked-no-backend-fixture` | 不购买、不消耗真实额度的 billing/quota fixture 或测试账号状态。 |
+| `GUI-BILL-02` | `blocked-no-backend-fixture` | 带 `sunsetted_to_build_ts` 的 backend test team 状态。 |
+| `GUI-CLOUD-01` | `blocked-no-backend-fixture` | controlled capacity/quota backend state 或 local fixture。 |
+
+这些行均未升级为 `verified-current-cycle`。升级前必须具备当前周期的
+cropped/redacted screenshot、accessibility anchors、process/profile proof 和
+cleanup proof。
+
+## Phase 89 low-risk local GUI smoke preparation
+
+审计日期：2026-06-02。
+
+Phase 89 did not build the bundle or open the GUI because this run is following
+a heat-safety policy. It prepared the no-account/no-backend local smoke slice in
+`docs/gui-smoke-artifacts/phase89/README.md`.
+
+Safe rows for a later local run:
+
+```text
+GUI-BASE-01
+GUI-BASE-02
+GUI-BASE-03
+GUI-BASE-04
+GUI-BASE-05
+GUI-ONB-01
+GUI-ONB-02
+GUI-AUTH-03
+GUI-SET-01
+GUI-SET-02
+GUI-WS-08
+```
+
+The following public-RC rows remain excluded from low-risk local smoke because
+they require isolated account/backend fixtures or disposable objects:
+
+```text
+GUI-AUTH-01
+GUI-SET-03
+GUI-SET-04
+GUI-SET-05
+GUI-SET-06
+GUI-WS-04
+GUI-WS-06
+GUI-WS-07
+GUI-BILL-01
+GUI-BILL-02
+GUI-CLOUD-01
+```
+
+## Phase 90 isolated account check
+
+审计日期：2026-06-02。
+
+Phase 90 checked for the required `zh-rc16-test-account` profile and found no
+local profile directories. It did not launch the GUI, open a browser, attempt
+login, read secrets, or touch a custom endpoint.
+
+Rows remaining blocked:
+
+```text
+GUI-AUTH-01: blocked-no-isolated-account
+GUI-SET-03: blocked-no-isolated-account
+GUI-WS-06: blocked-no-isolated-account
+```
+
+## Phase 91 backend and disposable fixture check
+
+审计日期：2026-06-02。
+
+Phase 91 checked for required backend, billing, cloud, AWS, team, managed-secret,
+and disposable-object fixtures. It did not create, delete, or mutate any object.
+
+Rows remaining blocked:
+
+```text
+GUI-SET-04: blocked-no-backend-fixture
+GUI-SET-05: blocked-no-backend-fixture
+GUI-SET-06: blocked-no-disposable-object
+GUI-WS-04: blocked-no-disposable-object
+GUI-WS-07: blocked-no-disposable-object
+GUI-BILL-01: blocked-no-backend-fixture
+GUI-BILL-02: blocked-no-backend-fixture
+GUI-CLOUD-01: blocked-no-backend-fixture
+```
+
 ## 基础工作区
 
 | ID | 路径 | 触发条件 | 账号/状态需求 | 期望中文锚点 | 当前状态 | 最近记录 | 备注 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| GUI-BASE-01 | macOS 菜单栏 | 启动 `WarpOss.app` 后查看系统菜单栏 | 无 | `文件`、`编辑`、`视图`、`标签页`、`块`、`窗口`、`帮助` | `verified` | 2026-05-31 P7-M4 | Computer Use 当前周期读取到 `文件`、`编辑`、`视图`、`标签页`、`块`、`AI`、`Drive`、`窗口`、`帮助`；截图见 `docs/gui-smoke-artifacts/phase7/p7-m4-workspace.png`。 |
-| GUI-BASE-02 | 工作区全局搜索 | 打开基础工作区并聚焦全局搜索入口 | 无 | 全局搜索占位符为中文 | `verified` | 2026-05-31 P7-M4 | `Cmd-P` 当前周期显示 `搜索命令`，并显示中文筛选 chip；截图见 `docs/gui-smoke-artifacts/phase7/p7-m4-command-palette.png`。 |
+| GUI-BASE-01 | macOS 菜单栏 | 启动 `WarpOss.app` 后查看系统菜单栏 | 无 | `文件`、`编辑`、`视图`、`标签页`、`块`、`窗口`、`帮助` | `verified` | 2026-06-01 P38 | Computer Use 在当前源构建中读取到 `文件`、`编辑`、`视图`、`标签页`、`块`、`AI`、`Drive`、`窗口`、`帮助`；截图见 `docs/gui-smoke-artifacts/phase38/p38-main-window-current-source.png`。 |
+| GUI-BASE-02 | 工作区全局搜索 | 打开基础工作区并聚焦全局搜索入口 | 无 | 全局搜索占位符为中文 | `verified` | 2026-06-01 P19 | P19 低负载复验在隔离 `zh-p19-lowload` profile 中打开命令面板，显示 `搜索命令`、`文件`、`操作`、`会话`、`启动配置` 和 `打开主题选择器`。截图见 `docs/gui-smoke-artifacts/phase19/p19-command-palette-readable.png`。 |
 | GUI-BASE-03 | 新会话入口 | 打开基础工作区 | 无 | 新建会话/终端入口为中文 | `verified` | 2026-05-31 P7-M4 | 当前 horizontal tab UI 的 `+` 菜单显示 `终端`，系统 `文件` 菜单显示 `新建终端标签页`；这不是历史 `新会话` 文案，但入口已中文化。截图见 `docs/gui-smoke-artifacts/phase7/p7-m4-new-session-menu.png` 和 `docs/gui-smoke-artifacts/phase7/p7-m4-file-menu.png`。 |
-| GUI-BASE-04 | 终端-only 工作区 | 首次启动选择 terminal-only 或跳过 Agent 路径 | fresh profile | 中文工作区入口 | `verified` | historical GUI smoke | 需在新 profile 下复验一次。 |
+| GUI-BASE-04 | 终端-only 工作区 | 首次启动选择 terminal-only 或跳过 Agent 路径 | fresh profile | 中文工作区入口 | `verified` | 2026-06-01 P38 | 当前源构建使用 `zh-rc10-local-fixture`，在 onboarding 中选择禁用 AI 后进入主窗口；截图见 `docs/gui-smoke-artifacts/phase38/p38-main-window-current-source.png`。 |
 | GUI-BASE-05 | 命令面板筛选标签 | 打开命令面板 | 无 | `文件`、`操作`、`会话`、`启动配置` | `verified` | 2026-05-31 P7-M4 | `Cmd-P` 当前周期显示 `搜索命令`、`文件`、`操作`、`会话`、`启动配置` 和 `打开主题选择器`；截图见 `docs/gui-smoke-artifacts/phase7/p7-m4-command-palette.png`。 |
 
 ## Onboarding 与登录
 
 | ID | 路径 | 触发条件 | 账号/状态需求 | 期望中文锚点 | 当前状态 | 最近记录 | 备注 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| GUI-ONB-01 | Fresh onboarding: Agent path | 清空本地用户状态后首次启动，选择 Agent 路径 | fresh profile | 欢迎、Agent 选择、模型/自主程度等中文 | `manual-gate` | Phase 2 | 需要真实交互式桌面会话。 |
+| GUI-ONB-01 | Fresh onboarding: Agent path | 清空本地用户状态后首次启动，选择 Agent 路径 | fresh profile | 欢迎、Agent 选择、模型/自主程度等中文 | `verified` | 2026-06-01 P38 | 当前源构建截图覆盖欢迎页、Agent 选择、个性化、第三方 Agent、主题选择；静态产品预览 PNG 仍作为 `visual-residue` 单独跟踪。截图见 `docs/gui-smoke-artifacts/phase38/p38-onboarding-welcome-current-source.png` 等。 |
 | GUI-ONB-02 | Fresh onboarding: terminal-only path | 清空本地用户状态后首次启动，选择 terminal-only | fresh profile | 不启用 AI、终端路径中文 | `verified` | historical GUI smoke | 建议在下个 release 重新跑。 |
 | GUI-ONB-03 | HOA onboarding | 触发新功能/HOA 引导 | 需要对应 feature state | 垂直标签页、Agent 收件箱、标签页配置等中文 | `manual-gate` | Phase 2 first pass | 自动化未稳定触发。 |
-| GUI-AUTH-01 | 浏览器登录 | fresh/logged-out profile 中进入 `login_slide.rs`，点击浏览器登录并完成回流 | 需要隔离测试账号、可打开浏览器、可接收 auth callback；不使用主账号 | 登录、授权回流、错误 fallback 中文 | `manual-gate` | 2026-05-30 P5-M4 | 账号和浏览器回流依赖；当前本机 GUI 窗口不可见/不可读，不能证明回流 UI。 |
+| GUI-AUTH-01 | 浏览器登录 | fresh/logged-out profile 中进入 `login_slide.rs`，点击浏览器登录并完成回流 | 需要隔离测试账号、可打开浏览器、可接收 auth callback；不使用主账号 | 登录、授权回流、错误 fallback 中文 | `blocked-no-isolated-account` | 2026-06-02 Phase 88 | 账号和浏览器回流依赖；当前没有可用隔离测试账号，不能使用主账号。 |
 | GUI-AUTH-02 | Token paste fallback | fresh/logged-out profile 中进入浏览器已打开状态，点击 token 粘贴入口或粘贴无效 redirect URL | 本地可用无效 token 触发错误；完整成功路径仍需测试账号 | token 粘贴、重试、错误提示中文 | `needs-trigger` | 2026-05-30 P5-M4 | 组件路径：`login_slide.rs`、`paste_auth_token_modal.rs`、`login_failure_notification.rs`；无效 token 错误可本地构造，但仍需可见 GUI。 |
-| GUI-AUTH-03 | 隐私设置与跳过登录 | fresh profile onboarding 中打开隐私设置，或在登录页触发跳过登录确认 | 需要 fresh profile；不需要真实账号 | 隐私设置、跳过登录确认中文 | `manual-gate` | 2026-05-30 P5-M4 | 本地可触发，但会改变 onboarding/profile 状态；需隔离 profile 和可见 GUI。 |
+| GUI-AUTH-03 | 隐私设置与跳过登录 | fresh profile onboarding 中打开隐私设置，或在登录页触发跳过登录确认 | 需要 fresh profile；不需要真实账号 | 隐私设置、跳过登录确认中文 | `verified` | 2026-06-01 P38 | 当前源构建在 `zh-rc10-local-fixture` 中看到 `开始使用 AI`、`禁用 AI 功能`、禁用 AI 确认、`暂时跳过` 等中文；截图见 `docs/gui-smoke-artifacts/phase38/p38-onboarding-ai-enable-skip-login-current-source.png` 和 `p38-disable-ai-confirmation-current-source.png`。 |
 
 ## 设置页
 
 | ID | 路径 | 触发条件 | 账号/状态需求 | 期望中文锚点 | 当前状态 | 最近记录 | 备注 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| GUI-SET-01 | Settings shell | 打开设置页并切换 Account、Appearance、Features、Privacy、AI、Code、MCP、Billing、Environments | 部分页面需要登录 | 设置导航和页面标题中文 | `verified` | 2026-05-31 P7-M4 | 通过右上角菜单进入 `设置`，当前周期看到 `账户`、`Agent`、`代码`、`云平台`、`团队`、`外观`、`功能`、`键盘快捷键`、`Warpify`、`推荐`、`Warp Drive`、`隐私`、`关于` 等导航。截图见 `docs/gui-smoke-artifacts/phase7/p7-m4-settings-shell.png`。 |
+| GUI-SET-01 | Settings shell | 打开设置页并切换 Account、Appearance、Features、Privacy、AI、Code、MCP、Billing、Environments | 部分页面需要登录 | 设置导航和页面标题中文 | `verified` | 2026-06-01 P38 | 当前源构建复验设置页 `账户`、`Warp Agent`、`隐私`，侧栏中文锚点可读；截图见 `docs/gui-smoke-artifacts/phase38/p38-settings-account-current-source.png`、`p38-settings-agent-current-source.png` 和 `p38-settings-privacy-current-source.png`。 |
 | GUI-SET-02 | Appearance command actions | 打开 Appearance 或命令面板中相关动作 | 无 | Appearance 动作标签中文，搜索关键词不被破坏 | `manual-gate` | Round 2 | `dim inactive panes` 等搜索 tag 仍保留英文。 |
-| GUI-SET-03 | AI settings deep paths | 打开 AI 设置，查看 Build 方案、BYO API keys、自定义端点 | 登录或对应 plan 状态 | Build 方案、API 密钥、自定义端点中文 | `manual-gate` | Phase 2 first pass | 需要账号和 plan 状态。 |
-| GUI-SET-04 | AWS Bedrock credentials | 打开 AI 设置中的 AWS Bedrock 凭据区域 | AWS/Bedrock 配置状态 | AWS Bedrock 凭据、登录命令、AWS Profile、刷新中文 | `manual-gate` | Phase 2 / Round 2 | 需要凭据或错误状态。 |
-| GUI-SET-05 | AWS credential errors | 构造 Bedrock 凭据错误 | AWS/Bedrock 错误状态 | AWS 凭据错误中文 | `needs-trigger` | Round 2 / Round 4 | 需要可重复错误触发方式。 |
-| GUI-SET-06 | Environment deletion confirmation | Settings > Environments 中编辑可删环境并点击 `删除环境` | 需要隔离的 cloud environment 测试对象；不能使用真实生产环境 | `删除环境？`、`确定要移除 … 环境吗？`、`删除环境`、`取消` | `manual-gate` | 2026-05-31 P6-M3 | 源码路径已复查：`update_environment_form.rs` 触发，`delete_environment_confirmation_dialog.rs` 渲染；P6-M3 未尝试删除，因为 P6-M2 为 `automation-blocked`，且没有隔离 cloud environment 对象。 |
+| GUI-SET-03 | AI settings deep paths | 打开 AI 设置，查看 Build 方案、BYO API keys、自定义端点 | 登录或对应 plan 状态 | Build 方案、API 密钥、自定义端点中文 | `blocked-no-isolated-account` | 2026-06-02 Phase 88 | 需要隔离账号和 plan 状态；当前没有可用隔离测试账号。 |
+| GUI-SET-04 | AWS Bedrock credentials | 打开 AI 设置中的 AWS Bedrock 凭据区域 | AWS/Bedrock 配置状态 | AWS Bedrock 凭据、登录命令、AWS Profile、刷新中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 88 | 需要 disposable AWS/Bedrock profile 或明确 fixture；当前未提供。 |
+| GUI-SET-05 | AWS credential errors | 构造 Bedrock 凭据错误 | AWS/Bedrock 错误状态 | AWS 凭据错误中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 88 | 需要不会访问真实凭据的 invalid Bedrock fixture；当前未提供。 |
+| GUI-SET-06 | Environment deletion confirmation | Settings > Environments 中编辑可删环境并点击 `删除环境` | 需要隔离的 cloud environment 测试对象；不能使用真实生产环境 | `删除环境？`、`确定要移除 … 环境吗？`、`删除环境`、`取消` | `blocked-no-disposable-object` | 2026-06-02 Phase 88 | 源码路径已复查：`update_environment_form.rs` 触发，`delete_environment_confirmation_dialog.rs` 渲染；当前缺少精确命名为 `zh-smoke-delete-environment` 的 disposable 对象。 |
 
 ## 工作区、会话与确认框
 
@@ -182,19 +352,19 @@ Add a debug_assertions-only env-gated override controlled by WARP_CN_CUSTOM_INFE
 | GUI-WS-01 | 工作区左右面板 | 打开左侧/右侧面板、工具面板、用户菜单 | 视入口而定 | Agent 对话、Warp Drive、工具面板等中文 | `manual-gate` | Phase 2 | 基础入口已部分验证，深层菜单未完整复验。 |
 | GUI-WS-02 | 会话列表菜单和删除 toast | 打开会话列表，对会话执行菜单/删除操作 | 有会话历史 | 菜单项、删除 toast 中文 | `manual-gate` | Round 2 | 需要可删除测试会话。 |
 | GUI-WS-03 | Rewind 搜索提示和确认 | 触发 terminal rewind 或回退确认 | 有可 rewind 会话 | rewind 搜索和确认说明中文 | `manual-gate` | Phase 2 first pass | 需要构造历史命令状态。 |
-| GUI-WS-04 | Auth-secret 删除确认 | Agent auth secret selector 中删除 managed auth secret | 需要隔离 managed auth secret；不能删除真实密钥 | `删除密钥`、`确定要删除 … 吗？`、`删除`、`取消` | `manual-gate` | 2026-05-31 P6-M3 | 源码路径已复查：`auth_secret_selector.rs` 打开删除动作，`delete_auth_secret_confirmation_dialog.rs` 渲染；P6-M3 阻塞于 `automation-blocked` 和缺少隔离 managed auth secret。 |
+| GUI-WS-04 | Auth-secret 删除确认 | Agent auth secret selector 中删除 managed auth secret | 需要隔离 managed auth secret；不能删除真实密钥 | `删除密钥`、`确定要删除 … 吗？`、`删除`、`取消` | `blocked-no-disposable-object` | 2026-06-02 Phase 88 | 源码路径已复查：`auth_secret_selector.rs` 打开删除动作，`delete_auth_secret_confirmation_dialog.rs` 渲染；当前缺少精确命名为 `zh-smoke-delete-secret` 的 disposable managed auth secret。 |
 | GUI-WS-05 | CLI 管理员权限提示 | 安装/卸载 Oz CLI 命令 | macOS 权限提示 | 管理员权限提示中文 | `manual-gate` | Round 3 | AppleScript 字符串已通过编译验证，仍需视觉确认。 |
-| GUI-WS-06 | Remove endpoint confirmation | Settings > AI > 自定义推理中编辑并移除自定义 endpoint | Public-RC 需要隔离测试账号；fixture smoke 可使用 `WARP_CN_CUSTOM_INFERENCE_SMOKE=1`，但不能替代真实账号证据 | `移除端点？`、`确定要移除此端点吗？`、`移除端点`、`取消` | `fixture-verified` | 2026-05-31 P9-M5 | P9-M4 使用 debug-only in-memory fixture 预置 `zh-smoke-delete-endpoint`，验证了列表显示、编辑弹窗、取消删除后保留、最终删除和 `端点已移除` toast。截图：`docs/gui-smoke-artifacts/phase9/p9-m4-fixture-endpoint-seeded.png`、`p9-m4-fixture-edit-modal.png`、`p9-m4-fixture-remove-confirmation.png`、`p9-m4-fixture-after-cancel.png`、`p9-m4-fixture-after-remove.png`。P9-M5 尝试不带 fixture env 的真实路径，但当前没有隔离测试账号；`zh-rc6` 进程只带 `WARP_DATA_PROFILE=zh-rc6`，无 `WARP_CN_CUSTOM_INFERENCE_SMOKE`，并触发 Keychain/App 数据权限提示，均已拒绝。该行仍不能升级为 `verified`，public-RC 仍要求不带 fixture env 的隔离测试账号路径。 |
-| GUI-WS-07 | Transfer ownership confirmation | 转让团队所有权 | 团队 owner 账号 | 转让确认中文 | `manual-gate` | Round 3 | 高风险路径，必须测试账号隔离。 |
+| GUI-WS-06 | Remove endpoint confirmation | Settings > AI > 自定义推理中编辑并移除自定义 endpoint | Public-RC 需要隔离测试账号；fixture smoke 可使用 `WARP_CN_CUSTOM_INFERENCE_SMOKE=1`，但不能替代真实账号证据 | `移除端点？`、`确定要移除此端点吗？`、`移除端点`、`取消` | `blocked-no-isolated-account` | 2026-06-02 Phase 88 | P9-M4 使用 debug-only in-memory fixture 预置 `zh-smoke-delete-endpoint`，验证了列表显示、编辑弹窗、取消删除后保留、最终删除和 `端点已移除` toast。该历史 fixture 证据不能升级为 public-RC 证据；当前仍缺少不带 fixture env 的隔离测试账号和 disposable endpoint。 |
+| GUI-WS-07 | Transfer ownership confirmation | 转让团队所有权 | 团队 owner 账号 | 转让确认中文 | `blocked-no-disposable-object` | 2026-06-02 Phase 88 | 高风险路径，必须测试账号隔离；当前缺少精确命名为 `zh-smoke-public-rc-team` 的 owner test team 和明确批准。 |
 | GUI-WS-08 | 标签页右键菜单 | 右键当前会话标签页 | 无 | `共享会话`、`复制标签页标题`、`重命名标签页`、`关闭标签页`、`关闭其他标签页`、`关闭右侧标签页`、`另存为新配置` | `verified` | 2026-05-31 P7-M4 | 当前 `zh-rc4` profile 使用 horizontal tab UI；右键当前标签页显示 `共享会话`、`复制标签页标题`、`重命名标签页`、`左移标签页`、`关闭标签页`、`关闭其他标签页`、`关闭右侧标签页`、`另存为新配置` 和颜色选项。截图见 `docs/gui-smoke-artifacts/phase7/p7-m4-tab-context-menu.png`。 |
 
 ## 云端、Billing 与 Launch Modals
 
 | ID | 路径 | 触发条件 | 账号/状态需求 | 期望中文锚点 | 当前状态 | 最近记录 | 备注 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| GUI-CLOUD-01 | 云端 Agent 容量弹窗 | Cloud Mode ambient agent 触发 `ConcurrentLimit` 或 paid-plan out-of-credits 触发 `OutOfCredits` | 需要 CloudMode、ambient agent、服务端 at-capacity/Quota 状态或受控 mock；不使用主账号额度做验证 | 容量、点数、升级提示中文 | `needs-trigger` | 2026-05-30 P5-M4 | 路径：`ambient_agent/model.rs`、`ambient_agent/view_impl.rs`、`cloud_agent_capacity_modal/mod.rs`；仍有定价/倍数英文残留，需先可重复触发。 |
-| GUI-BILL-01 | 额度耗尽/额度弹窗 | `BuyCreditsBanner` 显示 `OutOfCredits` 或 `MonthlyLimitReached` | 需要 workspace 允许购买 add-on credits、无剩余额度/bonus、auto reload 状态或受控 model fixture；不消费真实主账号额度 | 额度、自动充值、方案说明中文 | `needs-trigger` | 2026-05-30 P5-M4 | 路径：`request_usage_model.rs`、`terminal/buy_credits_banner.rs`；可用模型测试验证条件，GUI 需隔离账号状态。 |
-| GUI-BILL-02 | Build 方案迁移弹窗 | 打开 `BuildPlanMigrationModal` 或满足 one-time modal 条件 | 需要已登录团队管理员、team service agreement 带 `sunsetted_to_build_ts`、未 dismiss；可考虑开发动作强制打开但不能作为公开账号证据 | Build 方案迁移说明中文 | `needs-trigger` | 2026-05-30 P5-M4 | 路径：`one_time_modal_model.rs`、`build_plan_migration_modal.rs`；核心 copy 已中文化，但触发依赖服务端 billing 状态。 |
+| GUI-CLOUD-01 | 云端 Agent 容量弹窗 | Cloud Mode ambient agent 触发 `ConcurrentLimit` 或 paid-plan out-of-credits 触发 `OutOfCredits` | 需要 CloudMode、ambient agent、服务端 at-capacity/Quota 状态或受控 mock；不使用主账号额度做验证 | 容量、点数、升级提示中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 88 | 需要 controlled capacity/quota backend state 或 local fixture；当前未提供。 |
+| GUI-BILL-01 | 额度耗尽/额度弹窗 | `BuyCreditsBanner` 显示 `OutOfCredits` 或 `MonthlyLimitReached` | 需要 workspace 允许购买 add-on credits、无剩余额度/bonus、auto reload 状态或受控 model fixture；不消费真实主账号额度 | 额度、自动充值、方案说明中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 88 | 需要 safe quota/billing fixture 或 disposable billing test account；当前未提供。 |
+| GUI-BILL-02 | Build 方案迁移弹窗 | 打开 `BuildPlanMigrationModal` 或满足 one-time modal 条件 | 需要已登录团队管理员、team service agreement 带 `sunsetted_to_build_ts`、未 dismiss；可考虑开发动作强制打开但不能作为公开账号证据 | Build 方案迁移说明中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 88 | 需要 backend test team with `sunsetted_to_build_ts`；当前未提供。 |
 | GUI-LAUNCH-01 | Oz/OpenWarp/orchestration launch modals | 触发 launch modal | feature/version 状态 | launch modal 标题、按钮、说明中文 | `manual-gate` | Round 3 | 需要对应 feature 状态。 |
 
 ## Agent 与 Warp on Web
@@ -318,4 +488,373 @@ Owner categories:
 - 只完成 `./script/run --dont-open` bundle gate。
 - 只看到 `warp-oss` 或 `terminal-server` 进程启动。
 - 只通过 dry-run、coverage、编译或单元测试。
+
+## 2026-06-02 Phase 67 public-RC evidence package
+
+Phase 67 did not launch GUI or touch account/backend state. It refreshed the
+public-RC evidence package after RC13 and kept fixture evidence separate from
+true isolated-account evidence.
+
+Rows still blocked for public RC:
+
+| Row | Required evidence | Current Phase 67 status |
+| --- | --- | --- |
+| `GUI-AUTH-01` | Isolated account browser login and auth callback | `blocked-until-isolated-account` |
+| `GUI-SET-03` | Real-account AI settings, Build plan/API key/custom inference state | `blocked-until-isolated-account-state` |
+| `GUI-SET-04` | Disposable AWS/Bedrock profile | `blocked-until-disposable-aws-profile` |
+| `GUI-SET-05` | Invalid Bedrock credential fixture | `blocked-until-invalid-credential-fixture` |
+| `GUI-SET-06` | Disposable cloud environment deletion confirmation | `blocked-until-disposable-environment` |
+| `GUI-WS-04` | Disposable managed auth secret deletion confirmation | `blocked-until-disposable-secret` |
+| `GUI-WS-06` | Disposable custom endpoint removal without fixture env | `fixture-verified-only` |
+| `GUI-WS-07` | Disposable team ownership transfer confirmation | `blocked-until-disposable-team` |
+| `GUI-BILL-01` | Safe billing/quota state | `blocked-until-safe-billing-state` |
+| `GUI-BILL-02` | Backend Build-plan migration state | `blocked-until-backend-billing-state` |
+| `GUI-CLOUD-01` | Safe cloud capacity/quota state | `blocked-until-capacity-fixture` |
+
+Public RC cannot be marked `verified` from fixture evidence alone. Cropped or
+redacted screenshots and cleanup proof are required for every disposable object
+path before promotion.
 - GUI 自动化读取窗口超时但没有人工视觉确认。
+
+## 2026-06-01 P18 RC7 evidence decision
+
+RC7 status: `ready-for-local-use-source-level`.
+
+- Phase 13-17 source passes completed and raised release-preset coverage to `4746 covered / 4147 candidates = 53.4%`.
+- Low-load and compile gates passed: manifest validation, glossary, dry-run, locale JSON/YAML export, Python localization tests, `cargo fmt --check`, `git diff --check`, and `cargo check -p warp`.
+- No GUI row is promoted to `verified` in P18, because this pass did not capture current-cycle visual screenshots for account/state paths.
+- Existing historical GUI evidence remains unchanged for base workspace, command palette, settings shell, and tab context menu.
+- `GUI-WS-06` remains fixture-level only for custom endpoint deletion; public RC still requires a no-fixture isolated test-account run.
+- Browser login, token fallback, Billing, Cloud capacity, Agent lifecycle/error states, environment deletion, and auth-secret deletion remain manual or fixture gates.
+- P18 did not use the user's main account, real billing quota, real production cloud environment, real auth secret, or real team ownership state.
+
+## 2026-06-01 P19 low-load GUI evidence recovery
+
+Phase 19 status: `qualified-low-load-gui-source-fix`.
+
+- Used existing `target/debug/bundle/osx/WarpOss.app`; did not run bundle rebuild.
+- Launched the app directly with `WARP_DATA_PROFILE=zh-p19-lowload`, `WARP_SKIP_COMMON_SKILLS_INSTALL=1`, and `nice -n 10`.
+- Computer Use successfully read the `WarpOss` window and menu bar.
+- Current-cycle screenshots captured:
+  - `docs/gui-smoke-artifacts/phase19/p19-settings-agent-readable.png`
+  - `docs/gui-smoke-artifacts/phase19/p19-command-palette-readable.png`
+  - `docs/gui-smoke-artifacts/phase19/p19-warp-drive-english-residue.png`
+- Re-verified current-cycle GUI anchors for `GUI-BASE-02` and `GUI-SET-01`.
+- Found a logged-out Warp Drive settings page residue: `To use Warp Drive, please create an account.`, `Sign up`, and the Warp Drive description were still English in `app/src/settings_view/warp_drive_page.rs`.
+- Added Phase 19 manifest entries and applied source replacements for those Warp Drive strings.
+- Did not rebuild the bundle after this source fix to respect the low-load requirement; visual after-fix confirmation is deferred to the next bundle/GUI gate.
+- `GUI-ONB-01`, `GUI-AUTH-02`, `GUI-AUTH-03`, `GUI-AGENT-01`, `GUI-AGENT-03`, `GUI-AGENT-04`, and `GUI-AGENT-05` remain blocked or needs-trigger because they require fresh onboarding state, token fallback trigger, Agent input/conversation fixtures, lifecycle fixtures, error fixtures, or environment modal fixtures.
+- No main account, real billing quota, cloud environment, secret, or team ownership state was used.
+- The P19 `WarpOss` and child `terminal-server` processes were stopped after evidence capture.
+
+## 2026-06-01 P20 public-RC gate runbook
+
+Phase 20 status: `qualified-runbook-only`.
+
+- Added `docs/zh-Hans-public-rc-gate-runbook.md`.
+- The runbook defines isolated profiles, disposable object names, screenshot/evidence labels, allowed actions, cleanup rules, and stop conditions for Auth, Settings/AI, custom inference, environment deletion, auth-secret deletion, Billing, Cloud, launch modal, and Agent lifecycle rows.
+- `GUI-WS-06` remains fixture-only until an isolated account proves the no-fixture custom endpoint path.
+- No public-RC row is promoted in Phase 20; this phase prepares safe execution and prevents accidental use of main accounts, billing quota, production cloud objects, real secrets, or team ownership state.
+
+## 2026-06-01 P21 terminal backlog source pass
+
+Phase 21 status: `qualified-terminal-backlog-pass`.
+
+- Added terminal-focused manifest entries for `terminal/view.rs`, Agent tips, model selector, context menu, SSH errors, and shared-session viewer errors.
+- Raised terminal preset coverage from `18.1%` to `37.5%`.
+- Raised release preset coverage to `58.5%`.
+- Dry-run is clean with `would_change: 0` and `missing: 0`.
+- Python localization tests, `cargo fmt --check`, and `git diff --check` passed after mechanical formatting.
+- No GUI row is promoted by this source-only pass.
+
+## 2026-06-01 P22 settings/workspace source pass
+
+Phase 22 status: `qualified-settings-workspace-pass`.
+
+- Added Settings and Workspace manifest entries for Teams, Referrals, Appearance search/control terms, global search, right-panel unavailable reasons, and selected workspace toasts/errors.
+- Raised Settings coverage from `76.6%` to `87.5%`.
+- Raised Workspace coverage from `75.6%` to `94.3%`.
+- Raised release preset coverage to `62.8%`.
+- Dry-run is clean with `would_change: 0` and `missing: 0`.
+- Python localization tests, `cargo fmt --check`, and `git diff --check` passed after mechanical formatting.
+- No GUI row is promoted by this source-only pass.
+
+## 2026-06-01 P23 AI SDK/editor/environment source pass
+
+Phase 23 status: `qualified-ai-sdk-editor-environment-pass`.
+
+- Added AI-focused manifest entries for Agent SDK environment setup, Agent Code diff application, execution profile editor, secret/environment CLI, integration output, requested command view, conversation errors, and Codex harness messages.
+- Raised AI root coverage from `42.1%` to `56.0%`.
+- Raised modals preset coverage to `52.6%`.
+- Raised release preset coverage to `66.9%`.
+- Dry-run is clean with `would_change: 0` and `missing: 0`.
+- Python localization tests, `cargo fmt --check`, and `git diff --check` passed after mechanical formatting.
+- No GUI row is promoted by this source-only pass.
+
+## 2026-06-01 P24/P25 metadata migration and RC8 gate
+
+Phase 24/25 status: `qualified-rc8-source-gate`.
+
+- Added missing manifest `context/status` metadata to older entries and raised both fields to `100.0%` coverage.
+- Created `docs/zh-Hans-release-candidate-2026-06-01-rc8.md`.
+- RC8 release preset coverage is `66.9%`.
+- Final dry-run is clean with `would_change: 0` and `missing: 0`.
+- Locale JSON/YAML exports, JSON parse, Python localization tests, `cargo fmt --check`, `git diff --check`, and `cargo check -j 2 -p warp` passed.
+- `cargo check -j 2 -p warp` only reports existing unused-variable warnings.
+- RC8 remains `ready-for-local-use-source-level`, not `ready-for-public-rc`, because account/state GUI rows still require isolated test-account or fixture evidence.
+
+## 2026-06-01 P26 public-RC readiness
+
+Phase 26 status: `qualified-public-rc-readiness`.
+
+- Added post-RC8 execution batches to `docs/zh-Hans-public-rc-gate-runbook.md`.
+- Added profile names for `zh-rc9-local-fixture`, `zh-rc9-agent-fixture`, `zh-rc9-test-account`, `zh-rc9-server-state`, and `zh-rc9-aws-fixture`.
+- Confirmed local-fixture rows can proceed only if GUI automation can read target UI.
+- Confirmed `GUI-AUTH-01`, `GUI-SET-03`, `GUI-WS-06`, `GUI-SET-06`, `GUI-WS-04`, and `GUI-WS-07` remain blocked until an isolated test account and disposable objects exist.
+- Confirmed `GUI-CLOUD-01`, `GUI-BILL-01`, `GUI-BILL-02`, `GUI-LAUNCH-01`, `GUI-ONB-03`, and `GUI-WEB-01` require backend, feature, billing, route, or server-state fixtures.
+- No GUI row is promoted by this readiness-only phase.
+- No source files, accounts, billing quota, cloud environment, secrets, or team ownership state were touched.
+
+## 2026-06-01 P27 terminal backlog source pass
+
+Phase 27 status: `qualified-terminal-backlog-pass-3-low-load`.
+
+- Added Terminal-focused manifest entries across input, events, available shells, CLI Agent, local TTY shell, Claude/Gemini plugin managers, session/model errors, shared-session sharer errors, and terminal init bindings.
+- Added `77` translated visible/user-facing strings and `207` reviewed preserves for shell commands, parser/protocol/debug strings, environment variables, product names, and test fixtures.
+- Raised Terminal preset coverage from `37.5%` to `52.1%`.
+- Raised release preset coverage from `66.9%` to `70.7%`.
+- Phase 27 scoped dry-run is clean with `would_change: 0` and `missing: 0`.
+- Manifest validation, glossary check, Python localization tests, `cargo fmt --check`, and `git diff --check` passed.
+- Full-manifest dry-run is deferred to the Phase 32 RC9 gate because the local machine became hot during full scanning.
+- No GUI row is promoted by this source-only pass.
+
+## 2026-06-01 P28 AI/Agent backlog source pass
+
+Phase 28 status: `qualified-ai-agent-backlog-pass-2-low-load`.
+
+- Added AI/Agent manifest entries across Agent SDK CLI output, execution profiles, orchestration controls, usage details, run-agent cards, prompt alerts, remote search errors, LLM availability messages, rules UI, and selected diagnostics.
+- Added `240` translated visible/user-facing strings and `117` reviewed preserves for provider CLI output matching, prompt/tool contracts, schema keys, IDs, test fixtures, filenames, command templates, and diagnostics.
+- Raised AI root coverage from `56.0%` to `70.9%`.
+- Raised modals preset coverage from `58.6%` to `65.8%`.
+- Raised release preset coverage from `70.7%` to `75.2%`.
+- Phase 28 scoped dry-run is clean with `would_change: 0` and `missing: 0`.
+- Manifest validation, glossary check, Python localization tests, `cargo fmt --check`, and `git diff --check` passed.
+- Full-manifest dry-run is deferred to the Phase 32 RC9 gate because repeated full scans caused local overheating.
+- No GUI row is promoted by this source-only pass.
+
+## 2026-06-01 P29 settings/modals source pass
+
+Phase 29 status: `qualified-settings-modals-cleanup-low-load`.
+
+- Added Settings-focused manifest entries across AI settings, shared blocks, code settings, external editor settings, environment forms, MCP settings, privacy regex, billing state labels, custom inference examples, and Settings navigation labels.
+- Added `125` translated visible/searchable/modal-facing strings and `41` reviewed preserves for examples, date formats, IDs, commands, search tags, and diagnostics.
+- Raised Settings preset coverage from `87.5%` to `96.3%`.
+- Modals preset remains above target at `65.8%`.
+- Raised release preset coverage from `75.2%` to `77.2%`.
+- Phase 29 scoped dry-run is clean with `would_change: 0` and `missing: 0`.
+- Manifest validation, glossary check, Python localization tests, `cargo fmt --check`, and `git diff --check` passed.
+- Full-manifest dry-run is deferred to the Phase 32 RC9 gate because repeated full scans caused local overheating.
+- No GUI row is promoted by this source-only pass.
+
+## 2026-06-01 P30 low-load GUI evidence pass
+
+Phase 30 status: `qualified-gui-evidence-low-load-with-residue`.
+
+- Reused `target/debug/bundle/osx/WarpOss.app` with `WARP_DATA_PROFILE=zh-rc9-local-fixture`; no rebuild was performed.
+- Captured current-cycle screenshots under `docs/gui-smoke-artifacts/phase30/`.
+- Verified fresh onboarding and local no-login flow were reachable in the isolated profile.
+- `GUI-ONB-01`: `fixture-evidence-with-residue`; onboarding text is Chinese, but static product preview imagery still contains embedded English and the reused bundle showed pre-Phase-28 `auto (cost-efficient)` residue.
+- `GUI-AUTH-03`: `fixture-evidence`; `隐私设置`, `服务条款`, `禁用 AI 功能`, and disable-AI confirmation were visible in Chinese.
+- `GUI-WS-01`: `accessibility-evidence` + `cropped-screenshot-evidence`; main window, left panel, top search, and Settings navigation were readable in Chinese.
+- `GUI-SET-03`: `local-fixture-only`; logged-out Settings > Agent was readable, but isolated account evidence is still required for Build plan/API key/custom endpoint state.
+- `GUI-AUTH-02`, `GUI-WS-02`, `GUI-WS-03`, `GUI-WS-05`, and `GUI-AGENT-01` through `GUI-AGENT-05` remain blocked or partial because token fallback, disposable session history, rewind history, admin prompt, Agent tips, Agent conversation, lifecycle, error, and environment modal fixtures were unavailable.
+- No public-RC row is promoted by Phase 30.
+- No account, billing quota, cloud environment, secret, production object, or team ownership state was touched.
+
+## 2026-06-01 P31 isolated test-account public-RC pass
+
+Phase 31 status: `qualified-public-rc-account-state-blocked`.
+
+- Public-RC account/state rows were audited against `docs/zh-Hans-public-rc-gate-runbook.md`.
+- `GUI-AUTH-01` remains `blocked-external-state`: missing isolated test account and browser auth callback.
+- `GUI-SET-03` remains `blocked-external-state`: missing isolated account for real AI settings, Build plan, API key, and custom inference state.
+- `GUI-SET-06` remains `blocked-external-state`: missing disposable cloud environment `zh-smoke-delete-environment`.
+- `GUI-WS-04` remains `blocked-external-state`: missing disposable managed auth secret `zh-smoke-delete-secret`.
+- `GUI-WS-06` remains `blocked-external-state`: missing isolated account/custom inference state and disposable endpoint `zh-smoke-delete-endpoint`.
+- `GUI-WS-07` remains `blocked-external-state`: missing disposable owner test team `zh-smoke-public-rc-team`.
+- `GUI-BILL-01`, `GUI-BILL-02`, and `GUI-CLOUD-01` remain `blocked-external-state`: missing safe billing/quota/backend fixtures.
+- No public-RC row is promoted by Phase 31.
+- No account, billing quota, cloud environment, secret, production object, or team ownership state was touched.
+
+## 2026-06-01 P32 review/freeze/RC9 gate
+
+Phase 32 status: `qualified-rc9-gate`.
+
+- Created `docs/zh-Hans-release-candidate-2026-06-01-rc9.md`.
+- RC9 decision is `ready-for-local-use-with-fixture-evidence`.
+- Public RC remains not ready because isolated account/state evidence is still unavailable.
+- Final manifest state: `6294` entries, `301` files, `would_change: 0`, `missing: 0`.
+- Metadata remains complete: manifest `context/status` coverage is `100.0%`.
+- Final source coverage: onboarding `100.0%`, workspace `94.3%`, search `100.0%`, settings `96.3%`, modals `65.8%`, release `77.2%`, terminal `52.1%`, AI/Agent `70.9%`.
+- Locale JSON/YAML exports completed and JSON parsed.
+- Python localization tests passed: `19` tests.
+- `cargo fmt --check`, `git diff --check`, and `cargo check -j 2 -p warp` passed.
+- Rust warnings are unchanged existing unused-variable warnings in `scp_fallback.rs` and `slash_commands/mod.rs`.
+- The full dry-run was run through a throttled wrapper to reduce heat; the Python summary was clean, and no manifest drift or replacement failure was reported.
+
+## 2026-06-01 P37 GUI fixture and visual residue preparation
+
+Phase 37 status: `qualified-gui-fixture-visual-residue-prep`.
+
+- Located the static onboarding preview asset roots used by Phase 30 screenshots:
+  - `app/assets/async/png/onboarding/welcome_agent.png`
+  - `app/assets/async/png/onboarding/welcome_terminal.png`
+  - `app/assets/async/png/onboarding/agent_intention/`
+  - `app/assets/async/png/onboarding/terminal_intention/`
+  - `app/assets/async/png/onboarding/thirdparty_*.png`
+- Confirmed those embedded English previews are PNG content residue, not Rust string manifest drift.
+- Added `zh-rc10-local-fixture`, `zh-rc10-agent-fixture`, `zh-rc10-test-account`, `zh-rc10-server-state`, and `zh-rc10-aws-fixture` to the public-RC runbook.
+- Defined Phase 38 fixture labels for current-source logged-out onboarding, token fallback, local Agent fixture states, and static imagery.
+- No public-RC row is promoted by Phase 37.
+- No source fixture code was added in this phase; debug-only fixture implementation remains a Phase 38/39 prerequisite if GUI automation cannot naturally trigger the row.
+
+## 2026-06-01 P38 current-source GUI smoke
+
+Phase 38 status: `qualified-current-source-gui-smoke-low-load`.
+
+- Rebuilt `target/debug/bundle/osx/WarpOss.app` from current source with `CARGO_BUILD_JOBS=2` and `nice -n 10`.
+- Launched with `WARP_DATA_PROFILE=zh-rc10-local-fixture`; `warp-oss` and child `terminal-server` were reniced to `15` and stopped after capture.
+- Captured current-source screenshots under `docs/gui-smoke-artifacts/phase38/`.
+- Promoted current-source local evidence:
+  - `GUI-BASE-01`: `accessibility-evidence`; menu bar showed `文件`、`编辑`、`视图`、`标签页`、`块`、`AI`、`Drive`、`窗口`、`帮助`.
+  - `GUI-BASE-04`: `cropped-screenshot-evidence`; disabling AI reached the Chinese main window.
+  - `GUI-ONB-01`: `cropped-screenshot-evidence`; welcome, Agent choice, customization, third-party Agent, and theme screens were visible in Chinese.
+  - `GUI-AUTH-03`: `cropped-screenshot-evidence`; disable-AI confirmation and skip flow were visible in Chinese.
+  - `GUI-SET-01`: `cropped-screenshot-evidence`; Account, Warp Agent, and Privacy settings were visible in Chinese.
+- Static onboarding preview PNGs still contain embedded English UI and remain `visual-residue`; this is not source string manifest drift.
+- The current-source smoke initially showed server/cache-provided `auto (cost-efficient)` model metadata. Source and manifest already translated this string, so Phase 38 added a narrow runtime display-name mapping in `app/src/ai/llms.rs` plus a focused unit test. A second GUI launch after the fix was `automation-blocked` on this desktop, so the fix is accepted by source inspection and unit test rather than a second screenshot.
+- `GUI-SET-03` remains blocked for public-RC evidence because real Build plan/API key/custom endpoint state requires an isolated account.
+- `GUI-AUTH-01`, `GUI-SET-06`, `GUI-WS-04`, `GUI-WS-06`, `GUI-WS-07`, `GUI-BILL-01`, `GUI-BILL-02`, and `GUI-CLOUD-01` remain blocked until Phase 39 prerequisites exist.
+- No main account, billing quota, cloud environment, secret, production object, or team ownership state was touched.
+
+## 2026-06-01 P39 isolated account and backend-state audit
+
+Phase 39 status: `qualified-public-rc-account-state-blocked`.
+
+- Audited the public-RC rows against `docs/zh-Hans-public-rc-gate-runbook.md`.
+- Did not run account/backend GUI interactions because no disposable test account, test team, safe billing/quota state, disposable endpoint, disposable cloud environment, disposable managed secret, or cleanup path was available.
+- `GUI-AUTH-01` remains `blocked-external-state`: missing isolated test account and browser auth callback.
+- `GUI-SET-03` remains `blocked-external-state`: missing isolated account for real AI settings, Build plan, API key, and custom inference state.
+- `GUI-SET-06` remains `blocked-external-state`: missing disposable cloud environment `zh-smoke-delete-environment`.
+- `GUI-WS-04` remains `blocked-external-state`: missing disposable managed auth secret `zh-smoke-delete-secret`.
+- `GUI-WS-06` remains `blocked-external-state`: missing isolated account/custom inference state and disposable endpoint `zh-smoke-delete-endpoint`.
+- `GUI-WS-07` remains `blocked-external-state`: missing disposable owner test team `zh-smoke-public-rc-team`.
+- `GUI-BILL-01`, `GUI-BILL-02`, and `GUI-CLOUD-01` remain `blocked-external-state`: missing safe billing/quota/backend fixtures.
+- `GUI-SET-04` and `GUI-SET-05` remain `blocked-external-state`: missing explicit disposable AWS/Bedrock profile or invalid credential fixture.
+- No public-RC row is promoted by Phase 39.
+- No account, billing quota, cloud environment, secret, production object, or team ownership state was touched.
+
+## 2026-06-02 P40 review/freeze/RC10 gate
+
+Phase 40 status: `qualified-rc10-gate`.
+
+- Created `docs/zh-Hans-release-candidate-2026-06-01-rc10.md`.
+- RC10 decision is `ready-for-local-use-with-fixture-evidence`.
+- Public RC remains not ready because isolated account/state evidence is still unavailable.
+- Final manifest state: `6786` entries, `342` files, `would_change: 0`, `missing: 0`.
+- Metadata remains complete: manifest `context/status` coverage is `100.0%`.
+- Final source coverage: onboarding `100.0%`, workspace `99.9%`, search `100.0%`, settings `99.9%`, modals `73.1%`, release `83.1%`, terminal `61.2%`, AI/Agent `78.0%`.
+- Locale JSON/YAML exports completed and JSON parsed.
+- Python localization tests passed: `19` tests.
+- `cargo fmt --check`, `git diff --check`, and `cargo check -j 2 -p warp` passed.
+- Rust warnings are unchanged existing unused-variable warnings in `scp_fallback.rs` and `slash_commands/mod.rs`.
+- The full dry-run was run through a throttled Python wrapper to reduce heat; the Python summary was clean, and no manifest drift or replacement failure was reported.
+
+## 2026-06-02 P44 auth-secret and Agent fixture audit
+
+Phase 44 status: `qualified-auth-secret-ftux-source-and-agent-fixture-blockers`.
+
+- Auth-secret FTUX source copy is translated in `app/src/terminal/view/ambient_agent/auth_secret_ftux_view.rs`: placeholder, save failure, empty-name validation, success toast, credential description, encryption copy, learn-more link, team sharing, optional-field suffix, and buttons.
+- Agent task/notification copy is translated in `app/src/ai/ambient_agents/task.rs` and `app/src/ai/agent_management/agent_management_model.rs`: task completion/cancellation/error notifications, task source labels, and cancel-task toasts.
+- No GUI launch was attempted in this phase because the laptop heat constraint favors source/fixture audit first, and no safe Agent fixture hook was found that could exercise the rows without account/backend state.
+- Existing debug GUI fixture support remains limited to custom inference endpoint smoke via `WARP_CN_CUSTOM_INFERENCE_SMOKE=1`; there is no corresponding `WARP_CN_AGENT_*` or profile-seeded fixture for Agent tips, conversation details, lifecycle states, stream errors, or Agent Assisted Environment fallback.
+- `GUI-AUTH-02` remains `needs-trigger`: invalid token fallback is locally constructible in principle, but no visible GUI/token-paste fixture hook exists in current source.
+- `GUI-WS-04` remains `blocked-external-state`: auth-secret deletion still requires disposable managed secret `zh-smoke-delete-secret` or a dedicated fixture; Phase 44 only translated auth-secret FTUX source copy and did not create/delete secrets.
+- `GUI-AGENT-01` remains `manual-gate`: missing an env-gated Agent tips fixture that opens the Agent input area and exposes overlap/accessibility evidence.
+- `GUI-AGENT-02` remains `manual-gate`: missing a disposable local Agent conversation fixture that can open the details panel with safe metadata.
+- `GUI-AGENT-03` remains `needs-trigger`: source status labels are translated, but GUI evidence still needs a lifecycle fixture covering queued, pending, in progress, done, failed, blocked, and cancelled.
+- `GUI-AGENT-04` remains `needs-trigger`: missing controlled web/AWS/quota/stream-error fixtures; do not consume main-account quota or credentials.
+- `GUI-AGENT-05` remains `needs-trigger`: missing an environment-modal fixture that triggers Agent Assisted Environment fallback copy.
+- No account, billing quota, cloud object, managed secret, production object, or team state was touched.
+
+## 2026-06-02 P45 static onboarding visual asset decision
+
+Phase 45 status: `qualified-static-onboarding-visual-residue-deferred`.
+
+- Reviewed all `54` onboarding PNGs through source mapping and local contact sheets.
+- Accepted `4` assets as `accepted-decorative-or-brand-art`: `hoa_welcome_banner.png`, `onboarding_bg.png`, `openwarp_launch_banner.png`, and `orchestration_launch_banner.png`.
+- Classified `50` assets as `defer-to-design-regeneration` because they contain embedded English UI, terminal/code/editor preview text, notification text, toolbar text, or sidebar labels.
+- Affected source surfaces are onboarding intention, customization, third-party Agent, theme picker, and login right-panel visuals.
+- No PNG was modified in this phase. RC11 must continue to describe these screenshots as `visual-residue`, not manifest/source drift.
+- Follow-up requires a reversible asset branch, regenerated Chinese-localized preview art, before/after screenshots, and confirmation that no unrelated binary assets changed.
+
+## 2026-06-02 P46 public-RC external-state evidence pass
+
+Phase 46 status: `qualified-public-rc-account-state-blocked`.
+
+- Followed `docs/zh-Hans-public-rc-gate-runbook.md` and stopped before GUI/account/backend interaction because the required disposable prerequisites were unavailable.
+- No GUI launch was attempted, and no account, billing quota, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- `GUI-AUTH-01` remains `blocked-external-state`: missing isolated test account and browser auth callback.
+- `GUI-SET-03` remains `blocked-external-state`: missing isolated account for AI settings, Build plan, API key, and custom inference state.
+- `GUI-SET-04` and `GUI-SET-05` remain `blocked-external-state`: missing explicit disposable AWS/Bedrock profile or invalid credential fixture.
+- `GUI-SET-06` remains `blocked-external-state`: missing disposable cloud environment `zh-smoke-delete-environment`.
+- `GUI-WS-04` remains `blocked-external-state`: missing disposable managed auth secret `zh-smoke-delete-secret` or dedicated fixture.
+- `GUI-WS-06` remains `blocked-external-state`: missing isolated account/custom inference state and disposable endpoint `zh-smoke-delete-endpoint`.
+- `GUI-WS-07` remains `blocked-external-state`: missing disposable owner test team `zh-smoke-public-rc-team`.
+- `GUI-BILL-01`, `GUI-BILL-02`, and `GUI-CLOUD-01` remain `blocked-external-state`: missing safe billing/quota/backend fixtures.
+- No row was promoted to public-RC `verified`; public RC remains blocked by current-cycle external-state evidence.
+
+## 2026-06-02 P53 visual and public-RC blocker refresh
+
+Phase 53 status: `qualified-visual-public-rc-blocker-refresh`.
+
+- Rechecked onboarding PNG inventory: total remains `54`, with `16` agent customization, `10` terminal customization, `8` agent theme, and `8` terminal theme PNGs.
+- Phase 45 asset policy still applies: `4` decorative/brand assets accepted, `50` screenshot/static-art assets remain `defer-to-design-regeneration`.
+- No PNG was modified; visual residue remains bitmap content, not manifest/source drift.
+- No GUI launch was attempted, and no account, billing quota, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- Public-RC blocker status is unchanged from Phase 46: `GUI-AUTH-01`, `GUI-SET-03`, `GUI-SET-04`, `GUI-SET-05`, `GUI-SET-06`, `GUI-WS-04`, `GUI-WS-06`, `GUI-WS-07`, `GUI-BILL-01`, `GUI-BILL-02`, and `GUI-CLOUD-01` remain `blocked-external-state`.
+- No row was promoted to public-RC `verified`.
+
+## 2026-06-02 P61 visual and public-RC preflight
+
+Phase 61 status: `qualified-visual-public-rc-preflight`.
+
+- Rechecked onboarding PNG inventory: total remains `54`, with `12` root-level onboarding PNGs, `16` `agent_intention` root PNGs, `10` `terminal_intention` root PNGs, `8` `agent_intention/theme` PNGs, and `8` `terminal_intention/theme` PNGs.
+- Phase 45/53 asset policy still applies: `4` decorative/brand assets accepted, `50` screenshot/static-art assets remain `defer-to-design-regeneration`.
+- Created `docs/zh-Hans-onboarding-visual-regeneration-plan.md` to define the reversible asset-only branch, before/after comparison, dimensions/filename checks, and design approval requirements.
+- No PNG was modified; visual residue remains bitmap content, not manifest/source drift.
+- No GUI launch was attempted, and no account, billing quota, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- Public-RC blocker status remains unchanged: `GUI-AUTH-01`, `GUI-SET-03`, `GUI-SET-04`, `GUI-SET-05`, `GUI-SET-06`, `GUI-WS-04`, `GUI-WS-06`, `GUI-WS-07`, `GUI-BILL-01`, `GUI-BILL-02`, and `GUI-CLOUD-01` remain `blocked-external-state`.
+- No row was promoted to public-RC `verified`.
+
+## 2026-06-02 P96 low-risk GUI smoke heat-safe defer
+
+Phase 96 status: `qualified-with-heat-safety-gui-defer`.
+
+- Reviewed the RC18 low-risk GUI smoke candidate list: `GUI-BASE-01`, `GUI-BASE-02`, `GUI-BASE-03`, `GUI-BASE-04`, `GUI-BASE-05`, `GUI-ONB-01`, `GUI-ONB-02`, `GUI-AUTH-03`, `GUI-SET-01`, `GUI-SET-02`, and `GUI-WS-08`.
+- Did not launch GUI or build a bundle because the active goal requires avoiding local performance pressure after severe machine heating.
+- Created `docs/gui-smoke-artifacts/phase96/README.md` as the Phase 96 artifact index.
+- No account, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- Public-RC blocker status is unchanged: `GUI-AUTH-01`, `GUI-SET-03`, `GUI-SET-04`, `GUI-SET-05`, `GUI-SET-06`, `GUI-WS-04`, `GUI-WS-06`, `GUI-WS-07`, `GUI-BILL-01`, `GUI-BILL-02`, and `GUI-CLOUD-01` remain blocked until isolated accounts, backend fixtures, or disposable objects exist.
+- No row was promoted to current-cycle public-RC `verified`.
+
+## 2026-06-02 P105 low-risk GUI smoke heat-safe defer
+
+Phase 105 status: `qualified-with-heat-safety-gui-defer`.
+
+- Reviewed the RC19 low-risk GUI smoke candidate list: `GUI-BASE-01`, `GUI-BASE-02`, `GUI-BASE-03`, `GUI-BASE-04`, `GUI-BASE-05`, `GUI-ONB-01`, `GUI-ONB-02`, `GUI-AUTH-03`, `GUI-SET-01`, `GUI-SET-02`, and `GUI-WS-08`.
+- Did not build a bundle or launch GUI because the active goal requires avoiding local performance pressure after severe machine heating.
+- Did not create a new ignored artifact directory because no screenshots or accessibility snapshots were captured.
+- No account, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- Public-RC blocker status is unchanged: `GUI-AUTH-01`, `GUI-SET-03`, `GUI-SET-04`, `GUI-SET-05`, `GUI-SET-06`, `GUI-WS-04`, `GUI-WS-06`, `GUI-WS-07`, `GUI-BILL-01`, `GUI-BILL-02`, and `GUI-CLOUD-01` remain blocked until isolated accounts, backend fixtures, or disposable objects exist.
+- No row was promoted to current-cycle public-RC `verified`.

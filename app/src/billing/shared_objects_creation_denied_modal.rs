@@ -21,7 +21,7 @@ use crate::ui_components::icons::Icon;
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::workspaces::workspace::CustomerType;
 
-const DEFAULT_LIMIT_REACHED_MODAL_HEADER: &str = "Shared object limit reached";
+const DEFAULT_LIMIT_REACHED_MODAL_HEADER: &str = "已达到共享对象上限";
 
 pub struct SharedObjectsCreationDeniedModal {
     shared_objects_creation_denied_modal: ViewHandle<Modal<SharedObjectsCreationDeniedBody>>,
@@ -125,9 +125,9 @@ impl SharedObjectsCreationDeniedModal {
         let appearance = Appearance::as_ref(ctx);
         self.team_uid = Some(team_uid);
         let title: Option<String> = if is_delinquent_due_to_payment_issue {
-            Some(format!("Shared {object_type}s restricted"))
+            Some(format!("共享 {object_type} 已受限"))
         } else {
-            Some(format!("Shared {object_type}s limit reached"))
+            Some(format!("已达到共享 {object_type} 上限"))
         };
         let (icon, icon_color) = match object_type {
             DriveObjectType::Notebook { is_ai_document } => (

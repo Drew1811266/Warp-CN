@@ -552,27 +552,27 @@ pub mod regexes {
     pub const DEFAULT_REGEXES_WITH_NAMES: &[DefaultRegex] = &[
         DefaultRegex {
             pattern: IPV4_ADDRESS,
-            name: "IPv4 Address",
+            name: "IPv4 地址",
         },
         DefaultRegex {
             pattern: IPV6_ADDRESS,
-            name: "IPv6 Address",
+            name: "IPv6 地址",
         },
         DefaultRegex {
             pattern: PHONE_NUMBER,
-            name: "Phone Number",
+            name: "电话号码",
         },
         DefaultRegex {
             pattern: MAC_ADDRESS,
-            name: "MAC Address",
+            name: "MAC 地址",
         },
         DefaultRegex {
             pattern: GOOGLE_API_KEY,
-            name: "Google API Key",
+            name: "Google API 密钥",
         },
         DefaultRegex {
             pattern: AWS_ACCESS_ID,
-            name: "AWS Access ID",
+            name: "AWS 访问 ID",
         },
         DefaultRegex {
             pattern: SLACK_APP_TOKEN,
@@ -580,31 +580,31 @@ pub mod regexes {
         },
         DefaultRegex {
             pattern: GITHUB_CLASSIC_PERSONAL_ACCESS_TOKEN,
-            name: "GitHub Classic Personal Access Token",
+            name: "GitHub 经典个人访问令牌",
         },
         DefaultRegex {
             pattern: GITHUB_FINE_GRAINED_PERSONAL_ACCESS_TOKEN,
-            name: "GitHub Fine-Grained Personal Access Token",
+            name: "GitHub 细粒度个人访问令牌",
         },
         DefaultRegex {
             pattern: GITHUB_OAUTH_ACCESS_TOKEN,
-            name: "GitHub OAuth Access Token",
+            name: "GitHub OAuth 访问令牌",
         },
         DefaultRegex {
             pattern: GITHUB_USER_TO_SERVER_TOKEN,
-            name: "GitHub User-to-Server Token",
+            name: "GitHub 用户到服务器令牌",
         },
         DefaultRegex {
             pattern: GITHUB_SERVER_TO_SERVER_TOKEN,
-            name: "GitHub Server-to-Server Token",
+            name: "GitHub 服务器到服务器令牌",
         },
         DefaultRegex {
             pattern: STRIPE_KEY,
-            name: "Stripe Key",
+            name: "Stripe 密钥",
         },
         DefaultRegex {
             pattern: FIREBASE_AUTH_DOMAIN,
-            name: "Firebase Auth Domain",
+            name: "Firebase 认证域名",
         },
         DefaultRegex {
             pattern: JWT,
@@ -612,23 +612,23 @@ pub mod regexes {
         },
         DefaultRegex {
             pattern: OPENAI_API_KEY,
-            name: "OpenAI API Key",
+            name: "OpenAI API 密钥",
         },
         DefaultRegex {
             pattern: ANTHROPIC_API_KEY,
-            name: "Anthropic API Key",
+            name: "Anthropic API 密钥",
         },
         DefaultRegex {
             pattern: GENERIC_SK_API_KEY,
-            name: "Generic SK API Key",
+            name: "通用 SK API 密钥",
         },
         DefaultRegex {
             pattern: FIREWORKS_API_KEY,
-            name: "Fireworks API Key",
+            name: "Fireworks API 密钥",
         },
         DefaultRegex {
             pattern: WARP_API_KEY,
-            name: "Warp API Key",
+            name: "Warp API 密钥",
         },
     ];
 }

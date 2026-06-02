@@ -205,7 +205,7 @@ impl GrantBucket {
             .all(|e| e.date_naive() == first.date_naive())
         {
             let local = first.with_timezone(&Local);
-            format!("Expires {}", local.format("%b %d, %Y"))
+            format!("到期：{}", local.format("%b %d, %Y"))
         } else {
             String::new()
         }
@@ -1498,7 +1498,7 @@ impl BillingAndUsagePageV2View {
         let fg = theme.foreground();
         let auto_reload_enabled = state.auto_reload_enabled;
         let purchase_button_label = if self.addon_credits.purchase_loading {
-            "Buying\u{2026}"
+            "购买中..."
         } else {
             "一次性购买"
         };

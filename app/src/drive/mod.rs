@@ -90,12 +90,12 @@ impl fmt::Display for DriveObjectType {
             DriveObjectType::Notebook { .. } => write!(f, "notebook"),
             DriveObjectType::Workflow => write!(f, "workflow"),
             DriveObjectType::Folder => write!(f, "folder"),
-            DriveObjectType::EnvVarCollection => write!(f, "env var collection"),
+            DriveObjectType::EnvVarCollection => write!(f, "环境变量集合"),
             DriveObjectType::AgentModeWorkflow => write!(f, "prompt"),
-            DriveObjectType::AIFact => write!(f, "ai fact"),
-            DriveObjectType::AIFactCollection => write!(f, "ai fact collection"),
-            DriveObjectType::MCPServer => write!(f, "mcp server"),
-            DriveObjectType::MCPServerCollection => write!(f, "mcp server collection"),
+            DriveObjectType::AIFact => write!(f, "AI Fact"),
+            DriveObjectType::AIFactCollection => write!(f, "AI Fact 集合"),
+            DriveObjectType::MCPServer => write!(f, "MCP server"),
+            DriveObjectType::MCPServerCollection => write!(f, "MCP server 集合"),
         }
     }
 }
@@ -131,10 +131,7 @@ pub fn write_has_auto_opened_welcome_folder_to_user_defaults(app: &mut AppContex
     schemars::JsonSchema,
     settings_value::SettingsValue,
 )]
-#[schemars(
-    description = "Sort order for Warp Drive items.",
-    rename_all = "snake_case"
-)]
+#[schemars(description = "Warp Drive 项目的排序方式。", rename_all = "snake_case")]
 pub enum DriveSortOrder {
     /// Sort by newest revision first in main index, most recently trashed in trash index
     #[default]
@@ -215,11 +212,11 @@ impl DriveSortOrder {
     /// Returns the text that is used to display the sorting option in the KnowledgeIndex's sorting menu
     pub fn menu_text(&self, index_variant: DriveIndexVariant) -> &str {
         match (self, index_variant) {
-            (DriveSortOrder::ByTimestamp, DriveIndexVariant::MainIndex) => "Last updated",
-            (DriveSortOrder::ByTimestamp, DriveIndexVariant::Trash) => "Last trashed",
-            (DriveSortOrder::AlphabeticalDescending, _) => "A to Z",
-            (DriveSortOrder::AlphabeticalAscending, _) => "Z to A",
-            (DriveSortOrder::ByObjectType, _) => "Type",
+            (DriveSortOrder::ByTimestamp, DriveIndexVariant::MainIndex) => "最近更新",
+            (DriveSortOrder::ByTimestamp, DriveIndexVariant::Trash) => "最近移入废纸篓",
+            (DriveSortOrder::AlphabeticalDescending, _) => "A 到 Z",
+            (DriveSortOrder::AlphabeticalAscending, _) => "Z 到 A",
+            (DriveSortOrder::ByObjectType, _) => "类型",
         }
     }
 }

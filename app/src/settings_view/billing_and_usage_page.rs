@@ -1956,7 +1956,7 @@ impl BillingAndUsagePageView {
         };
 
         let button_text = if purchase_addon_credits_loading {
-            "Buying…".to_string()
+            "购买中...".to_string()
         } else {
             "购买".to_string()
         };

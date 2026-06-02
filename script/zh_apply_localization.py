@@ -375,6 +375,224 @@ def replace_rust_string_literals(text: str, source: str, target: str) -> tuple[s
     return "".join(result), replaced
 
 
+def replace_rust_string_literals_many(
+    text: str,
+    replacements_by_source: dict[str, str],
+) -> tuple[dict[str, int], dict[str, int]]:
+    """Count many replacement sources/targets in one Rust string-literal pass."""
+
+    found_counts = {source: 0 for source in replacements_by_source}
+    target_counts = {source: 0 for source in replacements_by_source}
+    sources_by_target: dict[str, list[str]] = {}
+    for source, target in replacements_by_source.items():
+        sources_by_target.setdefault(target, []).append(source)
+
+    def count_literal(literal: str) -> None:
+        if literal in replacements_by_source:
+            found_counts[literal] += 1
+        for source in sources_by_target.get(literal, ()):
+            target_counts[source] += 1
+
+    index = 0
+
+    while index < len(text):
+        char = text[index]
+        next_char = text[index + 1] if index + 1 < len(text) else ""
+
+        if char == "/" and next_char == "/":
+            newline = text.find("\n", index + 2)
+            if newline == -1:
+                break
+            index = newline + 1
+            continue
+
+        if char == "/" and next_char == "*":
+            end = text.find("*/", index + 2)
+            if end == -1:
+                break
+            index = end + 2
+            continue
+
+        if char == "'":
+            char_end = _consume_char_literal(text, index)
+            if char_end is not None:
+                index = char_end
+                continue
+
+        if char != '"':
+            index += 1
+            continue
+
+        raw_hash_count = _raw_string_hash_count_before_quote(text, index)
+        if raw_hash_count is not None:
+            raw_end = _consume_raw_string(text, index, raw_hash_count)
+            terminator = '"' + ("#" * raw_hash_count)
+            if text[raw_end - len(terminator) : raw_end] != terminator:
+                index = raw_end
+                continue
+
+            literal = text[index + 1 : raw_end - len(terminator)]
+            count_literal(literal)
+            index = raw_end
+            continue
+
+        index += 1
+        literal_chars: list[str] = []
+        escaped = False
+
+        while index < len(text):
+            current = text[index]
+            index += 1
+
+            if escaped:
+                if current == "\n":
+                    while index < len(text) and text[index] in " \t":
+                        index += 1
+                    escaped = False
+                    continue
+                if current == "\r":
+                    if index < len(text) and text[index] == "\n":
+                        index += 1
+                    while index < len(text) and text[index] in " \t":
+                        index += 1
+                    escaped = False
+                    continue
+                literal_chars.append(current)
+                escaped = False
+                continue
+            if current == "\\":
+                escaped = True
+                continue
+            if current == '"':
+                count_literal("".join(literal_chars))
+                break
+            literal_chars.append(current)
+
+    return found_counts, target_counts
+
+
+def replace_rust_string_literals_many_apply(
+    text: str,
+    replacements_by_source: dict[str, str],
+) -> tuple[str, dict[str, int], dict[str, int]]:
+    """Replace many Rust string literals in one pass and report source/target counts."""
+
+    result: list[str] = []
+    found_counts = {source: 0 for source in replacements_by_source}
+    target_counts = {source: 0 for source in replacements_by_source}
+    sources_by_target: dict[str, list[str]] = {}
+    for source, target in replacements_by_source.items():
+        sources_by_target.setdefault(target, []).append(source)
+
+    def replacement_for_literal(literal: str) -> str | None:
+        if literal in replacements_by_source:
+            found_counts[literal] += 1
+            return replacements_by_source[literal]
+        for source in sources_by_target.get(literal, ()):
+            target_counts[source] += 1
+        return None
+
+    index = 0
+
+    while index < len(text):
+        char = text[index]
+        next_char = text[index + 1] if index + 1 < len(text) else ""
+
+        if char == "/" and next_char == "/":
+            newline = text.find("\n", index + 2)
+            if newline == -1:
+                result.append(text[index:])
+                break
+            result.append(text[index : newline + 1])
+            index = newline + 1
+            continue
+
+        if char == "/" and next_char == "*":
+            end = text.find("*/", index + 2)
+            if end == -1:
+                result.append(text[index:])
+                break
+            result.append(text[index : end + 2])
+            index = end + 2
+            continue
+
+        if char == "'":
+            char_end = _consume_char_literal(text, index)
+            if char_end is not None:
+                result.append(text[index:char_end])
+                index = char_end
+                continue
+
+        if char != '"':
+            result.append(char)
+            index += 1
+            continue
+
+        raw_hash_count = _raw_string_hash_count_before_quote(text, index)
+        if raw_hash_count is not None:
+            raw_end = _consume_raw_string(text, index, raw_hash_count)
+            terminator = '"' + ("#" * raw_hash_count)
+            if text[raw_end - len(terminator) : raw_end] != terminator:
+                result.append(text[index:raw_end])
+                index = raw_end
+                continue
+
+            literal = text[index + 1 : raw_end - len(terminator)]
+            replacement = replacement_for_literal(literal)
+            if replacement is None:
+                result.append(text[index:raw_end])
+            else:
+                result.append('"')
+                result.append(replacement)
+                result.append(terminator)
+            index = raw_end
+            continue
+
+        start = index
+        index += 1
+        literal_chars: list[str] = []
+        escaped = False
+
+        while index < len(text):
+            current = text[index]
+            index += 1
+
+            if escaped:
+                if current == "\n":
+                    while index < len(text) and text[index] in " \t":
+                        index += 1
+                    escaped = False
+                    continue
+                if current == "\r":
+                    if index < len(text) and text[index] == "\n":
+                        index += 1
+                    while index < len(text) and text[index] in " \t":
+                        index += 1
+                    escaped = False
+                    continue
+                literal_chars.append(current)
+                escaped = False
+                continue
+            if current == "\\":
+                escaped = True
+                continue
+            if current == '"':
+                literal = "".join(literal_chars)
+                replacement = replacement_for_literal(literal)
+                if replacement is None:
+                    result.append(text[start:index])
+                else:
+                    result.append('"')
+                    result.append(replacement)
+                    result.append('"')
+                break
+            literal_chars.append(current)
+        else:
+            result.append(text[start:index])
+
+    return "".join(result), found_counts, target_counts
+
+
 def load_manifest(path: Path) -> list[dict[str, object]]:
     replacements: list[dict[str, object]] = []
     current: dict[str, object] | None = None
@@ -634,11 +852,84 @@ def apply_replacements(
         ),
     )
 
+    if dry_run:
+        grouped_replacements: dict[Path, list[tuple[int, dict[str, object]]]] = {}
+        for index, replacement in enumerate(replacements, start=1):
+            rel_path = replacement.get("path")
+            source = replacement.get("source")
+            target = replacement.get("target")
+
+            if not isinstance(rel_path, str) or not isinstance(source, str) or not isinstance(target, str):
+                print(f"replacement #{index} is missing string path/source/target fields", file=sys.stderr)
+                failures += 1
+                continue
+
+            file_path = repo_root / rel_path
+            manifest_files.add(file_path)
+            grouped_replacements.setdefault(file_path, []).append((index, replacement))
+
+        for file_path, file_replacements in grouped_replacements.items():
+            rel_path = str(file_path.relative_to(repo_root))
+            if not file_path.exists():
+                print(f"{rel_path}: file does not exist", file=sys.stderr)
+                failures += len(file_replacements)
+                continue
+
+            text = file_path.read_text(encoding="utf-8")
+            replacements_by_source = {
+                str(replacement["source"]): str(replacement["target"])
+                for _, replacement in file_replacements
+            }
+            found_counts, target_counts = replace_rust_string_literals_many(
+                text,
+                replacements_by_source,
+            )
+
+            for _, replacement in file_replacements:
+                source = str(replacement["source"])
+                target = str(replacement["target"])
+                expected_count = replacement.get("expected_count")
+                found = found_counts[source]
+
+                if found == 0:
+                    if target_counts[source] > 0:
+                        already_applied += 1
+                        continue
+                    print(f"{rel_path}: source string literal not found: {source!r}", file=sys.stderr)
+                    failures += 1
+                    continue
+
+                if expected_count is not None and found != expected_count:
+                    print(
+                        f"{rel_path}: expected {expected_count} occurrence(s) for {source!r}, found {found}",
+                        file=sys.stderr,
+                    )
+                    failures += 1
+                    continue
+
+                if source == target:
+                    continue
+
+                would_change += 1
+                changed_files.add(file_path)
+
+        if summary:
+            print(f"entries: {len(replacements)}")
+            print(f"files: {len(manifest_files)}")
+            print(f"already_applied: {already_applied}")
+            print(f"would_change: {would_change}")
+            print(f"missing: {failures}")
+        else:
+            for file_path in sorted(changed_files):
+                print(file_path.relative_to(repo_root))
+
+        return failures
+
+    grouped_replacements: dict[Path, list[tuple[int, dict[str, object]]]] = {}
     for index, replacement in enumerate(replacements, start=1):
         rel_path = replacement.get("path")
         source = replacement.get("source")
         target = replacement.get("target")
-        expected_count = replacement.get("expected_count")
 
         if not isinstance(rel_path, str) or not isinstance(source, str) or not isinstance(target, str):
             print(f"replacement #{index} is missing string path/source/target fields", file=sys.stderr)
@@ -647,37 +938,63 @@ def apply_replacements(
 
         file_path = repo_root / rel_path
         manifest_files.add(file_path)
+        grouped_replacements.setdefault(file_path, []).append((index, replacement))
+
+    updated_file_cache: dict[Path, str] = {}
+
+    for file_path, file_replacements in grouped_replacements.items():
+        rel_path = str(file_path.relative_to(repo_root))
         if not file_path.exists():
             print(f"{rel_path}: file does not exist", file=sys.stderr)
-            failures += 1
+            failures += len(file_replacements)
             continue
 
         text = file_path.read_text(encoding="utf-8")
-        updated_text, found = replace_rust_string_literals(text, source, target)
-        if found == 0:
-            _, target_count = replace_rust_string_literals(text, target, target)
-            if target_count > 0:
-                already_applied += 1
+        replacements_by_source = {
+            str(replacement["source"]): str(replacement["target"])
+            for _, replacement in file_replacements
+        }
+        found_counts, target_counts = replace_rust_string_literals_many(
+            text,
+            replacements_by_source,
+        )
+
+        valid_replacements: dict[str, str] = {}
+        for _, replacement in file_replacements:
+            source = str(replacement["source"])
+            target = str(replacement["target"])
+            expected_count = replacement.get("expected_count")
+            found = found_counts[source]
+
+            if found == 0:
+                if target_counts[source] > 0:
+                    already_applied += 1
+                    continue
+                print(f"{rel_path}: source string literal not found: {source!r}", file=sys.stderr)
+                failures += 1
                 continue
-            print(f"{rel_path}: source string literal not found: {source!r}", file=sys.stderr)
-            failures += 1
-            continue
 
-        if expected_count is not None and found != expected_count:
-            print(
-                f"{rel_path}: expected {expected_count} occurrence(s) for {source!r}, found {found}",
-                file=sys.stderr,
-            )
-            failures += 1
-            continue
+            if expected_count is not None and found != expected_count:
+                print(
+                    f"{rel_path}: expected {expected_count} occurrence(s) for {source!r}, found {found}",
+                    file=sys.stderr,
+                )
+                failures += 1
+                continue
 
-        if source == target:
-            continue
+            if source == target:
+                continue
 
-        would_change += 1
-        if not dry_run:
-            file_path.write_text(updated_text, encoding="utf-8")
-        changed_files.add(file_path)
+            would_change += 1
+            valid_replacements[source] = target
+            changed_files.add(file_path)
+
+        if valid_replacements:
+            updated_text, _, _ = replace_rust_string_literals_many_apply(text, valid_replacements)
+            updated_file_cache[file_path] = updated_text
+
+    for file_path in sorted(updated_file_cache):
+        file_path.write_text(updated_file_cache[file_path], encoding="utf-8")
 
     if summary:
         print(f"entries: {len(replacements)}")

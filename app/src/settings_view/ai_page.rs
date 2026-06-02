@@ -676,9 +676,7 @@ impl AISettingsPageView {
                 .iter()
                 .position(|val| val == current_value)
                 .unwrap_or_else(|| {
-                    log::warn!(
-                        "Could not find current VoiceInputToggleKey value in dropdown option list"
-                    );
+                    log::warn!("无法在下拉选项列表中找到当前 VoiceInputToggleKey 值");
                     0
                 });
 
@@ -855,9 +853,7 @@ impl AISettingsPageView {
                 let predicate = match AgentModeCommandExecutionPredicate::new_regex(s) {
                     Ok(regex) => regex,
                     Err(e) => {
-                        log::warn!(
-                            "Failed to convert string to regex for cmd execution allowlist: {e}"
-                        );
+                        log::warn!("无法将字符串转换为命令执行允许列表正则：{e}");
                         return;
                     }
                 };
@@ -887,9 +883,7 @@ impl AISettingsPageView {
                 let predicate = match AgentModeCommandExecutionPredicate::new_regex(s) {
                     Ok(regex) => regex,
                     Err(e) => {
-                        log::warn!(
-                            "Failed to convert string to regex for cmd execution denylist: {e}"
-                        );
+                        log::warn!("无法将字符串转换为命令执行拒绝列表正则：{e}");
                         return;
                     }
                 };
@@ -1441,9 +1435,7 @@ impl AISettingsPageView {
                 let predicate = match AgentModeCommandExecutionPredicate::new_regex(s) {
                     Ok(regex) => regex,
                     Err(e) => {
-                        log::warn!(
-                            "Failed to convert string to regex for cmd execution denylist: {e}"
-                        );
+                        log::warn!("无法将字符串转换为命令执行拒绝列表正则：{e}");
                         return;
                     }
                 };
@@ -1480,9 +1472,7 @@ impl AISettingsPageView {
                 let predicate = match AgentModeCommandExecutionPredicate::new_regex(s) {
                     Ok(regex) => regex,
                     Err(e) => {
-                        log::warn!(
-                            "Failed to convert string to regex for cmd execution allowlist: {e}"
-                        );
+                        log::warn!("无法将字符串转换为命令执行允许列表正则：{e}");
                         return;
                     }
                 };
@@ -2991,9 +2981,7 @@ impl TypedActionView for AISettingsPageView {
                         );
                     }
                     Err(e) => {
-                        log::warn!(
-                            "Failed to set value for Natural Language Autosuggestions setting: {e:?}"
-                        );
+                        log::warn!("设置自然语言自动建议值失败：{e:?}");
                     }
                 }
                 ctx.notify();
@@ -3013,9 +3001,7 @@ impl TypedActionView for AISettingsPageView {
                         );
                     }
                     Err(e) => {
-                        log::warn!(
-                            "Failed to set value for Shared Block Title Generation setting: {e:?}"
-                        );
+                        log::warn!("设置共享 Block 标题生成值失败：{e:?}");
                     }
                 }
                 ctx.notify();
@@ -3455,9 +3441,7 @@ impl TypedActionView for AISettingsPageView {
                         .show_model_selectors_in_prompt
                         .toggle_and_save_value(ctx)
                     {
-                        log::warn!(
-                            "Failed to set value for Show Base Model Picker in Prompt: {e:?}"
-                        );
+                        log::warn!("设置在提示词中显示基础模型选择器失败：{e:?}");
                     }
                 });
                 ctx.notify();
@@ -3844,8 +3828,7 @@ impl SettingsWidget for GlobalAIWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "oz warp agent global ai a.i. active next command prompt code diffs suggestion suggested suggestions \
-                agent mode natural language detection input hint api keys bring your own byo google anthropic openai"
+        "oz warp Agent 全局 ai a.i. 活跃 下一条 命令 提示词 代码 diff 建议 Agent 模式 自然语言检测 输入提示 API 密钥 自带 byo google anthropic openai"
     }
 
     fn render(
@@ -4127,7 +4110,7 @@ impl SettingsWidget for UsageWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "a.i. ai usage limit plan"
+        "a.i. ai 用量 限额 方案 usage limit plan"
     }
 
     fn render(
@@ -4492,7 +4475,7 @@ impl SettingsWidget for ActiveAIWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "active ai a.i. next command prompt suggestions code diffs suggested banners passive unit tests commit pull request pr git code review autogen generate"
+        "active ai a.i. 下一条 命令 提示词 建议 代码 diff 横幅 被动 单元测试 commit pull request pr git 代码审查 自动生成 generate"
     }
 
     fn should_render(&self, app: &AppContext) -> bool {
@@ -4584,9 +4567,9 @@ impl SettingsWidget for AgentsWidget {
 
     fn search_terms(&self) -> &str {
         if MCPServersWidget::should_show_mcp() {
-            "ai a.i. agent autonomy profiles allowlist denylist autoexecute permissions models llms planning mcp server"
+            "ai a.i. Agent 自主性 配置档 允许列表 拒绝列表 自动执行 权限 模型 llms 规划 mcp server"
         } else {
-            "ai a.i. agent autonomy profiles allowlist denylist autoexecute permissions models llms planning"
+            "ai a.i. Agent 自主性 配置档 允许列表 拒绝列表 自动执行 权限 模型 llms 规划"
         }
     }
 
@@ -5562,7 +5545,7 @@ impl SettingsWidget for AIInputWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "oz agent ai input natural language detection autodetection prompt terminal command commands history shell executed execution"
+        "oz Agent ai 输入 自然语言检测 自动检测 提示词 终端 命令 历史 shell 执行"
     }
 
     fn render(
@@ -5812,7 +5795,7 @@ impl SettingsWidget for MCPServersWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "oz agent mcp server servers model context protocol file-based file based project claude .mcp.json .claude/.mcp.json .codex config.toml .codex/config.toml"
+        "oz Agent mcp server servers 模型 上下文协议 文件型 file-based 项目 claude .mcp.json .claude/.mcp.json .codex config.toml .codex/config.toml"
     }
 
     fn should_render(&self, _app: &AppContext) -> bool {
@@ -6063,7 +6046,7 @@ impl SettingsWidget for AIFactWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "agent oz ai a.i. knowledge fact memory memories rules warp drive context workflows notebooks environment variables"
+        "Agent oz ai a.i. 知识 fact 记忆 规则 Warp Drive 上下文 工作流 notebooks 环境变量"
     }
 
     fn should_render(&self, _app: &AppContext) -> bool {
@@ -6189,7 +6172,7 @@ impl SettingsWidget for VoiceWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "voice agent oz ai a.i. speech input natural language talk english"
+        "voice Agent oz ai a.i. 语音 输入 自然语言 说话 英语 speech"
     }
 
     fn should_render(&self, app: &AppContext) -> bool {
@@ -6254,7 +6237,7 @@ impl SettingsWidget for OtherAIWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "other oz updates zero state empty changelog new conversation agent what's new use agent footer toolbar layout chip chips rearrange re-arrange thinking expanded reasoning collapse never show hide conversation history"
+        "other oz 更新 空状态 empty changelog 新会话 Agent what's new use agent footer toolbar layout chip chips rearrange thinking expanded reasoning collapse never show hide 会话历史"
     }
 
     fn render(
@@ -6386,7 +6369,7 @@ impl SettingsWidget for CLIAgentWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "third party cli coding agent claude codex gemini toolbar footer layout chip chips rearrange re-arrange bar command regex auto show rich input dismiss"
+        "第三方 CLI coding Agent Claude Codex Gemini toolbar footer layout chip chips rearrange bar 命令 正则 自动 显示 rich input dismiss"
     }
 
     fn render(
@@ -6688,7 +6671,7 @@ impl SettingsWidget for AgentAttributionWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "agent attribution commit pull request co-author author credit oz warp"
+        "Agent 署名 commit pull request co-author author credit oz warp"
     }
 
     fn render(
@@ -6785,7 +6768,7 @@ impl SettingsWidget for CloudAgentComputerUseWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "oz cloud agent computer use orchestration multi-agent"
+        "oz 云端 Agent computer use 编排 multi-agent"
     }
 
     fn render(
@@ -6886,7 +6869,7 @@ impl SettingsWidget for CloudHandoffWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "cloud handoff auto sleep ampersand & move to cloud local"
+        "云端 handoff 自动 sleep ampersand & 移至云端 本地 cloud local"
     }
 
     fn should_render(&self, _app: &AppContext) -> bool {
@@ -7442,7 +7425,7 @@ impl SettingsWidget for ApiKeysWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "api keys bring your own byo openai anthropic google claude gemini gpt custom inference endpoint"
+        "API 密钥 自带 byo openai anthropic google claude gemini gpt 自定义推理端点 endpoint"
     }
 
     fn render(
@@ -8038,7 +8021,7 @@ impl SettingsWidget for AwsBedrockWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "aws bedrock amazon credentials login profile"
+        "AWS Bedrock amazon 凭据 登录 profile"
     }
 
     fn should_render(&self, app: &AppContext) -> bool {

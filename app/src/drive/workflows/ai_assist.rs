@@ -64,12 +64,10 @@ pub enum GeneratedCommandMetadataError {
 impl GeneratedCommandMetadataError {
     pub fn user_facing_message(&self) -> String {
         match self {
-            Self::BadCommand => {
-                "Failed to generate metadata. Please try again with a different command."
-            }
-            Self::AiProviderError => "Something went wrong. Please try again.",
-            Self::RateLimited => "Looks like you're out of AI credits. Please try again later.",
-            Self::Other => "Something went wrong. Please try again.",
+            Self::BadCommand => "生成元数据失败。请换一个命令后重试。",
+            Self::AiProviderError => "出现问题。请重试。",
+            Self::RateLimited => "你的 AI 点数似乎已用完。请稍后再试。",
+            Self::Other => "出现问题。请重试。",
         }
         .to_string()
     }
@@ -146,7 +144,7 @@ impl WorkflowModal {
                                     if has_admin_permissions {
                                         ctx.emit(WorkflowModalEvent::AiAssistUpgradeError(Some(team.uid), current_user_id));
                                     } else {
-                                        ctx.emit(WorkflowModalEvent::AiAssistError("Looks like you're out of AI credits. Contact a team admin to upgrade for more credits.".to_string()));
+                                        ctx.emit(WorkflowModalEvent::AiAssistError("你的 AI 点数似乎已用完。请联系团队管理员升级以获得更多点数。".to_string()));
                                     }
                                 } else {
                                     ctx.emit(WorkflowModalEvent::AiAssistError(message.clone()));

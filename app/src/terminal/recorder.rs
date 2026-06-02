@@ -103,7 +103,7 @@ impl PtyRecorder {
                 let display_path = warp_core::paths::home_relative_path(path);
                 let file_path = path.to_owned();
                 self.show_toast(
-                    format!("PTY recording started: {display_path}"),
+                    format!("PTY 录制已开始：{display_path}"),
                     Some(file_path),
                     ctx,
                 );
@@ -112,7 +112,7 @@ impl PtyRecorder {
             let display_path = warp_core::paths::home_relative_path(&self.path);
             self.stop_recording();
             self.show_toast(
-                format!("PTY recording stopped: {display_path}"),
+                format!("PTY 录制已停止：{display_path}"),
                 Some(self.path.clone()),
                 ctx,
             );
@@ -164,7 +164,7 @@ impl PtyRecorder {
                 let path_str = path.to_string_lossy().into_owned();
                 toast = toast
                     .with_link(
-                        ToastLink::new("Open".to_string())
+                        ToastLink::new("打开".to_string())
                             .with_onclick_action(WorkspaceAction::OpenInExplorer { path }),
                     )
                     .with_on_body_click(move |ctx| {
@@ -210,10 +210,7 @@ async fn record_pty_bytes(
                     file = Some(f);
                 }
                 Err(e) => {
-                    log::info!(
-                        "Failed to open file for PTY recording at {}: {e}",
-                        path.display()
-                    );
+                    log::info!("打开 PTY 录制文件失败，路径为 {}：{e}", path.display());
                 }
             }
         }

@@ -79,6 +79,29 @@ fn llm_info_deserializes_without_base_model_name() {
 }
 
 #[test]
+fn llm_info_localizes_builtin_auto_display_names_from_wire_metadata() {
+    let raw = r#"{
+            "display_name": "auto (cost-efficient)",
+            "base_model_name": "auto (cost-efficient)",
+            "id": "auto",
+            "usage_metadata": {
+                "request_multiplier": 1,
+                "credit_multiplier": null
+            },
+            "description": null,
+            "disable_reason": null,
+            "vision_supported": false,
+            "spec": null,
+            "provider": "Unknown"
+        }"#;
+
+    let info: LLMInfo = serde_json::from_str(raw).expect("should deserialize");
+    assert_eq!(info.display_name, "自动（节省成本）");
+    assert_eq!(info.base_model_name, "自动（节省成本）");
+    assert_eq!(info.id.to_string(), "auto");
+}
+
+#[test]
 fn llm_info_deserializes_host_configs_as_vec() {
     // Wire format from server: host_configs is a Vec
     let raw = r#"{

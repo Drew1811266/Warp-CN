@@ -51,8 +51,12 @@ fn aws_profile_reference_for_message(profile: &str, capitalize_first_word: bool)
             "默认 AWS 配置档".to_string()
         }
     } else {
-        let article = if capitalize_first_word { "The" } else { "the" };
-        format!("{article} AWS profile `{profile}`")
+        let article = if capitalize_first_word {
+            "AWS 配置档"
+        } else {
+            "AWS 配置档"
+        };
+        format!("{article} `{profile}`")
     }
 }
 
@@ -290,7 +294,7 @@ fn refresh_aws_credentials_local_chain(
     );
     Box::pin(async move {
         rx.await
-            .unwrap_or_else(|_| Err("Credential refresh was interrupted".to_string()))
+            .unwrap_or_else(|_| Err("凭据刷新已中断".to_string()))
     })
 }
 
@@ -315,9 +319,7 @@ fn refresh_aws_credentials_oidc(
     }
 
     let Some(task_id) = task_id else {
-        let message = "AWS Bedrock inference requires an ambient task ID before credentials \
-                       can be minted"
-            .to_string();
+        let message = "AWS Bedrock 推理需要 ambient task ID 后才能生成凭据".to_string();
         manager.set_aws_credentials_state(
             AwsCredentialsState::Failed {
                 message: message.clone(),
@@ -401,7 +403,7 @@ fn refresh_aws_credentials_oidc(
     );
     Box::pin(async move {
         rx.await
-            .unwrap_or_else(|_| Err("Credential refresh was interrupted".to_string()))
+            .unwrap_or_else(|_| Err("凭据刷新已中断".to_string()))
     })
 }
 

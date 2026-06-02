@@ -266,12 +266,8 @@ pub fn process_attachment(
     attachment_path: &PathBuf,
     index: usize,
 ) -> anyhow::Result<AttachmentInput> {
-    let file_bytes = std::fs::read(attachment_path).map_err(|e| {
-        anyhow::anyhow!(
-            "Failed to read attachment file '{}': {e}",
-            attachment_path.display()
-        )
-    })?;
+    let file_bytes = std::fs::read(attachment_path)
+        .map_err(|e| anyhow::anyhow!("读取附件文件 '{}' 失败：{e}", attachment_path.display()))?;
 
     // Detect MIME type from file data using infer crate, fall back to file extension
     let mime_type = if file_bytes.len() >= MIN_IMAGE_HEADER_SIZE {
@@ -289,7 +285,7 @@ pub fn process_attachment(
 
     if file_bytes.len() > MAX_ATTACHMENT_SIZE_BYTES {
         return Err(anyhow::anyhow!(
-            "File is too large ({}MB). Maximum size is 10MB.",
+            "文件过大（{}MB）。最大大小为 10MB。",
             file_bytes.len() / (1024 * 1024)
         ));
     }

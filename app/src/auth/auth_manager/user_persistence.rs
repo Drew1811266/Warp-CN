@@ -8,7 +8,7 @@ use crate::auth::user::{
 };
 use crate::auth::UserUid;
 
-const USER_STORAGE_KEY: &str = "User";
+const USER_STORAGE_KEY: &str = "用户";
 
 /// Helper function to set `true` as the default for a serde field on PersistedUser.
 fn default_as_true() -> bool {

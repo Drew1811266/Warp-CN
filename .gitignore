@@ -96,3 +96,6 @@ __pycache__/
 
 # Project notes
 .note/
+
+# Local agent planning artifacts and temporary localization evidence.
+.omx/

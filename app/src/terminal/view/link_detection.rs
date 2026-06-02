@@ -64,11 +64,11 @@ impl GridHighlightedLink {
                     .map(|path| path.is_dir())
                     .unwrap_or(false) =>
             {
-                "Open folder"
+                "打开文件夹"
             }
             #[cfg(feature = "local_fs")]
-            GridHighlightedLink::File(_) => "Open file",
-            GridHighlightedLink::Url(_) => "Open link",
+            GridHighlightedLink::File(_) => "打开文件",
+            GridHighlightedLink::Url(_) => "打开链接",
         }
     }
 }
@@ -151,11 +151,11 @@ impl RichContentLink {
         match &self {
             #[cfg(feature = "local_fs")]
             RichContentLink::FilePath { absolute_path, .. } if absolute_path.is_dir() => {
-                "Open folder"
+                "打开文件夹"
             }
             #[cfg(feature = "local_fs")]
-            RichContentLink::FilePath { .. } => "Open file",
-            RichContentLink::Url(_) => "Open link",
+            RichContentLink::FilePath { .. } => "打开文件",
+            RichContentLink::Url(_) => "打开链接",
         }
     }
 }

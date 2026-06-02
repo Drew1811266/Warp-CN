@@ -370,14 +370,14 @@ impl View for AgentMessageBar {
             Some(FigmaMcpStatus::NotInstalled) => {
                 message.items.push(figma_chip(
                     self.mouse_states.figma_install_button.clone(),
-                    "Get Figma MCP",
+                    "获取 Figma MCP",
                     Some(InputAction::FigmaAddButtonClicked),
                 ));
             }
             Some(FigmaMcpStatus::Installed) => {
                 message.items.push(figma_chip(
                     self.mouse_states.figma_enable_button.clone(),
-                    "Enable Figma MCP",
+                    "启用 Figma MCP",
                     Some(InputAction::FigmaEnableButtonClicked),
                 ));
             }
@@ -385,7 +385,7 @@ impl View for AgentMessageBar {
                 message.items.push(
                     figma_chip(
                         self.mouse_states.figma_enable_button.clone(),
-                        "Enabling...",
+                        "正在启用...",
                         None,
                     )
                     .with_is_disabled(true),
@@ -460,7 +460,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for BootstrappingMessageProducer {
         {
             None
         } else {
-            Some(Message::from_text("Starting shell..."))
+            Some(Message::from_text("正在启动 shell..."))
         }
     }
 }
@@ -511,7 +511,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
             items.push(MessageItem::clickable(
                 vec![
                     MessageItem::keystroke(resume_keystroke),
-                    MessageItem::text("to resume conversation"),
+                    MessageItem::text("继续对话"),
                 ],
                 |ctx| {
                     ctx.dispatch_typed_action(TerminalAction::ResumeConversation);
@@ -540,7 +540,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
                         background_color: bg_color_override_for_shortcuts_and_commands,
                     },
                     MessageItem::Text {
-                        content: "for help".into(),
+                        content: "查看帮助".into(),
                         color: color_override_for_shortcuts_and_commands,
                     },
                 ],
@@ -564,7 +564,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
                         background_color: bg_color_override_for_shortcuts_and_commands,
                     },
                     MessageItem::Text {
-                        content: "for commands".into(),
+                        content: "查看命令".into(),
                         color: color_override_for_shortcuts_and_commands,
                     },
                 ],
@@ -597,7 +597,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
                             background_color: bg_color_override_for_shortcuts_and_commands,
                         },
                         MessageItem::Text {
-                            content: "send task to the cloud".into(),
+                            content: "将任务发送到云端".into(),
                             color: color_override_for_shortcuts_and_commands,
                         },
                     ],
@@ -624,7 +624,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
                 items.push(MessageItem::clickable(
                     vec![
                         MessageItem::keystroke(conversations_keystroke),
-                        MessageItem::text("open conversation"),
+                        MessageItem::text("打开对话"),
                     ],
                     |ctx| {
                         ctx.dispatch_typed_action(InputAction::ToggleConversationsMenu);
@@ -649,7 +649,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
             items.push(MessageItem::clickable(
                 vec![
                     MessageItem::keystroke(code_review_keystroke),
-                    MessageItem::text("for code review"),
+                    MessageItem::text("进行代码审查"),
                 ],
                 |ctx| {
                     ctx.dispatch_typed_action(WorkspaceAction::ToggleRightPanel);
@@ -675,11 +675,11 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
                         Keystroke::parse("cmdorctrl-alt-p").expect("keystroke should parse"),
                     ),
                     MessageItem::text(if is_plan_for_this_conversation_open {
-                        "to hide plan"
+                        "隐藏计划"
                     } else if plan_count > 1 {
-                        "to view plans"
+                        "查看计划"
                     } else {
-                        "to view plan"
+                        "查看计划"
                     }),
                 ],
                 |ctx| {
@@ -699,7 +699,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
             items.push(MessageItem::clickable(
                 vec![
                     MessageItem::keystroke(fork_keystroke),
-                    MessageItem::text("to fork and continue"),
+                    MessageItem::text("复刻并继续"),
                 ],
                 |ctx| {
                     ctx.dispatch_typed_action(
@@ -808,9 +808,9 @@ impl MessageProvider<AgentMessageArgs<'_>> for ForkSlashCommandMessageProducer {
         // pane with Cmd/Ctrl+Enter.
         let primary_to_new_pane = command_name == commands::FORK.name || is_continue_locally;
         let (primary_label, secondary_label) = if primary_to_new_pane {
-            (" new pane", " new tab")
+            (" 新窗格", " 新标签页")
         } else {
-            (" current pane", " new pane")
+            (" 当前窗格", " 新窗格")
         };
 
         Some(Message::new(vec![
@@ -839,7 +839,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for HideShortcutsMessageProducer {
                     key: "?".to_owned(),
                     ..Default::default()
                 }),
-                MessageItem::text("to hide help"),
+                MessageItem::text("隐藏帮助"),
             ],
             |ctx| {
                 ctx.dispatch_typed_action(InputAction::ToggleAgentViewShortcuts);
@@ -873,10 +873,10 @@ impl MessageProvider<AgentMessageArgs<'_>> for AutodetectedBashModeMessageProduc
             Some(keystroke) => Message::new(vec![
                 MessageItem::text("autodetected shell command, "),
                 MessageItem::keystroke(keystroke),
-                MessageItem::text(" to override"),
+                MessageItem::text(" 可覆盖"),
             ])
             .with_text_color(appearance.theme().ansi_fg_blue()),
-            None => Message::from_text("autodetected shell command"),
+            None => Message::from_text("已自动检测到 shell 命令"),
         };
 
         Some(message)
@@ -924,7 +924,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ExitCloudHandoffModeMessageProduc
                 background_color: None,
             },
             MessageItem::Text {
-                content: "to hand off to cloud".into(),
+                content: "交给云端".into(),
                 color: Some(active_color),
             },
             MessageItem::Keystroke {
@@ -936,7 +936,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ExitCloudHandoffModeMessageProduc
                 background_color: dismiss_key_bg,
             },
             MessageItem::Text {
-                content: "to dismiss".into(),
+                content: "关闭".into(),
                 color: Some(dismiss_text_color),
             },
         ]))
@@ -968,7 +968,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ExitBashModeMessageProducer {
                     color: None,
                     background_color: None,
                 },
-                MessageItem::text("to exit shell mode"),
+                MessageItem::text("退出 shell 模式"),
             ])
             .with_text_color(text_color),
         )

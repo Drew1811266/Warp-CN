@@ -43,7 +43,7 @@ impl RewindSearchItem {
     pub fn new_current() -> Self {
         Self {
             exchange_id: None,
-            query_text: "Current".to_string(),
+            query_text: "当前".to_string(),
             file_changes: FileChangesInfo::default(),
             query_match_result: None,
             score: OrderedFloat(0.0),
@@ -141,7 +141,7 @@ impl SearchItem for RewindSearchItem {
         let changes_element: Box<dyn Element> = if self.is_current {
             // "Current" item shows "No code to be restored"
             Text::new_inline(
-                "No code to be restored".to_string(),
+                "没有可恢复的代码".to_string(),
                 appearance.ui_font_family(),
                 secondary_font_size,
             )
@@ -174,7 +174,7 @@ impl SearchItem for RewindSearchItem {
             row.finish()
         } else {
             Text::new_inline(
-                "No code to be restored".to_string(),
+                "没有可恢复的代码".to_string(),
                 appearance.ui_font_family(),
                 secondary_font_size,
             )
@@ -221,11 +221,11 @@ impl SearchItem for RewindSearchItem {
             "当前状态（不回退）".to_string()
         } else if self.has_code_changes() {
             format!(
-                "Rewind to: {} (+{} -{})",
+                "回退到：{}（+{} -{}）",
                 self.query_text, self.file_changes.lines_added, self.file_changes.lines_removed
             )
         } else {
-            format!("Rewind to: {} (no code changes)", self.query_text)
+            format!("回退到：{}（无代码更改）", self.query_text)
         }
     }
 }

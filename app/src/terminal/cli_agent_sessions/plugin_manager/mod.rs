@@ -120,14 +120,14 @@ pub(crate) async fn run_cli_command_logged(
                 return Ok(());
             }
             Err(PluginInstallError {
-                message: format!("'{display_cmd}' failed"),
+                message: format!("'{display_cmd}' 运行失败"),
                 log: log.to_owned(),
             })
         }
         Err(err) => {
             log.push_str(&format!("error: {err}\n"));
             Err(PluginInstallError {
-                message: format!("failed to run '{display_cmd}'"),
+                message: format!("运行 '{display_cmd}' 失败"),
                 log: log.clone(),
             })
         }
@@ -163,7 +163,7 @@ pub(crate) trait CliAgentPluginManager: Send + Sync {
     /// Default returns an error — only agents with `can_auto_install() == true` should override.
     async fn install(&self) -> Result<(), PluginInstallError> {
         Err(PluginInstallError {
-            message: "Auto-install not supported for this agent".to_owned(),
+            message: "此 Agent 不支持自动安装".to_owned(),
             log: String::new(),
         })
     }
@@ -172,19 +172,19 @@ pub(crate) trait CliAgentPluginManager: Send + Sync {
     /// Default returns an error — only agents with `can_auto_install() == true` should override.
     async fn update(&self) -> Result<(), PluginInstallError> {
         Err(PluginInstallError {
-            message: "Auto-update not supported for this agent".to_owned(),
+            message: "此 Agent 不支持自动更新".to_owned(),
             log: String::new(),
         })
     }
 
     /// Toast message shown after a successful auto-install.
     fn install_success_message(&self) -> &'static str {
-        "Warp plugin installed. Please restart the session to activate."
+        "Warp 插件已安装。请重启会话以激活。"
     }
 
     /// Toast message shown after a successful auto-update.
     fn update_success_message(&self) -> &'static str {
-        "Warp plugin updated. Please restart the session to activate."
+        "Warp 插件已更新。请重启会话以激活。"
     }
 
     /// Manual installation instructions for the modal UI.

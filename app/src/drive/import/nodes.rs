@@ -881,7 +881,7 @@ impl FileUploadState {
 
         file_node_to_update.status = match result {
             UploadResult::Success(id) => UploadStatus::Loaded(id),
-            UploadResult::Error(e) => UploadStatus::Error(format!("Failed to parse file: {e}")),
+            UploadResult::Error(e) => UploadStatus::Error(format!("解析文件失败：{e}")),
         };
 
         let parent_id = file_node_to_update.parent_id;

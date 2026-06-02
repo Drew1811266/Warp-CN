@@ -50,9 +50,9 @@ impl InlineMenuAction for AcceptConversation {
             let is_active = active_ids.contains(&ConversationOrTaskId::from(item.item_id));
 
             let text = if is_active {
-                " go to conversation"
+                " 前往对话"
             } else {
-                " continue in this pane"
+                " 在此窗格中继续"
             };
 
             let item_id = item.item_id;
@@ -85,7 +85,7 @@ impl InlineMenuAction for AcceptConversation {
                     background_color: Some(ColorU::transparent_black()),
                 },
                 MessageItem::Text {
-                    content: " continue in this pane".into(),
+                    content: " 在此窗格中继续".into(),
                     color: Some(disabled_color),
                 },
             ]);

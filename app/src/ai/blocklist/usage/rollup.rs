@@ -137,7 +137,7 @@ fn orchestrator_display_name(orchestrator: &AIConversation) -> String {
         .agent_name()
         .filter(|n| !n.is_empty())
         .map(|n| n.to_string())
-        .unwrap_or_else(|| "Orchestrator".to_string())
+        .unwrap_or_else(|| "编排器".to_string())
 }
 
 /// Display name for a child row. Mirrors the orchestration pill bar's

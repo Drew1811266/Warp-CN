@@ -61,7 +61,7 @@ const DEFAULT_HOST_ENV_VAR: &str = "WARP_CLOUD_MODE_DEFAULT_HOST";
 // ── Shared constants ────────────────────────────────────────────────
 
 pub const ORCHESTRATION_WARP_WORKER_HOST: &str = WARP_WORKER_HOST;
-pub const ORCHESTRATION_ENV_NONE_LABEL: &str = "Empty environment";
+pub const ORCHESTRATION_ENV_NONE_LABEL: &str = "空环境";
 
 pub const ORCHESTRATION_PICKER_HEIGHT: f32 = 36.;
 pub const ORCHESTRATION_PICKER_BORDER_WIDTH: f32 = 1.;
@@ -69,16 +69,16 @@ pub const ORCHESTRATION_PICKER_FONT_SIZE: f32 = 14.;
 pub const ORCHESTRATION_PICKER_RADIUS: f32 = 4.;
 pub const ORCHESTRATION_PICKER_MAX_WIDTH: f32 = 205.;
 
-const DEFAULT_MODEL_LABEL: &str = "Default model";
+const DEFAULT_MODEL_LABEL: &str = "默认模型";
 const ORCHESTRATION_SEGMENTED_CONTROL_PADDING: f32 = 4.;
 const ORCHESTRATION_SEGMENT_VERTICAL_PADDING: f32 = 4.;
 
 /// Label shown in the auth secret picker when no secret is selected
 /// (the child agent will inherit credentials from its environment).
-const AUTH_SECRET_INHERIT_LABEL: &str = "Skip (advanced)";
+const AUTH_SECRET_INHERIT_LABEL: &str = "跳过（高级）";
 /// Label for the auth secret column.
-pub const AUTH_SECRET_COLUMN_LABEL: &str = "API key";
-const AUTH_SECRET_CREATE_NEW_LABEL: &str = "New API key…";
+pub const AUTH_SECRET_COLUMN_LABEL: &str = "API 密钥";
+const AUTH_SECRET_CREATE_NEW_LABEL: &str = "新建 API 密钥...";
 
 // ── Action trait ────────────────────────────────────────────────────
 
@@ -248,9 +248,7 @@ impl OrchestrationEditState {
             RunAgentsExecutionMode::Remote { .. }
                 if self.harness_type.eq_ignore_ascii_case("opencode") =>
             {
-                Some(
-                    "OpenCode is not supported on Cloud yet. Switch to Local or pick a different harness.",
-                )
+                Some("OpenCode 暂不支持云端。请切换到本地或选择其他 harness。")
             }
             RunAgentsExecutionMode::Remote { .. } => None,
         }
@@ -863,7 +861,7 @@ fn render_new_environment_footer<A: OrchestrationControlAction>(
                         .finish(),
                 )
                 .with_child(
-                    Text::new_inline("New environment", font_family, font_size)
+                    Text::new_inline("新环境", font_family, font_size)
                         .with_color(text_color.into())
                         .finish(),
                 )
@@ -1130,7 +1128,7 @@ pub fn accept_disabled_reason_with_auth(
         return Some(reason.to_string());
     }
     if auth_secret_selection_required(state, ctx) {
-        return Some("Select an API key for this harness to continue.".to_string());
+        return Some("请选择此 harness 的 API 密钥后继续。".to_string());
     }
     None
 }
@@ -1191,12 +1189,12 @@ pub fn populate_auth_secret_picker_for_harness<A: OrchestrationControlAction, V:
             }
             AuthSecretFetchState::NotFetched | AuthSecretFetchState::Loading => {
                 items.push(MenuItem::Item(
-                    MenuItemFields::new("Loading…").with_disabled(true),
+                    MenuItemFields::new("正在加载...").with_disabled(true),
                 ));
             }
             AuthSecretFetchState::Failed(_) => {
                 items.push(MenuItem::Item(
-                    MenuItemFields::new("Unable to load secrets").with_disabled(true),
+                    MenuItemFields::new("无法加载密钥").with_disabled(true),
                 ));
             }
         }
@@ -1774,7 +1772,7 @@ pub fn render_mode_toggle<A: OrchestrationControlAction>(
 ) -> Box<dyn Element> {
     let theme = appearance.theme();
     let label = Text::new(
-        "Agent location".to_string(),
+        "Agent 位置".to_string(),
         appearance.ui_font_family(),
         appearance.monospace_font_size() - 1.,
     )
@@ -1782,7 +1780,7 @@ pub fn render_mode_toggle<A: OrchestrationControlAction>(
     .finish();
 
     let local_segment = render_segment_button::<A>(
-        "Local",
+        "本地",
         !is_remote,
         A::execution_mode_toggled(false),
         handles.local_toggle.clone(),
@@ -1790,7 +1788,7 @@ pub fn render_mode_toggle<A: OrchestrationControlAction>(
         active_segment_bg,
     );
     let cloud_segment = render_segment_button::<A>(
-        "Cloud",
+        "云端",
         is_remote,
         A::execution_mode_toggled(true),
         handles.cloud_toggle.clone(),
@@ -1913,7 +1911,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         if show_harness_picker {
             add(
                 &mut column,
-                "Agent harness",
+                "Agent 运行器",
                 handles
                     .harness_picker
                     .as_ref()
@@ -1933,7 +1931,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         if is_remote {
             add(
                 &mut column,
-                "Host",
+                "主机",
                 handles
                     .host_picker
                     .as_ref()
@@ -1941,7 +1939,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
             );
             add(
                 &mut column,
-                "Environment",
+                "环境",
                 handles
                     .environment_picker
                     .as_ref()
@@ -1950,7 +1948,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         }
         add(
             &mut column,
-            "Base model",
+            "基础模型",
             handles
                 .model_picker
                 .as_ref()
@@ -1972,7 +1970,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         if show_harness_picker {
             add_picker(
                 &mut row,
-                "Agent harness",
+                "Agent 运行器",
                 handles
                     .harness_picker
                     .as_ref()
@@ -1982,7 +1980,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         if is_remote {
             add_picker(
                 &mut row,
-                "Host",
+                "主机",
                 handles
                     .host_picker
                     .as_ref()
@@ -1990,7 +1988,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
             );
             add_picker(
                 &mut row,
-                "Environment",
+                "环境",
                 handles
                     .environment_picker
                     .as_ref()
@@ -1999,7 +1997,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         }
         add_picker(
             &mut row,
-            "Base model",
+            "基础模型",
             handles
                 .model_picker
                 .as_ref()
@@ -2080,8 +2078,8 @@ pub fn empty_env_recommendation_message(
     }
     let env_count = CloudAmbientAgentEnvironment::get_all(app).len();
     Some(if env_count > 0 {
-        "We recommend selecting an environment for cloud agents.".to_string()
+        "建议为云端 Agent 选择一个环境。".to_string()
     } else {
-        "We recommend creating an environment for cloud agents.".to_string()
+        "建议为云端 Agent 创建一个环境。".to_string()
     })
 }

@@ -80,7 +80,7 @@ fn maybe_add_settings_sync_toggle_binding<T: Action + Clone>(
         *lock = true;
         toggle_binding_pairs.push(
             ToggleSettingActionPair::new(
-                "settings sync",
+                "设置同步 settings sync",
                 builder(SettingsAction::MainPageToggle(
                     MainPageAction::ToggleSettingsSync,
                 )),
@@ -598,7 +598,7 @@ impl SettingsWidget for AccountWidget {
     type View = MainSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "account sign up"
+        "账号 注册 account sign up"
     }
 
     fn render(
@@ -666,7 +666,7 @@ impl SettingsWidget for SettingsSyncWidget {
     type View = MainSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "settings sync"
+        "设置同步 settings sync"
     }
 
     fn should_render(&self, app: &AppContext) -> bool {
@@ -755,7 +755,7 @@ impl SettingsWidget for EarnRewardsWidget {
     type View = MainSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "earn rewards referral share friends"
+        "奖励 推荐 分享 好友 rewards referral share friends"
     }
 
     fn should_render(&self, app: &AppContext) -> bool {
@@ -1008,7 +1008,7 @@ impl SettingsWidget for VersionInfoWidget {
     type View = MainSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "version update"
+        "版本 更新 version update"
     }
 
     fn render(
@@ -1056,7 +1056,7 @@ impl SettingsWidget for LogoutWidget {
     type View = MainSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "sign out log out logout"
+        "退出登录 登出 sign out log out logout"
     }
 
     fn should_render(&self, app: &AppContext) -> bool {

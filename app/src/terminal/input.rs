@@ -370,9 +370,9 @@ pub const DEBOUNCE_AI_QUERY_PREDICTION_PERIOD: Duration = Duration::from_millis(
 pub(super) const CLI_AGENT_RICH_INPUT_EDITOR_MAX_HEIGHT: f32 = 236.;
 pub(super) const CLI_AGENT_RICH_INPUT_EDITOR_TOP_PADDING: f32 = 10.;
 pub(super) const CLI_AGENT_RICH_INPUT_EDITOR_BOTTOM_PADDING: f32 = 8.;
-pub(super) const CLI_AGENT_RICH_INPUT_HINT_TEXT: &str = "Tell the agent what to build...";
+pub(super) const CLI_AGENT_RICH_INPUT_HINT_TEXT: &str = "告诉 Agent 要构建什么...";
 
-const CLOUD_MODE_V2_HINT_TEXT: &str = "Kick off a cloud agent";
+const CLOUD_MODE_V2_HINT_TEXT: &str = "启动云端 Agent";
 const SHORT_CIRCUIT_HIGHLIGHTING_ACTIONS: [Option<PlainTextEditorViewAction>; 7] = [
     Some(PlainTextEditorViewAction::Space),
     Some(PlainTextEditorViewAction::NonExpandingSpace),
@@ -394,34 +394,34 @@ pub fn get_input_box_top_border_width() -> f32 {
 
 pub const COMPLETIONS_MENU_WIDTH: f32 = 330.;
 pub const OPEN_COMPLETIONS_KEYBINDING_NAME: &str = "input:open_completion_suggestions";
-pub const INPUT_A11Y_LABEL: &str = "Command Input.";
-pub const INPUT_A11Y_HELPER: &str = "Input your shell command, press enter to execute. Press cmd-up to navigate to output of previously executed commands. Press cmd-l to re-focus command input.";
-pub const AI_COMMAND_SEARCH_HINT_TEXT: &str = "Type '#' for AI command suggestions";
+pub const INPUT_A11Y_LABEL: &str = "命令输入。";
+pub const INPUT_A11Y_HELPER: &str = "输入 shell 命令，按 Enter 执行。按 cmd-up 跳转到之前执行命令的输出。按 cmd-l 重新聚焦命令输入。";
+pub const AI_COMMAND_SEARCH_HINT_TEXT: &str = "输入 '#' 获取 AI 命令建议";
 
-const AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT: &str = "Run commands";
+const AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT: &str = "运行命令";
 
 // Rotating hint text options for new Agent Mode conversations
 const AGENT_MODE_HINT_OPTIONS: &[&str] = &[
-    "Warp anything e.g. Deploy my React app to Vercel and set up environment variables",
-    "Warp anything e.g. Help me debug why my Python tests are failing in CI",
-    "Warp anything e.g. Set up a new microservice with Docker and create the deployment pipeline",
-    "Warp anything e.g. Find and fix the memory leak in my Node.js application",
-    "Warp anything e.g. Create a backup script for my PostgreSQL database and schedule it",
-    "Warp anything e.g. Help me migrate my data from MySQL to PostgreSQL",
-    "Warp anything e.g. Set up monitoring and alerts for my AWS infrastructure",
-    "Warp anything e.g. Build a REST API for my mobile app using FastAPI",
-    "Warp anything e.g. Help me optimize my SQL queries that are running slowly",
-    "Warp anything e.g. Create a GitHub Actions workflow to automatically deploy on merge",
-    "Warp anything e.g. Set up Redis caching for my web application",
-    "Warp anything e.g. Help me troubleshoot why my Kubernetes pods keep crashing",
-    "Warp anything e.g. Build a data pipeline to process CSV files and load them into BigQuery",
-    "Warp anything e.g. Set up SSL certificates and configure HTTPS for my domain",
-    "Warp anything e.g. Help me refactor this legacy code to use modern design patterns",
-    "Warp anything e.g. Create unit tests for my authentication service",
-    "Warp anything e.g. Set up log aggregation with ELK stack for my distributed system",
-    "Warp anything e.g. Help me implement OAuth2 authentication in my Express.js app",
-    "Warp anything e.g. Optimize my Docker images to reduce build times and size",
-    "Warp anything e.g. Set up A/B testing infrastructure for my web application",
+    "Warp 任意任务，例如：将我的 React app 部署到 Vercel 并设置环境变量",
+    "Warp 任意任务，例如：帮我调试 Python 测试为何在 CI 中失败",
+    "Warp 任意任务，例如：用 Docker 设置新的微服务并创建部署流水线",
+    "Warp 任意任务，例如：找到并修复我的 Node.js 应用中的内存泄漏",
+    "Warp 任意任务，例如：为我的 PostgreSQL 数据库创建并定时运行备份脚本",
+    "Warp 任意任务，例如：帮我将数据从 MySQL 迁移到 PostgreSQL",
+    "Warp 任意任务，例如：为我的 AWS 基础设施设置监控和告警",
+    "Warp 任意任务，例如：用 FastAPI 为我的移动 app 构建 REST API",
+    "Warp 任意任务，例如：帮我优化运行缓慢的 SQL 查询",
+    "Warp 任意任务，例如：创建 GitHub Actions 工作流，在合并后自动部署",
+    "Warp 任意任务，例如：为我的 Web 应用设置 Redis 缓存",
+    "Warp 任意任务，例如：帮我排查 Kubernetes Pod 持续崩溃的原因",
+    "Warp 任意任务，例如：构建数据流水线处理 CSV 文件并加载到 BigQuery",
+    "Warp 任意任务，例如：为我的域名设置 SSL 证书并配置 HTTPS",
+    "Warp 任意任务，例如：帮我重构这段旧代码以使用现代设计模式",
+    "Warp 任意任务，例如：为我的认证服务创建单元测试",
+    "Warp 任意任务，例如：为我的分布式系统设置 ELK 日志聚合",
+    "Warp 任意任务，例如：帮我在 Express.js app 中实现 OAuth2 认证",
+    "Warp 任意任务，例如：优化 Docker 镜像以减少构建时间和体积",
+    "Warp 任意任务，例如：为我的 Web 应用设置 A/B 测试基础设施",
 ];
 
 fn get_agent_mode_new_conversation_hint_text() -> &'static str {
@@ -442,12 +442,10 @@ fn get_stable_agent_mode_hint_text(cached_hint: &mut Option<&'static str>) -> &'
     }
 }
 
-const AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI: &str = "Steer the running agent";
-const AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_CLASSIC: &str =
-    "Steer the running agent, or backspace to exit";
-const AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_UDI: &str = "Ask a follow up";
-const AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_CLASSIC: &str =
-    "Ask a follow up, or backspace to exit";
+const AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI: &str = "引导正在运行的 Agent";
+const AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_CLASSIC: &str = "引导正在运行的 Agent，或按退格退出";
+const AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_UDI: &str = "继续追问";
+const AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_CLASSIC: &str = "继续追问，或按退格退出";
 
 /// Action name for setting input mode to agent mode
 pub const SET_INPUT_MODE_AGENT_ACTION_NAME: &str = "input:set_mode_agent";
@@ -490,11 +488,11 @@ enum InputPrefixMode {
 
 const VIM_STATUS_BAR_BOTTOM_PADDING: f32 = 20.;
 
-const DYNAMIC_ENUM_GENERATE_MESSAGE: &str = "Run the following command to generate variants:";
-const DYNAMIC_ENUM_RUN_MESSAGE: &str = "Run command";
-const DYNAMIC_ENUM_PENDING_MESSAGE: &str = "Command pending...";
-const DYNAMIC_ENUM_FAILURE_MESSAGE: &str = "Command failed";
-const DYNAMIC_ENUM_NO_RESULTS_MESSAGE: &str = "Command returned no results";
+const DYNAMIC_ENUM_GENERATE_MESSAGE: &str = "运行以下命令生成变体：";
+const DYNAMIC_ENUM_RUN_MESSAGE: &str = "运行命令";
+const DYNAMIC_ENUM_PENDING_MESSAGE: &str = "命令等待中...";
+const DYNAMIC_ENUM_FAILURE_MESSAGE: &str = "命令失败";
+const DYNAMIC_ENUM_NO_RESULTS_MESSAGE: &str = "命令没有返回结果";
 const DYNAMIC_ENUM_MENU_PADDING: f32 = 10.;
 const DYNAMIC_ENUM_MENU_HEIGHT_OFFSET: f32 = 25.;
 const DYNAMIC_ENUM_HORIZONTAL_TEXT_PADDING: f32 = 5.;
@@ -768,21 +766,21 @@ impl InputSuggestionsMode {
             InputSuggestionsMode::UserQueryMenu {
                 action: UserQueryMenuAction::ForkFrom,
                 ..
-            } => Some("Search queries"),
+            } => Some("搜索查询"),
             InputSuggestionsMode::UserQueryMenu {
                 action: UserQueryMenuAction::Rewind,
                 ..
             } => Some("搜索要回退到的查询"),
-            InputSuggestionsMode::ConversationMenu => Some("Search conversations"),
-            InputSuggestionsMode::SkillMenu => Some("Search skills"),
-            InputSuggestionsMode::ModelSelector => Some("Search models"),
-            InputSuggestionsMode::ProfileSelector => Some("Search profiles"),
+            InputSuggestionsMode::ConversationMenu => Some("搜索对话"),
+            InputSuggestionsMode::SkillMenu => Some("搜索技能"),
+            InputSuggestionsMode::ModelSelector => Some("搜索模型"),
+            InputSuggestionsMode::ProfileSelector => Some("搜索配置档"),
             InputSuggestionsMode::SlashCommands if FeatureFlag::AgentView.is_enabled() => {
-                Some("Search commands")
+                Some("搜索命令")
             }
-            InputSuggestionsMode::PromptsMenu => Some("Search prompts"),
-            InputSuggestionsMode::IndexedReposMenu => Some("Search indexed repos"),
-            InputSuggestionsMode::PlanMenu { .. } => Some("Search plans"),
+            InputSuggestionsMode::PromptsMenu => Some("搜索提示词"),
+            InputSuggestionsMode::IndexedReposMenu => Some("搜索已索引仓库"),
+            InputSuggestionsMode::PlanMenu { .. } => Some("搜索计划"),
             _ => None,
         }
     }
@@ -1769,21 +1767,21 @@ pub fn init(app: &mut AppContext) {
             FixedBinding::new(
                 "ctrl-r",
                 WorkspaceAction::ShowCommandSearch(Default::default()),
-                id!("Input") & !id!("VoltronActive"),
+                id!("输入") & !id!("VoltronActive"),
             ),
         ]);
     }
 
     app.register_fixed_bindings(vec![
-        FixedBinding::new("ctrl-d", InputAction::CtrlD, id!("Input")),
+        FixedBinding::new("ctrl-d", InputAction::CtrlD, id!("输入")),
         FixedBinding::custom(
             CustomAction::History,
             InputAction::Up,
-            "Show History",
+            "显示历史",
             // We need to ensure the workflow info box is not open as the "up" arrow
             // key is used to navigate the environment variables dropdown.
             // Same goes with the LLM menu.
-            id!("Input")
+            id!("输入")
                 & !id!("IMEOpen")
                 & !id!("VoltronActive")
                 & !id!("WorkflowInfoBox")
@@ -1796,47 +1794,47 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "input:insert_network_logging_workflow",
-        "Show Warp network log",
+        "显示 Warp 网络日志",
         WorkspaceAction::OpenNetworkLogPane,
     )
     .with_enabled(|| ContextFlag::NetworkLogConsole.is_enabled())]);
 
     app.register_editable_bindings([EditableBinding::new(
         "input:clear_screen",
-        "Clear screen",
+        "清屏",
         InputAction::ClearScreen,
     )
-    .with_context_predicate(id!("Input"))
+    .with_context_predicate(id!("输入"))
     .with_key_binding("ctrl-l")]);
 
     app.register_editable_bindings([
         EditableBinding::new(
             "terminal:scroll_up_one_page",
-            "Scroll terminal output up one page",
+            "向上滚动一页终端输出",
             InputAction::PageUp,
         )
-        .with_context_predicate(id!("Input") & !id!("IMEOpen"))
+        .with_context_predicate(id!("输入") & !id!("IMEOpen"))
         .with_key_binding("pageup"),
         EditableBinding::new(
             "terminal:scroll_down_one_page",
-            "Scroll terminal output down one page",
+            "向下滚动一页终端输出",
             InputAction::PageDown,
         )
-        .with_context_predicate(id!("Input") & !id!("IMEOpen"))
+        .with_context_predicate(id!("输入") & !id!("IMEOpen"))
         .with_key_binding("pagedown"),
     ]);
 
     app.register_editable_bindings([EditableBinding::new(
         "workspace:edit_prompt",
-        BindingDescription::new("Edit Prompt")
-            .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Edit Prompt"),
+        BindingDescription::new("编辑提示词")
+            .with_custom_description(bindings::MAC_MENUS_CONTEXT, "编辑提示词"),
         WorkspaceAction::OpenPromptEditor {
             open_source: PromptEditorOpenSource::CommandPalette,
         },
     )
     .with_group(bindings::BindingGroup::Settings.as_str())
     .with_context_predicate(
-        id!("Input")
+        id!("输入")
             & id!(SharedSessionStatus::ActiveSharer.as_keymap_context())
             & !id!("LongRunningCommand")
             & !id!(flags::ACTIVE_AGENT_VIEW)
@@ -1848,17 +1846,17 @@ pub fn init(app: &mut AppContext) {
     {
         app.register_editable_bindings([EditableBinding::new(
             "input:toggle_classic_completions_mode",
-            "(Experimental) Toggle classic completions mode",
+            "（实验性）切换经典补全模式",
             InputAction::ToggleClassicCompletionsMode,
         )
-        .with_context_predicate(id!("Input"))]);
+        .with_context_predicate(id!("输入"))]);
     }
 
     // Register editable bindings relating to Command Search.
     app.register_editable_bindings([
         EditableBinding::new(
             "workspace:show_command_search",
-            "Command Search",
+            "命令搜索",
             WorkspaceAction::ShowCommandSearch(Default::default()),
         )
         // Only show command search if none of the input-related panels are open, and if we aren't
@@ -1869,34 +1867,34 @@ pub fn init(app: &mut AppContext) {
         // Therefore, this binding is guarded with !id!("VimNormalMode"). Note that although there
         // is usually a conflict between these, that isn't always the case if the user has
         // re-mapped CommandSearch to something else. However, we don't account for that here.
-        .with_context_predicate(id!("Input") & !id!("VoltronActive") & !id!("VimNormalMode"))
+        .with_context_predicate(id!("输入") & !id!("VoltronActive") & !id!("VimNormalMode"))
         .with_custom_action(CustomAction::CommandSearch),
         EditableBinding::new(
             "input:search_command_history",
-            "History Search",
+            "历史搜索",
             WorkspaceAction::ShowCommandSearch(CommandSearchOptions {
                 filter: Some(QueryFilter::History),
                 init_content: Default::default(),
             }),
         )
-        .with_context_predicate(id!("Input") & !id!("VoltronActive"))
+        .with_context_predicate(id!("输入") & !id!("VoltronActive"))
         .with_custom_action(CustomAction::HistorySearch),
         EditableBinding::new(
             OPEN_COMPLETIONS_KEYBINDING_NAME,
-            "Open completions menu",
+            "打开补全菜单",
             InputAction::MaybeOpenCompletionSuggestions,
         )
-        .with_context_predicate(id!("Input"))
+        .with_context_predicate(id!("输入"))
         .with_key_binding("tab"),
     ]);
 
     if let Some(custom_action) = workflows::CategoriesView::custom_action() {
         app.register_editable_bindings([EditableBinding::new(
             "input:toggle_workflows",
-            "Workflows",
+            "工作流",
             InputAction::SelectAndRefreshVoltron(VoltronItem::Workflows),
         )
-        .with_context_predicate(id!("Input"))
+        .with_context_predicate(id!("输入"))
         .with_custom_action(custom_action)]);
     }
 
@@ -1908,7 +1906,7 @@ pub fn init(app: &mut AppContext) {
             FixedBinding::new(
                 "ctrl-shift-R",
                 InputAction::SelectAndRefreshVoltron(VoltronItem::Workflows),
-                id!("Input"),
+                id!("输入"),
             ),
         ]);
     }
@@ -1916,11 +1914,11 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "input:toggle_natural_language_command_search",
-            "Open AI Command Suggestions",
+            "打开 AI 命令建议",
             InputAction::ShowAiCommandSearch,
         )
         .with_context_predicate(
-            id!("Input")
+            id!("输入")
                 & !id!(SharedSessionStatus::reader().as_keymap_context())
                 & id!(flags::IS_ANY_AI_ENABLED)
                 & !id!("AIInput"),
@@ -1929,25 +1927,25 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::AISearch),
         EditableBinding::new(
             START_NEW_CONVERSATION_KEYBINDING_NAME,
-            "New agent conversation",
+            "新建 Agent 对话",
             InputAction::StartNewAgentConversation,
         )
         .with_enabled(|| !FeatureFlag::AgentView.is_enabled())
         .with_group(bindings::BindingGroup::WarpAi.as_str())
         .with_context_predicate(
-            id!("Input") & id!(flags::IS_ANY_AI_ENABLED) & id!("TerminalView_NonEmptyBlockList"),
+            id!("输入") & id!(flags::IS_ANY_AI_ENABLED) & id!("TerminalView_NonEmptyBlockList"),
         )
         .with_mac_key_binding("cmd-shift-N")
         .with_linux_or_windows_key_binding("ctrl-alt-shift-N"),
         EditableBinding::new(
             "input:enable_auto_detection",
-            "Trigger Auto Detection",
+            "触发自动检测",
             InputAction::EnableAutoDetection,
         )
         .with_enabled(|| FeatureFlag::AgentMode.is_enabled())
         .with_group(bindings::BindingGroup::WarpAi.as_str())
         .with_context_predicate(
-            id!("Input")
+            id!("输入")
                 & id!("UniversalDeveloperInput")
                 & id!(flags::IS_ANY_AI_ENABLED)
                 & !id!("IMEOpen"),
@@ -1955,10 +1953,10 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding("alt-shift-I"),
         EditableBinding::new(
             "input:clear_and_reset_ai_context_menu_query",
-            "Clear and reset AI context menu query",
+            "清除并重置 AI 上下文菜单查询",
             InputAction::ClearAndResetAIContextMenuQuery,
         )
-        .with_context_predicate(id!("Input") & id!("AIContextMenuOpen") & !id!("IMEOpen"))
+        .with_context_predicate(id!("输入") & id!("AIContextMenuOpen") & !id!("IMEOpen"))
         .with_mac_key_binding("cmd-shift-backspace")
         .with_linux_or_windows_key_binding("ctrl-shift-backspace"),
     ]);
@@ -1970,7 +1968,7 @@ pub fn init(app: &mut AppContext) {
                 bindings as slash_command_bindings, bindings::DefaultSlashCommandBinding,
             };
 
-            let context_predicate = id!("Input")
+            let context_predicate = id!("输入")
                 & !id!("IMEOpen")
                 & id!(command.name)
                 & !id!(flags::ACTIVE_INLINE_AGENT_VIEW)
@@ -2001,7 +1999,7 @@ pub fn init(app: &mut AppContext) {
     app.register_fixed_bindings([FixedBinding::new(
         cmd_or_ctrl_shift("e"),
         InputAction::TryHandlePassiveCodeDiff(CodeDiffAction::Edit),
-        id!("Input")
+        id!("输入")
             & id!(flags::CODE_SUGGESTIONS_FLAG)
             & id!(flags::PASSIVE_CODE_DIFF_KEYBINDINGS_ENABLED),
     )]);
@@ -2010,7 +2008,7 @@ pub fn init(app: &mut AppContext) {
         app.register_fixed_bindings([FixedBinding::new(
             "shift-?",
             InputAction::ToggleAgentViewShortcuts,
-            id!("Input")
+            id!("输入")
                 & !id!("IMEOpen")
                 & id!(flags::EMPTY_INPUT_BUFFER)
                 & id!(flags::ACTIVE_AGENT_VIEW)
@@ -2186,7 +2184,7 @@ impl Input {
                     event
                 {
                     let window_id = ctx.window_id();
-                    let toast_message = format!("Failed to prepare cloud handoff: {error_message}");
+                    let toast_message = format!("准备云端接手失败：{error_message}");
                     ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                         ts.add_ephemeral_toast(
                             DismissibleToast::error(toast_message),
@@ -3201,7 +3199,7 @@ impl Input {
                     ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                         ts.add_ephemeral_toast(
                             DismissibleToast::error(
-                                "Attached images were removed — the selected model does not support images.".to_string(),
+                                "附加图片已移除——所选模型不支持图片。".to_string(),
                             ),
                             window_id,
                             ctx,
@@ -4036,15 +4034,9 @@ impl Input {
         if !skipped_files.is_empty() {
             let window_id = ctx.window_id();
             let message = if skipped_files.len() == 1 {
-                format!(
-                    "{} was not attached — exceeds 10MB limit.",
-                    skipped_files[0]
-                )
+                format!("未附加 {}——超过 10MB 限制。", skipped_files[0])
             } else {
-                format!(
-                    "{} files were not attached — exceed 10MB limit.",
-                    skipped_files.len()
-                )
+                format!("未附加 {} 个文件——超过 10MB 限制。", skipped_files.len())
             };
             ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                 ts.add_ephemeral_toast(DismissibleToast::error(message), window_id, ctx);
@@ -4429,7 +4421,7 @@ impl Input {
                     ctx.dispatch_typed_action_deferred(action);
                 } else {
                     ctx.emit(Event::ShowToast {
-                        message: "Couldn't navigate to conversation.".to_string(),
+                        message: "无法导航到对话。".to_string(),
                         flavor: ToastFlavor::Error,
                     });
                 }
@@ -5257,7 +5249,7 @@ impl Input {
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-                        DismissibleToast::error(format!("Skill not found: {}", reference)),
+                        DismissibleToast::error(format!("未找到技能：{}", reference)),
                         window_id,
                         ctx,
                     );
@@ -5320,8 +5312,7 @@ impl Input {
         else {
             let window_id = ctx.window_id();
             ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                let toast =
-                    DismissibleToast::default(String::from("No active conversation to export"));
+                let toast = DismissibleToast::default(String::from("没有可导出的活跃对话"));
                 toast_stack.add_ephemeral_toast(toast, window_id, ctx);
             });
             return;
@@ -5385,9 +5376,8 @@ impl Input {
             let window_id = ctx.window_id();
             let display_path = file_path.display().to_string();
             ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                let toast = DismissibleToast::default(format!(
-                    "File {display_path} already exists and will be overwritten"
-                ));
+                let toast =
+                    DismissibleToast::default(format!("文件 {display_path} 已存在，将被覆盖"));
                 toast_stack.add_ephemeral_toast(toast, window_id, ctx);
             });
         }
@@ -5399,9 +5389,7 @@ impl Input {
                 let window_id = ctx.window_id();
                 let display_path = file_path.display().to_string();
                 ToastStack::handle(ctx).update(ctx, move |toast_stack, ctx| {
-                    let toast = DismissibleToast::default(format!(
-                        "Conversation exported to {display_path}"
-                    ));
+                    let toast = DismissibleToast::default(format!("对话已导出到 {display_path}"));
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
             }
@@ -5409,14 +5397,11 @@ impl Input {
                 // Show error toast with user-friendly message
                 let user_message = match e.kind() {
                     std::io::ErrorKind::PermissionDenied => {
-                        format!(
-                            "Permission denied writing to {}. Check file permissions.",
-                            file_path.display()
-                        )
+                        format!("写入 {} 被拒绝。请检查文件权限。", file_path.display())
                     }
                     std::io::ErrorKind::NotFound => {
                         format!(
-                            "Directory not found: {}",
+                            "未找到目录：{}",
                             file_path
                                 .parent()
                                 .map(|p| p.display().to_string())
@@ -5424,18 +5409,14 @@ impl Input {
                         )
                     }
                     std::io::ErrorKind::AlreadyExists => {
-                        format!("File {} already exists", file_path.display())
+                        format!("文件 {} 已存在", file_path.display())
                     }
                     _ => {
-                        format!("Failed to export to {}: {}", file_path.display(), e)
+                        format!("导出到 {} 失败：{}", file_path.display(), e)
                     }
                 };
 
-                log::error!(
-                    "Failed to write conversation to file {}: {}",
-                    file_path.display(),
-                    e
-                );
+                log::error!("将对话写入文件 {} 失败：{}", file_path.display(), e);
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, move |toast_stack, ctx| {
                     let toast = DismissibleToast::default(user_message);
@@ -5479,9 +5460,9 @@ impl Input {
             let window_id = ctx.window_id();
 
             let message = if images_removed == 1 {
-                "1 image was removed - limit is 20 per conversation.".into()
+                "已移除 1 张图片 - 每个对话限制 20 张。".into()
             } else {
-                format!("{images_removed} images were removed - limit is 20 per conversation.")
+                format!("已移除 {images_removed} 张图片 - 每个对话限制 20 张。")
             };
 
             ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
@@ -6354,10 +6335,7 @@ impl Input {
             .session(self.terminal_view_id)
             .map(|session| match session.agent {
                 CLIAgent::Unknown => Cow::Borrowed(CLI_AGENT_RICH_INPUT_HINT_TEXT),
-                _ => Cow::Owned(format!(
-                    "Enter prompt for {}...",
-                    session.agent.display_name()
-                )),
+                _ => Cow::Owned(format!("输入 {} 的提示...", session.agent.display_name())),
             })
             .unwrap_or(Cow::Borrowed(CLI_AGENT_RICH_INPUT_HINT_TEXT))
     }
@@ -6381,8 +6359,8 @@ impl Input {
                     .as_ref(ctx)
                     .selected_environment_id()
                     .and_then(|id| CloudAmbientAgentEnvironment::get_by_id(id, ctx))
-                    .map(|env| format!("Hand off to {}", env.model().string_model.display_name()))
-                    .unwrap_or_else(|| "Handoff to cloud".to_owned())
+                    .map(|env| format!("接手给 {}", env.model().string_model.display_name()))
+                    .unwrap_or_else(|| "接手到云端".to_owned())
             };
             self.editor.update(ctx, |editor, ctx| {
                 editor.set_placeholder_text(&hint, ctx);
@@ -6786,7 +6764,7 @@ impl Input {
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
                         DismissibleToast::error(format!(
-                            "Cannot run `{truncated_command}` (command already running)."
+                            "无法运行 `{truncated_command}`（命令已在运行）。"
                         )),
                         window_id,
                         ctx,
@@ -7493,13 +7471,13 @@ impl Input {
         // Emit the a11y content as the last step so that it overwrites any of the a11y content
         // emitted by the editor (if multiple `AccessibilityContent`s are emitted within the same
         // event loop, the last one wins).
-        let mut accessibility_text = format!("Workflow command {} inserted.", &command_to_insert);
+        let mut accessibility_text = format!("已插入工作流命令 {}。", &command_to_insert);
         if let Some(a11y_content) = self.selected_workflow_a11y_text(ctx) {
             let _ = write!(accessibility_text, " {a11y_content}");
         }
         ctx.emit_a11y_content(AccessibilityContent::new(
             accessibility_text,
-            "Press shift-tab to select the next workflow argument",
+            "按 shift-tab 选择下一个工作流参数",
             WarpA11yRole::UserAction,
         ));
 
@@ -7599,7 +7577,7 @@ impl Input {
             .and_then(|selected_workflow_state| {
                 selected_workflow_state.more_info_view.read(ctx, |view, _| {
                     view.selected_argument()
-                        .map(|argument| format!("Selected Workflow argument {}", argument.name()))
+                        .map(|argument| format!("已选择工作流参数 {}", argument.name()))
                 })
             })
     }
@@ -10431,9 +10409,9 @@ impl Input {
                     // Show voice status as placeholder when the buffer is empty.
                     if self.editor.as_ref(ctx).is_empty(ctx) {
                         let placeholder = if *is_listening {
-                            "Listening..."
+                            "正在聆听..."
                         } else {
-                            "Transcribing..."
+                            "正在转写..."
                         };
                         self.editor.update(ctx, |editor, ctx| {
                             editor.set_placeholder_text(placeholder, ctx);
@@ -10910,16 +10888,16 @@ impl Input {
         // Show toast for excess images if any
         if excess_images > 0 {
             let (limit_name, limit_value) = if available_per_query < available_per_conversation {
-                ("per query", MAX_IMAGE_COUNT_FOR_QUERY)
+                ("每次查询", MAX_IMAGE_COUNT_FOR_QUERY)
             } else {
-                ("per conversation", MAX_IMAGES_PER_CONVERSATION)
+                ("每个对话", MAX_IMAGES_PER_CONVERSATION)
             };
 
             let message = if excess_images == 1 {
-                format!("1 image wasn't attached - limit is {limit_value} images {limit_name}.")
+                format!("未附加 1 张图片 - {limit_name} 限制为 {limit_value} 张图片。")
             } else {
                 format!(
-                    "{excess_images} images weren't attached - limit is {limit_value} images {limit_name}."
+                    "未附加 {excess_images} 张图片 - {limit_name} 限制为 {limit_value} 张图片。"
                 )
             };
             self.show_image_paste_error(ctx, message);
@@ -12754,8 +12732,7 @@ impl Input {
                         ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                             ts.add_ephemeral_toast(
                                 DismissibleToast::error(
-                                    "No agent harnesses are available. Contact your team admin."
-                                        .to_string(),
+                                    "没有可用的 Agent 运行器。请联系团队管理员。".to_string(),
                                 ),
                                 window_id,
                                 ctx,
@@ -12807,10 +12784,8 @@ impl Input {
                         let window_id = ctx.window_id();
                         ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                             ts.add_ephemeral_toast(
-                                DismissibleToast::default(
-                                    "Preparing handoff — try again in a moment.".to_owned(),
-                                )
-                                .with_object_id("local-to-cloud-handoff-not-ready".to_owned()),
+                                DismissibleToast::default("正在准备接手——请稍后重试。".to_owned())
+                                    .with_object_id("local-to-cloud-handoff-not-ready".to_owned()),
                                 window_id,
                                 ctx,
                             );
@@ -13341,9 +13316,7 @@ impl Input {
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-                        DismissibleToast::error(
-                            "Cannot send queries as a read-only viewer.".to_string(),
-                        ),
+                        DismissibleToast::error("只读查看者无法发送查询。".to_string()),
                         window_id,
                         ctx,
                     );
@@ -13626,7 +13599,7 @@ impl Input {
                 Ok(bytes) => {
                     if bytes.len() > MAX_ATTACHMENT_SIZE_BYTES {
                         log::warn!(
-                            "Skipping file {} ({} bytes) — exceeds 10MB limit",
+                            "跳过文件 {}（{} 字节），超过 10MB 限制",
                             file.file_name,
                             bytes.len()
                         );
@@ -13656,9 +13629,7 @@ impl Input {
                 {
                     Ok(resp) => resp,
                     Err(e) => {
-                        log::error!(
-                            "Failed to prepare attachment uploads for task {task_id}: {e:?}"
-                        );
+                        log::error!("为任务 {task_id} 准备附件上传失败：{e:?}");
                         return None;
                     }
                 };
@@ -13683,11 +13654,7 @@ impl Input {
                             });
                         }
                         Ok(resp) => {
-                            log::error!(
-                                "Failed to upload attachment {}: HTTP {}",
-                                file_name,
-                                resp.status()
-                            );
+                            log::error!("上传附件 {} 失败：HTTP {}", file_name, resp.status());
                         }
                         Err(e) => {
                             log::error!("Failed to upload attachment {file_name}: {e:?}");
@@ -13697,7 +13664,7 @@ impl Input {
 
                 if uploaded.len() < files_to_upload.len() {
                     log::warn!(
-                        "Only {}/{} attachments uploaded successfully",
+                        "仅成功上传 {}/{} 个附件",
                         uploaded.len(),
                         files_to_upload.len()
                     );
@@ -13714,9 +13681,7 @@ impl Input {
                     let window_id = ctx.window_id();
                     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
-                            DismissibleToast::error(
-                                "Too many attachments for this conversation.".to_string(),
-                            ),
+                            DismissibleToast::error("此对话的附件过多。".to_string()),
                             window_id,
                             ctx,
                         );
@@ -14950,9 +14915,7 @@ impl TypedActionView for Input {
             InputAction::ToggleClassicCompletionsMode => {
                 InputSettings::handle(ctx).update(ctx, |settings, ctx| {
                     if let Err(e) = settings.classic_completions_mode.toggle_and_save_value(ctx) {
-                        log::warn!(
-                            "Failed to toggle and save classic completions mode setting: {e}."
-                        )
+                        log::warn!("切换并保存经典补全模式设置失败：{e}。")
                     }
                 });
             }
@@ -15055,7 +15018,7 @@ impl TypedActionView for Input {
                     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
                             DismissibleToast::error(
-                                "Cannot start a new conversation while agent is monitoring a command.".to_string()
+                                "Agent 正在监控命令时，无法开始新对话。".to_string(),
                             ),
                             window_id,
                             ctx,
@@ -15128,7 +15091,7 @@ impl TypedActionView for Input {
 
 impl View for Input {
     fn ui_name() -> &'static str {
-        "Input"
+        "输入"
     }
 
     fn accessibility_contents(&self, _: &AppContext) -> Option<AccessibilityContent> {

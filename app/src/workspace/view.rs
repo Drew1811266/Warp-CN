@@ -642,7 +642,7 @@ const MAX_WINDOW_TITLE_LENGTH: usize = 80;
 const AUTO_CLOUD_HANDOFF_PROMPT: &str = "从当前对话状态开始，在云端继续此本地 Warp Agent 任务。";
 
 /// The default display name used for the user if they have no associated display name.
-pub const DEFAULT_USER_DISPLAY_NAME: &str = "User";
+pub const DEFAULT_USER_DISPLAY_NAME: &str = "用户";
 
 lazy_static! {
     static ref OPENING_WARP_DRIVE_ON_START_UP: Arc<Mutex<bool>> = Arc::new(Mutex::new(false));
@@ -2005,7 +2005,7 @@ impl Workspace {
                     log::warn!("Failed to remove tab config file: {e:?}");
                     self.toast_stack.update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
-                            DismissibleToast::error(format!("Failed to remove tab config: {e}")),
+                            DismissibleToast::error(format!("移除标签页配置失败：{e}")),
                             ctx,
                         );
                     });
@@ -2427,7 +2427,7 @@ impl Workspace {
                     me.shown_staging_banner_count += 1;
                     me.toast_stack.update(ctx, |toast_stack, ctx| {
                         let toast = DismissibleToast::error(
-                            "Staging API call failed. Did your IP address change?".to_string(),
+                            "Staging API 调用失败。你的 IP 地址是否发生变化？".to_string(),
                         )
                         .with_object_id("staging_access_blocked_toast".to_string());
                         toast_stack.add_ephemeral_toast(toast, ctx);
@@ -2507,7 +2507,7 @@ impl Workspace {
                             home_dir.as_ref().and_then(|h| h.to_str()),
                         );
                         let message = format!(
-                            "Failed to load tab config {friendly_path}: {}",
+                            "加载标签页配置 {friendly_path} 失败：{}",
                             error.error_message
                         );
                         let path = error.file_path.clone();
@@ -9435,12 +9435,12 @@ impl Workspace {
             .unwrap_or_else(|| repo.to_string());
         let config_name = match worktree_branch_name {
             Some(name) if !name.is_empty() => {
-                format!("New worktree: {repo_display_name}, {name}")
+                format!("新建 worktree：{repo_display_name}，{name}")
             }
             _ if !base_branch.is_empty() => {
-                format!("New worktree: {repo_display_name}, {base_branch}")
+                format!("新建 worktree：{repo_display_name}，{base_branch}")
             }
-            _ => format!("New worktree: {repo_display_name}"),
+            _ => format!("新建 worktree：{repo_display_name}"),
         };
 
         let filename_hint = if let Some(name) = worktree_branch_name {
@@ -11931,7 +11931,7 @@ impl Workspace {
                 log::error!("Failed to load Oz conversation {conversation_id} for forking.");
                 WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     let toast = DismissibleToast::error(
-                        "Failed to load conversation for forking.".to_owned(),
+                        "加载要 fork 的对话失败。".to_owned(),
                     );
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
@@ -12293,7 +12293,7 @@ impl Workspace {
         };
 
         WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-            let toast = DismissibleToast::default(format!("Forked \"{title}\""));
+            let toast = DismissibleToast::default(format!("已 fork {title}"));
             toast_stack.add_ephemeral_toast(toast, window_id, ctx);
         });
     }
@@ -12478,9 +12478,7 @@ impl Workspace {
                         });
                     }
                     RequestPermissionsOutcome::OtherError { error_message } => {
-                        log::error!(
-                            "Unknown error when requesting notification permissions. error_msg: {error_message}"
-                        );
+                        log::error!("请求通知权限时发生未知错误。error_msg: {error_message}");
                     }
                 }
                 send_telemetry_from_ctx!(
@@ -13443,9 +13441,7 @@ impl Workspace {
                 me.handoff_environment_creation_modal = None;
                 me.toast_stack.update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-                        DismissibleToast::error(format!(
-                            "Failed to create environment: {error_message}"
-                        )),
+                        DismissibleToast::error(format!("创建环境失败：{error_message}")),
                         ctx,
                     );
                 });
@@ -13571,9 +13567,7 @@ impl Workspace {
                 me.handoff_environment_creation_modal = None;
                 me.toast_stack.update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-                        DismissibleToast::error(format!(
-                            "Failed to create environment: {error_message}"
-                        )),
+                        DismissibleToast::error(format!("创建环境失败：{error_message}")),
                         ctx,
                     );
                 });
@@ -14238,9 +14232,7 @@ impl Workspace {
                             if let NotificationSendError::Other { error_message } =
                                 &notification_error
                             {
-                                log::error!(
-                                    "Unknown error when sending notification. error_msg: {error_message}"
-                                );
+                                log::error!("发送通知时发生未知错误。error_msg: {error_message}");
                             }
                             send_telemetry_from_ctx!(
                                 TelemetryEvent::NotificationFailedToSend {
@@ -21139,7 +21131,7 @@ impl Workspace {
                 ..Default::default()
             })),
             Arc::new(HashMap::new()),
-            Some("Introducing Oz".to_string()),
+            Some("认识 Oz".to_string()),
             ctx,
         );
         self.oz_launch_modal.tab_pane_group_id = self
@@ -21611,9 +21603,8 @@ impl TypedActionView for Workspace {
                 let modify_settings_skill = SkillManager::as_ref(ctx)
                     .active_bundled_skill("modify-settings", ctx)
                     .cloned();
-                let query = format!(
-                    "My settings.toml file has an error: {error_description}. Please fix it."
-                );
+                let query =
+                    format!("我的 settings.toml 文件有错误：{error_description}。请修复它。");
                 self.active_tab_pane_group().update(ctx, |pane_group, ctx| {
                     pane_group.add_terminal_pane_in_agent_mode(None, None, ctx);
                     if let Some(terminal_view) = pane_group.focused_session_view(ctx) {
@@ -22356,7 +22347,7 @@ impl TypedActionView for Workspace {
                     status.is_syncing_all_inputs(window_id)
                 });
                 let verb = if enabled { "enabled" } else { "disabled" };
-                let mut message = format!("You {verb} synchronized inputs in all tabs.");
+                let mut message = format!("你已{verb}所有标签页中的同步输入。");
                 if let Some(keystroke) = keybinding_name_to_keystroke(
                     "workspace:toggle_sync_all_terminal_inputs_in_all_tabs",
                     ctx,
@@ -22389,7 +22380,7 @@ impl TypedActionView for Workspace {
                     status.should_sync_this_pane_group(current_pane_group_id, window_id)
                 });
                 let verb = if enabled { "enabled" } else { "disabled" };
-                let mut message = format!("You {verb} synchronized inputs in this tab.");
+                let mut message = format!("你已{verb}此标签页中的同步输入。");
                 if let Some(keystroke) = keybinding_name_to_keystroke(
                     "workspace:toggle_sync_terminal_inputs_in_tab",
                     ctx,
@@ -22413,8 +22404,7 @@ impl TypedActionView for Workspace {
                 self.process_updated_sync_state(ctx);
 
                 self.toast_stack.update(ctx, |view, ctx| {
-                    let new_toast =
-                        DismissibleToast::success("Disabled all synchronized inputs.".to_string());
+                    let new_toast = DismissibleToast::success("已停用所有输入同步。".to_string());
                     view.add_ephemeral_toast(new_toast, ctx);
                 });
                 send_telemetry_from_ctx!(TelemetryEvent::DisableInputSync, ctx);
@@ -23078,7 +23068,7 @@ impl TypedActionView for Workspace {
                         let entry = format!("file://{}", plugin_path.display());
                         set_opencode_warp_plugin(&entry)
                     }
-                    None => "Failed to determine home directory".to_string(),
+                    None => "无法确定主目录".to_string(),
                 };
                 self.toast_stack.update(ctx, |view, ctx| {
                     view.add_ephemeral_toast(DismissibleToast::default(message), ctx);
@@ -23098,7 +23088,7 @@ impl TypedActionView for Workspace {
 
                 self.toast_stack.update(ctx, |view, ctx| {
                     view.add_ephemeral_toast(
-                        DismissibleToast::default("Sampling process for 3 seconds...".to_string()),
+                        DismissibleToast::default("正在采样进程 3 秒...".to_string()),
                         ctx,
                     );
                 });
@@ -23159,20 +23149,20 @@ impl TypedActionView for Workspace {
                                     }
                                 }
 
-                                format!("Process sample saved to {output_path}")
+                                format!("进程采样已保存到 {output_path}")
                             }
                             Ok(Ok(output)) => {
                                 let stderr = String::from_utf8_lossy(&output.stderr);
                                 log::error!("sample command failed ({}): {stderr}", output.status);
-                                "Failed to sample process (check logs)".to_string()
+                                "进程采样失败（请检查日志）".to_string()
                             }
                             Ok(Err(io_err)) => {
                                 log::error!("Failed to run sample command: {io_err}");
-                                "Failed to sample process (check logs)".to_string()
+                                "进程采样失败（请检查日志）".to_string()
                             }
                             Err(join_err) => {
                                 log::error!("Sample task panicked: {join_err}");
-                                "Failed to sample process (check logs)".to_string()
+                                "进程采样失败（请检查日志）".to_string()
                             }
                         };
                         me.toast_stack.update(ctx, |view, ctx| {
@@ -23409,7 +23399,7 @@ impl TypedActionView for Workspace {
 
 impl View for Workspace {
     fn ui_name() -> &'static str {
-        "Workspace"
+        "工作区"
     }
 
     fn self_or_child_interacted_with(&self, ctx: &mut ViewContext<Self>) {
@@ -25606,7 +25596,7 @@ fn compute_default_panel_widths(
 #[cfg(debug_assertions)]
 fn set_opencode_warp_plugin(new_entry: &str) -> String {
     let Some(home) = dirs::home_dir() else {
-        return "Failed to determine home directory".to_string();
+        return "无法确定主目录".to_string();
     };
 
     let config_dir = home.join(".config/opencode");

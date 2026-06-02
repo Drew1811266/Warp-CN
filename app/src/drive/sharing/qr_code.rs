@@ -13,9 +13,9 @@ pub struct QrMatrix {
 
 #[derive(Debug, thiserror::Error)]
 pub enum QrCodeError {
-    #[error("Unable to encode QR code")]
+    #[error("无法编码二维码")]
     Encode,
-    #[error("Unable to encode QR code image")]
+    #[error("无法编码二维码图片")]
     Image(#[from] image::ImageError),
 }
 

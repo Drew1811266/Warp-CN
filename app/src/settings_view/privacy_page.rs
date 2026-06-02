@@ -545,9 +545,7 @@ impl TypedActionView for PrivacyPageView {
                                 .set_value(new_user_secret_regex_list, ctx)
                                 .is_err()
                             {
-                                log::error!(
-                                    "Failed to add recommended regex to custom secret regex list"
-                                );
+                                log::error!("无法将推荐正则添加到自定义 secret 正则列表");
                             }
                             ctx.notify();
                         }
@@ -1134,7 +1132,7 @@ impl SettingsWidget for SecretRedactionWidget {
     type View = PrivacyPageView;
 
     fn search_terms(&self) -> &str {
-        "secret redaction safe mode hide"
+        "secret 隐藏 安全模式 脱敏 secret redaction safe mode hide"
     }
 
     fn render(
@@ -1410,7 +1408,7 @@ impl SettingsWidget for AppAnalyticsWidget {
     type View = PrivacyPageView;
 
     fn search_terms(&self) -> &str {
-        "telemetry usage analytics data collection"
+        "遥测 用量 分析 数据收集 telemetry usage analytics data collection"
     }
 
     fn should_render(&self, app: &AppContext) -> bool {
@@ -1578,7 +1576,7 @@ impl SettingsWidget for CrashReportsWidget {
     type View = PrivacyPageView;
 
     fn search_terms(&self) -> &str {
-        "telemetry crash reports stability data collection"
+        "遥测 崩溃报告 稳定性 数据收集 telemetry crash reports stability data collection"
     }
 
     fn should_render(&self, app: &AppContext) -> bool {
@@ -1650,7 +1648,7 @@ impl SettingsWidget for CloudConversationStorageWidget {
     type View = PrivacyPageView;
 
     fn search_terms(&self) -> &str {
-        "sync cloud conversation store storage ai agent"
+        "同步 云端 会话 存储 ai Agent sync cloud conversation storage"
     }
 
     fn should_render(&self, app: &AppContext) -> bool {
@@ -1760,7 +1758,7 @@ impl SettingsWidget for NetworkLogWidget {
     type View = PrivacyPageView;
 
     fn search_terms(&self) -> &str {
-        "network log audit console data collection"
+        "网络日志 审计 控制台 数据收集 network log audit console"
     }
 
     fn render(
@@ -1836,7 +1834,7 @@ impl SettingsWidget for DataManagementWidget {
     type View = PrivacyPageView;
 
     fn search_terms(&self) -> &str {
-        "data management delete account"
+        "数据管理 删除账号 data management delete account"
     }
 
     fn render(
@@ -1912,7 +1910,7 @@ impl SettingsWidget for PrivacyPolicyWidget {
     type View = PrivacyPageView;
 
     fn search_terms(&self) -> &str {
-        "privacy policy terms"
+        "隐私政策 条款 privacy policy terms"
     }
 
     fn render(

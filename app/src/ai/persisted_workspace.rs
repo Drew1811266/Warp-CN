@@ -948,7 +948,7 @@ impl PersistedWorkspace {
                         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                             toast_stack.add_ephemeral_toast(
                                 DismissibleToast::success(format!(
-                                    "{} installed and enabled successfully.",
+                                    "{} 已安装并成功启用。",
                                     server_type.binary_name()
                                 )),
                                 window_id,
@@ -987,7 +987,7 @@ impl PersistedWorkspace {
                         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                             toast_stack.add_ephemeral_toast(
                                 DismissibleToast::error(format!(
-                                    "Failed to install {}: {}",
+                                    "安装 {} 失败：{}",
                                     server_type.binary_name(),
                                     e
                                 )),

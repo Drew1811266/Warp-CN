@@ -170,7 +170,7 @@ impl GetFilesExecutor {
             // current working directory is, which is never the case.
             return ActionExecution::Sync(AIAgentActionResultType::GetFiles(
                 GetFilesResult::Error(
-                    "The search failed. Try another way to locate the relevant files.".to_string(),
+                    "搜索失败。请尝试用其他方式定位相关文件。".to_string(),
                 ),
             ));
         };
@@ -218,13 +218,13 @@ impl GetFilesExecutor {
 
                                 let error_message = match e {
                                     GetRelevantFilesError::Pending => {
-                                        "The current git repository is still being indexed, so search is unavailable right now. You can try again later".to_owned()
+                                        "当前 git 仓库仍在索引中，暂时无法搜索。你可以稍后重试".to_owned()
                                     }
                                     GetRelevantFilesError::CreateFailed => {
-                                        "Relevant file search in the current directory is not available".to_owned()
+                                        "当前目录不可使用相关文件搜索".to_owned()
                                     }
                                     GetRelevantFilesError::Missing => {
-                                        "The current directory isn't within a git repository, which is necessary to search for relevant files.".to_owned()
+                                        "当前目录不在 git 仓库内，而搜索相关文件需要 git 仓库。".to_owned()
                                     }
                                 };
                                 ActionExecution::Sync(AIAgentActionResultType::GetFiles(
@@ -249,7 +249,7 @@ impl GetFilesExecutor {
                         ),
                     Some(GetRelevantFilesStatus::Failed { .. }) => ActionExecution::Sync(
                         AIAgentActionResultType::GetFiles(GetFilesResult::Error(
-                            "The search failed. Try another way to locate the relevant files."
+                            "搜索失败。请尝试用其他方式定位相关文件。"
                                 .to_owned(),
                         )),
                     ),
@@ -320,7 +320,7 @@ impl GetFilesExecutor {
                 } else {
                     let missing_files = result.missing_files.join(", ");
                     Ok(GetFilesResult::Error(format!(
-                        "These files do not exist: {}",
+                        "这些文件不存在：{}",
                         missing_files
                     )))
                 }

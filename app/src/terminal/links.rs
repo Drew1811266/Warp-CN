@@ -8,7 +8,7 @@ pub fn directly_open_link_keybinding_string() -> &'static str {
     match OperatingSystem::get() {
         OperatingSystem::Mac => "Cmd +",
         OperatingSystem::Linux | OperatingSystem::Windows => "Ctrl +",
-        OperatingSystem::Other(_) => "Middle",
+        OperatingSystem::Other(_) => "中键",
     }
 }
 

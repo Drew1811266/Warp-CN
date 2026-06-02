@@ -71,9 +71,9 @@ pub(crate) async fn download_artifact_bytes(
         .parent()
         .filter(|parent| !parent.as_os_str().is_empty())
     {
-        tokio::fs::create_dir_all(parent).await.with_context(|| {
-            format!("Failed to create download directory '{}'", parent.display())
-        })?;
+        tokio::fs::create_dir_all(parent)
+            .await
+            .with_context(|| format!("创建下载目录 {} 失败", parent.display()))?;
     }
 
     let response = http_client
@@ -81,12 +81,7 @@ pub(crate) async fn download_artifact_bytes(
         .timeout(Duration::from_secs(300))
         .send()
         .await
-        .with_context(|| {
-            format!(
-                "Failed to download artifact '{}' from signed URL",
-                artifact.artifact_uid()
-            )
-        })?;
+        .with_context(|| format!("无法从签名 URL 下载 artifact {}", artifact.artifact_uid()))?;
     let response = response
         .error_for_status()
         .map_err(|err| anyhow!("Artifact download failed: {err}"))?;

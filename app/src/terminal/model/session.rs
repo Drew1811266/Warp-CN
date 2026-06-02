@@ -46,21 +46,21 @@ use crate::terminal::{History, ShellHost, ShellLaunchData};
 #[derive(thiserror::Error, Debug)]
 pub enum ReadHistoryContentsError {
     #[cfg(windows)]
-    #[error("Couldn't get path to history file")]
+    #[error("无法获取历史文件路径")]
     HistoryFilePathError,
 
     #[cfg(windows)]
-    #[error("Error running PowerShell commands to read history file: {0}")]
+    #[error("运行 PowerShell 命令读取历史文件时出错：{0}")]
     PowerShellError(anyhow::Error),
 
     #[cfg(windows)]
-    #[error("Error running PowerShell commands and reading from filesystem to read history file. PowerShell error: {powershell_error}, filesystem error: {async_fs_error}")]
+    #[error("运行 PowerShell 命令并从文件系统读取历史文件时出错。PowerShell 错误：{powershell_error}，文件系统错误：{async_fs_error}")]
     PowerShellAndAsyncFsError {
         powershell_error: anyhow::Error,
         async_fs_error: std::io::Error,
     },
 
-    #[error("Error reading history file from filesystem: {0}")]
+    #[error("从文件系统读取历史文件时出错：{0}")]
     AsyncFsError(std::io::Error),
 }
 
@@ -1226,7 +1226,7 @@ impl Session {
             };
             if history_file.exists() {
                 log::info!(
-                    "Loading history from file {} for shell {}",
+                    "正在从文件 {} 加载 shell {} 的历史",
                     history_file.display(),
                     shell_type.name()
                 );
@@ -1250,7 +1250,7 @@ impl Session {
             }
         }
         log::info!(
-            "No history file found for shell {}, starting with empty history",
+            "未找到 shell {} 的历史文件，将从空历史开始",
             shell_type.name()
         );
         Vec::new()
@@ -1304,9 +1304,7 @@ impl Session {
                 // Report this error so we have some data on whether this method of running
                 // PowerShell commands is reliable. If this turns out to be noisy, we can remove
                 // this log line.
-                log::warn!(
-                    "Failed to read history using PowerShell commands: {powershell_error:?}"
-                );
+                log::warn!("使用 PowerShell 命令读取历史失败：{powershell_error:?}");
                 #[cfg(feature = "crash_reporting")]
                 sentry::with_scope(
                     |scope| {
@@ -1322,7 +1320,7 @@ impl Session {
                     },
                     || {
                         sentry::capture_message(
-                            "Failed to read history using PowerShell commands",
+                            "使用 PowerShell 命令读取历史失败",
                             sentry::Level::Error,
                         )
                     },
@@ -1340,7 +1338,7 @@ impl Session {
     async fn read_history_via_powershell(history_file_path: &str) -> Result<Vec<u8>> {
         let Some(powershell_command) = crate::util::windows::any_powershell_path() else {
             return Err(anyhow::anyhow!(
-                "Failed to find powershell executable to read history"
+                "未找到用于读取历史的 PowerShell 可执行文件"
             ));
         };
 
@@ -1356,13 +1354,10 @@ impl Session {
         match read_result {
             Ok(output) if output.status.success() => Ok(output.stdout),
             Ok(output) => Err(anyhow::anyhow!(
-                "Command to read history file failed with stderr: {:#}",
+                "读取历史文件的命令失败，stderr：{:#}",
                 String::from_utf8_lossy(&output.stderr)
             )),
-            Err(e) => Err(anyhow::anyhow!(
-                "Failed to execute command to read history file: {:#}",
-                e
-            )),
+            Err(e) => Err(anyhow::anyhow!("执行读取历史文件的命令失败：{:#}", e)),
         }
     }
 
@@ -1383,7 +1378,7 @@ impl Session {
         }
 
         log::info!(
-            "No history file found for shell {}, starting with empty history",
+            "未找到 shell {} 的历史文件，将从空历史开始",
             shell_type.name()
         );
         Vec::new()

@@ -35,10 +35,7 @@ impl CreateEnvironmentModal {
             }
             HandoffEnvironmentCreationModalEvent::CreationFailed { error_message } => {
                 me.visible = false;
-                me.show_error_toast(
-                    format!("Failed to create environment: {error_message}"),
-                    ctx,
-                );
+                me.show_error_toast(format!("创建环境失败：{error_message}"), ctx);
                 ctx.notify();
             }
         });

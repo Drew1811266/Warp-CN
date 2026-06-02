@@ -678,7 +678,7 @@ fn wsl_arguments_for_session_spawning_command(
             ));
             args
         }
-        _ => todo!("We don't yet support bootstrapping {shell_type:?} on WSL"),
+        _ => todo!("暂不支持在 WSL 上 bootstrap {shell_type:?}"),
     }
 }
 

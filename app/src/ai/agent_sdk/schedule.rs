@@ -229,17 +229,17 @@ impl TableFormat for ScheduleInfo {
     fn header() -> Vec<Cell> {
         vec![
             Cell::new("ID"),
-            Cell::new("Name"),
-            Cell::new("Schedule"),
-            Cell::new("Paused"),
-            Cell::new("Last ran"),
-            Cell::new("Next run"),
-            Cell::new("Scope"),
+            Cell::new("名称"),
+            Cell::new("计划"),
+            Cell::new("已暂停"),
+            Cell::new("上次运行"),
+            Cell::new("下次运行"),
+            Cell::new("范围"),
         ]
     }
 
     fn row(&self) -> Vec<Cell> {
-        let paused_display = if self.paused { "Yes" } else { "No" };
+        let paused_display = if self.paused { "是" } else { "否" };
         vec![
             Cell::new(&self.id),
             Cell::new(&self.name),
@@ -253,7 +253,7 @@ impl TableFormat for ScheduleInfo {
 }
 
 fn print_schedule_info(info: &ScheduleInfo, output_format: OutputFormat) -> anyhow::Result<()> {
-    let paused_display = if info.paused { "Yes" } else { "No" };
+    let paused_display = if info.paused { "是" } else { "否" };
 
     match output_format {
         OutputFormat::Json => {
@@ -296,37 +296,34 @@ fn print_schedule_info(info: &ScheduleInfo, output_format: OutputFormat) -> anyh
         }
         OutputFormat::Pretty => {
             let mut table = output::standard_table();
-            table.add_row(vec![Cell::new("Name"), Cell::new(&info.name)]);
-            table.add_row(vec![
-                Cell::new("Cron schedule"),
-                Cell::new(&info.cron_schedule),
-            ]);
-            table.add_row(vec![Cell::new("Paused"), Cell::new(paused_display)]);
+            table.add_row(vec![Cell::new("名称"), Cell::new(&info.name)]);
+            table.add_row(vec![Cell::new("Cron 计划"), Cell::new(&info.cron_schedule)]);
+            table.add_row(vec![Cell::new("已暂停"), Cell::new(paused_display)]);
 
             let last_ran = info.last_ran_display();
             let next_run = info.next_run_display();
-            table.add_row(vec![Cell::new("Last ran"), Cell::new(last_ran)]);
+            table.add_row(vec![Cell::new("上次运行"), Cell::new(last_ran)]);
             if let Some(error) = &info.last_spawn_error {
-                table.add_row(vec![Cell::new("Last error"), Cell::new(error)]);
+                table.add_row(vec![Cell::new("上次错误"), Cell::new(error)]);
             }
-            table.add_row(vec![Cell::new("Next run"), Cell::new(next_run)]);
+            table.add_row(vec![Cell::new("下次运行"), Cell::new(next_run)]);
 
-            table.add_row(vec![Cell::new("Prompt"), Cell::new(&info.prompt)]);
+            table.add_row(vec![Cell::new("提示词"), Cell::new(&info.prompt)]);
 
             if let Some(environment_id) = &info.agent_config.environment_id {
-                table.add_row(vec![Cell::new("Environment ID"), Cell::new(environment_id)]);
+                table.add_row(vec![Cell::new("环境 ID"), Cell::new(environment_id)]);
             }
             if let Some(model_id) = &info.agent_config.model_id {
-                table.add_row(vec![Cell::new("Model ID"), Cell::new(model_id)]);
+                table.add_row(vec![Cell::new("模型 ID"), Cell::new(model_id)]);
             }
             if let Some(agent_name) = &info.agent_config.name {
-                table.add_row(vec![Cell::new("Agent name"), Cell::new(agent_name)]);
+                table.add_row(vec![Cell::new("Agent 名称"), Cell::new(agent_name)]);
             }
             if let Some(skill_spec) = &info.agent_config.skill_spec {
-                table.add_row(vec![Cell::new("Skill"), Cell::new(skill_spec)]);
+                table.add_row(vec![Cell::new("技能"), Cell::new(skill_spec)]);
             }
             if let Some(worker_host) = &info.agent_config.worker_host {
-                table.add_row(vec![Cell::new("Host"), Cell::new(worker_host)]);
+                table.add_row(vec![Cell::new("主机"), Cell::new(worker_host)]);
             }
 
             println!("{table}");
@@ -564,7 +561,7 @@ fn list(ctx: &mut AppContext, output_format: OutputFormat) -> anyhow::Result<()>
 
                     let id = match sync_id {
                         SyncId::ServerId(server_id) => server_id.to_string(),
-                        SyncId::ClientId(_) => "Unsynced".to_string(),
+                        SyncId::ClientId(_) => "未同步".to_string(),
                     };
 
                     ScheduleInfo::new(id, scope, config, history.as_ref())
@@ -608,7 +605,7 @@ fn get(
 
             let id = match &schedule_id {
                 SyncId::ServerId(server_id) => server_id.to_string(),
-                SyncId::ClientId(_) => "Unsynced".to_string(),
+                SyncId::ClientId(_) => "未同步".to_string(),
             };
             let scope = super::common::format_owner(&schedule.permissions().owner).to_string();
             let config = schedule.model().string_model.clone();

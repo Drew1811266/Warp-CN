@@ -107,7 +107,7 @@ impl Adapter {
     ) -> Self {
         let reconnecting_banner = ctx.add_typed_action_view(|_| {
             Banner::new_without_close(BannerTextContent::formatted_text(vec![
-                FormattedTextFragment::plain_text("Offline, trying to reconnect..."),
+                FormattedTextFragment::plain_text("已离线，正在尝试重新连接..."),
             ]))
             .with_icon(Icon::CloudOffline)
         });

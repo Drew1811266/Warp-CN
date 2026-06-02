@@ -58,7 +58,7 @@ impl SearchCodebaseExecutor {
                         return;
                     };
                     if let Err(e) = result_tx.send(result.clone()) {
-                        log::warn!("Failed to send search codebase results to receiver {e:?}.");
+                        log::warn!("无法将代码库搜索结果发送给接收方 {e:?}。");
                     }
                 }
                 GetRelevantFilesControllerEvent::Success {
@@ -91,9 +91,7 @@ impl SearchCodebaseExecutor {
                                     if !result.missing_files.is_empty() {
                                         let missing_files = result.missing_files.join(", ");
                                         SearchCodebaseResult::Failed {
-                                            message: format!(
-                                                "These files do not exist: {missing_files}"
-                                            ),
+                                            message: format!("这些文件不存在：{missing_files}"),
                                             reason: SearchCodebaseFailureReason::InvalidFilePaths,
                                         }
                                     } else {
@@ -113,9 +111,7 @@ impl SearchCodebaseExecutor {
                                 return;
                             };
                             if let Err(e) = result_tx.send(result) {
-                                log::warn!(
-                                    "Failed to send search codebase results to receiver {e:?}."
-                                );
+                                log::warn!("无法将代码库搜索结果发送给接收方 {e:?}。");
                             }
                         },
                     );
@@ -125,11 +121,10 @@ impl SearchCodebaseExecutor {
                         return;
                     };
                     if let Err(e) = result_tx.send(SearchCodebaseResult::Failed {
-                        message: "The search failed. Try another way to locate the relevant files."
-                            .to_owned(),
+                        message: "搜索失败。请尝试用其他方式定位相关文件。".to_owned(),
                         reason: SearchCodebaseFailureReason::GetRelevantFilesError,
                     }) {
-                        log::warn!("Failed to send search codebase results to receiver {e:?}.");
+                        log::warn!("无法将代码库搜索结果发送给接收方 {e:?}。");
                     }
                 }
             }
@@ -228,7 +223,8 @@ impl SearchCodebaseExecutor {
                 return ActionExecution::Sync(AIAgentActionResultType::SearchCodebase(
                     SearchCodebaseResult::Failed {
                         reason: SearchCodebaseFailureReason::CodebaseNotIndexed,
-                        message: "The search failed because the codebase is not available. Try another way to locate the relevant files.".to_owned(),
+                        message: "搜索失败，因为代码库不可用。请尝试用其他方式定位相关文件。"
+                            .to_owned(),
                     },
                 ));
             };
@@ -277,7 +273,7 @@ impl SearchCodebaseExecutor {
                     ActionExecution::Sync(AIAgentActionResultType::SearchCodebase(
                         SearchCodebaseResult::Failed {
                             reason: SearchCodebaseFailureReason::CodebaseNotIndexed,
-                            message: "Remote codebase search is unavailable.".to_owned(),
+                            message: "远程代码库搜索不可用。".to_owned(),
                         },
                     ))
                 }
@@ -296,8 +292,7 @@ impl SearchCodebaseExecutor {
                 return ActionExecution::Sync(AIAgentActionResultType::SearchCodebase(
                     SearchCodebaseResult::Failed {
                         reason: SearchCodebaseFailureReason::MissingCurrentWorkingDirectory,
-                        message: "The search failed. Try another way to locate the relevant files."
-                            .to_string(),
+                        message: "搜索失败。请尝试用其他方式定位相关文件。".to_string(),
                     },
                 ));
             };
@@ -330,19 +325,22 @@ impl SearchCodebaseExecutor {
                 // main thread since its just for telemetry.
                 let _ = ctx.spawn(async move { search_dir.exists() }, |_, exists, ctx| {
                     let error = if exists {
-                        "The codebase isn't indexed".to_string()
+                        "代码库尚未建立索引".to_string()
                     } else {
-                        "The codebase doesn't exist".to_string()
+                        "代码库不存在".to_string()
                     };
                     send_telemetry_from_ctx!(
                         TelemetryEvent::SearchCodebaseRepoUnavailable { action_id, error },
                         ctx
                     );
                 });
-                return ActionExecution::Sync(AIAgentActionResultType::SearchCodebase(SearchCodebaseResult::Failed {
-                    message: "The search failed because the codebase is not available. Try another way to locate the relevant files.".to_owned(),
-                    reason: SearchCodebaseFailureReason::CodebaseNotIndexed
-                }));
+                return ActionExecution::Sync(AIAgentActionResultType::SearchCodebase(
+                    SearchCodebaseResult::Failed {
+                        message: "搜索失败，因为代码库不可用。请尝试用其他方式定位相关文件。"
+                            .to_owned(),
+                        reason: SearchCodebaseFailureReason::CodebaseNotIndexed,
+                    },
+                ));
             };
 
             // Add the repo root as a temporary permission; if the user gave us permission to
@@ -388,16 +386,16 @@ impl SearchCodebaseExecutor {
                     log::warn!("Failed to send get_relevant_files request for directory: {e:?}");
 
                     let error_message = match e {
-                            GetRelevantFilesError::Pending => {
-                                "The current git repository is still being indexed, so search is unavailable right now. You can try again later".to_owned()
-                            }
-                            GetRelevantFilesError::CreateFailed => {
-                                "Relevant file search in the current directory is not available".to_owned()
-                            }
-                            GetRelevantFilesError::Missing => {
-                                "The current directory isn't within a git repository, which is necessary to search for relevant files.".to_owned()
-                            }
-                        };
+                        GetRelevantFilesError::Pending => {
+                            "当前 git 仓库仍在建立索引，因此暂时无法搜索。你可以稍后再试".to_owned()
+                        }
+                        GetRelevantFilesError::CreateFailed => {
+                            "当前目录无法使用相关文件搜索".to_owned()
+                        }
+                        GetRelevantFilesError::Missing => {
+                            "当前目录不在 git 仓库中，无法搜索相关文件。".to_owned()
+                        }
+                    };
                     ActionExecution::Sync(AIAgentActionResultType::SearchCodebase(
                         SearchCodebaseResult::Failed {
                             reason: SearchCodebaseFailureReason::CodebaseNotIndexed,

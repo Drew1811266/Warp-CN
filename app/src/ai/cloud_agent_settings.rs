@@ -21,7 +21,7 @@ use crate::server::ids::SyncId;
     schemars::JsonSchema,
     settings_value::SettingsValue,
 )]
-#[schemars(description = "Selected third-party harness model.")]
+#[schemars(description = "已选择的第三方 harness 模型。")]
 pub struct HarnessModelSelection {
     pub model_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]

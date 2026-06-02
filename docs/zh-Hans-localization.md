@@ -16,20 +16,24 @@ The script applies exact replacements inside Rust string literals, including raw
 
 ## Status
 
-Last verified release audit: 2026-05-31.
+Last verified release audit: 2026-06-02 RC20, generated on 2026-06-02 Asia/Shanghai.
 
-- Manifest entries: 2664.
-- Covered areas: onboarding/auth, workspace shell, Warp on Web home, HOA onboarding, search and command entry points, settings core pages, AI settings deep paths, BYO API keys, AWS Bedrock credentials and user-facing credential errors, Appearance command-palette actions, conversation list actions, cloud agent capacity messaging, environment deletion confirmation, launch modals, credit and plan modals, Agent tips, Agent status/error residue, conversation details panel, CLI admin prompts, destructive confirmation dialogs, advanced settings pages, common modals/toasts, Warp Drive surfaces, tab configs, themes, terminal sharing surfaces, terminal notification banners, rewind labels, auth-secret confirmation dialogs, environment modal fallbacks, Agent management/input panels, custom inference endpoint settings, team invite basics, and vertical tab context menus.
-- Dry-run summary: `entries: 2664`, `files: 198`, `already_applied: 2649`, `would_change: 0`, `missing: 0`.
-- Metadata summary: `key/context/status/expected_count: 150 (5.6%)`.
+- RC20 decision: `ready-for-local-use-with-fixture-evidence`; public RC remains blocked. New RC20 evidence includes `resources/localization/zh-Hans-public-rc-blockers.toml`, `script/zh_public_rc_status.py`, `docs/zh-Hans-local-fixture-implementation-plan-rc20.md`, `docs/zh-Hans-onboarding-asset-authorization-rc20.md`, and `docs/zh-Hans-release-candidate-2026-06-02-rc20.md`. Current public-RC blocker total is 11.
+- RC19 decision: `ready-for-local-use-with-fixture-evidence`; public RC remains blocked until Rust compile can run safely, isolated account/backend-state evidence exists, GUI/bundle evidence can be rerun safely, and onboarding visual residue is regenerated or design-approved. The RC19 Rust compile gate was skipped for heat-safety because this post-RC18 goal explicitly avoided heavy local load and Phases 103-110 did not add source translations or PNG assets.
+- Manifest entries: 7943.
+- Covered areas: onboarding/auth, workspace shell, Warp on Web home, HOA onboarding, search and command entry points, settings core pages, AI settings deep paths, BYO API keys, AWS Bedrock credentials and user-facing credential errors, Appearance command-palette actions, conversation list actions, cloud agent capacity messaging, environment deletion confirmation, launch modals, credit and plan modals, Agent tips, Agent status/error residue, conversation details panel, CLI admin prompts, destructive confirmation dialogs, advanced settings pages, common modals/toasts, Warp Drive surfaces, tab configs, themes, terminal sharing surfaces, terminal notification banners, rewind labels, auth-secret confirmation dialogs, environment modal fallbacks, Agent management/input panels, custom inference endpoint settings, team invite basics, vertical tab context menus, terminal link/auth-secret/loading/onboarding/banner surfaces, shared-session viewer toasts, terminal executor preservation records, Agent management/scheduled task copy, AWS credential errors, web search/fetch/get-files copy, execution profiles, rule-editor copy, terminal block/view/CLI/ambient/zero-state surfaces, terminal residue pass 10 through 12, AI/Agent residue pass 8 through 10, workspace/settings straggler closure, public-RC prerequisite package RC16, onboarding visual asset regeneration plan RC16, upstream drift preflight RC16, RC17 upstream freshness rules, public-RC evidence templates, low-risk GUI smoke preparation, isolated-account blocker record, backend/disposable fixture blocker record, onboarding before contact sheet, PNG regeneration blocker record, locale export maintenance, inventory precision cleanup, dry-run fast-path plus non-dry-run batch-apply maintenance, RC18 post-RC17 heat-safe evidence closure, and RC19 tracked evidence/runbook/fixture-contract hardening.
+- Dry-run summary: `entries: 7943`, `files: 552`, `already_applied: 5690`, `would_change: 0`, `missing: 0`.
+- Metadata summary: `key: 150 (1.9%)`, `context/status: 7943 (100.0%)`, `preserve_terms: 155 (2.0%)`, `expected_count: 195 (2.5%)`.
 - Phase 3 status: manifest v2 metadata validation, external inventory ignore rules, glossary checks, GUI smoke matrix, upstream stable sync, and JSON/YAML locale export prototype are in place. Current v1 entries remain valid, and new entries may add `key`, `context`, `status`, `preserve_terms`, `notes`, and `expected_count` metadata for future locale migration.
 - Coverage snapshot:
-  - `onboarding`: 266 covered, 54 candidates, 83.1%.
-  - `workspace`: 598 covered, 352 candidates, 62.9%.
+  - `onboarding`: 323 covered, 0 candidates, 100.0%.
+  - `workspace`: 865 covered, 0 candidates, 100.0%.
   - `search`: 269 covered, 0 candidates, 100.0%.
-  - `settings`: 1202 covered, 823 candidates, 59.4%.
-  - `modals`: 679 covered, 5025 candidates, 11.9%.
-  - `release`: 2892 covered, 6233 candidates, 31.7%.
+  - `settings`: 2024 covered, 0 candidates, 100.0%.
+  - `modals`: 5240 covered, 2 candidates, 100.0%.
+  - `release`: 8574 covered, 2 candidates, 100.0%.
+  - `terminal`: 2178 covered, 1 candidate, 100.0%.
+  - `AI / Agent`: 2515 covered, 1 candidate, 100.0%.
 - Package note: the app crate package is currently named `warp`; the older checklist label `cargo check -p app` fails in this workspace because no package named `app` exists.
 - Phase 2 command-line validation passed:
   - `python3 script/zh_apply_localization.py --dry-run --summary`
@@ -74,11 +78,11 @@ Inventory ignore rules now live in `resources/localization/zh-Hans-inventory-ign
 
 Glossary rules live in `resources/localization/zh-Hans-glossary.toml`. The first rule set is intentionally conservative: it checks stable product/technical terms, a few high-frequency translations, and forbidden target terms without forcing all historical entries to be normalized at once.
 
-GUI verification is tracked in `docs/zh-Hans-gui-smoke-matrix.md`. Use that matrix for release smoke status instead of relying on process startup, bundle success, or scattered manual-gate notes.
+GUI verification is tracked in `docs/zh-Hans-gui-smoke-matrix.md`. Use that matrix for release smoke status instead of relying on process startup, bundle success, or scattered manual-gate notes. For RC20 and later, public-RC blocker totals are summarized from `resources/localization/zh-Hans-public-rc-blockers.toml` with `script/zh_public_rc_status.py`.
 
 Upstream stable sync is documented in `docs/zh-Hans-upstream-sync.md`. Use that checklist when selecting a new upstream base, resolving manifest drift, and recording release gate results.
 
-The current Phase 8 RC5 record is `docs/zh-Hans-release-candidate-2026-05-31-rc5.md`. The Phase 7 RC4 record remains in `docs/zh-Hans-release-candidate-2026-05-31-rc4.md`, the Phase 6 RC3 record remains in `docs/zh-Hans-release-candidate-2026-05-31-rc3.md`, the Phase 5 RC2 record remains in `docs/zh-Hans-release-candidate-2026-05-30-rc2.md`, and the earlier Phase 4 release-candidate record remains in `docs/zh-Hans-release-candidate-2026-05-30.md`.
+The current RC20 record is `docs/zh-Hans-release-candidate-2026-06-02-rc20.md`. RC20 planning is tracked in `.omx/plans/2026-06-02-zh-Hans-post-rc19-plan.md`. RC19 remains in `docs/zh-Hans-release-candidate-2026-06-02-rc19.md`, RC18 remains in `docs/zh-Hans-release-candidate-2026-06-02-rc18.md`, RC17 remains in `docs/zh-Hans-release-candidate-2026-06-02-rc17.md`, RC16 remains in `docs/zh-Hans-release-candidate-2026-06-02-rc16.md`, RC15 remains in `docs/zh-Hans-release-candidate-2026-06-02-rc15.md`, RC14 remains in `docs/zh-Hans-release-candidate-2026-06-02-rc14.md`, RC13 remains in `docs/zh-Hans-release-candidate-2026-06-02-rc13.md`, RC12 remains in `docs/zh-Hans-release-candidate-2026-06-02-rc12.md`, RC11 remains in `docs/zh-Hans-release-candidate-2026-06-02-rc11.md`, RC10 remains in `docs/zh-Hans-release-candidate-2026-06-01-rc10.md`, RC9 remains in `docs/zh-Hans-release-candidate-2026-06-01-rc9.md`, RC8 remains in `docs/zh-Hans-release-candidate-2026-06-01-rc8.md`, RC7 remains in `docs/zh-Hans-release-candidate-2026-06-01-rc7.md`, RC6 remains in `docs/zh-Hans-release-candidate-2026-05-31-rc6.md`, RC5 remains in `docs/zh-Hans-release-candidate-2026-05-31-rc5.md`, RC4 remains in `docs/zh-Hans-release-candidate-2026-05-31-rc4.md`, RC3 remains in `docs/zh-Hans-release-candidate-2026-05-31-rc3.md`, RC2 remains in `docs/zh-Hans-release-candidate-2026-05-30-rc2.md`, and the earlier Phase 4 release-candidate record remains in `docs/zh-Hans-release-candidate-2026-05-30.md`.
 
 The locale export prototype does not replace the source-level overlay. It serializes the manifest into migration-friendly JSON/YAML so the translation asset can be converted later if Warp adopts a first-party locale format.
 

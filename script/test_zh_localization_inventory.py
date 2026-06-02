@@ -63,6 +63,19 @@ internal_words = ["localhost"]
         self.assertFalse(is_candidate_literal("localhost", 'label("localhost")', config))
         self.assertTrue(is_candidate_literal("Visible title", 'label("Visible title")', config))
 
+    def test_filters_keybinding_literals_with_punctuation(self) -> None:
+        config = InventoryIgnoreConfig()
+
+        self.assertFalse(is_candidate_literal("cmdorctrl-,", 'binding("cmdorctrl-,")', config))
+        self.assertFalse(is_candidate_literal("cmdorctrl-=", 'binding("cmdorctrl-=")', config))
+        self.assertFalse(is_candidate_literal("cmdorctrl--", 'binding("cmdorctrl--")', config))
+        self.assertFalse(is_candidate_literal("ctrl-shift->", 'binding("ctrl-shift->")', config))
+        self.assertFalse(is_candidate_literal("shift-cmd-{", 'binding("shift-cmd-{")', config))
+        self.assertFalse(is_candidate_literal("alt-{}", 'binding("alt-{}")', config))
+        self.assertFalse(is_candidate_literal("cmd-meta-y", 'binding("cmd-meta-y")', config))
+        self.assertFalse(is_candidate_literal("shift-?", 'binding("shift-?")', config))
+        self.assertTrue(is_candidate_literal("Dark", 'label("Dark")', config))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -160,14 +160,10 @@ impl View for TerminalViewZeroStateBlock {
                 .finish(),
             )
             .with_child(
-                Text::new(
-                    "New terminal session",
-                    appearance.ui_font_family(),
-                    title_font_size,
-                )
-                .with_color(theme.main_text_color(theme.background()).into_solid())
-                .with_style(Properties::default().weight(Weight::Bold))
-                .finish(),
+                Text::new("新建终端会话", appearance.ui_font_family(), title_font_size)
+                    .with_color(theme.main_text_color(theme.background()).into_solid())
+                    .with_style(Properties::default().weight(Weight::Bold))
+                    .finish(),
             )
             .finish();
 
@@ -185,7 +181,7 @@ impl View for TerminalViewZeroStateBlock {
                 Message::new(vec![MessageItem::clickable(
                     vec![
                         MessageItem::keystroke(ENTER_AGENT_VIEW_NEW_CONVERSATION_KEYSTROKE.clone()),
-                        MessageItem::text("start a new agent conversation"),
+                        MessageItem::text("开始新的 Agent 对话"),
                     ],
                     |ctx| {
                         ctx.dispatch_typed_action(TerminalAction::StartNewAgentConversation);
@@ -200,7 +196,7 @@ impl View for TerminalViewZeroStateBlock {
                         MessageItem::keystroke(
                             ENTER_CLOUD_AGENT_VIEW_NEW_CONVERSATION_KEYSTROKE.clone(),
                         ),
-                        MessageItem::text("start a new cloud agent conversation"),
+                        MessageItem::text("开始新的云端 Agent 对话"),
                     ],
                     |ctx| {
                         ctx.dispatch_typed_action(TerminalAction::EnterCloudAgentView);
@@ -216,7 +212,7 @@ impl View for TerminalViewZeroStateBlock {
                             key: "up".to_owned(),
                             ..Default::default()
                         }),
-                        MessageItem::text("cycle past commands and conversations"),
+                        MessageItem::text("循环浏览过去的命令和对话"),
                     ],
                     |ctx| {
                         ctx.dispatch_typed_action(TerminalAction::OpenInlineHistoryMenu);
@@ -235,7 +231,7 @@ impl View for TerminalViewZeroStateBlock {
                     Message::new(vec![MessageItem::clickable(
                         vec![
                             MessageItem::keystroke(keystroke),
-                            MessageItem::text("open code review"),
+                            MessageItem::text("打开代码审查"),
                         ],
                         |ctx| {
                             ctx.dispatch_typed_action(WorkspaceAction::ToggleRightPanel);
@@ -274,7 +270,7 @@ impl View for TerminalViewZeroStateBlock {
                         Shrinkable::new(
                             1.,
                             render_standard_message(
-                                Message::from_text("autodetect agent prompts in terminal sessions"),
+                                Message::from_text("自动检测终端会话中的 Agent 提示词"),
                                 app,
                             ),
                         )
@@ -291,7 +287,7 @@ impl View for TerminalViewZeroStateBlock {
                 theme.disabled_text_color(theme.background())
             };
             Text::new(
-                "Don't show again",
+                "不再显示",
                 appearance.ui_font_family(),
                 appearance.monospace_font_size() - 4.,
             )

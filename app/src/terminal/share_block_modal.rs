@@ -82,7 +82,7 @@ const COMMAND_OPTION: (&str, DisplaySetting) = ("命令", DisplaySetting::Comman
 const OUTPUT_OPTION: (&str, DisplaySetting) = ("输出", DisplaySetting::Output);
 
 /// This default title is helpful for screen readers.
-const DEFAULT_EMBED_TITLE: &str = "embedded warp block";
+const DEFAULT_EMBED_TITLE: &str = "嵌入式 Warp 块";
 const BLOCK_CREATION_FAILED_MESSAGE: &str = "出了点问题。请重试。";
 
 #[derive(PartialEq)]

@@ -1,0 +1,170 @@
+# zh-Hans public-RC blocker registry.
+# This registry is the machine-readable source of truth for rows that remain
+# blocked after RC19. Keep it in sync with the human evidence records before
+# changing any status.
+
+[[blocker]]
+id = "GUI-AUTH-01"
+category = "isolated_account"
+status = "blocked-no-isolated-account"
+reason = "Browser login callback and returned account state require an isolated test account; the user's main account must not be used."
+required_evidence = [
+  "isolated browser-login test account",
+  "redacted login and callback GUI evidence",
+  "logout or profile cleanup proof",
+]
+handoff_doc = "docs/zh-Hans-public-rc-isolated-account-runbook-rc19.md"
+safety_rule = "Do not use the user's main account or store account identifiers, cookies, tokens, or magic links in evidence."
+public_rc_required = true
+local_fixture_allowed = false
+
+[[blocker]]
+id = "GUI-SET-03"
+category = "isolated_account"
+status = "blocked-no-isolated-account"
+reason = "AI settings and custom inference state require an isolated account with the relevant product surfaces visible."
+required_evidence = [
+  "isolated account with AI settings visible",
+  "redacted Settings > AI GUI evidence",
+  "logout or profile cleanup proof",
+]
+handoff_doc = "docs/zh-Hans-public-rc-isolated-account-runbook-rc19.md"
+safety_rule = "Inspect only; do not create real endpoints, API keys, or account state while collecting this evidence."
+public_rc_required = true
+local_fixture_allowed = false
+
+[[blocker]]
+id = "GUI-SET-04"
+category = "backend_fixture"
+status = "blocked-no-backend-fixture"
+reason = "AWS Bedrock settings evidence requires a disposable profile or explicit backend/local fixture that cannot expose real credentials."
+required_evidence = [
+  "disposable AWS or Bedrock fixture",
+  "redacted settings GUI evidence",
+  "fixture reset proof",
+]
+handoff_doc = "docs/zh-Hans-backend-fixture-contract-rc19.md"
+safety_rule = "Never use real AWS credentials or expose profile names that identify a real account."
+public_rc_required = true
+local_fixture_allowed = true
+
+[[blocker]]
+id = "GUI-SET-05"
+category = "backend_fixture"
+status = "blocked-no-backend-fixture"
+reason = "Invalid Bedrock credential error evidence requires a controlled fixture that cannot contact real credentials."
+required_evidence = [
+  "invalid credential fixture",
+  "redacted error GUI evidence",
+  "fixture reset proof",
+]
+handoff_doc = "docs/zh-Hans-backend-fixture-contract-rc19.md"
+safety_rule = "Use only safe invalid marker values; do not enter real API keys or provider credentials."
+public_rc_required = true
+local_fixture_allowed = true
+
+[[blocker]]
+id = "GUI-SET-06"
+category = "disposable_object"
+status = "blocked-no-disposable-object"
+reason = "Environment delete confirmation requires a disposable cloud environment with exact allowlisted naming and cleanup proof."
+required_evidence = [
+  "disposable environment named zh-smoke-delete-environment",
+  "redacted confirmation GUI evidence",
+  "cleanup proof that the environment is absent or restored",
+]
+handoff_doc = "docs/zh-Hans-backend-fixture-contract-rc19.md"
+safety_rule = "Cancel first and delete only the exact disposable environment after explicit approval."
+public_rc_required = true
+local_fixture_allowed = false
+
+[[blocker]]
+id = "GUI-WS-04"
+category = "disposable_object"
+status = "blocked-no-disposable-object"
+reason = "Managed auth secret delete confirmation requires a disposable secret with exact allowlisted naming and cleanup proof."
+required_evidence = [
+  "disposable secret named zh-smoke-delete-secret",
+  "redacted confirmation GUI evidence",
+  "cleanup proof that the secret is absent or restored",
+]
+handoff_doc = "docs/zh-Hans-backend-fixture-contract-rc19.md"
+safety_rule = "Cancel first and delete only the exact disposable secret after explicit approval."
+public_rc_required = true
+local_fixture_allowed = false
+
+[[blocker]]
+id = "GUI-WS-06"
+category = "isolated_account"
+status = "blocked-no-isolated-account"
+reason = "Custom inference endpoint removal requires an isolated account with custom inference enabled and a disposable endpoint."
+required_evidence = [
+  "isolated account with custom inference enabled",
+  "disposable endpoint named zh-smoke-delete-endpoint",
+  "redacted remove confirmation GUI evidence",
+  "cleanup proof that the endpoint is absent",
+]
+handoff_doc = "docs/zh-Hans-public-rc-isolated-account-runbook-rc19.md"
+safety_rule = "Do not create, edit, or delete any endpoint whose name is not zh-smoke-delete-endpoint."
+public_rc_required = true
+local_fixture_allowed = false
+
+[[blocker]]
+id = "GUI-WS-07"
+category = "disposable_object"
+status = "blocked-no-disposable-object"
+reason = "Team ownership transfer confirmation requires a disposable owner test team and explicit approval."
+required_evidence = [
+  "disposable owner test team named zh-smoke-public-rc-team",
+  "redacted transfer confirmation GUI evidence",
+  "cleanup proof that ownership is restored or the team is deleted",
+]
+handoff_doc = "docs/zh-Hans-backend-fixture-contract-rc19.md"
+safety_rule = "Do not transfer ownership of any real team; automate nothing for admin/ownership prompts without explicit approval."
+public_rc_required = true
+local_fixture_allowed = false
+
+[[blocker]]
+id = "GUI-BILL-01"
+category = "backend_fixture"
+status = "blocked-no-backend-fixture"
+reason = "Out-of-credits or billing modal evidence requires a safe billing/quota fixture or disposable billing test state."
+required_evidence = [
+  "safe quota or billing fixture",
+  "redacted billing GUI evidence",
+  "fixture reset proof",
+]
+handoff_doc = "docs/zh-Hans-backend-fixture-contract-rc19.md"
+safety_rule = "Do not buy credits, attach payment methods, expose billing IDs, or consume real quota."
+public_rc_required = true
+local_fixture_allowed = true
+
+[[blocker]]
+id = "GUI-BILL-02"
+category = "backend_fixture"
+status = "blocked-no-backend-fixture"
+reason = "Build plan migration modal evidence requires backend test team state with sunset or migration flags."
+required_evidence = [
+  "backend test team with build-plan migration state",
+  "redacted modal GUI evidence",
+  "backend flag reset proof",
+]
+handoff_doc = "docs/zh-Hans-backend-fixture-contract-rc19.md"
+safety_rule = "Use backend test state only; do not mutate production team or billing state."
+public_rc_required = true
+local_fixture_allowed = true
+
+[[blocker]]
+id = "GUI-CLOUD-01"
+category = "backend_fixture"
+status = "blocked-no-backend-fixture"
+reason = "Cloud capacity or quota modal evidence requires controlled backend capacity state or a safe local fixture."
+required_evidence = [
+  "controlled capacity or quota fixture",
+  "redacted cloud capacity GUI evidence",
+  "fixture reset proof",
+]
+handoff_doc = "docs/zh-Hans-backend-fixture-contract-rc19.md"
+safety_rule = "Do not create, delete, or exhaust production cloud capacity; use controlled fixture state only."
+public_rc_required = true
+local_fixture_allowed = true

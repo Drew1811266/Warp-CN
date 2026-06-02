@@ -13,43 +13,39 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
         AgentDriverError::TerminalUnavailable | AgentDriverError::InvalidRuntimeState => (
             AgentTaskState::Error,
             TaskStatusUpdate::with_error_code(
-                "An internal error occurred. Please try running your task again. If the issue persists, contact support.",
+                "发生内部错误。请尝试重新运行任务。如果问题仍然存在，请联系支持团队。",
                 PlatformErrorCode::InternalError,
             ),
         ),
         AgentDriverError::BootstrapFailed => (
             AgentTaskState::Error,
             TaskStatusUpdate::with_error_code(
-                "Terminal session failed to start. Please try running your task again.",
+                "终端会话启动失败。请尝试重新运行任务。",
                 PlatformErrorCode::InternalError,
             ),
         ),
         AgentDriverError::ShareSessionFailed { error: share_err } => {
             let message = match share_err {
                 ShareSessionError::Internal(_) => {
-                    "Failed to share agent session due to an internal error. Please try running your task again.".to_string()
+                    "由于内部错误，Agent 会话共享失败。请尝试重新运行任务。".to_string()
                 }
                 ShareSessionError::Failed(reason) => {
                     // The reason string comes from the session-sharing layer and is aimed at
                     // interactive users (e.g. "try sharing again"). Provide a cloud-agent-
                     // appropriate message instead of wrapping it, which would produce
                     // repetitive "try again" text.
-                    format!("Failed to share agent session: {reason}")
+                    format!("Agent 会话共享失败：{reason}")
                 }
                 ShareSessionError::Disabled => {
-                    "Session sharing is not enabled for your account. This is likely because \
-                     an administrator has disabled session sharing for your team. Please \
-                     verify that session sharing is enabled in your team settings, or try \
-                     running without the --share flag."
+                    "你的账号未启用会话共享。这可能是因为管理员为你的团队禁用了会话共享。请确认团队设置中已启用会话共享，或尝试不带 --share 标志运行。"
                     .to_string()
                 }
                 ShareSessionError::Timeout => {
-                    "Failed to share agent session: timed out waiting for the session sharing \
-                     server to respond. Please check your network connection and try again."
+                    "Agent 会话共享失败：等待会话共享服务器响应超时。请检查网络连接后重试。"
                     .to_string()
                 }
                 ShareSessionError::Interrupted => {
-                    "Session sharing was interrupted before it could complete. Please try running your task again.".to_string()
+                    "会话共享在完成前被中断。请尝试重新运行任务。".to_string()
                 }
             };
             (
@@ -66,7 +62,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
         AgentDriverError::WarpDriveSyncFailed => (
             AgentTaskState::Error,
             TaskStatusUpdate::with_error_code(
-                "Warp Drive failed to sync. Please check your network connection and try again.",
+                "Warp Drive 同步失败。请检查网络连接后重试。",
                 PlatformErrorCode::InternalError,
             ),
         ),
@@ -76,7 +72,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
                 AgentTaskState::Error,
                 TaskStatusUpdate::with_error_code(
                     format!(
-                        "Authentication required. Log in via '{bin} login', provide an API key via '--api-key', or set the WARP_API_KEY environment variable."
+                        "需要认证。请通过 '{bin} login' 登录、通过 '--api-key' 提供 API 密钥，或设置 WARP_API_KEY 环境变量。"
                     ),
                     PlatformErrorCode::AuthenticationRequired,
                 ),
@@ -85,7 +81,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
         AgentDriverError::CloudProviderSetupFailed(err) => (
             AgentTaskState::Error,
             TaskStatusUpdate::with_error_code(
-                format!("Error configuring cloud access: {err:#}"),
+                format!("配置云端访问时出错：{err:#}"),
                 PlatformErrorCode::InternalError,
             ),
         ),
@@ -95,7 +91,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
                 format!(
-                    "MCP server {uuid} was not found. Verify the server exists in your Warp Drive and the UUID is correct."
+                    "未找到 MCP server {uuid}。请确认该 server 存在于你的 Warp Drive 中，且 UUID 正确。"
                 ),
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
@@ -103,21 +99,21 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
         AgentDriverError::MCPStartupFailed => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                "One or more MCP servers failed to start. Check that your MCP server configuration is valid and the server process is runnable.",
+                "一个或多个 MCP server 启动失败。请检查 MCP server 配置是否有效，并确认 server 进程可以运行。",
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
         ),
         AgentDriverError::MCPJsonParseError(msg) => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                format!("Failed to parse MCP server JSON configuration: {msg}"),
+                format!("解析 MCP server JSON 配置失败：{msg}"),
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
         ),
         AgentDriverError::MCPMissingVariables => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                "MCP server configuration is missing required variables. Provide all required environment variables or template values.",
+                "MCP server 配置缺少必需变量。请提供所有必需的环境变量或模板值。",
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
         ),
@@ -125,7 +121,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
                 format!(
-                    "Agent profile \"{name}\" not found. Check the profile ID and ensure it exists in your team's Warp Drive."
+                    "未找到 Agent 配置文件“{name}”。请检查配置文件 ID，并确保它存在于团队的 Warp Drive 中。"
                 ),
                 PlatformErrorCode::ResourceNotFound,
             ),
@@ -134,7 +130,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
                 format!(
-                    "Saved prompt not found for ID {id}. Verify the prompt exists in your Warp Drive."
+                    "未找到 ID 为 {id} 的已保存提示词。请确认该提示词存在于你的 Warp Drive 中。"
                 ),
                 PlatformErrorCode::ResourceNotFound,
             ),
@@ -143,7 +139,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
                 format!(
-                    "Environment '{id}' not found. Verify the environment ID and ensure it exists in your team settings."
+                    "未找到环境 '{id}'。请确认环境 ID，并确保它存在于团队设置中。"
                 ),
                 PlatformErrorCode::ResourceNotFound,
             ),
@@ -152,7 +148,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
                 format!(
-                    "Environment setup failed: {msg}. Check your repository URLs and setup commands."
+                    "环境设置失败：{msg}。请检查仓库 URL 和设置命令。"
                 ),
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
@@ -161,7 +157,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
                 format!(
-                    "Working directory '{}' does not exist or is not a directory. Verify the path in your environment configuration.",
+                    "工作目录 '{}' 不存在或不是目录。请检查环境配置中的路径。",
                     path.display()
                 ),
                 PlatformErrorCode::EnvironmentSetupFailed,
@@ -189,12 +185,12 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
         // --- Cancellation / Blocked (no error code) ---
         AgentDriverError::ConversationCancelled { .. } => (
             AgentTaskState::Cancelled,
-            TaskStatusUpdate::message("Task cancelled."),
+            TaskStatusUpdate::message("任务已取消。"),
         ),
         AgentDriverError::ConversationBlocked { blocked_action } => (
             AgentTaskState::Blocked,
             TaskStatusUpdate::message(format!(
-                "The agent got stuck waiting for user confirmation on the action: {blocked_action}"
+                "Agent 在等待用户确认操作时卡住：{blocked_action}"
             )),
         ),
 
@@ -202,49 +198,49 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
         AgentDriverError::TeamMetadataRefreshTimeout => (
             AgentTaskState::Error,
             TaskStatusUpdate::with_error_code(
-                "Timed out refreshing team metadata. Please check your network connection and try again.",
+                "刷新团队元数据超时。请检查网络连接后重试。",
                 PlatformErrorCode::InternalError,
             ),
         ),
         AgentDriverError::SkillResolutionFailed(msg) => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                format!("Skill resolution failed: {msg}"),
+                format!("Skill 解析失败：{msg}"),
                 PlatformErrorCode::ResourceNotFound,
             ),
         ),
         AgentDriverError::ConfigBuildFailed(err) => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                format!("Failed to build agent configuration: {err}"),
+                format!("构建 Agent 配置失败：{err}"),
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
         ),
         AgentDriverError::PromptResolutionFailed(err) => (
             AgentTaskState::Error,
             TaskStatusUpdate::with_error_code(
-                format!("Failed to resolve prompt for the run: {err}"),
+                format!("解析本次运行的提示词失败：{err}"),
                 PlatformErrorCode::InternalError,
             ),
         ),
         AgentDriverError::SecretsFetchFailed(err) => (
             AgentTaskState::Error,
             TaskStatusUpdate::with_error_code(
-                format!("Failed to fetch task secrets: {err}"),
+                format!("获取任务密钥失败：{err}"),
                 PlatformErrorCode::InternalError,
             ),
         ),
         AgentDriverError::AwsBedrockCredentialsFailed(msg) => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                format!("Failed to initialize AWS Bedrock credentials: {msg}"),
+                format!("初始化 AWS Bedrock 凭据失败：{msg}"),
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
         ),
         AgentDriverError::ConversationLoadFailed(msg) => (
             AgentTaskState::Error,
             TaskStatusUpdate::with_error_code(
-                format!("Failed to load conversation: {msg}"),
+                format!("加载对话失败：{msg}"),
                 PlatformErrorCode::InternalError,
             ),
         ),
@@ -256,8 +252,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
                 format!(
-                    "Conversation {conversation_id} was produced by the {expected} harness, but --harness {got} was requested. \
-                     Re-run with --harness {expected} (or omit --harness) to continue this conversation."
+                    "对话 {conversation_id} 由 {expected} harness 生成，但当前请求了 --harness {got}。请使用 --harness {expected} 重新运行（或省略 --harness）来继续此对话。"
                 ),
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
@@ -270,8 +265,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
                 format!(
-                    "Task {task_id} was created with the {expected} harness, but --harness {got} was requested. \
-                     Re-run with --harness {expected} (or omit --harness) to continue this task."
+                    "任务 {task_id} 使用 {expected} harness 创建，但当前请求了 --harness {got}。请使用 --harness {expected} 重新运行（或省略 --harness）来继续此任务。"
                 ),
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
@@ -283,8 +277,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
                 format!(
-                    "Conversation {conversation_id} has no stored transcript for the {harness} harness. \
-                     The prior run may have crashed before saving any state."
+                    "对话 {conversation_id} 没有 {harness} harness 的已存转录。上一次运行可能在保存状态前崩溃。"
                 ),
                 PlatformErrorCode::ResourceNotFound,
             ),
@@ -292,14 +285,14 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
         AgentDriverError::HarnessCommandFailed { exit_code } => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                format!("Harness command exited with code {exit_code}"),
+                format!("Harness 命令退出，代码为 {exit_code}"),
                 PlatformErrorCode::InternalError,
             ),
         ),
         AgentDriverError::HarnessSetupFailed { harness, reason } => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                format!("Harness '{harness}' validation failed: {reason}"),
+                format!("Harness '{harness}' 校验失败：{reason}"),
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
         ),
@@ -312,9 +305,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
         ),
         AgentDriverError::HarnessAuthCheckFailed { harness, detail } => {
             let message = format!(
-                "Harness '{harness}' authentication check failed: login credentials \
-                 are invalid or expired. Verify that the authentication secret \
-                 configured for this harness is correct."
+                "Harness '{harness}' 认证检查失败：登录凭据无效或已过期。请确认为此 harness 配置的认证密钥正确。"
             );
             log::error!("Preflight detail for {harness}: {detail}");
             (
@@ -331,10 +322,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             excerpt,
         } => {
             let message = format!(
-                "Harness '{harness}' could not make a successful API request. \
-                 Matched failure pattern '{pattern}' in harness output: \"{excerpt}\". \
-                 This usually means the API key is invalid, out of credits, or the \
-                 account is misconfigured."
+                "Harness '{harness}' 无法成功发起 API 请求。在 harness 输出中匹配到失败模式 '{pattern}'，输出片段为 {excerpt}。这通常表示 API 密钥无效、点数不足，或账号配置有误。"
             );
             log::error!("Runtime failure for {harness}: pattern={pattern}, excerpt={excerpt}");
             (

@@ -219,8 +219,8 @@ impl AgentSource {
             AgentSource::AgentWebhook => "API",
             AgentSource::Slack => "Slack",
             AgentSource::Cli => "CLI",
-            AgentSource::ScheduledAgent => "Scheduled",
-            AgentSource::Interactive | AgentSource::CloudMode => "Warp App",
+            AgentSource::ScheduledAgent => "定时",
+            AgentSource::Interactive | AgentSource::CloudMode => "Warp 应用",
             AgentSource::WebApp => "Oz Web",
             AgentSource::GitHubAction => "GitHub Action",
         }
@@ -656,10 +656,10 @@ pub fn cancel_task_with_toast<V: View>(task_id: AmbientAgentTaskId, ctx: &mut Vi
         async move { ai_client.cancel_ambient_agent_task(&task_id).await },
         move |_view, result, ctx| {
             let message = match result {
-                Ok(()) => "Task cancelled".to_string(),
+                Ok(()) => "任务已取消".to_string(),
                 Err(e) => {
-                    log::error!("Failed to cancel task: {e}");
-                    format!("Failed to cancel task: {e}")
+                    log::error!("取消任务失败：{e}");
+                    format!("取消任务失败：{e}")
                 }
             };
             ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
@@ -677,7 +677,7 @@ pub fn cancel_task_silently<V: View>(task_id: AmbientAgentTaskId, ctx: &mut View
         async move { ai_client.cancel_ambient_agent_task(&task_id).await },
         move |_view, result, _| {
             if let Err(e) = result {
-                log::error!("Failed to cancel task: {e}");
+                log::error!("取消任务失败：{e}");
             }
         },
     );

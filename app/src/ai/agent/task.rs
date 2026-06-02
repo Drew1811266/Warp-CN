@@ -63,47 +63,45 @@ impl Display for TaskId {
 
 #[derive(Debug, thiserror::Error)]
 pub enum UpdateTaskError {
-    #[error("Task never initialized with CreateTask client action.")]
+    #[error("任务从未使用 CreateTask 客户端操作初始化。")]
     TaskNotInitialized,
-    #[error("Message not found")]
+    #[error("未找到消息")]
     MessageNotFound,
-    #[error("Field mask operation failed: {0:#}")]
+    #[error("字段掩码操作失败：{0:#}")]
     FieldMask(#[from] FieldMaskError),
-    #[error("Exchange not found.")]
+    #[error("未找到 Exchange。")]
     ExchangeNotFound,
-    #[error("Attempted to update already-finished output.")]
+    #[error("尝试更新已完成的输出。")]
     OutputAlreadyFinished,
-    #[error("Attempted to update output that was never initialized.")]
+    #[error("尝试更新从未初始化的输出。")]
     OutputNeverInitialized,
-    #[error("Failed to convert API message to client type: {0}")]
+    #[error("无法将 API 消息转换为客户端类型：{0}")]
     ConversionError(#[from] MessageToAIAgentOutputMessageError),
 }
 
 #[derive(Debug, thiserror::Error)]
 pub enum ExtractMessagesError {
-    #[error("Task never initialized with CreateTask client action.")]
+    #[error("任务从未使用 CreateTask 客户端操作初始化。")]
     TaskNotInitialized,
-    #[error("First message not found: {0}")]
+    #[error("未找到第一条消息：{0}")]
     FirstMessageNotFound(String),
-    #[error("Last message not found: {0}")]
+    #[error("未找到最后一条消息：{0}")]
     LastMessageNotFound(String),
-    #[error("Invalid range: first message appears after last message")]
+    #[error("范围无效：第一条消息出现在最后一条消息之后")]
     InvalidRange,
-    #[error("Checksum mismatch: expected {expected} messages, found {actual}")]
+    #[error("校验和不匹配：应有 {expected} 条消息，实际为 {actual} 条")]
     ChecksumMismatch { expected: u32, actual: u32 },
 }
 
 #[derive(Debug, thiserror::Error)]
 pub enum UpgradeOptimisticTaskError {
-    #[error("Attempted to upgrade optimistic root task with parent.")]
+    #[error("尝试升级带有父任务的乐观根任务。")]
     RootWithUnexpectedParent,
-    #[error("Attempted to upgrade optimistic CLI subagent task with no parent.")]
+    #[error("尝试升级没有父任务的乐观 CLI subagent 任务。")]
     CLISubagentMissingParent,
-    #[error(
-        "Attempted to upgrade optimistic CLI subagent task for subtask with no CLI subagent call."
-    )]
+    #[error("尝试升级没有 CLI subagent 调用的子任务乐观 CLI subagent 任务。")]
     CLISubagentMissingSubagentCall,
-    #[error("Attempted to upgrade task with server data.")]
+    #[error("尝试用服务器数据升级任务。")]
     UnexpectedUpgrade,
 }
 
@@ -242,9 +240,7 @@ impl Task {
                 active_code_review,
                 false,
             ) {
-                log::error!(
-                    "Failed to update last exchange from messages upon converting to a server created task: {e:?}"
-                );
+                log::error!("转换为服务器创建的任务时，无法从消息更新最后一个 exchange：{e:?}");
             }
         }
         Ok(self)
@@ -1016,9 +1012,7 @@ impl AIAgentExchange {
                     }
                 }
                 MaybeAIAgentOutputMessage::NoClientRepresentation => {
-                    log::warn!(
-                        "Tried to update output for message which no longer has a client representation"
-                    );
+                    log::warn!("尝试更新已不再有客户端表示的消息输出");
                 }
             }
         }
