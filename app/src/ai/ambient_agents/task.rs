@@ -603,6 +603,102 @@ impl std::fmt::Display for AmbientAgentTaskState {
     }
 }
 
+#[cfg(any(debug_assertions, test))]
+pub(crate) const WARP_CN_AGENT_LIFECYCLE_SMOKE_ENV: &str = "WARP_CN_AGENT_LIFECYCLE_SMOKE";
+
+#[cfg(any(debug_assertions, test))]
+#[allow(dead_code)]
+#[derive(Debug, Clone, PartialEq)]
+pub(crate) struct AmbientAgentLifecycleSmokeFixture {
+    pub state: AmbientAgentTaskState,
+    pub label: String,
+}
+
+#[cfg(any(debug_assertions, test))]
+#[allow(dead_code)]
+#[derive(Debug, Clone, PartialEq)]
+pub(crate) struct AmbientAgentLifecycleSmokeFixtureProbe {
+    pub state_query_param: String,
+    pub label: String,
+    pub is_working: bool,
+    pub is_terminal: bool,
+    pub is_failure_like: bool,
+}
+
+#[cfg(any(debug_assertions, test))]
+#[allow(dead_code)]
+pub(crate) fn lifecycle_smoke_fixture_states_from_env(
+) -> Option<Vec<AmbientAgentLifecycleSmokeFixture>> {
+    lifecycle_smoke_fixture_states_for_env_value(
+        std::env::var(WARP_CN_AGENT_LIFECYCLE_SMOKE_ENV)
+            .ok()
+            .as_deref(),
+    )
+}
+
+#[cfg(any(debug_assertions, test))]
+#[allow(dead_code)]
+pub(crate) fn lifecycle_smoke_fixture_states_for_env_value(
+    value: Option<&str>,
+) -> Option<Vec<AmbientAgentLifecycleSmokeFixture>> {
+    if !value.is_some_and(is_truthy_smoke_fixture_value) {
+        return None;
+    }
+
+    let states = [
+        AmbientAgentTaskState::Queued,
+        AmbientAgentTaskState::Pending,
+        AmbientAgentTaskState::Claimed,
+        AmbientAgentTaskState::InProgress,
+        AmbientAgentTaskState::Succeeded,
+        AmbientAgentTaskState::Failed,
+        AmbientAgentTaskState::Error,
+        AmbientAgentTaskState::Blocked,
+        AmbientAgentTaskState::Cancelled,
+    ];
+
+    Some(
+        states
+            .into_iter()
+            .map(|state| AmbientAgentLifecycleSmokeFixture {
+                label: state.to_string(),
+                state,
+            })
+            .collect(),
+    )
+}
+
+#[cfg(any(debug_assertions, test))]
+#[allow(dead_code)]
+pub(crate) fn lifecycle_smoke_fixture_probe_for_env_value(
+    value: Option<&str>,
+) -> Option<Vec<AmbientAgentLifecycleSmokeFixtureProbe>> {
+    lifecycle_smoke_fixture_states_for_env_value(value).map(|fixtures| {
+        fixtures
+            .into_iter()
+            .map(|fixture| AmbientAgentLifecycleSmokeFixtureProbe {
+                state_query_param: fixture
+                    .state
+                    .as_query_param()
+                    .expect("lifecycle smoke fixture uses queryable states")
+                    .to_string(),
+                label: fixture.label,
+                is_working: fixture.state.is_working(),
+                is_terminal: fixture.state.is_terminal(),
+                is_failure_like: fixture.state.is_failure_like(),
+            })
+            .collect()
+    })
+}
+
+#[cfg(any(debug_assertions, test))]
+fn is_truthy_smoke_fixture_value(value: &str) -> bool {
+    matches!(
+        value.trim().to_ascii_lowercase().as_str(),
+        "1" | "true" | "yes" | "on"
+    )
+}
+
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 pub struct TaskPrincipalInfo {
     #[serde(rename = "type")]

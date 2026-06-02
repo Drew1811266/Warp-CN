@@ -24,6 +24,24 @@ Current RC20 blocker registry:
 - `resources/localization/zh-Hans-public-rc-blockers.toml`
 - `script/zh_public_rc_status.py`
 
+Post-RC20 external-prerequisite reconfirmation:
+
+- `docs/zh-Hans-localization-phase124.md`
+- `docs/zh-Hans-localization-phase172.md`
+
+Current Phase 172 public-RC blocker summary:
+
+```text
+total: 11
+public_rc_required: 11
+blocked-no-backend-fixture: 5
+blocked-no-disposable-object: 3
+blocked-no-isolated-account: 3
+handoff docs:
+  docs/zh-Hans-public-rc-isolated-account-runbook-rc19.md
+  docs/zh-Hans-backend-fixture-contract-rc19.md
+```
+
 Use the registry as the first public-RC gate evidence source. A blocker cannot
 be marked cleared unless the registry status, human phase/release evidence, and
 the relevant GUI/backend/account artifact all agree. If any one of those three
@@ -333,3 +351,146 @@ remaining blocker
 
 Fixture evidence remains useful for rendering confidence, but only true isolated
 account/backend evidence plus cleanup proof can promote public RC.
+
+## Phase 132 Public-RC Prerequisite Recheck
+
+Phase 132 refreshed the blocker registry after the RC22 lifecycle fixture probe
+work. It did not launch GUI, build a bundle, log in, create backend fixtures,
+create disposable objects, consume billing quota, touch cloud state, create
+managed secrets, or mutate team state.
+
+Command:
+
+```text
+nice -n 10 python3 script/zh_public_rc_status.py --json
+```
+
+Current status:
+
+```text
+total: 11
+public_rc_required: 11
+blocked-no-backend-fixture: 5
+blocked-no-disposable-object: 3
+blocked-no-isolated-account: 3
+```
+
+Fixture probe work for `WARP_CN_AGENT_LIFECYCLE_SMOKE` remains source-anchor
+evidence only. It does not clear public-RC blockers and does not change the
+registry. Clearing any row still requires current-cycle cropped/redacted GUI or
+accessibility evidence, matching backend/account/object cleanup proof, registry
+changes, and a phase/release record.
+
+## Phase 140 Public-RC External Prerequisite Refresh
+
+Phase 140 refreshed the registry again during the RC23 planning/execution pass.
+It did not launch GUI, log in, create backend fixtures, create disposable
+objects, consume billing quota, touch cloud state, create managed secrets, or
+mutate team state.
+
+Command:
+
+```text
+nice -n 10 python3 script/zh_public_rc_status.py --json
+```
+
+Current status:
+
+```text
+total: 11
+public_rc_required: 11
+blocked-no-backend-fixture: 5
+blocked-no-disposable-object: 3
+blocked-no-isolated-account: 3
+```
+
+No isolated account, backend fixture, disposable object approval, cleanup proof,
+or current-cycle GUI/accessibility evidence was available in this execution
+context. All public-RC blockers therefore remain blocked.
+
+## Phase 150 Public-RC External Evidence Refresh
+
+Phase 150 refreshed the registry during the RC24 planning/execution pass. It
+did not launch GUI, log in, create backend fixtures, create disposable objects,
+consume billing quota, touch cloud state, create managed secrets, create
+endpoints, or mutate team state.
+
+Command:
+
+```text
+nice -n 10 python3 script/zh_public_rc_status.py --json
+```
+
+Current status:
+
+```text
+total: 11
+public_rc_required: 11
+blocked-no-backend-fixture: 5
+blocked-no-disposable-object: 3
+blocked-no-isolated-account: 3
+```
+
+Rows still blocked:
+
+```text
+isolated_account: GUI-AUTH-01, GUI-SET-03, GUI-WS-06
+backend_fixture: GUI-SET-04, GUI-SET-05, GUI-BILL-01, GUI-BILL-02, GUI-CLOUD-01
+disposable_object: GUI-SET-06, GUI-WS-04, GUI-WS-07
+```
+
+No exact current-cycle isolated account, backend fixture, disposable object,
+cleanup proof, or GUI/accessibility evidence was provided. No public-RC row was
+cleared.
+
+## Phase 161 Backend Fixture And Disposable Object Gate
+
+Phase 161 reviewed `docs/zh-Hans-backend-fixture-contract-rc19.md`. The
+contract defines fixture names and cleanup requirements, but this execution
+context did not provide fixture owners, live backend fixture state, exact
+disposable objects, or cleanup proof. No backend, billing, cloud, secret,
+environment, endpoint, or team operation was run.
+
+Rows still blocked:
+
+```text
+backend_fixture: GUI-SET-04, GUI-SET-05, GUI-BILL-01, GUI-BILL-02, GUI-CLOUD-01
+disposable_object: GUI-SET-06, GUI-WS-04, GUI-WS-07
+```
+
+No public-RC row was cleared.
+
+## Phase 159 Public-RC Registry And Evidence Readiness Refresh
+
+Phase 159 refreshed the registry during the RC25 planning/execution pass. It
+did not launch GUI, log in, create backend fixtures, create disposable objects,
+consume billing quota, touch cloud state, create managed secrets, create
+endpoints, or mutate team state.
+
+Command:
+
+```text
+nice -n 10 python3 script/zh_public_rc_status.py --json
+```
+
+Current status:
+
+```text
+total: 11
+public_rc_required: 11
+blocked-no-backend-fixture: 5
+blocked-no-disposable-object: 3
+blocked-no-isolated-account: 3
+```
+
+Rows still blocked:
+
+```text
+isolated_account: GUI-AUTH-01, GUI-SET-03, GUI-WS-06
+backend_fixture: GUI-SET-04, GUI-SET-05, GUI-BILL-01, GUI-BILL-02, GUI-CLOUD-01
+disposable_object: GUI-SET-06, GUI-WS-04, GUI-WS-07
+```
+
+No exact current-cycle isolated account, backend fixture, disposable object,
+cleanup proof, or GUI/accessibility evidence was provided. No public-RC row was
+cleared.

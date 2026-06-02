@@ -7,9 +7,9 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 ## 当前状态
 
-当前版本：`0.14`
+当前版本：`0.15`
 
-最后核验记录：`2026-06-02 RC20`
+最后核验记录：`2026-06-02 RC26`
 
 当前结论：`ready-for-local-use-with-fixture-evidence`。也就是说，本仓库已经适合本地工程使用和继续验证，但还不是公开 RC。公开 RC 仍需要补齐隔离账号、后端 fixture、一次性对象、GUI、bundle 和静态图证据。
 
@@ -203,7 +203,13 @@ expected_count = 1
 主要文档：
 
 - `docs/zh-Hans-localization.md`：总体维护记录和阶段索引。
-- `docs/zh-Hans-release-candidate-2026-06-02-rc20.md`：当前 RC20 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc26.md`：当前 RC26 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc25.md`：上一轮 RC25 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc24.md`：RC24 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc23.md`：RC23 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc22.md`：RC22 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc21.md`：RC21 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc20.md`：RC20 记录。
 - `docs/zh-Hans-public-rc-gate-runbook.md`：公开 RC gate 操作说明。
 - `docs/zh-Hans-local-fixture-implementation-plan-rc20.md`：本地 fixture 实施准备计划。
 - `docs/zh-Hans-gui-smoke-matrix.md`：GUI 冒烟矩阵和 manual gate。
@@ -241,7 +247,7 @@ git diff --cached --check
 
 ### 能直接公开发布吗？
 
-现在不建议。`0.14 / RC20` 可以作为本地工程使用和继续验证的版本，但公开 RC 仍需要清掉 11 个 blocker，并补齐重型构建、GUI、账号、后端和静态图证据。
+现在不建议。`0.15 / RC26` 可以作为本地工程使用和继续验证的版本，但公开 RC 仍需要清掉 11 个 blocker，并补齐重型构建、GUI、账号、后端和静态图证据。
 
 ## 上游项目
 

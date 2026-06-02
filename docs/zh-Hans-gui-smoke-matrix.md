@@ -313,6 +313,305 @@ GUI-BILL-02: blocked-no-backend-fixture
 GUI-CLOUD-01: blocked-no-backend-fixture
 ```
 
+## Phase 121 no-account GUI smoke decision
+
+审计日期：2026-06-02。
+
+Phase 121 did not launch GUI because Phase 120 skipped the current-cycle bundle
+gate for heat-safety. It checked for active `warp-oss`, `terminal-server`, or
+`WarpOss.app` processes and found none. No no-account GUI rows were promoted to
+`verified-current-cycle`, and no account, token, backend, billing, cloud,
+managed-secret, endpoint, team, or destructive state was touched.
+
+Rows preserved for the next safe GUI run:
+
+```text
+GUI-BASE-01
+GUI-BASE-02
+GUI-BASE-03
+GUI-BASE-04
+GUI-BASE-05
+GUI-ONB-01
+GUI-ONB-02
+GUI-AUTH-02
+GUI-AUTH-03
+GUI-SET-01
+GUI-SET-02
+GUI-WS-01
+GUI-WS-02
+GUI-WS-03
+GUI-WS-08
+GUI-AGENT-01
+```
+
+## Phase 123 fixture GUI evidence decision
+
+审计日期：2026-06-02。
+
+Phase 123 did not launch GUI. Phase 122 added a debug/test-only
+`WARP_CN_AGENT_LIFECYCLE_SMOKE` lifecycle seed helper, but it is not yet wired
+into a GUI smoke launch path. `GUI-AGENT-03` therefore remains `needs-trigger`;
+no row was promoted to `fixture-verified`, and the public-RC blocker registry was
+unchanged.
+
+## Phase 130 no-GUI lifecycle fixture evidence
+
+审计日期：2026-06-02。
+
+Phase 130 records source-anchor evidence only. Phase 129 added a debug/test-only
+model probe for `WARP_CN_AGENT_LIFECYCLE_SMOKE` that exposes deterministic
+state query params, localized labels, and lifecycle metadata without starting a
+real Agent run or GUI. Targeted Rust tests passed for inert unset/false-like
+values and truthy localized lifecycle output.
+
+This is `fixture-prep` evidence, not GUI evidence. `GUI-AGENT-03` remains
+`needs-trigger` until a future safe bundle/GUI or accessibility pass captures
+the lifecycle labels in a rendered Agent surface. No public-RC blocker was
+cleared.
+
+## Phase 131 heat-safe GUI reattempt
+
+审计日期：2026-06-02。
+
+Phase 131 found no active `cargo`, `rustc`, `warp-oss`, `terminal-server`,
+`script/run`, or `WarpOss.app` process and no macOS thermal warning. It still
+skipped `cargo check -p warp`, bundle generation, and GUI launch because the
+system load was already around `3.13 3.64 3.58` and WindowServer/Codex processes
+were actively consuming CPU. No GUI row was promoted, and
+`WARP_CN_AGENT_LIFECYCLE_SMOKE` was not used in a GUI launch.
+
+## Phase 137 heat-safe no-account GUI decision
+
+审计日期：2026-06-02。
+
+Phase 137 did not launch GUI. Phase 136 did not produce a fresh bundle because
+the machine was already under elevated desktop/Codex load, and the second probe
+still showed load averages around `3.45 3.59 3.53` with WindowServer and Codex
+CPU activity. No no-account GUI row was promoted, and
+`WARP_CN_AGENT_LIFECYCLE_SMOKE` was not used in a GUI launch.
+
+## Phase 138 lifecycle fixture feasibility
+
+审计日期：2026-06-02。
+
+Phase 138 chose to keep `WARP_CN_AGENT_LIFECYCLE_SMOKE` as source-anchor
+evidence only. The current rendered lifecycle path still depends on
+`WaitingForSession` and `ProgressUpdated` model/view state, while Phase 136/137
+did not provide a fresh safe bundle/GUI run. `GUI-AGENT-03` remains
+`needs-trigger`; no row was promoted to `fixture-verified`.
+
+## Phase 140 public-RC prerequisite refresh
+
+审计日期：2026-06-02。
+
+Phase 140 reran the machine-readable public-RC blocker summary and found the
+same 11 blockers: 5 backend fixture rows, 3 disposable object rows, and 3
+isolated account rows. No isolated account, backend fixture, disposable object
+approval, cleanup proof, or current-cycle GUI/accessibility evidence was
+available, so no row was promoted.
+
+## Phase 147 heat-safe no-account GUI decision
+
+审计日期：2026-06-02。
+
+Phase 147 did not launch GUI. Phase 145 skipped the current-cycle full compile
+for heat safety, and Phase 146 therefore could not produce a fresh bundle. The
+only bundle found was the older `target/debug/bundle/osx/WarpOss.app` from
+2026-06-01 21:53:26, so reusing it would not create valid current-cycle RC24
+evidence. No `warp-oss`, `terminal-server`, or `WarpOss.app` process was
+running after the gate.
+
+No no-account GUI row was promoted. Existing historical GUI evidence remains
+unchanged, and public-RC rows remain blocked by account/backend/disposable
+object prerequisites.
+
+## Phase 148 Agent lifecycle rendered fixture decision
+
+审计日期：2026-06-02。
+
+Phase 148 chose Option A: keep `WARP_CN_AGENT_LIFECYCLE_SMOKE` as
+source-anchor-only evidence. Phase 147 did not launch GUI and no fresh
+current-cycle bundle exists, so Option B could not expose rendered lifecycle
+labels through the existing app path. Option C would require a new narrow Rust
+render harness; no already-proven harness exists in this cycle, so source
+changes were deferred.
+
+`GUI-AGENT-03` remains `needs-trigger`. It cannot be promoted without
+current-cycle accessibility anchors or cropped/redacted evidence for the
+rendered lifecycle labels.
+
+## Phase 158 Agent lifecycle deferred record
+
+审计日期：2026-06-02。
+
+Phase 158 executed the Phase 157 Option A decision. It made no source changes,
+did not run a lifecycle render harness, and did not launch GUI. Low-load
+manifest, glossary, dry-run, Rust formatting, and diff whitespace checks passed.
+
+`GUI-AGENT-03` remains `needs-trigger` with source-anchor-only evidence. A
+future promotion still requires rendered current-cycle accessibility anchors or
+cropped/redacted GUI evidence for every required lifecycle label.
+
+## Phase 159 public-RC registry and evidence readiness refresh
+
+审计日期：2026-06-02。
+
+Phase 159 reran the public-RC blocker registry and found the same 11 blockers:
+5 backend fixture rows, 3 disposable object rows, and 3 isolated account rows.
+No exact current-cycle isolated account, backend fixture, disposable object,
+cleanup proof, or GUI/accessibility evidence was available, so no public-RC row
+was promoted.
+
+## Phase 160 isolated account evidence gate
+
+审计日期：2026-06-02。
+
+Phase 160 reviewed `docs/zh-Hans-public-rc-isolated-account-runbook-rc19.md`.
+The runbook defines the account label `zh-rc19-test-account` and evidence rules,
+but it does not provide an actual isolated account, browser callback, custom
+inference state, or disposable endpoint. No login was attempted and no main
+account was used.
+
+`GUI-AUTH-01`, `GUI-SET-03`, and `GUI-WS-06` remain
+`blocked-no-isolated-account`.
+
+## Phase 161 backend fixture and disposable object gate
+
+审计日期：2026-06-02。
+
+Phase 161 reviewed `docs/zh-Hans-backend-fixture-contract-rc19.md`. The
+contract defines fixture names and cleanup requirements, but this execution
+context did not provide fixture owners, live backend fixture state, exact
+disposable objects, or cleanup proof. No backend, billing, cloud, secret,
+environment, endpoint, or team operation was run.
+
+`GUI-SET-04`, `GUI-SET-05`, `GUI-BILL-01`, `GUI-BILL-02`, and `GUI-CLOUD-01`
+remain `blocked-no-backend-fixture`. `GUI-SET-06`, `GUI-WS-04`, and
+`GUI-WS-07` remain `blocked-no-disposable-object`.
+
+## Phase 149 Agent lifecycle deferred record
+
+审计日期：2026-06-02。
+
+Phase 149 executed the Phase 148 Option A decision. It made no source changes,
+did not run a lifecycle render harness, and did not launch GUI. Low-load
+manifest, glossary, dry-run, Rust formatting, and diff whitespace checks passed.
+
+`GUI-AGENT-03` remains `needs-trigger` with source-anchor-only evidence. A
+future promotion still requires rendered current-cycle accessibility anchors or
+cropped/redacted GUI evidence for every required lifecycle label.
+
+## Phase 150 public-RC external evidence refresh
+
+审计日期：2026-06-02。
+
+Phase 150 reran the public-RC blocker registry and found the same 11 blockers:
+5 backend fixture rows, 3 disposable object rows, and 3 isolated account rows.
+No isolated account, backend fixture, disposable object approval, cleanup proof,
+or current-cycle GUI/accessibility evidence was available, so no public-RC row
+was promoted.
+
+## Phase 156 heat-safe no-account GUI decision
+
+审计日期：2026-06-02。
+
+Phase 156 did not launch GUI. Phase 154 skipped the current-cycle full compile
+for heat safety, and Phase 155 therefore could not produce a fresh bundle. The
+only bundle found was the older `target/debug/bundle/osx/WarpOss.app` from
+2026-06-01 21:53:26, so reusing it would not create valid current-cycle RC25
+evidence. No `warp-oss`, `terminal-server`, or `WarpOss.app` process was
+running after the gate.
+
+No no-account GUI row was promoted. Existing historical GUI evidence remains
+unchanged, and public-RC rows remain blocked by account/backend/disposable
+object prerequisites.
+
+## Phase 157 Agent lifecycle rendered fixture decision
+
+审计日期：2026-06-02。
+
+Phase 157 chose Option A: keep `WARP_CN_AGENT_LIFECYCLE_SMOKE` as
+source-anchor-only evidence. Phase 156 did not launch GUI and no fresh
+current-cycle bundle exists, so Option B could not expose rendered lifecycle
+labels through the existing app path. Option C would require a new narrow Rust
+render harness; no already-proven harness exists in this cycle, so source
+changes were deferred.
+
+`GUI-AGENT-03` remains `needs-trigger`. It cannot be promoted without
+current-cycle accessibility anchors or cropped/redacted evidence for the
+rendered lifecycle labels.
+
+## Phase 169 heat-safe no-account GUI decision
+
+审计日期：2026-06-02。
+
+Phase 169 did not launch GUI. Phase 167 skipped the current-cycle full compile
+because Phase 166 did not find a quiet window, and Phase 168 therefore did not
+produce a fresh bundle. The only bundle found was the older
+`target/debug/bundle/osx/WarpOss.app` from 2026-06-01 21:53:26, so reusing it
+would not create valid current-cycle RC26 evidence. No `warp-oss`,
+`terminal-server`, or `WarpOss.app` process was running after the gate.
+
+No no-account GUI row was promoted. Existing historical GUI evidence remains
+unchanged, and public-RC rows remain blocked by account/backend/disposable
+object prerequisites.
+
+## Phase 170 Agent lifecycle rendered fixture decision
+
+审计日期：2026-06-02。
+
+Phase 170 chose Option A: keep `WARP_CN_AGENT_LIFECYCLE_SMOKE` as
+source-anchor-only evidence. Phase 169 did not launch GUI and no fresh
+current-cycle bundle exists, so Option B cannot expose rendered lifecycle labels
+through the existing app path. Option C would require adding or proving a narrow
+Rust render harness in this cycle; no existing proven harness was found, and no
+new source changes were made.
+
+`GUI-AGENT-03` remains `needs-trigger`. It cannot be promoted without
+current-cycle accessibility anchors or cropped/redacted evidence for the
+rendered lifecycle labels.
+
+## Phase 171 Agent lifecycle source-only execution
+
+审计日期：2026-06-02。
+
+Phase 171 executed the Phase 170 Option A decision. It made no source changes,
+did not run a lifecycle render harness, and did not launch GUI. Low-load
+manifest, glossary, dry-run, Rust formatting, and diff whitespace checks passed.
+
+`GUI-AGENT-03` remains `needs-trigger` with source-anchor-only evidence. A
+future promotion still requires rendered current-cycle accessibility anchors or
+cropped/redacted GUI evidence for every required lifecycle label.
+
+## Phase 172 public-RC registry and handoff refresh
+
+审计日期：2026-06-02。
+
+Phase 172 reran the public-RC blocker registry in JSON mode and found the same
+11 blockers: 5 backend fixture rows, 3 disposable object rows, and 3 isolated
+account rows. The current handoff documents remain
+`docs/zh-Hans-public-rc-isolated-account-runbook-rc19.md` and
+`docs/zh-Hans-backend-fixture-contract-rc19.md`.
+
+No exact current-cycle isolated account, backend fixture, disposable object,
+cleanup proof, or GUI/accessibility evidence was available, so no public-RC row
+was promoted.
+
+## Phase 173 static onboarding PNG asset gate
+
+审计日期：2026-06-02。
+
+Phase 173 rechecked onboarding PNG status without modifying assets. The
+inventory still contains 54 PNGs: 12 root-level onboarding PNGs, 16
+`agent_intention` root PNGs, 10 `terminal_intention` root PNGs, 8
+`agent_intention/theme` PNGs, and 8 `terminal_intention/theme` PNGs. `git
+status --short -- '*.png'` and `git diff --name-only -- '*.png'` returned no
+output.
+
+The Phase 45/61 asset policy still applies: static onboarding screenshots remain
+visual residue until an approved reversible asset-only regeneration branch is
+created. No GUI row was promoted by Phase 173.
+
 ## 基础工作区
 
 | ID | 路径 | 触发条件 | 账号/状态需求 | 期望中文锚点 | 当前状态 | 最近记录 | 备注 |
@@ -330,7 +629,7 @@ GUI-CLOUD-01: blocked-no-backend-fixture
 | GUI-ONB-01 | Fresh onboarding: Agent path | 清空本地用户状态后首次启动，选择 Agent 路径 | fresh profile | 欢迎、Agent 选择、模型/自主程度等中文 | `verified` | 2026-06-01 P38 | 当前源构建截图覆盖欢迎页、Agent 选择、个性化、第三方 Agent、主题选择；静态产品预览 PNG 仍作为 `visual-residue` 单独跟踪。截图见 `docs/gui-smoke-artifacts/phase38/p38-onboarding-welcome-current-source.png` 等。 |
 | GUI-ONB-02 | Fresh onboarding: terminal-only path | 清空本地用户状态后首次启动，选择 terminal-only | fresh profile | 不启用 AI、终端路径中文 | `verified` | historical GUI smoke | 建议在下个 release 重新跑。 |
 | GUI-ONB-03 | HOA onboarding | 触发新功能/HOA 引导 | 需要对应 feature state | 垂直标签页、Agent 收件箱、标签页配置等中文 | `manual-gate` | Phase 2 first pass | 自动化未稳定触发。 |
-| GUI-AUTH-01 | 浏览器登录 | fresh/logged-out profile 中进入 `login_slide.rs`，点击浏览器登录并完成回流 | 需要隔离测试账号、可打开浏览器、可接收 auth callback；不使用主账号 | 登录、授权回流、错误 fallback 中文 | `blocked-no-isolated-account` | 2026-06-02 Phase 88 | 账号和浏览器回流依赖；当前没有可用隔离测试账号，不能使用主账号。 |
+| GUI-AUTH-01 | 浏览器登录 | fresh/logged-out profile 中进入 `login_slide.rs`，点击浏览器登录并完成回流 | 需要隔离测试账号、可打开浏览器、可接收 auth callback；不使用主账号 | 登录、授权回流、错误 fallback 中文 | `blocked-no-isolated-account` | 2026-06-02 Phase 160 | 账号和浏览器回流依赖；当前没有可用隔离测试账号，不能使用主账号。 |
 | GUI-AUTH-02 | Token paste fallback | fresh/logged-out profile 中进入浏览器已打开状态，点击 token 粘贴入口或粘贴无效 redirect URL | 本地可用无效 token 触发错误；完整成功路径仍需测试账号 | token 粘贴、重试、错误提示中文 | `needs-trigger` | 2026-05-30 P5-M4 | 组件路径：`login_slide.rs`、`paste_auth_token_modal.rs`、`login_failure_notification.rs`；无效 token 错误可本地构造，但仍需可见 GUI。 |
 | GUI-AUTH-03 | 隐私设置与跳过登录 | fresh profile onboarding 中打开隐私设置，或在登录页触发跳过登录确认 | 需要 fresh profile；不需要真实账号 | 隐私设置、跳过登录确认中文 | `verified` | 2026-06-01 P38 | 当前源构建在 `zh-rc10-local-fixture` 中看到 `开始使用 AI`、`禁用 AI 功能`、禁用 AI 确认、`暂时跳过` 等中文；截图见 `docs/gui-smoke-artifacts/phase38/p38-onboarding-ai-enable-skip-login-current-source.png` 和 `p38-disable-ai-confirmation-current-source.png`。 |
 
@@ -340,10 +639,10 @@ GUI-CLOUD-01: blocked-no-backend-fixture
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | GUI-SET-01 | Settings shell | 打开设置页并切换 Account、Appearance、Features、Privacy、AI、Code、MCP、Billing、Environments | 部分页面需要登录 | 设置导航和页面标题中文 | `verified` | 2026-06-01 P38 | 当前源构建复验设置页 `账户`、`Warp Agent`、`隐私`，侧栏中文锚点可读；截图见 `docs/gui-smoke-artifacts/phase38/p38-settings-account-current-source.png`、`p38-settings-agent-current-source.png` 和 `p38-settings-privacy-current-source.png`。 |
 | GUI-SET-02 | Appearance command actions | 打开 Appearance 或命令面板中相关动作 | 无 | Appearance 动作标签中文，搜索关键词不被破坏 | `manual-gate` | Round 2 | `dim inactive panes` 等搜索 tag 仍保留英文。 |
-| GUI-SET-03 | AI settings deep paths | 打开 AI 设置，查看 Build 方案、BYO API keys、自定义端点 | 登录或对应 plan 状态 | Build 方案、API 密钥、自定义端点中文 | `blocked-no-isolated-account` | 2026-06-02 Phase 88 | 需要隔离账号和 plan 状态；当前没有可用隔离测试账号。 |
-| GUI-SET-04 | AWS Bedrock credentials | 打开 AI 设置中的 AWS Bedrock 凭据区域 | AWS/Bedrock 配置状态 | AWS Bedrock 凭据、登录命令、AWS Profile、刷新中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 88 | 需要 disposable AWS/Bedrock profile 或明确 fixture；当前未提供。 |
-| GUI-SET-05 | AWS credential errors | 构造 Bedrock 凭据错误 | AWS/Bedrock 错误状态 | AWS 凭据错误中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 88 | 需要不会访问真实凭据的 invalid Bedrock fixture；当前未提供。 |
-| GUI-SET-06 | Environment deletion confirmation | Settings > Environments 中编辑可删环境并点击 `删除环境` | 需要隔离的 cloud environment 测试对象；不能使用真实生产环境 | `删除环境？`、`确定要移除 … 环境吗？`、`删除环境`、`取消` | `blocked-no-disposable-object` | 2026-06-02 Phase 88 | 源码路径已复查：`update_environment_form.rs` 触发，`delete_environment_confirmation_dialog.rs` 渲染；当前缺少精确命名为 `zh-smoke-delete-environment` 的 disposable 对象。 |
+| GUI-SET-03 | AI settings deep paths | 打开 AI 设置，查看 Build 方案、BYO API keys、自定义端点 | 登录或对应 plan 状态 | Build 方案、API 密钥、自定义端点中文 | `blocked-no-isolated-account` | 2026-06-02 Phase 160 | 需要隔离账号和 plan 状态；当前没有可用隔离测试账号。 |
+| GUI-SET-04 | AWS Bedrock credentials | 打开 AI 设置中的 AWS Bedrock 凭据区域 | AWS/Bedrock 配置状态 | AWS Bedrock 凭据、登录命令、AWS Profile、刷新中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 161 | 需要 disposable AWS/Bedrock profile 或明确 fixture；当前未提供。 |
+| GUI-SET-05 | AWS credential errors | 构造 Bedrock 凭据错误 | AWS/Bedrock 错误状态 | AWS 凭据错误中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 161 | 需要不会访问真实凭据的 invalid Bedrock fixture；当前未提供。 |
+| GUI-SET-06 | Environment deletion confirmation | Settings > Environments 中编辑可删环境并点击 `删除环境` | 需要隔离的 cloud environment 测试对象；不能使用真实生产环境 | `删除环境？`、`确定要移除 … 环境吗？`、`删除环境`、`取消` | `blocked-no-disposable-object` | 2026-06-02 Phase 161 | 源码路径已复查：`update_environment_form.rs` 触发，`delete_environment_confirmation_dialog.rs` 渲染；当前缺少精确命名为 `zh-smoke-delete-environment` 的 disposable 对象。 |
 
 ## 工作区、会话与确认框
 
@@ -352,19 +651,19 @@ GUI-CLOUD-01: blocked-no-backend-fixture
 | GUI-WS-01 | 工作区左右面板 | 打开左侧/右侧面板、工具面板、用户菜单 | 视入口而定 | Agent 对话、Warp Drive、工具面板等中文 | `manual-gate` | Phase 2 | 基础入口已部分验证，深层菜单未完整复验。 |
 | GUI-WS-02 | 会话列表菜单和删除 toast | 打开会话列表，对会话执行菜单/删除操作 | 有会话历史 | 菜单项、删除 toast 中文 | `manual-gate` | Round 2 | 需要可删除测试会话。 |
 | GUI-WS-03 | Rewind 搜索提示和确认 | 触发 terminal rewind 或回退确认 | 有可 rewind 会话 | rewind 搜索和确认说明中文 | `manual-gate` | Phase 2 first pass | 需要构造历史命令状态。 |
-| GUI-WS-04 | Auth-secret 删除确认 | Agent auth secret selector 中删除 managed auth secret | 需要隔离 managed auth secret；不能删除真实密钥 | `删除密钥`、`确定要删除 … 吗？`、`删除`、`取消` | `blocked-no-disposable-object` | 2026-06-02 Phase 88 | 源码路径已复查：`auth_secret_selector.rs` 打开删除动作，`delete_auth_secret_confirmation_dialog.rs` 渲染；当前缺少精确命名为 `zh-smoke-delete-secret` 的 disposable managed auth secret。 |
+| GUI-WS-04 | Auth-secret 删除确认 | Agent auth secret selector 中删除 managed auth secret | 需要隔离 managed auth secret；不能删除真实密钥 | `删除密钥`、`确定要删除 … 吗？`、`删除`、`取消` | `blocked-no-disposable-object` | 2026-06-02 Phase 161 | 源码路径已复查：`auth_secret_selector.rs` 打开删除动作，`delete_auth_secret_confirmation_dialog.rs` 渲染；当前缺少精确命名为 `zh-smoke-delete-secret` 的 disposable managed auth secret。 |
 | GUI-WS-05 | CLI 管理员权限提示 | 安装/卸载 Oz CLI 命令 | macOS 权限提示 | 管理员权限提示中文 | `manual-gate` | Round 3 | AppleScript 字符串已通过编译验证，仍需视觉确认。 |
-| GUI-WS-06 | Remove endpoint confirmation | Settings > AI > 自定义推理中编辑并移除自定义 endpoint | Public-RC 需要隔离测试账号；fixture smoke 可使用 `WARP_CN_CUSTOM_INFERENCE_SMOKE=1`，但不能替代真实账号证据 | `移除端点？`、`确定要移除此端点吗？`、`移除端点`、`取消` | `blocked-no-isolated-account` | 2026-06-02 Phase 88 | P9-M4 使用 debug-only in-memory fixture 预置 `zh-smoke-delete-endpoint`，验证了列表显示、编辑弹窗、取消删除后保留、最终删除和 `端点已移除` toast。该历史 fixture 证据不能升级为 public-RC 证据；当前仍缺少不带 fixture env 的隔离测试账号和 disposable endpoint。 |
-| GUI-WS-07 | Transfer ownership confirmation | 转让团队所有权 | 团队 owner 账号 | 转让确认中文 | `blocked-no-disposable-object` | 2026-06-02 Phase 88 | 高风险路径，必须测试账号隔离；当前缺少精确命名为 `zh-smoke-public-rc-team` 的 owner test team 和明确批准。 |
+| GUI-WS-06 | Remove endpoint confirmation | Settings > AI > 自定义推理中编辑并移除自定义 endpoint | Public-RC 需要隔离测试账号；fixture smoke 可使用 `WARP_CN_CUSTOM_INFERENCE_SMOKE=1`，但不能替代真实账号证据 | `移除端点？`、`确定要移除此端点吗？`、`移除端点`、`取消` | `blocked-no-isolated-account` | 2026-06-02 Phase 160 | P9-M4 使用 debug-only in-memory fixture 预置 `zh-smoke-delete-endpoint`，验证了列表显示、编辑弹窗、取消删除后保留、最终删除和 `端点已移除` toast。该历史 fixture 证据不能升级为 public-RC 证据；当前仍缺少不带 fixture env 的隔离测试账号和 disposable endpoint。 |
+| GUI-WS-07 | Transfer ownership confirmation | 转让团队所有权 | 团队 owner 账号 | 转让确认中文 | `blocked-no-disposable-object` | 2026-06-02 Phase 161 | 高风险路径，必须测试账号隔离；当前缺少精确命名为 `zh-smoke-public-rc-team` 的 owner test team 和明确批准。 |
 | GUI-WS-08 | 标签页右键菜单 | 右键当前会话标签页 | 无 | `共享会话`、`复制标签页标题`、`重命名标签页`、`关闭标签页`、`关闭其他标签页`、`关闭右侧标签页`、`另存为新配置` | `verified` | 2026-05-31 P7-M4 | 当前 `zh-rc4` profile 使用 horizontal tab UI；右键当前标签页显示 `共享会话`、`复制标签页标题`、`重命名标签页`、`左移标签页`、`关闭标签页`、`关闭其他标签页`、`关闭右侧标签页`、`另存为新配置` 和颜色选项。截图见 `docs/gui-smoke-artifacts/phase7/p7-m4-tab-context-menu.png`。 |
 
 ## 云端、Billing 与 Launch Modals
 
 | ID | 路径 | 触发条件 | 账号/状态需求 | 期望中文锚点 | 当前状态 | 最近记录 | 备注 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| GUI-CLOUD-01 | 云端 Agent 容量弹窗 | Cloud Mode ambient agent 触发 `ConcurrentLimit` 或 paid-plan out-of-credits 触发 `OutOfCredits` | 需要 CloudMode、ambient agent、服务端 at-capacity/Quota 状态或受控 mock；不使用主账号额度做验证 | 容量、点数、升级提示中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 88 | 需要 controlled capacity/quota backend state 或 local fixture；当前未提供。 |
-| GUI-BILL-01 | 额度耗尽/额度弹窗 | `BuyCreditsBanner` 显示 `OutOfCredits` 或 `MonthlyLimitReached` | 需要 workspace 允许购买 add-on credits、无剩余额度/bonus、auto reload 状态或受控 model fixture；不消费真实主账号额度 | 额度、自动充值、方案说明中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 88 | 需要 safe quota/billing fixture 或 disposable billing test account；当前未提供。 |
-| GUI-BILL-02 | Build 方案迁移弹窗 | 打开 `BuildPlanMigrationModal` 或满足 one-time modal 条件 | 需要已登录团队管理员、team service agreement 带 `sunsetted_to_build_ts`、未 dismiss；可考虑开发动作强制打开但不能作为公开账号证据 | Build 方案迁移说明中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 88 | 需要 backend test team with `sunsetted_to_build_ts`；当前未提供。 |
+| GUI-CLOUD-01 | 云端 Agent 容量弹窗 | Cloud Mode ambient agent 触发 `ConcurrentLimit` 或 paid-plan out-of-credits 触发 `OutOfCredits` | 需要 CloudMode、ambient agent、服务端 at-capacity/Quota 状态或受控 mock；不使用主账号额度做验证 | 容量、点数、升级提示中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 161 | 需要 controlled capacity/quota backend state 或 local fixture；当前未提供。 |
+| GUI-BILL-01 | 额度耗尽/额度弹窗 | `BuyCreditsBanner` 显示 `OutOfCredits` 或 `MonthlyLimitReached` | 需要 workspace 允许购买 add-on credits、无剩余额度/bonus、auto reload 状态或受控 model fixture；不消费真实主账号额度 | 额度、自动充值、方案说明中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 161 | 需要 safe quota/billing fixture 或 disposable billing test account；当前未提供。 |
+| GUI-BILL-02 | Build 方案迁移弹窗 | 打开 `BuildPlanMigrationModal` 或满足 one-time modal 条件 | 需要已登录团队管理员、team service agreement 带 `sunsetted_to_build_ts`、未 dismiss；可考虑开发动作强制打开但不能作为公开账号证据 | Build 方案迁移说明中文 | `blocked-no-backend-fixture` | 2026-06-02 Phase 161 | 需要 backend test team with `sunsetted_to_build_ts`；当前未提供。 |
 | GUI-LAUNCH-01 | Oz/OpenWarp/orchestration launch modals | 触发 launch modal | feature/version 状态 | launch modal 标题、按钮、说明中文 | `manual-gate` | Round 3 | 需要对应 feature 状态。 |
 
 ## Agent 与 Warp on Web
@@ -373,7 +672,7 @@ GUI-CLOUD-01: blocked-no-backend-fixture
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | GUI-AGENT-01 | Agent tips | 打开 Agent 输入区域并触发 tips | Agent enabled | tips、快捷提示中文 | `manual-gate` | Round 3 | 需要确认不会遮挡输入。 |
 | GUI-AGENT-02 | Conversation details panel | 打开 Agent conversation details | 有 Agent 对话 | metadata、状态、操作中文 | `manual-gate` | Round 3 | 需要测试对话。 |
-| GUI-AGENT-03 | Agent conversation status labels | 触发 task/conversation queued、pending、in progress、done、failed、blocked、cancelled | 需要 Agent 任务生命周期状态或 model fixture；不依赖破坏性账号操作 | `排队中`、`等待中`、`进行中`、`已完成`、`失败`、`已阻塞`、`已取消` | `needs-trigger` | 2026-05-30 P5-M5 | P5-M5 已替换 status display 层、pending query badge 和 history status；GUI 仍需构造生命周期状态复验。 |
+| GUI-AGENT-03 | Agent conversation status labels | 触发 task/conversation queued、pending、in progress、done、failed、blocked、cancelled | 需要 Agent 任务生命周期状态或 model fixture；不依赖破坏性账号操作 | `排队中`、`等待中`、`进行中`、`已完成`、`失败`、`已阻塞`、`已取消` | `needs-trigger` | 2026-06-02 Phase 171 | Phase 129/130 已提供 debug/test-only model probe 和 Rust 测试 source-anchor 证据；Phase 171 执行 Phase 170 Option A，未改源码、未启动 GUI、未运行 render harness，继续保持 source-anchor-only。 |
 | GUI-AGENT-04 | Agent error residue | 触发 web search/fetch、AWS Bedrock、quota 或 Agent stream error fallback | 错误状态、mock/failure fixture 或隔离测试账号；不应使用主账号配额耗尽做测试 | 错误提示中文 | `needs-trigger` | 2026-05-30 P5-M4 | 需要把 web/AWS/quota 错误拆成单独 fixture；本轮只记录门禁，不追加批量翻译。 |
 | GUI-AGENT-05 | Agent Assisted Environment fallback | 打开环境创建/编辑弹窗并触发 fallback 文案 | 环境功能状态 | fallback 文案中文 | `needs-trigger` | Round 4 | Round 4 未触发对应状态。 |
 | GUI-WEB-01 | Warp on Web home | 打开 Warp on Web home | web/home 可达状态 | home copy 中文 | `needs-trigger` | Round 4 | Round 4 未触发该页面。 |
