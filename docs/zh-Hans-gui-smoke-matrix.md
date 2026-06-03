@@ -612,6 +612,147 @@ The Phase 45/61 asset policy still applies: static onboarding screenshots remain
 visual residue until an approved reversible asset-only regeneration branch is
 created. No GUI row was promoted by Phase 173.
 
+## Phase 179 no-account GUI smoke skip
+
+审计日期：2026-06-02。
+
+Phase 179 did not launch GUI because Phase 178 did not produce a fresh
+current-cycle bundle. `target/debug/bundle/osx/WarpOss.app` exists, but its
+mtime is `Jun 1 21:53:26 2026`, so it is historical bundle evidence rather than
+post-RC26 current-cycle evidence.
+
+No `warp-oss`, `terminal-server`, or `WarpOss.app` process was running aside
+from the probe shell itself. No GUI row was promoted, no account/backend state
+was touched, and no historical bundle was reused as current-cycle evidence.
+
+## Phase 180 isolated-account lane
+
+审计日期：2026-06-02。
+
+Phase 180 reviewed the isolated-account lane for `GUI-AUTH-01`, `GUI-SET-03`,
+and `GUI-WS-06`. No isolated test account, browser callback evidence, AI
+settings account state, custom-inference-enabled account, disposable
+`zh-smoke-delete-endpoint`, or cleanup proof was provided in the execution
+context.
+
+No browser auth was launched, no account was used, no endpoint was created or
+deleted, and the user's main account was not used. These rows remain
+`blocked-no-isolated-account`.
+
+## Phase 181 backend fixture lane
+
+审计日期：2026-06-02。
+
+Phase 181 reviewed backend fixture prerequisites for `GUI-SET-04`,
+`GUI-SET-05`, `GUI-BILL-01`, `GUI-BILL-02`, and `GUI-CLOUD-01`. No fixture
+owner, allowed mutation list, reset procedure, redaction plan, teardown date, or
+production-safety proof was provided.
+
+## Phase 189 no-account GUI smoke skip
+
+审计日期：2026-06-02。
+
+Phase 189 did not launch GUI. Phase 188 skipped the fresh bundle build under
+heat-safety rules after two probes remained above load 3 with WindowServer
+around 43% CPU and active Codex/Finder CPU usage. The only app bundle remained
+the historical `target/debug/bundle/osx/WarpOss.app` from 2026-06-01 21:53:26,
+so it was not eligible as post-RC27 current-cycle evidence.
+
+No no-account GUI row was promoted. Existing historical GUI evidence remains
+unchanged, and public-RC rows remain blocked by account/backend/disposable
+object prerequisites.
+
+## Phase 190-195 public-RC external prerequisite lanes
+
+审计日期：2026-06-02。
+
+Phase 190 prepared the isolated-account package and kept `GUI-AUTH-01`,
+`GUI-SET-03`, and `GUI-WS-06` blocked because no isolated account credential,
+browser callback proof, custom inference state, disposable
+`zh-smoke-delete-endpoint`, cleanup proof, or execution approval was available.
+
+Phase 191 respected that blocker and did not launch browser auth, use the main
+account, or mutate endpoints.
+
+Phase 192 hardened the backend fixture contract and kept `GUI-SET-04`,
+`GUI-SET-05`, `GUI-BILL-01`, `GUI-BILL-02`, and `GUI-CLOUD-01` blocked because
+no fixture owner, reset procedure, teardown date, or production-safety proof was
+available.
+
+Phase 193 respected that blocker and did not contact backend services, enter
+credentials, buy credits, consume quota, or mutate billing/cloud/team state.
+
+Phase 194 prepared the disposable-object package and kept `GUI-SET-06`,
+`GUI-WS-04`, and `GUI-WS-07` blocked because exact disposable object existence,
+disposability, cleanup proof, and explicit destructive-action approval were not
+available.
+
+Phase 195 respected that blocker and did not open destructive confirmations,
+delete objects, transfer ownership, or touch production state.
+
+## Phase 196 Agent lifecycle render follow-up
+
+审计日期：2026-06-02。
+
+Phase 196 reviewed the source harness for `WARP_CN_AGENT_LIFECYCLE_SMOKE` and
+confirmed the localized lifecycle labels remain present in
+`app/src/ai/ambient_agents/task.rs`: `排队中`, `等待中`, `已分配`, `进行中`,
+`已完成`, `失败`, `错误`, `已阻塞`, and `已取消`.
+
+No rendered GUI evidence was produced because Phase 188 did not produce a fresh
+bundle and Phase 189 did not launch GUI. `GUI-AGENT-03` remains
+`needs-trigger`; source harness evidence was not promoted as public-RC proof.
+
+No AWS/Bedrock credential path, billing/quota path, cloud capacity path, or
+Build plan backend state was touched. These rows remain
+`blocked-no-backend-fixture`.
+
+## Phase 182 disposable-object lane
+
+审计日期：2026-06-02。
+
+Phase 182 reviewed disposable-object prerequisites for `GUI-SET-06`,
+`GUI-WS-04`, and `GUI-WS-07`. No exact allowlisted
+`zh-smoke-delete-environment`, `zh-smoke-delete-secret`, or
+`zh-smoke-public-rc-team` object was provided, and no destructive approval or
+cleanup proof was available.
+
+No environment delete confirmation, managed-secret delete confirmation, or team
+ownership transfer confirmation was opened. No object was deleted or
+transferred. These rows remain `blocked-no-disposable-object`.
+
+## Phase 183 Agent lifecycle source harness
+
+审计日期：2026-06-02。
+
+Phase 183 reviewed `AmbientAgentTaskState` display labels and ran:
+
+```bash
+CARGO_BUILD_JOBS=1 cargo test -j 1 -p warp lifecycle_smoke_fixture -- --nocapture
+```
+
+The targeted source-harness tests passed: 4 passed, 0 failed, 4715 filtered
+out. The existing `WARP_CN_AGENT_LIFECYCLE_SMOKE` fixture remains inert without
+a truthy env value and covers `排队中`, `等待中`, `已分配`, `进行中`,
+`已完成`, `失败`, `错误`, `已阻塞`, and `已取消`.
+
+This is source-harness evidence only. No GUI or accessibility evidence was
+produced, so `GUI-AGENT-03` remains `needs-trigger`.
+
+## Phase 184 onboarding PNG asset lane
+
+审计日期：2026-06-02。
+
+Phase 184 rechecked static onboarding PNG assets. `git status --short --
+'*.png'` and `git diff --name-only -- '*.png'` produced no output, and
+`app/assets/async/png/onboarding` still contains 54 PNGs. The authorization
+package still requires the asset-only branch
+`codex/zh-Hans-onboarding-assets-rc20`, design/product approval, contact sheets,
+binary scope proof, and visual QA before PNG regeneration.
+
+No PNG files were changed. Static onboarding image residue remains
+`blocked-no-asset-approval`.
+
 ## 基础工作区
 
 | ID | 路径 | 触发条件 | 账号/状态需求 | 期望中文锚点 | 当前状态 | 最近记录 | 备注 |
@@ -1157,3 +1298,312 @@ Phase 105 status: `qualified-with-heat-safety-gui-defer`.
 - No account, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
 - Public-RC blocker status is unchanged: `GUI-AUTH-01`, `GUI-SET-03`, `GUI-SET-04`, `GUI-SET-05`, `GUI-SET-06`, `GUI-WS-04`, `GUI-WS-06`, `GUI-WS-07`, `GUI-BILL-01`, `GUI-BILL-02`, and `GUI-CLOUD-01` remain blocked until isolated accounts, backend fixtures, or disposable objects exist.
 - No row was promoted to current-cycle public-RC `verified`.
+
+## 2026-06-02 P207 fresh bundle heat-safe defer
+
+Phase 207 status: `qualified-with-heat-safety-bundle-defer`.
+
+- Ran two lightweight load probes 60 seconds apart before attempting a fresh bundle.
+- No `cargo`, `rustc`, `warp-oss`, `terminal-server`, `script/run`, or `WarpOss.app` workload was active other than the probe shell.
+- System load stayed around `2.30` to `2.69`, while WindowServer, Codex helper processes, Finder, syspolicyd, and trustd showed notable CPU use.
+- `pmset -g therm` reported no recorded thermal or performance warning, but the active CPU profile was not quiet enough for a conservative bundle retry.
+- Did not run `TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open`.
+- Did not launch `target/debug/bundle/osx/WarpOss.app`.
+- No screenshot, accessibility snapshot, account state, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- No row was promoted to current-cycle public-RC `verified`; GUI evidence remains dependent on a later quiet-window fresh bundle or an approved external prerequisite path.
+
+## 2026-06-02 P208 no-account GUI smoke deferred
+
+Phase 208 status: `qualified-gui-smoke-deferred-by-phase207`.
+
+- Reviewed the no-account GUI smoke dependency after Phase 207.
+- Did not run no-account GUI smoke because the current cycle did not produce a fresh bundle.
+- Did not reuse historical screenshots or accessibility snapshots as current-cycle evidence.
+- No account, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- No row was promoted to current-cycle public-RC `verified`.
+
+## 2026-06-02 P209 public-RC prerequisite refresh
+
+Phase 209 status: `qualified-public-rc-prerequisites-refreshed`.
+
+- Re-ran `python3 script/zh_public_rc_status.py`.
+- Registry total remains `11` public-RC blockers: `3` isolated account blockers, `5` backend fixture blockers, and `3` disposable object blockers.
+- No isolated test account, backend fixture contract, safe billing/quota state, disposable AWS/Bedrock fixture, disposable cloud environment, disposable managed secret, disposable endpoint, or disposable owner test team was provided in this cycle.
+- No registry row was downgraded or promoted.
+- No account, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- Public RC remains blocked.
+
+## 2026-06-02 P210 onboarding PNG asset branch decision
+
+Phase 210 status: `qualified-png-asset-branch-deferred`.
+
+- Checked PNG dirtiness; `git status --short -- '*.png' 'app/assets/async/png/onboarding/**/*.png'` and `git diff --name-only -- '*.png' 'app/assets/async/png/onboarding/**/*.png'` produced no output.
+- Rechecked onboarding PNG inventory; total remains `54`.
+- Existing asset policy still applies: `4` decorative/brand assets accepted, `50` screenshot/static-art assets remain deferred for design-approved regeneration.
+- Did not create an asset-only branch because no design/product approval was provided for RC29.
+- Did not modify, generate, stage, or commit any PNG.
+- Visual residue status is unchanged and cannot be promoted by RC29.
+
+## 2026-06-02 P213 heavy validation
+
+Phase 213 status: `qualified-heavy-gate-deferred`.
+
+- Captured two load probes 60 seconds apart before attempting RC30 heavy validation.
+- No `cargo`, `rustc`, `warp-oss`, `terminal-server`, `script/run`, or `WarpOss.app` workload was active other than the probe shell.
+- Probe 1 load was `3.44 3.63 3.21`; Probe 2 load was `2.31 3.23 3.09`.
+- `pmset -g therm` reported no recorded thermal or performance warning, but WindowServer, Finder, trustd, and Codex helper processes showed sustained CPU pressure.
+- Did not run `CARGO_BUILD_JOBS=1 cargo check -j 1 -p warp`.
+- Did not run `TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open`.
+- Did not launch `target/debug/bundle/osx/WarpOss.app`.
+- No account, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was touched.
+
+## 2026-06-02 P214 no-account GUI smoke deferred
+
+Phase 214 status: `qualified-gui-smoke-deferred`.
+
+- Checked the Phase 213 dependency and found `fresh bundle: not run`.
+- Did not run no-account GUI smoke because the current cycle did not produce a fresh bundle.
+- Did not reuse historical screenshots or accessibility snapshots as current-cycle evidence.
+- No screenshot, accessibility snapshot, account state, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- No row was promoted to current-cycle public-RC `verified`.
+
+## 2026-06-02 P215 isolated account prerequisite gate
+
+Phase 215 status: `qualified-isolated-account-blocked`.
+
+- Re-ran `python3 script/zh_public_rc_status.py`.
+- `GUI-AUTH-01`, `GUI-SET-03`, and `GUI-WS-06` remain `blocked-no-isolated-account`.
+- No isolated test account was provided for RC30.
+- Did not log in, start a browser callback, paste tokens, inspect Settings > AI with account state, create a disposable custom inference endpoint, or delete any endpoint.
+- No account, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- No isolated-account row was promoted.
+
+## 2026-06-02 P216 backend fixture prerequisite gate
+
+Phase 216 status: `qualified-backend-fixture-blocked`.
+
+- Re-ran `python3 script/zh_public_rc_status.py`.
+- `GUI-SET-04`, `GUI-SET-05`, `GUI-BILL-01`, `GUI-BILL-02`, and `GUI-CLOUD-01` remain `blocked-no-backend-fixture`.
+- No safe AWS/Bedrock, invalid credential, billing/quota, Build plan migration, or cloud capacity fixture was provided for RC30.
+- Did not enter real provider credentials, attach payment state, consume quota, create cloud capacity state, or mutate backend test state.
+- No account, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- No backend fixture row was promoted.
+
+## 2026-06-02 P217 disposable object prerequisite gate
+
+Phase 217 status: `qualified-disposable-object-blocked`.
+
+- Re-ran `python3 script/zh_public_rc_status.py`.
+- `GUI-SET-06`, `GUI-WS-04`, and `GUI-WS-07` remain `blocked-no-disposable-object`.
+- No disposable environment named `zh-smoke-delete-environment`, disposable managed secret named `zh-smoke-delete-secret`, or disposable owner test team named `zh-smoke-public-rc-team` was provided or approved for RC30.
+- Did not create, delete, cancel-delete, or transfer any environment, managed secret, endpoint, team, production object, or ownership state.
+- No account, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- No disposable-object row was promoted.
+
+## 2026-06-02 P218 onboarding PNG asset branch decision
+
+Phase 218 status: `qualified-png-asset-branch-deferred`.
+
+- Checked PNG dirtiness; `git status --short -- '*.png' 'app/assets/async/png/onboarding/**/*.png'` and `git diff --name-only -- '*.png' 'app/assets/async/png/onboarding/**/*.png'` produced no output.
+- Rechecked onboarding PNG inventory; total remains `54`.
+- Existing asset policy still applies: `4` decorative/brand assets accepted, `50` screenshot/static-art assets remain deferred for design-approved regeneration.
+- Did not create an asset-only branch because no design/product approval was provided for RC30.
+- Did not modify, generate, stage, or commit any PNG.
+- Visual residue status is unchanged and cannot be promoted by RC30.
+
+## 2026-06-02 P223 heavy validation with helper
+
+Phase 223 status: `qualified-heavy-gate-deferred`.
+
+- The low-load helper decided whether Rust compile and bundle were safe.
+- Helper output: Probe 1 load `2.75 2.82 2.90`, Probe 2 load `2.31 2.70 2.85`.
+- Helper decision was `defer-heavy-gate` because both probes exceeded the `2.50` threshold.
+- Did not run `CARGO_BUILD_JOBS=1 cargo check -j 1 -p warp`.
+- Did not run `TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open`.
+- Did not launch `target/debug/bundle/osx/WarpOss.app`.
+- No account, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was touched.
+
+## 2026-06-02 P224 current-cycle GUI smoke deferred
+
+Phase 224 status: `qualified-gui-smoke-deferred`.
+
+- Checked the Phase 223 dependency and found `fresh bundle: not run`.
+- Did not run current-cycle GUI smoke because the current cycle did not produce a fresh bundle.
+- Did not reuse historical screenshots or accessibility snapshots as current-cycle evidence.
+- No screenshot, accessibility snapshot, account state, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- No row was promoted to current-cycle public-RC `verified`.
+
+## 2026-06-02 P225 public-RC action package
+
+Phase 225 status: `qualified-public-rc-action-package`.
+
+- Re-ran `python3 script/zh_public_rc_status.py`; public-RC blocker total remains `11`.
+- Created `docs/zh-Hans-public-rc-action-package-rc31.md`.
+- The action package groups required inputs into isolated account, backend fixture, disposable object, visual asset, and heavy validation categories.
+- No registry row was changed or promoted.
+- No account, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+
+## 2026-06-02 P233 asset preflight
+
+Phase 233 status: `qualified-asset-approval-preflight`.
+
+- Checked PNG dirtiness; `git status --short -- '*.png' 'app/assets/async/png/onboarding/**/*.png'` and `git diff --name-only -- '*.png' 'app/assets/async/png/onboarding/**/*.png'` produced no output.
+- Onboarding PNG inventory remains `54` total, with `50` deferred screenshot/static-art assets and `4` accepted decorative/brand assets.
+- No design/product approval was provided for an asset-only branch in this phase.
+- Did not modify, generate, stage, or commit any PNG.
+- Asset regeneration remains `blocked-no-asset-approval`.
+
+## 2026-06-02 P234 heavy gate
+
+Phase 234 status: `qualified-heavy-gate-decision`.
+
+- Ran `python3 script/zh_low_load_gate.py --probes 2 --wait-seconds 60 --max-load 2.50 --max-hot-process-percent 25`.
+- Helper output: Probe 1 load `3.75 3.54 3.02` with `WindowServer 44.7%`; Probe 2 load `4.99 3.88 3.17` with `mds_stores 124.0%` and `WindowServer 45.0%`.
+- Helper decision was `defer-heavy-gate`.
+- Did not run `CARGO_BUILD_JOBS=1 cargo check -j 1 -p warp`.
+- Did not run `TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open`.
+- Did not launch `target/debug/bundle/osx/WarpOss.app`.
+- GUI launch remains blocked because this phase did not produce a fresh bundle.
+
+## 2026-06-02 P235 RC32 freeze
+
+Phase 235 status: `qualified-rc32-freeze`.
+
+- Final low-load validation kept manifest validation, glossary, dry-run, release coverage, public-RC status, privacy guard, Python tests, `cargo fmt --check`, and `git diff --check` clean.
+- `script/zh_public_rc_evidence_lint.py` returned the expected blocker signal: `ready_rows: 0`, `errors: 11`, `decision: fail`, `exit_code: 1`.
+- No current-cycle GUI smoke was run because Phase 234 did not produce a fresh bundle.
+- No screenshot, accessibility snapshot, account state, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- No row was promoted to current-cycle public-RC `verified`.
+
+## 2026-06-02 P241 asset and GUI dependency recheck
+
+Phase 241 status: `qualified-asset-gui-dependency-recheck`.
+
+- PNG status remained clean.
+- Asset regeneration remains blocked without an explicitly approved asset-only branch.
+- Fresh bundle dependency remains `skipped-with-heat-safety`.
+- GUI smoke remains blocked because no current-cycle fresh bundle exists.
+
+## 2026-06-02 P242 heavy gate
+
+Phase 242 status: `qualified-heavy-gate-decision`.
+
+- Ran `python3 script/zh_low_load_gate.py --probes 2 --wait-seconds 60 --max-load 2.50 --max-hot-process-percent 25`.
+- Helper output: Probe 1 load `2.20 2.56 2.69` with `WindowServer 42.5%` and `Codex (Service) 31.1%`; Probe 2 load `2.61 2.60 2.69` with `WindowServer 44.7%`.
+- Helper decision was `defer-heavy-gate`.
+- Did not run `CARGO_BUILD_JOBS=1 cargo check -j 1 -p warp`.
+- Did not run `TERM=xterm-256color WARP_SKIP_COMMON_SKILLS_INSTALL=1 ./script/run --dont-open`.
+- Did not launch `target/debug/bundle/osx/WarpOss.app`.
+- GUI launch remains blocked because this phase did not produce a fresh bundle.
+
+## 2026-06-02 P243 RC33 freeze
+
+Phase 243 status: `qualified-rc33-freeze`.
+
+- Final low-load validation kept manifest validation, glossary, dry-run, release coverage, public-RC status, public-RC evidence report, privacy guard, Python tests, `cargo fmt --check`, and `git diff --check` clean.
+- `script/zh_public_rc_evidence_report.py` reported `ready_rows: 0` and `decision: blocked`.
+- `script/zh_public_rc_evidence_lint.py --strict-artifacts` returned the expected blocker signal: `ready_rows: 0`, `errors: 11`, `decision: fail`, `exit_code: 1`.
+- No current-cycle GUI smoke was run because Phase 242 did not produce a fresh bundle.
+- No screenshot, accessibility snapshot, account state, backend fixture, billing/quota state, cloud object, managed secret, custom endpoint, production object, or team ownership state was read, created, modified, or deleted.
+- No row was promoted to current-cycle public-RC `verified`.
+
+## RC34 Pre-Heavy-Gate Refresh
+
+```text
+asset lane: blocked-no-asset-approval
+PNG changes: none
+fresh bundle: pending-low-load-gate
+GUI launch: blocked-no-fresh-bundle
+```
+
+## RC35 Heavy Validation Retry
+
+```text
+fresh bundle: passed
+GUI launch: pending-explicit-gui-smoke-approval
+```
+
+## RC34 Heavy Validation Retry
+
+```text
+fresh bundle: skipped-with-heat-safety
+GUI launch: skipped-no-fresh-bundle
+```
+
+## RC35 Lane And Asset Refresh
+
+```text
+asset lane: blocked-no-asset-approval
+PNG changes: none
+fresh bundle: pending-low-load-gate
+GUI launch: blocked-no-fresh-bundle
+```
+
+## RC36 Filtered Evidence Packetization
+
+```text
+filtered action packets: available
+backend_fixture rows: 5 missing
+disposable_object rows: 3 missing
+isolated_account rows: 3 missing
+GUI launch: pending explicit GUI smoke approval
+PNG assets: unchanged
+```
+
+## RC36 Heavy Validation Retry
+
+```text
+low-load gate: defer-heavy-gate
+fresh bundle: skipped-with-heat-safety
+GUI launch: pending explicit GUI smoke approval
+```
+
+## RC37 Evidence Queue Planning
+
+```text
+evidence queue: available
+backend_fixture queue rows: 5
+disposable_object queue rows: 3
+isolated_account queue rows: 3
+GUI launch: pending explicit GUI smoke approval
+PNG assets: unchanged
+```
+
+## RC37 Heavy Validation Retry
+
+```text
+low-load gate: defer-heavy-gate
+fresh bundle: skipped-with-heat-safety
+GUI launch: pending explicit GUI smoke approval
+```
+
+## RC38 Evidence Candidate Preflight
+
+RC38 adds `script/zh_public_rc_evidence_candidate.py` so redacted text
+candidates can be machine-checked before any ledger update is proposed.
+
+```text
+candidate preflight: available
+public-RC blockers: 11
+ready evidence rows: 0
+rows promoted in RC38: 0
+GUI launch in RC38: not run unless separately approved
+```
+
+Candidate preflight does not collect evidence and does not replace GUI, account,
+fixture, cleanup, or strict artifact-lint requirements.
+
+## RC38 Heavy Validation Retry
+
+```text
+low-load gate: run-heavy-gate
+cargo check -j 1 -p warp: passed with existing unused-variable warnings
+script/run --dont-open: passed with existing unused-variable warnings
+fresh bundle: refreshed
+bundle path: target/debug/bundle/osx/WarpOss.app
+GUI launch: not run
+```
+
+The heavy gate refreshed the local bundle under low-load conditions. It did not
+open the app and does not provide current-cycle GUI, account, fixture, cleanup,
+or public-RC evidence.

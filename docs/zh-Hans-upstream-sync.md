@@ -28,6 +28,35 @@ RC17 freshness 规则（2026-06-02）：
 - fetch 步骤不得同时执行 merge、rebase 或 branch switch。
 - 任何上游移动后，必须重新运行 manifest validation 和 dry-run summary。
 
+Phase 185 freshness 备注（2026-06-02）：
+
+- 当前执行分支为 `codex/zh-Hans-post-rc26-execution`。
+- `git fetch origin --tags` 部分刷新了远端分支，并将 `origin/master` 更新到 `ac4225c1805811a46bfa9df7531e6a4f0058ab12`，但因为多个本地 tag 会被覆盖而退出 1。
+- 本轮没有强制覆盖 tag，没有 merge、rebase 或切换分支。
+- `git ls-remote --tags origin 'refs/tags/v0.2026.*stable_00'` 显示最新 stable 仍是 `v0.2026.05.27.09.22.stable_00`。
+- 当前分支仍包含该 stable 基线；`origin/master` 仅作为预检信息，不作为发布基线。
+- 后续如需完整刷新上游 tag，先做非破坏性 tag 冲突审计，再决定是否处理本地同名 tag。
+
+Phase 198 tag 冲突审计备注（2026-06-02）：
+
+- 本轮只读比较了本地 tag、`git ls-remote --tags origin 'refs/tags/v0.2026.*'`、本地 peeled tag commit 和远端 tag commit。
+- 本地 tag 总数为 51；远端 `v0.2026.*` tag 总数为 44；本地私有/发布标签 `0.1`、`0.11`、`0.12`、`0.13`、`0.14`、`0.15` 和 `repo-sync/watermark/private-to-public` 是本地-only。
+- 同名 `v0.2026.*` tag 的 peeled commit 冲突数为 41。
+- 最新 stable 名称仍是 `v0.2026.05.27.09.22.stable_00`，但本地该 tag 指向 `7ed8bbd5dbf701c453ce90a6961f4e6dbcc8d6b4`，远端同名 tag 指向 `2566f54af7c3e71facfe1865f2c492549b14248a`。
+- 远端同名 stable commit 当前不是本分支 `HEAD` 的祖先。
+- 本轮没有删除 tag、没有 force-fetch、没有 merge、rebase 或切换分支。
+- 结论：后续公开 RC 不能再声称当前分支跟随“当前远端 stable tag 目标”；需要单独 upstream-sync 计划来决定是否采纳远端 retarget 后的 stable commit。
+
+Phase 201-206 tree-parity 与 tag namespace 策略（2026-06-02）：
+
+- 本地 `v0.2026.05.27.09.22.stable_00` 目标 `7ed8bbd5dbf701c453ce90a6961f4e6dbcc8d6b4` 和远端同名 tag 目标 `2566f54af7c3e71facfe1865f2c492549b14248a` 的 tree SHA 完全相同：`2281e0a3e27c328bb6bb6f3af82f2d6050780ea7`。
+- `git diff --stat` 与 `git diff --name-status` 对这两个 commit 没有输出；本轮 retarget 冲突是 commit/tag/parent 身份差异，不是源码树差异。
+- 当前策略是 **tree-parity adoption without destructive tag mutation**：公开表述可以说当前选定源码基线与远端 stable 目标 tree-parity 一致，但不能声称当前 `HEAD` 在祖先关系上包含远端 stable commit。
+- 本地 fork release tags `0.1` 到 `0.15` 视为 fork-owned release labels。
+- 本地 `v0.2026.*` tag 视为 cached upstream labels；判断当前远端 truth 时必须使用 `git ls-remote --tags origin ...` 或明确 commit/tree ID。
+- 不删除、不 force-fetch、不覆盖本地 `v0.2026.*` tag，除非用户明确批准 exact tag/ref action。
+- 如果未来必须满足 ancestry-based remote stable adoption，再创建独立 upstream-sync branch，从 `2566f54af7c3e71facfe1865f2c492549b14248a` replay localization overlay。
+
 ## 1. 发布策略
 
 用户发布版只跟随 **stable 或明确选定的上游基线**。不要追着上游 dev/nightly 每天发布中文构建版。

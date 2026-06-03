@@ -1,0 +1,94 @@
+# zh-Hans public-RC evidence intake ledger.
+# This file stores only redacted, committable metadata. Raw screenshots,
+# recordings, account identifiers, callback URLs, cookies, tokens, endpoint
+# URLs, team IDs, and private object names must stay outside the repository.
+
+generated_on = "2026-06-02"
+
+[[evidence]]
+row_id = "GUI-AUTH-01"
+status = "missing"
+evidence_paths = []
+cleanup_proof = ""
+redaction = ""
+notes = "isolated account evidence not provided"
+
+[[evidence]]
+row_id = "GUI-SET-03"
+status = "missing"
+evidence_paths = []
+cleanup_proof = ""
+redaction = ""
+notes = "isolated AI settings evidence not provided"
+
+[[evidence]]
+row_id = "GUI-SET-04"
+status = "missing"
+evidence_paths = []
+cleanup_proof = ""
+redaction = ""
+notes = "backend AWS/Bedrock fixture evidence not provided"
+
+[[evidence]]
+row_id = "GUI-SET-05"
+status = "missing"
+evidence_paths = []
+cleanup_proof = ""
+redaction = ""
+notes = "invalid Bedrock credential fixture evidence not provided"
+
+[[evidence]]
+row_id = "GUI-SET-06"
+status = "missing"
+evidence_paths = []
+cleanup_proof = ""
+redaction = ""
+notes = "disposable environment evidence not provided"
+
+[[evidence]]
+row_id = "GUI-WS-04"
+status = "missing"
+evidence_paths = []
+cleanup_proof = ""
+redaction = ""
+notes = "disposable managed secret evidence not provided"
+
+[[evidence]]
+row_id = "GUI-WS-06"
+status = "missing"
+evidence_paths = []
+cleanup_proof = ""
+redaction = ""
+notes = "isolated custom inference endpoint evidence not provided"
+
+[[evidence]]
+row_id = "GUI-WS-07"
+status = "missing"
+evidence_paths = []
+cleanup_proof = ""
+redaction = ""
+notes = "disposable team ownership evidence not provided"
+
+[[evidence]]
+row_id = "GUI-BILL-01"
+status = "missing"
+evidence_paths = []
+cleanup_proof = ""
+redaction = ""
+notes = "safe quota or billing fixture evidence not provided"
+
+[[evidence]]
+row_id = "GUI-BILL-02"
+status = "missing"
+evidence_paths = []
+cleanup_proof = ""
+redaction = ""
+notes = "Build plan migration fixture evidence not provided"
+
+[[evidence]]
+row_id = "GUI-CLOUD-01"
+status = "missing"
+evidence_paths = []
+cleanup_proof = ""
+redaction = ""
+notes = "cloud capacity fixture evidence not provided"

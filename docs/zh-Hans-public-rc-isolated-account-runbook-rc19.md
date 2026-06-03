@@ -129,3 +129,102 @@ fixture evidence alone cannot promote these rows
 main-account evidence is invalid
 ```
 
+## Post-RC27 Prerequisite Package
+
+Phase 190 keeps the isolated-account lane blocked because no concrete isolated
+account package was available in the execution context.
+
+Required package before execution:
+
+```text
+account label: zh-rc28-test-account or equivalent isolated label
+local profile: zh-rc28-test-account
+browser callback: available and testable
+allowed surfaces: GUI-AUTH-01, GUI-SET-03, GUI-WS-06 only
+custom inference: enabled only for disposable endpoint evidence
+endpoint allowlist: zh-smoke-delete-endpoint only
+redaction: email, account ID, token, API key, endpoint URL, team ID, cookies,
+  magic links, and any other identifiers must be removed from committed evidence
+cleanup proof: logout confirmation plus local profile cleanup or explicit
+  profile-retention reason
+```
+
+Missing as of Phase 190:
+
+```text
+isolated account credential/callback proof
+custom inference enabled state
+disposable endpoint zh-smoke-delete-endpoint
+cleanup proof plan tied to an actual account
+explicit approval to run browser auth and endpoint removal
+```
+
+## RC32 Evidence Intake Gate
+
+Before any isolated-account row can be promoted, `resources/localization/zh-Hans-public-rc-evidence.toml`
+must contain a `status = "provided"` row for the matching blocker, the row must
+pass `python3 script/zh_public_rc_evidence_lint.py`, and the raw evidence must
+still be reviewed for redaction, row match, and cleanup proof.
+
+Rows still requiring isolated-account evidence:
+
+```text
+GUI-AUTH-01
+GUI-SET-03
+GUI-WS-06
+```
+
+Disposable-object rows must additionally prove that only the exact allowlisted
+object names were used:
+
+```text
+GUI-SET-06: zh-smoke-delete-environment
+GUI-WS-04: zh-smoke-delete-secret
+GUI-WS-07: zh-smoke-public-rc-team
+```
+
+## RC36 Filtered Action Packet Commands
+
+Use these commands to request isolated-account evidence one row at a time:
+
+```bash
+python3 script/zh_public_rc_evidence_report.py --missing-action-markdown --row-id GUI-AUTH-01
+python3 script/zh_public_rc_evidence_report.py --missing-action-markdown --row-id GUI-SET-03
+python3 script/zh_public_rc_evidence_report.py --missing-action-markdown --row-id GUI-WS-06
+python3 script/zh_public_rc_evidence_report.py --missing-actions-json --category isolated_account
+```
+
+These commands do not create evidence. They print safe handoff metadata only.
+Do not use the user's main account, and do not store account identifiers,
+callback URLs, cookies, tokens, or magic links in repository files.
+
+## RC37 Evidence Queue Commands
+
+Use these commands to inspect isolated-account queue order before collecting
+evidence:
+
+```bash
+python3 script/zh_public_rc_evidence_queue.py --markdown --category isolated_account
+python3 script/zh_public_rc_evidence_queue.py --json --row-id GUI-AUTH-01
+python3 script/zh_public_rc_evidence_queue.py --json --row-id GUI-SET-03
+python3 script/zh_public_rc_evidence_queue.py --json --row-id GUI-WS-06
+```
+
+These commands do not create evidence. They print queue metadata only. Do not
+use the user's main account, and do not store account identifiers, callback
+URLs, cookies, tokens, or magic links in repository files.
+
+## RC38 Candidate Preflight Commands
+
+After raw evidence is reviewed and converted to a redacted text candidate
+outside Git, run preflight before proposing any ledger update:
+
+```bash
+python3 script/zh_public_rc_evidence_candidate.py --row-id GUI-AUTH-01 --artifact /path/to/gui-auth-01-candidate.txt --markdown
+python3 script/zh_public_rc_evidence_candidate.py --row-id GUI-SET-03 --artifact /path/to/gui-set-03-candidate.txt --markdown
+python3 script/zh_public_rc_evidence_candidate.py --row-id GUI-WS-06 --artifact /path/to/gui-ws-06-candidate.txt --markdown
+```
+
+These commands do not create evidence and do not clear blockers. Keep candidate
+files outside Git until human redaction review approves a committed
+`artifacts/redacted/<row-id>.txt` path.

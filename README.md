@@ -7,11 +7,11 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 ## 当前状态
 
-当前版本：`0.15`
+当前版本：`0.18`
 
-最后核验记录：`2026-06-02 RC26`
+最后核验记录：`2026-06-03 RC38`
 
-当前结论：`ready-for-local-use-with-fixture-evidence`。也就是说，本仓库已经适合本地工程使用和继续验证，但还不是公开 RC。公开 RC 仍需要补齐隔离账号、后端 fixture、一次性对象、GUI、bundle 和静态图证据。
+当前结论：`ready-for-local-use-with-fixture-evidence`。也就是说，本仓库已经适合本地工程使用和继续验证，但还不是公开 RC。RC38 继续保持源码级汉化和低负载验证干净，并新增 public-RC redacted evidence candidate preflight 的 text/JSON/Markdown 输出；远端 stable tag retarget 已确认与本地 stable 目标源码树一致，但不能声称当前分支包含远端 stable commit。公开 RC 仍需要补齐 GUI、隔离账号、后端 fixture、一次性对象和静态图证据。
 
 ## 汉化进度
 
@@ -73,9 +73,10 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 1. 用隔离账号验证登录、账号状态、Settings、custom inference 等路径。
 2. 为 Billing、Cloud、managed secret、team 等外部状态路径补齐 fixture 或可控测试证据。
 3. 重新生成或设计确认 onboarding 静态 PNG，当前仍有历史英文静态图残留需要单独资产分支处理。
-4. 在电脑负载可控时重新跑 Rust compile、bundle build 和 GUI launch gate。
+4. 在电脑负载可控时重新跑 GUI launch gate；RC38 已在低负载 gate 允许后刷新本地 bundle，但 GUI 仍需单独批准和当前周期证据。
 5. 继续做逐条翻译审查，重点检查语义、术语一致性、UI 容量和功能安全，而不是盲目增加条目。
-6. 等待或推动 Warp 官方 i18n 框架成熟后，把当前 manifest 迁移为官方 `zh-CN` locale。
+6. 对外描述上游状态时使用显式 commit/tree 证据；当前源码树已等价于远端 `v0.2026.05.27.09.22.stable_00` 目标，但若要声称 ancestry/commit identity，仍需要单独批准 upstream-sync 分支。
+7. 等待或推动 Warp 官方 i18n 框架成熟后，把当前 manifest 迁移为官方 `zh-CN` locale。
 
 ## 汉化方式
 
@@ -89,10 +90,15 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 | `resources/localization/zh-Hans-inventory-ignore.toml` | inventory 忽略规则 |
 | `resources/localization/zh-Hans-glossary.toml` | 术语表、保留词和禁用译法 |
 | `resources/localization/zh-Hans-public-rc-blockers.toml` | 公开 RC blocker registry |
+| `resources/localization/zh-Hans-public-rc-evidence.toml` | 公开 RC 脱敏证据元数据 ledger |
 | `script/zh_apply_localization.py` | 应用、校验和统计翻译清单 |
 | `script/zh_localization_inventory.py` | 扫描候选英文字符串和覆盖率 |
 | `script/zh_export_locale.py` | 导出 JSON/YAML locale 迁移雏形 |
 | `script/zh_public_rc_status.py` | 汇总公开 RC blocker 状态 |
+| `script/zh_public_rc_evidence_lint.py` | 校验公开 RC 证据元数据是否逐行匹配且可提交 |
+| `script/zh_public_rc_evidence_report.py` | 生成 public-RC 证据分类报表、安全 packet 模板、missing-action 输出、JSON 输出和 row/category Markdown action packet |
+| `script/zh_public_rc_evidence_queue.py` | 生成 public-RC 优先级证据队列、JSON 队列和 Markdown 队列 |
+| `script/zh_public_rc_evidence_candidate.py` | 预检 public-RC 脱敏候选证据文本，输出 text/JSON/Markdown 审查结果 |
 | `script/privacy_guard.py` | 检查截图、录屏、原始 GUI 证据等敏感产物 |
 
 `zh_apply_localization.py` 是幂等的：源码还是英文时会替换为中文；源码已经是中文时会视为已应用；如果英文原文和中文目标都找不到，会报告上游字符串可能已经漂移。
@@ -158,10 +164,18 @@ python3 script/zh_apply_localization.py --validate-manifest
 python3 script/zh_apply_localization.py --check-glossary
 python3 script/zh_apply_localization.py --dry-run --summary
 python3 script/zh_public_rc_status.py
-python3 -m unittest script/test_zh_apply_localization.py script/test_zh_localization_inventory.py script/test_zh_export_locale.py script/test_zh_public_rc_status.py
+python3 -m unittest script/test_zh_apply_localization.py script/test_zh_localization_inventory.py script/test_zh_export_locale.py script/test_zh_public_rc_status.py script/test_zh_low_load_gate.py
 cargo fmt --check
 git diff --check
 ```
+
+重型 gate 前先运行散热保护检查：
+
+```bash
+python3 script/zh_low_load_gate.py --probes 2 --wait-seconds 60 --max-load 2.50 --max-hot-process-percent 25
+```
+
+只有输出 `decision: run-heavy-gate` 时才继续跑 Rust compile、bundle 和 GUI。
 
 发布前再补充重型 gate。为避免本地电脑过热，建议串行、低并发运行：
 
@@ -203,8 +217,20 @@ expected_count = 1
 主要文档：
 
 - `docs/zh-Hans-localization.md`：总体维护记录和阶段索引。
-- `docs/zh-Hans-release-candidate-2026-06-02-rc26.md`：当前 RC26 记录。
-- `docs/zh-Hans-release-candidate-2026-06-02-rc25.md`：上一轮 RC25 记录。
+- `docs/zh-Hans-release-candidate-2026-06-03-rc38.md`：当前 RC38 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc37.md`：上一轮 RC37 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc36.md`：RC36 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc35.md`：RC35 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc34.md`：RC34 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc33.md`：RC33 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc32.md`：RC32 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc31.md`：RC31 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc30.md`：RC30 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc29.md`：RC29 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc28.md`：RC28 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc27.md`：RC27 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc26.md`：RC26 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc25.md`：RC25 记录。
 - `docs/zh-Hans-release-candidate-2026-06-02-rc24.md`：RC24 记录。
 - `docs/zh-Hans-release-candidate-2026-06-02-rc23.md`：RC23 记录。
 - `docs/zh-Hans-release-candidate-2026-06-02-rc22.md`：RC22 记录。
@@ -247,7 +273,7 @@ git diff --cached --check
 
 ### 能直接公开发布吗？
 
-现在不建议。`0.15 / RC26` 可以作为本地工程使用和继续验证的版本，但公开 RC 仍需要清掉 11 个 blocker，并补齐重型构建、GUI、账号、后端和静态图证据。
+现在不建议。`0.18 / RC38` 可以作为本地工程使用和继续验证的版本，但公开 RC 仍需要清掉 11 个 blocker，补齐 GUI、账号、后端 fixture、一次性对象和静态图证据；上游 stable retarget 目前只能按源码树等价表述，不能按 commit ancestry 表述。
 
 ## 上游项目
 
