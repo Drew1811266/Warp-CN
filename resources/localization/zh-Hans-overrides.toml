@@ -16930,7 +16930,7 @@ context = "Legacy reviewed zh-Hans localization entry"
 [[replace]]
 path = "app/src/settings_view/delete_environment_confirmation_dialog.rs"
 source = "Are you sure you want to remove the {} environment?"
-target = "确定要移除 {} 环境吗？"
+target = "确定要删除 {} 环境吗？"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -54534,7 +54534,7 @@ context = "Phase 65 suggestion chip tooltip"
 [[replace]]
 path = "app/src/ai/blocklist/suggestion_chip_view.rs"
 source = "Suggested prompt:n{prompt}"
-target = "建议提示：{prompt}"
+target = "建议提示：n{prompt}"
 status = "active"
 context = "Phase 65 suggestion chip prompt tooltip"
 

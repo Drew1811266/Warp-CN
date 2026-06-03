@@ -82,7 +82,7 @@ impl View for DeleteEnvironmentConfirmationDialog {
 
         let appearance = Appearance::as_ref(app);
 
-        let description = format!("确定要移除 {} 环境吗？", self.env_name);
+        let description = format!("确定要删除 {} 环境吗？", self.env_name);
 
         let dialog = Dialog::new(
             "删除环境？".to_string(),

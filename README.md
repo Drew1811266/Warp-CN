@@ -216,6 +216,7 @@ expected_count = 1
 
 主要文档：
 
+- `docs/zh-Hans-development-guide.md`：汉化开发、审计、验证、GUI 证据、public-RC 和上游同步的主开发手册。
 - `docs/zh-Hans-localization.md`：总体维护记录和阶段索引。
 - `docs/zh-Hans-release-candidate-2026-06-03-rc38.md`：当前 RC38 记录。
 - `docs/zh-Hans-release-candidate-2026-06-02-rc37.md`：上一轮 RC37 记录。

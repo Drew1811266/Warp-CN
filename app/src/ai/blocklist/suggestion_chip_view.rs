@@ -158,7 +158,7 @@ impl Suggestion {
                 } else {
                     workflow.prompt.clone()
                 };
-                format!("建议提示：{prompt}")
+                format!("建议提示：\n{prompt}")
             }
         }
     }
