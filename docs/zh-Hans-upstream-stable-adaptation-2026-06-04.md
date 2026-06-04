@@ -50,12 +50,14 @@ cargo fmt: passed
 inventory coverage: passed; release covered=8534 candidates=0 coverage=100.0%
 translation update idempotent: entries=7937 files=550 already_applied=5717 would_change=0 missing=0
 full audit: not run
-privacy guard: not run
+privacy guard: passed
+python compile: passed
+python unit tests: passed; ran 64 tests
 low-load gate: not run
-cargo check: not run
+cargo check: passed by Task 7 reviewer
 bundle refresh: not run
 GUI launch: not run
-public RC: not ready
+public RC: not ready; 11 strict evidence blockers
 ```
 
 ## Manifest Drift Repair
@@ -114,3 +116,25 @@ dry-run after Task 7 edits: entries=7937 files=550 already_applied=5717 would_ch
 Task 7 added 36 reviewed manifest entries and narrow ignore rules for internal-only 0.19 strings. User-visible updates covered vertical tab group menus, queued prompt actions, AI prompt submission settings, staging IAP credential status, shared-session metadata access, Claude Code platform plugin user errors, and duplicate child-agent guidance. Internal logs, protocol IDs, config keys, position IDs, test assertions, and orchestration viewer diagnostics were ignored with literal patterns instead of translated.
 
 See `docs/zh-Hans-translation-audit-0.19.md` for the Task 7 summary.
+
+## Script And Privacy Validation
+
+Task 8 validated the imported Warp CN scripts after the 0.19 overlay and candidate update.
+
+```text
+privacy guard: passed
+python compile: passed
+python unit tests: ran 64 tests, OK
+public RC status: total=11 public_rc_required=11
+strict evidence lint: fail, missing evidence=11
+```
+
+Public-RC blocker categories remain unchanged and are not source-localization blockers:
+
+```text
+blocked-no-backend-fixture: 5
+blocked-no-disposable-object: 3
+blocked-no-isolated-account: 3
+```
+
+The strict evidence lint failure is expected until current-cycle GUI evidence is produced for all 11 required rows. Evidence report and queue JSON were written to `/tmp/zh-0.19-public-rc-evidence-report.json` and `/tmp/zh-0.19-public-rc-evidence-queue.json`.
