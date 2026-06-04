@@ -37,9 +37,10 @@ The adaptation uses a clean upstream-stable worktree plus imported durable Warp 
 ## Gate Status
 
 ```text
-manifest validation: not run
-glossary check: not run
-dry-run summary: not run
+manifest validation: passed
+glossary check: passed
+metadata summary: passed
+dry-run initial: entries=7943 files=552 already_applied=0 would_change=5658 missing=69
 overlay apply: not run
 inventory coverage: not run
 full audit: not run
