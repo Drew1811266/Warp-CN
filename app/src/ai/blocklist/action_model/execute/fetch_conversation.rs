@@ -72,7 +72,7 @@ fn materialize_conversation(
     let Some(conversation) = conversation else {
         log::warn!("FetchConversation: failed to load conversation {server_conversation_id}");
         return AIAgentActionResultType::FetchConversation(FetchConversationResult::Error(
-            format!("Failed to load conversation {server_conversation_id}"),
+            format!("无法加载对话 {server_conversation_id}"),
         ));
     };
 
@@ -97,7 +97,7 @@ fn materialize_conversation(
         Err(e) => {
             log::error!("FetchConversation: failed to materialize YAML: {e}");
             AIAgentActionResultType::FetchConversation(FetchConversationResult::Error(format!(
-                "Failed to materialize conversation: {e}"
+                "无法实例化对话：{e}"
             )))
         }
     }

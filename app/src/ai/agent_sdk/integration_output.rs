@@ -162,7 +162,7 @@ fn print_integration_card(integration: &SimpleIntegration) {
     let explanation = status_explanation(integration.connection_status);
     let status_text = format!("{emoji} {explanation}");
     let status_row = crate::ai::agent_sdk::text_layout::render_labeled_wrapped_field(
-        "Status",
+        "状态",
         &status_text,
         MAX_LINE_WIDTH,
     );
@@ -176,7 +176,7 @@ fn print_integration_card(integration: &SimpleIntegration) {
         _ => "(none)".to_string(),
     };
     let env_row = crate::ai::agent_sdk::text_layout::render_labeled_wrapped_field(
-        "Environment",
+        "环境",
         &env_value,
         MAX_LINE_WIDTH,
     );
@@ -186,7 +186,7 @@ fn print_integration_card(integration: &SimpleIntegration) {
     if let Some(ListedSimpleIntegrationConfig { model_id, .. }) = &integration.integration_config {
         if !model_id.is_empty() {
             let model_row = crate::ai::agent_sdk::text_layout::render_labeled_wrapped_field(
-                "Model",
+                "模型",
                 model_id,
                 MAX_LINE_WIDTH,
             );
@@ -199,7 +199,7 @@ fn print_integration_card(integration: &SimpleIntegration) {
     {
         if !base_prompt.is_empty() {
             let base_prompt_row = crate::ai::agent_sdk::text_layout::render_labeled_wrapped_field(
-                "Base prompt",
+                "基础提示词",
                 base_prompt,
                 MAX_LINE_WIDTH,
             );
@@ -211,7 +211,7 @@ fn print_integration_card(integration: &SimpleIntegration) {
     if let Some(config) = &integration.integration_config {
         let lines = mcp_server_display_lines(config);
         if !lines.is_empty() {
-            let row = render_labeled_wrapped_lines("MCP servers", &lines, MAX_LINE_WIDTH);
+            let row = render_labeled_wrapped_lines("MCP 服务器", &lines, MAX_LINE_WIDTH);
             table.add_row(vec![row]);
         }
     }
@@ -254,17 +254,13 @@ fn status_emoji(status: SimpleIntegrationConnectionStatus) -> &'static str {
 
 fn status_explanation(status: SimpleIntegrationConnectionStatus) -> &'static str {
     match status {
-        SimpleIntegrationConnectionStatus::NotConnected => "This integration is not connected.",
-        SimpleIntegrationConnectionStatus::ConnectionError => {
-            "This provider is connected but there is an error."
-        }
+        SimpleIntegrationConnectionStatus::NotConnected => "此 integration 未连接。",
+        SimpleIntegrationConnectionStatus::ConnectionError => "此 provider 已连接，但存在错误。",
         SimpleIntegrationConnectionStatus::IntegrationNotConfigured => {
-            "Connection is active, but the agent integration has not been configured yet."
+            "连接处于活动状态，但 Agent integration 尚未配置。"
         }
-        SimpleIntegrationConnectionStatus::NotEnabled => {
-            "Integration is configured but currently disabled."
-        }
-        SimpleIntegrationConnectionStatus::Active => "Integration is connected and enabled.",
+        SimpleIntegrationConnectionStatus::NotEnabled => "Integration 已配置，但当前已禁用。",
+        SimpleIntegrationConnectionStatus::Active => "Integration 已连接并启用。",
     }
 }
 
@@ -311,11 +307,11 @@ impl IntegrationInfo {
 
         let created_at_formatted = created_at
             .map(format_approx_duration_from_now_utc)
-            .unwrap_or_else(|| "Unknown".to_string());
+            .unwrap_or_else(|| "未知".to_string());
 
         let updated_at_formatted = updated_at
             .map(format_approx_duration_from_now_utc)
-            .unwrap_or_else(|| "Unknown".to_string());
+            .unwrap_or_else(|| "未知".to_string());
 
         Self {
             provider,
@@ -335,11 +331,11 @@ impl TableFormat for IntegrationInfo {
     fn header() -> Vec<Cell> {
         vec![
             Cell::new("Provider"),
-            Cell::new("Description"),
-            Cell::new("Status"),
-            Cell::new("Environment"),
-            Cell::new("Created"),
-            Cell::new("Updated"),
+            Cell::new("描述"),
+            Cell::new("状态"),
+            Cell::new("环境"),
+            Cell::new("创建时间"),
+            Cell::new("更新时间"),
         ]
     }
 

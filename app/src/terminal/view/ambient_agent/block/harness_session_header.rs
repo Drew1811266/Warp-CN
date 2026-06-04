@@ -63,7 +63,7 @@ impl View for HarnessSessionHeader {
             Icon::ChevronRight
         };
 
-        let label = format!("Running {}...", self.cli_name);
+        let label = format!("{} 正在运行...", self.cli_name);
 
         let row = Flex::row()
             .with_cross_axis_alignment(CrossAxisAlignment::Center)

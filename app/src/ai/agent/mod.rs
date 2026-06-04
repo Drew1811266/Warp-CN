@@ -167,8 +167,8 @@ pub enum FinishedAIAgentOutput {
 impl Display for FinishedAIAgentOutput {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            FinishedAIAgentOutput::Cancelled { .. } => write!(f, "Cancelled"),
-            FinishedAIAgentOutput::Error { error, .. } => write!(f, "Error: {error}"),
+            FinishedAIAgentOutput::Cancelled { .. } => write!(f, "已取消"),
+            FinishedAIAgentOutput::Error { error, .. } => write!(f, "错误：{error}"),
             FinishedAIAgentOutput::Success { output } => write!(f, "\n{output}"),
         }
     }
@@ -256,7 +256,7 @@ pub enum AIAgentOutputStatus {
 impl Display for AIAgentOutputStatus {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            AIAgentOutputStatus::Streaming { .. } => write!(f, "Streaming..."),
+            AIAgentOutputStatus::Streaming { .. } => write!(f, "正在流式输出..."),
             AIAgentOutputStatus::Finished { finished_output } => write!(f, "{finished_output}"),
         }
     }
@@ -557,7 +557,7 @@ impl AIAgentOutput {
                 AIAgentOutputMessageType::CommentsAddressed {
                     comments: comment_ids,
                 } => {
-                    result.push(format!("Addressed {} comments", comment_ids.len()));
+                    result.push(format!("已处理 {} 条评论", comment_ids.len()));
                     last_was_action = false;
                 }
                 AIAgentOutputMessageType::Reasoning { .. } => continue,
@@ -571,11 +571,11 @@ impl AIAgentOutput {
                 AIAgentOutputMessageType::ArtifactCreated(_) => continue,
                 AIAgentOutputMessageType::SkillInvoked(_) => continue,
                 AIAgentOutputMessageType::MessagesReceivedFromAgents { messages } => {
-                    result.push(format!("Received {} messages", messages.len()));
+                    result.push(format!("已收到 {} 条消息", messages.len()));
                     last_was_action = false;
                 }
                 AIAgentOutputMessageType::EventsFromAgents { event_ids } => {
-                    result.push(format!("Received {} agent events", event_ids.len()));
+                    result.push(format!("已收到 {} 个 Agent 事件", event_ids.len()));
                     last_was_action = false;
                 }
             }
@@ -689,24 +689,21 @@ impl Display for RenderableAIError {
                 if let Some(message) = user_display_message {
                     write!(f, "{message}")
                 } else {
-                    write!(f, "Quota limit reached.")
+                    write!(f, "已达到配额限制。")
                 }
             }
             Self::ServerOverloaded => {
-                write!(f, "Warp is currently overloaded. Please try again later.")
+                write!(f, "Warp 当前负载较高。请稍后重试。")
             }
-            Self::InternalWarpError => write!(f, "Internal Warp error."),
+            Self::InternalWarpError => write!(f, "Warp 内部错误。"),
             Self::ContextWindowExceeded(message) => {
-                write!(f, "Context window exceeded: {message}")
+                write!(f, "已超出上下文窗口：{message}")
             }
             Self::InvalidApiKey { provider, .. } => {
-                write!(f, "Invalid API key for {provider}")
+                write!(f, "{provider} 的 API 密钥无效")
             }
             Self::AwsBedrockCredentialsExpiredOrInvalid { model_name } => {
-                write!(
-                    f,
-                    "AWS Bedrock credentials expired or invalid for {model_name}"
-                )
+                write!(f, "AWS Bedrock 凭据已过期，或对 {model_name} 无效")
             }
             Self::Other { error_message, .. } => write!(f, "{error_message}"),
         }
@@ -1774,33 +1771,31 @@ impl Display for AIAgentOutputMessage {
             AIAgentOutputMessageType::Subagent(subagent) => write!(f, "Subagent: {subagent}")?,
             AIAgentOutputMessageType::WebSearch(status) => match status {
                 WebSearchStatus::Searching { query } => match query {
-                    Some(q) => write!(f, "Searching web for: {q}")?,
-                    None => write!(f, "Searching web")?,
+                    Some(q) => write!(f, "正在搜索网页：{q}")?,
+                    None => write!(f, "正在搜索网页")?,
                 },
                 WebSearchStatus::Success { query, pages } => {
-                    write!(f, "Searched web for: {query} ({} results)", pages.len())?
+                    write!(f, "已搜索网页：{query}（{} 个结果）", pages.len())?
                 }
-                WebSearchStatus::Error { query } => write!(f, "Web search failed for: {query}")?,
+                WebSearchStatus::Error { query } => write!(f, "网页搜索失败：{query}")?,
             },
             AIAgentOutputMessageType::WebFetch(status) => match status {
                 WebFetchStatus::Fetching { urls } => {
-                    write!(f, "Fetching {} web pages...", urls.len())?
+                    write!(f, "正在获取 {} 个网页...", urls.len())?
                 }
-                WebFetchStatus::Success { pages } => {
-                    write!(f, "Fetched {} web pages", pages.len())?
-                }
-                WebFetchStatus::Error => write!(f, "Web fetch failed")?,
+                WebFetchStatus::Success { pages } => write!(f, "已获取 {} 个网页", pages.len())?,
+                WebFetchStatus::Error => write!(f, "网页获取失败")?,
             },
             AIAgentOutputMessageType::CommentsAddressed {
                 comments: comment_ids,
-            } => write!(f, "Addressed {} comments", comment_ids.len())?,
+            } => write!(f, "已处理 {} 条评论", comment_ids.len())?,
             AIAgentOutputMessageType::DebugOutput { text } => write!(f, "[DEBUG] {text}")?,
             AIAgentOutputMessageType::ArtifactCreated(data) => match data {
                 ArtifactCreatedData::PullRequest { url, branch } => {
-                    write!(f, "Created PR: {url} (branch: {branch})")?
+                    write!(f, "已创建 PR：{url}（分支：{branch}）")?
                 }
                 ArtifactCreatedData::Screenshot { artifact_uid, .. } => {
-                    write!(f, "Screenshot captured (artifact: {artifact_uid})")?
+                    write!(f, "已捕获截图（artifact：{artifact_uid}）")?
                 }
                 ArtifactCreatedData::File {
                     artifact_uid,
@@ -1808,17 +1803,17 @@ impl Display for AIAgentOutputMessage {
                     ..
                 } => write!(
                     f,
-                    "File artifact uploaded: {filepath} (artifact: {artifact_uid})"
+                    "已上传文件 artifact：{filepath}（artifact：{artifact_uid}）"
                 )?,
             },
             AIAgentOutputMessageType::SkillInvoked(invoked_skill) => {
                 write!(f, "Skill Invoked: {}", invoked_skill.name)?
             }
             AIAgentOutputMessageType::MessagesReceivedFromAgents { messages } => {
-                write!(f, "Received {} messages", messages.len())?
+                write!(f, "已收到 {} 条消息", messages.len())?
             }
             AIAgentOutputMessageType::EventsFromAgents { event_ids } => {
-                write!(f, "Received {} agent events", event_ids.len())?
+                write!(f, "已收到 {} 个 Agent 事件", event_ids.len())?
             }
         }
 

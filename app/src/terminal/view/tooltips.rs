@@ -59,7 +59,7 @@ fn open_in_warp_tooltip(
         None
     };
     Some(GridTooltipLink {
-        text: "Open in Warp".to_string(),
+        text: "在 Warp 中打开".to_string(),
         action: TerminalAction::OpenCodeInWarp {
             path,
             layout: *EditorSettings::as_ref(app).open_file_layout.value(),
@@ -78,9 +78,9 @@ fn show_in_file_explorer_tooltip(
     mouse_state: MouseStateHandle,
 ) -> GridTooltipLink {
     let text = if cfg!(target_os = "macos") {
-        "Show in Finder"
+        "在 Finder 中显示"
     } else {
-        "Show containing folder"
+        "显示所在文件夹"
     }
     .to_string();
     GridTooltipLink {
@@ -130,7 +130,7 @@ impl TerminalView {
 
                         if is_redacted {
                             links.push(GridTooltipLink {
-                                text: "Reveal secret".to_string(),
+                                text: "显示密钥".to_string(),
                                 action: TerminalAction::ToggleGridSecret {
                                     handle,
                                     show_secret: true,
@@ -140,7 +140,7 @@ impl TerminalView {
                             });
                         } else {
                             links.push(GridTooltipLink {
-                                text: "Hide secret".to_string(),
+                                text: "隐藏密钥".to_string(),
                                 action: TerminalAction::ToggleGridSecret {
                                     handle,
                                     show_secret: false,
@@ -152,7 +152,7 @@ impl TerminalView {
                     }
 
                     links.push(GridTooltipLink {
-                        text: "Copy secret".to_string(),
+                        text: "复制密钥".to_string(),
                         action: TerminalAction::CopyGridSecret(handle),
                         mouse_state: self.mouse_states.copy_secrets_tooltip.clone(),
                         detail: None,
@@ -172,7 +172,7 @@ impl TerminalView {
 
                         if is_obfuscated {
                             links.push(GridTooltipLink {
-                                text: "Reveal secret".to_string(),
+                                text: "显示密钥".to_string(),
                                 action: TerminalAction::ToggleRichContentSecret {
                                     rich_content_tooltip_info: tooltip_info.clone(),
                                     show_secret: true,
@@ -182,7 +182,7 @@ impl TerminalView {
                             });
                         } else {
                             links.push(GridTooltipLink {
-                                text: "Hide secret".to_string(),
+                                text: "隐藏密钥".to_string(),
                                 action: TerminalAction::ToggleRichContentSecret {
                                     rich_content_tooltip_info: tooltip_info.clone(),
                                     show_secret: false,
@@ -194,7 +194,7 @@ impl TerminalView {
                     }
 
                     links.push(GridTooltipLink {
-                        text: "Copy secret".to_string(),
+                        text: "复制密钥".to_string(),
                         action: TerminalAction::CopyRichContentSecret(tooltip_info.clone()),
                         mouse_state: self.mouse_states.copy_secrets_tooltip.clone(),
                         detail: None,
@@ -208,7 +208,7 @@ impl TerminalView {
             let mut open_in_warp = None;
             let mut show_in_file_explorer = None;
             let modifier = directly_open_link_keybinding_string();
-            let mut detail = Some(format!("[{modifier} Click]"));
+            let mut detail = Some(format!("[{modifier} 点击]"));
             #[cfg(feature = "local_fs")]
             {
                 if let GridHighlightedLink::File(file_link) = link {
@@ -245,7 +245,7 @@ impl TerminalView {
             let mut open_in_warp = None;
             let mut show_in_file_explorer = None;
             let modifier_string = directly_open_link_keybinding_string();
-            let mut detail = Some(format!("[{modifier_string} Click]"));
+            let mut detail = Some(format!("[{modifier_string} 点击]"));
 
             #[cfg(feature = "local_fs")]
             {

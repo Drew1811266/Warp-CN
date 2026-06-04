@@ -45,7 +45,7 @@ pub fn render_inline_notifications_discovery_banner(
     let active_ui_text_color = appearance.theme().active_ui_text_color().into_solid();
 
     let learn_more_button = InlineBannerTextButton {
-        text: "Learn more".to_string(),
+        text: "了解更多".to_string(),
         text_color: active_ui_text_color,
         button_state: InlineBannerButtonState {
             on_click_event: TerminalAction::NotificationsDiscoveryBanner(
@@ -58,7 +58,7 @@ pub fn render_inline_notifications_discovery_banner(
         variant: InlineBannerTextButtonVariant::Secondary,
     };
     let troubleshoot_button = InlineBannerTextButton {
-        text: "Troubleshoot".to_string(),
+        text: "排查问题".to_string(),
         text_color: active_ui_text_color,
         button_state: InlineBannerButtonState {
             on_click_event: TerminalAction::NotificationsDiscoveryBanner(
@@ -73,19 +73,16 @@ pub fn render_inline_notifications_discovery_banner(
 
     let (title, buttons) = match notifications_mode {
         NotificationsMode::Dismissed => (
-            "We won't show this banner again, but you can always go to Settings to enable notifications.",
+            "我们不会再显示此横幅，但你随时可以前往设置启用通知。",
             vec![],
         ),
-        NotificationsMode::Disabled => (
-            "Notifications were turned off, but you can always go to Settings to enable notifications.",
-            vec![],
-        ),
+        NotificationsMode::Disabled => ("通知已关闭，但你随时可以前往设置重新启用。", vec![]),
         NotificationsMode::Unset => (
             trigger.discovery_banner_copy(),
             vec![
                 learn_more_button,
                 InlineBannerTextButton {
-                    text: "Enable".to_string(),
+                    text: "启用".to_string(),
                     text_color: active_ui_text_color,
                     button_state: InlineBannerButtonState {
                         on_click_event: TerminalAction::NotificationsDiscoveryBanner(
@@ -104,21 +101,18 @@ pub fn render_inline_notifications_discovery_banner(
             // permissions request (if any)
             let (title, docs_button) = match request_outcome {
                 Some(request_outcome) => match request_outcome {
-                    RequestPermissionsOutcome::Accepted => (
-                        "Success! You are now ready to receive desktop notifications.",
-                        learn_more_button,
-                    ),
-                    RequestPermissionsOutcome::PermissionsDenied => (
-                        "Warp was denied permissions to send you notifications.",
-                        troubleshoot_button,
-                    ),
-                    RequestPermissionsOutcome::OtherError { .. } => (
-                        "Something went wrong while requesting permissions.",
-                        troubleshoot_button,
-                    ),
+                    RequestPermissionsOutcome::Accepted => {
+                        ("已启用！你现在可以接收桌面通知。", learn_more_button)
+                    }
+                    RequestPermissionsOutcome::PermissionsDenied => {
+                        ("Warp 的通知发送权限已被拒绝。", troubleshoot_button)
+                    }
+                    RequestPermissionsOutcome::OtherError { .. } => {
+                        ("请求权限时出现问题。", troubleshoot_button)
+                    }
                 },
                 None => (
-                    "Don't forget to 'Allow' the permissions request to finish setting up notifications.",
+                    "请记得在权限请求中点按“允许”，以完成通知设置。",
                     learn_more_button,
                 ),
             };
@@ -128,7 +122,7 @@ pub fn render_inline_notifications_discovery_banner(
                 vec![
                     docs_button,
                     InlineBannerTextButton {
-                        text: "Configure notifications".to_string(),
+                        text: "配置通知".to_string(),
                         text_color: active_ui_text_color,
                         button_state: InlineBannerButtonState {
                             on_click_event: TerminalAction::NotificationsDiscoveryBanner(

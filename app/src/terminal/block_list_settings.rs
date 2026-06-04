@@ -10,7 +10,7 @@ define_settings_group!(BlockListSettings, settings: [
        sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
        private: false,
        toml_path: "appearance.blocks.show_jump_to_bottom_of_block_button",
-       description: "Whether to show the jump-to-bottom button in long command output.",
+       description: "是否在较长命令输出中显示跳到底部按钮。",
    },
    snackbar_enabled: SnackbarEnabled {
        type: bool,
@@ -19,7 +19,7 @@ define_settings_group!(BlockListSettings, settings: [
        sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
        private: false,
        toml_path: "general.snackbar_enabled",
-       description: "Whether to show snackbar notifications.",
+       description: "是否显示 snackbar 通知。",
    }
    show_block_dividers: ShowBlockDividers {
        type: bool,
@@ -28,6 +28,6 @@ define_settings_group!(BlockListSettings, settings: [
        sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
        private: false,
        toml_path: "appearance.blocks.show_block_dividers",
-       description: "Whether to show dividers between terminal blocks.",
+       description: "是否在终端块之间显示分隔线。",
    }
 ]);

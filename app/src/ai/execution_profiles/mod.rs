@@ -76,7 +76,7 @@ pub fn create_default_from_legacy_settings(app: &AppContext) -> AIExecutionProfi
     // ignore it. The same applies to "Autonomy".
     let ai_settings = AISettings::as_ref(app);
     AIExecutionProfile {
-        name: "Default".to_string(),
+        name: "默认".to_string(),
         is_default_profile: true,
         command_denylist: ai_settings.agent_mode_command_execution_denylist.clone(),
         // We initialize the command allowlist to be anything the user added, excluding all
@@ -146,9 +146,9 @@ impl StringModel for AIExecutionProfile {
     fn display_name(&self) -> String {
         // Handles case where default profile was previously created and named "Untitled"
         if self.is_default_profile {
-            "Default".to_string()
+            "默认".to_string()
         } else if self.name.trim().is_empty() {
-            "Untitled".to_string()
+            "未命名".to_string()
         } else {
             self.name.clone()
         }

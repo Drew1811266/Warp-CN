@@ -44,7 +44,9 @@ dry-run initial: entries=7943 files=552 already_applied=0 would_change=5658 miss
 manifest drift repair: passed
 dry-run repaired: entries=7899 files=550 already_applied=0 would_change=5682 missing=0
 release inventory smoke: covered=8494 candidates=83 coverage=99.0%
-overlay apply: not run
+overlay apply: passed
+overlay idempotent: entries=7899 files=550 already_applied=5681 would_change=0 missing=0
+cargo fmt: passed
 inventory coverage: full Task 7 not run
 full audit: not run
 privacy guard: not run
@@ -78,3 +80,17 @@ Classification summary:
 - Ignore additions: 4 moved auth-crate exact paths and 21 reviewed literal patterns were added for internal storage/auth details, fixtures, fake IDs, hostnames, and Claude mailbox protocol snippets that should not become user-visible translation candidates.
 
 Task 5 did not apply the overlay and did not edit upstream Rust source files. The release inventory command was run only as a parser smoke check after ignore changes; full inventory review remains Task 7.
+
+## Overlay Application
+
+Task 6 applied the repaired manifest to the 0.19 stable source tree and formatted the Rust workspace.
+
+```text
+applied replacements: 5681
+dry-run after apply: entries=7899 files=550 already_applied=5681 would_change=0 missing=0
+cargo fmt: passed
+```
+
+During formatting, `cargo fmt` exposed invalid Rust generated for ordinary string literals whose localized targets contain embedded double quotes. The overlay tool now escapes replacement text when writing normal Rust strings, and `script/test_zh_apply_localization.py` covers the idempotent quote-preserving case. This was required for the CLI install AppleScript prompts and the Command Search sample query `# 在文件中查找 "foo"` to remain valid Rust while still matching the manifest on dry-run.
+
+The `User canceled` osascript stderr token remains in English because it is a control-flow sentinel used to detect administrator prompt cancellation. The returned cancellation errors remain localized.

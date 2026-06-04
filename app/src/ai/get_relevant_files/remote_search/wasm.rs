@@ -28,6 +28,6 @@ pub(super) fn send_request(
 ) -> RemoteSearchRequest {
     RemoteSearchRequest::Ready(SearchCodebaseResult::Failed {
         reason: SearchCodebaseFailureReason::CodebaseNotIndexed,
-        message: "Remote codebase search is not available in this environment.".to_string(),
+        message: "此环境中不可使用远程代码库搜索。".to_string(),
     })
 }

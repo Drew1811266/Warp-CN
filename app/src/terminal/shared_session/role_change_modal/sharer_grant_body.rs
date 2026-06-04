@@ -59,7 +59,7 @@ impl SharerGrantBody {
                     width: Some(BUTTON_WIDTH),
                     ..Default::default()
                 })
-                .with_centered_text_label(String::from("Cancel"))
+                .with_centered_text_label(String::from("取消"))
                 .build()
                 .with_cursor(Cursor::PointingHand)
                 .on_click(move |ctx, _, _| ctx.dispatch_typed_action(SharerGrantBodyAction::Cancel))
@@ -82,7 +82,7 @@ impl SharerGrantBody {
                 width: Some(BUTTON_WIDTH),
                 ..Default::default()
             })
-            .with_centered_text_label(String::from("Make Editor"))
+            .with_centered_text_label(String::from("设为编辑者"))
             .build()
             .with_cursor(Cursor::PointingHand)
             .on_click(move |ctx, _, _| {
@@ -110,8 +110,8 @@ impl View for SharerGrantBody {
         let appearance = Appearance::as_ref(app);
         let button_row = self.render_button_row(appearance);
 
-        let text1 = "This grants the ability to execute commands on your";
-        let text2 = "behalf. Use with caution.";
+        let text1 = "这将授予代表你执行命令的";
+        let text2 = "能力。请谨慎使用。";
         let text_body = Container::new(
             Flex::column()
                 .with_child(
@@ -145,7 +145,7 @@ impl View for SharerGrantBody {
                     self.dont_show_again_mouse_state.clone(),
                     Some(TEXT_FONT_SIZE),
                 )
-                .with_label(Span::new("Don't show again.", Default::default()))
+                .with_label(Span::new("不再显示。", Default::default()))
                 .check(self.dont_show_again)
                 .build()
                 .with_cursor(Cursor::PointingHand)

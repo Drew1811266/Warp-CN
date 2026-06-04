@@ -30,7 +30,7 @@ use crate::terminal::ShellLaunchData;
 use crate::{send_telemetry_from_app_ctx, PrivacySettings, TelemetryEvent};
 
 const GREP_TIMEOUT: Duration = Duration::from_secs(10);
-const NON_ZERO_EXIT_CODE_ERROR: &str = "Grep command exited with non-zero exit code";
+const NON_ZERO_EXIT_CODE_ERROR: &str = "Grep 命令以非零退出码结束";
 
 fn escape_double_quotes(s: &str) -> String {
     s.replace('"', "\\\"")
@@ -363,12 +363,12 @@ async fn run_grep(
         // remote path with the local platform's path separators.
         let Ok(standardized) = StandardizedPath::try_new(&absolute_path) else {
             return Err(GrepError::new(
-                "Could not determine parent directory of file when running grep".to_string(),
+                "运行 grep 时无法确定文件的父目录".to_string(),
             ));
         };
         let Some(parent) = standardized.parent() else {
             return Err(GrepError::new(
-                "Could not determine parent directory of file when running grep".to_string(),
+                "运行 grep 时无法确定文件的父目录".to_string(),
             ));
         };
         Cow::Owned(parent.as_str().to_owned())
@@ -646,17 +646,12 @@ fn parse_grep_output(
         let line_number = parts.next();
 
         let (Some(file), Some(line_number)) = (file, line_number) else {
-            return Err(anyhow::anyhow!(
-                "Failed to parse Grep output, unexpected format"
-            ));
+            return Err(anyhow::anyhow!("无法解析 Grep 输出，格式不符合预期"));
         };
         let line_number = match line_number.parse::<usize>() {
             Ok(line_number) => line_number,
             Err(e) => {
-                return Err(anyhow::anyhow!(
-                    "Failed to parse line number in Grep output: {:?}",
-                    e
-                ));
+                return Err(anyhow::anyhow!("无法解析 Grep 输出中的行号：{:?}", e));
             }
         };
 

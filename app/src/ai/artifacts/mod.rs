@@ -176,7 +176,7 @@ impl From<api::message::artifact_event::FileArtifact> for Artifact {
                 .file_name()
                 .and_then(|file_name| file_name.to_str())
                 .filter(|file_name| !file_name.trim().is_empty())
-                .unwrap_or("File")
+                .unwrap_or("文件")
                 .to_string(),
             mime_type: file.mime_type,
             description: if file.description.is_empty() {
@@ -292,7 +292,7 @@ pub fn file_button_label(filename: &str, filepath: &str) -> String {
     {
         return filepath_basename.to_string();
     }
-    "File".to_string()
+    "文件".to_string()
 }
 
 pub fn open_screenshot_lightbox<V: warpui::View>(
@@ -360,7 +360,7 @@ fn screenshot_lightbox_image_from_download_result(
             log::warn!("Failed to load screenshot artifact {index}: {e}");
             Some(LightboxImage {
                 source: LightboxImageSource::Loading,
-                description: Some("Failed to load".to_string()),
+                description: Some("加载失败".to_string()),
             })
         }
     }
@@ -386,7 +386,7 @@ pub fn download_file_artifact<V: warpui::View>(
                 log::warn!("Failed to load file artifact {artifact_uid}: {error}");
                 show_file_download_toast(
                     &artifact_uid,
-                    DismissibleToast::error("Failed to prepare file download.".to_string()),
+                    DismissibleToast::error("准备文件下载失败。".to_string()),
                     ctx,
                 );
             }
@@ -447,16 +447,14 @@ fn open_file_download_picker<V: warpui::View>(
                 move |_me, result, ctx| match result {
                     Ok(()) => show_file_download_toast(
                         &artifact_uid,
-                        DismissibleToast::success(format!("Downloaded {toast_filename}.")),
+                        DismissibleToast::success(format!("已下载 {toast_filename}。")),
                         ctx,
                     ),
                     Err(error) => {
                         log::warn!("Failed to download file artifact {artifact_uid}: {error}");
                         show_file_download_toast(
                             &artifact_uid,
-                            DismissibleToast::error(format!(
-                                "Failed to download {toast_filename}."
-                            )),
+                            DismissibleToast::error(format!("无法下载 {toast_filename}。")),
                             ctx,
                         );
                     }

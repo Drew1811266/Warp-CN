@@ -257,16 +257,16 @@ fn poll_run_until_joinable_session(
                                     let exhausted_stale_skips = !seen_working_state
                                         && skipped_stale_polls >= MAX_STALE_POLLS_BEFORE_FAILURE;
                                     let message = if exhausted_stale_skips {
-                                        "Cloud follow-up did not start in time".to_string()
+                                        "云端 follow-up 未及时启动".to_string()
                                     } else {
                                         task.status_message
                                             .as_ref()
                                             .map(|msg| msg.message.clone())
                                             .unwrap_or_else(|| {
                                                 if task.state.is_failure_like() {
-                                                    "Cloud agent failed".to_string()
+                                                    "云端 Agent 失败".to_string()
                                                 } else {
-                                                    "Cloud follow-up finished before a new session became available".to_string()
+                                                    "云端 follow-up 在新会话可用前已结束".to_string()
                                                 }
                                             })
                                     };

@@ -47,8 +47,8 @@ impl SessionType {
     /// Short label for the session type pill in the modal.
     pub(crate) fn pill_label(&self) -> &'static str {
         match self {
-            SessionType::Terminal => "Terminal",
-            SessionType::Oz => "Built in agent",
+            SessionType::Terminal => "终端",
+            SessionType::Oz => "内置 Agent",
             SessionType::CliAgent(CLIAgent::Claude) => "Claude",
             SessionType::CliAgent(CLIAgent::Codex) => "Codex",
             SessionType::CliAgent(CLIAgent::Gemini) => "Gemini",
@@ -89,7 +89,7 @@ fn config_name(directory: &Path, enable_worktree: bool) -> String {
     let prefix = if enable_worktree {
         "Worktree"
     } else {
-        "New tab"
+        "新建标签页"
     };
     format!("{prefix}: {repo}")
 }
@@ -129,7 +129,7 @@ pub fn build_tab_config(
             params.insert(
                 WORKTREE_BRANCH_PARAM.to_string(),
                 TabConfigParam {
-                    description: Some("New worktree branch name".to_string()),
+                    description: Some("新建 worktree 分支名称".to_string()),
                     default: Some(WORKTREE_BRANCH_DEFAULT.to_string()),
                     param_type: TabConfigParamType::Text,
                 },
@@ -215,7 +215,7 @@ pub fn tab_config_from_pane_snapshot(
     snapshot_to_flat_panes(snapshot, &mut panes, &mut counter);
 
     TabConfig {
-        name: "My Tab Config".to_string(),
+        name: "我的标签页配置".to_string(),
         title: custom_title,
         color,
         panes,

@@ -230,9 +230,9 @@ impl ExportManager {
         if is_bulk && self.exports.is_empty() {
             ToastStack::handle(ctx).update(ctx, move |toast_stack, ctx| {
                 let link_label = if cfg!(target_os = "macos") {
-                    "Open in Finder"
+                    "在 Finder 中打开"
                 } else {
-                    "Open in folder"
+                    "在文件夹中打开"
                 };
 
                 let mut toast_link = ToastLink::new(link_label.to_string());
@@ -243,8 +243,7 @@ impl ExportManager {
                         .with_onclick_action(WorkspaceAction::OpenInExplorer { path: root_dir });
                 }
                 toast_stack.add_ephemeral_toast(
-                    DismissibleToast::success("Finished exporting objects".to_string())
-                        .with_link(toast_link),
+                    DismissibleToast::success("对象导出完成".to_string()).with_link(toast_link),
                     window_id,
                     ctx,
                 );
@@ -315,7 +314,7 @@ impl ExportManager {
         };
 
         let name = if name.is_empty() {
-            "Untitled".to_string()
+            "未命名".to_string()
         } else {
             safe_filename(&name)
         };
@@ -372,8 +371,8 @@ impl ExportManager {
         let window_id = export.remove().window_id;
         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
             let message = match id.display_name(ctx) {
-                Some(name) => format!("Failed to export {name}"),
-                None => "Export failed".to_string(),
+                Some(name) => format!("导出 {name} 失败"),
+                None => "导出失败".to_string(),
             };
             toast_stack.add_persistent_toast(DismissibleToast::error(message), window_id, ctx);
         });
@@ -393,14 +392,14 @@ impl ExportManager {
         if !export.get().is_bulk {
             ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                 let message = match export.key().display_name(ctx) {
-                    Some(name) => format!("Exported {name}"),
-                    None => "Exported object".to_string(),
+                    Some(name) => format!("已导出 {name}"),
+                    None => "已导出对象".to_string(),
                 };
 
                 let link_label = if cfg!(target_os = "macos") {
-                    "Open in Finder"
+                    "在 Finder 中打开"
                 } else {
-                    "Open in folder"
+                    "在文件夹中打开"
                 };
 
                 toast_stack.add_ephemeral_toast(
@@ -450,7 +449,7 @@ impl ExportId {
             .map(|object| {
                 let mut name = object.display_name();
                 if name.is_empty() {
-                    name.push_str("Untitled")
+                    name.push_str("未命名")
                 }
                 name
             })

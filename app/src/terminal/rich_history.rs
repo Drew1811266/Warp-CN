@@ -41,7 +41,7 @@ pub fn render_rich_history(entry: &HistoryEntry, ctx: &AppContext) -> Box<dyn El
         flex_column.add_child(
             Container::new(render_row_with_icon_and_paragraph(
                 icon.into(),
-                format!("Exit code {}", exit_code.value()),
+                format!("退出代码 {}", exit_code.value()),
                 appearance,
             ))
             .with_margin_top(DETAILS_PARAGRAPH_SPACING)
@@ -78,7 +78,7 @@ pub fn render_rich_history(entry: &HistoryEntry, ctx: &AppContext) -> Box<dyn El
             Container::new(
                 ui_builder
                     .paragraph(format!(
-                        "Finished in {}",
+                        "耗时 {}",
                         human_readable_precise_duration((completed_ts).sub(start_ts))
                     ))
                     .build()
@@ -94,7 +94,7 @@ pub fn render_rich_history(entry: &HistoryEntry, ctx: &AppContext) -> Box<dyn El
             Container::new(
                 ui_builder
                     .paragraph(format!(
-                        "Last ran {}",
+                        "上次运行于 {}",
                         format_approx_duration_from_now(start_ts)
                     ))
                     .build()
@@ -139,7 +139,7 @@ pub(crate) fn render_ai_query_rich_history(
             appearance
                 .ui_builder()
                 .paragraph(format!(
-                    "Ran {}",
+                    "运行于 {}",
                     format_approx_duration_from_now(entry.start_time)
                 ))
                 .build()

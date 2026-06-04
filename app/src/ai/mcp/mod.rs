@@ -81,7 +81,7 @@ impl StringModel for MCPServer {
     type CloudObjectType = CloudMCPServer;
 
     fn model_type_name(&self) -> &'static str {
-        "MCP server"
+        "MCP 服务器"
     }
 
     fn should_enforce_revisions() -> bool {
@@ -506,7 +506,7 @@ impl MCPProvider {
             MCPProvider::Warp => "Warp",
             MCPProvider::Claude => "Claude",
             MCPProvider::Codex => "Codex",
-            MCPProvider::Agents => "Other Agents",
+            MCPProvider::Agents => "其他 Agent",
         }
     }
 

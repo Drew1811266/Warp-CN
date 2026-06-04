@@ -40,9 +40,9 @@ impl WebSearchView {
         let loading_icon = yellow_running_icon(appearance);
 
         let text = if let Some(q) = query {
-            format!("Searching the web for \"{q}\"")
+            format!("正在搜索网页：“{q}”")
         } else {
-            "Searching the web".to_string()
+            "正在搜索网页".to_string()
         };
 
         super::search_results_common::render_loading_header(text, loading_icon, app)
@@ -55,9 +55,9 @@ impl WebSearchView {
         app: &AppContext,
     ) -> Box<dyn Element> {
         let title_text = if query.is_empty() {
-            "Searched the web".to_string()
+            "已搜索网页".to_string()
         } else {
-            format!("Searched the web for \"{query}\"")
+            format!("已搜索网页：“{query}”")
         };
 
         let body = if self.collapsible.is_expanded {
@@ -69,7 +69,7 @@ impl WebSearchView {
         render_collapsible_search_results(
             title_text,
             pages.len(),
-            "URLs",
+            "URL",
             &self.collapsible,
             body,
             |ctx| {
@@ -108,7 +108,7 @@ impl WebSearchView {
 
         if pages.is_empty() {
             let no_results = Text::new_inline(
-                "No URLs found".to_string(),
+                "未找到 URL".to_string(),
                 appearance.ui_font_family(),
                 appearance.monospace_font_size(),
             )

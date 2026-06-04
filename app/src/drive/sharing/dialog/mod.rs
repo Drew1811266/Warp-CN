@@ -78,7 +78,7 @@ const QR_VISUAL_SIZE: f32 = 160.;
 const QR_ICON_BUTTON_SIZE: f32 = 32.;
 const QR_EXPORT_SIZE: u32 = 1024;
 
-const NO_ACCESS_LABEL: &str = "No access";
+const NO_ACCESS_LABEL: &str = "无访问权限";
 
 #[derive(Default)]
 struct UiStateHandles {
@@ -265,7 +265,7 @@ impl SharingDialog {
             email_editor: ctx.add_typed_action_view(|ctx| {
                 let mut view = WordBlockEditorView::new(
                     ctx,
-                    "Emails",
+                    "电子邮件",
                     13.,
                     vec![' ', ','],
                     EMAIL_CHIP_WIDTH,
@@ -954,7 +954,7 @@ impl SharingDialog {
             let window_id = ctx.window_id();
             let object_name = self.targeted_object_name(ctx);
             ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                let toast = DismissibleToast::default(format!("Copied link to {object_name}."));
+                let toast = DismissibleToast::default(format!("已复制 {object_name} 的链接。"));
                 toast_stack.add_ephemeral_toast(toast, window_id, ctx);
             });
         }
@@ -1014,7 +1014,7 @@ impl SharingDialog {
                 if !is_team_guest || !is_session {
                     items.push(MenuItem::Separator);
                     items.push(
-                        MenuItemFields::new("Remove")
+                        MenuItemFields::new("移除")
                             .with_on_select_action(SharingDialogAction::RemoveGuest)
                             .with_disabled(inherited_access)
                             .into_item(),
@@ -1451,7 +1451,7 @@ impl SharingDialog {
                 ButtonVariant::Accent,
                 self.ui_state_handles.invite_button.clone(),
             )
-            .with_centered_text_label("Invite".into())
+            .with_centered_text_label("邀请".into())
             .with_style(UiComponentStyles {
                 // Adjust the height to match the email editor's padding.
                 height: Some(style::ACL_ITEM_HEIGHT + 6.),
@@ -1494,7 +1494,7 @@ impl SharingDialog {
 
             if !validation_state.duplicate_guests.is_empty() {
                 let error_text = format!(
-                    "Already shared with {}",
+                    "已与 {} 共享",
                     validation_state.duplicate_guests.iter().format(", ")
                 );
                 contents.add_child(self.render_error_message(error_text, appearance));
@@ -1502,7 +1502,7 @@ impl SharingDialog {
 
             if !validation_state.invalid_emails.is_empty() {
                 let error_text = format!(
-                    "Invalid address: {}",
+                    "地址无效：{}",
                     validation_state.invalid_emails.iter().format(", ")
                 );
                 contents.add_child(self.render_error_message(error_text, appearance));
@@ -1789,7 +1789,7 @@ impl SharingDialog {
     fn render_access_header(&self, appearance: &Appearance) -> Box<dyn Element> {
         appearance
             .ui_builder()
-            .span("Who has access")
+            .span("谁有访问权限")
             .with_style(UiComponentStyles {
                 font_color: Some(style::label_text(appearance)),
                 font_size: Some(style::PRIMARY_TEXT_SIZE),
@@ -1819,7 +1819,7 @@ impl SharingDialog {
             .ui_builder()
             .wrappable_text(
                 format!(
-                    "Live session started at {} on {}",
+                    "实时会话开始于 {}，日期 {}",
                     started_at.format("%l:%M%P"),
                     started_at.format("%m/%d"),
                 ),
@@ -1854,7 +1854,7 @@ impl SharingDialog {
         }
 
         const PREFIX: &str = "You must have full access to manage permissions. You have ";
-        const SUFFIX: &str = " access.";
+        const SUFFIX: &str = " 权限。";
         let access_level_start = PREFIX.chars().count();
         let access_level_end = access_level_start + access_level.name().chars().count();
 
@@ -1884,8 +1884,8 @@ impl SharingDialog {
         let owner = self.owner(app)?;
 
         let tooltip_text = match owner {
-            Subject::Team(_) => "Team objects automatically grant full permissions to team members",
-            _ => "Owners always have full permissions on their objects",
+            Subject::Team(_) => "团队对象会自动向团队成员授予完整权限",
+            _ => "所有者始终拥有自己对象的完整权限",
         };
         let owner_access_label = render_with_detail_tooltip(
             tooltip_text,
@@ -2027,13 +2027,13 @@ impl SharingDialog {
         let is_ai_conversation = matches!(self.target, Some(ShareableObject::AIConversation(_)));
 
         let mut items = vec![
-            MenuItemFields::new("Only people invited")
+            MenuItemFields::new("仅受邀人员")
                 .with_on_select_action(SharingDialogAction::SetLinkPermissions(None))
                 .with_icon(Icon::Lock)
                 .with_disabled(inherited_access)
                 .into_item(),
             MenuItem::Separator,
-            MenuItemFields::new("Anyone with the link")
+            MenuItemFields::new("拥有链接的任何人")
                 .with_no_interaction_on_hover()
                 .with_icon(Icon::Globe)
                 .into_item(),
@@ -2208,13 +2208,13 @@ impl SharingDialog {
         let inherited_access = self.team_sharing_state.inheritance.is_some();
         let current_access_level = self.team_sharing_state.access_level;
         let items = [
-            MenuItemFields::new("Only invited teammates")
+            MenuItemFields::new("仅受邀团队成员")
                 .with_on_select_action(SharingDialogAction::SetTeamPermissions(None))
                 .with_icon(Icon::Lock)
                 .with_disabled(inherited_access)
                 .into_item(),
             MenuItem::Separator,
-            MenuItemFields::new("Teammates with the link")
+            MenuItemFields::new("拥有链接的团队成员")
                 .with_no_interaction_on_hover()
                 .with_icon(Icon::Users)
                 .into_item(),
@@ -2381,7 +2381,7 @@ impl SharingDialog {
             .with_padding_right(10.)
             .finish();
 
-        let name_text = subject.name(app).unwrap_or(Cow::Borrowed("Unknown"));
+        let name_text = subject.name(app).unwrap_or(Cow::Borrowed("未知"));
         let name_label = appearance
             .ui_builder()
             .span(name_text)
@@ -2446,10 +2446,7 @@ impl SharingDialog {
 
     fn download_qr_code(&self, ctx: &mut ViewContext<Self>) {
         let Some(url) = self.target_link(ctx) else {
-            self.show_ephemeral_toast(
-                DismissibleToast::error("Unable to download QR code.".to_string()),
-                ctx,
-            );
+            self.show_ephemeral_toast(DismissibleToast::error("无法下载二维码。".to_string()), ctx);
             return;
         };
 
@@ -2457,7 +2454,7 @@ impl SharingDialog {
             Ok(png) => png,
             Err(_) => {
                 self.show_ephemeral_toast(
-                    DismissibleToast::error("Unable to download QR code.".to_string()),
+                    DismissibleToast::error("无法下载二维码。".to_string()),
                     ctx,
                 );
                 return;
@@ -2484,14 +2481,10 @@ impl SharingDialog {
 
     fn handle_qr_write_result(&self, result: std::io::Result<()>, ctx: &mut ViewContext<Self>) {
         match result {
-            Ok(()) => self.show_ephemeral_toast(
-                DismissibleToast::success("QR code downloaded.".to_string()),
-                ctx,
-            ),
-            Err(_) => self.show_ephemeral_toast(
-                DismissibleToast::error("Unable to download QR code.".to_string()),
-                ctx,
-            ),
+            Ok(()) => self
+                .show_ephemeral_toast(DismissibleToast::success("二维码已下载。".to_string()), ctx),
+            Err(_) => self
+                .show_ephemeral_toast(DismissibleToast::error("无法下载二维码。".to_string()), ctx),
         }
     }
 
@@ -2604,7 +2597,7 @@ impl SharingDialog {
         .finish();
         let title = appearance
             .ui_builder()
-            .span("Share session QR code")
+            .span("共享会话二维码")
             .with_style(UiComponentStyles {
                 font_color: Some(foreground),
                 font_size: Some(style::HEADER_TEXT_SIZE),
@@ -2673,14 +2666,14 @@ impl SharingDialog {
                         self.render_footer_icon_button(
                             Icon::Copy,
                             SharingDialogAction::CopyLink,
-                            "Copy link",
+                            "复制链接",
                             self.ui_state_handles.qr_copy_button.clone(),
                             appearance,
                         ),
                         Container::new(self.render_footer_icon_button(
                             Icon::Download,
                             SharingDialogAction::DownloadQrCode,
-                            "Download QR code",
+                            "下载二维码",
                             self.ui_state_handles.qr_download_button.clone(),
                             appearance,
                         ))
@@ -2703,7 +2696,7 @@ impl SharingDialog {
             .unwrap_or_else(|| {
                 appearance
                     .ui_builder()
-                    .paragraph("Unable to create QR code for this session link.")
+                    .paragraph("无法为此会话链接创建二维码。")
                     .with_style(UiComponentStyles {
                         font_color: Some(style::acl_secondary_text_color(appearance)),
                         ..Default::default()
@@ -2757,7 +2750,7 @@ impl SharingDialog {
             .with_text_and_icon_label(
                 TextAndIcon::new(
                     TextAndIconAlignment::IconFirst,
-                    "Copy link",
+                    "复制链接",
                     Icon::Link.to_warpui_icon(copy_button_foreground),
                     MainAxisSize::Min,
                     MainAxisAlignment::SpaceBetween,
@@ -2788,7 +2781,7 @@ impl SharingDialog {
             self.render_footer_icon_button(
                 Icon::QrCode,
                 SharingDialogAction::ShowQrCode,
-                "Show QR code",
+                "显示二维码",
                 self.ui_state_handles.qr_code_button.clone(),
                 appearance,
             )

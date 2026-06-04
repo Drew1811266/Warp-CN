@@ -54,17 +54,13 @@ where
     F4: Fn(&mut EventContext, Vector2F) + 'static,
 {
     let callout_bg = callout_background_fill(appearance).into_solid();
-    let title = Text::new(
-        "Create your first tab config",
-        appearance.ui_font_family(),
-        16.,
-    )
-    .with_color(callout_title_color(appearance))
-    .with_style(Properties::default().weight(Weight::Bold))
-    .finish();
+    let title = Text::new("创建你的第一个标签页配置", appearance.ui_font_family(), 16.)
+        .with_color(callout_title_color(appearance))
+        .with_style(Properties::default().weight(Weight::Bold))
+        .finish();
 
     let description = Text::new(
-        "Set up a reusable starting point for your tabs. Pick a repo, choose a session type, and optionally attach a worktree. Use it whenever you want to open a tab with this setup.",
+        "为标签页设置可复用的起点。选择仓库、会话类型，并可选附加 worktree。之后想用这套设置打开标签页时即可直接使用。",
         appearance.ui_font_family(),
         14.,
     )

@@ -130,7 +130,7 @@ impl UsageHistoryModel {
                         }
                     }
                     Err(e) => {
-                        report_error!(e.context("Failed to fetch conversation usage"));
+                        report_error!(e.context("无法获取对话使用量"));
                     }
                 }
                 ctx.notify();

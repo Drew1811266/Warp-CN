@@ -57,7 +57,7 @@ impl AwsBedrockCredentialsErrorView {
     ) -> Self {
         // Run button
         let run_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("Refresh AWS Credentials", PrimaryTheme)
+            ActionButton::new("刷新 AWS 凭据", PrimaryTheme)
                 .with_size(ButtonSize::InlineActionHeader)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(AwsBedrockCredentialsErrorAction::RunLoginCommand)
@@ -66,7 +66,7 @@ impl AwsBedrockCredentialsErrorView {
 
         // Configure button
         let configure_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("Configure", NakedTheme)
+            ActionButton::new("配置", NakedTheme)
                 .with_size(ButtonSize::InlineActionHeader)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(AwsBedrockCredentialsErrorAction::Configure)
@@ -111,7 +111,7 @@ impl View for AwsBedrockCredentialsErrorView {
                 .with_cross_axis_alignment(CrossAxisAlignment::Center)
                 .with_child(
                     Text::new(
-                        format!("Running `{}`...", self.login_command),
+                        format!("正在运行 `{}`...", self.login_command),
                         appearance.ui_font_family(),
                         14.,
                     )
@@ -137,21 +137,16 @@ impl View for AwsBedrockCredentialsErrorView {
         };
 
         let make_alert_text = || {
-            Text::new(
-                "AWS credentials expired or missing",
-                appearance.ui_font_family(),
-                14.,
-            )
-            .with_color(error_color(theme))
-            .with_selectable(false)
-            .finish()
+            Text::new("AWS 凭据已过期或缺失", appearance.ui_font_family(), 14.)
+                .with_color(error_color(theme))
+                .with_selectable(false)
+                .finish()
         };
 
         let make_detail_text = || {
             Text::new(
                 format!(
-                    "Failed to authenticate with AWS Bedrock when using {}. \
-                     Run `{}` to refresh credentials.",
+                    "使用 {} 时无法通过 AWS Bedrock 身份验证。运行 `{}` 以刷新凭据。",
                     self.model_name, self.login_command
                 ),
                 appearance.ui_font_family(),
@@ -187,7 +182,7 @@ impl View for AwsBedrockCredentialsErrorView {
             .finish();
 
             let checkbox_label = Text::new(
-                "Always run automatically",
+                "始终自动运行",
                 appearance.ui_font_family(),
                 appearance.monospace_font_size() - 1.,
             )

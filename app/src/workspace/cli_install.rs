@@ -29,7 +29,7 @@ fn create_symlink_with_admin(source: &Path, target: &Path) -> Result<()> {
 
     // Use osascript to run the ln command with admin privileges, with a custom prompt
     let script = format!(
-        "do shell script \"ln -sf {escaped_source} {escaped_target}\" with prompt \"Warp needs administrator privileges to install the command in /usr/local/bin.\" with administrator privileges"
+        "do shell script \"ln -sf {escaped_source} {escaped_target}\" with prompt \"Warp 需要管理员权限才能将命令安装到 /usr/local/bin。\" with administrator privileges"
     );
 
     log::debug!("Creating symlink with admin privileges");
@@ -38,16 +38,14 @@ fn create_symlink_with_admin(source: &Path, target: &Path) -> Result<()> {
         .arg("-e")
         .arg(&script)
         .output()
-        .context("Failed to execute osascript for admin privileges")?;
+        .context("无法通过 osascript 获取管理员权限")?;
 
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
         if stderr.contains("User canceled") || stderr.contains("cancelled") {
-            return Err(anyhow!("Installation cancelled by user."));
+            return Err(anyhow!("用户已取消安装。"));
         }
-        return Err(anyhow!(
-            "Failed to create symlink with admin privileges: {stderr}"
-        ));
+        return Err(anyhow!("使用管理员权限创建符号链接失败：{stderr}"));
     }
 
     Ok(())
@@ -65,7 +63,7 @@ fn remove_file_with_admin(target: &Path) -> Result<()> {
     let escaped_target = ShellFamily::Posix.shell_escape(target_str);
 
     let script = format!(
-        "do shell script \"rm {escaped_target}\" with prompt \"Warp needs administrator privileges to uninstall the command from /usr/local/bin.\" with administrator privileges"
+        "do shell script \"rm {escaped_target}\" with prompt \"Warp 需要管理员权限才能从 /usr/local/bin 卸载该命令。\" with administrator privileges"
     );
 
     log::debug!("Removing file with admin privileges");
@@ -74,16 +72,14 @@ fn remove_file_with_admin(target: &Path) -> Result<()> {
         .arg("-e")
         .arg(&script)
         .output()
-        .context("Failed to execute osascript for admin privileges")?;
+        .context("无法通过 osascript 获取管理员权限")?;
 
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
         if stderr.contains("User canceled") || stderr.contains("cancelled") {
-            return Err(anyhow!("Uninstallation cancelled by user."));
+            return Err(anyhow!("用户已取消卸载。"));
         }
-        return Err(anyhow!(
-            "Failed to remove file with admin privileges: {stderr}"
-        ));
+        return Err(anyhow!("使用管理员权限移除文件失败：{stderr}"));
     }
 
     Ok(())
@@ -98,13 +94,12 @@ fn remove_file_with_admin(target: &Path) -> Result<()> {
 /// 4. Handles existing installations and edge cases
 pub fn install_cli() -> Result<()> {
     let cli_path = cli_install_target_path();
-    let current_binary =
-        std::env::current_exe().context("Failed to get current executable path")?;
+    let current_binary = std::env::current_exe().context("无法获取当前可执行文件路径")?;
 
     // Check if target file exists and handle conflicts
     if cli_path.exists() && !cli_path.is_symlink() {
         return Err(anyhow!(
-            "Cannot install: {:?} exists but is not a symlink. Please remove it manually first.",
+            "无法安装：{:?} 已存在但不是符号链接。请先手动移除。",
             cli_path
         ));
     }
@@ -124,7 +119,7 @@ pub fn install_cli() -> Result<()> {
             log::debug!("Symlink creation failed, trying with admin privileges");
 
             create_symlink_with_admin(&current_binary, &cli_path)
-                .context("Failed to create symlink even with admin privileges")?;
+                .context("即使使用管理员权限也无法创建符号链接")?;
 
             log::debug!("CLI installed successfully with admin privileges");
         }
@@ -149,7 +144,7 @@ pub fn uninstall_cli() -> Result<()> {
     // Safety check: verify it's actually a symlink before removing
     if !cli_path.is_symlink() {
         return Err(anyhow!(
-            "Cannot uninstall: {:?} exists but is not a symlink. Please remove it manually.",
+            "无法卸载：{:?} 已存在但不是符号链接。请手动移除。",
             cli_path
         ));
     }
@@ -164,8 +159,7 @@ pub fn uninstall_cli() -> Result<()> {
         Err(_) => {
             log::debug!("File removal failed, trying with admin privileges");
 
-            remove_file_with_admin(&cli_path)
-                .context("Failed to remove symlink even with admin privileges")?;
+            remove_file_with_admin(&cli_path).context("即使使用管理员权限也无法移除符号链接")?;
 
             log::debug!("CLI uninstalled successfully with admin privileges");
         }

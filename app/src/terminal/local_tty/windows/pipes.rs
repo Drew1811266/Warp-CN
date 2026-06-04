@@ -59,11 +59,11 @@ static PIPE_DIRECTORY: LazyLock<windows::core::Result<ShareableHandle>> =
 #[derive(Debug, thiserror::Error)]
 #[allow(clippy::enum_variant_names)]
 pub enum CreatePipeError {
-    #[error("Failed to open named pipe device: {0:#}")]
+    #[error("打开命名管道设备失败：{0:#}")]
     PipeDeviceOpen(#[source] windows::core::Error),
-    #[error("Failed to create pipe: {0:#}")]
+    #[error("创建管道失败：{0:#}")]
     CreatePipe(#[source] windows::core::Error),
-    #[error("Failed to create client-side handle: {0:#}")]
+    #[error("创建客户端句柄失败：{0:#}")]
     ClientHandleCreation(#[source] windows::core::Error),
 }
 

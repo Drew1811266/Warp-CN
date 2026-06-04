@@ -76,7 +76,7 @@ struct ModelListItem {
 
 impl TableFormat for ModelListItem {
     fn header() -> Vec<Cell> {
-        vec![Cell::new("MODEL ID")]
+        vec![Cell::new("模型 ID")]
     }
 
     fn row(&self) -> Vec<Cell> {

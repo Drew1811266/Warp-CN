@@ -118,7 +118,7 @@ impl CloudSetupGuideView {
         );
 
         let visit_oz_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Visit Oz", SecondaryTheme)
+            ActionButton::new("访问 Oz", SecondaryTheme)
                 .on_click(|ctx| ctx.dispatch_typed_action(CloudSetupGuideAction::VisitOz))
         });
 
@@ -146,7 +146,7 @@ impl CloudSetupGuideView {
         let mut header_container = Flex::column().with_spacing(8.);
 
         let title = Text::new(
-            "Getting started with Oz cloud agents",
+            "开始使用 Oz 云端 Agent",
             appearance.ui_font_family(),
             title_font_size,
         )
@@ -156,7 +156,7 @@ impl CloudSetupGuideView {
         header_container.add_child(title);
 
         let subtitle = Text::new(
-            "Start Oz cloud agents directly in Warp from an integration (Linear, Slack), with an event (GitHub, built-in schedule), or programmatically with the Oz SDK or CLI.",
+            "可以通过集成（Linear、Slack）、事件（GitHub、内置计划）或使用 Oz SDK/CLI 以编程方式，直接在 Warp 中启动 Oz 云端 Agent。",
             appearance.ui_font_family(),
             subtitle_font_size,
         )
@@ -167,19 +167,15 @@ impl CloudSetupGuideView {
         // Documentation link line.
         let docs_line = Flex::row()
             .with_child(
-                Text::new_inline(
-                    "Check out the ",
-                    appearance.ui_font_family(),
-                    subtitle_font_size,
-                )
-                .with_color(theme.nonactive_ui_text_color().into_solid())
-                .finish(),
+                Text::new_inline("查看 ", appearance.ui_font_family(), subtitle_font_size)
+                    .with_color(theme.nonactive_ui_text_color().into_solid())
+                    .finish(),
             )
             .with_child(
                 appearance
                     .ui_builder()
                     .link(
-                        "Oz documentation".to_string(),
+                        "Oz 文档".to_string(),
                         None,
                         Some(Box::new(|ctx| {
                             ctx.dispatch_typed_action(CloudSetupGuideAction::OpenDocs {
@@ -197,7 +193,7 @@ impl CloudSetupGuideView {
             )
             .with_child(
                 Text::new_inline(
-                    " to learn more.",
+                    " 以了解更多。",
                     appearance.ui_font_family(),
                     subtitle_font_size,
                 )
@@ -215,7 +211,7 @@ impl CloudSetupGuideView {
         let font_size = 16.;
 
         let text = Text::new_inline(
-            "Quick start: Visit oz.warp.dev for a UI-based setup experience.",
+            "快速开始：访问 oz.warp.dev 使用基于 UI 的设置体验。",
             appearance.ui_font_family(),
             font_size,
         )
@@ -249,7 +245,7 @@ impl CloudSetupGuideView {
         let font_size = 16.;
 
         Text::new(
-            "Manual setup: Create a Slack or Linear integration with the Oz CLI",
+            "手动设置：使用 Oz CLI 创建 Slack 或 Linear 集成",
             appearance.ui_font_family(),
             font_size,
         )
@@ -347,39 +343,36 @@ impl CloudSetupGuideView {
         let Some((workflow, setup_step)) = (match code {
             CREATE_ENV_SLASH_CMD => Some((
                 WorkflowType::Local(
-                    Workflow::new("Create Environment", CREATE_ENV_SLASH_CMD).with_arguments(vec![
-                        Argument::new("github link or local filepath", ArgumentType::Text)
-                            .with_description("GitHub link or local filepath to the repository"),
+                    Workflow::new("创建环境", CREATE_ENV_SLASH_CMD).with_arguments(vec![
+                        Argument::new("GitHub 链接或本地文件路径", ArgumentType::Text)
+                            .with_description("仓库的 GitHub 链接或本地文件路径"),
                     ]),
                 ),
                 SetupGuideStep::CreateEnvironment,
             )),
             CREATE_ENV_CLI_CMD => Some((
                 WorkflowType::Local(
-                    Workflow::new("Create Environment (CLI)", CREATE_ENV_CLI_CMD).with_arguments(
-                        vec![
-                            Argument::new("NAME", ArgumentType::Text)
-                                .with_description("Name for the environment"),
-                            Argument::new("DOCKER_IMAGE", ArgumentType::Text)
-                                .with_description("Docker image to use for the environment"),
-                        ],
-                    ),
+                    Workflow::new("创建环境（CLI）", CREATE_ENV_CLI_CMD).with_arguments(vec![
+                        Argument::new("NAME", ArgumentType::Text).with_description("环境名称"),
+                        Argument::new("DOCKER_IMAGE", ArgumentType::Text)
+                            .with_description("环境使用的 Docker 镜像"),
+                    ]),
                 ),
                 SetupGuideStep::CreateEnvironmentCli,
             )),
             CREATE_SLACK_INTEGRATION_CMD => Some((
                 WorkflowType::Local(
-                    Workflow::new("Create Slack Integration", CREATE_SLACK_INTEGRATION_CMD)
+                    Workflow::new("创建 Slack 集成", CREATE_SLACK_INTEGRATION_CMD)
                         .with_arguments(vec![Argument::new("environment_id", ArgumentType::Text)
-                            .with_description("ID of the environment to integrate with")]),
+                            .with_description("要集成的环境 ID")]),
                 ),
                 SetupGuideStep::CreateSlackIntegration,
             )),
             CREATE_LINEAR_INTEGRATION_CMD => Some((
                 WorkflowType::Local(
-                    Workflow::new("Create Linear Integration", CREATE_LINEAR_INTEGRATION_CMD)
+                    Workflow::new("创建 Linear 集成", CREATE_LINEAR_INTEGRATION_CMD)
                         .with_arguments(vec![Argument::new("environment_id", ArgumentType::Text)
-                            .with_description("ID of the environment to integrate with")]),
+                            .with_description("要集成的环境 ID")]),
                 ),
                 SetupGuideStep::CreateLinearIntegration,
             )),
@@ -432,7 +425,7 @@ impl CloudSetupGuideView {
             .with_child(Self::render_step_number(1, appearance))
             .with_child(
                 Text::new(
-                    "Create an environment",
+                    "创建环境",
                     appearance.ui_font_family(),
                     step_title_font_size,
                 )
@@ -444,7 +437,7 @@ impl CloudSetupGuideView {
 
         let description = Container::new(
             Text::new(
-                "First, set up an environment to create an integration.",
+                "请先设置一个环境，然后再创建集成。",
                 appearance.ui_font_family(),
                 step_desc_font_size,
             )
@@ -455,8 +448,8 @@ impl CloudSetupGuideView {
         .finish();
 
         let sub_description = Container::new(Self::render_description_with_link(
-            "Use Warp's environment setup command to have an agent help you through it. ",
-            "Visit docs",
+            "使用 Warp 的环境设置命令，让 Agent 协助你完成。",
+            "查看文档",
             self.env_docs_link_mouse_state.clone(),
             SetupGuideDocs::Environment,
             appearance,
@@ -475,7 +468,7 @@ impl CloudSetupGuideView {
 
         let or_text = Container::new(
             Text::new(
-                "Or, supply your own existing docker image.",
+                "或者，提供你自己的现有 Docker 镜像。",
                 appearance.ui_font_family(),
                 step_desc_font_size,
             )
@@ -517,7 +510,7 @@ impl CloudSetupGuideView {
             .with_child(Self::render_step_number(2, appearance))
             .with_child(
                 Text::new(
-                    "Create an integration",
+                    "创建集成",
                     appearance.ui_font_family(),
                     step_title_font_size,
                 )
@@ -528,8 +521,8 @@ impl CloudSetupGuideView {
             .finish();
 
         let sub_description = Container::new(Self::render_description_with_link(
-            "Integrate Slack or Linear to assign Warp's Agent tasks with @Warp. ",
-            "Visit docs",
+            "集成 Slack 或 Linear，以通过 @Warp 分配 Warp Agent 任务。",
+            "查看文档",
             self.integration_docs_link_mouse_state.clone(),
             SetupGuideDocs::Integration,
             appearance,

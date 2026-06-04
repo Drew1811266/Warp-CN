@@ -34,7 +34,7 @@ impl EnvVarCollectionSearchItem {
                 env_var_collection
                     .title
                     .clone()
-                    .unwrap_or("Untitled".to_owned()),
+                    .unwrap_or("未命名".to_owned()),
                 true,
             )
             .with_style(UiComponentStyles {
@@ -92,7 +92,7 @@ impl SearchItem for EnvVarCollectionSearchItem {
             env_var_collection
                 .title
                 .clone()
-                .unwrap_or("Untitled".to_owned()),
+                .unwrap_or("未命名".to_owned()),
             appearance.ui_font_family(),
             appearance.monospace_font_size(),
         )
@@ -216,11 +216,11 @@ impl SearchItem for EnvVarCollectionSearchItem {
         let env_var_collection = self.env_var_collection.model().string_model.clone();
 
         format!(
-            "Environment Variables: {}",
+            "环境变量：{}",
             env_var_collection
                 .title
                 .clone()
-                .unwrap_or("Untitled".to_owned())
+                .unwrap_or("未命名".to_owned())
         )
     }
 }

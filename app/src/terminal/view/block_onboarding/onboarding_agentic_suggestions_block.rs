@@ -145,14 +145,14 @@ impl OnboardingAgenticSuggestionsBlock {
         let matrix_save_directory = themes_dir()
             .into_os_string()
             .into_string()
-            .unwrap_or("the Warp themes directory.".to_string());
+            .unwrap_or("Warp 主题目录。".to_string());
 
         let agent_suggestions = vec![
             (
                 AgenticSuggestionsContent {
-                    title: "Create a snake game in Python from scratch".to_string(),
-                    description: "Have Agent Mode walk you through creating a snake game from end-to-end".to_string(),
-                    prompt: "Make a snake game for playing in the terminal using python. Use the code tool and requested commands to do it for me. Before deciding on a solution, make sure I have all the prerequisites installed. At the end of our conversation, the app should run without any additional steps.".to_string(),
+                    title: "从零开始用 Python 创建贪吃蛇游戏".to_string(),
+                    description: "让 Agent Mode 带你端到端创建贪吃蛇游戏".to_string(),
+                    prompt: "用 Python 制作一个可在终端中游玩的贪吃蛇游戏。请使用代码工具和请求命令来帮我完成。决定方案前，请确认我已安装所有必要前置条件。对话结束时，这个应用应无需额外步骤即可运行。".to_string(),
                     chip_type: OnboardingChipType::PythonSnakeGame,
                     icon: UIIcon::Icon::GamingPad,
                 },
@@ -160,9 +160,9 @@ impl OnboardingAgenticSuggestionsBlock {
             ),
             (
                 AgenticSuggestionsContent {
-                    title: format!("Explore git history in {git_repo_trimmed}"),
-                    description: "Work with Agent Mode to understand recent changes to a git repository".to_string(),
-                    prompt: format!("Explore my git history in {git_repo_path} and provide me a summary."),
+                    title: format!("浏览 {git_repo_trimmed} 的 Git 历史"),
+                    description: "与 Agent Mode 协作了解 Git 仓库的近期变更".to_string(),
+                    prompt: format!("探索 {git_repo_path} 中的 git 历史，并为我提供摘要。"),
                     chip_type: OnboardingChipType::ExploreGitHistory,
                     icon: UIIcon::Icon::BookOpen,
                 },
@@ -170,8 +170,8 @@ impl OnboardingAgenticSuggestionsBlock {
             ),
             (
                 AgenticSuggestionsContent {
-                    title: "Create a Matrix-styled custom theme".to_string(),
-                    description: "Make your terminal look like you entered the Matrix".to_string(),
+                    title: "创建 Matrix 风格的自定义主题".to_string(),
+                    description: "让你的终端看起来像进入了 Matrix".to_string(),
                     prompt: format!("First check if {matrix_save_directory} exists, and create this path if it doesn't already exist. Then create a matrix theme for my Warp terminal without a background image field, following exact YAML structure on the warp website without any extra or missing fields. Call it matrix.yaml and save it in the directory we previously created. Once you've verified that the theme is correct and ready to be applied, let me know by only saying 'The matrix theme is now available at <path>.'."),
                     chip_type: OnboardingChipType::MatrixThemePicker,
                     icon: UIIcon::Icon::PaintBrush,
@@ -180,9 +180,9 @@ impl OnboardingAgenticSuggestionsBlock {
             ),
             (
                 AgenticSuggestionsContent {
-                    title: "Something else?".to_string(),
-                    description: "Pair with an Agent to accomplish another task".to_string(),
-                    prompt: "What can you help with me on?".to_string(),
+                    title: "还有其他事？".to_string(),
+                    description: "与 Agent 协作完成其他任务".to_string(),
+                    prompt: "你可以帮我做什么？".to_string(),
                     chip_type: OnboardingChipType::Other,
                     icon: UIIcon::Icon::Stars,
                 },
@@ -351,14 +351,11 @@ impl OnboardingAgenticSuggestionsBlock {
     }
 
     fn get_git_repo_name(shell_type: ShellType, git_repo_path: Option<String>) -> String {
-        Self::split_path(
-            &git_repo_path.unwrap_or("my repository".to_string()),
-            shell_type,
-        )
-        .into_iter()
-        .rfind(|s| *s != ".." && *s != "." && !s.is_empty())
-        .unwrap_or_default()
-        .to_string()
+        Self::split_path(&git_repo_path.unwrap_or("我的仓库".to_string()), shell_type)
+            .into_iter()
+            .rfind(|s| *s != ".." && *s != "." && !s.is_empty())
+            .unwrap_or_default()
+            .to_string()
     }
 
     pub fn find_most_used_cloud_tool(
@@ -581,10 +578,9 @@ impl OnboardingAgenticSuggestionsBlock {
         let font_size = appearance.monospace_font_size();
         let font_color = current_theme.main_text_color(current_theme.background());
 
-        const WELCOME_TEXT_LINE_ONE: &str = "Welcome to Warp!";
-        const WELCOME_TEXT_LINE_TWO_PART_ONE: &str =
-            "Here are a few examples of how to leverage the power of AI in your terminal using";
-        const WELCOME_TEXT_LINE_TWO_PART_TWO: &str = " Agent Mode";
+        const WELCOME_TEXT_LINE_ONE: &str = "欢迎使用 Warp！";
+        const WELCOME_TEXT_LINE_TWO_PART_ONE: &str = "以下是几个在终端中使用 AI 能力的示例，使用";
+        const WELCOME_TEXT_LINE_TWO_PART_TWO: &str = " Agent 模式";
 
         Flex::column()
             .with_children(vec![
@@ -642,7 +638,7 @@ impl OnboardingAgenticSuggestionsBlock {
                     )
                     .with_child(
                         Text::new(
-                            "Thinking...".to_owned(),
+                            "正在思考...".to_owned(),
                             appearance.ui_font_family(),
                             appearance.monospace_font_size(),
                         )

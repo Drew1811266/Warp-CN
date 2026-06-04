@@ -41,21 +41,19 @@ use crate::workspaces::user_workspaces::UserWorkspaces;
 #[derive(Debug, thiserror::Error)]
 pub(crate) enum ShareSessionError {
     /// Connection to the session-sharing server failed.
-    #[error("Internal error")]
+    #[error("内部错误")]
     Internal(#[source] Arc<anyhow::Error>),
     /// The server rejected the session-sharing request.
     #[error("{0}")]
     Failed(String),
     /// Session sharing is disabled for this user or team.
-    #[error(
-        "Session sharing is not enabled. This is likely because an administrator has disabled session sharing for your team."
-    )]
+    #[error("未启用会话共享。这可能是因为管理员为你的团队禁用了会话共享。")]
     Disabled,
     /// The session-sharing request timed out.
-    #[error("Timed out waiting for session sharing to start")]
+    #[error("等待会话共享启动超时")]
     Timeout,
     /// The session-sharing channel was dropped before completing.
-    #[error("Session sharing was interrupted")]
+    #[error("会话共享已中断")]
     Interrupted,
 }
 
@@ -584,7 +582,7 @@ impl TerminalDriver {
                 }
                 Err(_timeout) => {
                     log::error!(
-                        "Timed out waiting for session sharing to start after {}s",
+                        "等待会话共享启动超时，已等待 {} 秒",
                         TERMINAL_SESSION_SHARE_DELAY.as_secs()
                     );
                     Err(AgentDriverError::ShareSessionFailed {

@@ -237,16 +237,16 @@ fn write_get_output_to<W: std::io::Write>(
             writeln!(&mut *output)?;
         }
         OutputFormat::Pretty => {
-            writeln!(&mut *output, "Artifact UID: {}", output_record.artifact_uid)?;
+            writeln!(&mut *output, "Artifact UID：{}", output_record.artifact_uid)?;
             writeln!(
                 &mut *output,
-                "Artifact type: {}",
+                "Artifact 类型：{}",
                 output_record.artifact_type
             )?;
-            writeln!(&mut *output, "Created at: {}", output_record.created_at)?;
-            writeln!(&mut *output, "Download URL: {}", output_record.download_url)?;
-            writeln!(&mut *output, "Expires at: {}", output_record.expires_at)?;
-            writeln!(&mut *output, "Content type: {}", output_record.content_type)?;
+            writeln!(&mut *output, "创建时间：{}", output_record.created_at)?;
+            writeln!(&mut *output, "下载 URL：{}", output_record.download_url)?;
+            writeln!(&mut *output, "过期时间：{}", output_record.expires_at)?;
+            writeln!(&mut *output, "内容类型：{}", output_record.content_type)?;
             if let Some(filepath) = output_record.filepath {
                 writeln!(&mut *output, "Filepath: {filepath}")?;
             }
@@ -257,7 +257,7 @@ fn write_get_output_to<W: std::io::Write>(
                 writeln!(&mut *output, "Description: {description}")?;
             }
             if let Some(size_bytes) = output_record.size_bytes {
-                writeln!(&mut *output, "Size bytes: {size_bytes}")?;
+                writeln!(&mut *output, "大小（字节）：{size_bytes}")?;
             }
         }
         OutputFormat::Text => {
@@ -308,11 +308,11 @@ fn write_download_output_to<W: std::io::Write>(
             writeln!(&mut *output)?;
         }
         OutputFormat::Pretty => {
-            writeln!(&mut *output, "Artifact downloaded")?;
-            writeln!(&mut *output, "Artifact UID: {}", output_record.artifact_uid)?;
+            writeln!(&mut *output, "Artifact 已下载")?;
+            writeln!(&mut *output, "Artifact UID：{}", output_record.artifact_uid)?;
             writeln!(
                 &mut *output,
-                "Artifact type: {}",
+                "Artifact 类型：{}",
                 output_record.artifact_type
             )?;
             writeln!(&mut *output, "Path: {}", output_record.path.display())?;
@@ -360,18 +360,18 @@ fn write_upload_output_to<W: std::io::Write>(
             writeln!(&mut *output)?;
         }
         OutputFormat::Pretty => {
-            writeln!(&mut *output, "Artifact uploaded")?;
-            writeln!(&mut *output, "Artifact UID: {}", output_record.artifact_uid)?;
+            writeln!(&mut *output, "Artifact 已上传")?;
+            writeln!(&mut *output, "Artifact UID：{}", output_record.artifact_uid)?;
             writeln!(&mut *output, "Filepath: {}", output_record.filepath)?;
             writeln!(
                 &mut *output,
                 "Description: {}",
                 output_record.description.as_deref().unwrap_or("")
             )?;
-            writeln!(&mut *output, "MIME type: {}", output_record.mime_type)?;
+            writeln!(&mut *output, "MIME 类型：{}", output_record.mime_type)?;
             writeln!(
                 &mut *output,
-                "Size bytes: {}",
+                "大小（字节）：{}",
                 output_record
                     .size_bytes
                     .map(|size| size.to_string())

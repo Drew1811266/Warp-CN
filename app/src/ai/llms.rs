@@ -46,7 +46,7 @@ pub fn should_show_bedrock_icon_for_model(llm: &LLMInfo, app: &AppContext) -> bo
 /// Note: this key used to store a single [`AvailableLLMs`]
 /// but was migrated to store a full [`ModelsByFeature`].
 pub const MODELS_BY_FEATURE_CACHE_KEY: &str = "AvailableLLMs";
-const CUSTOM_ENDPOINT_USAGE_FALLBACK_LABEL: &str = "Custom endpoint";
+const CUSTOM_ENDPOINT_USAGE_FALLBACK_LABEL: &str = "自定义端点";
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LLMUsageMetadata {
@@ -67,13 +67,11 @@ impl DisableReason {
     /// Returns a user-facing tooltip explaining why the model is disabled.
     pub fn tooltip_text(&self) -> &'static str {
         match self {
-            DisableReason::AdminDisabled => "This model has been disabled by your team admin.",
-            DisableReason::OutOfRequests => "Please upgrade your plan to make more requests.",
-            DisableReason::ProviderOutage => {
-                "This model is temporarily unavailable due to a provider outage."
-            }
-            DisableReason::RequiresUpgrade => "Please upgrade your plan to access this model.",
-            DisableReason::Unavailable => "This model is unavailable.",
+            DisableReason::AdminDisabled => "此模型已被团队管理员停用。",
+            DisableReason::OutOfRequests => "请升级方案以发起更多请求。",
+            DisableReason::ProviderOutage => "由于提供商服务中断，此模型暂时不可用。",
+            DisableReason::RequiresUpgrade => "请升级方案以访问此模型。",
+            DisableReason::Unavailable => "此模型不可用。",
         }
     }
 
@@ -466,8 +464,8 @@ impl Default for ModelsByFeature {
             agent_mode: AvailableLLMs {
                 default_id: "auto".to_owned().into(),
                 choices: vec![LLMInfo {
-                    display_name: "auto (cost-efficient)".to_owned(),
-                    base_model_name: "auto (cost-efficient)".to_owned(),
+                    display_name: "自动（节省成本）".to_owned(),
+                    base_model_name: "自动（节省成本）".to_owned(),
                     id: "auto".to_owned().into(),
                     reasoning_level: None,
                     usage_metadata: LLMUsageMetadata {
@@ -488,8 +486,8 @@ impl Default for ModelsByFeature {
             coding: AvailableLLMs {
                 default_id: "auto".to_owned().into(),
                 choices: vec![LLMInfo {
-                    display_name: "auto (responsive)".to_owned(),
-                    base_model_name: "auto (responsive)".to_owned(),
+                    display_name: "自动（响应更快）".to_owned(),
+                    base_model_name: "自动（响应更快）".to_owned(),
                     id: "auto".to_owned().into(),
                     reasoning_level: None,
                     usage_metadata: LLMUsageMetadata {
@@ -1341,7 +1339,7 @@ fn custom_llm_info_from(endpoint: &CustomEndpoint, model: &CustomEndpointModel) 
             request_multiplier: 1,
             credit_multiplier: None,
         },
-        description: Some(format!("Custom · {}", endpoint.name)),
+        description: Some(format!("自定义 · {}", endpoint.name)),
         disable_reason: None,
         vision_supported: true,
         spec: None,

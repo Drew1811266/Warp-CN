@@ -82,18 +82,18 @@ use crate::workspaces::workspace::{
 
 const TEAM_MEMBERS_HEADER_POSITION_ID: &str = "team_settings:team_members_header";
 // Styling for team create page
-const TEAM_NAME_EDITOR_PLACEHOLDER_TEXT: &str = "Team name";
+const TEAM_NAME_EDITOR_PLACEHOLDER_TEXT: &str = "团队名称";
 const CREATE_TEAM_BUTTON_LEFT_PADDING: f32 = 10.;
-const CREATE_TEAM_DESCRIPTION: &str = "When you create a team, you can collaborate on agent-driven development by sharing cloud agent runs, environments, automations, and artifacts. You can also create a shared knowledge store for teammates and agents alike.";
+const CREATE_TEAM_DESCRIPTION: &str = "创建团队后，你可以通过共享云端 Agent 运行记录、环境、自动化和产物来协作进行 Agent 驱动开发。你还可以为团队成员和 Agent 创建共享知识库。";
 
 // Styling for team management page
-const LEAVE_TEAM_BUTTON_LABEL: &str = "Leave team";
-const DELETE_TEAM_BUTTON_LABEL: &str = "Delete team";
-const CREATE_TEAM_BUTTON_LABEL: &str = "Create";
-const APPROVE_DOMAINS_PLACEHOLDER: &str = "Domains, comma separated";
-const EMAILS_PLACEHOLDER: &str = "Emails, comma separated";
-const APPROVE_DOMAINS_BUTTON_LABEL: &str = "Set";
-const SEND_EMAIL_INVITES_BUTTON_LABEL: &str = "Invite";
+const LEAVE_TEAM_BUTTON_LABEL: &str = "离开团队";
+const DELETE_TEAM_BUTTON_LABEL: &str = "删除团队";
+const CREATE_TEAM_BUTTON_LABEL: &str = "创建";
+const APPROVE_DOMAINS_PLACEHOLDER: &str = "域名，用逗号分隔";
+const EMAILS_PLACEHOLDER: &str = "邮箱，用逗号分隔";
+const APPROVE_DOMAINS_BUTTON_LABEL: &str = "设置";
+const SEND_EMAIL_INVITES_BUTTON_LABEL: &str = "邀请";
 const BUTTON_WIDTH: f32 = 82.;
 const BUTTON_HEIGHT: f32 = 40.;
 const COPY_LINK_LEFT_PADDING: f32 = 7.;
@@ -108,18 +108,17 @@ const SUBSUBSECTION_HEADER_FONT_SIZE: f32 = 14.;
 const OWNER_STATE_CHIP_ACCENT_OPACITY: u8 = 30;
 
 const INVITE_LINK_PREFIX: &str = "/team/";
-const INVALID_DOMAINS_INSTRUCTIONS: &str =
-    "Some of the provided domains are invalid, or have already been added.";
+const INVALID_DOMAINS_INSTRUCTIONS: &str = "部分域名无效，或已经添加。";
 
-const INVITE_LINK_TOGGLE_INSTRUCTIONS: &str = "As an admin, you can choose whether to enable or disable the ability for team members to invite others by invitation link.";
+const INVITE_LINK_TOGGLE_INSTRUCTIONS: &str =
+    "作为管理员，你可以选择是否允许团队成员通过邀请链接邀请其他人。";
 const INVITE_LINK_DOMAIN_RESTRICTIONS_INSTRUCTIONS: &str =
-    "Restrict by domain — only allow users with emails at specific domains to join your team through the invite link.";
+    "按域名限制：只允许特定域名邮箱的用户通过邀请链接加入你的团队。";
 
-const INVITE_BY_EMAIL_EXPIRY_INSTRUCTIONS: &str = "Email invitations are valid for 7 days.";
-const INVALID_EMAILS_INSTRUCTIONS: &str =
-    "Some of the provided email addresses are invalid, already invited, or members of the team.";
+const INVITE_BY_EMAIL_EXPIRY_INSTRUCTIONS: &str = "邮件邀请有效期为 7 天。";
+const INVALID_EMAILS_INSTRUCTIONS: &str = "部分邮箱地址无效、已邀请，或已经是团队成员。";
 
-const OFFLINE_TEXT: &str = "You are offline.";
+const OFFLINE_TEXT: &str = "你当前离线。";
 
 const MAX_CHIP_WIDTH: f32 = 280.;
 
@@ -241,24 +240,24 @@ impl From<&TeamsPageAction> for LoginGatedFeature {
     fn from(val: &TeamsPageAction) -> LoginGatedFeature {
         use TeamsPageAction::*;
         match val {
-            LeaveTeam => "Leave Team",
-            ShowDeleteTeamConfirmationDialog => "Delete Team",
-            CreateTeam => "Create Team",
-            DeletePendingEmailInvitation { .. } => "Delete Pending Email Invitation",
-            RemoveUserFromTeam { .. } => "Remove User From Team",
-            AddDomainRestrictions { .. } => "Add Domain Restrictions",
-            DeleteDomainRestriction { .. } => "Delete Domain Restriction",
-            SendEmailInvites { .. } => "Send Email Invites",
-            GenerateUpgradeLink { .. } => "Generate Upgrade Link",
-            GenerateStripeBillingPortalLink { .. } => "Generate Stripe Billing Portal Link",
-            OpenAdminPanel { .. } => "Open Admin Panel",
-            ContactSupport => "Contact Support",
-            ContactSales => "Contact Sales",
+            LeaveTeam => "离开团队",
+            ShowDeleteTeamConfirmationDialog => "删除团队",
+            CreateTeam => "创建团队",
+            DeletePendingEmailInvitation { .. } => "删除待处理的电子邮件邀请",
+            RemoveUserFromTeam { .. } => "从团队中移除用户",
+            AddDomainRestrictions { .. } => "添加域名限制",
+            DeleteDomainRestriction { .. } => "删除域名限制",
+            SendEmailInvites { .. } => "发送电子邮件邀请",
+            GenerateUpgradeLink { .. } => "生成升级链接",
+            GenerateStripeBillingPortalLink { .. } => "生成 Stripe 账单门户链接",
+            OpenAdminPanel { .. } => "打开管理员面板",
+            ContactSupport => "联系支持",
+            ContactSales => "联系销售",
             ToggleTeamDiscoverability { .. } | ToggleTeamDiscoverabilityBeforeCreation => {
-                "Toggle Team Discoverability"
+                "切换团队可发现性"
             }
-            JoinTeamWithTeamDiscovery { .. } => "Join Team With Team Discovery",
-            _ => "Unknown reason",
+            JoinTeamWithTeamDiscovery { .. } => "通过团队发现加入团队",
+            _ => "未知原因",
         }
     }
 }
@@ -275,9 +274,7 @@ impl TryFrom<&TeamsPageAction> for TelemetryEvent {
             // Some Team events are logged from the server so we do not want to log
             // them from the client as well. For more details see:
             // https://docs.google.com/document/d/1va3_qfkHtDFKZqYaMgNUn5nwU4f8NByzyhg1uolHlck/edit
-            _ => Err(anyhow::anyhow!(
-                "We do not log this telemetry event from the client."
-            )),
+            _ => Err(anyhow::anyhow!("我们不会从客户端记录此遥测事件。")),
         }
     }
 }
@@ -327,8 +324,8 @@ impl std::fmt::Display for TeamsInviteOption {
             f,
             "{}",
             match self {
-                TeamsInviteOption::Link => "Link",
-                TeamsInviteOption::Email => "Email",
+                TeamsInviteOption::Link => "链接",
+                TeamsInviteOption::Email => "电子邮件",
             },
         )
     }
@@ -777,7 +774,7 @@ impl TeamsPageView {
             .to_string();
         let rename_team_editor = ctx.add_typed_action_view(|ctx| {
             let mut input = ClickableTextInput::new(team_name, ctx);
-            input.set_placeholder_text("Your new team name", ctx);
+            input.set_placeholder_text("你的新团队名称", ctx);
             input
         });
         ctx.subscribe_to_view(&rename_team_editor, |me, _, event, ctx| {
@@ -801,7 +798,7 @@ impl TeamsPageView {
         });
         let transfer_ownership_modal = ctx.add_typed_action_view(|ctx| {
             Modal::new(
-                Some("Transfer team ownership?".to_string()),
+                Some("要转移团队所有权吗？".to_string()),
                 transfer_ownership_modal_body,
                 ctx,
             )
@@ -919,7 +916,7 @@ impl TeamsPageView {
             }
             UserWorkspacesEvent::EmailInviteRejected(err) => {
                 self.update_team_members_state(ctx);
-                self.show_error("Failed to send invite", Some(err), ctx)
+                self.show_error("发送邀请失败", Some(err), ctx)
             }
             UserWorkspacesEvent::TeamsChanged => {
                 self.update_team_members_state(ctx);
@@ -932,25 +929,25 @@ impl TeamsPageView {
                 ctx.emit(TeamsPageViewEvent::TeamsChanged);
             }
             UserWorkspacesEvent::ToggleInviteLinksSuccess => {
-                self.show_success("Toggled invite links", ctx);
+                self.show_success("已切换邀请链接", ctx);
                 ctx.notify();
             }
             UserWorkspacesEvent::ToggleInviteLinksRejected(err) => {
-                self.show_error("Failed to toggle invite links", Some(err), ctx);
+                self.show_error("切换邀请链接失败", Some(err), ctx);
             }
             UserWorkspacesEvent::ResetInviteLinks => {
-                self.show_success("Reset invite links", ctx);
+                self.show_success("已重置邀请链接", ctx);
                 ctx.notify();
             }
             UserWorkspacesEvent::ResetInviteLinksRejected(err) => {
-                self.show_error("Failed to reset invite links", Some(err), ctx);
+                self.show_error("重置邀请链接失败", Some(err), ctx);
             }
             UserWorkspacesEvent::DeleteTeamInvite => {
                 self.update_team_members_state(ctx);
-                self.show_success("Deleted invite", ctx);
+                self.show_success("已删除邀请", ctx);
             }
             UserWorkspacesEvent::DeleteTeamInviteRejected(err) => {
-                self.show_error("Failed to delete invite", Some(err), ctx);
+                self.show_error("删除邀请失败", Some(err), ctx);
             }
             UserWorkspacesEvent::AddDomainRestrictionsSuccess => {
                 self.approve_domains_block_editor
@@ -960,19 +957,19 @@ impl TeamsPageView {
                 self.update_approved_domains_state(ctx);
             }
             UserWorkspacesEvent::AddDomainRestrictionsRejected(err) => {
-                self.show_error("Failed to add domain restriction", Some(err), ctx)
+                self.show_error("添加域名限制失败", Some(err), ctx)
             }
             UserWorkspacesEvent::DeleteDomainRestrictionSuccess => {
                 self.update_approved_domains_state(ctx);
             }
             UserWorkspacesEvent::DeleteDomainRestrictionRejected(err) => {
-                self.show_error("Failed to delete domain restriction", Some(err), ctx)
+                self.show_error("删除域名限制失败", Some(err), ctx)
             }
             UserWorkspacesEvent::GenerateUpgradeLink(upgrade_link) => {
                 ctx.open_url(upgrade_link);
             }
             UserWorkspacesEvent::GenerateUpgradeLinkRejected(err) => self.show_error(
-                "Failed to generate upgrade link. Please contact us at feedback@warp.dev",
+                "生成升级链接失败。请通过 feedback@warp.dev 联系我们",
                 Some(err),
                 ctx,
             ),
@@ -980,16 +977,16 @@ impl TeamsPageView {
                 ctx.open_url(billing_session_link);
             }
             UserWorkspacesEvent::GenerateStripeBillingPortalLinkRejected(err) => self.show_error(
-                "Failed to generate billing link. Please contact us at feedback@warp.dev",
+                "生成账单链接失败。请通过 feedback@warp.dev 联系我们",
                 Some(err),
                 ctx,
             ),
             UserWorkspacesEvent::ToggleTeamDiscoverabilitySuccess => {
-                self.show_success("Toggled team discoverability", ctx);
+                self.show_success("已切换团队可发现性", ctx);
                 ctx.notify();
             }
             UserWorkspacesEvent::ToggleTeamDiscoverabilityRejected(err) => {
-                self.show_error("Failed to toggle team discoverability", Some(err), ctx);
+                self.show_error("切换团队可发现性失败", Some(err), ctx);
             }
             UserWorkspacesEvent::JoinTeamWithTeamDiscoverySuccess => {
                 // Force refresh of Warp Drive objects after joining a team
@@ -1001,14 +998,14 @@ impl TeamsPageView {
                     .user_workspaces
                     .as_ref(ctx)
                     .current_team()
-                    .map_or("Successfully joined team".to_string(), |team| {
-                        format!("Successfully joined {}", team.name)
+                    .map_or("已成功加入团队".to_string(), |team| {
+                        format!("已成功加入 {}", team.name)
                     });
                 self.show_success(message, ctx);
                 ctx.notify();
             }
             UserWorkspacesEvent::JoinTeamWithTeamDiscoveryRejected(err) => {
-                self.show_error("Failed to join team", Some(err), ctx);
+                self.show_error("加入团队失败", Some(err), ctx);
             }
             UserWorkspacesEvent::FetchDiscoverableTeamsSuccess(teams) => {
                 self.discoverable_teams_states = teams
@@ -1022,18 +1019,18 @@ impl TeamsPageView {
                 log::error!("Failed to fetch discoverable teams: {e:?}");
             }
             UserWorkspacesEvent::TransferTeamOwnershipSuccess => {
-                self.show_success("Successfully transferred team ownership", ctx);
+                self.show_success("已成功转移团队所有权", ctx);
                 ctx.notify();
             }
             UserWorkspacesEvent::TransferTeamOwnershipRejected(err) => {
-                self.show_error("Failed to transfer team ownership", Some(err), ctx);
+                self.show_error("转移团队所有权失败", Some(err), ctx);
             }
             UserWorkspacesEvent::SetTeamMemberRoleSuccess => {
                 self.update_team_members_state(ctx);
-                self.show_success("Successfully updated team member role", ctx);
+                self.show_success("已成功更新团队成员角色", ctx);
             }
             UserWorkspacesEvent::SetTeamMemberRoleRejected(err) => {
-                self.show_error("Failed to update team member role", Some(err), ctx);
+                self.show_error("更新团队成员角色失败", Some(err), ctx);
             }
             UserWorkspacesEvent::UpdateWorkspaceSettingsSuccess => {
                 // as of right now, this is only emitted on the billing & usage page
@@ -1150,19 +1147,15 @@ impl TeamsPageView {
     ) {
         match event {
             TeamUpdateManagerEvent::LeaveError => {
-                let error = "Error leaving team".to_string();
+                let error = "离开团队时出错".to_string();
                 self.show_error(error, None, ctx);
             }
             TeamUpdateManagerEvent::LeaveSuccess => {
-                self.show_success("Successfully left team", ctx);
+                self.show_success("已成功离开团队", ctx);
                 ctx.notify();
             }
-            TeamUpdateManagerEvent::RenameTeamSuccess => {
-                self.show_success("Successfully renamed team", ctx)
-            }
-            TeamUpdateManagerEvent::RenameTeamError => {
-                self.show_error("Failed to rename team", None, ctx)
-            }
+            TeamUpdateManagerEvent::RenameTeamSuccess => self.show_success("已成功重命名团队", ctx),
+            TeamUpdateManagerEvent::RenameTeamError => self.show_error("重命名团队失败", None, ctx),
         }
     }
 
@@ -1445,7 +1438,7 @@ impl TeamsPageView {
     fn copy_invite_link(&mut self, link: &str, ctx: &mut ViewContext<Self>) {
         ctx.clipboard()
             .write(ClipboardContent::plain_text(link.to_string()));
-        self.show_toast("Link copied to clipboard!", ToastFlavor::Default, ctx);
+        self.show_toast("链接已复制到剪贴板！", ToastFlavor::Default, ctx);
     }
 
     fn remove_user_from_team(
@@ -1510,7 +1503,7 @@ impl TeamsPageView {
         // Verify no invalid domains before continuing
         let invalid_domains = editor.get_list_of_invalid_words(ctx);
         if !invalid_domains.is_empty() {
-            let error = format!("Invalid domains: {}", invalid_domains.len());
+            let error = format!("无效域名：{}", invalid_domains.len());
             self.show_error(error, None, ctx);
             return;
         }
@@ -1529,10 +1522,7 @@ impl TeamsPageView {
             .into_iter()
             .collect();
 
-        self.show_success(
-            format!("Domain restrictions added: {}", unique_domains.len()),
-            ctx,
-        );
+        self.show_success(format!("已添加域名限制：{}", unique_domains.len()), ctx);
         self.user_workspaces
             .update(ctx, move |user_workspaces, ctx| {
                 user_workspaces.add_invite_link_domain_restrictions(team_uid, unique_domains, ctx);
@@ -1557,7 +1547,7 @@ impl TeamsPageView {
         // Verify no invalid emails before continuing
         let invalid_emails = editor.get_list_of_invalid_words(ctx);
         if !invalid_emails.is_empty() {
-            let error = format!("Invalid emails: {}", invalid_emails.len());
+            let error = format!("无效电子邮件：{}", invalid_emails.len());
             self.show_error(error, None, ctx);
             return;
         }
@@ -1577,9 +1567,9 @@ impl TeamsPageView {
             .collect();
 
         let message = if unique_emails.len() == 1 {
-            "Your invite is on the way!".to_string()
+            "你的邀请正在发送！".to_string()
         } else {
-            format!("Your {} invites are on the way!", unique_emails.len())
+            format!("你的 {} 个邀请正在发送！", unique_emails.len())
         };
         self.show_success(message, ctx);
         self.user_workspaces
@@ -1718,7 +1708,7 @@ impl TeamsPageView {
             let actions = if current_user_has_admin_permissions {
                 vec![ItemAction {
                     icon: Icon::X,
-                    label: "Cancel invite".to_string(),
+                    label: "取消邀请".to_string(),
                     action: TeamsPageAction::DeletePendingEmailInvitation {
                         team_uid: team.uid,
                         invitee_email: email_invite.invitee_email.clone(),
@@ -1755,7 +1745,7 @@ impl TeamsPageView {
                 if current_user_has_owner_permissions && !team_member_has_owner_permissions {
                     actions.push(ItemAction {
                         icon: Icon::Users,
-                        label: "Transfer ownership".to_string(),
+                        label: "转移所有权".to_string(),
                         action: TeamsPageAction::ShowTransferOwnershipModal {
                             new_owner_email: member.email.clone(),
                             new_owner_uid: member.uid,
@@ -1772,7 +1762,7 @@ impl TeamsPageView {
                     if team_member_has_admin_permissions {
                         actions.push(ItemAction {
                             icon: Icon::ArrowDown,
-                            label: "Demote from admin".to_string(),
+                            label: "取消管理员身份".to_string(),
                             action: TeamsPageAction::SetTeamMemberRole {
                                 team_uid: team.uid,
                                 user_uid: member.uid,
@@ -1782,7 +1772,7 @@ impl TeamsPageView {
                     } else {
                         actions.push(ItemAction {
                             icon: Icon::ArrowUp,
-                            label: "Promote to admin".to_string(),
+                            label: "提升为管理员".to_string(),
                             action: TeamsPageAction::SetTeamMemberRole {
                                 team_uid: team.uid,
                                 user_uid: member.uid,
@@ -1796,7 +1786,7 @@ impl TeamsPageView {
                 if current_user_has_admin_permissions && !team_member_has_owner_permissions {
                     actions.push(ItemAction {
                         icon: Icon::X,
-                        label: "Remove from team".to_string(),
+                        label: "从团队中移除".to_string(),
                         action: TeamsPageAction::RemoveUserFromTeam {
                             user_uid: member.uid,
                             team_uid: team.uid,
@@ -1995,10 +1985,10 @@ impl TeamsWidget {
         .finish();
 
         let title = match warning {
-            GrowTeamWarning::SeatCapReached => "Your team is full",
-            GrowTeamWarning::SeatCapExceeded => "You've exceeded your member limit",
-            GrowTeamWarning::PaymentPastDue => "Payment past due",
-            GrowTeamWarning::PaymentUnpaid => "Subscription unpaid",
+            GrowTeamWarning::SeatCapReached => "你的团队已满",
+            GrowTeamWarning::SeatCapExceeded => "你已超出成员数量限制",
+            GrowTeamWarning::PaymentPastDue => "付款已逾期",
+            GrowTeamWarning::PaymentUnpaid => "订阅未支付",
         };
         let title_element = self.render_subsection_header(title.to_owned(), appearance);
 
@@ -2010,16 +2000,12 @@ impl TeamsWidget {
         );
 
         let body_prefix = match warning {
-            GrowTeamWarning::SeatCapReached => "You've reached your plan's member limit.",
+            GrowTeamWarning::SeatCapReached => "你已达到当前套餐的团队成员数量上限。",
             GrowTeamWarning::SeatCapExceeded => {
-                "You've exceeded your plan's member limit. Existing team members keep their access, but you won't be able to add new members."
+                "你已超出当前套餐的团队成员数量上限。现有团队成员仍可访问，但你将无法添加新成员。"
             }
-            GrowTeamWarning::PaymentPastDue => {
-                "Team invites have been restricted due to a past-due payment."
-            }
-            GrowTeamWarning::PaymentUnpaid => {
-                "Team invites have been restricted due to an unpaid subscription."
-            }
+            GrowTeamWarning::PaymentPastDue => "团队邀请已因付款逾期而受限。",
+            GrowTeamWarning::PaymentUnpaid => "团队邀请已因订阅未支付而受限。",
         };
 
         let is_delinquency = matches!(
@@ -2028,22 +2014,20 @@ impl TeamsWidget {
         );
         let cta_sentence = if !has_admin_permissions {
             if is_delinquency {
-                "Contact a team admin to restore access."
+                "请联系团队管理员以恢复访问权限。"
             } else {
-                "Contact a team admin to grow the team."
+                "请联系团队管理员以扩充团队。"
             }
         } else {
             match cta {
-                GrowTeamWarningCta::Upgrade => "Upgrade to grow your team.",
-                GrowTeamWarningCta::UpdateBilling => {
-                    "Update your payment information to restore access."
-                }
-                GrowTeamWarningCta::ContactSupport => "Contact support to restore access.",
+                GrowTeamWarningCta::Upgrade => "升级以扩充你的团队。",
+                GrowTeamWarningCta::UpdateBilling => "更新付款信息以恢复访问权限。",
+                GrowTeamWarningCta::ContactSupport => "联系支持以恢复访问权限。",
                 GrowTeamWarningCta::None => {
                     if is_delinquency {
-                        "Contact support to restore access."
+                        "联系支持以恢复访问权限。"
                     } else {
-                        "Contact sales to grow your team."
+                        "联系销售以扩充你的团队。"
                     }
                 }
             }
@@ -2073,15 +2057,15 @@ impl TeamsWidget {
         // mouse state handle is fine because at most one CTA shows at a time.
         if let Some((cta_label, cta_action)) = match cta {
             GrowTeamWarningCta::Upgrade => Some((
-                "Upgrade",
+                "升级",
                 TeamsPageAction::GenerateUpgradeLink { team_uid: team.uid },
             )),
             GrowTeamWarningCta::UpdateBilling => Some((
-                "Update billing",
+                "更新账单",
                 TeamsPageAction::GenerateStripeBillingPortalLink { team_uid: team.uid },
             )),
             GrowTeamWarningCta::ContactSupport => {
-                Some(("Contact support", TeamsPageAction::ContactSupport))
+                Some(("联系支持", TeamsPageAction::ContactSupport))
             }
             GrowTeamWarningCta::None => None,
         } {
@@ -2140,12 +2124,9 @@ impl TeamsWidget {
         billing_metadata: &BillingMetadata,
     ) -> (&'static str, &'static str) {
         if billing_metadata.customer_type == CustomerType::Business {
-            (
-                "Upgrade to Enterprise",
-                " for an unlimited team member limit.",
-            )
+            ("升级到 Enterprise", " 即可获得不受限制的团队成员数量。")
         } else {
-            ("Upgrade to Business", " for a higher team member limit.")
+            ("升级到 Business", " 即可获得更高的团队成员数量限制。")
         }
     }
 
@@ -2157,21 +2138,19 @@ impl TeamsWidget {
         has_admin_permissions: bool,
     ) -> Box<dyn Element> {
         let prorated_message = if has_admin_permissions {
-            "You'll be charged for a portion of the team member's usage of Warp."
+            "你将需要支付该团队成员一部分 Warp 用量费用。"
         } else {
-            "Your admin will be charged for a portion of the team member's usage of Warp."
+            "你的管理员将需要支付该团队成员一部分 Warp 用量费用。"
         };
 
         let additional_members_cost_money_msg = if let Some((monthly_cost, yearly_cost)) =
             self.get_per_seat_costs(team_metadata, pricing_info_model)
         {
             format!(
-                "Additional members are billed at your plan's per-user rate: ${monthly_cost:.0}/month or ${yearly_cost:.0}/year, depending on your billing interval. {prorated_message}"
+                "额外成员将按你套餐的每用户价格计费：${monthly_cost:.0}/月或 ${yearly_cost:.0}/年，具体取决于你的账单周期。{prorated_message}"
             )
         } else {
-            format!(
-                "Additional members are billed at your plan's per-user rate. {prorated_message}"
-            )
+            format!("额外成员将按你套餐的每用户价格计费。{prorated_message}")
         };
 
         let horizontal_padding = 16.;
@@ -2390,7 +2369,7 @@ impl TeamsWidget {
                 left_side.add_child(
                     Container::new(self.render_delinquency_badge(
                         appearance,
-                        "PAST DUE".into(),
+                        "逾期".into(),
                         themes::theme::Fill::from(*PAST_DUE_BADGE_COLOR).into(),
                     ))
                     .with_margin_left(8.)
@@ -2433,7 +2412,7 @@ impl TeamsWidget {
             .with_text_and_icon_label(
                 TextAndIcon::new(
                     TextAndIconAlignment::IconFirst,
-                    "Contact support",
+                    "联系支持",
                     Icon::Phone.to_warpui_icon(appearance.theme().accent()),
                     MainAxisSize::Min,
                     MainAxisAlignment::Center,
@@ -2462,7 +2441,7 @@ impl TeamsWidget {
             .with_text_and_icon_label(
                 TextAndIcon::new(
                     TextAndIconAlignment::IconFirst,
-                    "Manage billing",
+                    "管理账单",
                     Icon::CoinsStacked.to_warpui_icon(appearance.theme().accent()),
                     MainAxisSize::Min,
                     MainAxisAlignment::Center,
@@ -2493,7 +2472,7 @@ impl TeamsWidget {
             .with_text_and_icon_label(
                 TextAndIcon::new(
                     TextAndIconAlignment::IconFirst,
-                    "Open admin panel",
+                    "打开管理员面板",
                     Icon::Users.to_warpui_icon(appearance.theme().accent()),
                     MainAxisSize::Min,
                     MainAxisAlignment::Center,
@@ -2527,12 +2506,12 @@ impl TeamsWidget {
             // If the team is upgradeable to self-serve tier, show them the upgrade link.
             if team.billing_metadata.can_upgrade_to_higher_tier_plan() {
                 let description = if team.billing_metadata.can_upgrade_to_build_plan() {
-                    "Upgrade to Build"
+                    "升级到 Build"
                 } else {
                     match team.billing_metadata.customer_type {
-                        CustomerType::Prosumer => "Upgrade to Turbo plan",
-                        CustomerType::Turbo => "Upgrade to Lightspeed plan",
-                        _ => "Compare plans",
+                        CustomerType::Prosumer => "升级到 Turbo 套餐",
+                        CustomerType::Turbo => "升级到 Lightspeed 套餐",
+                        _ => "比较套餐",
                     }
                 };
                 billing_links.add_child(
@@ -2573,8 +2552,8 @@ impl TeamsWidget {
     ) -> Box<dyn Element> {
         let mut section = Flex::column();
         let sub_header_text = match team.billing_metadata.customer_type {
-            CustomerType::Free => "Free plan usage limits",
-            _ => "Plan usage limits",
+            CustomerType::Free => "免费套餐用量限制",
+            _ => "套餐用量限制",
         };
         section.add_child(self.render_subsection_header(sub_header_text.into(), appearance));
 
@@ -2584,9 +2563,8 @@ impl TeamsWidget {
         if let Some(policy) = team.billing_metadata.tier.shared_notebooks_policy {
             if !policy.is_unlimited {
                 let mut shared_notebooks_column = Flex::column();
-                shared_notebooks_column.add_child(
-                    self.render_plan_usage_header("Shared Notebooks".into(), appearance),
-                );
+                shared_notebooks_column
+                    .add_child(self.render_plan_usage_header("共享 Notebook".into(), appearance));
                 let num_shared_notebooks = cloud_model
                     .active_notebooks_in_space(Space::Team { team_uid: team.uid }, app)
                     .count();
@@ -2609,9 +2587,8 @@ impl TeamsWidget {
         if let Some(policy) = team.billing_metadata.tier.shared_workflows_policy {
             if !policy.is_unlimited {
                 let mut shared_workflows_column = Flex::column();
-                shared_workflows_column.add_child(
-                    self.render_plan_usage_header("Shared Workflows".into(), appearance),
-                );
+                shared_workflows_column
+                    .add_child(self.render_plan_usage_header("共享工作流".into(), appearance));
                 let num_shared_workflows = cloud_model
                     .active_workflows_in_space(Space::Team { team_uid: team.uid }, app)
                     .count();
@@ -2662,11 +2639,9 @@ impl TeamsWidget {
         }
 
         invitation_section.add_child(
-            Container::new(
-                self.render_subsection_header("Invite team members".to_owned(), appearance),
-            )
-            .with_padding_bottom(16.)
-            .finish(),
+            Container::new(self.render_subsection_header("邀请团队成员".to_owned(), appearance))
+                .with_padding_bottom(16.)
+                .finish(),
         );
 
         if team_metadata.billing_metadata.is_on_stripe_paid_plan() {
@@ -2735,7 +2710,7 @@ impl TeamsWidget {
 
         // Header + admin-only subtext on the left, toggle on the right. The
         // text is stacked so the toggle centers against the whole block.
-        let header = self.render_subsubsection_header("By link".to_owned(), appearance);
+        let header = self.render_subsubsection_header("通过链接".to_owned(), appearance);
         let text_column = if has_admin_permissions {
             Flex::column()
                 .with_child(header)
@@ -2793,7 +2768,7 @@ impl TeamsWidget {
                         appearance
                             .ui_builder()
                             .link(
-                                "Reset links".into(),
+                                "重置链接".into(),
                                 None,
                                 Some(Box::new(move |ctx| {
                                     ctx.dispatch_typed_action(TeamsPageAction::ResetInviteLinks {
@@ -2839,7 +2814,7 @@ impl TeamsWidget {
 
         // "By email" subsection header
         section.add_child(
-            Container::new(self.render_subsubsection_header("By email".to_owned(), appearance))
+            Container::new(self.render_subsubsection_header("通过电子邮件".to_owned(), appearance))
                 .with_padding_top(CONTENT_SEPARATION_PADDING)
                 .with_padding_bottom(8.)
                 .finish(),
@@ -2912,7 +2887,7 @@ impl TeamsWidget {
             .with_main_axis_size(MainAxisSize::Max)
             .with_main_axis_alignment(MainAxisAlignment::SpaceBetween)
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
-            .with_child(self.render_subsection_header("Team members".to_owned(), appearance))
+            .with_child(self.render_subsection_header("团队成员".to_owned(), appearance))
             .with_child(self.render_team_members_count(team, appearance))
             .finish();
         section.add_child(
@@ -2939,9 +2914,9 @@ impl TeamsWidget {
     fn render_team_members_count(&self, team: &Team, appearance: &Appearance) -> Box<dyn Element> {
         let count = team.members.len();
         let count_label = if count == 1 {
-            "1 team member".to_string()
+            "1 名团队成员".to_string()
         } else {
-            format!("{count} team members")
+            format!("{count} 名团队成员")
         };
 
         // No capacity tooltip when the plan is unlimited (or workspace size
@@ -2984,8 +2959,7 @@ impl TeamsWidget {
         };
 
         let plan_display = team.billing_metadata.customer_type.to_display_string();
-        let tooltip_text =
-            format!("Your plan ({plan_display}) has a maximum capacity of {cap} members.");
+        let tooltip_text = format!("你的套餐（{plan_display}）最多支持 {cap} 名成员。");
 
         let info_icon = Container::new(
             ConstrainedBox::new(Icon::Info.to_warpui_icon(muted_color).finish())
@@ -3132,7 +3106,7 @@ impl TeamsWidget {
                 let actions = if has_admin_permissions {
                     vec![ItemAction {
                         icon: Icon::X,
-                        label: "Remove domain".to_string(),
+                        label: "移除域名".to_string(),
                         action: TeamsPageAction::DeleteDomainRestriction {
                             domain_uid: domain_restriction.uid,
                             team_uid: team.uid,
@@ -3246,11 +3220,11 @@ impl TeamsWidget {
     ) -> Box<dyn Element> {
         // Same layout as the "By link" header row: text column on the left,
         // toggle on the right.
-        let header = self.render_subsubsection_header("By discovery".to_owned(), appearance);
+        let header = self.render_subsubsection_header("通过发现".to_owned(), appearance);
 
         let domain = current_user_email.split('@').nth(1).unwrap_or("");
         let team_discoverability_instructions =
-            format!("Allow Warp users with an @{domain} email to find and join the team.");
+            format!("允许使用 @{domain} 电子邮件的 Warp 用户发现并加入团队。");
         let subtext = self.render_sub_text(
             team_discoverability_instructions,
             appearance,
@@ -3387,7 +3361,7 @@ impl TeamsWidget {
             let link = appearance
                 .ui_builder()
                 .link(
-                    "Manage plan".into(),
+                    "管理套餐".into(),
                     None,
                     Some(Box::new(move |ctx| {
                         ctx.dispatch_typed_action(
@@ -3685,7 +3659,7 @@ impl TeamsWidget {
                 );
                 (link, true)
             }
-            None => ("Failed to load invite link.".into(), false),
+            None => ("加载邀请链接失败。".into(), false),
         };
         let theme = appearance.theme();
 
@@ -3980,9 +3954,9 @@ impl TeamsWidget {
         let mut page = Flex::column();
 
         // Title, subtitle, and description
-        page.add_child(render_sub_header(appearance, "Teams".to_string(), None));
+        page.add_child(render_sub_header(appearance, "团队".to_string(), None));
         page.add_child(
-            self.render_sub_header_with_subtext_color(appearance, "Create a team".to_string()),
+            self.render_sub_header_with_subtext_color(appearance, "创建团队".to_string()),
         );
         page.add_child(
             Container::new(
@@ -4009,10 +3983,9 @@ impl TeamsWidget {
             .with_margin_left(-4.)
             .finish();
             let checkbox_row_text = if let Some(domain) = view.auth_state.user_email_domain() {
-                format!("Allow Warp users with an @{domain} email to find and join the team.")
+                format!("允许使用 @{domain} 电子邮件的 Warp 用户发现并加入团队。")
             } else {
-                "Allow Warp users with the same email domain as you to find and join the team."
-                    .to_string()
+                "允许与你拥有相同电子邮件域名的 Warp 用户发现并加入团队。".to_string()
             };
             let checkbox_row = Container::new(
                 Flex::row()
@@ -4042,7 +4015,7 @@ impl TeamsWidget {
             page.add_child(render_separator(appearance));
             page.add_child(self.render_sub_header_with_subtext_color(
                 appearance,
-                "Or, join an existing team within your company".to_string(),
+                "或者，加入你公司已有的团队".to_string(),
             ));
 
             // Team discovery
@@ -4120,22 +4093,19 @@ impl TeamsWidget {
 
         // Number of teammates
         let teammate_string = if team_state.team.num_members == 1 {
-            "1 teammate".to_string()
+            "1 名队友".to_string()
         } else {
-            format!("{} teammates", team_state.team.num_members)
+            format!("{} 名队友", team_state.team.num_members)
         };
         single_team.add_child(self.render_sub_text(teammate_string, appearance, None));
 
         // Call to action
         single_team.add_child(
-            Container::new(
-                self.render_sub_text(
-                    "Join this team and start collaborating on workflows, notebooks, and more."
-                        .to_string(),
-                    appearance,
-                    None,
-                ),
-            )
+            Container::new(self.render_sub_text(
+                "加入此团队，开始在工作流、Notebook 等内容上协作。".to_string(),
+                appearance,
+                None,
+            ))
             .with_padding_top(12.)
             .with_padding_bottom(12.)
             .finish(),
@@ -4311,7 +4281,7 @@ impl TeamsWidget {
     ) -> Box<dyn Element> {
         if team_state.team.team_accepting_invites {
             self.render_button(
-                "Join",
+                "加入",
                 ButtonVariant::Accent,
                 team_state.mouse_state_handle.clone(),
                 Some(TeamsPageAction::JoinTeamWithTeamDiscovery {
@@ -4341,7 +4311,7 @@ impl TeamsWidget {
                     font_size: Some(14.),
                     ..Default::default()
                 })
-                .with_centered_text_label("Contact Admin to request access".to_string())
+                .with_centered_text_label("联系管理员申请访问权限".to_string())
                 .disabled()
                 .build()
                 .finish()
@@ -4353,7 +4323,7 @@ impl SettingsWidget for TeamsWidget {
     type View = TeamsPageView;
 
     fn search_terms(&self) -> &str {
-        "invites teams team members"
+        "邀请 团队 团队成员"
     }
 
     fn render(

@@ -363,13 +363,13 @@ impl TableFormat for AgentResponse {
     fn header() -> Vec<Cell> {
         vec![
             Cell::new("UID"),
-            Cell::new("Name"),
-            Cell::new("Created"),
-            Cell::new("Description"),
-            Cell::new("Secrets"),
+            Cell::new("名称"),
+            Cell::new("创建时间"),
+            Cell::new("描述"),
+            Cell::new("密钥"),
             Cell::new("Skills"),
-            Cell::new("Base model"),
-            Cell::new("Environment"),
+            Cell::new("基础模型"),
+            Cell::new("环境"),
         ]
     }
 

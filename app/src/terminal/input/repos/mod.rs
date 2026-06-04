@@ -51,7 +51,7 @@ impl InlineMenuAction for AcceptRepo {
                         background_color: bg_color_override_for_shortcuts_and_commands,
                     },
                     MessageItem::Text {
-                        content: " cd to repo".into(),
+                        content: " 切换到仓库".into(),
                         color: color_override_for_shortcuts_and_commands,
                     },
                 ],

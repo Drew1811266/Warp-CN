@@ -7,8 +7,9 @@ use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View
 use super::style::{self, MODAL_PADDING};
 use crate::appearance::Appearance;
 
-const SESSION_BUILD_FREE_PLAN_SUBHEADER: &str = "Warp's free and pro plans come with a limited number of shared sessions.\n\nFor increased access to session sharing upgrade to the Build plan.";
-const VIEW_PLANS_TEXT: &str = "View plans";
+const SESSION_BUILD_FREE_PLAN_SUBHEADER: &str =
+    "Warp 免费版和 Pro 套餐包含的共享会话数量有限。nn如需更多会话共享额度，请升级到 Build 套餐。";
+const VIEW_PLANS_TEXT: &str = "查看套餐";
 
 pub struct DeniedBody {
     button_mouse_state: MouseStateHandle,

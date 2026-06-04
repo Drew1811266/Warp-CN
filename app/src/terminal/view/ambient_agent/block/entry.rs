@@ -27,7 +27,7 @@ use crate::terminal::{BlockListSettings, TerminalManager, TerminalView};
 use crate::ui_components::agent_icon::terminal_view_agent_icon_variant;
 use crate::ui_components::blended_colors;
 use crate::ui_components::icon_with_status::{render_icon_with_status, IconWithStatusVariant};
-const DEFAULT_CLOUD_AGENT_TITLE: &str = "New cloud agent";
+const DEFAULT_CLOUD_AGENT_TITLE: &str = "新建云端 Agent";
 
 #[derive(Default)]
 struct StateHandles {
@@ -181,11 +181,11 @@ impl AmbientAgentEntryBlock {
     fn detail_text(&self, app: &AppContext) -> Option<&'static str> {
         match self.ambient_agent_view_model(app)?.status() {
             Status::Setup | Status::Composing => None,
-            Status::WaitingForSession { .. } => Some("Starting environment..."),
-            Status::AgentRunning => Some("Agent is working on task"),
-            Status::Failed { .. } => Some("Agent failed"),
-            Status::NeedsGithubAuth { .. } => Some("Authentication required"),
-            Status::Cancelled { .. } => Some("Cancelled"),
+            Status::WaitingForSession { .. } => Some("正在启动环境..."),
+            Status::AgentRunning => Some("Agent 正在处理任务"),
+            Status::Failed { .. } => Some("Agent 失败"),
+            Status::NeedsGithubAuth { .. } => Some("需要身份验证"),
+            Status::Cancelled { .. } => Some("已取消"),
         }
     }
 
@@ -197,7 +197,7 @@ impl AmbientAgentEntryBlock {
             }
             Status::Failed { .. } => Some(ConversationStatus::Error),
             Status::NeedsGithubAuth { .. } => Some(ConversationStatus::Blocked {
-                blocked_action: "GitHub authentication required".to_owned(),
+                blocked_action: "需要 GitHub 身份验证".to_owned(),
             }),
             Status::Cancelled { .. } => Some(ConversationStatus::Cancelled),
         }

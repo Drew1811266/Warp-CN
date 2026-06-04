@@ -22,7 +22,7 @@ pub fn display_name(harness: Harness) -> &'static str {
         Harness::OpenCode => "OpenCode",
         Harness::Gemini => "Gemini CLI",
         Harness::Codex => "Codex",
-        Harness::Unknown => "Unknown",
+        Harness::Unknown => "未知",
     }
 }
 

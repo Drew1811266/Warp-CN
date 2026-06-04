@@ -84,7 +84,7 @@ impl SearchItem for ConversationSearchItem {
             .active_window()
             .and_then(|window_id| active_agent_views.get_focused_terminal_view_id(window_id));
 
-        let secondary_suffix = " open in different pane";
+        let secondary_suffix = " 在不同窗格中打开";
         let title = &self.entry.display.title;
         let should_show_suffix = open_terminal_view_id
             .is_some_and(|terminal_view_id| Some(terminal_view_id) != focused_terminal_view_id);

@@ -123,7 +123,7 @@ use crate::view_components::compactible_action_button::{
 use crate::workspace::WorkspaceAction;
 use crate::{AIAgentTodoList, FeatureFlag};
 
-const BLOCKED_ACTION_MESSAGE_FOR_UPLOADING_ARTIFACT: &str = "Grant access to upload this artifact?";
+const BLOCKED_ACTION_MESSAGE_FOR_UPLOADING_ARTIFACT: &str = "允许上传此 artifact 吗？";
 
 /// Data required to render the AI block output component.
 #[derive(Copy, Clone)]
@@ -352,9 +352,9 @@ pub(super) fn render(props: Props, app: &AppContext) -> Box<dyn Element> {
                             && props.thinking_display_mode.should_render() =>
                         {
                             let header_text = if let Some(dur) = finished_duration {
-                                format!("Thought for {}", format_elapsed_seconds(*dur))
+                                format!("思考了 {}", format_elapsed_seconds(*dur))
                             } else {
-                                "Thinking".to_string()
+                                "思考中".to_string()
                             };
                             if let Some(element) = render_collapsible_block(
                                 output_message,
@@ -452,7 +452,7 @@ pub(super) fn render(props: Props, app: &AppContext) -> Box<dyn Element> {
                                             // action so the user sees the error instead
                                             // of an empty box.
                                             let formatted_text = render_requested_action_body_text(
-                                                "Failed to read files".into(),
+                                                "读取文件失败".into(),
                                                 appearance.ui_font_family(),
                                                 app,
                                             );
@@ -855,7 +855,7 @@ pub(super) fn render(props: Props, app: &AppContext) -> Box<dyn Element> {
                             SummarizationType::ConversationSummary
                         ) && !are_all_text_sections_empty(&text.sections) =>
                         {
-                            let header_text = "Conversation summarized".to_string();
+                            let header_text = "对话已总结".to_string();
                             if let Some(element) = render_collapsible_block(
                                 output_message,
                                 header_text,
@@ -1000,13 +1000,13 @@ pub(super) fn render(props: Props, app: &AppContext) -> Box<dyn Element> {
                                         })
                                         .map(|task| truncate_from_end(&task.title, 40));
                                     Some((
-                                        "agent run",
+                                        "Agent 运行",
                                         title.unwrap_or_else(|| truncate_from_end(target_id, 40)),
                                     ))
                                 });
 
                             let done = is_finished || is_cancelled;
-                            let verb = if done { "Searched" } else { "Searching" };
+                            let verb = if done { "已搜索" } else { "正在搜索" };
 
                             let mut fragments: Vec<FormattedTextFragment> =
                                 vec![FormattedTextFragment::plain_text(format!("{verb} "))];
@@ -1021,9 +1021,7 @@ pub(super) fn render(props: Props, app: &AppContext) -> Box<dyn Element> {
                                     ));
                                 }
                                 None => {
-                                    fragments.push(FormattedTextFragment::plain_text(
-                                        "this conversation",
-                                    ));
+                                    fragments.push(FormattedTextFragment::plain_text("此对话"));
                                 }
                             };
                             match query {
@@ -1119,7 +1117,7 @@ pub(super) fn render(props: Props, app: &AppContext) -> Box<dyn Element> {
                             output_items.add_child(
                                 render_informational_footer(
                                     app,
-                                    "Sorry you had a bad experience with this interaction. We've refunded you 1 credit. We appreciate your feedback!"
+                                    "抱歉这次交互体验不佳。我们已退还 1 个点数。感谢你的反馈！"
                                         .to_string(),
                                 )
                                 .with_agent_output_item_spacing(app)
@@ -1131,7 +1129,7 @@ pub(super) fn render(props: Props, app: &AppContext) -> Box<dyn Element> {
                                 render_informational_footer(
                                     app,
                                     format!(
-                                        "Sorry you had a bad experience with this interaction. We've refunded you {request_refunded_count} credits. We appreciate your feedback!"
+                                        "抱歉这次交互体验不佳。我们已退还 {request_refunded_count} 个点数。感谢你的反馈！"
                                     ),
                                 )
                                 .with_agent_output_item_spacing(app)
@@ -1170,12 +1168,9 @@ pub(super) fn render(props: Props, app: &AppContext) -> Box<dyn Element> {
                 && !error.is_invalid_api_key()
             {
                 output_items.add_child(
-                    render_informational_footer(
-                        app,
-                        "This response won't count towards your usage.".to_string(),
-                    )
-                    .with_agent_output_item_spacing(app)
-                    .finish(),
+                    render_informational_footer(app, "此回复不会计入你的用量。".to_string())
+                        .with_agent_output_item_spacing(app)
+                        .finish(),
                 );
 
                 output_items.add_child(
@@ -1325,10 +1320,8 @@ fn render_search_codebase(
                                     .codebase_search_speedbump_option_handles
                                     .clone(),
                                 vec![
-                                    RadioButtonItem::text(
-                                        "Always allow file access for coding tasks",
-                                    ),
-                                    RadioButtonItem::text("Always allow file access for this repo"),
+                                    RadioButtonItem::text("始终允许编码任务访问文件"),
+                                    RadioButtonItem::text("始终允许此仓库的文件访问"),
                                 ],
                                 props
                                     .state_handles
@@ -1370,12 +1363,12 @@ fn render_search_codebase(
                                 appearance
                                     .ui_builder()
                                     .link(
-                                        "Manage AI Autonomy permissions".into(),
+                                        "管理 AI 自主权限".into(),
                                         None,
                                         Some(Box::new(move |ctx| {
                                             ctx.dispatch_typed_action(
                                                 WorkspaceAction::ShowSettingsPageWithSearch {
-                                                    search_query: "Autonomy".to_string(),
+                                                    search_query: "自主权限".to_string(),
                                                     section: Some(SettingsSection::WarpAgent),
                                                 },
                                             );
@@ -1418,7 +1411,7 @@ fn render_search_codebase(
                         renderable_action(
                             props,
                             id,
-                            format!("Search in {}", root_repo_path.to_string_lossy()).as_str(),
+                            format!("在 {} 中搜索", root_repo_path.to_string_lossy()).as_str(),
                             app,
                             footer,
                             appearance,
@@ -1468,7 +1461,7 @@ fn render_search_codebase(
                     renderable_action(
                         props,
                         id,
-                        format!("Searching in {}", root_repo_path.to_string_lossy()).as_str(),
+                        format!("正在 {} 中搜索", root_repo_path.to_string_lossy()).as_str(),
                         app,
                         footer,
                         appearance,
@@ -1494,7 +1487,7 @@ fn render_search_codebase(
                                 renderable_action(
                                     props,
                                     id,
-                                    "No relevant files found.",
+                                    "未找到相关文件。",
                                     app,
                                     footer,
                                     appearance,
@@ -1530,11 +1523,11 @@ fn render_search_codebase(
                             let root_repo_path = root_repo_path?;
                             let message = match reason {
                                 SearchCodebaseFailureReason::CodebaseNotIndexed => format!(
-                                    "Search in {} failed because the codebase isn't indexed",
+                                    "在 {} 中搜索失败，因为代码库尚未索引",
                                     root_repo_path.to_string_lossy(),
                                 ),
                                 _ => {
-                                    format!("Search in {} failed", root_repo_path.to_string_lossy())
+                                    format!("在 {} 中搜索失败", root_repo_path.to_string_lossy())
                                 }
                             };
                             renderable_action(
@@ -1554,7 +1547,7 @@ fn render_search_codebase(
                             renderable_action(
                                 props,
                                 id,
-                                format!("Search in {} cancelled", root_repo_path.to_string_lossy())
+                                format!("已取消在 {} 中搜索", root_repo_path.to_string_lossy())
                                     .as_str(),
                                 app,
                                 footer,
@@ -1573,7 +1566,7 @@ fn render_search_codebase(
             renderable_action(
                 props,
                 id,
-                format!("Search in {}", root_repo_path.to_string_lossy()).as_str(),
+                format!("在 {} 中搜索", root_repo_path.to_string_lossy()).as_str(),
                 app,
                 footer,
                 appearance,
@@ -1762,7 +1755,7 @@ fn render_read_skill(
 
             let skill_icon_override = icon_override_for_skill_name(&skill.name);
             let open_button = render_skill_button(
-                "Open skill",
+                "打开 skill",
                 props.state_handles.open_skill_button_handle.clone(),
                 appearance,
                 skill.provider,
@@ -1837,7 +1830,7 @@ fn render_read_files(
             *shown.lock() = true;
             renderable_action =
                 renderable_action.with_footer(render_autonomy_checkbox_setting_speedbump_footer(
-                    "Always allow file access for coding tasks",
+                    "始终允许编码任务访问文件",
                     *checked,
                     AIBlockAction::ToggleAutoreadFilesSpeedbumpCheckbox,
                     props
@@ -1908,7 +1901,7 @@ fn maybe_render_edit_document(
 
     // Document operations are always auto-executed for now
     if status.as_ref().is_some_and(|status| status.is_blocked()) {
-        todo!("Implement granular permissions for AI documents.");
+        todo!("实现 AI 文档的细粒度权限。");
     }
 
     let agent_action_results = props
@@ -1945,7 +1938,7 @@ fn maybe_render_create_document(
 
     // Document operations are always auto-executed for now
     if status.as_ref().is_some_and(|status| status.is_blocked()) {
-        todo!("Implement granular permissions for AI documents.");
+        todo!("实现 AI 文档的细粒度权限。");
     }
 
     let agent_action_results = props
@@ -1995,7 +1988,7 @@ fn render_stopped_output(props: Props, app: &AppContext) -> Box<dyn Element> {
                         .map(|index| (item, index))
                 }) {
                     return Some(format!(
-                        "Stopped task {}/{}: \"{}\"",
+                        "已停止任务 {}/{}：“{}”",
                         item_index + 1,
                         todo_list.len(),
                         item.title
@@ -2005,9 +1998,9 @@ fn render_stopped_output(props: Props, app: &AppContext) -> Box<dyn Element> {
 
             conversation
                 .initial_query()
-                .map(|task_name| format!("Stopped task: \"{task_name}\""))
+                .map(|task_name| format!("已停止任务：“{task_name}”"))
         })
-        .unwrap_or_else(|| "Stopped task".to_string());
+        .unwrap_or_else(|| "已停止任务".to_string());
 
     let stop_icon = Container::new(
         ConstrainedBox::new(gray_stop_icon(appearance).finish())
@@ -2100,12 +2093,7 @@ fn render_stopped_output(props: Props, app: &AppContext) -> Box<dyn Element> {
             None,
         )
         .with_custom_label(button_content)
-        .with_tooltip(move || {
-            ui_builder
-                .tool_tip("Resume conversation".to_string())
-                .build()
-                .finish()
-        })
+        .with_tooltip(move || ui_builder.tool_tip("继续对话".to_string()).build().finish())
         .with_cursor(Some(Cursor::PointingHand))
         .build()
         .on_click(move |ctx, _, _| {
@@ -2155,7 +2143,7 @@ fn render_requested_edits_output_message(
             .view
             .as_ref(app)
             .title()
-            .unwrap_or("Could not apply changes to file.");
+            .unwrap_or("无法将更改应用到文件。");
         RenderableAction::new(title, app)
             .with_icon(inline_action_icons::cancelled_icon(appearance).finish())
             .render(app)
@@ -2164,7 +2152,7 @@ fn render_requested_edits_output_message(
         match requested_edit.view.as_ref(app).display_mode() {
             DisplayMode::FullPane => Align::new(
                 Text::new_inline(
-                    "This suggestion is being edited in another tab.",
+                    "此建议正在另一个标签页中编辑。",
                     appearance.ui_font_family(),
                     appearance.monospace_font_size(),
                 )
@@ -2274,11 +2262,11 @@ fn render_suggest_new_conversation(
         };
         let (label, status_icon) = match result {
             SuggestNewConversationResult::Accepted { .. } => (
-                "New conversation started",
+                "已开始新对话",
                 inline_action_icons::green_check_icon(appearance).finish(),
             ),
             SuggestNewConversationResult::Rejected => (
-                "Continuing current conversation",
+                "正在继续当前对话",
                 warpui::elements::Icon::new(
                     Icon::FlipForward.into(),
                     internal_colors::neutral_6(theme),
@@ -2286,7 +2274,7 @@ fn render_suggest_new_conversation(
                 .finish(),
             ),
             SuggestNewConversationResult::Cancelled => (
-                "New conversation suggestion cancelled",
+                "已取消新对话建议",
                 inline_action_icons::cancelled_icon(appearance).finish(),
             ),
         };
@@ -2308,7 +2296,7 @@ fn render_suggest_new_conversation(
     }
 
     if props.shared_session_status.is_viewer() {
-        let header_element = HeaderConfig::new("Start a new conversation", app)
+        let header_element = HeaderConfig::new("开始新对话", app)
             .with_icon(gray_stop_icon(appearance))
             .render(app);
 
@@ -2323,8 +2311,7 @@ fn render_suggest_new_conversation(
 
     let mut content = Flex::column().with_cross_axis_alignment(CrossAxisAlignment::Stretch);
 
-    let new_conversation_header_text =
-        "It seems like the topic changed. Would you like to make a new conversation?";
+    let new_conversation_header_text = "主题似乎发生了变化。要新建一个对话吗？";
     let new_conversation_header_element = HeaderConfig::new(new_conversation_header_text, app)
         .with_icon(yellow_stop_icon(appearance))
         .with_corner_radius_override(CornerRadius::with_top(Radius::Pixels(8.)))
@@ -2370,11 +2357,7 @@ fn create_formatted_text_for_grep(
         .as_ref()
         .is_some_and(|status| status.is_queued());
 
-    let display_path = if path == "." {
-        "the current directory"
-    } else {
-        path
-    };
+    let display_path = if path == "." { "当前目录" } else { path };
 
     let formatted_text = if queries.len() == 1 {
         let query = queries
@@ -2392,9 +2375,9 @@ fn create_formatted_text_for_grep(
             ]
         };
         fragments.push(if is_cancelled {
-            FormattedTextFragment::plain_text(format!(" in {display_path} cancelled"))
+            FormattedTextFragment::plain_text(format!(" 已在 {display_path} 中取消"))
         } else {
-            FormattedTextFragment::plain_text(format!(" in {display_path}"))
+            FormattedTextFragment::plain_text(format!(" 在 {display_path} 中"))
         });
         FormattedText::new([FormattedTextLine::Line(fragments)])
     } else {
@@ -2403,18 +2386,14 @@ fn create_formatted_text_for_grep(
         if is_cancelled {
             lines.push(FormattedTextLine::Line(vec![
                 FormattedTextFragment::plain_text(format!(
-                    "Cancelled grep for the following patterns in {display_path}"
+                    "已取消在 {display_path} 中 Grep 以下模式"
                 )),
             ]));
         } else {
             lines.push(FormattedTextLine::Line(vec![if is_queued {
-                FormattedTextFragment::plain_text(format!(
-                    "Grep for the following patterns in {display_path}"
-                ))
+                FormattedTextFragment::plain_text(format!("在 {display_path} 中 Grep 以下模式"))
             } else {
-                FormattedTextFragment::plain_text(format!(
-                    "Grepping for the following patterns in {display_path}"
-                ))
+                FormattedTextFragment::plain_text(format!("正在 {display_path} 中 Grep 以下模式"))
             }]));
         }
 
@@ -2470,7 +2449,7 @@ fn create_formatted_text_for_file_glob(
         .as_ref()
         .is_some_and(|status| status.is_queued());
 
-    let path = path.unwrap_or("the current directory");
+    let path = path.unwrap_or("当前目录");
 
     let formatted_text = if patterns.len() == 1 {
         let pattern = patterns
@@ -2489,9 +2468,9 @@ fn create_formatted_text_for_file_glob(
             ]
         };
         fragments.push(if is_cancelled {
-            FormattedTextFragment::plain_text(format!(" in {path} cancelled"))
+            FormattedTextFragment::plain_text(format!(" 已在 {path} 中取消"))
         } else {
-            FormattedTextFragment::plain_text(format!(" in {path}"))
+            FormattedTextFragment::plain_text(format!(" 在 {path} 中"))
         });
         FormattedText::new([FormattedTextLine::Line(fragments)])
     } else {
@@ -2500,18 +2479,14 @@ fn create_formatted_text_for_file_glob(
         if is_cancelled {
             lines.push(FormattedTextLine::Line(vec![
                 FormattedTextFragment::plain_text(format!(
-                    "Cancelled search for files that match the following patterns in {path}"
+                    "已取消在 {path} 中搜索匹配以下模式的文件"
                 )),
             ]));
         } else {
             lines.push(FormattedTextLine::Line(vec![if is_queued {
-                FormattedTextFragment::plain_text(format!(
-                    "Find files that match the following patterns in {path}"
-                ))
+                FormattedTextFragment::plain_text(format!("在 {path} 中查找匹配以下模式的文件"))
             } else {
-                FormattedTextFragment::plain_text(format!(
-                    "Finding files that match the following patterns in {path}"
-                ))
+                FormattedTextFragment::plain_text(format!("正在 {path} 中查找匹配以下模式的文件"))
             }]));
         }
 
@@ -2599,7 +2574,7 @@ fn render_file_retrieval_tool(
         } if show_for_action_id == action_id => {
             *shown.lock() = true;
             config = config.with_footer(render_autonomy_checkbox_setting_speedbump_footer(
-                "Always allow file access for coding tasks",
+                "始终允许编码任务访问文件",
                 *checked,
                 AIBlockAction::ToggleAutoreadFilesSpeedbumpCheckbox,
                 props
@@ -2639,7 +2614,7 @@ fn render_comment_addressed_header(comment: &ReviewComment, app: &AppContext) ->
         Shrinkable::new(
             1.,
             Text::new_inline(
-                format!("Comment addressed: \"{content}\""),
+                format!("评论已处理：“{content}”"),
                 appearance.ui_font_family(),
                 appearance.monospace_font_size(),
             )
@@ -2685,7 +2660,7 @@ fn render_read_mcp_resource(
         renderable_action = renderable_action
             .with_header(blocked_action_header(
                 action_id.clone(),
-                "OK if I read this MCP resource?",
+                "可以读取这个 MCP 资源吗？",
                 buttons.run_button.clone(),
                 buttons.cancel_button.clone(),
                 props.action_model,
@@ -2715,7 +2690,7 @@ fn format_upload_artifact_text(
     request: &UploadArtifactRequest,
     result: Option<&UploadArtifactResult>,
 ) -> String {
-    let mut lines = vec![format!("Upload artifact: {}", request.file_path)];
+    let mut lines = vec![format!("上传 artifact：{}", request.file_path)];
 
     if let Some(description) = request.description.as_deref() {
         lines.push(format!("Description: {description}"));
@@ -2729,7 +2704,7 @@ fn format_upload_artifact_text(
         }) => {
             lines.push(format!("Status: uploaded artifact {artifact_uid}"));
             if let Some(filepath) = filepath.as_deref() {
-                lines.push(format!("Uploaded file: {filepath}"));
+                lines.push(format!("已上传文件：{filepath}"));
             }
         }
         Some(UploadArtifactResult::Error(error)) => {
@@ -2828,7 +2803,7 @@ fn render_use_computer(
             btn.render(
                 appearance,
                 button::Params {
-                    content: button::Content::Label("View screenshot".into()),
+                    content: button::Content::Label("查看截图".into()),
                     theme: &button::themes::Secondary,
                     options: button::Options {
                         size: button::Size::Small,
@@ -2871,7 +2846,7 @@ fn render_request_computer_use(
         renderable_action = renderable_action
             .with_header(blocked_action_header(
                 action_id.clone(),
-                "OK if I use computer control for this task?",
+                "可以为此任务使用电脑控制吗？",
                 buttons.run_button.clone(),
                 buttons.cancel_button.clone(),
                 props.action_model,
@@ -2917,7 +2892,7 @@ fn render_references_footer(
     )?;
 
     let title = Text::new_inline(
-        "References",
+        "引用",
         appearance.ui_font_family(),
         appearance.monospace_font_size(),
     )
@@ -3105,12 +3080,7 @@ fn render_response_footer(props: Props, app: &AppContext) -> Option<Box<dyn Elem
             ),
             props.state_handles.thumbs_up_handle.clone(),
         )
-        .with_tooltip(move || {
-            ui_builder
-                .tool_tip("Good response".to_string())
-                .build()
-                .finish()
-        })
+        .with_tooltip(move || ui_builder.tool_tip("好回复".to_string()).build().finish())
         .with_style(style_override)
         .with_hovered_styles(style_override_with_background)
         .with_active_styles(style_override_with_background);
@@ -3128,7 +3098,7 @@ fn render_response_footer(props: Props, app: &AppContext) -> Option<Box<dyn Elem
         .with_tooltip(move || {
             ui_builder
                 .clone()
-                .tool_tip("Bad response".to_string())
+                .tool_tip("差回复".to_string())
                 .build()
                 .finish()
         })
@@ -3198,12 +3168,7 @@ fn render_response_footer(props: Props, app: &AppContext) -> Option<Box<dyn Elem
             false,
             props.state_handles.continue_conversation_handle.clone(),
         )
-        .with_tooltip(move || {
-            ui_builder
-                .tool_tip("Continue conversation".to_string())
-                .build()
-                .finish()
-        })
+        .with_tooltip(move || ui_builder.tool_tip("继续对话".to_string()).build().finish())
         .with_style(style_override)
         .with_hovered_styles(style_override_with_background)
         .with_active_styles(style_override_with_background)
@@ -3222,12 +3187,7 @@ fn render_response_footer(props: Props, app: &AppContext) -> Option<Box<dyn Elem
             false,
             props.state_handles.fork_conversation_handle.clone(),
         )
-        .with_tooltip(move || {
-            ui_builder
-                .tool_tip("Fork conversation".to_string())
-                .build()
-                .finish()
-        })
+        .with_tooltip(move || ui_builder.tool_tip("复刻对话".to_string()).build().finish())
         .with_style(style_override)
         .with_hovered_styles(style_override_with_background)
         .with_active_styles(style_override_with_background)
@@ -3400,7 +3360,7 @@ fn render_usage_button(props: Props, app: &AppContext) -> Box<dyn Element> {
                 // Show tooltip on hover or while clicked
                 let mut stack = Stack::new().with_child(content.finish());
                 let tooltip = ui_builder
-                    .tool_tip("Show credit usage details".to_string())
+                    .tool_tip("显示点数用量详情".to_string())
                     .build()
                     .finish();
                 stack.add_positioned_overlay_child(
@@ -3734,7 +3694,7 @@ fn render_collapsible_debug_output(
         // "Debug output" label
         row.add_child(
             Text::new(
-                "Debug output".to_string(),
+                "调试输出".to_string(),
                 appearance.ai_font_family(),
                 appearance.monospace_font_size(),
             )
@@ -3877,16 +3837,16 @@ fn conversation_search_phase(task: &crate::ai::agent::task::Task) -> Conversatio
 
 fn format_conversation_search_phase(phase: &ConversationSearchPhase) -> String {
     match phase {
-        ConversationSearchPhase::ListingMessages => "Listing messages".to_string(),
+        ConversationSearchPhase::ListingMessages => "正在列出消息".to_string(),
         ConversationSearchPhase::Grepping { patterns } => {
             if patterns.is_empty() {
-                return "Grepping for patterns".to_string();
+                return "正在 Grep 模式".to_string();
             }
             let joined = truncate_from_end(&patterns.join(", "), 60);
-            format!("Grepping for patterns: {joined}")
+            format!("正在 Grep 模式：{joined}")
         }
         ConversationSearchPhase::ReadingMessages { count } => {
-            format!("Reading {count} messages")
+            format!("正在读取 {count} 条消息")
         }
     }
 }

@@ -29,7 +29,7 @@ fn format_upload_artifact_error(err: &anyhow::Error) -> String {
     let error_chain = format!("{err:#}");
 
     if error_chain != err.to_string() {
-        format!("Artifact upload failed: {error_chain}")
+        format!("Artifact 上传失败：{error_chain}")
     } else {
         error_chain
     }
@@ -121,9 +121,7 @@ impl UploadArtifactExecutor {
 
             let Some(server_conversation_token) = server_conversation_token else {
                 return ActionExecution::<()>::Sync(AIAgentActionResultType::UploadArtifact(
-                    UploadArtifactResult::Error(
-                        "Current conversation has not been synced to the server yet".to_string(),
-                    ),
+                    UploadArtifactResult::Error("当前对话尚未同步到服务器".to_string()),
                 ))
                 .into();
             };

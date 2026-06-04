@@ -65,7 +65,7 @@ const INNER_MARGIN: f32 = 20.;
 const MODAL_WIDTH: f32 = 862.;
 const BLOCK_TITLE_INPUT_WIDTH: f32 = 800.;
 
-const BLOCK_TITLE_PLACEHOLDER: &str = "Title (optional)";
+const BLOCK_TITLE_PLACEHOLDER: &str = "标题（可选）";
 
 // TODO(vorporeal): This is 12 in the specs, but I think our 14pt font is a bit
 // taller than 14pt?
@@ -77,13 +77,13 @@ const NEW_BUTTON_HORIZONTAL_PADDING: f32 = 10.;
 const NEW_COPY_BUTTON_WIDTH: f32 = 80.;
 
 const COMMAND_AND_OUTPUT_OPTION: (&str, DisplaySetting) =
-    ("Command and Output", DisplaySetting::CommandAndOutput);
-const COMMAND_OPTION: (&str, DisplaySetting) = ("Command", DisplaySetting::Command);
-const OUTPUT_OPTION: (&str, DisplaySetting) = ("Output", DisplaySetting::Output);
+    ("命令和输出", DisplaySetting::CommandAndOutput);
+const COMMAND_OPTION: (&str, DisplaySetting) = ("命令", DisplaySetting::Command);
+const OUTPUT_OPTION: (&str, DisplaySetting) = ("输出", DisplaySetting::Output);
 
 /// This default title is helpful for screen readers.
-const DEFAULT_EMBED_TITLE: &str = "embedded warp block";
-const BLOCK_CREATION_FAILED_MESSAGE: &str = "Something went wrong. Please try again.";
+const DEFAULT_EMBED_TITLE: &str = "嵌入式 Warp 块";
+const BLOCK_CREATION_FAILED_MESSAGE: &str = "出了点问题。请重试。";
 
 #[derive(PartialEq)]
 enum ShareRequestState {
@@ -160,7 +160,7 @@ pub fn init(app: &mut AppContext) {
         FixedBinding::custom(
             CustomAction::Copy,
             ShareBlockModalAction::CopyLink,
-            "Copy",
+            "复制",
             id!(ShareBlockModal::ui_name()),
         ),
         FixedBinding::new(
@@ -499,7 +499,7 @@ impl ShareBlockModal {
             );
             ctx.clipboard().write(ClipboardContent::plain_text(link));
             ctx.emit(ShareBlockModalEvent::ShowToast {
-                message: "Link copied.".to_string(),
+                message: "链接已复制。".to_string(),
                 flavor: ToastFlavor::Default,
             });
         }
@@ -543,7 +543,7 @@ impl ShareBlockModal {
         ctx.clipboard()
             .write(ClipboardContent::plain_text(embed_snippet));
         ctx.emit(ShareBlockModalEvent::ShowToast {
-            message: "Embed code copied.".to_string(),
+            message: "嵌入代码已复制。".to_string(),
             flavor: ToastFlavor::Success,
         });
     }
@@ -623,7 +623,7 @@ impl ShareBlockModal {
     fn render_create_block_buttons_row(&self, appearance: &Appearance) -> Box<dyn Element> {
         let create_link_button = self.render_create_block_button(
             appearance,
-            "Create link",
+            "创建链接",
             Icon::Link,
             ButtonVariant::Accent,
             self.mouse_state_handles
@@ -633,7 +633,7 @@ impl ShareBlockModal {
         );
         let get_embed_button = self.render_create_block_button(
             appearance,
-            "Get embed",
+            "获取嵌入代码",
             Icon::Code1,
             ButtonVariant::Basic,
             self.mouse_state_handles
@@ -660,7 +660,7 @@ impl ShareBlockModal {
             TextAndIconAlignment::TextFirst,
             if let ShareRequestState::Pending(pending_share_type) = self.request_state {
                 if pending_share_type == share_type {
-                    "Creating block...".to_string()
+                    "正在创建块...".to_string()
                 } else {
                     text_label.to_string()
                 }
@@ -735,7 +735,7 @@ impl ShareBlockModal {
         } else {
             let embed_snippet = self
                 .generate_embed_snippet(app)
-                .unwrap_or("Error generating embed snippet".to_string());
+                .unwrap_or("生成嵌入片段时出错".to_string());
             col.add_child(self.render_embed_label(appearance, embed_snippet));
             col.add_child(
                 Align::new(
@@ -761,7 +761,7 @@ impl ShareBlockModal {
                     .manage_permalinks_mouse_state
                     .clone(),
             )
-            .with_centered_text_label("Manage shared blocks".to_string())
+            .with_centered_text_label("管理共享块".to_string())
             .with_style(
                 self.button_style_overrides(appearance)
                     .set_font_size(12.)
@@ -793,7 +793,7 @@ impl ShareBlockModal {
     ) -> Box<dyn Element> {
         let text_and_icon = TextAndIcon::new(
             TextAndIconAlignment::TextFirst,
-            "Copy".to_string(),
+            "复制".to_string(),
             Icon::Copy.to_warpui_icon(appearance.theme().active_ui_text_color()),
             MainAxisSize::Max,
             MainAxisAlignment::Center,
@@ -867,7 +867,7 @@ impl ShareBlockModal {
             if link_generated {
                 self.block_title_editor.as_ref(app).buffer_text(app)
             } else {
-                "Share block".to_string()
+                "共享块".to_string()
             },
             appearance.ui_font_family(),
             24.,
@@ -955,7 +955,7 @@ impl ShareBlockModal {
                 .finish();
             let show_prompt_description = appearance
                 .ui_builder()
-                .span("Show prompt".to_string())
+                .span("显示提示".to_string())
                 .build()
                 .with_margin_left(2.)
                 .finish();
@@ -1056,7 +1056,7 @@ impl ShareBlockModal {
 
             let redact_secrets_description = appearance
                 .ui_builder()
-                .span("Redact secrets (API keys, passwords, IP addresses, PII etc.)".to_string())
+                .span("遮盖敏感信息（API 密钥、密码、IP 地址、个人身份信息等）".to_string())
                 .build()
                 .with_margin_left(4.)
                 .finish();

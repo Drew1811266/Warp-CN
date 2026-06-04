@@ -113,8 +113,7 @@ fn maybe_warn_team_api_key(ctx: &AppContext) {
     }
 
     eprintln!(
-        "\x1b[33mWarning: Free cloud credits apply to personal runs only but this run uses \
-         a team API key. If you want to use free cloud credits, consider using a personal API key instead.\x1b[0m"
+        "x1b[33m警告：免费云端点数仅适用于个人运行，但此运行使用的是团队 API 密钥。如需使用免费云端点数，请考虑改用个人 API 密钥。x1b[0m"
     );
 }
 
@@ -209,15 +208,13 @@ fn dispatch_command(
 fn format_skill_resolution_error(err: ResolveSkillError) -> String {
     match err {
         ResolveSkillError::NotFound { skill } => {
-            format!("Skill '{skill}' not found")
+            format!("未找到 skill '{skill}'")
         }
         ResolveSkillError::RepoNotFound { repo } => {
-            format!("Repository '{repo}' not found")
+            format!("未找到仓库 '{repo}'")
         }
         ResolveSkillError::Ambiguous { skill, candidates } => {
-            let mut msg = format!(
-                "Skill '{skill}' is ambiguous; specify as repo:skill_name\n\nCandidates:\n"
-            );
+            let mut msg = format!("skill '{skill}' 不明确；请按 repo:skill_name 指定。nn候选项：n");
             for path in candidates {
                 msg.push_str(&format!("- {}\n", path.display()));
             }
@@ -228,13 +225,13 @@ fn format_skill_resolution_error(err: ResolveSkillError) -> String {
             expected,
             found,
         } => {
-            format!("Repository '{repo}' found but belongs to org '{found}', expected '{expected}'")
+            format!("找到了仓库 '{repo}'，但它属于组织 '{found}'，预期为 '{expected}'")
         }
         ResolveSkillError::ParseFailed { path, message } => {
-            format!("Failed to parse skill file {}: {message}", path.display())
+            format!("解析 skill 文件 {} 失败：{message}", path.display())
         }
         ResolveSkillError::CloneFailed { org, repo, message } => {
-            format!("Failed to clone repository '{org}/{repo}': {message}")
+            format!("克隆仓库 '{org}/{repo}' 失败：{message}")
         }
     }
 }
@@ -263,7 +260,7 @@ fn run_agent(
             }
             if args.harness == Harness::OpenCode {
                 return Err(anyhow::anyhow!(
-                    "The opencode harness is only supported for local child agent launches."
+                    "opencode harness 仅支持本地子 Agent 启动。"
                 ));
             }
 
@@ -557,9 +554,7 @@ fn run_task(
         TaskCommand::Get(args) => {
             if args.conversation {
                 if !FeatureFlag::ConversationApi.is_enabled() {
-                    return Err(anyhow::anyhow!(
-                        "The --conversation flag is not available in this build"
-                    ));
+                    return Err(anyhow::anyhow!("此构建中不可使用 --conversation 标志"));
                 }
                 ambient::get_run_conversation(ctx, args.task_id)
             } else {
@@ -568,9 +563,7 @@ fn run_task(
         }
         TaskCommand::Conversation(conv_cmd) => {
             if !FeatureFlag::ConversationApi.is_enabled() {
-                return Err(anyhow::anyhow!(
-                    "The 'conversation' subcommand is not available in this build"
-                ));
+                return Err(anyhow::anyhow!("此构建中不可使用 'conversation' 子命令"));
             }
             match conv_cmd {
                 warp_cli::task::ConversationCommand::Get(args) => {
@@ -580,9 +573,7 @@ fn run_task(
         }
         TaskCommand::Message(message_cmd) => {
             if !FeatureFlag::OrchestrationV2.is_enabled() {
-                return Err(anyhow::anyhow!(
-                    "The 'message' subcommand is not available in this build"
-                ));
+                return Err(anyhow::anyhow!("此构建中不可使用 'message' 子命令"));
             }
             ambient::run_message(ctx, global_options, message_cmd)
         }
@@ -731,9 +722,7 @@ impl AgentDriverRunner {
                 HarnessKind::Unsupported(harness) => {
                     return Err(AgentDriverError::HarnessSetupFailed {
                         harness: harness.to_string(),
-                        reason: format!(
-                            "The {harness} harness is only supported for local child agent launches."
-                        ),
+                        reason: format!("{harness} harness 仅支持本地子 Agent 启动。"),
                     });
                 }
                 HarnessKind::Oz | HarnessKind::ThirdParty(_) => {}
@@ -961,7 +950,7 @@ impl AgentDriverRunner {
             // Extract the prompt text that we'll pass up to the server when we create the task.
             let prompt_for_task_creation = match &prompt {
                 Some(Prompt::PlainText(text)) => text.clone(),
-                Some(Prompt::SavedPrompt(id)) => format!("Saved prompt ({id})"),
+                Some(Prompt::SavedPrompt(id)) => format!("已保存提示词（{id}）"),
                 None => skill
                     .as_ref()
                     .map(|s| format!("/{}", s.skill_identifier))
@@ -1312,7 +1301,7 @@ impl AgentDriverRunner {
                 )
                 .ok_or_else(|| {
                     AgentDriverError::ConversationLoadFailed(
-                        "Failed to convert conversation data to AIConversation".into(),
+                        "无法将对话数据转换为 AIConversation".into(),
                     )
                 })?;
                 Ok(Some(driver::ResumeOptions::Oz(Box::new(
@@ -1337,9 +1326,7 @@ impl AgentDriverRunner {
             }
             HarnessKind::Unsupported(harness) => Err(AgentDriverError::HarnessSetupFailed {
                 harness: harness.to_string(),
-                reason: format!(
-                    "The {harness} harness is only supported for local child agent launches."
-                ),
+                reason: format!("{harness} harness 仅支持本地子 Agent 启动。"),
             }),
         }
     }
@@ -1493,7 +1480,7 @@ fn launch_command(
     let auth_state = AuthStateProvider::handle(ctx).as_ref(ctx).get();
     if !auth_state.is_logged_in() {
         return Err(anyhow::anyhow!(
-            "You are not logged in - please log in with `{cli_name} login` to continue."
+            "你尚未登录，请使用 `{cli_name} login` 登录后继续。"
         ));
     }
 
@@ -1515,9 +1502,10 @@ fn launch_command(
                 dispatched = true;
                 let auth_state = AuthStateProvider::handle(ctx).as_ref(ctx).get();
                 let message = if auth_state.is_api_key_authenticated() {
-                    "Your API key is invalid. Please provide a valid key via '--api-key' or the WARP_API_KEY environment variable.".to_string()
+                    "你的 API 密钥无效。请通过 '--api-key' 或 WARP_API_KEY 环境变量提供有效密钥。"
+                        .to_string()
                 } else {
-                    format!("Your credentials are invalid. Please log in again with `{cli_name} login`.")
+                    format!("你的凭据无效。请使用 `{cli_name} login` 重新登录。")
                 };
                 report_fatal_error(anyhow::anyhow!(message), ctx);
             }
@@ -1557,7 +1545,7 @@ fn report_fatal_error(err: anyhow::Error, ctx: &mut AppContext) {
         if let Ok(path) = log_file_path() {
             let _ = write!(
                 message,
-                "\n\nFor more information, check Warp logs at {}",
+                "nn如需更多信息，请查看 {} 处的 Warp 日志",
                 path.display()
             );
         }

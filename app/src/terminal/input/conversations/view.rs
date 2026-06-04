@@ -36,13 +36,13 @@ static TAB_CONFIGS: LazyLock<Vec<InlineMenuTabConfig<InlineConversationMenuTab>>
     LazyLock::new(|| {
         let mut configs = vec![InlineMenuTabConfig {
             id: InlineConversationMenuTab::All,
-            label: "All".to_string(),
+            label: "全部".to_string(),
             filters: HashSet::new(),
         }];
         if FeatureFlag::InlineMenuHeaders.is_enabled() {
             configs.push(InlineMenuTabConfig {
                 id: InlineConversationMenuTab::CurrentDirectory,
-                label: "Current Directory".to_string(),
+                label: "当前目录".to_string(),
                 filters: HashSet::from([QueryFilter::CurrentDirectoryConversations]),
             });
         }

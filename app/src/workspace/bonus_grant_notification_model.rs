@@ -110,7 +110,7 @@ impl BonusGrantNotificationModel {
             BonusGrantScope::Workspace(_) => "team",
         };
         format!(
-            "{} Reload Credits have been added to your {}.",
+            "{} 点 Reload 额度已添加到你的 {}。",
             grant.request_credits_granted, scope_text
         )
     }

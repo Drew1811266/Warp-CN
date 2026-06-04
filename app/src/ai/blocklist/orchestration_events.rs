@@ -206,15 +206,13 @@ impl OrchestrationEventService {
             let history_model = BlocklistAIHistoryModel::as_ref(ctx);
             let Some(child_conversation) = history_model.conversation(&child_conversation_id)
             else {
-                return SendEventResult::Error("Child conversation not found".to_string());
+                return SendEventResult::Error("未找到子对话".to_string());
             };
             if !child_conversation.status().is_in_progress() {
                 return SendEventResult::LifecycleDropped;
             }
             let Some(source_agent_id) = child_conversation.orchestration_agent_id() else {
-                return SendEventResult::Error(
-                    "Child conversation has no agent identifier".to_string(),
-                );
+                return SendEventResult::Error("子对话没有 Agent 标识符".to_string());
             };
             let parent_conversation_id =
                 child_conversation.parent_conversation_id().or_else(|| {
@@ -283,9 +281,7 @@ impl OrchestrationEventService {
                 ),
                 ctx
             );
-            return SendEventResult::Error(
-                "Cannot send lifecycle event with unspecified type".to_string(),
-            );
+            return SendEventResult::Error("无法发送未指定类型的生命周期事件".to_string());
         }
 
         let sender_agent_id = {
@@ -311,7 +307,7 @@ impl OrchestrationEventService {
                     ),
                     ctx
                 );
-                return SendEventResult::Error("Source conversation not found".to_string());
+                return SendEventResult::Error("未找到源对话".to_string());
             };
             let Some(sender_agent_id) = source_conversation
                 .server_conversation_token()
@@ -336,9 +332,7 @@ impl OrchestrationEventService {
                     ),
                     ctx
                 );
-                return SendEventResult::Error(
-                    "Source conversation has no server token — cannot send events".to_string(),
-                );
+                return SendEventResult::Error("源对话没有服务器令牌，无法发送事件".to_string());
             };
             sender_agent_id
         };
@@ -694,7 +688,7 @@ impl OrchestrationEventService {
                     ),
                     ctx
                 );
-                let error = "Source conversation not found".to_string();
+                let error = "未找到源对话".to_string();
                 self.log_send_message_error(
                     source_conversation_id,
                     target_agent_ids,
@@ -724,8 +718,7 @@ impl OrchestrationEventService {
                     ),
                     ctx
                 );
-                let error =
-                    "Source conversation has no server token — cannot send events".to_string();
+                let error = "源对话没有服务器令牌，无法发送事件".to_string();
                 self.log_send_message_error(
                     source_conversation_id,
                     target_agent_ids,
@@ -759,7 +752,7 @@ impl OrchestrationEventService {
                             ),
                             ctx
                         );
-                        let error = format!("Unknown agent address: {agent_id}");
+                        let error = format!("未知 Agent 地址：{agent_id}");
                         self.log_send_message_error(
                             source_conversation_id,
                             target_agent_ids,
@@ -790,7 +783,7 @@ impl OrchestrationEventService {
                 ),
                 ctx
             );
-            let error = "No target agents provided".to_string();
+            let error = "未提供目标 Agent".to_string();
             self.log_send_message_error(source_conversation_id, target_agent_ids, &subject, &error);
             return SendMessageResult::Error(error);
         }
@@ -874,9 +867,7 @@ impl OrchestrationEventService {
         ctx: &mut ModelContext<Self>,
     ) -> SendEventResult {
         if event_type == LifecycleEventType::Unspecified {
-            return SendEventResult::Error(
-                "Cannot send lifecycle event with unspecified type".to_string(),
-            );
+            return SendEventResult::Error("无法发送未指定类型的生命周期事件".to_string());
         }
         // Use one timestamp for every target in this fanout so all delivered copies of
         // the same logical lifecycle signal carry identical `occurred_at` semantics.

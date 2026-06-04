@@ -261,7 +261,7 @@ impl SearchItem for CodeSearchItem {
 
     fn accessibility_label(&self) -> String {
         format!(
-            "Code symbol: {} in {}:{}",
+            "代码符号：{}，位于 {}:{}",
             self.code_symbol.symbol.name,
             self.code_symbol.file_path.to_string_lossy(),
             self.code_symbol.symbol.line_number

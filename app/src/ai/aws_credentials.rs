@@ -34,9 +34,9 @@ pub enum LoadAwsCredentialsError {
 impl std::fmt::Display for LoadAwsCredentialsError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::NotConfigured => write!(f, "No AWS credentials configured"),
+            Self::NotConfigured => write!(f, "未配置 AWS 凭据"),
             Self::CredentialsLoadFailed(msg) => {
-                write!(f, "Failed to load AWS credentials: {msg}")
+                write!(f, "无法加载 AWS 凭据：{msg}")
             }
         }
     }
@@ -46,39 +46,38 @@ fn aws_profile_reference_for_message(profile: &str, capitalize_first_word: bool)
     let profile = profile.trim();
     if profile.is_empty() {
         if capitalize_first_word {
-            "The default AWS profile".to_string()
+            "默认 AWS 配置档".to_string()
         } else {
-            "the default AWS profile".to_string()
+            "默认 AWS 配置档".to_string()
         }
     } else {
-        let article = if capitalize_first_word { "The" } else { "the" };
-        format!("{article} AWS profile `{profile}`")
+        let article = if capitalize_first_word {
+            "AWS 配置档"
+        } else {
+            "AWS 配置档"
+        };
+        format!("{article} `{profile}`")
     }
 }
 
 fn user_facing_aws_credentials_error_message(err: &CredentialsError, profile: &str) -> String {
     match err {
         CredentialsError::CredentialsNotLoaded(_) => format!(
-            "AWS credentials were not found for {}. Log in with the AWS CLI or update your AWS credentials configuration, then refresh.",
+            "未找到 {} 的 AWS 凭据。请使用 AWS CLI 登录，或更新你的 AWS 凭据配置后刷新。",
             aws_profile_reference_for_message(profile, false)
         ),
-        CredentialsError::ProviderTimedOut(_) => {
-            "Timed out while loading AWS credentials. Refresh and try again.".to_string()
-        }
+        CredentialsError::ProviderTimedOut(_) => "加载 AWS 凭据超时。请刷新后重试。".to_string(),
         CredentialsError::InvalidConfiguration(_) => format!(
-            "{} is invalid or incomplete in your local AWS configuration. Update your AWS profile settings and credentials, then refresh.",
+            "{} 在本地 AWS 配置中无效或不完整。请更新 AWS 配置档设置和凭据后刷新。",
             aws_profile_reference_for_message(profile, true)
         ),
         CredentialsError::ProviderError(_) => {
-            "Unable to load AWS credentials from your configured provider. Refresh your AWS login and try again."
-                .to_string()
+            "无法从已配置的提供方加载 AWS 凭据。请刷新 AWS 登录后重试。".to_string()
         }
         CredentialsError::Unhandled(_) => {
-            "Unexpected error while loading AWS credentials. Refresh your AWS login and try again."
-                .to_string()
+            "加载 AWS 凭据时发生意外错误。请刷新 AWS 登录后重试。".to_string()
         }
-        _ => "Unable to load AWS credentials. Refresh your AWS login and try again."
-            .to_string(),
+        _ => "无法加载 AWS 凭据。请刷新 AWS 登录后重试。".to_string(),
     }
 }
 
@@ -295,7 +294,7 @@ fn refresh_aws_credentials_local_chain(
     );
     Box::pin(async move {
         rx.await
-            .unwrap_or_else(|_| Err("Credential refresh was interrupted".to_string()))
+            .unwrap_or_else(|_| Err("凭据刷新已中断".to_string()))
     })
 }
 
@@ -320,9 +319,7 @@ fn refresh_aws_credentials_oidc(
     }
 
     let Some(task_id) = task_id else {
-        let message = "AWS Bedrock inference requires an ambient task ID before credentials \
-                       can be minted"
-            .to_string();
+        let message = "AWS Bedrock 推理需要 ambient task ID 后才能生成凭据".to_string();
         manager.set_aws_credentials_state(
             AwsCredentialsState::Failed {
                 message: message.clone(),
@@ -406,7 +403,7 @@ fn refresh_aws_credentials_oidc(
     );
     Box::pin(async move {
         rx.await
-            .unwrap_or_else(|_| Err("Credential refresh was interrupted".to_string()))
+            .unwrap_or_else(|_| Err("凭据刷新已中断".to_string()))
     })
 }
 

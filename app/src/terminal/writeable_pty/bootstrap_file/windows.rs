@@ -26,13 +26,13 @@ enum FilePath {
 pub enum TempBootstrapFileError {
     #[error(transparent)]
     ConvertPath(#[from] WSLPathConversionError),
-    #[error("could not create temporary file")]
+    #[error("无法创建临时文件")]
     Create(std::io::Error),
-    #[error("could not write bootstrap script to temporary file")]
+    #[error("无法将启动脚本写入临时文件")]
     Write(std::io::Error),
-    #[error("could not flush to temporary file")]
+    #[error("无法刷新临时文件")]
     Flush(std::io::Error),
-    #[error("could not persist temporary file")]
+    #[error("无法持久化临时文件")]
     Persist(#[from] tempfile::PersistError),
 }
 

@@ -152,10 +152,10 @@ impl SpendingLimitModal {
     fn error_text(&self) -> Option<String> {
         match self.input_error_state {
             Some(SpendingLimitModalInputErrorState::InvalidNumberFormat) => {
-                Some("Please enter a valid currency amount".to_string())
+                Some("请输入有效的货币金额".to_string())
             }
             Some(SpendingLimitModalInputErrorState::NumberOutOfRange) => {
-                Some("Please enter a price between $0.01 and $10,000,000".to_string())
+                Some("请输入 $0.01 到 $10,000,000 之间的价格".to_string())
             }
             None => None,
         }
@@ -195,7 +195,7 @@ impl View for SpendingLimitModal {
         let theme = appearance.theme();
 
         let description_text = Text::new(
-            "Warp will prevent use of premium models when this dollar limit is reached. Resets on a monthly basis.",
+            "达到此美元限制后，Warp 将阻止使用高级模型。每月重置。",
             appearance.ui_font_family(),
             14.,
         )
@@ -203,7 +203,7 @@ impl View for SpendingLimitModal {
         .finish();
 
         let additional_note_text = Text::new(
-            "Note that AI credits made near your chosen limit may exceed it by a few dollars.",
+            "请注意，在接近你选择的限制时产生的 AI 额度费用可能会超出几美元。",
             appearance.ui_font_family(),
             12.,
         )
@@ -263,7 +263,7 @@ impl View for SpendingLimitModal {
                 ButtonVariant::Accent,
                 self.update_button_mouse_state.clone(),
             )
-            .with_text_label("Update".to_string())
+            .with_text_label("更新".to_string())
             .with_style(button_style);
 
         if self.input_error_state.is_some() {
@@ -278,7 +278,7 @@ impl View for SpendingLimitModal {
                         ButtonVariant::Secondary,
                         self.cancel_button_mouse_state.clone(),
                     )
-                    .with_text_label("Cancel".to_string())
+                    .with_text_label("取消".to_string())
                     .with_style(button_style)
                     .build()
                     .on_click(|ctx, _, _| {

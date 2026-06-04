@@ -48,7 +48,7 @@ pub fn build_managed_secret_value(
 ) -> Result<ManagedSecretValue> {
     if field_values.len() != info.fields.len() {
         return Err(anyhow!(
-            "Expected {} field values, got {}",
+            "预期 {} 个字段值，实际为 {} 个",
             info.fields.len(),
             field_values.len()
         ));
@@ -92,14 +92,14 @@ pub fn build_managed_secret_value(
             ))
         }
         ManagedSecretType::RawValue | ManagedSecretType::Dotenvx => Err(anyhow!(
-            "Auth secret type {:?} is not supported via the harness FTUX flow",
+            "运行框架 FTUX 流程不支持认证密钥类型 {:?}",
             info.secret_type
         )),
     }
 }
 
 static CODEX_AUTH_SECRET_TYPES: [AuthSecretTypeInfo; 1] = [AuthSecretTypeInfo {
-    display_name: "OpenAI API Key",
+    display_name: "OpenAI API 密钥",
     secret_type: ManagedSecretType::OpenaiApiKey,
     learn_more_url: CODEX_LEARN_MORE_URL,
     fields: &[
@@ -120,7 +120,7 @@ static CODEX_AUTH_SECRET_TYPES: [AuthSecretTypeInfo; 1] = [AuthSecretTypeInfo {
 
 static CLAUDE_AUTH_SECRET_TYPES: [AuthSecretTypeInfo; 3] = [
     AuthSecretTypeInfo {
-        display_name: "Anthropic API Key",
+        display_name: "Anthropic API 密钥",
         secret_type: ManagedSecretType::AnthropicApiKey,
         learn_more_url: CLAUDE_LEARN_MORE_URL,
         fields: &[AuthSecretTypeField {
@@ -131,13 +131,13 @@ static CLAUDE_AUTH_SECRET_TYPES: [AuthSecretTypeInfo; 3] = [
         }],
     },
     AuthSecretTypeInfo {
-        display_name: "Bedrock API Key",
+        display_name: "Bedrock API 密钥",
         secret_type: ManagedSecretType::AnthropicBedrockApiKey,
         learn_more_url: CLAUDE_LEARN_MORE_URL,
         fields: &[
             AuthSecretTypeField {
                 label: "AWS_BEARER_TOKEN_BEDROCK",
-                placeholder: Some("Bearer token"),
+                placeholder: Some("Bearer 令牌"),
                 optional: false,
                 sensitive: true,
             },
@@ -150,7 +150,7 @@ static CLAUDE_AUTH_SECRET_TYPES: [AuthSecretTypeInfo; 3] = [
         ],
     },
     AuthSecretTypeInfo {
-        display_name: "Bedrock Access Key",
+        display_name: "Bedrock 访问密钥",
         secret_type: ManagedSecretType::AnthropicBedrockAccessKey,
         learn_more_url: CLAUDE_LEARN_MORE_URL,
         fields: &[
@@ -162,13 +162,13 @@ static CLAUDE_AUTH_SECRET_TYPES: [AuthSecretTypeInfo; 3] = [
             },
             AuthSecretTypeField {
                 label: "AWS_SECRET_ACCESS_KEY",
-                placeholder: Some("Secret access key"),
+                placeholder: Some("秘密访问密钥"),
                 optional: false,
                 sensitive: true,
             },
             AuthSecretTypeField {
                 label: "AWS_SESSION_TOKEN",
-                placeholder: Some("Session token (temporary credentials only)"),
+                placeholder: Some("会话令牌（仅临时凭据）"),
                 optional: true,
                 sensitive: true,
             },

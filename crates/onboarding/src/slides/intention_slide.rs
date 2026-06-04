@@ -83,7 +83,7 @@ impl IntentionSlide {
 
         let title = appearance
             .ui_builder()
-            .paragraph("Welcome to Warp")
+            .paragraph("欢迎使用 Warp")
             .with_style(UiComponentStyles {
                 font_size: Some(36.),
                 font_weight: Some(Weight::Medium),
@@ -92,19 +92,16 @@ impl IntentionSlide {
             .build()
             .finish();
 
-        let subtitle = FormattedTextElement::from_str(
-            "How do you want to work?",
-            appearance.ui_font_family(),
-            16.,
-        )
-        .with_color(internal_colors::text_sub(
-            theme,
-            theme.background().into_solid(),
-        ))
-        .with_weight(Weight::Normal)
-        .with_alignment(TextAlignment::Left)
-        .with_line_height_ratio(1.0)
-        .finish();
+        let subtitle =
+            FormattedTextElement::from_str("你想如何使用 Warp？", appearance.ui_font_family(), 16.)
+                .with_color(internal_colors::text_sub(
+                    theme,
+                    theme.background().into_solid(),
+                ))
+                .with_weight(Weight::Normal)
+                .with_alignment(TextAlignment::Left)
+                .with_line_height_ratio(1.0)
+                .finish();
 
         Flex::column()
             .with_main_axis_size(MainAxisSize::Min)
@@ -202,7 +199,7 @@ impl IntentionSlide {
         let header_row = {
             let label = appearance
                 .ui_builder()
-                .paragraph("Build faster with AI agents")
+                .paragraph("使用 AI Agent 更快构建")
                 .with_style(UiComponentStyles {
                     font_size: Some(16.),
                     font_weight: Some(Weight::Semibold),
@@ -240,7 +237,7 @@ impl IntentionSlide {
         };
 
         let description = FormattedTextElement::from_str(
-            "An agent-first experience with best in class terminal support. Get terminal and agent driven development AI features like:",
+            "Agent 优先体验，并保留一流终端能力。启用终端与 Agent 驱动开发功能：",
             appearance.ui_font_family(),
             14.,
         )
@@ -321,7 +318,7 @@ impl IntentionSlide {
 
         let label = appearance
             .ui_builder()
-            .paragraph("Just use the terminal")
+            .paragraph("只使用终端")
             .with_style(UiComponentStyles {
                 font_size: Some(16.),
                 font_weight: Some(Weight::Semibold),
@@ -334,7 +331,7 @@ impl IntentionSlide {
         let badge = {
             let badge_text = appearance
                 .ui_builder()
-                .paragraph("No AI features")
+                .paragraph("不启用 AI 功能")
                 .with_style(UiComponentStyles {
                     font_size: Some(12.),
                     font_weight: Some(Weight::Semibold),
@@ -360,7 +357,7 @@ impl IntentionSlide {
             .finish();
 
         let description = FormattedTextElement::from_str(
-            "A modern terminal optimized for speed, context, and control without AI.",
+            "一个重视速度、上下文和掌控感的现代终端，不启用 AI。",
             appearance.ui_font_family(),
             14.,
         )
@@ -388,7 +385,7 @@ impl IntentionSlide {
         let back_button = self.back_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Back".into()),
+                content: button::Content::Label("返回".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -401,9 +398,9 @@ impl IntentionSlide {
 
         let new_settings_modes = FeatureFlag::OpenWarpNewSettingsModes.is_enabled();
         let next_text = if !new_settings_modes && selected_index == 1 {
-            "Get Warping"
+            "开始使用 Warp"
         } else {
-            "Next"
+            "下一步"
         };
         let enter = Keystroke::parse("enter").unwrap_or_default();
         let next_button = self.next_button.render(

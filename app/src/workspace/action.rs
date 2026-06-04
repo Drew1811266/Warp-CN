@@ -763,14 +763,14 @@ impl From<&WorkspaceAction> for LoginGatedFeature {
     fn from(val: &WorkspaceAction) -> LoginGatedFeature {
         use WorkspaceAction::*;
         match val {
-            ImportToTeamDrive => "Importing to a team drive",
-            CreateTeamNotebook => "Creating a team notebook",
-            CreateTeamWorkflow => "Creating a team workflow",
-            CreateTeamFolder => "Creating a team folder",
-            CreateTeamEnvVarCollection => "Creating a team environment variable collection",
-            CreateTeamAIPrompt => "Creating a team prompt",
-            OpenShareSessionModal(_) => "Sharing a session",
-            _ => "Unknown reason",
+            ImportToTeamDrive => "正在导入到团队 Drive",
+            CreateTeamNotebook => "正在创建团队笔记本",
+            CreateTeamWorkflow => "正在创建团队工作流",
+            CreateTeamFolder => "正在创建团队文件夹",
+            CreateTeamEnvVarCollection => "正在创建团队环境变量集合",
+            CreateTeamAIPrompt => "正在创建团队提示词",
+            OpenShareSessionModal(_) => "正在共享会话",
+            _ => "未知原因",
         }
     }
 }

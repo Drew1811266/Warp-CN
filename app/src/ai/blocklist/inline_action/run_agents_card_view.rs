@@ -70,7 +70,7 @@ use crate::view_components::compactible_split_action_button::CompactibleSplitAct
 use crate::view_components::dropdown::DropdownEvent;
 use crate::view_components::{FilterableDropdownEvent, FilterableDropdownOrientation};
 
-const RUN_AGENTS_CARD_TITLE: &str = "Can I start additional agents for this task?";
+const RUN_AGENTS_CARD_TITLE: &str = "可以为此任务启动更多 Agent 吗？";
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
@@ -312,7 +312,7 @@ impl RunAgentsCardView {
         let accept_keystroke = ENTER_KEYSTROKE.clone();
 
         let reject_button = CompactibleActionButton::new(
-            "Reject".to_string(),
+            "拒绝".to_string(),
             Some(KeystrokeSource::Fixed(reject_keystroke)),
             ButtonSize::Small,
             RunAgentsCardViewAction::Reject,
@@ -322,7 +322,7 @@ impl RunAgentsCardView {
         );
         let position_id_prefix = format!("{action_id:?}");
         let accept_button = CompactibleSplitActionButton::new(
-            "Accept".to_string(),
+            "接受".to_string(),
             Some(KeystrokeSource::Fixed(accept_keystroke)),
             ButtonSize::Small,
             RunAgentsCardViewAction::Accept,
@@ -711,7 +711,7 @@ impl RunAgentsCardView {
         };
         accept.set_disabled(reason.is_some(), ctx);
         // Tooltip explains why the button is disabled; falls back to "Accept".
-        accept.set_tooltip(reason.or_else(|| Some("Accept".to_string())), ctx);
+        accept.set_tooltip(reason.or_else(|| Some("接受".to_string())), ctx);
         self.handles.accept_button = Some(accept);
     }
 
@@ -922,7 +922,7 @@ impl RunAgentsCardView {
     fn toggle_accept_menu(&mut self, ctx: &mut ViewContext<Self>) {
         self.is_accept_menu_open = !self.is_accept_menu_open;
         if self.is_accept_menu_open {
-            let item = MenuItemFields::new_with_label("Accept w/o orchestration", "")
+            let item = MenuItemFields::new_with_label("接受但不编排", "")
                 .with_on_select_action(RunAgentsCardViewAction::AcceptWithoutOrchestration)
                 .into_item();
             self.accept_menu.update(ctx, |menu, ctx| {
@@ -984,7 +984,7 @@ impl View for RunAgentsCardView {
         // because restored blocks have no pending action status.
         if self.block_model.is_restored() {
             return render_status_only_card(
-                "Spawn agents cancelled".to_string(),
+                "Agent 启动已取消".to_string(),
                 appearance,
                 StatusKind::Cancelled,
                 app,
@@ -996,7 +996,7 @@ impl View for RunAgentsCardView {
         // and the action is queued for user confirmation).
         if !matches!(status, Some(AIActionStatus::Blocked)) {
             return render_status_only_card(
-                "Configuring agents\u{2026}".to_string(),
+                "正在配置 Agent...".to_string(),
                 appearance,
                 StatusKind::Spawning,
                 app,
@@ -1301,7 +1301,7 @@ fn render_summary(state: &RunAgentsEditState, appearance: &Appearance) -> Box<dy
     let theme = appearance.theme();
     let summary = if state.summary.trim().is_empty() {
         format!(
-            "Spawn {} agent(s) to address this task.",
+            "启动 {} 个 Agent 来处理此任务。",
             state.agent_run_configs.len()
         )
     } else {
@@ -1325,7 +1325,7 @@ fn render_agents_section(state: &RunAgentsEditState, app: &AppContext) -> Box<dy
     let appearance = Appearance::as_ref(app);
     let theme = appearance.theme();
     let label = Text::new(
-        format!("Agents ({})", state.agent_run_configs.len()),
+        format!("Agent（{}）", state.agent_run_configs.len()),
         appearance.ui_font_family(),
         appearance.monospace_font_size() - 1.,
     )
@@ -1366,12 +1366,12 @@ pub(crate) fn format_terminal_state(result: &RunAgentsResult) -> (String, Status
                 .count();
             let label = if launched == total {
                 if total == 1 {
-                    "Spawned 1 agent".to_string()
+                    "已启动 1 个 Agent".to_string()
                 } else {
-                    format!("Spawned {total} agents")
+                    format!("已启动 {total} 个 Agent")
                 }
             } else {
-                format!("Spawned {launched} of {total} agents")
+                format!("已启动 {total} 个 Agent 中的 {launched} 个")
             };
             let kind = if launched == total {
                 StatusKind::Success
@@ -1382,24 +1382,21 @@ pub(crate) fn format_terminal_state(result: &RunAgentsResult) -> (String, Status
         }
         RunAgentsResult::Denied { reason } => {
             let body = if reason.is_empty() {
-                "Orchestration is currently disabled. Re-enable on the plan card to launch."
-                    .to_string()
+                "编排当前已停用。请在计划卡片中重新启用后再启动。".to_string()
             } else {
-                format!(
-                    "Orchestration is currently disabled. Re-enable on the plan card to launch. ({reason})"
-                )
+                format!("编排当前已停用。请在计划卡片中重新启用后再启动。（{reason}）")
             };
             (body, StatusKind::Cancelled)
         }
         RunAgentsResult::Failure { error } => {
             let label = if error.is_empty() {
-                "Failed to start orchestration".to_string()
+                "启动编排失败".to_string()
             } else {
-                format!("Failed to start orchestration: {error}")
+                format!("启动编排失败：{error}")
             };
             (label, StatusKind::Failure)
         }
-        RunAgentsResult::Cancelled => ("Spawn agents cancelled".to_string(), StatusKind::Cancelled),
+        RunAgentsResult::Cancelled => ("Agent 启动已取消".to_string(), StatusKind::Cancelled),
     }
 }
 
@@ -1419,9 +1416,9 @@ fn render_spawning_card(
 ) -> Box<dyn Element> {
     let total = snapshot.agent_count;
     let label = if total == 1 {
-        "Spawning 1 agent\u{2026}".to_string()
+        "正在启动 1 个 Agent...".to_string()
     } else {
-        format!("Spawning {total} agents\u{2026}")
+        format!("正在启动 {total} 个 Agent...")
     };
     render_status_only_card(label, appearance, StatusKind::Spawning, app)
 }

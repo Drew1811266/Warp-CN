@@ -82,24 +82,24 @@ fn push_unique_path(paths: &mut Vec<PathBuf>, path: PathBuf) {
 
 #[derive(Debug, thiserror::Error)]
 pub enum ResolveSkillError {
-    #[error("Skill '{skill}' not found")]
+    #[error("未找到 Skill“{skill}”")]
     NotFound { skill: String },
-    #[error("Repository '{repo}' not found")]
+    #[error("未找到仓库“{repo}”")]
     RepoNotFound { repo: String },
-    #[error("Skill '{skill}' is ambiguous; specify as repo:skill_name")]
+    #[error("Skill“{skill}”不明确；请指定为 repo:skill_name")]
     Ambiguous {
         skill: String,
         candidates: Vec<PathBuf>,
     },
-    #[error("Repository '{repo}' found but belongs to org '{found}', expected '{expected}'")]
+    #[error("找到了仓库“{repo}”，但它属于组织“{found}”，预期为“{expected}”")]
     OrgMismatch {
         repo: String,
         expected: String,
         found: String,
     },
-    #[error("Failed to parse skill file {path}: {message}")]
+    #[error("无法解析 skill 文件 {path}: {message}")]
     ParseFailed { path: PathBuf, message: String },
-    #[error("Failed to clone repository '{org}/{repo}': {message}")]
+    #[error("无法克隆仓库“{org}/{repo}”: {message}")]
     CloneFailed {
         org: String,
         repo: String,
@@ -154,7 +154,7 @@ pub async fn clone_repo_for_skill(
     if target_dir.exists() {
         if target_dir.join(".git").is_dir() {
             log::info!(
-                "Target directory {} already exists and appears to be a git repo, skipping clone",
+                "目标目录 {} 已存在且似乎是 git 仓库，跳过克隆",
                 target_dir.display()
             );
             return Ok(());
@@ -163,10 +163,7 @@ pub async fn clone_repo_for_skill(
         return Err(ResolveSkillError::CloneFailed {
             org: org.to_string(),
             repo: repo.to_string(),
-            message: format!(
-                "Target directory {} already exists but is not a git repository",
-                target_dir.display()
-            ),
+            message: format!("目标目录 {} 已存在，但不是 git 仓库", target_dir.display()),
         });
     }
 
@@ -187,7 +184,7 @@ pub async fn clone_repo_for_skill(
         .map_err(|e| ResolveSkillError::CloneFailed {
             org: org.to_string(),
             repo: repo.to_string(),
-            message: format!("Failed to execute git clone: {e}"),
+            message: format!("无法执行 git clone: {e}"),
         })?;
 
     if !output.status.success() {

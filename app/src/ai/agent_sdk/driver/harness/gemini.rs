@@ -262,12 +262,8 @@ fn prepare_gemini_environment_config(
     )?;
     if let Some(prompt) = system_prompt {
         let prompt_path = gemini_dir.join(GEMINI_SYSTEM_PROMPT_FILE_NAME);
-        std::fs::write(&prompt_path, prompt).with_context(|| {
-            format!(
-                "Failed to write Gemini system prompt to {}",
-                prompt_path.display()
-            )
-        })?;
+        std::fs::write(&prompt_path, prompt)
+            .with_context(|| format!("无法将 Gemini 系统提示词写入 {}", prompt_path.display()))?;
     }
     Ok(())
 }
@@ -289,11 +285,7 @@ fn prepare_gemini_settings(settings_path: &Path, has_system_prompt: bool) -> Res
         }
     }
 
-    write_json_file(
-        settings_path,
-        &settings,
-        "Failed to serialize Gemini settings",
-    )
+    write_json_file(settings_path, &settings, "无法序列化 Gemini 设置")
 }
 
 fn prepare_gemini_trusted_folders(trusted_path: &Path, working_dir: &Path) -> Result<()> {
@@ -302,11 +294,7 @@ fn prepare_gemini_trusted_folders(trusted_path: &Path, working_dir: &Path) -> Re
         working_dir.to_string_lossy().into_owned(),
         GEMINI_TRUST_LEVEL_FOLDER.to_owned(),
     );
-    write_json_file(
-        trusted_path,
-        &trusted,
-        "Failed to serialize Gemini trusted folders",
-    )
+    write_json_file(trusted_path, &trusted, "无法序列化 Gemini 可信文件夹")
 }
 
 const GEMINI_CONFIG_DIR: &str = ".gemini";

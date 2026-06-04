@@ -646,7 +646,7 @@ impl Network {
             async move {
                 log::info!("Connecting to session sharing server");
                 let Some(create_endpoint) = connect_endpoint("/sessions/create".to_owned()) else {
-                    anyhow::bail!("This channel does not support session-sharing.");
+                    anyhow::bail!("此渠道不支持会话共享。");
                 };
                 let user_id = UserID {
                     anonymous_id,
@@ -704,7 +704,7 @@ impl Network {
                     IapManager::handle(ctx).update(ctx, |manager, ctx| {
                         manager.check_ws_connect_error(&e, ctx);
                     });
-                    let cause = Arc::new(e.context("Failed to create shared session"));
+                    let cause = Arc::new(e.context("无法创建共享会话"));
                     report_error!(&*cause);
                     ctx.emit(NetworkEvent::FailedToCreateSharedSession {
                         reason: FailedToInitializeSessionReason::internal_server_error_without_details(),
@@ -727,14 +727,12 @@ impl Network {
         let (Some(session_id), Some(reconnect_token)) =
             (self.session_id, self.reconnect_token.clone())
         else {
-            log::error!(
-                "Cannot reconnect to session as sharer without session_id, and reconnect_token"
-            );
+            log::error!("缺少 session_id 和 reconnect_token，无法以共享者身份重新连接到会话");
             return;
         };
         let Some(reconnect_endpoint) = connect_endpoint(format!("/sessions/{session_id}/resume"))
         else {
-            log::error!("This channel does not support session-sharing.");
+            log::error!("此渠道不支持会话共享。");
             return;
         };
         self.log_diagnostic(
@@ -833,7 +831,7 @@ impl Network {
                             "outcome=transport_retries_exhausted",
                         );
                         log::warn!(
-                            "Failed to reconnect to shared session, and retries exhausted: {e}"
+                            "重新连接共享会话失败，重试次数已用尽：{e}"
                         );
                         network.close_without_reconnection();
                         ctx.emit(NetworkEvent::FailedToReconnect);
@@ -893,7 +891,7 @@ impl Network {
                     // to get a possibly-more explicit reason.
                     ctx.emit(NetworkEvent::FailedToCreateSharedSession {
                         reason: FailedToInitializeSessionReason::InternalServerError {
-                            details: "Websocket closed before starting session".to_string(),
+                            details: "会话启动前 Websocket 已关闭".to_string(),
                         },
                         cause: None,
                     });
@@ -1337,8 +1335,7 @@ impl Network {
     }
 }
 
-const NO_QUOTA_REMAINING_MESSAGE: &str =
-    "Session sharing usage exceeded for the day. Please try again later.";
+const NO_QUOTA_REMAINING_MESSAGE: &str = "今天的会话共享使用量已超出限制。请稍后重试。";
 fn session_terminated_reason_diagnostic_label(reason: &SessionTerminatedReason) -> &'static str {
     match reason {
         SessionTerminatedReason::NoUserQuotaRemaining {} => "no_user_quota_remaining",
@@ -1359,10 +1356,10 @@ pub fn session_terminated_reason_string(
         }
         SessionTerminatedReason::ExceededSizeLimit => {
             let max_bytes = max_session_size.get_appropriate_unit(UnitType::Decimal);
-            format!("Session limit ({max_bytes}) exceeded. Please reshare to continue.")
+            format!("已超出会话限制（{max_bytes}）。请重新共享以继续。")
         }
         SessionTerminatedReason::InternalServerError { .. } => {
-            "Session ended due to an internal error. Please try sharing again.".to_string()
+            "由于内部错误，会话已结束。请尝试重新共享。".to_string()
         }
     }
 }
@@ -1371,29 +1368,25 @@ pub fn session_terminated_reason_string(
 pub fn failed_to_initialize_session_user_error(reason: &FailedToInitializeSessionReason) -> String {
     match reason {
         FailedToInitializeSessionReason::InternalServerError { .. } => {
-            "An internal error occurred. Please try sharing again."
+            "发生内部错误。请尝试重新共享。"
         }
         FailedToInitializeSessionReason::ScrollbackTooLarge {} => {
-            "Scrollback exceeds limit. Try sharing again without scrollback."
+            "回滚内容超出限制。请尝试不包含回滚内容重新共享。"
         }
         FailedToInitializeSessionReason::NoUserQuotaRemaining { .. } => {
             // TODO: we should pass down the next refresh time to tell the user.
             NO_QUOTA_REMAINING_MESSAGE
         }
-        FailedToInitializeSessionReason::UserNotFound => "You must be logged in to share sessions.",
+        FailedToInitializeSessionReason::UserNotFound => "必须登录后才能共享会话。",
     }
     .to_string()
 }
 
 pub fn failed_to_add_guests_user_error(reason: &FailedToAddGuestsReason) -> String {
     match reason {
-        FailedToAddGuestsReason::Invalid => "Something went wrong. Please try again.",
-        FailedToAddGuestsReason::NotWarpUsers => {
-            "One or more emails were not associated with Warp accounts."
-        }
-        FailedToAddGuestsReason::GuestAlreadyAdded => {
-            "One or more emails have already been added to the session."
-        }
+        FailedToAddGuestsReason::Invalid => "出了点问题。请重试。",
+        FailedToAddGuestsReason::NotWarpUsers => "一个或多个邮箱未关联 Warp 账号。",
+        FailedToAddGuestsReason::GuestAlreadyAdded => "一个或多个邮箱已添加到此会话。",
     }
     .to_string()
 }

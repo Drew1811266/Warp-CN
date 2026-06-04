@@ -149,10 +149,10 @@ const LINEAR_SCROLLING: ScrollingAcceleration = ScrollingAcceleration::Polynomia
 /// have a height that extends down to the bottom of the window when there's a horizontal scroll bar, which messes with the on-hover behavior.
 const BLOCK_HOVER_BUTTON_HEIGHT: f32 = 28.;
 
-const TAG_AGENT_FOR_ASSISTANCE_TEXT: &str = "Tag agent for assistance";
+const TAG_AGENT_FOR_ASSISTANCE_TEXT: &str = "标记 Agent 请求协助";
 
-const SAVE_AS_WORKFLOW_TEXT: &str = "Save as Workflow";
-const SAVE_AS_WORKFLOW_SECRETS_TEXT: &str = "Blocks containing secrets cannot be saved.";
+const SAVE_AS_WORKFLOW_TEXT: &str = "保存为工作流";
+const SAVE_AS_WORKFLOW_SECRETS_TEXT: &str = "包含密钥的块无法保存。";
 
 enum ScrollingAcceleration {
     Polynomial(f32),
@@ -3407,15 +3407,15 @@ impl Element for BlockListElement {
                     // we want to show different text in the separator if this is an individual conversation
                     // restored from the command palette
                     let banner_intro_text = if is_historical_conversation_restoration {
-                        "Conversation restored".to_string()
+                        "会话已恢复".to_string()
                     } else {
-                        "Previous session".to_string()
+                        "上一个会话".to_string()
                     };
 
                     let separator_text =
                         if let Some(ts) = (*model).block_list().restored_session_ts() {
                             format!(
-                                "{banner_intro_text} from {}",
+                                "{banner_intro_text}，来自 {}",
                                 ts.format("%a %b %-d at %-I:%M %p")
                             )
                         } else {

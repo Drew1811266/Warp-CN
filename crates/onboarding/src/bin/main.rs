@@ -88,7 +88,7 @@ impl OnboardingMainView {
         let models = vec![
             OnboardingModelInfo {
                 id: LLMId::from("auto"),
-                title: "Auto".to_string(),
+                title: "自动".to_string(),
                 icon: Icon::Oz,
                 requires_upgrade: false,
                 is_default: true,
@@ -203,9 +203,9 @@ impl View for FinishedOnboardingView {
         let appearance = Appearance::as_ref(app);
 
         let header_text = if self.selected_settings.is_some() {
-            "Finished Onboarding"
+            "已完成引导"
         } else {
-            "Skipped Onboarding"
+            "已跳过引导"
         };
 
         let header = appearance

@@ -43,7 +43,8 @@ use crate::terminal::input::message_bar::{Message, MessageItem};
 use crate::workspace::WorkspaceAction;
 use crate::workspaces::user_workspaces::UserWorkspaces;
 
-const AUTO_BEDROCK_TOOLTIP: &str = "Warp uses Bedrock when the model Auto selects supports it; otherwise it may use Warp-hosted inference.";
+const AUTO_BEDROCK_TOOLTIP: &str =
+    "当“自动”选择的模型支持 Bedrock 时，Warp 会使用 Bedrock；否则可能使用 Warp 托管推理。";
 
 #[derive(Clone, Debug)]
 pub struct AcceptModel {
@@ -63,7 +64,7 @@ impl InlineMenuAction for AcceptModel {
                 key: "enter".to_owned(),
                 ..Default::default()
             }),
-            MessageItem::text(" to select"),
+            MessageItem::text(" 选择"),
             MessageItem::keystroke(if OperatingSystem::get().is_mac() {
                 Keystroke {
                     key: "enter".to_owned(),
@@ -78,7 +79,7 @@ impl InlineMenuAction for AcceptModel {
                     ..Default::default()
                 }
             }),
-            MessageItem::text(" select and save to profile"),
+            MessageItem::text(" 选择并保存到配置"),
         ];
 
         if args.inline_menu_model.tab_configs().len() > 1 {
@@ -87,7 +88,7 @@ impl InlineMenuAction for AcceptModel {
                 shift: true,
                 ..Default::default()
             }));
-            items.push(MessageItem::text(" to cycle tabs"));
+            items.push(MessageItem::text(" 切换标签页"));
         }
 
         items.push(MessageItem::clickable(
@@ -96,7 +97,7 @@ impl InlineMenuAction for AcceptModel {
                     key: "escape".to_owned(),
                     ..Default::default()
                 }),
-                MessageItem::text(" to dismiss"),
+                MessageItem::text(" 关闭"),
             ],
             |ctx| {
                 ctx.dispatch_typed_action(
@@ -394,7 +395,7 @@ impl SearchItem for ModelSearchItem {
         }
 
         if self.is_selected {
-            let selected_label = "(selected)";
+            let selected_label = "（已选择）";
             let selected_text = Text::new_inline(
                 selected_label.to_string(),
                 appearance.ui_font_family(),
@@ -413,7 +414,7 @@ impl SearchItem for ModelSearchItem {
         }
 
         if self.is_disabled() {
-            let disabled_label = "(disabled)";
+            let disabled_label = "（已禁用）";
             let disabled_text = Text::new_inline(
                 disabled_label.to_string(),
                 appearance.ui_font_family(),
@@ -438,7 +439,7 @@ impl SearchItem for ModelSearchItem {
             let discount_percentage = self.discount_percentage.unwrap_or(0.);
             let chip = Container::new(
                 Text::new_inline(
-                    format!("{}% off!", discount_percentage.round() as u32),
+                    format!("优惠 {}%！", discount_percentage.round() as u32),
                     appearance.ui_font_family(),
                     font_size,
                 )
@@ -493,7 +494,7 @@ impl SearchItem for ModelSearchItem {
                     ButtonVariant::Outlined,
                     self.manage_api_key_mouse_state.clone(),
                 )
-                .with_text_label("Manage".to_string())
+                .with_text_label("管理".to_string())
                 .with_style(UiComponentStyles {
                     height: Some(24.),
                     padding: Some(Coords {
@@ -515,11 +516,11 @@ impl SearchItem for ModelSearchItem {
                 .finish();
             CostRow::BilledToProvider {
                 label: if self.is_using_bedrock && self.is_auto {
-                    "Inference may use Bedrock"
+                    "推理可能使用 Bedrock"
                 } else if self.is_using_bedrock {
-                    "Inference via Bedrock"
+                    "通过 Bedrock 推理"
                 } else {
-                    "Inference via API key"
+                    "通过 API 密钥推理"
                 },
                 tooltip: if self.is_using_bedrock && self.is_auto {
                     Some(CostRowTooltip {
@@ -575,16 +576,14 @@ impl SearchItem for ModelSearchItem {
                 );
 
             let mut text_fragments = vec![
-                FormattedTextFragment::plain_text(format!(
-                    "{display_name} is not available for free users. "
-                )),
-                FormattedTextFragment::hyperlink("Upgrade", upgrade_url),
+                FormattedTextFragment::plain_text(format!("免费用户无法使用 {display_name}。")),
+                FormattedTextFragment::hyperlink("升级", upgrade_url),
             ];
 
             if byok_available {
                 text_fragments.push(FormattedTextFragment::plain_text(" or ".to_string()));
                 text_fragments.push(FormattedTextFragment::hyperlink_action(
-                    "bring your own key",
+                    "自带密钥",
                     WorkspaceAction::ShowSettingsPageWithSearch {
                         search_query: "api".to_string(),
                         section: Some(SettingsSection::WarpAgent),
@@ -661,10 +660,10 @@ impl SearchItem for ModelSearchItem {
     fn accessibility_label(&self) -> String {
         let mut label = format!("Model: {}", self.display_text);
         if self.is_selected {
-            label.push_str(" (selected)");
+            label.push_str("（已选择）");
         }
         if self.is_disabled() {
-            label.push_str(" (disabled)");
+            label.push_str("（已禁用）");
         }
         label
     }

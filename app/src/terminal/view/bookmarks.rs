@@ -60,8 +60,8 @@ pub(super) fn render_floating_block_snapshot(
 
     // Emitted lines formatted
     let omitted_line_count = match content.omitted_line_count {
-        Some(count) if count > 1 => Some(format!("({count} lines omitted)...")),
-        Some(count) if count == 1 => Some(format!("({count} line omitted)...")),
+        Some(count) if count > 1 => Some(format!("（已省略 {count} 行）...")),
+        Some(count) if count == 1 => Some(format!("（已省略 {count} 行）...")),
         _ => None,
     };
 

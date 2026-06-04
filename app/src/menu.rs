@@ -143,8 +143,8 @@ pub enum MenuVariant {
 impl std::fmt::Debug for MenuVariant {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Fixed => write!(f, "Fixed"),
-            Self::Scrollable(_) => write!(f, "Scrollable"),
+            Self::Fixed => write!(f, "固定"),
+            Self::Scrollable(_) => write!(f, "可滚动"),
         }
     }
 }
@@ -200,9 +200,9 @@ pub enum MenuItemLabel {
 impl std::fmt::Debug for MenuItemLabel {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Text(arg0) => f.debug_tuple("Text").field(arg0).finish(),
+            Self::Text(arg0) => f.debug_tuple("文本").field(arg0).finish(),
             Self::MultilineText { label, max_lines } => f
-                .debug_struct("MultilineText")
+                .debug_struct("多行文本")
                 .field("label", label)
                 .field("max_lines", max_lines)
                 .finish(),
@@ -211,7 +211,7 @@ impl std::fmt::Debug for MenuItemLabel {
                 color,
                 alt_text,
             } => f
-                .debug_struct("Icon")
+                .debug_struct("图标")
                 .field("path", path)
                 .field("color", color)
                 .field("alt_text", alt_text)
@@ -220,7 +220,7 @@ impl std::fmt::Debug for MenuItemLabel {
                 primary_text,
                 secondary_text,
             } => f
-                .debug_struct("LabeledText")
+                .debug_struct("带标签文本")
                 .field("primary_text", primary_text)
                 .field("secondary_text", secondary_text)
                 .finish(),
@@ -228,11 +228,11 @@ impl std::fmt::Debug for MenuItemLabel {
                 primary_text,
                 secondary_text,
             } => f
-                .debug_struct("StackedText")
+                .debug_struct("堆叠文本")
                 .field("primary_text", primary_text)
                 .field("secondary_text", secondary_text)
                 .finish(),
-            Self::Custom { .. } => f.debug_tuple("Custom").finish(),
+            Self::Custom { .. } => f.debug_tuple("自定义").finish(),
         }
     }
 }
@@ -715,9 +715,9 @@ impl<A: Action + Clone> MenuItemFields<A> {
 
     pub fn toggle_pane_action(is_maximized: bool) -> Self {
         Self::new(if is_maximized {
-            "Minimize pane"
+            "最小化窗格"
         } else {
-            "Maximize pane"
+            "最大化窗格"
         })
     }
 
@@ -1484,7 +1484,7 @@ pub enum MenuItem<A: Action + Clone = ()> {
 }
 
 impl<A: Action + Clone> MenuItem<A> {
-    #[deprecated(note = "Submenus are not ready for use yet.")]
+    #[deprecated(note = "子菜单尚未可用。")]
     pub fn submenu<T: Into<String>>(label: T, items: Vec<MenuItem<A>>) -> Self {
         let menu = SubMenu::new(items);
         MenuItem::Submenu {
@@ -2540,19 +2540,19 @@ impl<A: Action + Clone> SubMenu<A> {
             Select(_) => {
                 let menu_item = match self.selected_item() {
                     Some(item) => match item {
-                        MenuItem::Item(fields) => format!("{} Selected", fields.get_a11y_text()),
+                        MenuItem::Item(fields) => format!("已选择 {}", fields.get_a11y_text()),
                         MenuItem::ItemsRow { items } => {
                             let selected_item_text = items
                                 .get(self.selected_item_index.unwrap_or_default())
                                 .map_or_else(|| "", |item| item.get_a11y_text());
-                            format!("{selected_item_text} Selected")
+                            format!("已选择 {selected_item_text}")
                         }
                         MenuItem::Separator => String::from(""),
                         MenuItem::Submenu { fields, .. } => {
-                            format!("{} Expanded", fields.get_a11y_text())
+                            format!("已展开 {}", fields.get_a11y_text())
                         }
                         MenuItem::Header { fields, .. } => {
-                            format!("{} Selected", fields.get_a11y_text())
+                            format!("已选择 {}", fields.get_a11y_text())
                         }
                     },
                     None => String::from(""),
@@ -2560,9 +2560,9 @@ impl<A: Action + Clone> SubMenu<A> {
 
                 let instructions = if matches!(self.selected_item(), Some(MenuItem::Submenu { .. }))
                 {
-                    "Press the up key or the down key to select a menu item. Press the right key to open the submenu"
+                    "按上方向键或下方向键选择菜单项。按右方向键打开子菜单"
                 } else {
-                    "Press the up key or the down key to select a menu item"
+                    "按上方向键或下方向键选择菜单项"
                 };
 
                 Custom(AccessibilityContent::new(
@@ -2572,23 +2572,23 @@ impl<A: Action + Clone> SubMenu<A> {
                 ))
             }
             OpenSubmenu => Custom(AccessibilityContent::new(
-                String::from("Submenu Expanded"),
-                "Press the right key to open the selected submenu",
+                String::from("子菜单已展开"),
+                "按右方向键打开选中的子菜单",
                 WarpA11yRole::TextRole,
             )),
             CloseSubmenu(_) => Custom(AccessibilityContent::new(
-                String::from("Submenu Closed"),
-                "Removing focus from a submenu will close the submenu",
+                String::from("子菜单已关闭"),
+                "移出子菜单焦点会关闭该子菜单",
                 WarpA11yRole::TextRole,
             )),
             Close(_) => Custom(AccessibilityContent::new(
-                String::from("Menu Closed"),
-                "Press the escape key to close the menu",
+                String::from("菜单已关闭"),
+                "按 Escape 键关闭菜单",
                 WarpA11yRole::TextRole,
             )),
             Enter => Custom(AccessibilityContent::new(
-                String::from("Action Selected"),
-                "Press the enter key to execute the selected menu item action",
+                String::from("操作已选择"),
+                "按 Enter 键执行选中菜单项的操作",
                 WarpA11yRole::TextRole,
             )),
             HoverSubmenuLeafNode { .. }
@@ -2881,7 +2881,7 @@ impl<A: Action + Clone> SubMenu<A> {
 
 impl<A: Action + Clone> View for Menu<A> {
     fn ui_name() -> &'static str {
-        "Menu"
+        "菜单"
     }
 
     fn render(&self, app: &AppContext) -> Box<dyn Element> {

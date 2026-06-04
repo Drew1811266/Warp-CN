@@ -67,16 +67,16 @@ impl ThirdPartyHarness for CodexHarness {
     fn runtime_error_patterns(&self) -> &'static [&'static str] {
         &[
             // Quota / billing.
-            "Quota exceeded. Check your plan and billing details.",
-            "You've hit your usage limit",
+            "配额已超出。请检查你的套餐和账单详情。",
+            "你已达到用量限制",
             // Upstream HTTP failures Codex surfaces verbatim. The 401 form
             // matches invalid-API-key and wrong-endpoint variants.
             "unexpected status 401",
-            "Incorrect API key provided",
-            "invalid API key",
+            "提供的 API 密钥不正确",
+            "API 密钥无效",
             // Region/endpoint block (Anthropic-style global vs US-only
             // routing surfaced through Codex's upstream client).
-            "Access blocked by Cloudflare",
+            "访问被 Cloudflare 阻止",
             // OAuth refresh failures — all five Codex variants share this
             // substring (see upstream session/token messages).
             "could not be refreshed",
@@ -438,9 +438,7 @@ async fn upload_transcript(
 ) -> Result<()> {
     let Some(session_id) = session_id else {
         if is_final {
-            log::warn!(
-                "Codex session id still unknown at final save; transcript was never uploaded"
-            );
+            log::warn!("最终保存时 Codex 会话 ID 仍未知；转录从未上传");
         } else {
             log::debug!("Codex session id not yet known; skipping transcript upload");
         }
@@ -448,9 +446,7 @@ async fn upload_transcript(
     };
     let Some(transcript_path) = transcript_path else {
         if is_final {
-            log::warn!(
-                "No codex rollout file found at final save for session {session_id}; transcript was never uploaded"
-            );
+            log::warn!("最终保存会话 {session_id} 时未找到 Codex rollout 文件；转录从未上传");
         } else {
             log::debug!("No codex rollout file yet for session {session_id}");
         }
@@ -545,22 +541,14 @@ fn codex_config_dir() -> Result<PathBuf> {
 }
 
 fn write_codex_agents_override(codex_dir: &Path, system_prompt: &str) -> Result<()> {
-    fs::create_dir_all(codex_dir).with_context(|| {
-        format!(
-            "Failed to create Codex config dir at {}",
-            codex_dir.display()
-        )
-    })?;
+    fs::create_dir_all(codex_dir)
+        .with_context(|| format!("无法在 {} 创建 Codex 配置目录", codex_dir.display()))?;
 
     // Note: this currently works because we are only doing this for cloud agents; if we enable
     // this for local runs we'll want to make sure we don't clobber any existing file overrides.
     let prompt_path = codex_dir.join(CODEX_AGENTS_OVERRIDE_FILE_NAME);
-    fs::write(&prompt_path, system_prompt).with_context(|| {
-        format!(
-            "Failed to write Codex system prompt to {}",
-            prompt_path.display()
-        )
-    })
+    fs::write(&prompt_path, system_prompt)
+        .with_context(|| format!("无法将 Codex 系统提示词写入 {}", prompt_path.display()))
 }
 
 /// Mirrors the subset of Codex's `AuthDotJson` (codex `login/src/auth/storage.rs`) that we
@@ -696,14 +684,14 @@ fn prepare_codex_config_toml(
         Err(e) if e.kind() == std::io::ErrorKind::NotFound => String::new(),
         Err(e) => {
             return Err(anyhow::Error::from(e).context(format!(
-                "Failed to read Codex config.toml at {}",
+                "无法读取 {} 处的 Codex config.toml",
                 config_toml_path.display()
             )));
         }
     };
     let mut doc: toml_edit::DocumentMut = existing.parse().with_context(|| {
         format!(
-            "Failed to parse Codex config.toml at {}",
+            "无法解析 {} 处的 Codex config.toml",
             config_toml_path.display()
         )
     })?;
@@ -716,12 +704,9 @@ fn prepare_codex_config_toml(
     set_codex_model(&mut doc, third_party_harness_model_config);
     set_codex_model_reasoning_effort(&mut doc, third_party_harness_model_config);
 
-    let canonical = working_dir.canonicalize().with_context(|| {
-        format!(
-            "Failed to canonicalize Codex working dir at {}",
-            working_dir.display()
-        )
-    })?;
+    let canonical = working_dir
+        .canonicalize()
+        .with_context(|| format!("无法规范化 {} 处的 Codex 工作目录", working_dir.display()))?;
     let project_key = canonical.to_string_lossy().into_owned();
     set_codex_project_trust_level(&mut doc, &project_key, CODEX_TRUST_LEVEL_TRUSTED);
 
@@ -736,13 +721,12 @@ fn prepare_codex_config_toml(
     write_codex_mcp_servers(&mut doc, resolved_mcp_servers);
 
     if let Some(parent) = config_toml_path.parent() {
-        fs::create_dir_all(parent).with_context(|| {
-            format!("Failed to create Codex config dir at {}", parent.display())
-        })?;
+        fs::create_dir_all(parent)
+            .with_context(|| format!("无法在 {} 创建 Codex 配置目录", parent.display()))?;
     }
     fs::write(config_toml_path, doc.to_string()).with_context(|| {
         format!(
-            "Failed to write Codex config.toml at {}",
+            "无法写入 {} 处的 Codex config.toml",
             config_toml_path.display()
         )
     })

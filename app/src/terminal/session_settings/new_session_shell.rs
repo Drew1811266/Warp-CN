@@ -16,21 +16,18 @@ use warpui::platform::OperatingSystem;
     schemars::JsonSchema,
     settings_value::SettingsValue,
 )]
-#[schemars(
-    description = "Shell to use when opening new sessions.",
-    rename_all = "snake_case"
-)]
+#[schemars(description = "打开新会话时使用的 shell。", rename_all = "snake_case")]
 pub enum NewSessionShell {
     #[default]
-    #[schemars(description = "Use the operating system's default shell.")]
+    #[schemars(description = "使用操作系统默认 shell。")]
     SystemDefault,
-    #[schemars(description = "A shell executable path.")]
+    #[schemars(description = "shell 可执行文件路径。")]
     Executable(String),
-    #[schemars(description = "An MSYS2 shell environment.")]
+    #[schemars(description = "MSYS2 shell 环境。")]
     MSYS2(String),
-    #[schemars(description = "A Windows Subsystem for Linux distribution.")]
+    #[schemars(description = "Windows Subsystem for Linux 发行版。")]
     WSL(String),
-    #[schemars(description = "A custom shell command.")]
+    #[schemars(description = "自定义 shell 命令。")]
     Custom(String),
 }
 

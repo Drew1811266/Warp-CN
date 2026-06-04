@@ -42,7 +42,7 @@ use crate::terminal::view::TerminalAction;
 use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
 
-const GENERATING_TITLE_PLACEHOLDER: &str = "Generating title...";
+const GENERATING_TITLE_PLACEHOLDER: &str = "正在生成标题...";
 const ORCHESTRATION_COLLAPSED_MAX_HEIGHT: f32 = 200.;
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct OrchestrationParticipant {
@@ -56,7 +56,7 @@ struct OrchestrationParticipant {
 impl OrchestrationParticipant {
     fn orchestrator() -> Self {
         Self {
-            display_name: "Orchestrator".to_string(),
+            display_name: "协调器".to_string(),
             avatar: OrchestrationAvatar::Orchestrator,
             conversation_id: None,
         }
@@ -64,8 +64,8 @@ impl OrchestrationParticipant {
 
     fn unknown_child() -> Self {
         Self {
-            display_name: "Unknown agent".to_string(),
-            avatar: OrchestrationAvatar::agent("Unknown agent".to_string()),
+            display_name: "未知 Agent".to_string(),
+            avatar: OrchestrationAvatar::agent("未知 Agent".to_string()),
             conversation_id: None,
         }
     }
@@ -170,8 +170,8 @@ fn transcript_metadata(recipients: &[OrchestrationParticipant], subject: &str) -
     match (recipients.is_empty(), subject.is_empty()) {
         (true, true) => None,
         (true, false) => Some(subject.to_string()),
-        (false, true) => Some(format!("to {recipients}")),
-        (false, false) => Some(format!("to {recipients} • {subject}")),
+        (false, true) => Some(format!("发送给 {recipients}")),
+        (false, false) => Some(format!("发送给 {recipients} • {subject}")),
     }
 }
 
@@ -458,7 +458,7 @@ pub(super) fn render_send_message(
                 );
             }
             SendMessageToAgentResult::Error(error) => {
-                let label = format!("Failed to send message to {recipients}: {error}");
+                let label = format!("发送消息给 {recipients} 失败：{error}");
                 let status_icon = inline_action_icons::red_x_icon(appearance).finish();
                 return render_requested_action_row_for_text(
                     label.into(),
@@ -475,7 +475,7 @@ pub(super) fn render_send_message(
                 .finish();
             }
             SendMessageToAgentResult::Cancelled => {
-                let label = format!("Send message to {recipients} cancelled.");
+                let label = format!("已取消发送给 {recipients} 的消息。");
                 let status_icon = inline_action_icons::cancelled_icon(appearance).finish();
                 return render_requested_action_row_for_text(
                     label.into(),
@@ -503,7 +503,7 @@ pub(super) fn render_send_message(
     let label_fragments = vec![
         FormattedTextFragment::plain_text("Sending message to "),
         FormattedTextFragment::bold(&recipients),
-        FormattedTextFragment::plain_text(format!(": {subject}")),
+        FormattedTextFragment::plain_text(format!("：{subject}")),
     ];
     let mut header_text = render_formatted_text_element(label_fragments, app);
     if should_dim_text {
@@ -588,7 +588,7 @@ pub(super) fn render_start_agent(
                 vec![
                     FormattedTextFragment::plain_text(start_agent_error_prefix(execution_mode)),
                     FormattedTextFragment::bold(name),
-                    FormattedTextFragment::plain_text(format!(": {error}")),
+                    FormattedTextFragment::plain_text(format!("：{error}")),
                 ],
                 inline_action_icons::red_x_icon(appearance).finish(),
             ),
@@ -596,7 +596,7 @@ pub(super) fn render_start_agent(
                 vec![
                     FormattedTextFragment::plain_text(start_agent_cancelled_prefix(execution_mode)),
                     FormattedTextFragment::bold(name),
-                    FormattedTextFragment::plain_text(" cancelled."),
+                    FormattedTextFragment::plain_text(" 已取消。"),
                 ],
                 inline_action_icons::cancelled_icon(appearance).finish(),
             ),
@@ -727,8 +727,8 @@ pub(super) fn render_start_agent(
 
 fn start_agent_success_suffix(execution_mode: &StartAgentExecutionMode) -> &'static str {
     match execution_mode {
-        StartAgentExecutionMode::Local { .. } => " locally.",
-        StartAgentExecutionMode::Remote { .. } => " remotely.",
+        StartAgentExecutionMode::Local { .. } => " 在本地。",
+        StartAgentExecutionMode::Remote { .. } => " 在远程。",
     }
 }
 

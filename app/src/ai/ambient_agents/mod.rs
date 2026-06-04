@@ -21,12 +21,11 @@ pub use task::{
     AmbientAgentLiveSessionState, AmbientAgentTask, AmbientAgentTaskState, TaskStatusMessage,
 };
 pub const OUT_OF_CREDITS_TASK_FAILURE_MESSAGE: &str =
-    "Out of credits. Upgrade your Warp plan to continue running cloud agents.";
-pub const SERVER_OVERLOADED_TASK_FAILURE_MESSAGE: &str =
-    "Warp is temporarily overloaded. Please try again shortly.";
+    "额度已用完。请升级你的 Warp 套餐以继续运行云端 Agent。";
+pub const SERVER_OVERLOADED_TASK_FAILURE_MESSAGE: &str = "Warp 暂时负载过高。请稍后重试。";
 
 #[derive(Debug, thiserror::Error)]
-#[error("Invalid task ID: {0}")]
+#[error("任务 ID 无效：{0}")]
 pub struct ParseAmbientAgentTaskIdError(#[from] uuid::Error);
 
 /// A globally unique ID for an ambient agent task.

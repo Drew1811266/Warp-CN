@@ -98,7 +98,7 @@ impl TypedActionView for FileUpload {
 
 impl View for FileUpload {
     fn ui_name() -> &'static str {
-        "SSH File Upload"
+        "SSH 文件上传"
     }
 
     fn render(&self, app: &warpui::AppContext) -> Box<dyn warpui::Element> {
@@ -302,7 +302,7 @@ impl FileUpload {
         if let FileUploadStatus::AwaitingPassword = file.status {
             session_action_row.add_child(
                 FormattedTextElement::from_str(
-                    String::from("Waiting for password input"),
+                    String::from("正在等待密码输入"),
                     font_family,
                     font_size,
                 )
@@ -365,9 +365,9 @@ impl FileUpload {
     /// assembly.
     fn render_file_detail_text(&self, file: &FileUploadInfo) -> FormattedText {
         let status_string = match file.status {
-            FileUploadStatus::Started | FileUploadStatus::AwaitingPassword => "Uploading",
-            FileUploadStatus::Completed { successful: true } => "Uploaded",
-            FileUploadStatus::Completed { successful: false } => "Failed to upload",
+            FileUploadStatus::Started | FileUploadStatus::AwaitingPassword => "正在上传",
+            FileUploadStatus::Completed { successful: true } => "已上传",
+            FileUploadStatus::Completed { successful: false } => "上传失败",
         };
 
         let mut file_iter = file.local_file_paths.iter().peekable();
@@ -392,7 +392,7 @@ impl FileUpload {
         }
 
         let mut dest_fragments = vec![
-            FormattedTextFragment::plain_text(" to "),
+            FormattedTextFragment::plain_text(" 到 "),
             FormattedTextFragment::inline_code(&file.remote_host),
         ];
         if let Some(remote_path) = &file.remote_dest_path {
@@ -416,7 +416,7 @@ impl FileUpload {
         let ui_builder = appearance.ui_builder().clone();
         Container::new(
             icon_button(appearance, Icon::X, true, file.clear_button.clone())
-                .with_tooltip(move || ui_builder.tool_tip("Clear upload".into()).build().finish())
+                .with_tooltip(move || ui_builder.tool_tip("清除上传".into()).build().finish())
                 .build()
                 .on_click(move |event_ctx, _, _| {
                     event_ctx
@@ -434,10 +434,10 @@ impl FileUpload {
         appearance: &Appearance,
     ) -> Box<dyn Element> {
         let view_session_text = if file.local_session_open {
-            String::from("Close")
+            String::from("关闭")
         } else {
-            String::from("View")
-        } + " upload session";
+            String::from("查看")
+        } + "上传会话";
         let upload_id = file.upload_id;
         Container::new(
             appearance
@@ -460,7 +460,7 @@ impl FileUpload {
             FormattedTextElement::new(
                 FormattedText::new(vec![FormattedTextLine::Heading(FormattedTextHeader {
                     heading_size: 3,
-                    text: vec![FormattedTextFragment::plain_text("File Uploads")],
+                    text: vec![FormattedTextFragment::plain_text("文件上传")],
                 })]),
                 appearance.ui_font_size(),
                 appearance.ui_font_family(),

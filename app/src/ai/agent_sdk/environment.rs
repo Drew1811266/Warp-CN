@@ -46,7 +46,7 @@ fn parse_repos(repo_strings: Vec<String>) -> anyhow::Result<Vec<GithubRepo>> {
             let parts: Vec<&str> = r.split('/').collect();
             if parts.len() != 2 {
                 return Err(anyhow::anyhow!(
-                    "Invalid repo format: '{}'. Expected format: 'owner/repo'",
+                    "仓库格式无效：'{}'。预期格式：'owner/repo'",
                     r
                 ));
             }
@@ -218,20 +218,20 @@ impl EnvironmentCommandRunner {
                                 .profile_for_uid(UserUid::new(uid))
                                 .map(|profile| profile.email.clone())
                         })
-                        .unwrap_or_else(|| "Unknown".to_string());
+                        .unwrap_or_else(|| "未知".to_string());
 
                     let last_edited_utc = environment.metadata().revision.as_ref().map(|r| r.utc());
 
                     let last_edited = last_edited_utc
                         .map(format_approx_duration_from_now_utc)
-                        .unwrap_or_else(|| "Unknown".to_string());
+                        .unwrap_or_else(|| "未知".to_string());
 
                     let scope_display =
                         super::common::format_owner(&environment.permissions().owner);
 
                     let id = match environment.sync_id() {
                         SyncId::ServerId(server_id) => server_id.to_string(),
-                        SyncId::ClientId(_) => "Unsynced".to_string(),
+                        SyncId::ClientId(_) => "未同步".to_string(),
                     };
 
                     EnvironmentInfo {
@@ -340,7 +340,7 @@ impl EnvironmentCommandRunner {
     where
         F: FnOnce(String, &mut ModelContext<Self>) + Send + 'static,
     {
-        const CUSTOM_IMAGE_OPTION: &str = "Custom Docker image";
+        const CUSTOM_IMAGE_OPTION: &str = "自定义 Docker 镜像";
 
         let server_api = ServerApiProvider::as_ref(ctx).get();
         let operation = ListWarpDevImages::build(ListWarpDevImagesVariables {});
@@ -358,7 +358,7 @@ impl EnvironmentCommandRunner {
                     }
 
                     println!(
-                        "No docker image provided, please select a base image.\n"
+                        "未提供 Docker 镜像，请选择基础镜像。n"
                     );
                     println!(
                         "All warpdotdev images contain Python and Node, in addition to language-specific tooling. For more info: {}\n",
@@ -369,7 +369,7 @@ impl EnvironmentCommandRunner {
                         output.images.into_iter().map(|img| img.image).collect();
                     image_choices.push(CUSTOM_IMAGE_OPTION.to_string());
 
-                    let selected_image = match Select::new("Select a base image:", image_choices)
+                    let selected_image = match Select::new("选择基础镜像：", image_choices)
                         .prompt()
                     {
                         Ok(image) => image,
@@ -385,7 +385,7 @@ impl EnvironmentCommandRunner {
                     };
 
                     let final_image = if selected_image == CUSTOM_IMAGE_OPTION {
-                        match inquire::Text::new("Enter custom Docker image name:").prompt() {
+                        match inquire::Text::new("输入自定义 Docker 镜像名称：").prompt() {
                             Ok(custom) => custom,
                             Err(err) => {
                                 if !Self::handle_inquire_error(err, ctx) {
@@ -521,7 +521,7 @@ impl EnvironmentCommandRunner {
             ctx.terminate_app(
                 warpui::platform::TerminationMode::ForceTerminate,
                 Some(Err(anyhow::anyhow!(
-                    "Exceeded maximum number of authorization attempts ({}). Please try again later.",
+                    "已超过最大授权尝试次数（{}）。请稍后重试。",
                     MAX_AUTH_ATTEMPTS
                 ))),
             );
@@ -559,7 +559,7 @@ impl EnvironmentCommandRunner {
                             UserRepoAuthStatusEnum::NoInstallationOrAccessForRepo => {
                                 if !status.is_public {
                                     eprintln!(
-                                        "Cannot access private repo {}/{}",
+                                        "无法访问私有仓库 {}/{}",
                                         status.owner, status.repo,
                                     );
                                     has_blocking_private_issues = true;
@@ -644,7 +644,7 @@ impl EnvironmentCommandRunner {
                                             ctx.terminate_app(
                                                 warpui::platform::TerminationMode::ForceTerminate,
                                                 Some(Err(anyhow::anyhow!(
-                                                    "GitHub authorization failed. Please try again."
+                                                    "GitHub 授权失败。请重试。"
                                                 ))),
                                             );
                                         }
@@ -652,7 +652,7 @@ impl EnvironmentCommandRunner {
                                             ctx.terminate_app(
                                                 warpui::platform::TerminationMode::ForceTerminate,
                                                 Some(Err(anyhow::anyhow!(
-                                                    "GitHub authorization expired. Please try again."
+                                                    "GitHub 授权已过期。请重试。"
                                                 ))),
                                             );
                                         }
@@ -662,7 +662,7 @@ impl EnvironmentCommandRunner {
                                             ctx.terminate_app(
                                                 warpui::platform::TerminationMode::ForceTerminate,
                                                 Some(Err(anyhow::anyhow!(
-                                                    "Unexpected non-terminal OAuth status returned"
+                                                    "返回了意外的非终态 OAuth 状态"
                                                 ))),
                                             );
                                         }
@@ -670,7 +670,7 @@ impl EnvironmentCommandRunner {
                                             ctx.terminate_app(
                                                 warpui::platform::TerminationMode::ForceTerminate,
                                                 Some(Err(anyhow::anyhow!(
-                                                    "Error polling OAuth status: {err}"
+                                                    "轮询 OAuth 状态出错：{err}"
                                                 ))),
                                             );
                                         }
@@ -692,7 +692,7 @@ impl EnvironmentCommandRunner {
                             ctx.terminate_app(
                                 warpui::platform::TerminationMode::ForceTerminate,
                                 Some(Err(anyhow::anyhow!(
-                                    "Server error: did not receive auth URL for OAuth flow"
+                                    "服务器错误：未收到 OAuth 流程的授权 URL"
                                 ))),
                             );
                         }
@@ -701,7 +701,7 @@ impl EnvironmentCommandRunner {
                             ctx.terminate_app(
                                 warpui::platform::TerminationMode::ForceTerminate,
                                 Some(Err(anyhow::anyhow!(
-                                    "Cannot {} environment: authorization required but no auth flow provided by server",
+                                    "无法{}环境：需要授权，但服务器未提供授权流程",
                                     operation_name
                                 ))),
                             );
@@ -793,7 +793,7 @@ impl EnvironmentCommandRunner {
                     if !output.provider_names.is_empty() {
                         let integration_list = output.provider_names.join(", ");
                         let prompt_message = format!(
-                            "This environment is used in the following integration(s): {integration_list}. Are you sure you want to {action} it?"
+                            "此环境正被以下 integration 使用：{integration_list}。确定要{action}它吗？"
                         );
 
                         let confirmation = Confirm::new(&prompt_message)
@@ -824,7 +824,7 @@ impl EnvironmentCommandRunner {
                     ctx.terminate_app(
                         warpui::platform::TerminationMode::ForceTerminate,
                         Some(Err(anyhow::anyhow!(
-                            "Aborting environment {action} because integration usage could not be determined. Re-run with --force to override."
+                            "由于无法确定 integration 使用情况，已中止环境{action}。重新运行并添加 --force 可覆盖。"
                         ))),
                     );
                 }
@@ -1136,14 +1136,14 @@ impl TableFormat for EnvironmentInfo {
     fn header() -> Vec<Cell> {
         vec![
             Cell::new("ID"),
-            Cell::new("Name"),
-            Cell::new("Description"),
-            Cell::new("Base image"),
-            Cell::new("Git repos"),
-            Cell::new("Setup commands"),
-            Cell::new("Creator"),
-            Cell::new("Last edited"),
-            Cell::new("Scope"),
+            Cell::new("名称"),
+            Cell::new("描述"),
+            Cell::new("基础镜像"),
+            Cell::new("Git 仓库"),
+            Cell::new("设置命令"),
+            Cell::new("创建者"),
+            Cell::new("上次编辑"),
+            Cell::new("范围"),
         ]
     }
 
@@ -1181,11 +1181,7 @@ struct ImageInfo {
 
 impl TableFormat for ImageInfo {
     fn header() -> Vec<Cell> {
-        vec![
-            Cell::new("Image"),
-            Cell::new("Repository"),
-            Cell::new("Tag"),
-        ]
+        vec![Cell::new("镜像"), Cell::new("仓库"), Cell::new("标签")]
     }
 
     fn row(&self) -> Vec<Cell> {

@@ -2492,9 +2492,9 @@ context = "Legacy reviewed zh-Hans localization entry"
 [[replace]]
 path = "app/src/workspace/cli_install.rs"
 source = "User canceled"
-target = "用户已取消"
+target = "User canceled"
 status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
+context = "Reviewed preserve: osascript stderr cancellation sentinel used for control flow, not user-visible UI copy."
 
 [[replace]]
 path = "app/src/workspace/cli_install.rs"

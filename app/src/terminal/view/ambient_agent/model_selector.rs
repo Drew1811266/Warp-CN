@@ -55,11 +55,11 @@ const SEARCH_VERTICAL_PADDING: f32 = 4.;
 // of total breathing room above the divider line.
 const SEARCH_FOOTER_TOP_MARGIN: f32 = 4.;
 
-const SEARCH_PLACEHOLDER_TEXT: &str = "Search models";
+const SEARCH_PLACEHOLDER_TEXT: &str = "搜索模型";
 
-const BUTTON_TOOLTIP: &str = "Choose agent model";
+const BUTTON_TOOLTIP: &str = "选择 Agent 模型";
 
-const NO_RESULTS_LABEL: &str = "No results";
+const NO_RESULTS_LABEL: &str = "无结果";
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ModelSelectorAction {

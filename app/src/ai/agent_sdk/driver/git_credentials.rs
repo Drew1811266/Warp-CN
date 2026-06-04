@@ -87,13 +87,8 @@ fn write_git_credentials_file(credentials: &[GitCredential]) -> Result<()> {
     }
 
     write_secret_file(&tmp_path, &content)?;
-    std::fs::rename(&tmp_path, &path).with_context(|| {
-        format!(
-            "Failed to rename {} to {}",
-            tmp_path.display(),
-            path.display()
-        )
-    })?;
+    std::fs::rename(&tmp_path, &path)
+        .with_context(|| format!("无法将 {} 重命名为 {}", tmp_path.display(), path.display()))?;
 
     Ok(())
 }
@@ -130,13 +125,8 @@ fn write_gh_hosts_yml(credentials: &[GitCredential], home: &std::path::Path) -> 
     }
 
     write_secret_file(&tmp_path, &yaml)?;
-    std::fs::rename(&tmp_path, &path).with_context(|| {
-        format!(
-            "Failed to rename {} to {}",
-            tmp_path.display(),
-            path.display()
-        )
-    })?;
+    std::fs::rename(&tmp_path, &path)
+        .with_context(|| format!("无法将 {} 重命名为 {}", tmp_path.display(), path.display()))?;
 
     Ok(())
 }
@@ -161,7 +151,7 @@ fn run_git_config(key: &str, value: &str) {
         Ok(output) if output.status.success() => {}
         Ok(output) => {
             log::warn!(
-                "git config --global {key} failed: {}",
+                "git config --global {key} 失败：{}",
                 String::from_utf8_lossy(&output.stderr)
             );
         }
@@ -181,7 +171,7 @@ fn run_git_config_add(key: &str, value: &str) {
         Ok(output) if output.status.success() => {}
         Ok(output) => {
             log::warn!(
-                "git config --global --add {key} failed: {}",
+                "git config --global --add {key} 失败：{}",
                 String::from_utf8_lossy(&output.stderr)
             );
         }
@@ -299,7 +289,7 @@ pub(crate) async fn refresh_loop(task_id: String, ai_client: Arc<dyn AIClient>) 
                 Err(e) if attempt < backoff_delays.len() => {
                     let delay = backoff_delays[attempt];
                     log::warn!(
-                        "Git credentials refresh failed (attempt {}): {e:#}; retrying in {}s",
+                        "Git 凭据刷新失败（第 {} 次）：{e:#}；{} 秒后重试",
                         attempt + 1,
                         delay.as_secs()
                     );
@@ -308,8 +298,7 @@ pub(crate) async fn refresh_loop(task_id: String, ai_client: Arc<dyn AIClient>) 
                 }
                 Err(e) => {
                     log::warn!(
-                        "Git credentials refresh failed after {} attempts: {e:#}; \
-                         credentials may expire before next refresh cycle",
+                        "Git 凭据在 {} 次尝试后仍刷新失败：{e:#}；凭据可能会在下次刷新周期前过期",
                         attempt + 1
                     );
                     break;

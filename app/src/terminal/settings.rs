@@ -19,12 +19,12 @@ use crate::settings::{AISettings, InputSettings, TerminalSpacing};
     schemars::JsonSchema,
     settings_value::SettingsValue,
 )]
-#[schemars(description = "Terminal block spacing.", rename_all = "snake_case")]
+#[schemars(description = "终端块间距。", rename_all = "snake_case")]
 pub enum SpacingMode {
     #[default]
-    #[schemars(description = "Normal")]
+    #[schemars(description = "普通")]
     Normal,
-    #[schemars(description = "Compact")]
+    #[schemars(description = "紧凑")]
     Compact,
 }
 
@@ -48,13 +48,13 @@ impl SpacingMode {
     settings_value::SettingsValue,
 )]
 #[schemars(
-    description = "How padding is applied in full-screen terminal apps.",
+    description = "全屏终端应用中的内边距应用方式。",
     rename_all = "snake_case"
 )]
 pub enum AltScreenPaddingMode {
-    #[schemars(description = "Use the same padding as the block list.")]
+    #[schemars(description = "使用与块列表相同的内边距。")]
     MatchBlocklist,
-    #[schemars(description = "Use a custom uniform padding value.")]
+    #[schemars(description = "使用自定义统一内边距值。")]
     Custom { uniform_padding: Pixels },
 }
 
@@ -93,7 +93,7 @@ define_settings_group!(TerminalSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "terminal.use_audible_bell",
-        description: "Whether to play an audible bell sound on terminal bell events.",
+        description: "终端响铃事件发生时是否播放提示音。",
     },
     spacing_mode: Spacing {
         type: SpacingMode,
@@ -102,7 +102,7 @@ define_settings_group!(TerminalSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "appearance.spacing",
-        description: "Controls the spacing between terminal blocks.",
+        description: "控制终端块之间的间距。",
     }
     maximum_grid_size: MaximumGridSize {
         type: usize,
@@ -111,7 +111,7 @@ define_settings_group!(TerminalSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "terminal.maximum_grid_size",
-        description: "The maximum number of rows in the terminal grid.",
+        description: "终端网格中的最大行数。",
     },
     alt_screen_padding: AltScreenPadding {
         type: AltScreenPaddingMode,
@@ -121,7 +121,7 @@ define_settings_group!(TerminalSettings, settings: [
         private: false,
         toml_path: "appearance.full_screen_apps.alt_screen_padding",
         max_table_depth: 0,
-        description: "Controls padding around full-screen terminal applications.",
+        description: "控制全屏终端应用周围的内边距。",
     },
     // This field should not be referenced directly to check zero state block visibility -- use
     // the `should_show_zero_state_block()` getter, which also considers global AI enablement.
@@ -132,7 +132,7 @@ define_settings_group!(TerminalSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "terminal.show_terminal_zero_state_block",
-        description: "Whether to show the AI zero-state block in new terminal sessions.",
+        description: "是否在新的终端会话中显示 AI 空状态块。",
     },
     // Opt-in toggle for running terminal find on a background thread. Only consulted on
     // channels where `FeatureFlag::AsyncFind` is off; channels with the flag on force the
@@ -144,7 +144,7 @@ define_settings_group!(TerminalSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "experimental.async_find_enabled",
-        description: "Use an improved implementation of find to keep the UI responsive while searching for matches on large outputs.",
+        description: "使用改进版查找实现，在大型输出中搜索匹配项时保持界面响应。",
     },
 ]);
 

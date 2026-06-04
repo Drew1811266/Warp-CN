@@ -30,7 +30,7 @@ pub fn render_aws_bedrock_login_banner(
     let active_ui_text_color = appearance.theme().active_ui_text_color().into_solid();
     let buttons = vec![
         InlineBannerTextButton {
-            text: "Don't show again".to_owned(),
+            text: "不再显示".to_owned(),
             text_color: active_ui_text_color,
             button_state: InlineBannerButtonState {
                 on_click_event: TerminalAction::AwsBedrockLoginBanner(
@@ -43,7 +43,7 @@ pub fn render_aws_bedrock_login_banner(
             variant: InlineBannerTextButtonVariant::Secondary,
         },
         InlineBannerTextButton {
-            text: "Log into AWS".to_owned(),
+            text: "登录 AWS".to_owned(),
             text_color: active_ui_text_color,
             button_state: InlineBannerButtonState {
                 on_click_event: TerminalAction::AwsBedrockLoginBanner(
@@ -64,7 +64,7 @@ pub fn render_aws_bedrock_login_banner(
 
     // Use sub_text_color for description to differentiate from title
     let description_text = warpui::elements::Text::new(
-        "Your Warp admin has enabled AWS Bedrock for your team.",
+        "你的 Warp 管理员已为团队启用 AWS Bedrock。",
         appearance.ui_font_family(),
         appearance.monospace_font_size() - 2.,
     )
@@ -75,7 +75,7 @@ pub fn render_aws_bedrock_login_banner(
         InlineBannerStyle::Recommendation,
         appearance,
         InlineBannerContent {
-            title: "Use AWS Bedrock?".to_string(),
+            title: "使用 AWS Bedrock？".to_string(),
             content: Some(vec![description_text]),
             buttons,
             close_button: Some(close_button),

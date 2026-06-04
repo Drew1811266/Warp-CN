@@ -136,9 +136,9 @@ impl CliAgentPluginManager for ClaudeCodePluginManager {
             .map(|v| compare_versions(&v, MINIMUM_PLUGIN_VERSION).is_lt())
             .unwrap_or(true);
         if still_outdated {
-            log.push_str("Post-update version check: plugin is still outdated\n");
+            log.push_str("更新后的版本检查：插件仍然过期n");
             return Err(PluginInstallError {
-                message: "Plugin update did not take effect".to_owned(),
+                message: "插件更新未生效".to_owned(),
                 log,
             });
         }
@@ -146,11 +146,11 @@ impl CliAgentPluginManager for ClaudeCodePluginManager {
     }
 
     fn install_success_message(&self) -> &'static str {
-        "Warp plugin installed. Please run /reload-plugins to activate."
+        "Warp 插件已安装。请运行 /reload-plugins 以激活。"
     }
 
     fn update_success_message(&self) -> &'static str {
-        "Warp plugin updated. Please run /reload-plugins to activate."
+        "Warp 插件已更新。请运行 /reload-plugins 以激活。"
     }
 
     fn install_instructions(&self) -> &'static PluginInstructions {
@@ -228,54 +228,53 @@ impl CliAgentPluginManager for ClaudeCodePluginManager {
 
 static INSTALL_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| {
     PluginInstructions {
-        title: "Install Warp Plugin for Claude Code",
-        subtitle: "Ensure that jq is installed on your machine. Then, run these commands.",
+        title: "安装 Claude Code 的 Warp 插件",
+        subtitle: "请确保你的机器上已安装 jq。然后运行这些命令。",
         steps: &[
             PluginInstructionStep {
-                description: "Add the Warp plugin marketplace repository",
+                description: "添加 Warp 插件 marketplace 仓库",
                 command: "claude plugin marketplace add warpdotdev/claude-code-warp",
                 executable: true,
                 link: None,
             },
             PluginInstructionStep {
-                description: "Install the Warp plugin",
+                description: "安装 Warp 插件",
                 command: "claude plugin install warp@claude-code-warp",
                 executable: true,
                 link: None,
             },
         ],
         post_install_notes: &[
-            "Restart Claude Code to activate the plugin.",
-            "There are some known issues with Claude Code's plugin system. \
-             If the plugin is not found after step 1, you can try manually adding an \"extraKnownMarketplaces\" entry to ~/.claude/settings.json.",
+            "重启 Claude Code 以激活插件。",
+            "Claude Code 的插件系统存在一些已知问题。如果第 1 步后找不到插件，可以尝试手动向 ~/.claude/settings.json 添加 extraKnownMarketplaces 条目。",
         ],
     }
 });
 
 static UPDATE_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| PluginInstructions {
-    title: "Update Warp Plugin for Claude Code",
-    subtitle: "Run the following commands.",
+    title: "更新 Claude Code 的 Warp 插件",
+    subtitle: "运行以下命令。",
     steps: &[
         PluginInstructionStep {
-            description: "Remove the existing marketplace (if present)",
+            description: "移除现有 marketplace（如存在）",
             command: "claude plugin marketplace remove claude-code-warp",
             executable: true,
             link: None,
         },
         PluginInstructionStep {
-            description: "Re-add the marketplace",
+            description: "重新添加 marketplace",
             command: "claude plugin marketplace add warpdotdev/claude-code-warp",
             executable: true,
             link: None,
         },
         PluginInstructionStep {
-            description: "Install the latest plugin version",
+            description: "安装最新插件版本",
             command: "claude plugin install warp@claude-code-warp",
             executable: true,
             link: None,
         },
     ],
-    post_install_notes: &["Restart Claude Code to activate the update."],
+    post_install_notes: &["重启 Claude Code 以激活更新。"],
 });
 
 fn check_installed(claude_dir: &Path) -> bool {
@@ -372,12 +371,7 @@ fn claude_home_dir() -> io::Result<PathBuf> {
     }
     dirs::home_dir()
         .map(|home| home.join(".claude"))
-        .ok_or_else(|| {
-            io::Error::new(
-                io::ErrorKind::NotFound,
-                "could not determine home directory",
-            )
-        })
+        .ok_or_else(|| io::Error::new(io::ErrorKind::NotFound, "无法确定主目录"))
 }
 
 #[cfg(test)]

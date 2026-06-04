@@ -19,7 +19,7 @@ use crate::workspaces::user_workspaces::UserWorkspaces;
     settings_value::SettingsValue,
 )]
 #[schemars(
-    description = "How detected secrets are visually displayed.",
+    description = "检测到的密钥如何在视觉上显示。",
     rename_all = "snake_case"
 )]
 pub enum SecretDisplayMode {
@@ -54,9 +54,9 @@ impl SecretDisplayMode {
     /// Display name for UI
     pub fn display_name(self) -> &'static str {
         match self {
-            SecretDisplayMode::Asterisks => "Asterisks",
-            SecretDisplayMode::Strikethrough => "Strikethrough",
-            SecretDisplayMode::AlwaysShow => "Always show secrets",
+            SecretDisplayMode::Asterisks => "星号",
+            SecretDisplayMode::Strikethrough => "删除线",
+            SecretDisplayMode::AlwaysShow => "始终显示密钥",
         }
     }
 
@@ -78,7 +78,7 @@ define_settings_group!(SafeModeSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "privacy.secret_redaction.enabled",
-        description: "Whether secret redaction is enabled to detect and obscure secrets in terminal output.",
+        description: "是否启用密钥遮蔽，以检测并隐藏终端输出中的密钥。",
     },
     secret_display_mode: SecretDisplayModeSetting {
         type: SecretDisplayMode,
@@ -87,7 +87,7 @@ define_settings_group!(SafeModeSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "privacy.secret_redaction.secret_display_mode_setting",
-        description: "Controls how detected secrets are visually displayed in the terminal.",
+        description: "控制检测到的密钥在终端中的视觉显示方式。",
     },
     // Keep legacy setting for backward compatibility during migration
     hide_secrets_in_block_list: HideSecretsInBlockList {
@@ -97,7 +97,7 @@ define_settings_group!(SafeModeSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "privacy.secret_redaction.hide_secrets_in_block_list",
-        description: "Whether to hide detected secrets in the block list using asterisks.",
+        description: "是否在块列表中用星号隐藏检测到的密钥。",
     },
 ]);
 

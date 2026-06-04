@@ -61,7 +61,7 @@ impl WarpDriveItem for WarpDriveEnvVarCollection {
         let title_to_render = if let Some(title) = title_text {
             title
         } else {
-            "Untitled".to_string()
+            "未命名".to_string()
         };
         let title = appearance
             .ui_builder()

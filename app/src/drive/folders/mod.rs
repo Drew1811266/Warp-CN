@@ -28,7 +28,7 @@ impl CloudModelType for CloudFolderModel {
     type IdType = FolderId;
 
     fn model_type_name(&self) -> &'static str {
-        "Folder"
+        "文件夹"
     }
 
     fn object_type(&self) -> ObjectType {

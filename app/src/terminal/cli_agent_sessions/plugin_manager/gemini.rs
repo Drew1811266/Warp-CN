@@ -96,9 +96,9 @@ impl CliAgentPluginManager for GeminiPluginManager {
             .map(|v| compare_versions(&v, MINIMUM_PLUGIN_VERSION).is_lt())
             .unwrap_or(true);
         if still_outdated {
-            log.push_str("Post-update version check: plugin is still outdated\n");
+            log.push_str("更新后的版本检查：插件仍然过期n");
             return Err(PluginInstallError {
-                message: "Plugin update did not take effect".to_owned(),
+                message: "插件更新未生效".to_owned(),
                 log,
             });
         }
@@ -106,11 +106,11 @@ impl CliAgentPluginManager for GeminiPluginManager {
     }
 
     fn install_success_message(&self) -> &'static str {
-        "Warp plugin installed. Please restart Gemini CLI to activate."
+        "Warp 插件已安装。请重启 Gemini CLI 以激活。"
     }
 
     fn update_success_message(&self) -> &'static str {
-        "Warp plugin updated. Please restart Gemini CLI to activate."
+        "Warp 插件已更新。请重启 Gemini CLI 以激活。"
     }
 
     fn install_instructions(&self) -> &'static PluginInstructions {
@@ -123,28 +123,28 @@ impl CliAgentPluginManager for GeminiPluginManager {
 }
 
 static INSTALL_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| PluginInstructions {
-    title: "Install Warp Plugin for Gemini CLI",
-    subtitle: "Run the following command, then restart Gemini CLI.",
+    title: "安装 Gemini CLI 的 Warp 插件",
+    subtitle: "运行以下命令，然后重启 Gemini CLI。",
     steps: &[PluginInstructionStep {
-        description: "Install the Warp extension",
+        description: "安装 Warp 扩展",
         command:
             "gemini extensions install https://github.com/warpdotdev/gemini-cli-warp --consent",
         executable: true,
         link: None,
     }],
-    post_install_notes: &["Restart Gemini CLI to activate the plugin."],
+    post_install_notes: &["重启 Gemini CLI 以激活插件。"],
 });
 
 static UPDATE_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| PluginInstructions {
-    title: "Update Warp Plugin for Gemini CLI",
-    subtitle: "Run the following command, then restart Gemini CLI.",
+    title: "更新 Gemini CLI 的 Warp 插件",
+    subtitle: "运行以下命令，然后重启 Gemini CLI。",
     steps: &[PluginInstructionStep {
-        description: "Update the Warp extension",
+        description: "更新 Warp 扩展",
         command: "gemini extensions update gemini-warp",
         executable: true,
         link: None,
     }],
-    post_install_notes: &["Restart Gemini CLI to activate the update."],
+    post_install_notes: &["重启 Gemini CLI 以激活更新。"],
 });
 
 fn check_installed(extensions_dir: &Path) -> bool {
@@ -171,12 +171,7 @@ fn installed_version(extensions_dir: &Path) -> Option<String> {
 fn gemini_extensions_dir() -> io::Result<PathBuf> {
     dirs::home_dir()
         .map(|home| home.join(".gemini").join("extensions"))
-        .ok_or_else(|| {
-            io::Error::new(
-                io::ErrorKind::NotFound,
-                "could not determine home directory",
-            )
-        })
+        .ok_or_else(|| io::Error::new(io::ErrorKind::NotFound, "无法确定主目录"))
 }
 
 #[cfg(test)]

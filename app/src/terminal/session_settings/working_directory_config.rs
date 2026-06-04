@@ -27,7 +27,7 @@ pub enum NewSessionSource {
     schemars::JsonSchema,
     settings_value::SettingsValue,
 )]
-#[schemars(description = "Where new sessions start.", rename_all = "snake_case")]
+#[schemars(description = "新会话的启动位置。", rename_all = "snake_case")]
 pub enum WorkingDirectoryMode {
     /// Start a new session in the user's home directory.
     HomeDir,
@@ -43,9 +43,9 @@ impl WorkingDirectoryMode {
     /// values in the settings view.
     pub fn dropdown_item_label(&self) -> &'static str {
         match self {
-            WorkingDirectoryMode::HomeDir => "Home directory",
-            WorkingDirectoryMode::PreviousDir => "Previous session's directory",
-            WorkingDirectoryMode::CustomDir => "Custom directory",
+            WorkingDirectoryMode::HomeDir => "主目录",
+            WorkingDirectoryMode::PreviousDir => "上一会话的目录",
+            WorkingDirectoryMode::CustomDir => "自定义目录",
         }
     }
 }
@@ -61,11 +61,11 @@ impl WorkingDirectoryMode {
     schemars::JsonSchema,
     settings_value::SettingsValue,
 )]
-#[schemars(description = "Working directory settings for a specific session source.")]
+#[schemars(description = "特定会话来源的工作目录设置。")]
 pub struct WorkingDirectoryPerSourceConfig {
-    #[schemars(description = "How the working directory is determined.")]
+    #[schemars(description = "工作目录的确定方式。")]
     pub mode: WorkingDirectoryMode,
-    #[schemars(description = "Custom directory path, used when mode is CustomDir.")]
+    #[schemars(description = "自定义目录路径，在模式为 CustomDir 时使用。")]
     pub custom_dir: String,
 }
 
@@ -108,17 +108,17 @@ impl WorkingDirectoryPerSourceConfig {
     schemars::JsonSchema,
     settings_value::SettingsValue,
 )]
-#[schemars(description = "Configuration for the initial working directory of new sessions.")]
+#[schemars(description = "新会话初始工作目录的配置。")]
 pub struct WorkingDirectoryConfig {
-    #[schemars(description = "Whether to use separate settings per session source.")]
+    #[schemars(description = "是否按会话来源使用单独设置。")]
     pub advanced_mode: bool,
-    #[schemars(description = "Default working directory settings used when advanced mode is off.")]
+    #[schemars(description = "高级模式关闭时使用的默认工作目录设置。")]
     pub global: WorkingDirectoryPerSourceConfig,
-    #[schemars(description = "Working directory settings for split pane sessions.")]
+    #[schemars(description = "分屏会话的工作目录设置。")]
     pub split_pane: WorkingDirectoryPerSourceConfig,
-    #[schemars(description = "Working directory settings for new tab sessions.")]
+    #[schemars(description = "新标签页会话的工作目录设置。")]
     pub new_tab: WorkingDirectoryPerSourceConfig,
-    #[schemars(description = "Working directory settings for new window sessions.")]
+    #[schemars(description = "新窗口会话的工作目录设置。")]
     pub new_window: WorkingDirectoryPerSourceConfig,
 }
 

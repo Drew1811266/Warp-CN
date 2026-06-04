@@ -61,10 +61,9 @@ impl OnboardingPromptBlock {
         let font_color = current_theme.main_text_color(current_theme.background());
 
         // Copy - https://docs.google.com/document/d/1zttBLI5Mw07kUupvrMQoC5aTwTXSHIUOIFFnxZ8GQEU/edit
-        const LINE_ONE: &str = "Next, let’s set up your prompt. Warp has a custom prompt builder or you can select PS1 to honor your pre-existing prompt configuration.";
-        const LINE_TWO: &str =
-            "Warp works with many custom prompts like oh-my-zsh, Starship, Powerlevel10K. ";
-        const LINK_TEXT: &str = "Learn more";
+        const LINE_ONE: &str = "下一步，设置你的提示符。Warp 提供自定义提示符构建器，也可以选择 PS1 来沿用你已有的提示符配置。";
+        const LINE_TWO: &str = "Warp 支持 oh-my-zsh、Starship、Powerlevel10K 等许多自定义提示符。";
+        const LINK_TEXT: &str = "了解更多";
         const LINK_DESTINATION: &str =
             "https://docs.warp.dev/terminal/appearance/prompt#custom-prompt-compatibility-table";
 
@@ -116,7 +115,7 @@ impl OnboardingPromptBlock {
                 font_size: Some(14.),
                 ..Default::default()
             })
-            .with_centered_text_label("Confirm".to_owned());
+            .with_centered_text_label("确认".to_owned());
         if self.selected_prompt.is_none() {
             confirm_button = confirm_button.disabled();
         }
@@ -235,10 +234,10 @@ impl OnboardingPromptBlock {
     fn render_existing_prompt_button_interior(&self, appearance: &Appearance) -> Box<dyn Element> {
         // Pixel values pulled from Figma mocks
         // https://www.figma.com/file/y888viqzWBoMpFTxQqkQEN/Activation?node-id=568:1595&mode=dev
-        const HEADER_TEXT: &str = "Shell prompt (PS1)";
-        const NO_PS1_TEXT: &str = "No existing prompt.";
-        const CORRECTION_TEXT: &str = "Look incorrect? ";
-        const LINK_TEXT: &str = "Let us know.";
+        const HEADER_TEXT: &str = "Shell 提示符（PS1）";
+        const NO_PS1_TEXT: &str = "没有现有提示符。";
+        const CORRECTION_TEXT: &str = "看起来不正确？";
+        const LINK_TEXT: &str = "告诉我们。";
         const LINK_DESTINATION: &str = "https://github.com/warpdotdev/Warp/issues/new?assignees=&labels=Bug&projects=&template=01_bug_report.yml";
 
         const HEADER_MARGIN_LEFT: f32 = 4.;
@@ -324,7 +323,7 @@ impl OnboardingPromptBlock {
     fn render_warp_prompt_button_interior(&self, appearance: &Appearance) -> Box<dyn Element> {
         // Pixel values pulled from Figma mocks
         // https://www.figma.com/file/y888viqzWBoMpFTxQqkQEN/Activation?node-id=568:1595&mode=dev
-        const HEADER_TEXT: &str = "Warp prompt";
+        const HEADER_TEXT: &str = "Warp 提示符";
         const HEADER_MARGIN_LEFT: f32 = 4.;
         const SECTION_MARGIN_TOP: f32 = 8.;
         const OUTER_CORNER_RADIUS: f32 = 4.;
@@ -387,13 +386,9 @@ impl OnboardingPromptBlock {
                 Shrinkable::new(
                     1.,
                     Align::new(
-                        Text::new_inline(
-                            "Customizable in appearance settings.",
-                            font_family,
-                            ui_font_size,
-                        )
-                        .with_color(font_color.with_opacity(60).into_solid())
-                        .finish(),
+                        Text::new_inline("可在外观设置中自定义。", font_family, ui_font_size)
+                            .with_color(font_color.with_opacity(60).into_solid())
+                            .finish(),
                     )
                     .bottom_right()
                     .finish(),

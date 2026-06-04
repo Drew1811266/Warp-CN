@@ -379,42 +379,42 @@ pub enum AgentRunPrompt {
 
 #[derive(Debug, thiserror::Error)]
 pub enum AgentDriverError {
-    #[error("Terminal session is not available.")]
+    #[error("终端会话不可用。")]
     TerminalUnavailable,
-    #[error("Invalid runtime state - please file a bug report.")]
+    #[error("运行时状态无效，请提交错误报告。")]
     InvalidRuntimeState,
-    #[error("Requested MCP server not found: {0}")]
+    #[error("未找到请求的 MCP server：{0}")]
     MCPServerNotFound(uuid::Uuid),
-    #[error("Failed to start MCP servers")]
+    #[error("启动 MCP server 失败")]
     MCPStartupFailed,
-    #[error("Failed to parse MCP server JSON: {0}")]
+    #[error("解析 MCP server JSON 失败：{0}")]
     MCPJsonParseError(String),
-    #[error("MCP server configuration is missing required variables")]
+    #[error("MCP server 配置缺少必需变量")]
     MCPMissingVariables,
-    #[error("Agent profile \"{0}\" not found")]
+    #[error("未找到 Agent 配置文件“{0}”")]
     ProfileError(String),
     #[error(
-        "Failed to authenticate with server - please log in via 'oz login', provide an API key via '--api-key <key>', or set the WARP_API_KEY environment variable"
+        "服务器认证失败，请通过 'oz login' 登录、通过 '--api-key <key>' 提供 API 密钥，或设置 WARP_API_KEY 环境变量"
     )]
     NotLoggedIn,
-    #[error("Saved prompt not found for id {0}")]
+    #[error("未找到 ID 为 {0} 的已保存提示词")]
     AIWorkflowNotFound(String),
-    #[error("Terminal bootstrap failed")]
+    #[error("终端引导失败")]
     BootstrapFailed,
-    #[error("Unable to share agent session")]
+    #[error("无法共享 Agent 会话")]
     ShareSessionFailed {
         #[source]
         error: terminal::ShareSessionError,
     },
-    #[error("Error syncing Warp Drive")]
+    #[error("同步 Warp Drive 时出错")]
     WarpDriveSyncFailed,
-    #[error("Requested environment not found: {0}")]
+    #[error("未找到请求的环境：{0}")]
     EnvironmentNotFound(String),
-    #[error("Environment setup failed: {0}")]
+    #[error("环境设置失败：{0}")]
     EnvironmentSetupFailed(String),
-    #[error("Cloud provider setup failed")]
+    #[error("云服务提供方设置失败")]
     CloudProviderSetupFailed(#[from] cloud_provider::CloudProviderSetupError),
-    #[error("Could not resolve working directory {}", path.display())]
+    #[error("无法解析工作目录 {}", path.display())]
     InvalidWorkingDirectory {
         path: PathBuf,
         #[source]
@@ -422,27 +422,26 @@ pub enum AgentDriverError {
     },
     #[error("{error}")]
     ConversationError { error: RenderableAIError },
-    #[error("Conversation was canceled: {reason}")]
+    #[error("对话已取消：{reason}")]
     ConversationCancelled { reason: CancellationReason },
-    #[error("The agent got stuck waiting for user confirmation on the action: {blocked_action}")]
+    #[error("Agent 在等待用户确认操作时卡住：{blocked_action}")]
     ConversationBlocked { blocked_action: String },
-    #[error("Timed out refreshing team metadata")]
+    #[error("刷新团队元数据超时")]
     TeamMetadataRefreshTimeout,
     #[error("{0}")]
     SkillResolutionFailed(String),
-    #[error("Failed to build agent configuration")]
+    #[error("构建 Agent 配置失败")]
     ConfigBuildFailed(#[source] anyhow::Error),
-    #[error("Failed to resolve server-side prompt")]
+    #[error("解析服务器端提示词失败")]
     PromptResolutionFailed(#[source] anyhow::Error),
-    #[error("Failed to fetch task secrets")]
+    #[error("获取任务密钥失败")]
     SecretsFetchFailed(#[source] anyhow::Error),
-    #[error("Failed to load conversation: {0}")]
+    #[error("加载对话失败：{0}")]
     ConversationLoadFailed(String),
-    #[error("Failed to initialize AWS Bedrock credentials: {0}")]
+    #[error("初始化 AWS Bedrock 凭据失败：{0}")]
     AwsBedrockCredentialsFailed(String),
     #[error(
-        "Conversation {conversation_id} was produced by the {expected} harness, but --harness {got} was requested. \
-         Re-run with --harness {expected} (or omit --harness to match) to continue this conversation."
+        "对话 {conversation_id} 由 {expected} harness 生成，但当前请求了 --harness {got}。请使用 --harness {expected} 重新运行（或省略 --harness 以匹配）来继续此对话。"
     )]
     ConversationHarnessMismatch {
         conversation_id: String,
@@ -450,8 +449,7 @@ pub enum AgentDriverError {
         got: String,
     },
     #[error(
-        "Task {task_id} was created with the {expected} harness, but --harness {got} was requested. \
-         Re-run with --harness {expected} (or omit --harness to match) to continue this task."
+        "任务 {task_id} 使用 {expected} harness 创建，但当前请求了 --harness {got}。请使用 --harness {expected} 重新运行（或省略 --harness 以匹配）来继续此任务。"
     )]
     TaskHarnessMismatch {
         task_id: String,
@@ -459,30 +457,29 @@ pub enum AgentDriverError {
         got: String,
     },
     #[error(
-        "Conversation {conversation_id} has no stored transcript for the {harness} harness. \
-         The prior run may have crashed before saving any state."
+        "对话 {conversation_id} 没有 {harness} harness 的已存转录。上一次运行可能在保存状态前崩溃。"
     )]
     ConversationResumeStateMissing {
         harness: String,
         conversation_id: String,
     },
-    #[error("Harness command exited with code {exit_code}")]
+    #[error("Harness 命令退出，代码为 {exit_code}")]
     HarnessCommandFailed { exit_code: i32 },
-    #[error("Harness '{harness}' setup failed: {reason}")]
+    #[error("Harness '{harness}' 设置失败：{reason}")]
     HarnessSetupFailed { harness: String, reason: String },
-    #[error("Harness '{harness}' config setup failed")]
+    #[error("Harness '{harness}' 配置设置失败")]
     HarnessConfigSetupFailed {
         harness: String,
         #[source]
         error: anyhow::Error,
     },
-    #[error("Harness '{harness}' auth preflight failed")]
+    #[error("Harness '{harness}' 认证预检失败")]
     HarnessAuthCheckFailed {
         harness: String,
         /// Stderr/stdout captured from the failing command, for logs.
         detail: String,
     },
-    #[error("Harness '{harness}' reported a runtime failure matching '{pattern}'")]
+    #[error("Harness '{harness}' 报告了匹配 '{pattern}' 的运行时故障")]
     HarnessRuntimeFailureDetected {
         harness: String,
         /// The originating needle from `runtime_error_patterns` that hit.
@@ -1986,9 +1983,7 @@ impl AgentDriver {
             }
             HarnessKind::Unsupported(harness) => Err(AgentDriverError::HarnessSetupFailed {
                 harness: harness.to_string(),
-                reason: format!(
-                    "The {harness} harness is only supported for local child agent launches."
-                ),
+                reason: format!("{harness} harness 仅支持本地子 Agent 启动。"),
             }),
         }
     }
@@ -2049,10 +2044,10 @@ impl AgentDriver {
             };
             safe_error!(
                 safe: (
-                    "Preflight auth check failed for {harness_name} (exit code {})",
+                    "{harness_name} 的认证预检失败（退出代码 {}）",
                     exit_code.value()
                 ),
-                full: ("Preflight auth check failed for {harness_name}. {detail}")
+                full: ("{harness_name} 的认证预检失败。{detail}")
             );
             return Err(AgentDriverError::HarnessAuthCheckFailed {
                 harness: harness_name.to_owned(),

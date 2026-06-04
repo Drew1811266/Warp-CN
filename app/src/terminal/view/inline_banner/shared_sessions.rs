@@ -32,7 +32,7 @@ fn render_inline_shared_session_banner(
     let today = Local::now();
     let is_today = datetime.year() == today.year() && datetime.ordinal() == today.ordinal();
     let day_str = if is_today {
-        String::from("Today")
+        String::from("今天")
     } else {
         // Formatted as "Month Day", e.g. "October 10".
         datetime.format("%B %e").to_string()
@@ -41,7 +41,7 @@ fn render_inline_shared_session_banner(
     // TODO: look into using the OS's locale to format the time according
     // to user's preferences.
     let time_str = datetime.format("%l:%M%P").to_string();
-    let datetime_str = format!("{day_str}, {time_str}");
+    let datetime_str = format!("{day_str}，{time_str}");
 
     let pill = Container::new(
         Flex::row()
@@ -99,11 +99,11 @@ pub fn render_inline_shared_session_started_banner(
     appearance: &Appearance,
 ) -> Box<dyn Element> {
     let label = if is_shared_ambient_agent_session {
-        "Environment started"
+        "环境已启动"
     } else if is_remote_control {
-        "Remote control active"
+        "远程控制已启用"
     } else {
-        "Sharing started"
+        "共享已开始"
     };
     render_inline_shared_session_banner(is_active, label.to_string(), started_at, appearance)
 }
@@ -115,11 +115,11 @@ pub fn render_inline_shared_session_ended_banner(
     appearance: &Appearance,
 ) -> Box<dyn Element> {
     let label = if is_shared_ambient_agent_session {
-        "Environment ended"
+        "环境已结束"
     } else if is_remote_control {
-        "Remote control stopped"
+        "远程控制已停止"
     } else {
-        "Sharing ended"
+        "共享已结束"
     };
     render_inline_shared_session_banner(false, label.to_string(), ended_at, appearance)
 }

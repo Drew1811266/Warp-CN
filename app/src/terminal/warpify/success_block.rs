@@ -110,21 +110,21 @@ impl WarpifySuccessBlock {
                 })
             })
         };
-        let auto_warpify_snippet = auto_warpify_snippet.map(|(output_grid, can_write_to_rc)| {
-            AutoWarpifySnippet {
+        let auto_warpify_snippet =
+            auto_warpify_snippet.map(|(output_grid, can_write_to_rc)| AutoWarpifySnippet {
                 description: (if !output_grid.is_empty() {
-                    "Run the following to automatically Warpify in the future:"
+                    "以后可运行以下内容来自动 Warpify："
                 } else {
-                    "In remote subshells, Warp runs commands in the background to power completions, syntax highlighting, and other features."
-                }).into(),
+                    "在远程子 shell 中，Warp 会在后台运行命令，以支持补全、语法高亮和其他功能。"
+                })
+                .into(),
                 output_grid: output_grid.into(),
                 selection_handle: Default::default(),
                 selected_text: Default::default(),
                 code_snippet_handles: Default::default(),
                 shell_type: shell.shell_type(),
                 can_write_to_rc,
-            }
-        });
+            });
 
         Self {
             source,
@@ -153,7 +153,7 @@ impl WarpifySuccessBlock {
 
     pub fn render_title_ui(&self, theme: &WarpTheme, appearance: &Appearance) -> Box<dyn Element> {
         let header_contents = render::build_header_row(
-            "Session Warpified",
+            "会话已 Warpify",
             Icon::new(UiIcon::Warp.into(), theme.active_ui_detail()),
             theme,
             appearance,
@@ -191,7 +191,7 @@ impl WarpifySuccessBlock {
         appearance
             .ui_builder()
             .link(
-                "Learn more".into(),
+                "了解更多".into(),
                 None,
                 Some(Box::new({
                     move |ctx| {

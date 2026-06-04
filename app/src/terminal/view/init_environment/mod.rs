@@ -19,8 +19,8 @@ use crate::ai::blocklist::inline_action::inline_action_icons::cancelled_icon;
 use crate::ai::blocklist::inline_action::requested_action::RenderableAction;
 use crate::appearance::Appearance;
 
-const EXPLANATION_TEXT: &str = "Would you like to create an environment for this project so you can run cloud agents in it? The agent will guide you through choosing GitHub repos, configuring a Docker image, and specifying startup commands.";
-const NO_REPOS_HELP_TEXT: &str = "If you want to create an environment with repos, rerun this command and pass in file paths or GitHub links as arguments, e.g. \"/create-environment <filepath> <GitHub URL>\".";
+const EXPLANATION_TEXT: &str = "要为此项目创建环境，以便在其中运行云端 Agent 吗？Agent 会引导你选择 GitHub 仓库、配置 Docker 镜像并指定启动命令。";
+const NO_REPOS_HELP_TEXT: &str = "如果要创建带仓库的环境，请重新运行此命令，并将文件路径或 GitHub 链接作为参数传入，例如 /create-environment <filepath> <GitHub URL>。";
 
 #[derive(Debug, Clone)]
 pub enum InitEnvironmentBlockAction {
@@ -85,7 +85,7 @@ impl InitEnvironmentBlock {
             ),
             // Skip button
             simple_navigation_button(
-                "Cancel".to_string(),
+                "取消".to_string(),
                 MouseStateHandle::default(),
                 InitEnvironmentBlockAction::Skip,
                 false,
@@ -156,7 +156,7 @@ impl View for InitEnvironmentBlock {
 
         let rendered_step = match &self.setup_state {
             SetupState::Pending { action_view } => self.render_pending_step(action_view, app),
-            SetupState::Skipped => RenderableAction::new("Environment setup cancelled", app)
+            SetupState::Skipped => RenderableAction::new("环境设置已取消", app)
                 .with_icon(cancelled_icon(appearance).finish())
                 .with_content_item_spacing()
                 .render(app)

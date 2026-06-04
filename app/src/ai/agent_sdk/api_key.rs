@@ -168,21 +168,23 @@ impl ApiKeyCommandRunner {
                     if !io::stdin().is_terminal() {
                         super::report_fatal_error(
                             anyhow!(
-                                "Refusing to expire API key without confirmation in non-interactive mode (use --force to bypass)"
+                                "非交互模式下拒绝在未确认时让 API 密钥过期（使用 --force 可绕过）"
                             ),
                             ctx,
                         );
                         return;
                     }
 
-                    let prompt = format!("Expire API key '{key}'?");
+                    let prompt = format!("是否让 API 密钥 {key} 过期？");
                     let should_expire = match Confirm::new(&prompt)
                         .with_default(false)
-                        .with_help_message("This action takes effect immediately")
+                        .with_help_message("此操作会立即生效")
                         .prompt()
                     {
                         Ok(should_expire) => should_expire,
-                        Err(InquireError::OperationCanceled | InquireError::OperationInterrupted) => {
+                        Err(
+                            InquireError::OperationCanceled | InquireError::OperationInterrupted,
+                        ) => {
                             ctx.terminate_app(TerminationMode::ForceTerminate, None);
                             return;
                         }
@@ -274,12 +276,12 @@ impl TableFormat for ApiKeyInfo {
     fn header() -> Vec<Cell> {
         vec![
             Cell::new("UID"),
-            Cell::new("Name"),
-            Cell::new("Key"),
-            Cell::new("Scope"),
-            Cell::new("Created"),
-            Cell::new("Last Used"),
-            Cell::new("Expires At"),
+            Cell::new("名称"),
+            Cell::new("密钥"),
+            Cell::new("范围"),
+            Cell::new("创建时间"),
+            Cell::new("上次使用"),
+            Cell::new("过期时间"),
         ]
     }
 
@@ -293,12 +295,12 @@ impl TableFormat for ApiKeyInfo {
             Cell::new(
                 self.last_used_at
                     .map(format_approx_duration_from_now_utc)
-                    .unwrap_or_else(|| "Never".to_string()),
+                    .unwrap_or_else(|| "永不".to_string()),
             ),
             Cell::new(
                 self.expires_at
                     .map(|dt| dt.format("%Y-%m-%d %H:%M:%S UTC").to_string())
-                    .unwrap_or_else(|| "Never".to_string()),
+                    .unwrap_or_else(|| "永不".to_string()),
             ),
         ]
     }
@@ -327,7 +329,7 @@ fn resolve_api_key_identifier(
 
     if io::stdin().is_terminal() {
         return match Select::new(
-            &format!("Multiple API keys match '{key_identifier}'. Select a key to expire:"),
+            &format!("有多个 API 密钥匹配 {key_identifier}。请选择要过期的密钥："),
             matches,
         )
         .prompt()
@@ -343,7 +345,7 @@ fn resolve_api_key_identifier(
     }
 
     Err(anyhow!(
-        "Multiple API keys match '{key_identifier}'; specify the key by UID"
+        "有多个 API 密钥匹配 {key_identifier}；请用 UID 指定密钥"
     ))
 }
 

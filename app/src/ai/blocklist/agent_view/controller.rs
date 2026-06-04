@@ -19,20 +19,20 @@ use crate::BlocklistAIHistoryModel;
 /// Error returned when entering the agent view fails.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, thiserror::Error)]
 pub enum EnterAgentViewError {
-    #[error("Already in agent mode.")]
+    #[error("已处于 Agent 模式。")]
     AlreadyInAgentView,
-    #[error("Cannot enter agent mode while a command is running.")]
+    #[error("命令运行时无法进入 Agent 模式。")]
     LongRunningCommand,
 }
 
 /// Error returned when exiting the agent view fails.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, thiserror::Error)]
 pub enum ExitAgentViewError {
-    #[error("Cannot exit agent while command is running.")]
+    #[error("命令运行时无法退出 Agent。")]
     LongRunningCommand,
-    #[error("Cannot exit conversation as a viewer.")]
+    #[error("作为查看者无法退出对话。")]
     ConversationViewer,
-    #[error("Cannot exit cloud agent.")]
+    #[error("无法退出云端 Agent。")]
     AmbientAgent,
 }
 
@@ -994,9 +994,9 @@ fn exit_confirmation_message(
                 ..Default::default()
             },
             if should_stop_and_exit {
-                "again to stop and exit"
+                "再次按下以停止并退出"
             } else {
-                "again to exit"
+                "再次按下以退出"
             },
         ),
         ExitConfirmationTrigger::CtrlC => (
@@ -1005,7 +1005,7 @@ fn exit_confirmation_message(
                 ctrl: true,
                 ..Default::default()
             },
-            "again to exit",
+            "再次按下以退出",
         ),
     };
 
@@ -1023,7 +1023,7 @@ fn new_conversation_keybinding_confirmation_message(
     let appearance = Appearance::handle(app).as_ref(app);
     Message::new(vec![
         MessageItem::keystroke(keystroke),
-        MessageItem::text("again to start new conversation"),
+        MessageItem::text("再次按下以开始新对话"),
     ])
     .with_text_color(appearance.theme().ansi_fg_magenta())
 }

@@ -41,13 +41,13 @@ pub(super) struct DeleteAuthSecretConfirmationDialog {
 impl DeleteAuthSecretConfirmationDialog {
     pub(super) fn new(ctx: &mut ViewContext<Self>) -> Self {
         let cancel_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Cancel", NakedTheme).on_click(|ctx| {
+            ActionButton::new("取消", NakedTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(DeleteAuthSecretConfirmationDialogAction::Cancel);
             })
         });
 
         let delete_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Delete", DangerPrimaryTheme).on_click(|ctx| {
+            ActionButton::new("删除", DangerPrimaryTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(DeleteAuthSecretConfirmationDialogAction::Confirm);
             })
         });
@@ -94,12 +94,12 @@ impl View for DeleteAuthSecretConfirmationDialog {
 
         let appearance = Appearance::as_ref(app);
         let description = format!(
-            "Are you sure you want to delete {}? This action cannot be undone. Any agents or environments referencing this secret will no longer have access to it.",
+            "确定要删除 {} 吗？此操作无法撤销。任何引用此密钥的 Agent 或环境都将无法再访问它。",
             pending_deletion.name
         );
 
         let dialog = Dialog::new(
-            "Delete secret".to_string(),
+            "删除密钥".to_string(),
             Some(description),
             dialog_styles(appearance),
         )

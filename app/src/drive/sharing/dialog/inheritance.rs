@@ -74,14 +74,14 @@ impl InheritanceState {
                         .with_children([prefix, folder_link])
                         .with_cross_axis_alignment(CrossAxisAlignment::Center)
                         .finish(),
-                    tooltip_text: "Edit inherited permissions on the parent folder",
+                    tooltip_text: "在父文件夹上编辑继承权限",
                 }
             }
             None => InheritanceDetails {
-                source_label: style::detail_text("Inherited permission", appearance)
+                source_label: style::detail_text("继承的权限", appearance)
                     .build()
                     .finish(),
-                tooltip_text: "Cannot edit inherited permissions",
+                tooltip_text: "无法编辑继承的权限",
             },
         }
     }

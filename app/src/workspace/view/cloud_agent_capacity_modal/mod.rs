@@ -126,12 +126,12 @@ impl CloudAgentCapacityModal {
         let neutral_bg = blended_colors::neutral_1(theme);
         let (title_text, mut explanation_text) = match self.variant {
             CloudAgentCapacityModalVariant::ConcurrentLimit => (
-                "Concurrent cloud agent limit reached",
-                "This cloud run is queued because your team has reached the maximum number of concurrent cloud agents. It will start automatically when another cloud run finishes.".to_string(),
+                "已达到并发云端 Agent 上限",
+                "由于你的团队已达到并发云端 Agent 数量上限，此云端运行已排队。其他云端运行完成后，它会自动开始。".to_string(),
             ),
             CloudAgentCapacityModalVariant::OutOfCredits => (
-                "You're out of AI credits",
-                "This cloud run stopped because your team has used all available AI credits for the current billing period.".to_string(),
+                "AI 额度已用完",
+                "由于你的团队已用完当前计费周期内的全部 AI 额度，此云端运行已停止。".to_string(),
             ),
         };
 
@@ -147,11 +147,9 @@ impl CloudAgentCapacityModal {
         if can_upgrade {
             let upgrade_suffix = match self.variant {
                 CloudAgentCapacityModalVariant::ConcurrentLimit => {
-                    " Upgrade your plan for more concurrent cloud agents."
+                    "升级套餐以获得更多并发云端 Agent。"
                 }
-                CloudAgentCapacityModalVariant::OutOfCredits => {
-                    " Upgrade your plan to continue running cloud agents."
-                }
+                CloudAgentCapacityModalVariant::OutOfCredits => "升级套餐以继续运行云端 Agent。",
             };
             explanation_text.push_str(upgrade_suffix);
         }
@@ -182,19 +180,15 @@ impl CloudAgentCapacityModal {
             let pricing_text = if customer_type == CustomerType::Free {
                 if let Some(pricing) = plan_pricing {
                     let price = pricing.yearly_plan_price_per_month_usd_cents / 100;
-                    format!(
-                        "Paid plans start at ${price}/month and include everything in your free trial plus:"
-                    )
+                    format!("付费方案 ${price}/月起，包含免费试用中的所有内容，并额外提供：")
                 } else {
-                    "Paid plans include everything in your free trial plus:".to_string()
+                    "付费套餐包含免费试用中的所有内容，并额外提供：".to_string()
                 }
             } else if let Some(pricing) = plan_pricing {
                 let price = pricing.yearly_plan_price_per_month_usd_cents / 100;
-                format!(
-                    "The Business plan starts at ${price}/month and includes everything on your current plan plus:"
-                )
+                format!("Business 方案 ${price}/月起，包含当前方案中的所有内容，并额外提供：")
             } else {
-                "The Business plan includes everything on your current plan plus:".to_string()
+                "Business 套餐包含当前套餐中的所有内容，并额外提供：".to_string()
             };
 
             let pricing = FormattedTextElement::new(
@@ -212,16 +206,16 @@ impl CloudAgentCapacityModal {
             // Credits text from plan pricing
             let credits_text = if let Some(limit) = plan_pricing.and_then(|plan| plan.request_limit)
             {
-                format!("{} AI credits per month", limit.separate_with_commas())
+                format!("每月 {} AI 点数", limit.separate_with_commas())
             } else {
-                "Extended AI credits per month".to_string()
+                "每月扩展 AI 额度".to_string()
             };
 
             // Benefits list based on plan type
             let mut benefits = vec![
-                format!("{} the number of concurrent cloud agents", agent_multiplier),
+                format!("{} 并发云端 Agent 数量", agent_multiplier),
                 credits_text,
-                "Bring your own API key".to_string(),
+                "自带 API 密钥".to_string(),
             ];
             for extra in extra_benefits {
                 benefits.push(extra.to_string());
@@ -276,9 +270,9 @@ impl CloudAgentCapacityModal {
         let content = content.finish();
         let cta_button = if show_cta {
             let cta_button_label = if can_upgrade {
-                "Upgrade plan"
+                "升级套餐"
             } else {
-                "Open billing"
+                "打开账单"
             };
             Some(
                 appearance

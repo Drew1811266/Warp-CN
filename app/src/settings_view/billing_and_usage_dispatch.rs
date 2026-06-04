@@ -47,7 +47,7 @@ impl BillingAndUsageDispatchView {
             ctx.notify();
         });
 
-        let page = PageType::new_monolith(BillingAndUsageWidget, Some("Billing and Usage"), true);
+        let page = PageType::new_monolith(BillingAndUsageWidget, Some("账单和用量"), true);
 
         Self { page, v1, v2 }
     }
@@ -89,7 +89,7 @@ impl Entity for BillingAndUsageDispatchView {
 
 impl View for BillingAndUsageDispatchView {
     fn ui_name() -> &'static str {
-        "Billing and usage"
+        "账单和用量"
     }
 
     fn render(&self, app: &AppContext) -> Box<dyn Element> {

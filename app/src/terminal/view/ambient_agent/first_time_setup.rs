@@ -144,23 +144,19 @@ impl FirstTimeCloudAgentSetupView {
 
         // Title - 20px medium weight
         column.add_child(
-            Text::new(
-                "Start a new Oz cloud agent",
-                appearance.ui_font_family(),
-                20.,
-            )
-            .with_style(Properties::default().weight(Weight::Medium))
-            .with_color(theme.foreground().into())
-            .finish(),
+            Text::new("启动新的 Oz 云端 Agent", appearance.ui_font_family(), 20.)
+                .with_style(Properties::default().weight(Weight::Medium))
+                .with_color(theme.foreground().into())
+                .finish(),
         );
 
         // Description with "Visit docs" link
         let description_fragments = vec![
             FormattedTextFragment::plain_text(
-                "Use Oz cloud agents to run parallel agents, build agents that run autonomously, and check in on your agents from anywhere. ",
+                "使用 Oz 云端 Agent 运行并行 Agent、构建可自主运行的 Agent，并从任何地方查看你的 Agent。 ",
             ),
             FormattedTextFragment::hyperlink(
-                "Visit docs",
+                "查看文档",
                 "https://docs.warp.dev/agent-platform/cloud-agents/overview",
             ),
         ];
@@ -189,7 +185,7 @@ impl FirstTimeCloudAgentSetupView {
 
         // Bold/semibold text in foreground color (per Figma: font-semibold text-[#e3e2df])
         Text::new(
-            "Cloud agents require an environment that they'll run in to get their task done. Create your first environment below. You'll be able to edit the environment later, or add new environments when you need them.",
+            "云端 Agent 需要一个运行环境来完成任务。请在下方创建你的第一个环境。之后你可以编辑该环境，或在需要时添加新环境。",
             appearance.ui_font_family(),
             appearance.ui_font_size(),
         )
@@ -209,7 +205,7 @@ impl FirstTimeCloudAgentSetupView {
 
         // Badge with blue border
         let badge = Container::new(
-            Text::new("Free credits", appearance.ui_font_family(), 12.)
+            Text::new("免费点数", appearance.ui_font_family(), 12.)
                 .with_style(Properties::default().weight(Weight::Semibold))
                 .with_color(theme.accent().into())
                 .finish(),
@@ -222,12 +218,9 @@ impl FirstTimeCloudAgentSetupView {
 
         // Banner text - dynamic based on credits
         let credits_text = if credits == 1 {
-            "You have 1 free credit to use on Oz cloud agents.".to_string()
+            "你有 1 个免费点数可用于 Oz 云端 Agent。".to_string()
         } else {
-            format!(
-                "You have {} free credits to use on Oz cloud agents.",
-                credits
-            )
+            format!("你有 {} 个免费点数可用于 Oz 云端 Agent。", credits)
         };
         let text = Text::new(credits_text, appearance.ui_font_family(), 12.)
             .with_color(blended_colors::text_sub(theme, theme.surface_1()))

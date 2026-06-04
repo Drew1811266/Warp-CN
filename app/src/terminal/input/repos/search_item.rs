@@ -191,6 +191,6 @@ impl SearchItem for RepoSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        format!("Indexed repository: {}", self.display_name)
+        format!("已索引仓库：{}", self.display_name)
     }
 }

@@ -855,18 +855,14 @@ impl TerminalView {
 
         match &restore_context_state {
             RestorationDirState::MissingOriginalDir => {
-                items.push(MessageItem::text(
-                    "couldn't find original conversation directory ",
-                ));
+                items.push(MessageItem::text("找不到原始对话目录"));
                 items.push(open_repo_hint.clone());
-                items.push(MessageItem::text(" change repos"));
+                items.push(MessageItem::text(" 切换仓库"));
             }
             RestorationDirState::NeedsCd { .. } => {
-                items.push(MessageItem::text(
-                    "changed directory to continue conversation ",
-                ));
+                items.push(MessageItem::text("已切换目录以继续对话"));
                 items.push(open_repo_hint.clone());
-                items.push(MessageItem::text(" change repos"));
+                items.push(MessageItem::text(" 切换仓库"));
             }
             RestorationDirState::Unchanged => {}
         }
@@ -1131,7 +1127,7 @@ impl TerminalView {
             async move {
                 let response = client
                     .get(&proto_url)
-                    .header("Accept", "application/protobuf")
+                    .header("接受", "application/protobuf")
                     .send()
                     .await?;
 

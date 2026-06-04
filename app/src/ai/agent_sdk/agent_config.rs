@@ -48,7 +48,7 @@ fn parse_repo_spec(spec: &str) -> anyhow::Result<GithubRepo> {
     }
 
     Err(anyhow::anyhow!(
-        "Invalid repo format: '{}'. Expected 'owner/repo' or 'https://github.com/owner/repo'",
+        "仓库格式无效：“{}”。应为“owner/repo”或“https://github.com/owner/repo”",
         spec
     ))
 }
@@ -78,7 +78,7 @@ impl AgentConfigRunner {
             ctx.terminate_app(
                 TerminationMode::ForceTerminate,
                 Some(Err(anyhow::anyhow!(
-                    "Exceeded maximum number of authorization attempts ({}). Please try again later.",
+                    "已超过最大授权尝试次数（{}）。请稍后再试。",
                     MAX_AUTH_ATTEMPTS
                 ))),
             );
@@ -110,10 +110,7 @@ impl AgentConfigRunner {
                             UserRepoAuthStatusEnum::Success => {}
                             UserRepoAuthStatusEnum::NoInstallationOrAccessForRepo => {
                                 if !status.is_public {
-                                    eprintln!(
-                                        "Cannot access private repo {}/{}",
-                                        status.owner, status.repo,
-                                    );
+                                    eprintln!("无法访问私有仓库 {}/{}", status.owner, status.repo,);
                                     has_blocking_private_issues = true;
                                 }
                                 // Public repos without auth are fine - no warning needed
@@ -156,32 +153,28 @@ impl AgentConfigRunner {
                                     Ok(OauthConnectTxStatus::Failed) => {
                                         ctx.terminate_app(
                                             TerminationMode::ForceTerminate,
-                                            Some(Err(anyhow::anyhow!(
-                                                "GitHub authorization failed. Please try again."
-                                            ))),
+                                            Some(Err(anyhow::anyhow!("GitHub 授权失败。请重试。"))),
                                         );
                                     }
                                     Ok(OauthConnectTxStatus::Expired) => {
                                         ctx.terminate_app(
                                             TerminationMode::ForceTerminate,
                                             Some(Err(anyhow::anyhow!(
-                                                "GitHub authorization expired. Please try again."
+                                                "GitHub 授权已过期。请重试。"
                                             ))),
                                         );
                                     }
                                     Ok(_) => {
                                         ctx.terminate_app(
                                             TerminationMode::ForceTerminate,
-                                            Some(Err(anyhow::anyhow!(
-                                                "Unexpected OAuth status"
-                                            ))),
+                                            Some(Err(anyhow::anyhow!("OAuth 状态不符合预期"))),
                                         );
                                     }
                                     Err(err) => {
                                         ctx.terminate_app(
                                             TerminationMode::ForceTerminate,
                                             Some(Err(anyhow::anyhow!(
-                                                "Error polling OAuth status: {err}"
+                                                "轮询 OAuth 状态时出错：{err}"
                                             ))),
                                         );
                                     }
@@ -197,7 +190,7 @@ impl AgentConfigRunner {
                             ctx.terminate_app(
                                 TerminationMode::ForceTerminate,
                                 Some(Err(anyhow::anyhow!(
-                                    "Cannot list agents: authorization required but no auth flow provided"
+                                    "无法列出 Agent：需要授权，但未提供认证流程"
                                 ))),
                             );
                         }
@@ -260,7 +253,7 @@ impl AgentConfigRunner {
                 // Description
                 if !variant.description.is_empty() {
                     let description_cell = super::text_layout::render_labeled_wrapped_field(
-                        "Description",
+                        "描述",
                         &variant.description,
                         MAX_LINE_WIDTH,
                     );
@@ -277,7 +270,7 @@ impl AgentConfigRunner {
                         truncated
                     };
                     let prompt_cell = super::text_layout::render_labeled_wrapped_field(
-                        "Base Prompt",
+                        "基础提示词",
                         &truncated_prompt,
                         MAX_LINE_WIDTH,
                     );

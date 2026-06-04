@@ -298,7 +298,7 @@ impl OnboardingStateModel {
     pub(crate) fn agent_price_badge(&self) -> String {
         const DEFAULT_AGENT_PRICE_CENTS: i32 = 1800;
         let cents = self.agent_price_cents.unwrap_or(DEFAULT_AGENT_PRICE_CENTS);
-        format!("Starting at ${}/mo", cents / 100)
+        format!("${}/月起", cents / 100)
     }
 
     pub(crate) fn set_agent_price_cents(

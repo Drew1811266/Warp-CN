@@ -254,9 +254,9 @@ impl PlanAndTodoListView {
                 chip_content.finish(),
                 self.plan_button_mouse_state.clone(),
                 if is_agent_unaware_of_plan_edits {
-                    "Agent is unaware of recent plan edits".to_string()
+                    "Agent 尚未感知最近的计划编辑".to_string()
                 } else {
-                    "View plan".to_string()
+                    "查看计划".to_string()
                 },
                 corner_radius,
                 appearance,
@@ -411,7 +411,7 @@ impl PlanAndTodoListView {
             .render_chip_button(
                 content,
                 self.todo_button_mouse_state.clone(),
-                "View todo list".to_string(),
+                "查看待办列表".to_string(),
                 corner_radius,
                 appearance,
             )

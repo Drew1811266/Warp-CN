@@ -15,8 +15,8 @@ use warpui::{Entity, SingletonEntity as _, TypedActionView, View, ViewContext};
 use crate::terminal::model::terminal_model::ExitReason;
 use crate::ui_components;
 
-const FILE_ISSUE_TEXT: &str = "File issue";
-const MORE_INFO_TEXT: &str = "More info";
+const FILE_ISSUE_TEXT: &str = "提交问题";
+const MORE_INFO_TEXT: &str = "更多信息";
 
 /// A banner to display when the shell process terminates.
 ///
@@ -165,9 +165,9 @@ impl TerminationType {
 
     fn text(&self, appearance: &Appearance) -> Box<dyn Element> {
         let text = match self {
-            TerminationType::Normal => "Shell process exited",
-            TerminationType::PtySpawnFailure { .. } => "Shell process could not start!",
-            TerminationType::Premature { .. } => "Shell process exited prematurely!",
+            TerminationType::Normal => "Shell 进程已退出",
+            TerminationType::PtySpawnFailure { .. } => "Shell 进程无法启动！",
+            TerminationType::Premature { .. } => "Shell 进程过早退出！",
         };
 
         Text::new(text, appearance.ui_font_family(), 14.)
@@ -183,9 +183,7 @@ impl TerminationType {
                 format!("{pty_spawn_error:#}").into()
             }
             TerminationType::Premature { shell_detail, .. } => format!(
-                "Something went wrong while starting {shell_detail} and Warpifying it, causing the \
-                process to terminate. Warpify script output is displayed here, which may point at \
-                a cause."
+                "启动 {shell_detail} 并进行 Warpify 时出了点问题，导致进程终止。这里显示了 Warpify 脚本输出，可能指向原因。"
             )
             .into(),
         };
@@ -240,7 +238,7 @@ impl TerminationType {
                 vec![
                     ui_builder
                         .button(ButtonVariant::Text, handles[0].clone())
-                        .with_text_label("Copy error".to_string())
+                        .with_text_label("复制错误".to_string())
                         .build()
                         .on_click(move |evt_ctx, _ctx, _position| {
                             evt_ctx.dispatch_typed_action(Action::CopyPtySpawnError(

@@ -113,7 +113,7 @@ impl ReadMCPResourceExecutor {
 
             let Some(resource) = resource else {
                 return ActionExecution::Sync(AIAgentActionResultType::ReadMCPResource(
-                    ReadMCPResourceResult::Error("MCP server resource not found".to_owned()),
+                    ReadMCPResourceResult::Error("未找到 MCP 服务器资源".to_owned()),
                 ));
             };
 
@@ -122,7 +122,7 @@ impl ReadMCPResourceExecutor {
             let Some(reconnecting_peer) = templatable_mcp_client.server_with_resource(resource)
             else {
                 return ActionExecution::Sync(AIAgentActionResultType::ReadMCPResource(
-                    ReadMCPResourceResult::Error("MCP server for resource not found".to_owned()),
+                    ReadMCPResourceResult::Error("未找到该资源对应的 MCP 服务器".to_owned()),
                 ));
             };
 

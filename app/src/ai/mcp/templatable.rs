@@ -26,7 +26,7 @@ impl StringModel for TemplatableMCPServer {
     type CloudObjectType = CloudTemplatableMCPServer;
 
     fn model_type_name(&self) -> &'static str {
-        "MCP server"
+        "MCP 服务器"
     }
 
     fn should_enforce_revisions() -> bool {

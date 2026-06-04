@@ -69,7 +69,7 @@ use crate::workspace::Workspace;
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::ToastStack;
 
-const DESCRIPTION_TEXT: &str = "Add MCP servers to extend the Warp Agent's capabilities. MCP servers expose data sources or tools to agents through a standardized interface, essentially acting like plugins. Add a custom server, or use the presets to get started with popular servers. You can also find team servers that have been shared with you here. ";
+const DESCRIPTION_TEXT: &str = "添加 MCP 服务器以扩展 Warp Agent 的能力。MCP 服务器通过标准化接口向 Agent 暴露数据源或工具，本质上类似插件。你可以添加自定义服务器，或使用预设快速开始使用热门服务器。也可以在这里找到共享给你的团队服务器。 ";
 
 #[derive(Debug, Clone)]
 pub enum MCPServersListPageViewEvent {
@@ -95,8 +95,8 @@ pub enum MCPServersListPageViewAction {
     ToggleFileBasedMcp,
 }
 
-const EMPTY_STATE_TEXT: &str = "Once you add a MCP server, it will be shown here.";
-const NO_SEARCH_RESULTS_TEXT: &str = "No search results found";
+const EMPTY_STATE_TEXT: &str = "添加 MCP 服务器后，它会显示在这里。";
+const NO_SEARCH_RESULTS_TEXT: &str = "未找到搜索结果";
 
 pub struct MCPServersListPageView {
     server_cards: HashMap<ServerCardItemId, ViewHandle<ServerCardView>>,
@@ -221,12 +221,12 @@ impl MCPServersListPageView {
 
         search_editor.update(ctx, |editor, ctx| {
             editor.clear_buffer_and_reset_undo_stack(ctx);
-            editor.set_placeholder_text("Search MCP Servers", ctx);
+            editor.set_placeholder_text("搜索 MCP 服务器", ctx);
         });
         let search_bar = ctx.add_typed_action_view(|_| SearchBar::new(search_editor.clone()));
 
         let add_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Add", NakedTheme)
+            ActionButton::new("添加", NakedTheme)
                 .with_icon(Icon::Plus)
                 .on_click(|ctx| ctx.dispatch_typed_action(MCPServersListPageViewAction::Add))
         });
@@ -367,7 +367,7 @@ impl MCPServersListPageView {
             template
                 .description
                 .clone()
-                .or_else(|| Some("Available to install".to_string())),
+                .or_else(|| Some("可安装".to_string())),
             None, // Templates can never have tools
             None, // Templates cannot have an error
             title_chip_text.into_iter().collect(),
@@ -665,9 +665,7 @@ impl MCPServersListPageView {
                         let log_path = logs::log_file_path_from_uuid(&template_uuid);
                         self.open_logs_for_server(&log_path, ctx);
                     } else {
-                        log::error!(
-                            "Could not find template_uuid for installation {installation_uuid}"
-                        );
+                        log::error!("找不到安装 {installation_uuid} 的 template_uuid");
                     }
                 }
                 ServerCardItemId::FileBasedMCP(uuid) => {
@@ -735,9 +733,7 @@ impl MCPServersListPageView {
             ServerCardEvent::InstallServerUpdate(item_id) => {
                 let ServerCardItemId::TemplatableMCPInstallation(installation_uuid) = item_id
                 else {
-                    log::error!(
-                        "Install server update is only supported for templatable MCP installations"
-                    );
+                    log::error!("安装服务器更新仅支持可模板化的 MCP 安装");
                     return;
                 };
                 self.start_server_update(*installation_uuid, ctx);
@@ -792,9 +788,7 @@ impl MCPServersListPageView {
         let installation =
             TemplatableMCPServerManager::as_ref(ctx).get_installed_server(&installation_uuid);
         let Some(installation) = installation else {
-            log::warn!(
-                "Failed to update MCP server: Could not find installation {installation_uuid}"
-            );
+            log::warn!("更新 MCP server 失败：找不到安装 {installation_uuid}");
             return;
         };
         let local_templatable_mcp_server = installation.templatable_mcp_server();
@@ -806,7 +800,7 @@ impl MCPServersListPageView {
                     .cloned();
                 let Some(latest_templatable_mcp_server) = latest_templatable_mcp_server else {
                     log::warn!(
-                        "Failed to update MCP server: Could not find templatable MCP server for installation {installation_uuid}"
+                        "更新 MCP server 失败：找不到安装 {installation_uuid} 对应的可模板化 MCP server"
                     );
                     return;
                 };
@@ -816,9 +810,7 @@ impl MCPServersListPageView {
                     return;
                 }
                 if local_templatable_mcp_server.version > latest_templatable_mcp_server.version {
-                    log::warn!(
-                        "Failed to update MCP server: Installed server is ahead of the latest template"
-                    );
+                    log::warn!("更新 MCP server 失败：已安装 server 领先于最新模板");
                     return;
                 }
 
@@ -828,14 +820,12 @@ impl MCPServersListPageView {
                     ctx,
                 );
                 // We do not have to update the cloud template, because this update came from a cloud template
-                log::info!(
-                    "Successfully updated server {installation_uuid} with the newest cloud template."
-                );
+                log::info!("已使用最新云端模板更新 server {installation_uuid}。");
 
                 // Show the toast that the server updated, even though we don't update the cloud template in this case
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                    let toast = DismissibleToast::success(String::from("MCP server updated"));
+                    let toast = DismissibleToast::success(String::from("MCP 服务器已更新"));
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
             }
@@ -846,7 +836,7 @@ impl MCPServersListPageView {
                 }) = local_templatable_mcp_server.gallery_data
                 else {
                     log::warn!(
-                        "Failed to update MCP server to newest gallery version: Installed server is not from the MCP gallery."
+                        "将 MCP server 更新到最新 gallery 版本失败：已安装 server 不来自 MCP gallery。"
                     );
                     return;
                 };
@@ -854,20 +844,20 @@ impl MCPServersListPageView {
                     MCPGalleryManager::as_ref(ctx).get_gallery_item(gallery_item_id)
                 else {
                     log::warn!(
-                        "Failed to update MCP server to newest gallery version: Could not find gallery item with uuid {gallery_item_id}"
+                        "将 MCP server 更新到最新 gallery 版本失败：找不到 uuid 为 {gallery_item_id} 的 gallery 项。"
                     );
                     return;
                 };
 
                 if installed_gallery_version == gallery_item.version() {
                     log::warn!(
-                        "Failed to update MCP server to newest gallery version: Installed server is up to date"
+                        "将 MCP server 更新到最新 gallery 版本失败：已安装 server 已是最新。"
                     );
                     return;
                 }
                 if installed_gallery_version > gallery_item.version() {
                     log::warn!(
-                        "Failed to update MCP server to newest gallery version: Installed server is ahead of the latest gallery item"
+                        "将 MCP server 更新到最新 gallery 版本失败：已安装 server 领先于最新 gallery 项。"
                     );
                     return;
                 }
@@ -876,7 +866,7 @@ impl MCPServersListPageView {
                     MCPGalleryManager::as_ref(ctx).get_templatable_mcp_server(gallery_item_id)
                 else {
                     log::warn!(
-                        "Failed to update MCP server to newest gallery version: Could not find newest gallery item"
+                        "将 MCP server 更新到最新 gallery 版本失败：找不到最新 gallery 项。"
                     );
                     return;
                 };
@@ -894,9 +884,7 @@ impl MCPServersListPageView {
                 TemplatableMCPServerManager::handle(ctx).update(ctx, |templatable_manager, ctx| {
                     templatable_manager.update_templatable_mcp_server(new_template, ctx);
                 });
-                log::info!(
-                    "Successfully updated server {installation_uuid} with the newest gallery template."
-                );
+                log::info!("已使用最新 gallery 模板更新 server {installation_uuid}。");
                 // We don't need to manually show a toast, because it will appear once the cloud template update goes through
             }
         };
@@ -910,9 +898,7 @@ impl MCPServersListPageView {
     ) {
         let installation_uuid = installation.uuid();
         if installation.template_uuid() != new_templatable_mcp_server.uuid {
-            log::warn!(
-                "Unable to update installation: installation template uuid differs from the new template uuid."
-            );
+            log::warn!("无法更新安装：安装模板 uuid 与新模板 uuid 不同。");
             return;
         }
 
@@ -950,9 +936,7 @@ impl MCPServersListPageView {
     fn install_from_gallery(&mut self, gallery_uuid: Uuid, ctx: &mut ViewContext<Self>) {
         let gallery_server = MCPGalleryManager::as_ref(ctx).get_gallery_item(gallery_uuid);
         let Some(gallery_server) = gallery_server else {
-            log::warn!(
-                "Could not install gallery item {gallery_uuid}: Unable to find gallery item with matching id."
-            );
+            log::warn!("无法安装 gallery 项 {gallery_uuid}：找不到匹配 id 的 gallery 项。");
             return;
         };
 
@@ -1103,7 +1087,7 @@ impl MCPServersListPageView {
         let is_any_ai_enabled = ai_settings.is_any_ai_enabled(app);
 
         let label = render_body_item_label::<MCPServersListPageViewAction>(
-            "Auto-spawn servers from third-party agents".to_string(),
+            "从第三方 Agent 自动启动服务器".to_string(),
             None,
             None,
             LocalOnlyIconState::Hidden,
@@ -1137,10 +1121,10 @@ impl MCPServersListPageView {
         > = std::sync::LazyLock::new(|| {
             vec![
                 FormattedTextFragment::plain_text(
-                    "Automatically detect and spawn MCP servers from globally-scoped third-party AI agent configuration files (e.g. in your home directory). Servers detected inside a repository are never spawned automatically and must be enabled individually in the \"Detected from\" sections below. ",
+                    "自动从全局范围的第三方 AI Agent 配置文件（例如主目录中）检测并启动 MCP 服务器。在仓库内检测到的服务器绝不会自动启动，必须在下方“检测自”区域中逐个启用。 ",
                 ),
                 FormattedTextFragment::hyperlink(
-                    "See supported providers.",
+                    "查看支持的提供方。",
                     "https://docs.warp.dev/agent-platform/capabilities/mcp#file-based-mcp-servers",
                 ),
             ]
@@ -1178,7 +1162,7 @@ impl MCPServersListPageView {
         let description_fragments = vec![
             FormattedTextFragment::plain_text(DESCRIPTION_TEXT),
             FormattedTextFragment::hyperlink(
-                "Learn more.",
+                "了解更多。",
                 "https://docs.warp.dev/agent-platform/capabilities/mcp",
             ),
         ];
@@ -1262,7 +1246,7 @@ impl MCPServersListPageView {
 
                 if !owned_server_cards.is_empty() {
                     page.add_child(self.render_server_cards_section(
-                        "My MCPs",
+                        "我的 MCP 服务器",
                         &owned_server_cards,
                         appearance,
                         app,
@@ -1274,8 +1258,8 @@ impl MCPServersListPageView {
                         .current_team()
                         .map(|team| team.name.clone());
                     let shared_by_text = match team_name {
-                        Some(name) => format!("Shared by Warp and {name}"),
-                        None => "Shared by Warp and from other devices".to_string(),
+                        Some(name) => format!("由 Warp 和 {name} 共享"),
+                        None => "由 Warp 和其他设备共享".to_string(),
                     };
 
                     page.add_child(self.render_server_cards_section(
@@ -1286,7 +1270,7 @@ impl MCPServersListPageView {
                     ));
                 } else if !filtered_gallery_cards.is_empty() {
                     page.add_child(self.render_server_cards_section(
-                        "Shared from Warp",
+                        "来自 Warp 共享",
                         &filtered_gallery_cards,
                         appearance,
                         app,
@@ -1295,7 +1279,7 @@ impl MCPServersListPageView {
 
                 // Render one section per provider (e.g. "Detected from Claude").
                 for (provider, cards) in &filtered_file_based_cards {
-                    let section_title = format!("Detected from {}", provider.display_name());
+                    let section_title = format!("检测自 {}", provider.display_name());
                     page.add_child(self.render_server_cards_section(
                         &section_title,
                         cards,
@@ -1348,9 +1332,7 @@ impl MCPServersListPageView {
                     owned_server_cards.push(server_card.clone());
                 }
                 ServerCardItemId::GalleryMCP(_) => {
-                    log::warn!(
-                        "Received an unexpected gallery server card when separating server cards by installed."
-                    );
+                    log::warn!("按已安装状态拆分 server 卡片时收到了意外的 gallery server 卡片。");
                 }
             }
         }
@@ -1632,7 +1614,7 @@ impl MCPServersListPageView {
                     .templatable_mcp_server()
                     .description
                     .clone()
-                    .or_else(|| Some("Detected from config file".to_string())),
+                    .or_else(|| Some("检测自配置文件".to_string())),
                 None, // tools only available when running
                 None, // no error when not yet started
                 title_chips,
@@ -1766,11 +1748,11 @@ impl MCPServersListPageView {
 
                 if is_shared {
                     match creator {
-                        Some(creator) => Some(TitleChip::text(format!("Shared by: {creator}"))),
-                        None => Some(TitleChip::text("Shared by a team member")),
+                        Some(creator) => Some(TitleChip::text(format!("共享者：{creator}"))),
+                        None => Some(TitleChip::text("由团队成员共享")),
                     }
                 } else if matches!(item_id, ServerCardItemId::TemplatableMCP(_)) {
-                    Some(TitleChip::text("From another device"))
+                    Some(TitleChip::text("来自另一台设备"))
                 } else {
                     None
                 }

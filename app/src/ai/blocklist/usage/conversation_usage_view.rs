@@ -288,10 +288,7 @@ impl ConversationUsageView {
         let mut values: Vec<Box<dyn Element>> = vec![];
 
         // Usage summary
-        labels.push(render_section_header(
-            "USAGE SUMMARY".to_string(),
-            appearance,
-        ));
+        labels.push(render_section_header("用量摘要".to_string(), appearance));
         values.push(render_section_header("".to_string(), appearance));
 
         // "Credits spent (total)" value: use the rollup total when available,
@@ -306,23 +303,20 @@ impl ConversationUsageView {
             && self.usage_info.credits_spent_for_last_block.is_some()
         {
             let last_block_credits = self.usage_info.credits_spent_for_last_block.unwrap();
-            labels.push(render_label_text(
-                "Credits spent (last response)",
-                appearance,
-            ));
+            labels.push(render_label_text("已用积分（上次响应）", appearance));
             values.push(render_value_text(
                 format_credits(last_block_credits),
                 appearance,
             ));
 
-            labels.push(render_label_text("Credits spent (total)", appearance));
+            labels.push(render_label_text("已用积分（总计）", appearance));
             values.push(self.render_total_credits_value_row(
                 total_credits_value,
                 rollup.as_ref(),
                 appearance,
             ));
         } else {
-            labels.push(render_label_text("Credits spent", appearance));
+            labels.push(render_label_text("已用积分", appearance));
             values.push(self.render_total_credits_value_row(
                 total_credits_value,
                 rollup.as_ref(),
@@ -338,7 +332,7 @@ impl ConversationUsageView {
         // existing flex spacing handles indentation.
         self.append_per_agent_rows(&mut labels, &mut values, rollup.as_ref(), appearance);
 
-        labels.push(render_label_text("Tool calls", appearance));
+        labels.push(render_label_text("工具调用", appearance));
         values.push(render_value_text(
             format_value_text(self.usage_info.tool_calls, "call"),
             appearance,
@@ -360,9 +354,9 @@ impl ConversationUsageView {
 
             let label_text = if category == PRIMARY_AGENT_CATEGORY && entries_by_category.len() == 1
             {
-                "Models".to_string()
+                "模型".to_string()
             } else {
-                format!("Models ({})", token_usage_category_display_name(&category))
+                format!("模型（{}）", token_usage_category_display_name(&category))
             };
 
             // For FULL_TERMINAL_USE_CATEGORY, add an info icon with tooltip
@@ -373,7 +367,7 @@ impl ConversationUsageView {
                     .ui_builder()
                     .info_button_with_tooltip(
                         font_size * 0.85,
-                        "You can change which model is used for full terminal use in the AI settings page",
+                        "可在 AI 设置页面更改完整终端使用的模型",
                         self.full_terminal_use_tooltip_mouse_state.clone(),
                     )
                     .finish();
@@ -436,7 +430,7 @@ impl ConversationUsageView {
             );
         }
 
-        labels.push(render_label_text("Context window used", appearance));
+        labels.push(render_label_text("已用上下文窗口", appearance));
         let context_usage_str =
             format!("{}%", (self.usage_info.context_window_usage * 100.).round());
         let context_window_element = Flex::row()
@@ -474,18 +468,18 @@ impl ConversationUsageView {
 
         // Tool call summary
         labels.push(render_section_header(
-            "TOOL CALL SUMMARY".to_string(),
+            "工具调用摘要".to_string(),
             appearance,
         ));
         values.push(render_section_header("".to_string(), appearance));
 
-        labels.push(render_label_text("Files changed", appearance));
+        labels.push(render_label_text("已修改文件", appearance));
         values.push(render_value_text(
             format_value_text(self.usage_info.files_changed, "file"),
             appearance,
         ));
 
-        labels.push(render_label_text("Diffs applied", appearance));
+        labels.push(render_label_text("已应用 Diff", appearance));
         let diffs_element = Flex::row()
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_child(
@@ -522,7 +516,7 @@ impl ConversationUsageView {
             .finish();
         values.push(diffs_element);
 
-        labels.push(render_label_text("Commands executed", appearance));
+        labels.push(render_label_text("已执行命令", appearance));
         values.push(render_value_text(
             format_value_text(self.usage_info.commands_executed, "command"),
             appearance,
@@ -549,24 +543,21 @@ impl ConversationUsageView {
 
                     // Section header
                     labels.push(render_section_header(
-                        "LAST RESPONSE TIME".to_string(),
+                        "上次响应时间".to_string(),
                         appearance,
                     ));
                     values.push(render_section_header("".to_string(), appearance));
 
-                    labels.push(render_label_text("Time to first token", appearance));
+                    labels.push(render_label_text("首个 token 用时", appearance));
                     values.push(render_value_text(
-                        format!(
-                            "{:.1} seconds",
-                            timing.time_to_first_token_ms as f64 / 1000.0
-                        ),
+                        format!("{:.1} 秒", timing.time_to_first_token_ms as f64 / 1000.0),
                         appearance,
                     ));
 
-                    labels.push(render_label_text("Total agent response time", appearance));
+                    labels.push(render_label_text("Agent 总响应时间", appearance));
                     values.push(render_value_text(
                         format!(
-                            "{:.1} seconds",
+                            "{:.1} 秒",
                             timing.total_agent_response_time_ms as f64 / 1000.0
                         ),
                         appearance,
@@ -574,12 +565,9 @@ impl ConversationUsageView {
 
                     if let Some(wall_ms) = timing.wall_to_wall_response_time_ms {
                         if wall_ms != 0 {
-                            labels.push(render_label_text(
-                                "Total time (including tool calls)",
-                                appearance,
-                            ));
+                            labels.push(render_label_text("总用时（含工具调用）", appearance));
                             values.push(render_value_text(
-                                format!("{:.1} seconds", wall_ms as f64 / 1000.0),
+                                format!("{:.1} 秒", wall_ms as f64 / 1000.0),
                                 appearance,
                             ));
                         }
@@ -682,9 +670,9 @@ impl ConversationUsageView {
         let link_color = theme.ansi_fg_blue();
         let icon_size = font_size;
         let (label, icon) = if self.details_expanded {
-            ("Hide details", Icon::ChevronUp)
+            ("隐藏详情", Icon::ChevronUp)
         } else {
-            ("View details", Icon::ChevronDown)
+            ("查看详情", Icon::ChevronDown)
         };
         Hoverable::new(
             self.details_toggle_mouse_state.clone(),
@@ -792,7 +780,7 @@ impl ConversationUsageView {
         let theme = appearance.theme();
         let font_size = appearance.ui_font_size() + 2.;
         let link_color = theme.ansi_fg_blue();
-        let label = format!("Show {hidden_count} more");
+        let label = format!("再显示 {hidden_count} 项");
         Hoverable::new(self.show_more_mouse_state.clone(), move |_hover_state| {
             Text::new(label.clone(), appearance.ui_font_family(), font_size)
                 .with_color(link_color)

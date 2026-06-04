@@ -199,7 +199,7 @@ impl RunAgentsExecutor {
                 && parent_run_id.is_none()
             {
                 slots.push(ChildSlot::Failed(
-                    "Remote child agents require the parent run_id to be available.".to_string(),
+                    "远程子 Agent 需要父级 run_id 可用。".to_string(),
                 ));
                 continue;
             }
@@ -245,7 +245,7 @@ impl RunAgentsExecutor {
                                 )) => RunAgentsAgentOutcomeKind::Failed { error },
                                 futures::future::Either::Left((Err(_), _)) => {
                                     RunAgentsAgentOutcomeKind::Failed {
-                                        error: "Cancelled before launch".to_string(),
+                                        error: "启动前已取消".to_string(),
                                     }
                                 }
                                 futures::future::Either::Right((_, _)) => {
@@ -255,8 +255,7 @@ impl RunAgentsExecutor {
                                     );
                                     RunAgentsAgentOutcomeKind::Failed {
                                         error: format!(
-                                            "Agent failed to start within {} seconds. \
-                                             The harness binary may not be installed.",
+                                            "Agent 未能在 {} 秒内启动。可能尚未安装 harness 二进制文件。",
                                             SPAWN_TIMEOUT.as_secs()
                                         ),
                                     }
@@ -437,23 +436,18 @@ fn prepare_request_for_execution(
     }
 
     if status.is_some_and(|status| status.is_disapproved()) {
-        return Some("Orchestration config was disapproved".to_string());
+        return Some("编排配置未获批准".to_string());
     }
 
     if BlocklistAIPermissions::as_ref(ctx)
         .get_run_agents_setting(ctx, Some(terminal_view_id))
         .is_never_allow()
     {
-        return Some(
-            "Running child agents is disabled by the active execution profile.".to_string(),
-        );
+        return Some("当前执行配置已禁用运行子 Agent。".to_string());
     }
 
     if !can_execute_with_auth_secret(request, ctx) {
-        return Some(
-            "Cloud child agents using this harness require an API key before they can run."
-                .to_string(),
-        );
+        return Some("使用此 harness 的云端子 Agent 需要 API 密钥才能运行。".to_string());
     }
 
     None
@@ -646,7 +640,7 @@ fn validate_request(request: &RunAgentsRequest) -> Result<(), String> {
         RunAgentsExecutionMode::Remote { .. }
     ) && request.harness_type.eq_ignore_ascii_case("opencode")
     {
-        return Err("Remote child agents do not support the opencode harness yet.".to_string());
+        return Err("远程子 Agent 尚不支持 opencode harness。".to_string());
     }
     Ok(())
 }
@@ -709,9 +703,7 @@ pub fn run_agents_to_start_agent_mode(
         } => {
             // OpenCode is unsupported on Remote.
             if run_harness_type.eq_ignore_ascii_case("opencode") {
-                return Err(
-                    "Remote child agents do not support the opencode harness yet.".to_string(),
-                );
+                return Err("远程子 Agent 尚不支持 opencode harness。".to_string());
             }
             Ok(StartAgentExecutionMode::Remote {
                 environment_id: environment_id.clone(),

@@ -115,7 +115,7 @@ impl HandoffEnvironmentCreationModal {
                 let Some(owner) = owner else {
                     log::error!("Unable to create environment: not logged in");
                     ctx.emit(HandoffEnvironmentCreationModalEvent::CreationFailed {
-                        error_message: "Not logged in".to_string(),
+                        error_message: "未登录".to_string(),
                     });
                     return;
                 };
@@ -193,15 +193,11 @@ impl HandoffEnvironmentCreationModal {
             .with_uniform_padding(8.)
             .finish();
 
-        let dialog = Dialog::new(
-            "Create environment".to_string(),
-            None,
-            dialog_styles(appearance),
-        )
-        .with_close_button(close_button)
-        .with_child(padded_form)
-        .with_width(DIALOG_WIDTH)
-        .build();
+        let dialog = Dialog::new("创建环境".to_string(), None, dialog_styles(appearance))
+            .with_close_button(close_button)
+            .with_child(padded_form)
+            .with_width(DIALOG_WIDTH)
+            .build();
 
         let dialog = Dismiss::new(dialog.finish())
             .prevent_interaction_with_other_elements()

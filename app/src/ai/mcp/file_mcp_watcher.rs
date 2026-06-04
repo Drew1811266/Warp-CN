@@ -623,9 +623,7 @@ fn substitute_env_vars(json_content: &str) -> Result<String, anyhow::Error> {
                     result = result.replace(&placeholder, &value);
                 }
                 _ => {
-                    return Err(anyhow::anyhow!(
-                        "Missing or empty environment variable: {var_name}"
-                    ));
+                    return Err(anyhow::anyhow!("缺少环境变量或环境变量为空：{var_name}"));
                 }
             }
         }
@@ -647,11 +645,11 @@ async fn parse_mcp_config_file(
         Err(err) => {
             safe_warn!(
                 safe: (
-                    "Failed to read MCP config file: {}",
+                    "读取 MCP 配置文件失败：{}",
                     err
                 ),
                 full: (
-                    "Failed to read MCP config file {}: {}",
+                    "读取 MCP 配置文件 {} 失败：{}",
                     file_path.display(),
                     err
                 )
@@ -666,11 +664,11 @@ async fn parse_mcp_config_file(
             Err(err) => {
                 safe_warn!(
                     safe: (
-                        "Failed to normalize Codex TOML: {:#}",
+                        "规范化 Codex TOML 失败：{:#}",
                         err
                     ),
                     full: (
-                        "Failed to normalize Codex TOML {}: {:#}",
+                        "规范化 Codex TOML {} 失败：{:#}",
                         file_path.display(),
                         err
                     )
@@ -686,11 +684,11 @@ async fn parse_mcp_config_file(
         Err(err) => {
             safe_warn!(
                 safe: (
-                    "Cannot start MCP servers - missing required environment variables: {}",
+                    "无法启动 MCP 服务器，缺少必需的环境变量：{}",
                     err
                 ),
                 full: (
-                    "Cannot start MCP servers from {} - missing required environment variables: {}",
+                    "无法从 {} 启动 MCP 服务器，缺少必需的环境变量：{}",
                     file_path.display(),
                     err
                 )
@@ -704,11 +702,11 @@ async fn parse_mcp_config_file(
         Err(err) => {
             safe_warn!(
                 safe: (
-                    "Failed to parse MCP servers: {:#}",
+                    "解析 MCP 服务器失败：{:#}",
                     err
                 ),
                 full: (
-                    "Failed to parse MCP servers from {}: {:#}",
+                    "解析来自 {} 的 MCP 服务器失败：{:#}",
                     file_path.display(),
                     err
                 )

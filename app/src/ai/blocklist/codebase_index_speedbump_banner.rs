@@ -14,17 +14,18 @@ use crate::terminal::view::{InlineBannerId, TerminalAction};
 use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
 
-const SPEEDBUMP_HEADER: &str = "Index Codebase?";
-const SPEEDBUMP_TEXT: &str = "Indexing helps agents quickly understand context and provide targeted solutions. Code is never stored on the server.";
+const SPEEDBUMP_HEADER: &str = "索引代码库？";
+const SPEEDBUMP_TEXT: &str =
+    "索引可帮助 Agent 快速理解上下文并提供针对性的解决方案。代码绝不会存储在服务器上。";
 /// Uniform padding around the banner
 const PADDING: f32 = 12.;
 /// Text for the button that allows execution
-const ALLOW_BUTTON_TEXT: &str = "Index codebase";
-const ALLOW_SETTINGS_TEXT: &str = "Allow automatic indexing";
-const DISMISS_FOREVER_BUTTON_TEXT: &str = "Don't show again";
+const ALLOW_BUTTON_TEXT: &str = "索引代码库";
+const ALLOW_SETTINGS_TEXT: &str = "允许自动索引";
+const DISMISS_FOREVER_BUTTON_TEXT: &str = "不再显示";
 
-const INDEXING_HEADER: &str = "Indexing codebase";
-const VIEW_STATUS_BUTTON_TEXT: &str = "View status";
+const INDEXING_HEADER: &str = "正在索引代码库";
+const VIEW_STATUS_BUTTON_TEXT: &str = "查看状态";
 
 #[derive(PartialEq, Clone)]
 pub enum VisibilityState {

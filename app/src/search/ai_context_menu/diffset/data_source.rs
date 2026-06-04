@@ -6,8 +6,8 @@ use crate::search::ai_context_menu::mixer::AIContextMenuSearchableAction;
 use crate::search::data_source::{Query, QueryResult};
 use crate::search::mixer::{DataSourceRunErrorWrapper, SyncDataSource};
 
-const UNCOMMITTED_CHANGES_NAME: &str = "uncommitted changes";
-const MAIN_BRANCH_CHANGES_NAME: &str = "changes vs. main branch";
+const UNCOMMITTED_CHANGES_NAME: &str = "未提交的更改";
+const MAIN_BRANCH_CHANGES_NAME: &str = "相对 main 分支的更改";
 
 pub struct DiffSetDataSource;
 

@@ -66,7 +66,7 @@ impl ReadSkillExecutor {
                     ctx
                 );
                 ActionExecution::Sync(
-                    ReadSkillResult::Error(format!("Skill not found: {:?}", skill_ref)).into(),
+                    ReadSkillResult::Error(format!("未找到技能：{:?}", skill_ref)).into(),
                 )
             }
         }

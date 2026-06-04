@@ -200,7 +200,7 @@ impl SearchItem for NotebookSearchItem {
 
         // Use notebook name, or "Untitled" if empty
         let display_name = if self.notebook_name.is_empty() {
-            "Untitled".to_string()
+            "未命名".to_string()
         } else {
             self.notebook_name.clone()
         };

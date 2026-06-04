@@ -84,9 +84,9 @@ pub(super) fn render(props: Props, app: &AppContext) -> Option<Box<dyn Element>>
             props.has_attached_context_selected_text,
             props.num_attached_context_blocks,
         ) {
-            (true, _) => "selected text".to_owned(),
-            (false, 1) => "1 block".to_owned(),
-            (false, n) => format!("{n} blocks"),
+            (true, _) => "所选文本".to_owned(),
+            (false, 1) => "1 个块".to_owned(),
+            (false, n) => format!("{n} 个块"),
         };
 
         left_row.add_child(render_attached_context_chip(

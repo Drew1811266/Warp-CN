@@ -210,7 +210,7 @@ impl IntegrationCommandRunner {
             ctx.terminate_app(
                 TerminationMode::ForceTerminate,
                 Some(Err(anyhow::anyhow!(
-                    "Exceeded maximum number of integration creation attempts ({}). Retry.",
+                    "已超过集成创建尝试次数上限（{}）。请重试。",
                     MAX_CREATE_ATTEMPTS
                 ))),
             );
@@ -333,7 +333,7 @@ impl IntegrationCommandRunner {
                                 println!("Authorize the provider here: {auth_url}\n");
                                 ctx.open_url(&auth_url);
                                 println!(
-                                    "After authorizing, re-run the command to continue the integration {action} process.",
+                                    "授权后，请重新运行该命令以继续集成 {action} 流程。",
                                 );
                                 ctx.terminate_app(
                                     TerminationMode::ForceTerminate,

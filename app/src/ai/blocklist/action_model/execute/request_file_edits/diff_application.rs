@@ -100,38 +100,38 @@ impl DiffApplicationError {
                 use std::fmt::Write;
                 let mut message = String::new();
                 if match_failures.fuzzy_match_failures > 0 {
-                    let _ = write!(message, "Could not apply all diffs to {file}.");
+                    let _ = write!(message, "无法将所有 diff 应用到 {file}。");
                 }
 
                 if match_failures.noop_deltas > 0 {
                     if !message.is_empty() {
                         message.push(' ');
                     }
-                    let _ = write!(message, "The changes to {file} were already made.");
+                    let _ = write!(message, "对 {file} 的更改已经完成。");
                 }
                 message
             }
             DiffApplicationError::MissingFile { file } => {
-                format!("{file} does not exist. Is the path correct?")
+                format!("{file} 不存在。路径是否正确？")
             }
             DiffApplicationError::AlreadyExists { file } => {
-                format!("Could not create {file} because it already exists.")
+                format!("无法创建 {file}，因为它已存在。")
             }
             DiffApplicationError::ReadFailed { file, .. } => {
-                format!("Could not read {file}")
+                format!("无法读取 {file}")
             }
             DiffApplicationError::MultipleFileCreation { file } => {
-                format!("There can only be one attempt to create {file}.")
+                format!("只能尝试创建 {file} 一次。")
             }
             DiffApplicationError::MultipleFileRenames { file } => {
-                format!("There can only be one attempt to rename {file}.")
+                format!("只能尝试重命名 {file} 一次。")
             }
             DiffApplicationError::MutatedDeletedFile { file } => {
-                format!("Could not mutate a deleted file {file}.")
+                format!("无法修改已删除的文件 {file}。")
             }
             DiffApplicationError::EmptyDiff => "No diffs could be applied.".to_string(),
             DiffApplicationError::RemoteFileOperationsUnsupported => {
-                "The file read/edit tool is not available on this remote session. Try using a different tool.".to_string()
+                "此远程会话中无法使用文件读取/编辑工具。请尝试使用其他工具。".to_string()
             }
         }
     }
@@ -462,8 +462,8 @@ async fn apply_replace_file<F, Fut>(
         }
         FileReadResult::ReadError(err) => {
             safe_warn!(
-                safe: ("Unable to read file for Agent Code: {err}"),
-                full: ("Unable to read file {absolute_path:?} for Agent Code: {err}")
+                safe: ("Agent Code 无法读取文件：{err}"),
+                full: ("Agent Code 无法读取文件 {absolute_path:?}：{err}")
             );
             result.errors.push(DiffApplicationError::ReadFailed {
                 file: file_path,
@@ -493,8 +493,8 @@ async fn apply_create_file<F, Fut>(
     match read_file(absolute_path.clone()).await {
         FileReadResult::Found(_) => {
             safe_warn!(
-                safe: ("Agent Code tried to create a file that already exists"),
-                full: ("Agent Code tried to create a file that already exists: {absolute_path:?}")
+                safe: ("Agent Code 尝试创建一个已存在的文件"),
+                full: ("Agent Code 尝试创建一个已存在的文件：{absolute_path:?}")
             );
             result
                 .errors
@@ -510,8 +510,8 @@ async fn apply_create_file<F, Fut>(
         }
         FileReadResult::ReadError(err) => {
             safe_warn!(
-                safe: ("Unable to check if file exists for Agent Code: {err}"),
-                full: ("Unable to check if file exists for Agent Code: {absolute_path:?} {err}")
+                safe: ("Agent Code 无法检查文件是否存在：{err}"),
+                full: ("Agent Code 无法检查文件是否存在：{absolute_path:?} {err}")
             );
             result.errors.push(DiffApplicationError::ReadFailed {
                 file: file_path,
@@ -553,8 +553,8 @@ async fn apply_delete_file<F, Fut>(
         }
         FileReadResult::ReadError(err) => {
             safe_warn!(
-                safe: ("Unable to read file for Agent Code: {err}"),
-                full: ("Unable to read file {absolute_path:?} for Agent Code: {err}")
+                safe: ("Agent Code 无法读取文件：{err}"),
+                full: ("Agent Code 无法读取文件 {absolute_path:?}：{err}")
             );
             result.errors.push(DiffApplicationError::ReadFailed {
                 file: file_path,
@@ -594,8 +594,8 @@ async fn apply_search_replace<F, Fut>(
                         })
                     } else {
                         safe_warn!(
-                            safe: ("Suggested non-empty diff on non-existent file"),
-                            full: ("Suggested non-empty diff on non-existent file: {absolute_path:?}")
+                            safe: ("对不存在的文件建议了非空 diff"),
+                            full: ("对不存在的文件建议了非空 diff：{absolute_path:?}")
                         );
                         // A non-empty search block on a non-existent file indicates that the
                         // LLM likely got the path wrong, and is not trying to create a new file.
@@ -606,8 +606,8 @@ async fn apply_search_replace<F, Fut>(
                 }
                 Err(err) => {
                     safe_warn!(
-                        safe: ("Suggested {} diffs on non-existent file", err.len()),
-                        full: ("Suggested {} diffs on non-existent file: {absolute_path:?}", err.len())
+                        safe: ("对不存在的文件建议了 {} 个 diff", err.len()),
+                        full: ("对不存在的文件建议了 {} 个 diff：{absolute_path:?}", err.len())
                     );
                     // Multiple diffs on a non-existent file indicate that the LLM likely got
                     // the path wrong, and is not trying to create a new file.
@@ -619,8 +619,8 @@ async fn apply_search_replace<F, Fut>(
         }
         FileReadResult::ReadError(err) => {
             safe_warn!(
-                safe: ("Unable to read file for Agent Code: {err}"),
-                full: ("Unable to read file {absolute_path:?} for Agent Code: {err}")
+                safe: ("Agent Code 无法读取文件：{err}"),
+                full: ("Agent Code 无法读取文件 {absolute_path:?}：{err}")
             );
             result.errors.push(DiffApplicationError::ReadFailed {
                 file: file_path,
@@ -629,8 +629,8 @@ async fn apply_search_replace<F, Fut>(
         }
         FileReadResult::Found(file_content) => {
             safe_debug!(
-                safe: ("Matching diffs"),
-                full: ("Matching diffs for: {file_path:?}")
+                safe: ("正在匹配 diff"),
+                full: ("正在为以下文件匹配 diff：{file_path:?}")
             );
             let fuzzy_match_diffs = fuzzy_match_diffs(&file_path, &deltas, file_content);
 
@@ -647,8 +647,8 @@ async fn apply_search_replace<F, Fut>(
             if fuzzy_match_diffs.warrants_failure() {
                 if let Some(failures) = fuzzy_match_diffs.failures.as_ref() {
                     safe_warn!(
-                        safe: ("Failure(s) applying diff: {failures:?}"),
-                        full: ("Failure(s) applying diff for {absolute_path:?}: {failures:?}")
+                        safe: ("应用 diff 时失败：{failures:?}"),
+                        full: ("为 {absolute_path:?} 应用 diff 时失败：{failures:?}")
                     );
                     result.errors.push(DiffApplicationError::UnmatchedDiffs {
                         file: file_path.clone(),
@@ -681,8 +681,8 @@ async fn apply_v4a_update<F, Fut>(
     let file_content = match read_file(absolute_path.clone()).await {
         FileReadResult::NotFound => {
             safe_warn!(
-                safe: ("V4A edits requested on non-existent file"),
-                full: ("V4A edits requested on non-existent file: {absolute_path:?}")
+                safe: ("V4A 请求编辑不存在的文件"),
+                full: ("V4A 请求编辑不存在的文件：{absolute_path:?}")
             );
             result
                 .errors
@@ -691,8 +691,8 @@ async fn apply_v4a_update<F, Fut>(
         }
         FileReadResult::ReadError(err) => {
             safe_warn!(
-                safe: ("Unable to read file for Agent Code: {err}"),
-                full: ("Unable to read file {absolute_path:?} for Agent Code: {err}")
+                safe: ("Agent Code 无法读取文件：{err}"),
+                full: ("Agent Code 无法读取文件 {absolute_path:?}：{err}")
             );
             result.errors.push(DiffApplicationError::ReadFailed {
                 file: file_path,
@@ -704,8 +704,8 @@ async fn apply_v4a_update<F, Fut>(
     };
 
     safe_debug!(
-        safe: ("Matching V4A diffs"),
-        full: ("Matching V4A diffs for: {file_path:?}")
+        safe: ("正在匹配 V4A diff"),
+        full: ("正在为以下文件匹配 V4A diff：{file_path:?}")
     );
 
     // Check if we're renaming to an existing file.
@@ -720,8 +720,8 @@ async fn apply_v4a_update<F, Fut>(
             FileReadResult::NotFound => None,
             FileReadResult::ReadError(err) => {
                 safe_warn!(
-                    safe: ("Unable to read rename target file: {err}"),
-                    full: ("Unable to read rename target file {target_absolute:?}: {err}")
+                    safe: ("无法读取重命名目标文件：{err}"),
+                    full: ("无法读取重命名目标文件 {target_absolute:?}：{err}")
                 );
                 result.errors.push(DiffApplicationError::ReadFailed {
                     file: target.clone(),
@@ -746,8 +746,8 @@ async fn apply_v4a_update<F, Fut>(
         if source_diffs.warrants_failure() {
             if let Some(failures) = source_diffs.failures.as_ref() {
                 safe_warn!(
-                    safe: ("Failure(s) applying V4A diff: {failures:?}"),
-                    full: ("Failure(s) applying V4A diff for {absolute_path:?}: {failures:?}")
+                    safe: ("应用 V4A diff 时失败：{failures:?}"),
+                    full: ("为 {absolute_path:?} 应用 V4A diff 时失败：{failures:?}")
                 );
                 result.errors.push(DiffApplicationError::UnmatchedDiffs {
                     file: file_path.clone(),
@@ -807,8 +807,8 @@ async fn apply_v4a_update<F, Fut>(
         if diffs.warrants_failure() {
             if let Some(failures) = diffs.failures.as_ref() {
                 safe_warn!(
-                    safe: ("Failure(s) applying V4A diff: {failures:?}"),
-                    full: ("Failure(s) applying V4A diff for {absolute_path:?}: {failures:?}")
+                    safe: ("应用 V4A diff 时失败：{failures:?}"),
+                    full: ("为 {absolute_path:?} 应用 V4A diff 时失败：{failures:?}")
                 );
                 result.errors.push(DiffApplicationError::UnmatchedDiffs {
                     file: file_path.clone(),

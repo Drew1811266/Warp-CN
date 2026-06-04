@@ -14,7 +14,7 @@ define_settings_group!(GeneralSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "general.show_warning_before_quitting",
-        description: "Whether to show a warning dialog before quitting Warp.",
+        description: "是否在退出 Warp 前显示警告对话框。",
     },
     quit_on_last_window_closed: QuitOnLastWindowClosed {
         type: bool,
@@ -23,7 +23,7 @@ define_settings_group!(GeneralSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "general.quit_on_last_window_closed",
-        description: "Whether to quit Warp when the last window is closed.",
+        description: "是否在最后一个窗口关闭时退出 Warp。",
     },
     restore_session: RestoreSession {
         type: bool,
@@ -32,7 +32,7 @@ define_settings_group!(GeneralSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "general.restore_session",
-        description: "Whether to restore the previous session when Warp starts up.",
+        description: "是否在 Warp 启动时恢复上一个会话。",
     },
     add_app_as_login_item: LoginItem {
         type: bool,
@@ -44,7 +44,7 @@ define_settings_group!(GeneralSettings, settings: [
         sync_to_cloud: SyncToCloud::Never,
         private: false,
         toml_path: "general.login_item",
-        description: "Whether to launch Warp automatically when you log in.",
+        description: "是否在你登录系统时自动启动 Warp。",
     },
     // Records whether the app has been added as a login item.
     // If it has, we don't try to add it again unless the user explicitly
@@ -68,7 +68,7 @@ define_settings_group!(GeneralSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "general.link_tooltip",
-        description: "Whether to show a tooltip when hovering over links.",
+        description: "是否在悬停链接时显示工具提示。",
     },
     welcome_tips_features_used: WelcomeTipsFeaturesUsed {
         type: HashSet<Tip>,
@@ -164,7 +164,7 @@ define_settings_group!(GeneralSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "code.editor.auto_open_code_review_pane_on_first_agent_change",
-        description: "Whether to automatically open the code review pane when the agent makes its first change.",
+        description: "是否在 Agent 首次做出更改时自动打开代码审查面板。",
     },
     bonus_grants_shown: BonusGrantsShown {
         type: HashSet<String>,

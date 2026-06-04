@@ -21,17 +21,14 @@ use crate::terminal::warpify::render::{apply_spacing_styles, build_description_r
 use crate::terminal::warpify::settings::WarpifySettings;
 use crate::ui_components::icons::Icon as UiIcon;
 
-const TMUX_NOT_INSTALLED_ERROR: &str =
-    "tmux is not installed on the remote machine. Please install tmux and try again.";
+const TMUX_NOT_INSTALLED_ERROR: &str = "远程机器上未安装 tmux。请安装 tmux 后重试。";
 const UNSUPPORTED_TMUX_VERSION_ERROR: &str =
-    "The tmux version available on the remote machine is below 3.0. Please install tmux 3.0 or greater using a different method and try again.";
-const TMUX_FAILED_ERROR: &str =
-    "tmux failed to execute on the remote machine. Please re-install tmux and try again.";
-const WARPIFY_TIMEOUT_ERROR: &str = "Warpifying the session hit a timeout.";
+    "远程机器上的 tmux 版本低于 3.0。请用其他方式安装 tmux 3.0 或更高版本后重试。";
+const TMUX_FAILED_ERROR: &str = "tmux 未能在远程机器上执行。请重新安装 tmux 后重试。";
+const WARPIFY_TIMEOUT_ERROR: &str = "Warpify 会话超时。";
 const UNSUPPORTED_SHELL_ERROR: &str =
-    "Unsupported shell. Please set bash, zsh, or fish as your default shell and try again.";
-const TMUX_INSTALL_FAILED_ERROR: &str =
-    "The tmux install hit an unexpected error. Please install tmux manually and try again.";
+    "不支持的 shell。请将 bash、zsh 或 fish 设为默认 shell 后重试。";
+const TMUX_INSTALL_FAILED_ERROR: &str = "tmux 安装遇到意外错误。请手动安装 tmux 后重试。";
 
 const SSH_GITHUB_ISSUE_URL: &str = "https://github.com/warpdotdev/Warp/issues/new?assignees=&labels=Bugs,SSH-tmux&projects=&template=03_ssh_tmux.yml";
 
@@ -63,22 +60,20 @@ impl WarpificationUnavailableReason {
 
     fn error_title(&self) -> &'static str {
         match self {
-            WarpificationUnavailableReason::TmuxNotInstalled { .. } => "tmux Not Installed",
-            WarpificationUnavailableReason::UnsupportedTmuxVersion { .. } => {
-                "Unsupported Tmux Version"
-            }
-            WarpificationUnavailableReason::TmuxFailed => "tmux Failed",
+            WarpificationUnavailableReason::TmuxNotInstalled { .. } => "未安装 tmux",
+            WarpificationUnavailableReason::UnsupportedTmuxVersion { .. } => "不支持的 tmux 版本",
+            WarpificationUnavailableReason::TmuxFailed => "tmux 失败",
             WarpificationUnavailableReason::Timeout {
                 is_tmux_install, ..
             } => {
                 if *is_tmux_install {
-                    "tmux Install Timeout"
+                    "tmux 安装超时"
                 } else {
-                    "SSH Warpify Timeout"
+                    "SSH Warpify 超时"
                 }
             }
-            WarpificationUnavailableReason::UnsupportedShell { .. } => "Unsupported Shell",
-            WarpificationUnavailableReason::TmuxInstallFailed { .. } => "tmux Install Failed",
+            WarpificationUnavailableReason::UnsupportedShell { .. } => "不支持的 shell",
+            WarpificationUnavailableReason::TmuxInstallFailed { .. } => "tmux 安装失败",
         }
     }
 }
@@ -166,7 +161,7 @@ impl SshErrorBlock {
         appearance: &Appearance,
     ) -> Box<dyn Element> {
         let header_contents = warpify::render::build_header_row(
-            "Error Warpifying session",
+            "Warpify 会话时出错",
             Icon::new(UiIcon::AlertTriangle.into(), theme.ui_error_color()),
             theme,
             appearance,
@@ -230,8 +225,8 @@ impl View for SshErrorBlock {
         if self.should_show_report_to_warp_button() {
             let report_issue_text = build_description_row(FormattedText::new([FormattedTextLine::Line(vec![
                     FormattedTextFragment::plain_text("We are actively working on improving the stability of SSH in Warp. Please consider "),
-                    FormattedTextFragment::hyperlink("filing an issue", get_ssh_github_issue_url(self.error_reason.error_title())),
-                    FormattedTextFragment::plain_text(" on GitHub so we can better identify the problem."),
+                    FormattedTextFragment::hyperlink("提交 issue", get_ssh_github_issue_url(self.error_reason.error_title())),
+                    FormattedTextFragment::plain_text(" 到 GitHub，帮助我们更好地定位问题。"),
                 ])]),
                 theme, appearance, self.report_link_highlight_index.clone())
                 .with_hyperlink_font_color(theme.accent().into())
@@ -250,7 +245,7 @@ impl View for SshErrorBlock {
                             ButtonVariant::Accent,
                             self.warpify_without_tmux_button_mouse_state.clone(),
                         )
-                        .with_centered_text_label("Warpify without TMUX".into())
+                        .with_centered_text_label("不使用 TMUX 进行 Warpify".into())
                         .with_style(UiComponentStyles {
                             font_size: Some(appearance.monospace_font_size()),
                             ..Default::default()
@@ -271,7 +266,7 @@ impl View for SshErrorBlock {
                         ButtonVariant::Secondary,
                         self.continue_button_mouse_state.clone(),
                     )
-                    .with_centered_text_label("Continue without Warpification".into())
+                    .with_centered_text_label("不进行 Warpify 并继续".into())
                     .with_style(UiComponentStyles {
                         font_size: Some(appearance.monospace_font_size()),
                         ..Default::default()

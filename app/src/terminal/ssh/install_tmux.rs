@@ -258,11 +258,11 @@ impl SshInstallTmuxBlock {
         let package_manager = &self.system_details.package_manager;
         Container::new(requested_script::render_requested_scripts(
             TitledScript {
-                title: format!("Install with {package_manager}"),
+                title: format!("使用 {package_manager} 安装"),
                 content: tmux_system_install_script.to_string(),
             },
             TitledScript {
-                title: "Install to ~/.warp".to_string(),
+                title: "安装到 ~/.warp".to_string(),
                 content: self.tmux_local_install_script.clone(),
             },
             *is_first_script_active,
@@ -290,7 +290,7 @@ impl SshInstallTmuxBlock {
 
     fn render_local_install_ui(&self, app: &AppContext) -> Box<dyn Element> {
         let header = if self.is_focused {
-            "Run this script to install tmux?"
+            "运行此脚本来安装 tmux？"
         } else {
             ""
         };
@@ -320,7 +320,7 @@ impl SshInstallTmuxBlock {
         appearance: &Appearance,
     ) -> Box<dyn Element> {
         let header_contents = render::build_header_row(
-            "Install tmux?",
+            "安装 tmux？",
             Icon::new(UiIcon::Warp.into(), theme.active_ui_detail()),
             theme,
             appearance,
@@ -378,14 +378,14 @@ impl View for SshInstallTmuxBlock {
         );
 
         let explanation = if self.outdated_version {
-            "In order to Warpify your SSH session, a more recent version of tmux (>=3.0) must be installed. "
+            "要 Warpify 你的 SSH 会话，必须安装较新版本的 tmux（>=3.0）。"
         } else {
-            "In order to Warpify your SSH session, tmux must be installed. "
+            "要 Warpify 你的 SSH 会话，必须安装 tmux。"
         };
 
         let warpify_description = vec![
             FormattedTextFragment::plain_text(explanation),
-            FormattedTextFragment::hyperlink("Why do I need tmux?", WHY_INSTALL_TMUX_URL),
+            FormattedTextFragment::hyperlink("为什么需要 tmux？", WHY_INSTALL_TMUX_URL),
         ];
 
         let text_color =

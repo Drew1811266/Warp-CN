@@ -77,21 +77,20 @@ const SUB_SECTION_MARGIN: f32 = 8.;
 
 const STATUS_ICON_SIZE: f32 = 16.;
 const LSP_STATUS_INDICATOR_SIZE: f32 = 8.;
-const CODE_FEATURE_NAME: &str = "Code";
-const INITIALIZATION_SETTINGS_HEADER: &str = "Initialization Settings";
-const CODEBASE_INDEXING_LABEL: &str = "Codebase indexing";
-const CODEBASE_INDEX_DESCRIPTION: &str = "Warp can automatically index code repositories as you navigate them, helping agents quickly understand context and provide solutions. Code is never stored on the server. If a codebase is unable to be indexed, Warp can still navigate your codebase and gain insights via grep and find tool calling.";
-const WARP_INDEXING_IGNORE_DESCRIPTION: &str = "To exclude specific files or directories from indexing, add them to the .warpindexingignore file in your repository directory. These files will still be accessible to AI features, but they won't be included in codebase embeddings.";
-const AUTO_INDEX_FEATURE_NAME: &str = "Index new folders by default";
-const AUTO_INDEX_DESCRIPTION: &str = "When set to true, Warp will automatically index code repositories as you navigate them - helping agents quickly understand context and provide targeted solutions.";
-const INDEXING_DISABLED_ADMIN_TEXT: &str = "Team admins have disabled codebase indexing.";
-const INDEXING_WORKSPACE_ENABLED_ADMIN_TEXT: &str = "Team admins have enabled codebase indexing.";
-const INDEXING_DISABLED_GLOBAL_AI_TEXT: &str =
-    "AI Features must be enabled to use codebase indexing.";
-const CODEBASE_INDEX_LIMIT_REACHED: &str = "You have reached the maximum number of codebase indices for your plan. Delete existing indices to auto-index new codebases.";
+const CODE_FEATURE_NAME: &str = "代码";
+const INITIALIZATION_SETTINGS_HEADER: &str = "初始化设置";
+const CODEBASE_INDEXING_LABEL: &str = "代码库索引";
+const CODEBASE_INDEX_DESCRIPTION: &str = "当你浏览代码仓库时，Warp 可以自动索引它们，帮助 Agent 快速理解上下文并提供解决方案。代码永远不会存储在服务器上。如果代码库无法建立索引，Warp 仍可通过 grep 和 find 工具调用浏览代码库并获取信息。";
+const WARP_INDEXING_IGNORE_DESCRIPTION: &str = "要从索引中排除特定文件或目录，请将它们添加到仓库目录中的 .warpindexingignore 文件。这些文件仍可被 AI 功能访问，但不会包含在代码库嵌入中。";
+const AUTO_INDEX_FEATURE_NAME: &str = "默认索引新文件夹";
+const AUTO_INDEX_DESCRIPTION: &str = "设为 true 时，Warp 会在你浏览代码仓库时自动建立索引，帮助 Agent 快速理解上下文并提供针对性解决方案。";
+const INDEXING_DISABLED_ADMIN_TEXT: &str = "团队管理员已停用代码库索引。";
+const INDEXING_WORKSPACE_ENABLED_ADMIN_TEXT: &str = "团队管理员已启用代码库索引。";
+const INDEXING_DISABLED_GLOBAL_AI_TEXT: &str = "必须启用 AI 功能才能使用代码库索引。";
+const CODEBASE_INDEX_LIMIT_REACHED: &str =
+    "你已达到当前套餐的代码库索引数量上限。请删除现有索引以自动索引新的代码库。";
 #[cfg(not(target_family = "wasm"))]
-const REMOTE_CODEBASE_INDEX_LIMIT_REACHED_FAILURE: &str =
-    "maximum number of codebase indexes has been reached";
+const REMOTE_CODEBASE_INDEX_LIMIT_REACHED_FAILURE: &str = "已达到代码库索引数量上限";
 
 /// Identifies which subpage of the Code settings the user is viewing.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -113,8 +112,8 @@ impl CodeSubpage {
 
     pub fn title(&self) -> &'static str {
         match self {
-            Self::Indexing => "Codebase Indexing",
-            Self::EditorAndCodeReview => "Editor and Code Review",
+            Self::Indexing => "代码库索引",
+            Self::EditorAndCodeReview => "编辑器与代码审查",
         }
     }
 }
@@ -329,7 +328,7 @@ impl CodeSettingsPageView {
         });
 
         let manual_add_directory_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Index new folder", SecondaryTheme)
+            ActionButton::new("索引新文件夹", SecondaryTheme)
                 .with_icon(Icon::FindAll)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(CodeSettingsPageAction::ManualAddDirectory);
@@ -373,8 +372,8 @@ impl CodeSettingsPageView {
                 Box::new(GlobalSearchToggleWidget::default()),
             ]);
             let categories = vec![
-                Category::new("Codebase Indexing", codebase_indexing_widgets),
-                Category::new("Code Editor and Review", code_editor_review_widgets),
+                Category::new("代码库索引", codebase_indexing_widgets),
+                Category::new("代码编辑器与审查", code_editor_review_widgets),
             ];
             PageType::new_categorized(categories, None)
         } else {
@@ -424,7 +423,7 @@ impl CodeSettingsPageView {
             // or the full categorized page when subpage is None.
             if let Some(subpage) = subpage {
                 let manual_add_directory_button = ctx.add_typed_action_view(|_| {
-                    ActionButton::new("Index new folder", SecondaryTheme)
+                    ActionButton::new("索引新文件夹", SecondaryTheme)
                         .with_icon(Icon::FindAll)
                         .on_click(|ctx| {
                             ctx.dispatch_typed_action(CodeSettingsPageAction::ManualAddDirectory);
@@ -473,7 +472,7 @@ impl CodeSettingsPageView {
     fn build_full_page(ctx: &mut ViewContext<Self>) -> PageType<Self> {
         if FeatureFlag::OpenWarpNewSettingsModes.is_enabled() {
             let manual_add_directory_button = ctx.add_typed_action_view(|_| {
-                ActionButton::new("Index new folder", SecondaryTheme)
+                ActionButton::new("索引新文件夹", SecondaryTheme)
                     .with_icon(Icon::FindAll)
                     .on_click(|ctx| {
                         ctx.dispatch_typed_action(CodeSettingsPageAction::ManualAddDirectory);
@@ -505,13 +504,13 @@ impl CodeSettingsPageView {
                 Box::new(GlobalSearchToggleWidget::default()),
             ]);
             let categories = vec![
-                Category::new("Codebase Indexing", codebase_indexing_widgets),
-                Category::new("Code Editor and Review", code_editor_review_widgets),
+                Category::new("代码库索引", codebase_indexing_widgets),
+                Category::new("代码编辑器与审查", code_editor_review_widgets),
             ];
             PageType::new_categorized(categories, None)
         } else {
             let manual_add_directory_button = ctx.add_typed_action_view(|_| {
-                ActionButton::new("Index new folder", SecondaryTheme)
+                ActionButton::new("索引新文件夹", SecondaryTheme)
                     .with_icon(Icon::FindAll)
                     .on_click(|ctx| {
                         ctx.dispatch_typed_action(CodeSettingsPageAction::ManualAddDirectory);
@@ -910,7 +909,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     if FeatureFlag::FullSourceCodeEmbedding.is_enabled() {
         ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(
             vec![ToggleSettingActionPair::new(
-                "codebase index",
+                "代码库索引",
                 builder(SettingsAction::Code(
                     CodeSettingsPageAction::ToggleCodebaseContext,
                 )),
@@ -922,7 +921,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
         ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(
             vec![ToggleSettingActionPair::new(
-                "auto-indexing",
+                "自动索引",
                 builder(SettingsAction::Code(
                     CodeSettingsPageAction::ToggleAutoIndexing,
                 )),
@@ -937,7 +936,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(
             vec![
                 ToggleSettingActionPair::new(
-                    "auto open code review panel",
+                    "自动打开代码审查面板",
                     builder(SettingsAction::Code(
                         CodeSettingsPageAction::ToggleAutoOpenCodeReviewPane,
                     )),
@@ -945,7 +944,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                     flags::AUTO_OPEN_CODE_REVIEW_PANE_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    "code review button",
+                    "代码审查按钮",
                     builder(SettingsAction::Code(
                         CodeSettingsPageAction::ToggleCodeReviewPanel,
                     )),
@@ -953,7 +952,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                     flags::SHOW_CODE_REVIEW_BUTTON_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    "diff stats on code review button",
+                    "代码审查按钮上的 diff 统计",
                     builder(SettingsAction::Code(
                         CodeSettingsPageAction::ToggleShowCodeReviewDiffStats,
                     )),
@@ -961,7 +960,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                     flags::SHOW_CODE_REVIEW_DIFF_STATS_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    "project explorer",
+                    "项目资源管理器",
                     builder(SettingsAction::Code(
                         CodeSettingsPageAction::ToggleProjectExplorer,
                     )),
@@ -969,7 +968,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                     flags::SHOW_PROJECT_EXPLORER,
                 ),
                 ToggleSettingActionPair::new(
-                    "global file search",
+                    "全局文件搜索",
                     builder(SettingsAction::Code(
                         CodeSettingsPageAction::ToggleGlobalSearch,
                     )),
@@ -992,7 +991,7 @@ impl SettingsWidget for CodePageWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "code coding codebase repository index indexing indices context path lsp language server"
+        "code coding 代码库 仓库 索引 indexing 上下文 路径 lsp language server"
     }
 
     fn render(
@@ -1316,7 +1315,7 @@ impl CodePageWidget {
                     .with_cross_axis_alignment(CrossAxisAlignment::Center)
                     .with_child(
                         ui_builder
-                            .span("Initialized / indexed folders")
+                            .span("已初始化 / 已索引文件夹")
                             .with_style(UiComponentStyles {
                                 font_size: Some(16.0),
                                 font_weight: Some(Weight::Semibold),
@@ -1440,7 +1439,7 @@ impl CodePageWidget {
                 Container::new(
                     appearance
                         .ui_builder()
-                        .paragraph("No folders have been initialized yet.")
+                        .paragraph("尚未初始化任何文件夹。")
                         .build()
                         .finish(),
                 )
@@ -1507,7 +1506,7 @@ impl CodePageWidget {
                 .with_text_and_icon_label(
                     warpui::ui_components::button::TextAndIcon::new(
                         warpui::ui_components::button::TextAndIconAlignment::IconFirst,
-                        "Open project rules",
+                        "打开项目规则",
                         warpui::elements::Icon::new(
                             "bundled/svg/file-code-02.svg",
                             theme.foreground(),
@@ -1710,7 +1709,7 @@ impl CodePageWidget {
         let theme = appearance.theme();
         let Some(index_state) = index_state else {
             return IndexingStatusPresentation {
-                text: Cow::from("No index created"),
+                text: Cow::from("未创建索引"),
                 color: theme.disabled_ui_text_color().into_solid(),
                 icon: Some(Icon::SlashCircle),
                 refresh_action: None,
@@ -1721,13 +1720,13 @@ impl CodePageWidget {
         if index_state.has_pending() {
             let text = match index_state.sync_progress() {
                 Some(SyncProgress::Discovering { total_nodes }) => {
-                    Cow::from(format!("Discovered {total_nodes} chunks"))
+                    Cow::from(format!("已发现 {total_nodes} 个块"))
                 }
                 Some(SyncProgress::Syncing {
                     completed_nodes,
                     total_nodes,
-                }) => Cow::from(format!("Syncing - {completed_nodes} / {total_nodes}")),
-                None => Cow::from("Syncing..."),
+                }) => Cow::from(format!("正在同步 - {completed_nodes} / {total_nodes}")),
+                None => Cow::from("正在同步..."),
             };
 
             return IndexingStatusPresentation {
@@ -1741,25 +1740,21 @@ impl CodePageWidget {
 
         if let Some(completed_successfully) = index_state.last_sync_successful() {
             let (text, color, icon) = if completed_successfully {
-                ("Synced", theme.ansi_fg_green(), Icon::Check)
+                ("已同步", theme.ansi_fg_green(), Icon::Check)
             } else if let Some(CodebaseIndexFinishedStatus::Failed(
                 CodebaseIndexingError::ExceededMaxFileLimit
                 | CodebaseIndexingError::MaxDepthExceeded,
             )) = index_state.last_sync_result()
             {
-                (
-                    "Codebase too large",
-                    theme.ui_warning_color(),
-                    Icon::AlertTriangle,
-                )
+                ("代码库过大", theme.ui_warning_color(), Icon::AlertTriangle)
             } else if index_state.has_synced_version() {
                 (
-                    "Stale",
+                    "已过期",
                     theme.nonactive_ui_detail().into_solid(),
                     Icon::ClockRefresh,
                 )
             } else {
-                ("Failed", theme.ui_error_color(), Icon::AlertTriangle)
+                ("失败", theme.ui_error_color(), Icon::AlertTriangle)
             };
 
             return IndexingStatusPresentation {
@@ -1773,7 +1768,7 @@ impl CodePageWidget {
 
         log::warn!("No index state for codebase");
         IndexingStatusPresentation {
-            text: Cow::from("No index built"),
+            text: Cow::from("未构建索引"),
             color: theme.nonactive_ui_text_color().into_solid(),
             icon: None,
             refresh_action: None,
@@ -1791,7 +1786,7 @@ impl CodePageWidget {
 
         match status.state {
             RemoteCodebaseIndexState::NotEnabled => IndexingStatusPresentation {
-                text: Cow::from("No index created"),
+                text: Cow::from("未创建索引"),
                 color: theme.disabled_ui_text_color().into_solid(),
                 icon: Some(Icon::SlashCircle),
                 refresh_action: Some(IndexingRefreshAction::RequestRemote),
@@ -1801,9 +1796,9 @@ impl CodePageWidget {
                 let limit_reached = remote_codebase_index_limit_reached(status);
                 IndexingStatusPresentation {
                     text: Cow::from(if limit_reached {
-                        "Index limit reached"
+                        "已达到索引上限"
                     } else {
-                        "Unavailable"
+                        "不可用"
                     }),
                     color: if limit_reached {
                         theme.ui_warning_color()
@@ -1820,14 +1815,14 @@ impl CodePageWidget {
                 }
             }
             RemoteCodebaseIndexState::Disabled => IndexingStatusPresentation {
-                text: Cow::from("Disabled"),
+                text: Cow::from("已停用"),
                 color: theme.disabled_ui_text_color().into_solid(),
                 icon: Some(Icon::SlashCircle),
                 refresh_action: Some(IndexingRefreshAction::RequestRemote),
                 show_delete: true,
             },
             RemoteCodebaseIndexState::Queued => IndexingStatusPresentation {
-                text: Cow::from("Queued"),
+                text: Cow::from("已排队"),
                 color: theme.disabled_ui_text_color().into_solid(),
                 icon: None,
                 refresh_action: None,
@@ -1836,11 +1831,11 @@ impl CodePageWidget {
             RemoteCodebaseIndexState::Indexing => {
                 let text = match (status.progress_completed, status.progress_total) {
                     (Some(completed), Some(total)) => {
-                        Cow::from(format!("Indexing - {completed} / {total}"))
+                        Cow::from(format!("正在索引 - {completed} / {total}"))
                     }
-                    (Some(completed), None) => Cow::from(format!("Indexing - {completed}")),
-                    (None, Some(total)) => Cow::from(format!("Indexing - 0 / {total}")),
-                    (None, None) => Cow::from("Indexing..."),
+                    (Some(completed), None) => Cow::from(format!("正在索引 - {completed}")),
+                    (None, Some(total)) => Cow::from(format!("正在索引 - 0 / {total}")),
+                    (None, None) => Cow::from("正在索引..."),
                 };
 
                 IndexingStatusPresentation {
@@ -1852,21 +1847,21 @@ impl CodePageWidget {
                 }
             }
             RemoteCodebaseIndexState::Ready => IndexingStatusPresentation {
-                text: Cow::from("Synced"),
+                text: Cow::from("已同步"),
                 color: theme.ansi_fg_green(),
                 icon: Some(Icon::Check),
                 refresh_action: Some(IndexingRefreshAction::Resync),
                 show_delete: true,
             },
             RemoteCodebaseIndexState::Stale => IndexingStatusPresentation {
-                text: Cow::from("Stale"),
+                text: Cow::from("已过期"),
                 color: theme.nonactive_ui_detail().into_solid(),
                 icon: Some(Icon::ClockRefresh),
                 refresh_action: Some(IndexingRefreshAction::Resync),
                 show_delete: true,
             },
             RemoteCodebaseIndexState::Failed => IndexingStatusPresentation {
-                text: Cow::from("Failed"),
+                text: Cow::from("失败"),
                 color: theme.ui_error_color(),
                 icon: Some(Icon::AlertTriangle),
                 refresh_action: Some(IndexingRefreshAction::Resync),
@@ -2021,7 +2016,7 @@ impl CodePageWidget {
         // "LSP SERVERS" label
         content.add_child(
             ui_builder
-                .span("LSP SERVERS")
+                .span("LSP 服务器")
                 .with_style(UiComponentStyles {
                     font_size: Some(11.0),
                     font_weight: Some(Weight::Semibold),
@@ -2134,10 +2129,10 @@ impl CodePageWidget {
         );
 
         let (description, is_installing) = match &repo_status {
-            Some(LspRepoStatus::DisabledAndInstalled { .. }) => ("Installed", false),
-            Some(LspRepoStatus::Installing { .. }) => ("Installing...", true),
-            Some(LspRepoStatus::CheckingForInstallation) => ("Checking...", true),
-            _ => ("Available for download", false),
+            Some(LspRepoStatus::DisabledAndInstalled { .. }) => ("已安装", false),
+            Some(LspRepoStatus::Installing { .. }) => ("正在安装...", true),
+            Some(LspRepoStatus::CheckingForInstallation) => ("正在检查...", true),
+            _ => ("可下载", false),
         };
 
         name_desc_column.add_child(
@@ -2319,7 +2314,7 @@ impl CodePageWidget {
                         background: Some(theme.surface_3().into()),
                         ..Default::default()
                     })
-                    .with_text_label("Restart server".to_owned())
+                    .with_text_label("重启服务器".to_owned())
                     .build()
                     .with_cursor(Cursor::PointingHand)
                     .on_click(move |ctx, _, _| {
@@ -2350,7 +2345,7 @@ impl CodePageWidget {
                         font_size: Some(12.),
                         ..Default::default()
                     })
-                    .with_text_label("View logs".to_owned())
+                    .with_text_label("查看日志".to_owned())
                     .build()
                     .with_cursor(Cursor::PointingHand)
                     .on_click(move |ctx, _, _| {
@@ -2406,26 +2401,26 @@ impl CodePageWidget {
                         AnsiColorIdentifier::Green
                             .to_ansi_color(&theme.terminal_colors().normal)
                             .into(),
-                        "Available",
+                        "可用",
                     ),
                     LspState::Starting | LspState::Available { .. } => (
                         AnsiColorIdentifier::Yellow
                             .to_ansi_color(&theme.terminal_colors().normal)
                             .into(),
-                        "Busy",
+                        "忙碌",
                     ),
                     LspState::Failed { .. } => (
                         AnsiColorIdentifier::Red
                             .to_ansi_color(&theme.terminal_colors().normal)
                             .into(),
-                        "Failed",
+                        "失败",
                     ),
                     LspState::Stopped { .. } | LspState::Stopping { .. } => {
-                        (theme.disabled_ui_text_color().into_solid(), "Stopped")
+                        (theme.disabled_ui_text_color().into_solid(), "已停止")
                     }
                 }
             }
-            None => (theme.disabled_ui_text_color().into_solid(), "Not running"),
+            None => (theme.disabled_ui_text_color().into_solid(), "未运行"),
         }
     }
 }
@@ -2462,7 +2457,7 @@ impl SettingsWidget for CodebaseIndexingCategorizedWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "codebase index indexing repository code context embedding auto-index lsp language server"
+        "代码库 索引 indexing 仓库 code 上下文 embedding 自动索引 lsp language server"
     }
 
     fn render(
@@ -2586,7 +2581,7 @@ impl SettingsWidget for ExternalEditorCodeWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "code editor open files markdown AI conversations layout pane tab"
+        "代码编辑器 打开文件 markdown AI 会话 布局 窗格 标签页"
     }
 
     fn render(
@@ -2612,7 +2607,7 @@ impl SettingsWidget for AutoOpenCodeReviewPaneCodeWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "oz auto open code review pane panel agent mode change first time accepted diff view conversation"
+        "oz 自动打开代码审查窗格 面板 Agent 模式 首次接受 diff 视图 会话"
     }
 
     fn render(
@@ -2623,7 +2618,7 @@ impl SettingsWidget for AutoOpenCodeReviewPaneCodeWidget {
     ) -> Box<dyn Element> {
         let general_settings = GeneralSettings::as_ref(app);
         render_body_item::<CodeSettingsPageAction>(
-            "Auto open code review panel".into(),
+            "自动打开代码审查面板".into(),
             None,
             LocalOnlyIconState::Hidden,
             ToggleState::Enabled,
@@ -2637,7 +2632,7 @@ impl SettingsWidget for AutoOpenCodeReviewPaneCodeWidget {
                     ctx.dispatch_typed_action(CodeSettingsPageAction::ToggleAutoOpenCodeReviewPane);
                 })
                 .finish(),
-            Some("When this setting is on, the code review panel will open on the first accepted diff of a conversation".into()),
+            Some("启用后，对话中首次接受 diff 时会打开代码审查面板".into()),
         )
     }
 }
@@ -2688,7 +2683,7 @@ impl SettingsWidget for CodeReviewPanelToggleWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "code review panel right side diff git"
+        "代码审查面板 右侧 diff git"
     }
 
     fn render(
@@ -2700,7 +2695,7 @@ impl SettingsWidget for CodeReviewPanelToggleWidget {
         let tab_settings = TabSettings::as_ref(app);
 
         render_body_item::<CodeSettingsPageAction>(
-            "Show code review button".into(),
+            "显示代码审查按钮".into(),
             None,
             LocalOnlyIconState::Hidden,
             ToggleState::Enabled,
@@ -2714,10 +2709,7 @@ impl SettingsWidget for CodeReviewPanelToggleWidget {
                     ctx.dispatch_typed_action(CodeSettingsPageAction::ToggleCodeReviewPanel);
                 })
                 .finish(),
-            Some(
-                "Show a button in the top right of the window to toggle the code review panel."
-                    .into(),
-            ),
+            Some("在窗口右上角显示用于切换代码审查面板的按钮。".into()),
         )
     }
 }
@@ -2731,7 +2723,7 @@ impl SettingsWidget for CodeReviewDiffStatsToggleWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "code review diff stats lines added removed counts"
+        "代码审查 diff 统计 新增 删除 行数"
     }
 
     fn render(
@@ -2743,7 +2735,7 @@ impl SettingsWidget for CodeReviewDiffStatsToggleWidget {
         let tab_settings = TabSettings::as_ref(app);
 
         render_body_item::<CodeSettingsPageAction>(
-            "Show diff stats on code review button".into(),
+            "在代码审查按钮上显示 diff 统计".into(),
             None,
             LocalOnlyIconState::Hidden,
             ToggleState::Enabled,
@@ -2759,7 +2751,7 @@ impl SettingsWidget for CodeReviewDiffStatsToggleWidget {
                     );
                 })
                 .finish(),
-            Some("Show lines added and removed counts on the code review button.".into()),
+            Some("在代码审查按钮上显示新增和删除行数。".into()),
         )
     }
 }
@@ -2773,7 +2765,7 @@ impl SettingsWidget for ProjectExplorerToggleWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "project explorer file tree left panel tools"
+        "项目资源管理器 文件树 左侧面板 工具"
     }
 
     fn render(
@@ -2785,7 +2777,7 @@ impl SettingsWidget for ProjectExplorerToggleWidget {
         let code_settings = CodeSettings::as_ref(app);
 
         render_body_item::<CodeSettingsPageAction>(
-            "Project explorer".into(),
+            "项目资源管理器".into(),
             None,
             LocalOnlyIconState::Hidden,
             ToggleState::Enabled,
@@ -2799,10 +2791,7 @@ impl SettingsWidget for ProjectExplorerToggleWidget {
                     ctx.dispatch_typed_action(CodeSettingsPageAction::ToggleProjectExplorer);
                 })
                 .finish(),
-            Some(
-                "Adds an IDE-style project explorer / file tree to the left side tools panel."
-                    .into(),
-            ),
+            Some("在左侧工具面板中添加 IDE 风格的项目资源管理器 / 文件树。".into()),
         )
     }
 }
@@ -2816,7 +2805,7 @@ impl SettingsWidget for GlobalSearchToggleWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "global search file search left panel tools"
+        "全局搜索 文件搜索 左侧面板 工具"
     }
 
     fn render(
@@ -2828,7 +2817,7 @@ impl SettingsWidget for GlobalSearchToggleWidget {
         let code_settings = CodeSettings::as_ref(app);
 
         render_body_item::<CodeSettingsPageAction>(
-            "Global file search".into(),
+            "全局文件搜索".into(),
             None,
             LocalOnlyIconState::Hidden,
             ToggleState::Enabled,
@@ -2842,7 +2831,7 @@ impl SettingsWidget for GlobalSearchToggleWidget {
                     ctx.dispatch_typed_action(CodeSettingsPageAction::ToggleGlobalSearch);
                 })
                 .finish(),
-            Some("Adds global file search to the left side tools panel.".into()),
+            Some("在左侧工具面板中添加全局文件搜索。".into()),
         )
     }
 }

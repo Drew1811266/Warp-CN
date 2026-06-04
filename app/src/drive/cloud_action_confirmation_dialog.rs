@@ -15,21 +15,22 @@ const BUTTON_BORDER_RADIUS: f32 = 4.;
 const BORDER_WIDTH: f32 = 1.;
 
 const DIALOG_WIDTH: f32 = 450.;
-const CANCEL_TEXT: &str = "Cancel";
+const CANCEL_TEXT: &str = "取消";
 
-const DELETE_TEAM_TITLE_TEXT: &str = "Are you sure you want to delete this team?";
-const LEAVE_TEAM_TITLE_TEXT: &str = "Are you sure you want to leave this team?";
-const REMOVE_TEAM_MEMBER_TITLE_TEXT: &str = "Are you sure you want to remove this member?";
+const DELETE_TEAM_TITLE_TEXT: &str = "确定要删除此团队吗？";
+const LEAVE_TEAM_TITLE_TEXT: &str = "确定要离开此团队吗？";
+const REMOVE_TEAM_MEMBER_TITLE_TEXT: &str = "确定要移除此成员吗？";
 
-const DELETE_TEAM_BODY_TEXT: &str = "Deleting this team will permanently delete it and all of its related content, including billing information or credits. You will not be able to restore them.";
-const LEAVE_TEAM_BODY_TEXT: &str = "You will need to be reinvited in order to rejoin.";
-const LEAVE_TEAM_RELOAD_CREDITS_BODY_TEXT: &str = "If you leave this team, you’ll lose access to any remaining reload credits tied to it. You’ll regain access to any unused, non-expired credits if you rejoin the same team later.";
-const REMOVE_TEAM_MEMBER_RELOAD_CREDITS_BODY_TEXT: &str = "This member will lose access to any remaining reload credits tied to this team. If they rejoin later, they’ll regain access to any unused, non-expired credits.";
+const DELETE_TEAM_BODY_TEXT: &str =
+    "删除此团队会永久删除团队及其所有相关内容，包括账单信息或额度。你将无法恢复它们。";
+const LEAVE_TEAM_BODY_TEXT: &str = "如需重新加入，你需要再次被邀请。";
+const LEAVE_TEAM_RELOAD_CREDITS_BODY_TEXT: &str = "如果离开此团队，你将无法访问与其关联的剩余 Reload 额度。如果之后重新加入同一团队，你将重新获得未使用且未过期额度的访问权限。";
+const REMOVE_TEAM_MEMBER_RELOAD_CREDITS_BODY_TEXT: &str = "此成员将无法访问与此团队关联的剩余 Reload 额度。如果之后重新加入，他们将重新获得未使用且未过期额度的访问权限。";
 
-const DELETE_TEAM_CONFIRM_TEXT: &str = "Yes, delete";
-const LEAVE_TEAM_CONFIRM_TEXT: &str = "Yes, leave";
-const LEAVE_TEAM_RELOAD_CREDITS_CONFIRM_TEXT: &str = "Leave Team";
-const REMOVE_TEAM_MEMBER_RELOAD_CREDITS_CONFIRM_TEXT: &str = "Remove Member";
+const DELETE_TEAM_CONFIRM_TEXT: &str = "确认删除";
+const LEAVE_TEAM_CONFIRM_TEXT: &str = "确认离开";
+const LEAVE_TEAM_RELOAD_CREDITS_CONFIRM_TEXT: &str = "离开团队";
+const REMOVE_TEAM_MEMBER_RELOAD_CREDITS_CONFIRM_TEXT: &str = "移除成员";
 
 pub enum CloudActionConfirmationDialogEvent {
     Cancel,

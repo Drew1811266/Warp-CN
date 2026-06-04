@@ -3,7 +3,7 @@ pub mod text {
     use std::fmt;
     use std::io::{self, Write};
 
-    const CANCELLED_MESSAGE: &str = "<cancelled>";
+    const CANCELLED_MESSAGE: &str = "<已取消>";
 
     use ai::agent::action_result::{FetchConversationResult, ReadSkillResult, UseComputerResult};
     use itertools::Itertools;
@@ -53,34 +53,31 @@ pub mod text {
                         output,
                         exit_code,
                         ..
-                    } => writeln!(w, "{output}\n\n (`{command}` exited with code {exit_code})"),
+                    } => writeln!(w, "{output}nn（`{command}` 已退出，代码为 {exit_code}）"),
                     RequestCommandOutputResult::LongRunningCommandSnapshot { command, .. } => {
-                        writeln!(w, "`{command}` is still running...")
+                        writeln!(w, "`{command}` 仍在运行...")
                     }
                     RequestCommandOutputResult::CancelledBeforeExecution => {
                         writeln!(w, "{CANCELLED_MESSAGE}")
                     }
                     RequestCommandOutputResult::Denylisted { .. } => {
-                        writeln!(
-                            w,
-                            "Command was not allowed to run due to presence on denylist"
-                        )
+                        writeln!(w, "由于命令位于拒绝列表中，不允许运行")
                     }
                 },
                 AIAgentActionResultType::WriteToLongRunningShellCommand(result) => match result {
                     WriteToLongRunningShellCommandResult::Snapshot { .. } => {
-                        writeln!(w, "Command is still running...")
+                        writeln!(w, "命令仍在运行...")
                     }
                     WriteToLongRunningShellCommandResult::CommandFinished {
                         output,
                         exit_code,
                         ..
-                    } => writeln!(w, "{output}\n\n (exited with code {exit_code})"),
+                    } => writeln!(w, "{output}nn（已退出，代码为 {exit_code}）"),
                     WriteToLongRunningShellCommandResult::Cancelled => {
                         writeln!(w, "{CANCELLED_MESSAGE}")
                     }
                     WriteToLongRunningShellCommandResult::Error(_) => {
-                        writeln!(w, "Failed to write to command.")
+                        writeln!(w, "写入命令失败。")
                     }
                 },
                 AIAgentActionResultType::RequestFileEdits(result) => match result {
@@ -92,7 +89,7 @@ pub mod text {
                     } => {
                         writeln!(
                             w,
-                            "Updated {} files, deleted {} files:\n```diff\n{diff}\n```",
+                            "已更新 {} 个文件，删除 {} 个文件：n```diffn{diff}n```",
                             updated_files.len(),
                             deleted_files.len()
                         )
@@ -101,12 +98,12 @@ pub mod text {
                         writeln!(w, "{CANCELLED_MESSAGE}")
                     }
                     RequestFileEditsResult::DiffApplicationFailed { error } => {
-                        writeln!(w, "Editing files failed: {error}")
+                        writeln!(w, "编辑文件失败：{error}")
                     }
                 },
                 AIAgentActionResultType::ReadFiles(result) => match result {
                     ReadFilesResult::Success { .. } => Ok(()),
-                    ReadFilesResult::Error(error) => writeln!(w, "Reading files failed: {error}"),
+                    ReadFilesResult::Error(error) => writeln!(w, "读取文件失败：{error}"),
                     ReadFilesResult::Cancelled => writeln!(w, "{CANCELLED_MESSAGE}"),
                 },
                 AIAgentActionResultType::UploadArtifact(result) => match result {
@@ -116,25 +113,25 @@ pub mod text {
                         ..
                     } => match filepath {
                         Some(filepath) => {
-                            writeln!(w, "Uploaded artifact {artifact_uid} from {filepath}")
+                            writeln!(w, "已从 {filepath} 上传 artifact {artifact_uid}")
                         }
-                        None => writeln!(w, "Uploaded artifact {artifact_uid}"),
+                        None => writeln!(w, "已上传 artifact {artifact_uid}"),
                     },
                     UploadArtifactResult::Error(error) => {
-                        writeln!(w, "Uploading artifact failed: {error}")
+                        writeln!(w, "上传 artifact 失败：{error}")
                     }
                     UploadArtifactResult::Cancelled => writeln!(w, "{CANCELLED_MESSAGE}"),
                 },
                 AIAgentActionResultType::SearchCodebase(result) => match result {
                     SearchCodebaseResult::Success { files } => {
-                        writeln!(w, "Codebase search results:")?;
+                        writeln!(w, "代码库搜索结果：")?;
                         for file in files {
                             writeln!(w, "- {file}")?;
                         }
                         Ok(())
                     }
                     SearchCodebaseResult::Failed { message, .. } => {
-                        writeln!(w, "Searching codebase failed: {message}")
+                        writeln!(w, "搜索代码库失败：{message}")
                     }
                     SearchCodebaseResult::Cancelled => todo!(),
                 },
@@ -145,12 +142,12 @@ pub mod text {
                         }
                         Ok(())
                     }
-                    GrepResult::Error(error) => writeln!(w, "grep failed: {error}"),
+                    GrepResult::Error(error) => writeln!(w, "grep 失败：{error}"),
                     GrepResult::Cancelled => writeln!(w, "{CANCELLED_MESSAGE}"),
                 },
                 AIAgentActionResultType::FileGlob(result) => match result {
                     FileGlobResult::Success { matched_files } => writeln!(w, "{matched_files}"),
-                    FileGlobResult::Error(error) => writeln!(w, "find failed: {error}"),
+                    FileGlobResult::Error(error) => writeln!(w, "find 失败：{error}"),
                     FileGlobResult::Cancelled => writeln!(w, "{CANCELLED_MESSAGE}"),
                 },
                 AIAgentActionResultType::FileGlobV2(result) => match result {
@@ -160,7 +157,7 @@ pub mod text {
                         }
                         Ok(())
                     }
-                    FileGlobV2Result::Error(error) => writeln!(w, "find failed: {error}"),
+                    FileGlobV2Result::Error(error) => writeln!(w, "find 失败：{error}"),
                     FileGlobV2Result::Cancelled => writeln!(w, "{CANCELLED_MESSAGE}"),
                 },
                 AIAgentActionResultType::ReadMCPResource(result) => match result {
@@ -192,7 +189,7 @@ pub mod text {
                         Ok(())
                     }
                     ReadMCPResourceResult::Error(error) => {
-                        writeln!(w, "Reading MCP resource failed: {error}")
+                        writeln!(w, "读取 MCP 资源失败：{error}")
                     }
                     ReadMCPResourceResult::Cancelled => writeln!(w, "{CANCELLED_MESSAGE}"),
                 },
@@ -206,7 +203,7 @@ pub mod text {
                                         writeln!(w, "{}", text_content.text)?;
                                     }
                                     rmcp::model::RawContent::Image(image_content) => {
-                                        writeln!(w, "{} image", image_content.mime_type)?;
+                                        writeln!(w, "{} 张图片", image_content.mime_type)?;
                                     }
                                     rmcp::model::RawContent::Resource(embedded_resource) => {
                                         match &embedded_resource.resource {
@@ -228,7 +225,7 @@ pub mod text {
                                     };
                                     }
                                     rmcp::model::RawContent::Audio(audio_content) => {
-                                        writeln!(w, "{} audio", audio_content.mime_type)?;
+                                        writeln!(w, "{} 段音频", audio_content.mime_type)?;
                                     }
                                     rmcp::model::RawContent::ResourceLink(raw_resource) => {
                                         let rmcp::model::RawResource {
@@ -248,16 +245,16 @@ pub mod text {
                             Ok(())
                         }
                         CallMCPToolResult::Error(error) => {
-                            writeln!(w, "Calling MCP tool failed: {error}")
+                            writeln!(w, "调用 MCP 工具失败：{error}")
                         }
                         CallMCPToolResult::Cancelled => writeln!(w, "{CANCELLED_MESSAGE}"),
                     }
                 }
                 AIAgentActionResultType::ReadSkill(result) => match result {
                     ReadSkillResult::Success { content } => {
-                        writeln!(w, "Skill read successfully: {}", content.file_name)
+                        writeln!(w, "Skill 读取成功：{}", content.file_name)
                     }
-                    ReadSkillResult::Error(error) => writeln!(w, "Skill read error: {error}"),
+                    ReadSkillResult::Error(error) => writeln!(w, "Skill 读取错误：{error}"),
                     ReadSkillResult::Cancelled => writeln!(w, "{CANCELLED_MESSAGE}"),
                 },
                 AIAgentActionResultType::SuggestNewConversation(result) => match result {
@@ -281,17 +278,17 @@ pub mod text {
                 AIAgentActionResultType::UseComputer(result) => match result {
                     // TODO(AGENT-2281): implement
                     UseComputerResult::Success(_result) => Ok(()),
-                    UseComputerResult::Error(error) => writeln!(w, "Use computer error: {error}"),
+                    UseComputerResult::Error(error) => writeln!(w, "使用电脑控制时出错：{error}"),
                     UseComputerResult::Cancelled => writeln!(w, "{CANCELLED_MESSAGE}"),
                 },
                 // TODO(AGENT-2281): implement
                 AIAgentActionResultType::RequestComputerUse(_result) => Ok(()),
                 AIAgentActionResultType::FetchConversation(result) => match result {
                     FetchConversationResult::Success { directory_path } => {
-                        writeln!(w, "Fetched conversation to {directory_path}")
+                        writeln!(w, "已将对话获取到 {directory_path}")
                     }
                     FetchConversationResult::Error(error) => {
-                        writeln!(w, "Fetch conversation error: {error}")
+                        writeln!(w, "获取对话出错：{error}")
                     }
                     FetchConversationResult::Cancelled => writeln!(w, "{CANCELLED_MESSAGE}"),
                 },
@@ -316,15 +313,15 @@ pub mod text {
                 }
                 AIAgentOutputMessageType::Action(action) => match &action.action {
                     AIAgentActionType::RequestCommandOutput { command, .. } => {
-                        writeln!(w, "Running `{command}`")?;
+                        writeln!(w, "正在运行 `{command}`")?;
                     }
                     AIAgentActionType::WriteToLongRunningShellCommand { input, .. } => {
-                        writeln!(w, "Write {} bytes to command", input.len())?;
+                        writeln!(w, "向命令写入 {} 字节", input.len())?;
                     }
                     AIAgentActionType::ReadFiles(request) => {
                         writeln!(
                             w,
-                            "Reading {}",
+                            "正在读取 {}",
                             request
                                 .locations
                                 .iter()
@@ -333,18 +330,18 @@ pub mod text {
                         // TODO: Better formatting, need shell info.
                     }
                     AIAgentActionType::UploadArtifact(request) => {
-                        writeln!(w, "Uploading artifact {}", request.file_path)?;
+                        writeln!(w, "正在上传 artifact {}", request.file_path)?;
                     }
                     AIAgentActionType::SearchCodebase(request) => {
                         writeln!(
                             w,
-                            "Searching {} for {}",
+                            "正在 {} 中搜索 {}",
                             request.codebase_path.as_deref().unwrap_or("codebase"),
                             request.query
                         )?;
                     }
                     AIAgentActionType::RequestFileEdits { file_edits, title } => {
-                        write!(w, "Editing files:")?;
+                        write!(w, "正在编辑文件：")?;
                         if let Some(title) = title {
                             write!(w, " {title}")?;
                         }
@@ -356,12 +353,12 @@ pub mod text {
                         }
                     }
                     AIAgentActionType::Grep { queries, path } => {
-                        writeln!(w, "Grepping for {} in {path}", format_queries(queries))?;
+                        writeln!(w, "正在 {path} 中 Grep {}", format_queries(queries))?;
                     }
                     AIAgentActionType::FileGlob { patterns, path } => {
-                        write!(w, "Finding files matching {}", format_queries(patterns))?;
+                        write!(w, "正在查找匹配 {} 的文件", format_queries(patterns))?;
                         if let Some(path) = path {
-                            write!(w, " in {path}")?;
+                            write!(w, " 在 {path} 中")?;
                         }
                         writeln!(w)?;
                     }
@@ -369,9 +366,9 @@ pub mod text {
                         patterns,
                         search_dir,
                     } => {
-                        write!(w, "Finding files matching {}", format_queries(patterns))?;
+                        write!(w, "正在查找匹配 {} 的文件", format_queries(patterns))?;
                         if let Some(path) = search_dir {
-                            write!(w, " in {path}")?;
+                            write!(w, " 在 {path} 中")?;
                         }
                         writeln!(w)?;
                     }
@@ -380,15 +377,15 @@ pub mod text {
                         name,
                         uri,
                     } => match uri {
-                        Some(uri) => writeln!(w, "Reading MCP resource {uri}")?,
-                        None => writeln!(w, "Reading MCP resource {name}")?,
+                        Some(uri) => writeln!(w, "正在读取 MCP 资源 {uri}")?,
+                        None => writeln!(w, "正在读取 MCP 资源 {name}")?,
                     },
                     AIAgentActionType::CallMCPTool {
                         server_id: _,
                         name,
                         input,
                     } => {
-                        writeln!(w, "MCP tool call {name}({input:#})")?;
+                        writeln!(w, "MCP 工具调用 {name}({input:#})")?;
                     }
                     AIAgentActionType::SuggestNewConversation { .. } => (),
                     AIAgentActionType::SuggestPrompt { .. } => (),
@@ -402,28 +399,24 @@ pub mod text {
                     | AIAgentActionType::ReadShellCommandOutput { .. }
                     | AIAgentActionType::TransferShellCommandControlToUser { .. } => (),
                     AIAgentActionType::UseComputer(request) => {
-                        writeln!(w, "Computer use action: {}", request.action_summary)?;
+                        writeln!(w, "电脑控制操作：{}", request.action_summary)?;
                     }
                     AIAgentActionType::RequestComputerUse(request) => {
-                        writeln!(w, "Requesting computer use: {}", request.task_summary)?;
+                        writeln!(w, "正在请求电脑控制：{}", request.task_summary)?;
                     }
                     AIAgentActionType::ReadSkill(request) => {
-                        writeln!(w, "Reading skill: {}", request.skill)?;
+                        writeln!(w, "正在读取 skill：{}", request.skill)?;
                     }
                     AIAgentActionType::FetchConversation { conversation_id } => {
-                        writeln!(w, "Fetching conversation {conversation_id}")?;
+                        writeln!(w, "正在获取对话 {conversation_id}")?;
                     }
                     AIAgentActionType::StartAgent { name, .. } => {
-                        writeln!(w, "Starting agent: {name}")?;
+                        writeln!(w, "正在启动 Agent：{name}")?;
                     }
                     AIAgentActionType::SendMessageToAgent {
                         addresses, subject, ..
                     } => {
-                        writeln!(
-                            w,
-                            "Sending message to [{}]: {subject}",
-                            addresses.join(", ")
-                        )?;
+                        writeln!(w, "正在发送消息给 [{}]：{subject}", addresses.join(", "))?;
                     }
                     AIAgentActionType::AskUserQuestion { .. } => (),
                     // RunAgents is desktop-client-only; SDK driver renders nothing.
@@ -431,11 +424,11 @@ pub mod text {
                 },
                 AIAgentOutputMessageType::TodoOperation(operation) => match operation {
                     TodoOperation::UpdateTodos { todos } => {
-                        writeln!(w, "Updated TODO list:")?;
+                        writeln!(w, "已更新 TODO 列表：")?;
                         format_todos(todos, w)?;
                     }
                     TodoOperation::MarkAsCompleted { completed_todos } => {
-                        writeln!(w, "Completed TODOs:")?;
+                        writeln!(w, "已完成的 TODO：")?;
                         format_todos(completed_todos, w)?;
                     }
                 },
@@ -444,41 +437,41 @@ pub mod text {
                 }
                 AIAgentOutputMessageType::WebSearch(status) => match status {
                     WebSearchStatus::Searching { query } => match query {
-                        Some(q) => writeln!(w, "Searching web for: {q}")?,
-                        None => writeln!(w, "Searching web")?,
+                        Some(q) => writeln!(w, "正在搜索网页：{q}")?,
+                        None => writeln!(w, "正在搜索网页")?,
                     },
                     WebSearchStatus::Success { query, pages } => {
-                        writeln!(w, "Searched web for: {query} ({} results)", pages.len())?;
+                        writeln!(w, "已搜索网页：{query}（{} 个结果）", pages.len())?;
                     }
                     WebSearchStatus::Error { query } => {
-                        writeln!(w, "Web search failed for: {query}")?;
+                        writeln!(w, "网页搜索失败：{query}")?;
                     }
                 },
                 AIAgentOutputMessageType::WebFetch(status) => match status {
                     WebFetchStatus::Fetching { urls } => {
-                        writeln!(w, "Fetching {} web pages...", urls.len())?;
+                        writeln!(w, "正在获取 {} 个网页...", urls.len())?;
                     }
                     WebFetchStatus::Success { pages } => {
-                        writeln!(w, "Fetched {} web pages", pages.len())?;
+                        writeln!(w, "已获取 {} 个网页", pages.len())?;
                     }
                     WebFetchStatus::Error => {
-                        writeln!(w, "Web fetch failed")?;
+                        writeln!(w, "网页获取失败")?;
                     }
                 },
                 AIAgentOutputMessageType::CommentsAddressed {
                     comments: comment_ids,
                 } => {
-                    writeln!(w, "Addressed {} comments", comment_ids.len())?;
+                    writeln!(w, "已处理 {} 条评论", comment_ids.len())?;
                 }
                 AIAgentOutputMessageType::DebugOutput { text } => {
                     writeln!(w, "[DEBUG] {text}")?;
                 }
                 AIAgentOutputMessageType::ArtifactCreated(data) => match data {
                     ArtifactCreatedData::PullRequest { url, branch } => {
-                        writeln!(w, "Created PR: {url} (branch: {branch})")?;
+                        writeln!(w, "已创建 PR：{url}（分支：{branch}）")?;
                     }
                     ArtifactCreatedData::Screenshot { artifact_uid, .. } => {
-                        writeln!(w, "Screenshot captured (artifact: {artifact_uid})")?;
+                        writeln!(w, "已捕获截图（artifact：{artifact_uid}）")?;
                     }
                     ArtifactCreatedData::File {
                         artifact_uid,
@@ -487,18 +480,18 @@ pub mod text {
                     } => {
                         writeln!(
                             w,
-                            "File artifact uploaded: {filepath} (artifact: {artifact_uid})"
+                            "已上传文件 artifact：{filepath}（artifact：{artifact_uid}）"
                         )?;
                     }
                 },
                 AIAgentOutputMessageType::SkillInvoked(invoked_skill) => {
-                    writeln!(w, "Skill Read: {}", invoked_skill.name)?;
+                    writeln!(w, "Skill 已读取：{}", invoked_skill.name)?;
                 }
                 AIAgentOutputMessageType::MessagesReceivedFromAgents { messages } => {
-                    writeln!(w, "Received {} messages", messages.len())?;
+                    writeln!(w, "已收到 {} 条消息", messages.len())?;
                 }
                 AIAgentOutputMessageType::EventsFromAgents { event_ids } => {
-                    writeln!(w, "Received {} agent events", event_ids.len())?;
+                    writeln!(w, "已收到 {} 个 Agent 事件", event_ids.len())?;
                 }
             }
         }
@@ -518,22 +511,19 @@ pub mod text {
 
     /// Report that the agent conversation has started. This debug ID can be reported to us for troubleshooting.
     pub fn conversation_started<W: Write>(conversation_id: &str, w: &mut W) -> io::Result<()> {
-        writeln!(
-            w,
-            "New conversation started with debug ID: {conversation_id}\n"
-        )
+        writeln!(w, "已开始新对话，调试 ID：{conversation_id}n")
     }
 
     /// Report the run ID with a link to the Oz dashboard.
     pub fn run_started<W: Write>(run_id: &str, w: &mut W) -> io::Result<()> {
         let run_url = super::run_url(run_id);
-        writeln!(w, "Run ID: {run_id}")?;
-        writeln!(w, "Open in Oz: {run_url}\n")
+        writeln!(w, "运行 ID：{run_id}")?;
+        writeln!(w, "在 Oz 中打开：{run_url}n")
     }
 
     /// Report that a shared session has been established.
     pub fn shared_session_established<W: Write>(join_url: &str, w: &mut W) -> io::Result<()> {
-        writeln!(w, "Sharing session at: {join_url}")
+        writeln!(w, "正在共享会话：{join_url}")
     }
 
     /// Format a list of query patterns.
@@ -554,7 +544,7 @@ pub mod text {
     ) -> io::Result<()> {
         writeln!(
             w,
-            "Created plan (title: {title}, id: {document_id}, notebook: {notebook_link})"
+            "已创建计划（标题：{title}，ID：{document_id}，notebook：{notebook_link}）"
         )
     }
 }
@@ -819,9 +809,7 @@ pub mod json {
                         Some(JsonMessage::ToolCanceled)
                     }
                     RequestCommandOutputResult::Denylisted { .. } => Some(JsonMessage::ToolError {
-                        error: Cow::Borrowed(
-                            "Command was not allowed to run due to presence on denylist",
-                        ),
+                        error: Cow::Borrowed("由于命令位于拒绝列表中，不允许运行"),
                     }),
                 },
                 AIAgentActionResultType::WriteToLongRunningShellCommand(result) => match result {
@@ -842,7 +830,7 @@ pub mod json {
                     ))),
                     WriteToLongRunningShellCommandResult::Error(_) => {
                         Some(JsonMessage::ToolError {
-                            error: "Failed to write to command.".into(),
+                            error: "写入命令失败。".into(),
                         })
                     }
                     WriteToLongRunningShellCommandResult::Cancelled => {

@@ -66,43 +66,41 @@ use crate::workspaces::workspace::{CustomerType, Workspace};
 use crate::{send_telemetry_from_ctx, WorkspaceAction};
 
 const HEADER_FONT_SIZE: f32 = 16.;
-const OVERAGE_USAGE_LINK_TEXT: &str = "View details on overage usage";
-const OVERAGE_TOGGLE_ADMIN_HEADER: &str = "Enable premium model usage overages";
-const OVERAGE_TOGGLE_USER_HEADER_ENABLED: &str = "Premium model usage overages are enabled";
-const OVERAGE_TOGGLE_USER_HEADER_DISABLED: &str = "Premium model usage overages are not enabled";
-const OVERAGE_TOGGLE_DESCRIPTION: &str = "Continue using premium models beyond your plan's limits. Usage is charged in $20 increments up to your spending limit, with any remaining balance charged on your scheduled billing date.";
-const OVERAGE_TOGGLE_USER_DESCRIPTION: &str =
-    "Ask a team admin to enable overages for more AI usage.";
+const OVERAGE_USAGE_LINK_TEXT: &str = "查看超额使用详情";
+const OVERAGE_TOGGLE_ADMIN_HEADER: &str = "启用高级模型超额使用";
+const OVERAGE_TOGGLE_USER_HEADER_ENABLED: &str = "已启用高级模型超额使用";
+const OVERAGE_TOGGLE_USER_HEADER_DISABLED: &str = "未启用高级模型超额使用";
+const OVERAGE_TOGGLE_DESCRIPTION: &str = "在套餐限制之外继续使用高级模型。使用量会按 $20 为单位计费，直到达到你的支出限制，剩余余额会在计划账单日扣费。";
+const OVERAGE_TOGGLE_USER_DESCRIPTION: &str = "请团队管理员启用超额使用，以获得更多 AI 使用量。";
 
-const SORT_MENU_ITEM_DISPLAY_NAME_A_Z_LABEL: &str = "A to Z";
-const SORT_MENU_ITEM_DISPLAY_NAME_Z_A_LABEL: &str = "Z to A";
-const SORT_MENU_ITEM_REQUEST_USAGE_ASCENDING_LABEL: &str = "Usage ascending";
-const SORT_MENU_ITEM_REQUEST_USAGE_DESCENDING_LABEL: &str = "Usage descending";
+const SORT_MENU_ITEM_DISPLAY_NAME_A_Z_LABEL: &str = "A 到 Z";
+const SORT_MENU_ITEM_DISPLAY_NAME_Z_A_LABEL: &str = "Z 到 A";
+const SORT_MENU_ITEM_REQUEST_USAGE_ASCENDING_LABEL: &str = "使用量升序";
+const SORT_MENU_ITEM_REQUEST_USAGE_DESCENDING_LABEL: &str = "使用量降序";
 
 const AUTO_RELOAD_EXCEED_LIMIT_WARNING_STRING: &str =
-    "Auto reload is disabled, as the next reload would exceed your monthly spend limit. Increase your limit to use auto reload.";
+    "自动充值已停用，因为下一次充值会超过你的月度支出限制。提高限制后即可使用自动充值。";
 const AUTO_RELOAD_DELINQUENT_WARNING_STRING: &str =
-    "Restricted due to billing issue. Update your payment method to purchase add-on credits.";
+    "因账单问题受限。请更新付款方式以购买附加额度。";
 const RESTRICTED_BILLING_USAGE_WARNING_STRING: &str =
-    "Auto reload is disabled due to recent failed reload. Please update your payment method and try again.";
+    "由于最近充值失败，自动充值已停用。请更新付款方式并重试。";
 
-const OVERVIEW_TAB_TEXT: &str = "Overview";
-const USAGE_HISTORY_TAB_TEXT: &str = "Usage History";
+const OVERVIEW_TAB_TEXT: &str = "概览";
+const USAGE_HISTORY_TAB_TEXT: &str = "使用记录";
 
-const ENTERPRISE_USAGE_CALLOUT_HEADER: &str = "Usage reporting is currently limited";
+const ENTERPRISE_USAGE_CALLOUT_HEADER: &str = "当前使用量报告受限";
 const ENTERPRISE_USAGE_CALLOUT_BODY_ADMIN_PREFIX: &str =
-    "Enterprise credit usage isn't fully available in this view yet. For the most accurate spend tracking, ";
-const ENTERPRISE_USAGE_CALLOUT_BODY_ADMIN_LINK: &str = "visit the admin panel";
+    "此视图尚未完整支持 Enterprise 额度使用量。若要获得最准确的支出跟踪，请";
+const ENTERPRISE_USAGE_CALLOUT_BODY_ADMIN_LINK: &str = "访问管理面板";
 const ENTERPRISE_USAGE_CALLOUT_BODY_ADMIN_SUFFIX: &str = ".";
 const ENTERPRISE_USAGE_CALLOUT_BODY_NON_ADMIN: &str =
-    "Enterprise credit usage isn't fully available in this view yet. Contact a team admin for detailed usage reporting.";
+    "此视图尚未完整支持 Enterprise 额度使用量。请联系团队管理员获取详细使用量报告。";
 
-const ADDON_CREDITS_DESCRIPTION: &str = "Add-on credits are purchased in prepaid packages that roll over each billing cycle and expire after one year. The more you purchase, the better the per-credit rate. Once your base plan credits are used, add-on credits will be consumed.";
-const ADDITIONAL_ADDON_CREDITS_DESCRIPTION_FOR_TEAM: &str =
-    "Purchased add-on credits are shared across your team.";
+const ADDON_CREDITS_DESCRIPTION: &str = "附加额度以预付包形式购买，会在每个账单周期结转，并在一年后过期。购买越多，单个额度价格越低。基础套餐额度用完后，将开始消耗附加额度。";
+const ADDITIONAL_ADDON_CREDITS_DESCRIPTION_FOR_TEAM: &str = "购买的附加额度会在你的团队中共享。";
 
 // Cloud agent trial widget constants.
-const AMBIENT_AGENT_TRIAL_TITLE: &str = "Cloud agent trial";
+const AMBIENT_AGENT_TRIAL_TITLE: &str = "云端 Agent 试用";
 /// The threshold below which we only show the "Buy more" button (not "New agent").
 use crate::ai::request_usage_model::AMBIENT_AGENT_TRIAL_CREDIT_THRESHOLD;
 
@@ -115,9 +113,13 @@ pub fn create_discount_badge(discount: u32, appearance: &Appearance) -> Box<dyn 
     let bg_color: Fill = theme.terminal_colors().normal.green.into();
 
     Container::new(
-        Text::new_inline(format!("{discount}% off"), appearance.ui_font_family(), 10.)
-            .with_color(theme.main_text_color(bg_color).into())
-            .finish(),
+        Text::new_inline(
+            format!("{discount}% 折扣"),
+            appearance.ui_font_family(),
+            10.,
+        )
+        .with_color(theme.main_text_color(bg_color).into())
+        .finish(),
     )
     .with_corner_radius(CornerRadius::with_all(Radius::Pixels(4.)))
     .with_background(bg_color)
@@ -287,19 +289,15 @@ impl BillingAndUsagePageView {
         });
 
         let overage_limit_modal_view = ctx.add_typed_action_view(|ctx| {
-            Modal::new(
-                Some("Overage spending limit".to_string()),
-                overage_limit_modal,
-                ctx,
-            )
-            .with_header_style(UiComponentStyles {
-                padding: Some(Coords::uniform(24.).bottom(16.)),
-                ..Default::default()
-            })
-            .with_body_style(UiComponentStyles {
-                padding: Some(Coords::uniform(24.).top(0.).bottom(12.)),
-                ..Default::default()
-            })
+            Modal::new(Some("超额支出限制".to_string()), overage_limit_modal, ctx)
+                .with_header_style(UiComponentStyles {
+                    padding: Some(Coords::uniform(24.).bottom(16.)),
+                    ..Default::default()
+                })
+                .with_body_style(UiComponentStyles {
+                    padding: Some(Coords::uniform(24.).top(0.).bottom(12.)),
+                    ..Default::default()
+                })
         });
         ctx.subscribe_to_view(&overage_limit_modal_view, |me, _, event, ctx| {
             me.handle_overage_modal_close_event(event, ctx);
@@ -311,19 +309,15 @@ impl BillingAndUsagePageView {
         });
 
         let addon_credit_modal_view = ctx.add_typed_action_view(|ctx| {
-            Modal::new(
-                Some("Monthly spending limit".to_string()),
-                addon_credit_modal,
-                ctx,
-            )
-            .with_header_style(UiComponentStyles {
-                padding: Some(Coords::uniform(24.).bottom(16.)),
-                ..Default::default()
-            })
-            .with_body_style(UiComponentStyles {
-                padding: Some(Coords::uniform(24.).top(0.).bottom(12.)),
-                ..Default::default()
-            })
+            Modal::new(Some("月度支出限制".to_string()), addon_credit_modal, ctx)
+                .with_header_style(UiComponentStyles {
+                    padding: Some(Coords::uniform(24.).bottom(16.)),
+                    ..Default::default()
+                })
+                .with_body_style(UiComponentStyles {
+                    padding: Some(Coords::uniform(24.).top(0.).bottom(12.)),
+                    ..Default::default()
+                })
         });
         ctx.subscribe_to_view(&addon_credit_modal_view, |me, _, event, ctx| {
             me.handle_addon_credit_modal_close_event(event, ctx);
@@ -340,7 +334,7 @@ impl BillingAndUsagePageView {
         });
 
         let load_more_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("Load more", SecondaryTheme).on_click(|ctx| {
+            ActionButton::new("加载更多", SecondaryTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(BillingAndUsagePageAction::RenderMoreUsageEntries);
             })
         });
@@ -444,11 +438,7 @@ impl BillingAndUsagePageView {
                 ctx.notify();
             }
             UserWorkspacesEvent::UpdateWorkspaceSettingsRejected(_err) => {
-                self.show_toast(
-                    "Failed to update workspace settings",
-                    ToastFlavor::Error,
-                    ctx,
-                );
+                self.show_toast("无法更新工作区设置", ToastFlavor::Error, ctx);
                 self.usage_based_pricing_toggle_override = None;
                 self.usage_based_pricing_toggle_loading = false;
             }
@@ -457,11 +447,7 @@ impl BillingAndUsagePageView {
             }
             UserWorkspacesEvent::PurchaseAddonCreditsSuccess => {
                 self.purchase_addon_credits_loading = false;
-                self.show_toast(
-                    "Successfully purchased add-on credits",
-                    ToastFlavor::Success,
-                    ctx,
-                );
+                self.show_toast("已成功购买附加额度", ToastFlavor::Success, ctx);
                 AIRequestUsageModel::handle(ctx).update(ctx, |ai_request_usage_model, ctx| {
                     ai_request_usage_model.refresh_request_usage_async(ctx)
                 });
@@ -739,7 +725,7 @@ impl Entity for BillingAndUsagePageView {
 
 impl View for BillingAndUsagePageView {
     fn ui_name() -> &'static str {
-        "Billing and usage"
+        "账单和使用量"
     }
 
     fn render(&self, app: &AppContext) -> Box<dyn Element> {
@@ -1073,9 +1059,9 @@ impl From<&BillingAndUsagePageAction> for LoginGatedFeature {
     fn from(val: &BillingAndUsagePageAction) -> LoginGatedFeature {
         use BillingAndUsagePageAction::*;
         match val {
-            Upgrade { .. } => "Upgrade Plan",
-            GenerateStripeBillingPortalLink { .. } => "Generate Stripe Billing Portal Link",
-            _ => "Unknown reason",
+            Upgrade { .. } => "升级套餐",
+            GenerateStripeBillingPortalLink { .. } => "生成 Stripe 账单门户链接",
+            _ => "未知原因",
         }
     }
 }
@@ -1115,12 +1101,9 @@ impl BillingAndUsagePageView {
             .finish();
 
         let credits_text = if credits_remaining == 1 {
-            "1 credit remaining".to_string()
+            "剩余 1 点额度".to_string()
         } else {
-            format!(
-                "{} credits remaining",
-                credits_remaining.separate_with_commas()
-            )
+            format!("剩余 {} 点额度", credits_remaining.separate_with_commas())
         };
         let credits_label = Text::new_inline(credits_text, appearance.ui_font_family(), 12.)
             .with_color(blended_colors::text_sub(theme, theme.surface_1()))
@@ -1141,7 +1124,7 @@ impl BillingAndUsagePageView {
                     ButtonVariant::Secondary,
                     self.ambient_trial_new_agent_button.clone(),
                 )
-                .with_text_label("New agent".to_string())
+                .with_text_label("新建 Agent".to_string())
                 .with_style(UiComponentStyles {
                     font_color: Some(bg),
                     background: Some(fg.into()),
@@ -1178,7 +1161,7 @@ impl BillingAndUsagePageView {
                     ButtonVariant::Secondary,
                     self.ambient_trial_buy_more_button.clone(),
                 )
-                .with_text_label("Buy more".to_string())
+                .with_text_label("购买更多".to_string())
                 .with_style(UiComponentStyles {
                     background: Some(bg.into()),
                     font_size: Some(14.),
@@ -1370,7 +1353,7 @@ impl BillingAndUsagePageView {
         let spend_limit_text = if let Some(cents) = usage_settings.max_monthly_spend_cents {
             format!("${:.2}", cents as f64 / 100.0)
         } else {
-            "Not set".to_string()
+            "未设置".to_string()
         };
 
         let info_icon = render_info_icon(
@@ -1379,19 +1362,13 @@ impl BillingAndUsagePageView {
                 mouse_state: self.ubp_info_icon_mouse_state.clone(),
                 on_click_action: None,
                 secondary_text: None,
-                tooltip_override_text: Some(
-                    "Sets the monthly overage spending limit beyond the plan amount".to_string(),
-                ),
+                tooltip_override_text: Some("设置超过套餐金额的月度超额支出限制".to_string()),
             },
         );
 
-        let label = Text::new_inline(
-            "Monthly overage spending limit",
-            appearance.ui_font_family(),
-            12.,
-        )
-        .with_color(appearance.theme().active_ui_text_color().into())
-        .finish();
+        let label = Text::new_inline("月度超额支出限制", appearance.ui_font_family(), 12.)
+            .with_color(appearance.theme().active_ui_text_color().into())
+            .finish();
 
         let value = Text::new_inline(spend_limit_text, appearance.ui_font_family(), 12.)
             .with_color(blended_colors::text_sub(
@@ -1615,7 +1592,7 @@ impl BillingAndUsagePageView {
         let ui_builder = appearance.ui_builder();
         let theme = appearance.theme();
 
-        let header = Text::new_inline("Add-on credits", appearance.ui_font_family(), 16.)
+        let header = Text::new_inline("附加额度", appearance.ui_font_family(), 16.)
             .with_color(fg.into())
             .with_style(Properties::default().weight(Weight::Bold))
             .finish();
@@ -1671,9 +1648,9 @@ impl BillingAndUsagePageView {
                     .current_team()
                     .is_some_and(|team| team.billing_metadata.is_on_legacy_paid_plan());
                 let (link_text, suffix) = if is_legacy_paid {
-                    ("Switch to the Build plan", " to purchase add-on credits.")
+                    ("切换到 Build 套餐", "以购买附加额度。")
                 } else {
-                    ("Upgrade to the Build plan", " to purchase add-on credits.")
+                    ("升级到 Build 套餐", "以购买附加额度。")
                 };
 
                 let text_fragments = vec![
@@ -1713,7 +1690,7 @@ impl BillingAndUsagePageView {
             // they're on an Enterprise-like plan. For admins, we show them a message to contact their
             // Account Executive.
             (false, false, true) => {
-                let paragraph_text = "Contact your Account Executive for more add-on credits.";
+                let paragraph_text = "请联系你的客户经理获取更多附加额度。";
                 Some(
                     ui_builder
                         .paragraph(paragraph_text)
@@ -1728,7 +1705,7 @@ impl BillingAndUsagePageView {
             // Every other case relates to not being a team admin. If you aren't an admin, we show
             // a generic message telling you to talk to them.
             (_, _, false) => {
-                let paragraph_text = "Contact a team admin to purchase add-on credits.";
+                let paragraph_text = "请联系团队管理员购买附加额度。";
                 Some(
                     ui_builder
                         .paragraph(paragraph_text)
@@ -1784,9 +1761,7 @@ impl BillingAndUsagePageView {
                 mouse_state: self.addon_info_icon_mouse_state.clone(),
                 on_click_action: None,
                 secondary_text: None,
-                tooltip_override_text: Some(
-                    "Sets the monthly limit spent on add-on credits".to_string(),
-                ),
+                tooltip_override_text: Some("设置附加额度的月度支出限制".to_string()),
             },
         );
 
@@ -1800,7 +1775,7 @@ impl BillingAndUsagePageView {
         let monthly_spend_row = Flex::row()
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_children([
-                ui_builder.span("Monthly spend limit").build().finish(),
+                ui_builder.span("月度支出限制").build().finish(),
                 Shrinkable::new(1., Align::new(info_icon).left().finish()).finish(),
                 icon_button(
                     appearance,
@@ -1829,15 +1804,14 @@ impl BillingAndUsagePageView {
                 let cost_cents = bonus_grants.cents_spent;
                 let cost_dollars = cost_cents as f64 / 100.0;
 
-                let label =
-                    Text::new_inline("Purchased this month", appearance.ui_font_family(), 12.)
-                        .with_color(appearance.theme().active_ui_text_color().into())
-                        .finish();
+                let label = Text::new_inline("本月已购买", appearance.ui_font_family(), 12.)
+                    .with_color(appearance.theme().active_ui_text_color().into())
+                    .finish();
 
                 let credits_text = if credits_purchased == 1 {
-                    "1 credit".to_string()
+                    "1 点额度".to_string()
                 } else {
-                    format!("{} credits", credits_purchased.separate_with_commas())
+                    format!("{} 点额度", credits_purchased.separate_with_commas())
                 };
 
                 let credits_component = Container::new(
@@ -1896,7 +1870,7 @@ impl BillingAndUsagePageView {
         let auto_reload_amount = selected_option
             .map(|option| option.credits.to_string())
             .filter(|_| auto_reload_enabled)
-            .unwrap_or("your selected".to_string());
+            .unwrap_or("你选择的".to_string());
         let auto_reload_switch = ui_builder
             .switch(self.auto_reload_switch.clone())
             .check(auto_reload_enabled);
@@ -1915,15 +1889,14 @@ impl BillingAndUsagePageView {
         };
 
         let auto_reload_switch = Container::new(render_body_item::<BillingAndUsagePageAction>(
-            "Auto reload".into(),
+            "自动充值".into(),
             None,
             Default::default(),
             Default::default(),
             appearance,
             auto_reload_switch,
             Some(format!(
-                "When enabled, auto reload will automatically purchase {auto_reload_amount} \
-                credits when your add-on credit balance reaches 100 credits remaining."
+                "启用后，当你的附加额度余额达到剩余 100 点额度时，自动充值会自动购买 {auto_reload_amount} 点额度。"
             )),
         ))
         .with_padding_right(-TOGGLE_BUTTON_RIGHT_PADDING)
@@ -1983,9 +1956,9 @@ impl BillingAndUsagePageView {
         };
 
         let button_text = if purchase_addon_credits_loading {
-            "Buying…".to_string()
+            "购买中...".to_string()
         } else {
-            "Buy".to_string()
+            "购买".to_string()
         };
 
         let would_exceed_limit = selected_option.is_some_and(|option| {
@@ -2076,7 +2049,7 @@ impl BillingAndUsagePageView {
                 .finish();
 
             let mut card_content_lower_children = vec![
-                ui_builder.span("One-time purchase").build().finish(),
+                ui_builder.span("一次性购买").build().finish(),
                 buy_row.finish(),
             ];
 
@@ -2095,14 +2068,12 @@ impl BillingAndUsagePageView {
                 ));
             } else if would_exceed_limit {
                 let warning_fragments = vec![
-                    FormattedTextFragment::plain_text(
-                        "Reloading would exceed your monthly limit. ",
-                    ),
+                    FormattedTextFragment::plain_text("充值会超过你的月度限制。"),
                     FormattedTextFragment::hyperlink_action(
-                        "Increase your limit",
+                        "提高你的限制",
                         BillingAndUsagePageAction::ShowAddOnCreditModal,
                     ),
-                    FormattedTextFragment::plain_text(" to continue."),
+                    FormattedTextFragment::plain_text("以继续。"),
                 ];
                 card_content_lower_children
                     .push(self.render_warning_row_with_link(appearance, warning_fragments));
@@ -2159,22 +2130,22 @@ impl BillingAndUsagePageView {
             if let (Some(count), Some(cost)) = (total_overages_count, total_overages_cost) {
                 if count == 1 {
                     (
-                        "1 credit".to_string(),
+                        "1 点额度".to_string(),
                         format!("${:.2}", cost as f64 / 100.0),
                     )
                 } else {
                     (
-                        format!("{} credits", count.separate_with_commas()),
+                        format!("{} 点额度", count.separate_with_commas()),
                         format!("${:.2}", cost as f64 / 100.0),
                     )
                 }
             } else {
-                ("0 credits".to_string(), "$0.00".to_string())
+                ("0 点额度".to_string(), "$0.00".to_string())
             };
 
         let mut left_side_component =
             Flex::row().with_cross_axis_alignment(CrossAxisAlignment::Center);
-        let label = Text::new_inline("Total overages", appearance.ui_font_family(), 12.)
+        let label = Text::new_inline("超额总计", appearance.ui_font_family(), 12.)
             .with_color(appearance.theme().active_ui_text_color().into())
             .finish();
 
@@ -2201,7 +2172,7 @@ impl BillingAndUsagePageView {
         if let Some(period_end) = total_overages_period_end {
             let local_period_end = period_end.with_timezone(&Local);
             let formatted_date = local_period_end.format("%b %d at %-I:%M %p").to_string();
-            let billing_date_text = format!("Usage resets on {formatted_date}");
+            let billing_date_text = format!("使用量将在 {formatted_date} 重置");
             left_side_component.add_child(
                 Container::new(
                     Text::new_inline(billing_date_text, appearance.ui_font_family(), 12.)
@@ -2250,17 +2221,22 @@ impl BillingAndUsagePageView {
         if let Some(info) = prorated_request_limits_info {
             if info.is_request_limit_prorated {
                 row.add_child(render_info_icon(
-                appearance,
-                AdditionalInfo::<BillingAndUsagePageAction> {
-                    mouse_state: info.mouse_state,
-                    on_click_action: None,
-                    secondary_text: None,
-                    tooltip_override_text: match info.is_current_user {
-                        true => Some("Your credit limit is prorated because you joined midway through the billing cycle.".to_string()),
-                        false => Some("This credit limit is prorated because this user joined midway through the billing cycle.".to_string()),
+                    appearance,
+                    AdditionalInfo::<BillingAndUsagePageAction> {
+                        mouse_state: info.mouse_state,
+                        on_click_action: None,
+                        secondary_text: None,
+                        tooltip_override_text: match info.is_current_user {
+                            true => Some(
+                                "由于你在账单周期中途加入，你的额度限制已按比例折算。".to_string(),
+                            ),
+                            false => Some(
+                                "由于此用户在账单周期中途加入，此额度限制已按比例折算。"
+                                    .to_string(),
+                            ),
+                        },
                     },
-                },
-            ))
+                ))
             }
         }
 
@@ -2278,7 +2254,7 @@ impl BillingAndUsagePageView {
         }
 
         let request_count_label = if workspace_is_delinquent_due_to_payment_issue {
-            "Restricted due to billing issue".to_string()
+            "因账单问题受限".to_string()
         } else {
             match divisor {
                 Some(Divisor::Unlimited) => {
@@ -2365,9 +2341,8 @@ impl BillingAndUsagePageView {
             )
             .finish()
         } else {
-            let header = "Credits";
-            let description =
-                format!("This is the {refresh_duration} limit of AI credits for your account.");
+            let header = "额度";
+            let description = format!("这是你账号 AI 额度的{refresh_duration}限制。");
 
             let request_usage_description = FormattedTextElement::from_str(
                 description,
@@ -2508,7 +2483,7 @@ impl BillingAndUsagePageView {
             .with_main_axis_alignment(MainAxisAlignment::Center)
             .with_child(
                 Container::new(
-                    Text::new_inline("Last 30 days".to_string(), appearance.ui_font_family(), 14.)
+                    Text::new_inline("最近 30 天".to_string(), appearance.ui_font_family(), 14.)
                         .with_color(blended_colors::text_sub(
                             appearance.theme(),
                             appearance.theme().surface_1(),
@@ -2621,7 +2596,7 @@ impl BillingAndUsagePageView {
                 )
                 .with_child(
                     Container::new(
-                        Text::new("No usage history", appearance.ui_font_family(), 14.)
+                        Text::new("没有使用记录", appearance.ui_font_family(), 14.)
                             .with_color(blended_colors::text_sub(
                                 appearance.theme(),
                                 appearance.theme().surface_1(),
@@ -2633,7 +2608,7 @@ impl BillingAndUsagePageView {
                 )
                 .with_child(
                     Text::new(
-                        "Kick off an agent task to view usage history here.",
+                        "启动一个 Agent 任务后，可在这里查看使用记录。",
                         appearance.ui_font_family(),
                         14.,
                     )
@@ -2778,7 +2753,7 @@ impl BillingAndUsagePageView {
             .with_child(
                 appearance
                     .ui_builder()
-                    .paragraph(format!("Resets {formatted_next_refresh_time}"))
+                    .paragraph(format!("重置时间：{formatted_next_refresh_time}"))
                     .with_style(UiComponentStyles {
                         font_color: Some(blended_colors::text_sub(
                             appearance.theme(),
@@ -2829,7 +2804,7 @@ impl BillingAndUsagePageView {
                         Hoverable::new(self.sort_icon_mouse_state.clone(), |mouse_state| {
                             if mouse_state.is_hovered() {
                                 let tooltip =
-                                    appearance.ui_builder().tool_tip("Sort by".to_string());
+                                    appearance.ui_builder().tool_tip("排序方式".to_string());
 
                                 button.add_positioned_overlay_child(
                                     tooltip.build().finish(),
@@ -2892,7 +2867,7 @@ impl BillingAndUsagePageView {
                 .with_child(
                     build_sub_header(
                         appearance,
-                        "Usage",
+                        "使用量",
                         Some(
                             appearance
                                 .theme()
@@ -2944,7 +2919,7 @@ impl BillingAndUsagePageView {
             };
 
             usage.add_child(self.render_ai_usage_limit_row(
-                "Team total".to_string(),
+                "团队总计".to_string(),
                 team_total_used,
                 team_divisor,
                 ai_request_usage_model.refresh_duration_to_string(),
@@ -3071,17 +3046,17 @@ impl BillingAndUsagePageView {
                 if has_admin_permissions {
                     vec![
                         FormattedTextFragment::hyperlink_action(
-                            "Manage billing",
+                            "管理账单",
                             BillingAndUsagePageAction::GenerateStripeBillingPortalLink {
                                 team_uid: team.uid,
                             },
                         ),
-                        FormattedTextFragment::plain_text(" to regain access to AI features."),
+                        FormattedTextFragment::plain_text("以恢复访问 AI 功能。"),
                     ]
                 } else {
                     // Non-admin team member - show message to contact admin
                     vec![FormattedTextFragment::plain_text(
-                        "Contact your team admin to resolve billing issues.",
+                        "请联系团队管理员解决账单问题。",
                     )]
                 }
             } else if team.billing_metadata.can_upgrade_to_higher_tier_plan() {
@@ -3090,40 +3065,35 @@ impl BillingAndUsagePageView {
                     if team.billing_metadata.can_upgrade_to_build_plan() {
                         if team.billing_metadata.is_on_legacy_paid_plan() {
                             vec![
-                                FormattedTextFragment::hyperlink(
-                                    "Switch to the Build plan",
-                                    upgrade_url,
-                                ),
-                                FormattedTextFragment::plain_text(
-                                    " for a more flexible pricing model.",
-                                ),
+                                FormattedTextFragment::hyperlink("切换到 Build 套餐", upgrade_url),
+                                FormattedTextFragment::plain_text("以获得更灵活的定价模型。"),
                             ]
                         } else {
                             let mut fragments = vec![FormattedTextFragment::hyperlink(
-                                "Upgrade to the Build plan",
+                                "升级到 Build 套餐",
                                 upgrade_url,
                             )];
                             if team.billing_metadata.is_byo_api_key_enabled() {
                                 fragments.push(FormattedTextFragment::plain_text(" or "));
                                 fragments.push(FormattedTextFragment::hyperlink_action(
-                                    "bring your own key",
+                                    "自带 API 密钥",
                                     BillingAndUsagePageAction::NavigateToByokSettings,
                                 ));
                             }
                             fragments.push(FormattedTextFragment::plain_text(
-                                " for increased access to AI features.",
+                                "以获得更多 AI 功能访问权限。",
                             ));
                             fragments
                         }
                     } else {
                         let upgrade_text = match team.billing_metadata.customer_type {
-                            CustomerType::Prosumer => "Upgrade to Turbo plan",
-                            CustomerType::Turbo => "Upgrade to Lightspeed plan",
-                            _ => "Upgrade",
+                            CustomerType::Prosumer => "升级到 Turbo 套餐",
+                            CustomerType::Turbo => "升级到 Lightspeed 套餐",
+                            _ => "升级",
                         };
                         vec![
                             FormattedTextFragment::hyperlink(upgrade_text, upgrade_url),
-                            FormattedTextFragment::plain_text(" to get more AI usage."),
+                            FormattedTextFragment::plain_text("以获得更多 AI 使用量。"),
                         ]
                     }
                 } else {
@@ -3132,35 +3102,32 @@ impl BillingAndUsagePageView {
             } else if team.billing_metadata.is_on_build_plan() {
                 vec![
                     FormattedTextFragment::hyperlink(
-                        "Upgrade to Max",
+                        "升级到 Max",
                         UserWorkspaces::upgrade_link_for_team(team.uid),
                     ),
-                    FormattedTextFragment::plain_text(" for more AI credits."),
+                    FormattedTextFragment::plain_text("以获得更多 AI 额度。"),
                 ]
             } else if team.billing_metadata.is_on_build_max_plan() {
                 vec![
                     FormattedTextFragment::hyperlink(
-                        "Switch to Business",
+                        "切换到 Business",
                         UserWorkspaces::upgrade_link_for_team(team.uid),
                     ),
                     FormattedTextFragment::plain_text(
-                        " for security features like SSO and automatically applied zero data retention.",
+                        "以获得 SSO 和自动应用零数据保留等安全功能。",
                     ),
                 ]
             } else if team.billing_metadata.is_on_build_business_plan()
                 || team.billing_metadata.is_on_legacy_business_plan()
             {
                 vec![
-                    FormattedTextFragment::hyperlink(
-                        "Upgrade to Enterprise",
-                        "mailto:sales@warp.dev",
-                    ),
-                    FormattedTextFragment::plain_text(" for custom limits and dedicated support."),
+                    FormattedTextFragment::hyperlink("升级到 Enterprise", "mailto:sales@warp.dev"),
+                    FormattedTextFragment::plain_text("以获得自定义限制和专属支持。"),
                 ]
             } else if !team.billing_metadata.is_usage_based_pricing_toggleable() {
                 vec![
-                    FormattedTextFragment::hyperlink("Contact support", "mailto:support@warp.dev"),
-                    FormattedTextFragment::plain_text(" for more AI usage."),
+                    FormattedTextFragment::hyperlink("联系支持", "mailto:support@warp.dev"),
+                    FormattedTextFragment::plain_text("以获得更多 AI 使用量。"),
                 ]
             } else {
                 vec![]
@@ -3169,18 +3136,18 @@ impl BillingAndUsagePageView {
             let user_id = auth_state.user_id().unwrap_or_default();
             let upgrade_url = UserWorkspaces::upgrade_link(user_id);
             let mut fragments = vec![FormattedTextFragment::hyperlink(
-                "Upgrade to the Build plan",
+                "升级到 Build 套餐",
                 upgrade_url,
             )];
             if UserWorkspaces::as_ref(app).is_byo_api_key_enabled(app) {
                 fragments.push(FormattedTextFragment::plain_text(" or "));
                 fragments.push(FormattedTextFragment::hyperlink_action(
-                    "bring your own key",
+                    "自带 API 密钥",
                     BillingAndUsagePageAction::NavigateToByokSettings,
                 ));
             }
             fragments.push(FormattedTextFragment::plain_text(
-                " for more credits and access to more models.",
+                "以获得更多额度并访问更多模型。",
             ));
             fragments
         };
@@ -3342,7 +3309,7 @@ impl BillingAndUsagePageView {
                 self.anonymous_user_sign_up_button.clone(),
             )
             .with_style(button_styles)
-            .with_text_label("Sign up".to_owned())
+            .with_text_label("注册".to_owned())
             .build()
             .on_click(move |ctx, _, _| {
                 ctx.dispatch_typed_action(BillingAndUsagePageAction::SignupAnonymousUser);
@@ -3354,7 +3321,7 @@ impl BillingAndUsagePageView {
             .with_cross_axis_alignment(CrossAxisAlignment::End);
         let current_user_id = auth_state.user_id().unwrap_or_default();
 
-        plan_info.add_child(render_customer_type_badge(appearance, "Free".into()));
+        plan_info.add_child(render_customer_type_badge(appearance, "免费".into()));
         plan_info.add_child(
             Container::new(
                 appearance
@@ -3363,7 +3330,7 @@ impl BillingAndUsagePageView {
                     .with_text_and_icon_label(
                         TextAndIcon::new(
                             TextAndIconAlignment::IconFirst,
-                            "Compare plans",
+                            "比较套餐",
                             Icon::CoinsStacked.to_warpui_icon(appearance.theme().accent()),
                             MainAxisSize::Min,
                             MainAxisAlignment::Center,
@@ -3402,7 +3369,7 @@ impl BillingAndUsagePageView {
     }
 
     fn render_plan_header_text(&self, appearance: &Appearance) -> Box<dyn Element> {
-        Text::new_inline("Plan", appearance.ui_font_family(), HEADER_FONT_SIZE)
+        Text::new_inline("套餐", appearance.ui_font_family(), HEADER_FONT_SIZE)
             .with_style(Properties::default().weight(Weight::Bold))
             .with_color(appearance.theme().active_ui_text_color().into())
             .finish()
@@ -3428,7 +3395,7 @@ impl BillingAndUsagePageView {
                 .with_text_and_icon_label(
                     TextAndIcon::new(
                         TextAndIconAlignment::IconFirst,
-                        "Manage billing",
+                        "管理账单",
                         Icon::CoinsStacked.to_warpui_icon(appearance.theme().accent()),
                         MainAxisSize::Min,
                         MainAxisAlignment::Center,
@@ -3486,7 +3453,7 @@ impl BillingAndUsagePageView {
                 .with_text_and_icon_label(
                     TextAndIcon::new(
                         TextAndIconAlignment::IconFirst,
-                        "Open admin panel",
+                        "打开管理面板",
                         Icon::Users.to_warpui_icon(appearance.theme().accent()),
                         MainAxisSize::Min,
                         MainAxisAlignment::Center,
@@ -3513,7 +3480,7 @@ impl BillingAndUsagePageView {
     ) -> (Box<dyn Element>, Box<dyn Element>) {
         let current_user_id = auth_state.user_id().unwrap_or_default();
 
-        let plan_badge = render_customer_type_badge(appearance, "Free".into());
+        let plan_badge = render_customer_type_badge(appearance, "免费".into());
 
         let badge_element = Container::new(plan_badge).with_margin_right(16.).finish();
 
@@ -3524,7 +3491,7 @@ impl BillingAndUsagePageView {
                 .with_text_and_icon_label(
                     TextAndIcon::new(
                         TextAndIconAlignment::IconFirst,
-                        "Compare plans",
+                        "比较套餐",
                         Icon::CoinsStacked.to_warpui_icon(appearance.theme().accent()),
                         MainAxisSize::Min,
                         MainAxisAlignment::Center,

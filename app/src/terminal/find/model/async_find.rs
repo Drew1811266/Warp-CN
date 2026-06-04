@@ -47,9 +47,9 @@ pub enum AsyncFindStatus {
 impl std::fmt::Display for AsyncFindStatus {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Idle => write!(f, "Idle"),
-            Self::Scanning => write!(f, "Scanning"),
-            Self::Complete => write!(f, "Complete"),
+            Self::Idle => write!(f, "空闲"),
+            Self::Scanning => write!(f, "正在扫描"),
+            Self::Complete => write!(f, "已完成"),
         }
     }
 }

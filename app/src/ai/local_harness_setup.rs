@@ -28,7 +28,7 @@ impl LocalHarnessSetupState {
 /// Returns the product-level disabled reason for a local harness.
 pub(crate) fn local_harness_product_disabled_message(harness: Harness) -> Option<&'static str> {
     match harness {
-        Harness::Codex => Some("Local Codex child agents are temporarily disabled."),
+        Harness::Codex => Some("本地 Codex 子 Agent 暂时已停用。"),
         Harness::Oz | Harness::Claude | Harness::OpenCode | Harness::Gemini | Harness::Unknown => {
             None
         }
