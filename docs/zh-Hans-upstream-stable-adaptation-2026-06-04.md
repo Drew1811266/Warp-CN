@@ -52,7 +52,7 @@ translation update idempotent: entries=7937 files=550 already_applied=5717 would
 full audit: passed; actionable rows=0
 privacy guard: passed
 python compile: passed
-python unit tests: passed; ran 64 tests
+python unit tests: passed; ran 66 tests in final lightweight validation
 low-load gate: defer-heavy-gate
 cargo check: passed by Task 7 reviewer
 bundle refresh: deferred
@@ -124,7 +124,8 @@ Task 8 validated the imported Warp CN scripts after the 0.19 overlay and candida
 ```text
 privacy guard: passed
 python compile: passed
-python unit tests: ran 64 tests, OK
+python unit tests at Task 8: ran 64 tests, OK
+python unit tests in final lightweight validation: ran 66 tests, OK
 public RC status: total=11 public_rc_required=11
 strict evidence lint: fail, missing evidence=11
 ```
@@ -176,3 +177,57 @@ GUI launch: deferred
 ```
 
 Task 7 code review independently ran `cargo check -q` successfully after the translation update, but Task 10 heavy gates remain deferred under the low-load policy.
+
+## GUI Evidence Gate
+
+Task 11 did not launch Warp or collect GUI evidence.
+
+```text
+GUI launch: deferred
+reason: low-load heavy gate deferred current-cycle heavy work
+approval status: explicit GUI evidence approval still required
+public-RC implication: no current-cycle GUI evidence may be claimed
+```
+
+The existing non-destructive GUI smoke matrix remains the correct next manual
+gate, but it must be executed only after the heavy gate is allowed and after the
+user approves GUI evidence collection.
+
+## Release Documentation Refresh
+
+Task 12 updated the repository-facing 0.19 release records:
+
+```text
+README.md
+docs/zh-Hans-development-guide.md
+docs/zh-Hans-release-candidate-2026-06-04-rc39.md
+docs/zh-Hans-release-notes-0.19-draft.md
+docs/zh-Hans-official-release-next-development-tasks.md
+```
+
+These records deliberately use `ready-for-source-localization;
+heavy-gates-deferred` instead of public-RC or final release wording.
+
+## Final Readiness
+
+Task 13 handoff state:
+
+```text
+0.19 source-localization candidate: ready for continued engineering verification
+manifest validation: passed
+glossary check: passed
+dry-run idempotency: passed
+release inventory candidates: 0
+full audit actionable rows: 0
+privacy/scripts/docs lightweight gates: passed in-cycle
+serial heavy cargo gate: deferred
+bundle refresh: deferred
+GUI evidence: deferred and requires explicit approval
+public RC: not ready; 11 strict evidence blockers
+GitHub publish: pending explicit user approval
+version tag: pending explicit user approval
+```
+
+The next development cycle should start from
+`docs/zh-Hans-official-release-next-development-tasks.md` and create a new RC
+record after rerunning the deferred heavy/GUI gates.

@@ -1,6 +1,6 @@
 # Warp CN zh-Hans Development Guide
 
-Last updated: 2026-06-03
+Last updated: 2026-06-04
 
 This guide is the working entry point for maintaining the Warp CN Simplified
 Chinese localization fork. It covers local setup, localization editing,
@@ -11,19 +11,22 @@ sync, and release handoff.
 
 | Item | Value |
 | --- | --- |
-| Project version | `0.18` |
-| Current conclusion | `ready-for-local-use-with-fixture-evidence` |
+| Project version | `0.19` |
+| Current conclusion | `ready-for-source-localization; heavy-gates-deferred` |
 | Manifest | `resources/localization/zh-Hans-overrides.toml` |
-| Manifest entries | 7,943 |
-| Covered source files | 552 |
-| Applied entries | 5,690 |
+| Manifest entries | 7,937 |
+| Covered source files | 550 |
+| Applied entries | 5,717 |
 | Pending apply changes | 0 |
 | Missing or drifted entries | 0 |
 | Public-RC blockers | 11 |
 
 Important boundary:
 
-- The fork is suitable for local engineering use and continued verification.
+- The 0.19 source-level localization overlay is suitable for continued
+  engineering verification.
+- Current-cycle heavy build, bundle refresh, and GUI launch evidence are
+  deferred because the low-load gate returned `defer-heavy-gate`.
 - It is not a Warp official Chinese release.
 - It is not public-RC ready until GUI evidence, isolated-account evidence,
   backend fixture evidence, disposable-object evidence, and visual asset review
@@ -172,8 +175,10 @@ python3 script/zh_localization_inventory.py --preset modals --top-paths 20
 
 Current expected posture:
 
-- Core preset coverage remains effectively complete.
-- Remaining candidates may be intentional product terms or internal strings.
+- Core preset coverage is complete for the 0.19 release inventory.
+- Remaining inventory candidates should be 0 for release handoff.
+- New candidates introduced by future upstream syncs may still be intentional
+  product terms or internal strings.
 - Do not translate a candidate only because it is English.
 
 ## Full Per-Entry Review
@@ -194,9 +199,9 @@ python3 script/zh_full_translation_audit.py --fail-on-actionable
 Artifacts:
 
 ```text
-docs/zh-Hans-full-translation-audit-0.18/entries.tsv
-docs/zh-Hans-full-translation-audit-0.18/entries.json
-docs/zh-Hans-full-translation-audit-0.18/summary.md
+docs/zh-Hans-full-translation-audit-0.19/entries.tsv
+docs/zh-Hans-full-translation-audit-0.19/entries.json
+docs/zh-Hans-full-translation-audit-0.19/summary.md
 ```
 
 Interpretation:
@@ -223,12 +228,12 @@ python3 script/zh_apply_localization.py --metadata-summary
 python3 script/zh_apply_localization.py --metadata-summary --json
 python3 script/zh_apply_localization.py --dry-run --summary
 python3 script/zh_full_translation_audit.py --fail-on-actionable
-python3 -m json.tool docs/zh-Hans-full-translation-audit-0.18/entries.json > /tmp/warp-cn-full-audit-entries.pretty.json
+python3 -m json.tool docs/zh-Hans-full-translation-audit-0.19/entries.json > /tmp/warp-cn-full-audit-entries.pretty.json
 python3 script/zh_public_rc_status.py
 python3 script/zh_public_rc_evidence_report.py --json > /tmp/warp-cn-public-rc-evidence-report.json
 python3 script/zh_public_rc_evidence_queue.py --json > /tmp/warp-cn-public-rc-evidence-queue.json
 python3 -m py_compile script/zh_apply_localization.py script/zh_localization_inventory.py script/zh_export_locale.py script/zh_public_rc_status.py script/zh_public_rc_evidence_lint.py script/zh_public_rc_evidence_report.py script/zh_public_rc_evidence_queue.py script/zh_public_rc_evidence_candidate.py script/privacy_guard.py script/zh_full_translation_audit.py
-python3 -m unittest script/test_zh_apply_localization.py script/test_zh_localization_inventory.py script/test_zh_export_locale.py script/test_zh_public_rc_status.py script/test_zh_low_load_gate.py script/test_zh_public_rc_evidence_lint.py script/test_zh_public_rc_evidence_report.py script/test_zh_public_rc_evidence_queue.py script/test_zh_public_rc_evidence_candidate.py
+python3 -m unittest script/test_zh_apply_localization.py script/test_zh_localization_inventory.py script/test_zh_export_locale.py script/test_zh_public_rc_status.py script/test_zh_low_load_gate.py script/test_zh_public_rc_evidence_lint.py script/test_zh_public_rc_evidence_report.py script/test_zh_public_rc_evidence_queue.py script/test_zh_public_rc_evidence_candidate.py script/test_zh_full_translation_audit.py
 cargo fmt --check
 git diff --check
 ```
@@ -238,7 +243,7 @@ Expected current results:
 - Manifest validation passes.
 - Glossary check passes.
 - Dry-run reports `would_change: 0` and `missing: 0`.
-- Full audit reports 7,943 entries and no actionable rows.
+- Full audit reports 7,937 entries and no actionable rows.
 - Unit tests pass.
 - Public-RC status still reports 11 blocked rows.
 
@@ -266,6 +271,14 @@ open -n target/debug/bundle/osx/WarpOss.app
 
 If the gate prints `decision: defer-heavy-gate`, record the reasons and do not
 retry repeatedly in the same cycle.
+
+Current 0.19 cycle note:
+
+- The low-load gate returned `defer-heavy-gate` on 2026-06-04.
+- Additional `CARGO_BUILD_JOBS=1 cargo check -j 1 -p warp`, bundle refresh, and
+  GUI launch evidence are deferred until the gate allows heavy work.
+- A Task 7 reviewer ran `cargo check -q` successfully after the 0.19
+  translation update, but that does not replace the deferred serial heavy gate.
 
 ## GUI Smoke Evidence
 
@@ -392,6 +405,10 @@ Use execution records to preserve what was actually run in a specific goal,
 phase, or RC cycle:
 
 - `docs/zh-Hans-development-guide-execution-2026-06-03.md`
+- `docs/zh-Hans-upstream-stable-adaptation-2026-06-04.md`
+- `docs/zh-Hans-release-candidate-2026-06-04-rc39.md`
+- `docs/zh-Hans-release-notes-0.19-draft.md`
+- `docs/zh-Hans-official-release-next-development-tasks.md`
 
 ## Troubleshooting
 
