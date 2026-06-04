@@ -53,10 +53,10 @@ full audit: passed; actionable rows=0
 privacy guard: passed
 python compile: passed
 python unit tests: passed; ran 64 tests
-low-load gate: not run
+low-load gate: defer-heavy-gate
 cargo check: passed by Task 7 reviewer
-bundle refresh: not run
-GUI launch: not run
+bundle refresh: deferred
+GUI launch: deferred
 public RC: not ready; 11 strict evidence blockers
 ```
 
@@ -155,3 +155,24 @@ json validation: passed
 ```
 
 The audit produced no actionable copy or functional review rows. The `blocked-public-rc` rows map to the 11 GUI evidence requirements already tracked by public-RC status.
+
+## Low-Load Rust And Bundle Gates
+
+Task 10 did not run additional heavy validation because the low-load gate deferred heavy work.
+
+```text
+decision: defer-heavy-gate
+reason: probe 1: load average exceeds 2.50
+reason: probe 1: hot process Codex (Renderer) at 37.9%
+reason: probe 1: hot process syspolicyd at 37.5%
+reason: probe 1: hot process WindowServer at 35.1%
+reason: probe 1: hot process codex at 25.6%
+reason: probe 2: load average exceeds 2.50
+reason: probe 2: hot process WindowServer at 35.4%
+reason: probe 2: hot process Codex (Renderer) at 25.9%
+cargo check: not rerun in Task 10
+bundle refresh: deferred
+GUI launch: deferred
+```
+
+Task 7 code review independently ran `cargo check -q` successfully after the translation update, but Task 10 heavy gates remain deferred under the low-load policy.
