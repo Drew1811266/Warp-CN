@@ -5,6 +5,14 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 > [!IMPORTANT]
 > 本仓库不是 Warp 官方发行版，也不代表 Warp 官方中文版本。上游功能、账号体系、云服务、协议、商标和许可证仍以 Warp 官方项目为准。
 
+## 界面预览
+
+以下截图来自 `0.19` 当前源码构建的隔离本地 profile，不包含真实账号、密钥或历史会话数据。
+
+| 启动界面 | 设置界面 |
+| --- | --- |
+| ![Warp CN 0.19 启动界面](images/warp-cn-0.19-startup.png) | ![Warp CN 0.19 设置界面](images/warp-cn-0.19-settings.png) |
+
 ## 当前状态
 
 当前版本：`0.19`
