@@ -11,7 +11,7 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 | 启动界面 | 设置界面 |
 | --- | --- |
-| ![Warp CN 0.19 启动界面](images/warp-cn-0.19-startup.png) | ![Warp CN 0.19 设置界面](images/warp-cn-0.19-settings.png) |
+| ![Warp CN 0.19 启动界面](images/warp-cn-0.19-startup.jpeg) | ![Warp CN 0.19 设置界面](images/warp-cn-0.19-settings.jpeg) |
 
 ## 当前状态
 
