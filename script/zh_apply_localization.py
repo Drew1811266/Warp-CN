@@ -362,7 +362,7 @@ def replace_rust_string_literals(text: str, source: str, target: str) -> tuple[s
                 literal = "".join(literal_chars)
                 if literal == source:
                     result.append('"')
-                    result.append(target)
+                    result.append(_escape_rust_string_literal_content(target))
                     result.append('"')
                     replaced += 1
                 else:
@@ -373,6 +373,26 @@ def replace_rust_string_literals(text: str, source: str, target: str) -> tuple[s
             result.append(text[start:index])
 
     return "".join(result), replaced
+
+
+def _escape_rust_string_literal_content(value: str) -> str:
+    """Escape replacement text before writing it into a normal Rust string."""
+
+    result: list[str] = []
+    for char in value:
+        if char == "\\":
+            result.append("\\\\")
+        elif char == '"':
+            result.append('\\"')
+        elif char == "\n":
+            result.append("\\n")
+        elif char == "\r":
+            result.append("\\r")
+        elif char == "\t":
+            result.append("\\t")
+        else:
+            result.append(char)
+    return "".join(result)
 
 
 def replace_rust_string_literals_many(
@@ -583,7 +603,7 @@ def replace_rust_string_literals_many_apply(
                     result.append(text[start:index])
                 else:
                     result.append('"')
-                    result.append(replacement)
+                    result.append(_escape_rust_string_literal_content(replacement))
                     result.append('"')
                 break
             literal_chars.append(current)

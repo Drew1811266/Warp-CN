@@ -184,7 +184,7 @@ fn test_render_environments_list_with_single_environment() {
                 text_content
             );
             assert!(
-                text_content.contains("查看我的运行"),
+                text_content.contains("View my runs"),
                 "Expected 'View my runs' link in rendered content: {}",
                 text_content
             );
@@ -251,7 +251,7 @@ fn test_render_environments_list_with_multiple_environments() {
                 text_content
             );
             assert!(
-                text_content.contains("查看我的运行"),
+                text_content.contains("View my runs"),
                 "Expected 'View my runs' link in rendered content: {}",
                 text_content
             );
@@ -306,7 +306,7 @@ fn test_render_environment_card_with_minimal_config() {
                 text_content
             );
             assert!(
-                text_content.contains("查看我的运行"),
+                text_content.contains("View my runs"),
                 "Expected 'View my runs' link in rendered content: {}",
                 text_content
             );
@@ -373,7 +373,7 @@ fn test_render_environment_card_with_github_repos() {
                 text_content
             );
             assert!(
-                text_content.contains("查看我的运行"),
+                text_content.contains("View my runs"),
                 "Expected 'View my runs' link in rendered content: {}",
                 text_content
             );
@@ -442,7 +442,7 @@ fn test_render_environment_card_with_setup_commands() {
                 text_content
             );
             assert!(
-                text_content.contains("查看我的运行"),
+                text_content.contains("View my runs"),
                 "Expected 'View my runs' link in rendered content: {}",
                 text_content
             );
@@ -527,7 +527,7 @@ fn test_render_environment_card_with_all_features() {
                 text_content
             );
             assert!(
-                text_content.contains("查看我的运行"),
+                text_content.contains("View my runs"),
                 "Expected 'View my runs' link in rendered content: {}",
                 text_content
             );
@@ -586,7 +586,7 @@ fn test_render_environment_card_with_empty_setup_commands() {
                 text_content
             );
             assert!(
-                text_content.contains("查看我的运行"),
+                text_content.contains("View my runs"),
                 "Expected 'View my runs' link in rendered content: {}",
                 text_content
             );
@@ -753,11 +753,11 @@ fn test_render_list_page_with_personal_and_team_environments_shows_section_heade
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("个人"),
+                text_content.contains("PERSONAL"),
                 "Expected 'Personal' section header in rendered content: {text_content}"
             );
             assert!(
-                text_content.contains("由 WARP 和 KATARINA'S TEAM 共享"),
+                text_content.contains("SHARED BY WARP AND KATARINA'S TEAM"),
                 "Expected shared section header in rendered content: {text_content}"
             );
         });
@@ -799,7 +799,7 @@ fn test_render_list_page_with_only_personal_environments_shows_personal_header()
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("个人"),
+                text_content.contains("PERSONAL"),
                 "Expected 'Personal' header in rendered content: {text_content}"
             );
         });
@@ -858,21 +858,21 @@ fn test_render_empty_state_shows_github_remote_and_local_rows() {
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("快速设置"),
+                text_content.contains("Quick setup"),
                 "Expected quick setup row title in rendered content: {}",
                 text_content
             );
             assert!(
-                text_content.contains("推荐"),
+                text_content.contains("Suggested"),
                 "Expected 'Suggested' badge text in rendered content: {}",
                 text_content
             );
             // GitHub button text depends on async auth state, so just check that one of the
             // expected states is present (Loading, Get started, Authorize, or Retry)
-            let has_github_button = text_content.contains("开始使用")
-                || text_content.contains("授权")
-                || text_content.contains("正在加载...")
-                || text_content.contains("重试");
+            let has_github_button = text_content.contains("Get started")
+                || text_content.contains("Authorize")
+                || text_content.contains("Loading...")
+                || text_content.contains("Retry");
             assert!(
                 has_github_button,
                 "Expected GitHub button text in rendered content: {}",
@@ -880,12 +880,12 @@ fn test_render_empty_state_shows_github_remote_and_local_rows() {
             );
 
             assert!(
-                text_content.contains("使用 Agent"),
+                text_content.contains("Use the agent"),
                 "Expected 'Use the agent' row title in rendered content: {}",
                 text_content
             );
             assert!(
-                text_content.contains("启动 Agent"),
+                text_content.contains("Launch agent"),
                 "Expected 'Launch agent' button text in rendered content: {}",
                 text_content
             );
@@ -897,9 +897,9 @@ fn test_render_empty_state_shows_github_remote_and_local_rows() {
             );
 
             // Basic ordering: GitHub row should appear above local repos row.
-            let github_pos = text_content.find("快速设置").unwrap_or(usize::MAX);
+            let github_pos = text_content.find("Quick setup").unwrap_or(usize::MAX);
             let local_pos = text_content
-                .find("使用 Agent")
+                .find("Use the agent")
                 .unwrap_or(usize::MAX);
             assert!(
                 github_pos < local_pos,
@@ -928,7 +928,7 @@ fn test_render_empty_state_github_card_loading_state() {
 
             // Just verify the empty state renders the key components
             assert!(
-                text_content.contains("快速设置"),
+                text_content.contains("Quick setup"),
                 "Expected quick setup row in rendered content: {}",
                 text_content
             );
@@ -955,7 +955,7 @@ fn test_render_empty_state_github_card_error_state_shows_retry() {
 
             // Just verify the empty state renders the key components
             assert!(
-                text_content.contains("快速设置"),
+                text_content.contains("Quick setup"),
                 "Expected quick setup row in rendered content: {}",
                 text_content
             );
@@ -982,7 +982,7 @@ fn test_render_empty_state_github_card_unauthed_state_shows_authorize() {
 
             // Just verify the empty state renders the key components
             assert!(
-                text_content.contains("快速设置"),
+                text_content.contains("Quick setup"),
                 "Expected quick setup row in rendered content: {}",
                 text_content
             );
@@ -1006,12 +1006,12 @@ fn test_environment_setup_mode_selector_renders_options() {
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("快速设置"),
+                text_content.contains("Quick setup"),
                 "Expected Quick setup option in rendered content: {}",
                 text_content
             );
             assert!(
-                text_content.contains("使用 Agent"),
+                text_content.contains("Use the agent"),
                 "Expected Use the agent option in rendered content: {}",
                 text_content
             );
@@ -1382,17 +1382,17 @@ fn test_render_environment_card_with_last_used_never() {
             // Use debug_text_content to verify the rendered text
             let text_content = element.debug_text_content().unwrap_or_default();
             assert!(
-                text_content.contains("上次使用：从未"),
+                text_content.contains("Last used: never"),
                 "Expected 'Last used: never' in rendered text: {}",
                 text_content
             );
             assert!(
-                text_content.contains("上次编辑："),
+                text_content.contains("Last edited:"),
                 "Expected 'Last edited:' in rendered text: {}",
                 text_content
             );
             assert!(
-                text_content.contains("查看我的运行"),
+                text_content.contains("View my runs"),
                 "Expected 'View my runs' link in rendered text: {}",
                 text_content
             );
@@ -1454,22 +1454,22 @@ fn test_render_environment_card_with_last_used_timestamp() {
             // Use debug_text_content to verify the rendered text
             let text_content = element.debug_text_content().unwrap_or_default();
             assert!(
-                text_content.contains("上次编辑："),
+                text_content.contains("Last edited:"),
                 "Expected 'Last edited:' in rendered text: {}",
                 text_content
             );
             assert!(
-                text_content.contains("上次使用："),
+                text_content.contains("Last used:"),
                 "Expected 'Last used:' in rendered text: {}",
                 text_content
             );
             assert!(
-                !text_content.contains("从未"),
+                !text_content.contains("never"),
                 "Did not expect 'never' in rendered text: {}",
                 text_content
             );
             assert!(
-                text_content.contains("查看我的运行"),
+                text_content.contains("View my runs"),
                 "Expected 'View my runs' link in rendered text: {}",
                 text_content
             );

@@ -586,13 +586,6 @@ pub fn init(app: &mut AppContext) {
         .with_group(bindings::BindingGroup::Navigation.as_str())
         .with_custom_action(CustomAction::ActivateNextPane),
         EditableBinding::new(
-            "workspace:toggle_mouse_reporting",
-            "切换鼠标报告",
-            WorkspaceAction::ToggleMouseReporting,
-        )
-        .with_group(bindings::BindingGroup::Settings.as_str())
-        .with_context_predicate(id!("Workspace")),
-        EditableBinding::new(
             "workspace:create_team_notebook",
             BindingDescription::new("创建新的团队笔记本")
                 .with_custom_description(bindings::MAC_MENUS_CONTEXT, "新建团队笔记本"),
@@ -727,6 +720,14 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| FeatureFlag::VerticalTabs.is_enabled())
         .with_key_binding(cmd_or_ctrl_shift("b")),
         EditableBinding::new(
+            LEFT_PANEL_PROJECT_EXPLORER_BINDING_NAME,
+            BindingDescription::new("左侧面板：项目资源管理器"),
+            WorkspaceAction::ToggleProjectExplorer,
+        )
+        .with_group(bindings::BindingGroup::Navigation.as_str())
+        .with_context_predicate(id!("Workspace") & id!(flags::SHOW_PROJECT_EXPLORER))
+        .with_custom_action(CustomAction::ToggleProjectExplorer),
+        EditableBinding::new(
             LEFT_PANEL_AGENT_CONVERSATIONS_BINDING_NAME,
             BindingDescription::new("左侧面板：Agent 对话"),
             WorkspaceAction::ToggleConversationListView,
@@ -735,14 +736,6 @@ pub fn init(app: &mut AppContext) {
         .with_context_predicate(id!("Workspace") & id!(flags::SHOW_CONVERSATION_HISTORY))
         .with_enabled(|| FeatureFlag::AgentViewConversationListView.is_enabled())
         .with_custom_action(CustomAction::ToggleConversationListView),
-        EditableBinding::new(
-            LEFT_PANEL_PROJECT_EXPLORER_BINDING_NAME,
-            BindingDescription::new("左侧面板：项目资源管理器"),
-            WorkspaceAction::ToggleProjectExplorer,
-        )
-        .with_group(bindings::BindingGroup::Navigation.as_str())
-        .with_context_predicate(id!("Workspace") & id!(flags::SHOW_PROJECT_EXPLORER))
-        .with_custom_action(CustomAction::ToggleProjectExplorer),
         EditableBinding::new(
             LEFT_PANEL_GLOBAL_SEARCH_BINDING_NAME,
             BindingDescription::new("左侧面板：全局搜索"),

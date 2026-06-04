@@ -480,9 +480,9 @@ impl AIRequestUsageModel {
 
     pub fn refresh_duration_to_string(&self) -> String {
         match self.request_limit_info.request_limit_refresh_duration {
-            RequestLimitRefreshDuration::Weekly => "每周".to_string(),
-            RequestLimitRefreshDuration::Monthly => "每月".to_string(),
-            RequestLimitRefreshDuration::EveryTwoWeeks => "每两周".to_string(),
+            RequestLimitRefreshDuration::Weekly => "weekly".to_string(),
+            RequestLimitRefreshDuration::Monthly => "monthly".to_string(),
+            RequestLimitRefreshDuration::EveryTwoWeeks => "biweekly".to_string(),
         }
     }
 

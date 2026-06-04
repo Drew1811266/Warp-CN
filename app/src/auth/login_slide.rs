@@ -116,14 +116,14 @@ pub enum LoginSlideEvent {
 }
 
 /// How the user arrived at the login slide. Controls which step is shown first
-/// and how "返回" is routed when the user backs out of the privacy-settings step.
+/// and how "Back" is routed when the user backs out of the privacy-settings step.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum LoginSlideSource {
     /// Reached via the normal onboarding flow (e.g. agent intention requires an account).
     OnboardingFlow,
     /// Reached via the "Log in" link on the intro / welcome slide.
     LoginExistingUserFromWelcome,
-    /// Reached via the "隐私设置" link on the terminal-intention theme slide.
+    /// Reached via the "Privacy Settings" link on the terminal-intention theme slide.
     /// Starts directly in the privacy settings step and routes Back to onboarding.
     PrivacySettingsFromTerminalIntentionTheme,
 }
@@ -458,7 +458,7 @@ impl LoginSlideView {
     // Step 1: Select auth pathway
     // ------------------------------------------------------------------
 
-    /// Disclaimer prefix shown before the "隐私设置" link. AI is
+    /// Disclaimer prefix shown before the "Privacy Settings" link. AI is
     /// dropped from the wording on paths that don't enable AI (e.g.
     /// Terminal+Drive), since there are no AI features to opt out of there.
     fn privacy_disclaimer_prefix(&self) -> &'static str {

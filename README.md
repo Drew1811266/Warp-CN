@@ -7,11 +7,11 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 ## 当前状态
 
-当前版本：`0.18`
+当前版本：`0.19`
 
-最后核验记录：`2026-06-03 RC38`
+最后核验记录：`2026-06-04 RC39`
 
-当前结论：`ready-for-local-use-with-fixture-evidence`。也就是说，本仓库已经适合本地工程使用和继续验证，但还不是公开 RC。RC38 继续保持源码级汉化和低负载验证干净，并新增 public-RC redacted evidence candidate preflight 的 text/JSON/Markdown 输出；远端 stable tag retarget 已确认与本地 stable 目标源码树一致，但不能声称当前分支包含远端 stable commit。公开 RC 仍需要补齐 GUI、隔离账号、后端 fixture、一次性对象和静态图证据。
+当前结论：`ready-for-source-localization; heavy-gates-deferred`。也就是说，当前 0.19 上游 stable 源码树的汉化 overlay、manifest 漂移修复、候选翻译、脚本测试和全量翻译审计已经完成，但本轮没有把它提升为公开 RC。电脑负载保护 gate 返回 `defer-heavy-gate`，因此额外串行 Rust 编译、bundle refresh 和 GUI launch 证据都已延期。公开 RC 仍需要补齐 GUI、隔离账号、后端 fixture、一次性对象和静态图证据。
 
 ## 汉化进度
 
@@ -19,9 +19,9 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 | 指标 | 当前值 |
 | --- | ---: |
-| Manifest 条目 | 7,943 |
-| 覆盖文件 | 552 |
-| 已应用条目 | 5,690 |
+| Manifest 条目 | 7,937 |
+| 覆盖文件 | 550 |
+| 已应用条目 | 5,717 |
 | 待应用变更 | 0 |
 | 丢失或漂移条目 | 0 |
 | `context` 元数据覆盖 | 100.0% |
@@ -32,19 +32,14 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 | 区域 | 已覆盖 | 候选残留 | 覆盖率 |
 | --- | ---: | ---: | ---: |
-| Onboarding / Auth | 323 | 0 | 100.0% |
-| Workspace | 865 | 0 | 100.0% |
-| Search | 269 | 0 | 100.0% |
-| Settings | 2,024 | 0 | 100.0% |
-| Modals | 5,240 | 2 | 100.0% |
-| Release aggregate | 8,574 | 2 | 100.0% |
+| Onboarding / Auth | 314 | 0 | 100.0% |
+| Workspace | 874 | 0 | 100.0% |
+| Search | 267 | 0 | 100.0% |
+| Settings | 2,040 | 0 | 100.0% |
+| Modals | 5,177 | 0 | 100.0% |
+| Release aggregate | 8,534 | 0 | 100.0% |
 
-剩余两个源码候选都是有意保留的 `Agent` 产品/功能术语：
-
-- `app/src/ai/blocklist/usage/rollup.rs`
-- `app/src/terminal/view/ambient_agent/block/harness_session_header.rs`
-
-因此，当前主要风险不再是“大量源码文案未翻译”，而是公开发布前的证据和外部状态验证还没有完成。
+当前主要风险不再是“大量源码文案未翻译”，而是公开发布前的重型构建、GUI 证据和外部状态验证还没有完成。
 
 ## 已覆盖内容
 
@@ -73,9 +68,9 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 1. 用隔离账号验证登录、账号状态、Settings、custom inference 等路径。
 2. 为 Billing、Cloud、managed secret、team 等外部状态路径补齐 fixture 或可控测试证据。
 3. 重新生成或设计确认 onboarding 静态 PNG，当前仍有历史英文静态图残留需要单独资产分支处理。
-4. 在电脑负载可控时重新跑 GUI launch gate；RC38 已在低负载 gate 允许后刷新本地 bundle，但 GUI 仍需单独批准和当前周期证据。
+4. 在电脑负载可控时重新跑 heavy gate、串行 `cargo check -j 1 -p warp`、bundle refresh 和 GUI launch gate；本轮 0.19 适配因低负载 gate 返回 `defer-heavy-gate` 而延期。
 5. 继续做逐条翻译审查，重点检查语义、术语一致性、UI 容量和功能安全，而不是盲目增加条目。
-6. 对外描述上游状态时使用显式 commit/tree 证据；当前源码树已等价于远端 `v0.2026.05.27.09.22.stable_00` 目标，但若要声称 ancestry/commit identity，仍需要单独批准 upstream-sync 分支。
+6. 对外描述上游状态时使用显式 tag/commit/tree 证据；当前 0.19 适配工作树基于官方上游 `v0.2026.06.03.09.49.stable_00`，commit `2249469e5d24e472cee6ce97d3d324293f67db71`。
 7. 等待或推动 Warp 官方 i18n 框架成熟后，把当前 manifest 迁移为官方 `zh-CN` locale。
 
 ## 汉化方式
@@ -218,8 +213,12 @@ expected_count = 1
 
 - `docs/zh-Hans-development-guide.md`：汉化开发、审计、验证、GUI 证据、public-RC 和上游同步的主开发手册。
 - `docs/zh-Hans-localization.md`：总体维护记录和阶段索引。
-- `docs/zh-Hans-release-candidate-2026-06-03-rc38.md`：当前 RC38 记录。
-- `docs/zh-Hans-release-candidate-2026-06-02-rc37.md`：上一轮 RC37 记录。
+- `docs/zh-Hans-release-candidate-2026-06-04-rc39.md`：当前 RC39 记录。
+- `docs/zh-Hans-upstream-stable-adaptation-2026-06-04.md`：0.19 上游 stable 适配记录。
+- `docs/zh-Hans-release-notes-0.19-draft.md`：0.19 本地化 release notes 草稿。
+- `docs/zh-Hans-official-release-next-development-tasks.md`：0.19 后续重型 gate、GUI 证据和公开 RC 任务清单。
+- `docs/zh-Hans-release-candidate-2026-06-03-rc38.md`：上一轮 RC38 记录。
+- `docs/zh-Hans-release-candidate-2026-06-02-rc37.md`：RC37 记录。
 - `docs/zh-Hans-release-candidate-2026-06-02-rc36.md`：RC36 记录。
 - `docs/zh-Hans-release-candidate-2026-06-02-rc35.md`：RC35 记录。
 - `docs/zh-Hans-release-candidate-2026-06-02-rc34.md`：RC34 记录。
@@ -274,7 +273,7 @@ git diff --cached --check
 
 ### 能直接公开发布吗？
 
-现在不建议。`0.18 / RC38` 可以作为本地工程使用和继续验证的版本，但公开 RC 仍需要清掉 11 个 blocker，补齐 GUI、账号、后端 fixture、一次性对象和静态图证据；上游 stable retarget 目前只能按源码树等价表述，不能按 commit ancestry 表述。
+现在不建议。`0.19 / RC39` 的源码级本地化候选可以继续用于工程验证，但本轮重型构建、bundle refresh 和 GUI launch 已因低负载 gate 延期；公开 RC 仍需要清掉 11 个 blocker，补齐 GUI、账号、后端 fixture、一次性对象和静态图证据，并在用户明确批准后再发布或打 tag。
 
 ## 上游项目
 

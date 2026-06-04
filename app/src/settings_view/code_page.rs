@@ -127,41 +127,8 @@ fn remote_codebase_index_limit_reached(status: &RemoteCodebaseIndexStatus) -> bo
 }
 
 #[cfg(all(test, not(target_family = "wasm")))]
-mod tests {
-    use remote_server::codebase_index_proto::{
-        RemoteCodebaseIndexState, RemoteCodebaseIndexStatus,
-    };
-
-    use super::remote_codebase_index_limit_reached;
-
-    fn remote_status_with_failure(failure_message: Option<&str>) -> RemoteCodebaseIndexStatus {
-        RemoteCodebaseIndexStatus {
-            repo_path: "/workspaces/repo".to_string(),
-            state: RemoteCodebaseIndexState::Unavailable,
-            last_updated_epoch_millis: Some(1),
-            progress_completed: None,
-            progress_total: None,
-            failure_message: failure_message.map(ToOwned::to_owned),
-            root_hash: None,
-        }
-    }
-
-    #[test]
-    fn remote_index_limit_failure_is_detected_from_status_message() {
-        let status = remote_status_with_failure(Some(
-            "已达到代码库索引数量上限，无法为远程代码库建立索引。",
-        ));
-
-        assert!(remote_codebase_index_limit_reached(&status));
-    }
-
-    #[test]
-    fn other_unavailable_failures_are_not_index_limit_failures() {
-        let status = remote_status_with_failure(Some("索引未启动，无法为远程代码库建立索引。"));
-
-        assert!(!remote_codebase_index_limit_reached(&status));
-    }
-}
+#[path = "code_page_tests.rs"]
+mod tests;
 
 #[derive(Clone, Default)]
 struct LspServerRowMouseStates {

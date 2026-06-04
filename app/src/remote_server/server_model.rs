@@ -914,7 +914,7 @@ impl ServerModel {
                         );
                         not_enabled_codebase_index_status(repo_path.to_string_lossy().to_string())
                     } else if !manager.can_create_new_indices() {
-                        let failure_message = "Cannot index remote codebase because the maximum number of codebase indexes has been reached.".to_string();
+                        let failure_message = "已达到代码库索引数量上限，无法为远程代码库建立索引。".to_string();
                         log::warn!(
                             "[Remote codebase indexing] Daemon cannot start IndexCodebase: repo_path={} reason={failure_message}",
                             repo_path.display()
@@ -927,7 +927,7 @@ impl ServerModel {
                         Self::current_codebase_index_status_or_queued(manager, repo_path, ctx)
                     } else {
                         let failure_message =
-                            "Cannot index remote codebase because indexing did not start."
+                            "索引未启动，无法为远程代码库建立索引。"
                                 .to_string();
                         log::warn!(
                             "[Remote codebase indexing] Daemon cannot start IndexCodebase: repo_path={} reason={failure_message}",

@@ -281,26 +281,18 @@ use crate::util::bindings::custom_tag_to_keystroke;
 impl Display for SettingsSection {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            SettingsSection::About => write!(f, "关于"),
-            SettingsSection::Account => write!(f, "账号"),
-            SettingsSection::BillingAndUsage => write!(f, "账单与用量"),
-            SettingsSection::Appearance => write!(f, "外观"),
-            SettingsSection::Features => write!(f, "功能"),
+            SettingsSection::BillingAndUsage => write!(f, "账单和用量"),
             SettingsSection::Keybindings => write!(f, "键盘快捷键"),
-            SettingsSection::Privacy => write!(f, "隐私"),
-            SettingsSection::Referrals => write!(f, "推荐"),
-            SettingsSection::SharedBlocks => write!(f, "共享块"),
-            SettingsSection::Teams => write!(f, "团队"),
-            SettingsSection::Warpify => write!(f, "Warpify"),
-            SettingsSection::MCPServers => write!(f, "MCP 服务器"),
+            SettingsSection::SharedBlocks => write!(f, "Shared blocks"),
+            SettingsSection::MCPServers => write!(f, "MCP Servers"),
             SettingsSection::WarpDrive => write!(f, "Warp Drive"),
             SettingsSection::WarpAgent => write!(f, "Warp Agent"),
-            SettingsSection::AgentProfiles => write!(f, "配置档"),
-            SettingsSection::AgentMCPServers => write!(f, "MCP 服务器"),
-            SettingsSection::Knowledge => write!(f, "知识"),
-            SettingsSection::ThirdPartyCLIAgents => write!(f, "第三方 CLI Agent"),
-            SettingsSection::CodeIndexing => write!(f, "索引与项目"),
-            SettingsSection::EditorAndCodeReview => write!(f, "编辑器与代码审查"),
+            SettingsSection::AgentProfiles => write!(f, "Profiles"),
+            SettingsSection::AgentMCPServers => write!(f, "MCP servers"),
+            SettingsSection::Knowledge => write!(f, "Knowledge"),
+            SettingsSection::ThirdPartyCLIAgents => write!(f, "Third party CLI agents"),
+            SettingsSection::CodeIndexing => write!(f, "Indexing and projects"),
+            SettingsSection::EditorAndCodeReview => write!(f, "Editor and Code Review"),
             SettingsSection::CloudEnvironments => write!(f, "环境"),
             SettingsSection::OzCloudAPIKeys => write!(f, "Oz Cloud API Keys"),
             _ => write!(f, "{self:?}"),
@@ -515,6 +507,8 @@ pub mod flags {
     pub const THINKING_DISPLAY_SHOW_AND_COLLAPSE: &str = "Thinking_Display_ShowAndCollapse";
     pub const THINKING_DISPLAY_ALWAYS_SHOW: &str = "Thinking_Display_AlwaysShow";
     pub const THINKING_DISPLAY_NEVER_SHOW: &str = "Thinking_Display_NeverShow";
+    pub const PROMPT_SUBMISSION_INTERRUPT: &str = "Prompt_Submission_Interrupt";
+    pub const PROMPT_SUBMISSION_QUEUE: &str = "Prompt_Submission_Queue";
     pub const SHOW_TERMINAL_INPUT_MESSAGE_LINE_FLAG: &str = "Show_Terminal_Input_Message_Line";
     pub const SLASH_COMMANDS_IN_TERMINAL_FLAG: &str = "Slash_Commands_In_Terminal";
     pub const AT_CONTEXT_MENU_IN_TERMINAL_FLAG: &str = "At_Context_Menu_In_Terminal";
@@ -1284,7 +1278,7 @@ impl SettingsView {
             )),
             SettingsNavItem::Page(SettingsSection::BillingAndUsage),
             SettingsNavItem::Umbrella(SettingsUmbrella::new(
-                "代码",
+                "Code",
                 vec![
                     SettingsSection::CodeIndexing,
                     SettingsSection::EditorAndCodeReview,

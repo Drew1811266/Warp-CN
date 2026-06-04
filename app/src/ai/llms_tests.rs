@@ -1,7 +1,6 @@
-use super::*;
-
 use warpui::App;
 
+use super::*;
 use crate::ai::execution_profiles::profiles::AIExecutionProfilesModel;
 use crate::ai::mcp::TemplatableMCPServerManager;
 use crate::auth::auth_manager::AuthManager;
@@ -76,29 +75,6 @@ fn llm_info_deserializes_without_base_model_name() {
     let info: LLMInfo = serde_json::from_str(raw).expect("should deserialize");
     assert_eq!(info.display_name, "gpt-4o");
     assert_eq!(info.base_model_name, "gpt-4o");
-}
-
-#[test]
-fn llm_info_localizes_builtin_auto_display_names_from_wire_metadata() {
-    let raw = r#"{
-            "display_name": "auto (cost-efficient)",
-            "base_model_name": "auto (cost-efficient)",
-            "id": "auto",
-            "usage_metadata": {
-                "request_multiplier": 1,
-                "credit_multiplier": null
-            },
-            "description": null,
-            "disable_reason": null,
-            "vision_supported": false,
-            "spec": null,
-            "provider": "Unknown"
-        }"#;
-
-    let info: LLMInfo = serde_json::from_str(raw).expect("should deserialize");
-    assert_eq!(info.display_name, "自动（节省成本）");
-    assert_eq!(info.base_model_name, "自动（节省成本）");
-    assert_eq!(info.id.to_string(), "auto");
 }
 
 #[test]

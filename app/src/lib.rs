@@ -278,6 +278,7 @@ use crate::root_view::{
 use crate::server::cloud_objects::listener::Listener;
 use crate::server::cloud_objects::update_manager::UpdateManager;
 use crate::server::experiments::ServerExperiments;
+use crate::server::iap::IapManager;
 use crate::server::sync_queue::{QueueItem, SyncQueue};
 pub use crate::server::telemetry::{
     AgentModeEntrypoint, AgentModeEntrypointSelectionType, TelemetryEvent,
@@ -1080,19 +1081,15 @@ pub(crate) fn initialize_app(
     let data_domain = ChannelState::data_domain();
 
     // Register an implementation of the secure storage service.
-    if ::ai::api_keys::custom_inference_smoke_override_enabled() {
-        warpui_extras::secure_storage::register_noop(&data_domain, ctx);
-    } else {
-        cfg_if::cfg_if! {
-            if #[cfg(feature = "integration_tests")] {
-                warpui_extras::secure_storage::register_noop(&data_domain, ctx);
-            } else if #[cfg(any(target_os = "linux", target_os = "freebsd"))] {
-                warpui_extras::secure_storage::register_with_fallback(&data_domain, warp_core::paths::state_dir(), ctx)
-            } else if #[cfg(target_os = "windows")] {
-                warpui_extras::secure_storage::register_with_dir(&data_domain, warp_core::paths::state_dir(), ctx)
-            } else {
-                warpui_extras::secure_storage::register(&data_domain, ctx);
-            }
+    cfg_if::cfg_if! {
+        if #[cfg(feature = "integration_tests")] {
+            warpui_extras::secure_storage::register_noop(&data_domain, ctx);
+        } else if #[cfg(any(target_os = "linux", target_os = "freebsd"))] {
+            warpui_extras::secure_storage::register_with_fallback(&data_domain, warp_core::paths::state_dir(), ctx)
+        } else if #[cfg(target_os = "windows")] {
+            warpui_extras::secure_storage::register_with_dir(&data_domain, warp_core::paths::state_dir(), ctx)
+        } else {
+            warpui_extras::secure_storage::register(&data_domain, ctx);
         }
     }
 
@@ -1138,8 +1135,21 @@ pub(crate) fn initialize_app(
     // captured by the HTTP client hooks.
     ctx.add_singleton_model(|_ctx| NetworkLogModel::default());
 
-    let server_api_provider = ctx
-        .add_singleton_model(|ctx| ServerApiProvider::new(auth_state.clone(), agent_source, ctx));
+    // Create a shared IAP state for staging builds. The same `Arc<IapState>`
+    // is handed to both `ServerApi` (for sync reads on the request path) and
+    // `IapManager` (which owns refresh logic on the main thread).
+    #[cfg(not(target_family = "wasm"))]
+    let iap_state =
+        ChannelState::iap_config().map(|cfg| Arc::new(crate::server::iap::IapState::new(&cfg)));
+    #[cfg(target_family = "wasm")]
+    let iap_state: Option<Arc<crate::server::iap::IapState>> = None;
+
+    let server_api_provider = ctx.add_singleton_model({
+        let auth_state = auth_state.clone();
+        let iap_state = iap_state.clone();
+        move |ctx| ServerApiProvider::new(auth_state, agent_source, iap_state, ctx)
+    });
+
     let server_api = server_api_provider.as_ref(ctx).get();
     let ai_client = server_api_provider.as_ref(ctx).get_ai_client();
 
@@ -1867,6 +1877,17 @@ pub(crate) fn initialize_app(
         ctx.add_singleton_model(LocalShellState::new);
         ctx.add_singleton_model(system::SystemInfo::new);
     }
+
+    // `IapManager` drives gcloud-based IAP token refresh for staging builds.
+    // Register it after `LocalShellState`: the Manager needs to know where the gcloud
+    // cli lives & thus needs PATH config set by ~/.zshrc et al.
+    //
+    // Registered on all targets (including wasm) so consumers such as the
+    // shared-session viewer network — which compiles and runs on wasm — can
+    // read the singleton without panicking. On wasm `iap_state` is always
+    // `None`, making this an inert no-op: `IapManager::new` early-returns from
+    // its refresh loop and `iap_state()` yields no proxy-auth header.
+    ctx.add_singleton_model(move |ctx| IapManager::new(iap_state, ctx));
 
     // Add a singleton model that holds the current prompt configuration.
     ctx.add_singleton_model(Prompt::new);

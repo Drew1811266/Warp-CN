@@ -161,17 +161,6 @@ pub fn secure_state_dir() -> Option<PathBuf> {
     if ChannelState::channel() == Channel::Integration {
         return None;
     }
-    // The zh-Hans custom inference smoke fixture is a debug-only GUI verification path.
-    // Avoid macOS App Group container permission prompts so the fixture can run without
-    // granting access to other app data.
-    if cfg!(debug_assertions)
-        && std::env::var("WARP_CN_CUSTOM_INFERENCE_SMOKE")
-            .ok()
-            .as_deref()
-            == Some("1")
-    {
-        return None;
-    }
 
     #[cfg(target_os = "macos")]
     if let Some(app_group_root) = app_group_container_path() {
@@ -306,7 +295,7 @@ pub fn app_group_container_path() -> Option<PathBuf> {
 
 /// Returns the path to resources included in the Warp distribution.
 ///
-/// Unlike [`warpui::AssetProvider`] assets, which are generally embedded in the binary, these are
+/// Unlike [`warpui_core::AssetProvider`] assets, which are generally embedded in the binary, these are
 /// stored on the filesystem alongside the rest of Warp.
 ///
 /// ## macOS

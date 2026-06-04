@@ -1,6 +1,5 @@
 use super::{derive_agent_attribution_toggle_state, AgentAttributionToggleState};
 use crate::workspaces::workspace::AdminEnablementSetting;
-use ::ai::api_keys::custom_inference_smoke_override_value_is_enabled;
 
 #[test]
 fn respect_user_setting_returns_user_pref_unlocked() {
@@ -91,14 +90,4 @@ fn team_force_takes_precedence_over_global_ai_disabled() {
             is_disabled: true,
         }
     );
-}
-
-#[test]
-fn custom_inference_smoke_override_enabled_only_for_exact_one() {
-    assert!(custom_inference_smoke_override_value_is_enabled(Some("1")));
-    assert!(!custom_inference_smoke_override_value_is_enabled(Some(
-        "true"
-    )));
-    assert!(!custom_inference_smoke_override_value_is_enabled(Some("0")));
-    assert!(!custom_inference_smoke_override_value_is_enabled(None));
 }

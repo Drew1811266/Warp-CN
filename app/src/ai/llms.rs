@@ -233,16 +233,13 @@ impl<'de> Deserialize<'de> for LLMInfo {
                 map
             }
         };
-        let display_name = localized_builtin_llm_display_name(wire.display_name);
-        let base_model_name = localized_builtin_llm_display_name(
-            wire.base_model_name.unwrap_or_else(|| display_name.clone()),
-        );
-
         Ok(Self {
-            base_model_name,
+            base_model_name: wire
+                .base_model_name
+                .unwrap_or_else(|| wire.display_name.clone()),
             vision_supported: wire.vision_supported,
             provider: wire.provider,
-            display_name,
+            display_name: wire.display_name,
             id: wire.id,
             reasoning_level: wire.reasoning_level,
             usage_metadata: wire.usage_metadata,
@@ -254,22 +251,6 @@ impl<'de> Deserialize<'de> for LLMInfo {
             context_window: wire.context_window,
         })
     }
-}
-
-fn localized_builtin_llm_display_name(name: String) -> String {
-    if builtin_auto_label_has_suffix(&name, "cost-efficient") {
-        "自动（节省成本）".to_owned()
-    } else if builtin_auto_label_has_suffix(&name, "responsive") {
-        "自动（响应更快）".to_owned()
-    } else {
-        name
-    }
-}
-
-fn builtin_auto_label_has_suffix(name: &str, suffix: &str) -> bool {
-    name.strip_prefix("auto (")
-        .and_then(|rest| rest.strip_suffix(')'))
-        .is_some_and(|rest| rest == suffix)
 }
 
 /// Deduplicates a list of LLMInfo choices by base_model_name and returns an alphabetically sorted

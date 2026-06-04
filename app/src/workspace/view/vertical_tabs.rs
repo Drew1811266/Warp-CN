@@ -128,6 +128,16 @@ fn vtab_pane_row_position_id(pane_group_id: EntityId, pane_id: PaneId) -> String
     format!("vertical_tabs:pane_row:{pane_group_id:?}:{pane_id}")
 }
 
+/// Save-position id for a tab group header's kebab button; anchors the group menu.
+pub(crate) fn vtab_group_kebab_position_id(tab_group_id: TabGroupId) -> String {
+    format!("vertical_tabs:group_kebab:{tab_group_id:?}")
+}
+
+/// Save-position id for a tab group's full container rect, used for drop hit-testing.
+pub(crate) fn vtab_group_position_id(group_id: TabGroupId) -> String {
+    format!("vertical_tabs:group:{group_id:?}")
+}
+
 fn terminal_title_fallback_font(agent_text: &TerminalAgentText) -> TerminalPrimaryLineFont {
     if agent_text.cli_agent.is_some() {
         TerminalPrimaryLineFont::Ui
@@ -2229,28 +2239,44 @@ fn render_tab_group_internal(
 
     let group_element = group_element.with_defer_events_to_children().finish();
 
-    let draggable = Draggable::new(tab.draggable_state.clone(), group_element)
-        .on_drag_start(|ctx, _, _| {
-            ctx.dispatch_typed_action(WorkspaceAction::StartTabDrag);
-        })
-        .on_drag(move |ctx, _, rect, _| {
-            ctx.dispatch_typed_action(WorkspaceAction::DragTab {
-                tab_index,
-                tab_position: rect,
-            });
-        })
-        .on_drop(|ctx, _, _, _| {
-            ctx.dispatch_typed_action(WorkspaceAction::DropTab);
-        });
-    // Only lock the drag to the vertical axis when cross-window tab drag is
-    // disabled. When it is enabled, the user needs to be able to drag
-    // horizontally out of the panel to detach the tab into a new window.
-    let draggable = if FeatureFlag::DragTabsToWindows.is_enabled() {
-        draggable
+    // Skip the per-tab drag while the enclosing group is already being dragged as a block.
+    let is_parent_group_dragging = tab
+        .group_id
+        .and_then(|gid| workspace.tab_groups.get(&gid))
+        .is_some_and(|group| group.draggable_state.is_dragging());
+
+    // Sole group member: skip the per-tab drag so the outer group drag fires instead.
+    let is_sole_group_member = in_tab_group
+        && tab
+            .group_id
+            .is_some_and(|gid| super::group_member_indices(&workspace.tabs, gid).count() == 1);
+
+    let draggable: Box<dyn Element> = if is_parent_group_dragging || is_sole_group_member {
+        group_element
     } else {
-        draggable.with_drag_axis(DragAxis::VerticalOnly)
+        let draggable = Draggable::new(tab.draggable_state.clone(), group_element)
+            .on_drag_start(|ctx, _, _| {
+                ctx.dispatch_typed_action(WorkspaceAction::StartTabDrag);
+            })
+            .on_drag(move |ctx, _, rect, _| {
+                ctx.dispatch_typed_action(WorkspaceAction::DragTab {
+                    tab_index,
+                    tab_position: rect,
+                });
+            })
+            .on_drop(|ctx, _, _, _| {
+                ctx.dispatch_typed_action(WorkspaceAction::DropTab);
+            });
+        // Only lock the drag to the vertical axis when cross-window tab drag is
+        // disabled. When it is enabled, the user needs to be able to drag
+        // horizontally out of the panel to detach the tab into a new window.
+        let draggable = if FeatureFlag::DragTabsToWindows.is_enabled() {
+            draggable
+        } else {
+            draggable.with_drag_axis(DragAxis::VerticalOnly)
+        };
+        draggable.finish()
     };
-    let draggable = draggable.finish();
 
     let draggable: Box<dyn Element> = if is_this_tab_dragging {
         Container::new(draggable)
@@ -2423,7 +2449,9 @@ fn render_tab_group_header_icon_button(
 }
 
 /// Renders the header row for a tab group: chevron, title + "N tabs", and (on hover)
-/// kebab + close buttons. Single-clicking outside the per-button regions toggles collapse.
+/// kebab + close buttons. Single-clicking outside the per-button regions toggles collapse;
+/// double-clicking opens the inline rename editor.
+#[allow(clippy::too_many_arguments)]
 fn render_grouped_tabs_header(
     group: &TabGroup,
     member_count: usize,
@@ -2431,6 +2459,8 @@ fn render_grouped_tabs_header(
     is_collapsed: bool,
     is_header_selected: bool,
     show_action_buttons: bool,
+    is_being_renamed: bool,
+    rename_editor: Option<&ViewHandle<EditorView>>,
     app: &AppContext,
 ) -> Box<dyn Element> {
     let appearance = Appearance::as_ref(app);
@@ -2466,11 +2496,16 @@ fn render_grouped_tabs_header(
     .with_height(VERTICAL_TABS_ICON_SIZE)
     .finish();
 
-    let title_text = group.name.clone().unwrap_or_else(|| "新建分组".to_string());
-    let title_element: Box<dyn Element> = Text::new_inline(title_text, font_family, 12.)
-        .with_clip(ClipConfig::ellipsis())
-        .with_color(main_text_color.into())
-        .finish();
+    let title_element: Box<dyn Element> =
+        if let Some(editor) = rename_editor.filter(|_| is_being_renamed) {
+            render_inline_tab_rename_editor(editor, appearance, app)
+        } else {
+            let title_text = group.name.clone().unwrap_or_else(|| "新建分组".to_string());
+            Text::new_inline(title_text, font_family, 12.)
+                .with_clip(ClipConfig::ellipsis())
+                .with_color(main_text_color.into())
+                .finish()
+        };
     let subtitle_text = if member_count == 1 {
         "1 个标签页".to_string()
     } else {
@@ -2489,15 +2524,21 @@ fn render_grouped_tabs_header(
         .finish();
 
     let action_buttons = if show_action_buttons {
-        let kebab_button = render_tab_group_header_icon_button(
-            WarpIcon::DotsVertical,
-            TAB_GROUP_HEADER_ACTION_ICON_SIZE,
-            sub_text_color,
-            internal_colors::fg_overlay_2(theme),
-            mouse_states.kebab.clone(),
-            // No-op for now; TODO(johnturcoo) add tab group more-options menu.
-            None,
-        );
+        let kebab_button = SavePosition::new(
+            render_tab_group_header_icon_button(
+                WarpIcon::DotsVertical,
+                TAB_GROUP_HEADER_ACTION_ICON_SIZE,
+                sub_text_color,
+                internal_colors::fg_overlay_2(theme),
+                mouse_states.kebab.clone(),
+                Some(WorkspaceAction::ToggleTabGroupRightClickMenu {
+                    group_id,
+                    anchor: TabContextMenuAnchor::VerticalTabsKebab,
+                }),
+            ),
+            &vtab_group_kebab_position_id(group_id),
+        )
+        .finish();
         let close_button = render_tab_group_header_icon_button(
             WarpIcon::X,
             TAB_GROUP_HEADER_ACTION_ICON_SIZE,
@@ -2555,12 +2596,19 @@ fn render_grouped_tabs_header(
     .with_cursor(Cursor::PointingHand)
     .with_defer_events_to_children();
 
-    // Single-click toggles collapse; no-op `on_right_click` keeps right-clicks from bubbling
-    // up to the panel's new-session menu handler.
+    // Click toggles collapse; double-click renames; right-click opens the group menu.
     hoverable = hoverable.on_click(move |ctx, _, _| {
         ctx.dispatch_typed_action(WorkspaceAction::ToggleTabGroupCollapsed(group_id));
     });
-    hoverable = hoverable.on_right_click(|_, _, _| {});
+    hoverable = hoverable.on_double_click(move |ctx, _, _| {
+        ctx.dispatch_typed_action(WorkspaceAction::RenameTabGroup(group_id));
+    });
+    hoverable = hoverable.on_right_click(move |ctx, _, position| {
+        ctx.dispatch_typed_action(WorkspaceAction::ToggleTabGroupRightClickMenu {
+            group_id,
+            anchor: TabContextMenuAnchor::Pointer(position),
+        });
+    });
     hoverable.finish()
 }
 
@@ -2586,6 +2634,7 @@ fn render_grouped_tab_container(
         .clone();
 
     let member_count = members.len();
+    let group_id = group.id;
     let group = group.clone();
     let any_member_active = members
         .iter()
@@ -2598,7 +2647,7 @@ fn render_grouped_tab_container(
         _ => VerticalTabsDisplayGranularity::Tabs,
     });
 
-    Hoverable::new(mouse_states.container.clone(), |hover_state| {
+    let container = Hoverable::new(mouse_states.container.clone(), |hover_state| {
         let mut content = Flex::column()
             .with_main_axis_size(MainAxisSize::Min)
             .with_cross_axis_alignment(CrossAxisAlignment::Stretch)
@@ -2606,6 +2655,10 @@ fn render_grouped_tab_container(
 
         // Collapsed group + active member: highlight the header instead of the (now hidden) member row.
         let is_header_selected = is_collapsed && any_member_active;
+        let is_being_renamed = workspace
+            .current_workspace_state
+            .is_tab_group_being_renamed(group.id);
+        let rename_editor = is_being_renamed.then(|| workspace.tab_group_rename_editor.clone());
         content.add_child(render_grouped_tabs_header(
             &group,
             member_count,
@@ -2613,6 +2666,8 @@ fn render_grouped_tab_container(
             is_collapsed,
             is_header_selected,
             hover_state.is_hovered(),
+            is_being_renamed,
+            rename_editor.as_ref(),
             app,
         ));
 
@@ -2674,10 +2729,57 @@ fn render_grouped_tab_container(
             .with_corner_radius(CornerRadius::with_all(Radius::Pixels(ROW_CORNER_RADIUS)))
             .finish()
     })
-    // Consume right-clicks so they don't bubble to the panel's new-session menu handler.
-    .on_right_click(|_, _, _| {})
+    // Right-click on group chrome (not member rows) opens the group menu.
+    .on_right_click(move |ctx, _, position| {
+        ctx.dispatch_typed_action(WorkspaceAction::ToggleTabGroupRightClickMenu {
+            group_id,
+            anchor: TabContextMenuAnchor::Pointer(position),
+        });
+    })
     .with_defer_events_to_children()
-    .finish()
+    .finish();
+    // Skip the group `Draggable` while a pane is being dragged so pane
+    // reordering (within the active tab's split layout) doesn't fight with
+    // group-block reordering for the same mouse input.
+    let skip_group_draggable = is_any_pane_dragging;
+    let is_this_group_dragging = group.draggable_state.is_dragging();
+    let group_draggable_state = group.draggable_state.clone();
+    let positioned_container: Box<dyn Element> = if skip_group_draggable {
+        container
+    } else {
+        Draggable::new(group_draggable_state, container)
+            .on_drag_start(move |ctx, _, _| {
+                ctx.dispatch_typed_action(WorkspaceAction::StartGroupDrag(group_id));
+            })
+            .on_drag(move |ctx, _, rect, _| {
+                ctx.dispatch_typed_action(WorkspaceAction::DragGroup {
+                    group_id,
+                    position: rect,
+                });
+            })
+            .on_drop(move |ctx, _, _, _| {
+                ctx.dispatch_typed_action(WorkspaceAction::DropGroup);
+            })
+            .with_drag_axis(DragAxis::VerticalOnly)
+            // Yield to a nested per-tab `Draggable` when it claims the mouse-down.
+            // This allows dragging a tab within a group, without triggering the groups `Draggable`.
+            .with_defer_to_handled_child_mouse_down()
+            .finish()
+    };
+
+    // Ghost slot: while dragging, the `Draggable` paints to the overlay
+    // layer, vacating the laid-out slot. Fill it with a background
+    // placeholder so the user sees where the group will land.
+    let positioned_container: Box<dyn Element> = if is_this_group_dragging {
+        Container::new(positioned_container)
+            .with_background(internal_colors::fg_overlay_1(theme))
+            .with_corner_radius(CornerRadius::with_all(Radius::Pixels(ROW_CORNER_RADIUS)))
+            .finish()
+    } else {
+        positioned_container
+    };
+
+    SavePosition::new(positioned_container, &vtab_group_position_id(group_id)).finish()
 }
 
 fn render_group_header(props: GroupHeaderProps<'_>, app: &AppContext) -> Box<dyn Element> {
@@ -3715,7 +3817,7 @@ fn render_terminal_row_content(
 
     let git_branch = terminal_view.current_git_branch(app);
 
-    // Line 1 and line 2 depend on the "窗格标题显示为" setting.
+    // Line 1 and line 2 depend on the "Pane title as" setting.
     // Line 3 (metadata) shows context data on the left + badges on the right.
     //
     // | Setting          | Line 1 (title)       | Line 2 (description)   | Line 3 left          |
@@ -5199,7 +5301,7 @@ pub(super) fn render_settings_popup(
         .with_padding_bottom(4.)
         .finish();
 
-    // Divider between toggle and "窗格标题显示为" section
+    // Divider between toggle and "Pane title as" section
     let make_divider = |theme: &WarpTheme| {
         Container::new(
             ConstrainedBox::new(
@@ -6499,8 +6601,8 @@ fn render_compact_pane_row(props: PaneProps<'_>, app: &AppContext) -> Box<dyn El
             .value(),
     );
 
-    // Build title (line 1) based on "窗格标题显示为" and subtitle (line 2) based on
-    // "附加元数据" setting.
+    // Build title (line 1) based on "Pane title as" and subtitle (line 2) based on
+    // "Additional metadata" setting.
     let (title_element, subtitle_element): (Box<dyn Element>, Option<Box<dyn Element>>) =
         if let TypedPane::Terminal(terminal_pane) = &props.typed {
             let terminal_view = terminal_pane.terminal_view(app).as_ref(app);
@@ -6513,7 +6615,7 @@ fn render_compact_pane_row(props: PaneProps<'_>, app: &AppContext) -> Box<dyn El
             let branch_display =
                 branch_label_display(git_branch.as_deref(), working_directory_text.as_str());
 
-            // Title based on "窗格标题显示为"
+            // Title based on "Pane title as"
             let title: Box<dyn Element> = render_pane_title_slot(
                 &props,
                 || match primary_info {
@@ -6546,7 +6648,7 @@ fn render_compact_pane_row(props: PaneProps<'_>, app: &AppContext) -> Box<dyn El
                 app,
             );
 
-            // Subtitle based on "附加元数据"
+            // Subtitle based on "Additional metadata"
             let subtitle: Option<Box<dyn Element>> = match compact_subtitle {
                 VerticalTabsCompactSubtitle::Branch => compact_branch_subtitle_display(
                     git_branch.as_deref(),

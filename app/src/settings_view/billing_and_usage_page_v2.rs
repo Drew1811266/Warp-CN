@@ -782,6 +782,7 @@ impl BillingAndUsagePageV2View {
             let base_remaining = ai_model
                 .request_limit()
                 .saturating_sub(ai_model.requests_used()) as i64;
+            let base_limit = (!ai_model.is_unlimited()).then(|| ai_model.request_limit() as i64);
             cards_row.add_child(
                 Expanded::new(
                     1.,
@@ -791,6 +792,7 @@ impl BillingAndUsagePageV2View {
                         "基础额度",
                         &reset_str,
                         base_remaining,
+                        base_limit,
                         outline_color,
                     ),
                 )
@@ -808,6 +810,7 @@ impl BillingAndUsagePageV2View {
                         "个人额度",
                         &classified.personal.expiry_label(),
                         classified.personal.total_balance(),
+                        None,
                         outline_color,
                     ),
                 )
@@ -825,6 +828,7 @@ impl BillingAndUsagePageV2View {
                         "团队额度",
                         &classified.team.expiry_label(),
                         classified.team.total_balance(),
+                        None,
                         outline_color,
                     ),
                 )
@@ -2136,6 +2140,7 @@ fn render_balance_card(
     label: &str,
     date: &str,
     remaining: i64,
+    total: Option<i64>,
     border_color: ColorU,
 ) -> Box<dyn Element> {
     let theme = appearance.theme();
@@ -2185,7 +2190,11 @@ fn render_balance_card(
     .with_style(Properties::default().weight(Weight::Semibold))
     .finish();
 
-    let remaining_label = Text::new_inline("remaining", appearance.ui_font_family(), 14.)
+    let remaining_label_text = match total {
+        Some(limit) => format!("/ {} 剩余", limit.separate_with_commas()),
+        None => "remaining".to_string(),
+    };
+    let remaining_label = Text::new_inline(remaining_label_text, appearance.ui_font_family(), 14.)
         .with_color(sub_color)
         .finish();
 

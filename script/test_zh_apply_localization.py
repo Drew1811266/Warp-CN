@@ -20,6 +20,8 @@ from zh_apply_localization import (
     metadata_summary,
     metadata_summary_report,
     print_metadata_summary,
+    replace_rust_string_literals_many,
+    replace_rust_string_literals_many_apply,
     validate_manifest,
 )
 
@@ -249,6 +251,32 @@ forbidden_targets = ["智能体"]
         )
 
         self.assertTrue(any("forbidden target term" in error for error in errors))
+
+
+class RustStringReplacementTests(unittest.TestCase):
+    def test_escapes_quotes_when_replacing_normal_string_literals(self) -> None:
+        source = 'do shell script "ln -sf {source} {target}"'
+        target = 'do shell script "ln -sf {source} {target}" with prompt "需要管理员权限。"'
+        text = 'let script = "do shell script \\"ln -sf {source} {target}\\"";\n'
+
+        updated, found_counts, target_counts = replace_rust_string_literals_many_apply(
+            text,
+            {source: target},
+        )
+
+        self.assertEqual(found_counts[source], 1)
+        self.assertEqual(target_counts[source], 0)
+        self.assertEqual(
+            updated,
+            'let script = "do shell script \\"ln -sf {source} {target}\\" with prompt \\"需要管理员权限。\\"";\n',
+        )
+
+        found_counts, target_counts = replace_rust_string_literals_many(
+            updated,
+            {source: target},
+        )
+        self.assertEqual(found_counts[source], 0)
+        self.assertEqual(target_counts[source], 1)
 
 
 if __name__ == "__main__":

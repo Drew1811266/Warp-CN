@@ -5,17 +5,17 @@ use warp_core::send_telemetry_from_ctx;
 use warp_core::ui::appearance::Appearance;
 use warp_core::ui::theme::color::internal_colors;
 use warp_core::ui::theme::WarpTheme;
-use warpui::elements::{
+use warpui_core::elements::{
     Border, ClippedScrollStateHandle, ConstrainedBox, Container, CornerRadius, CrossAxisAlignment,
     Empty, Flex, FormattedTextElement, Hoverable, MainAxisAlignment, MainAxisSize,
     MouseStateHandle, ParentElement, Radius, Text,
 };
-use warpui::fonts::{Properties, Weight};
-use warpui::keymap::Keystroke;
-use warpui::platform::Cursor;
-use warpui::text_layout::TextAlignment;
-use warpui::ui_components::components::{UiComponent, UiComponentStyles};
-use warpui::{
+use warpui_core::fonts::{Properties, Weight};
+use warpui_core::keymap::Keystroke;
+use warpui_core::platform::Cursor;
+use warpui_core::text_layout::TextAlignment;
+use warpui_core::ui_components::components::{UiComponent, UiComponentStyles};
+use warpui_core::{
     AppContext, Element, Entity, ModelHandle, SingletonEntity, TypedActionView, View, ViewContext,
 };
 
@@ -34,7 +34,7 @@ pub enum ThemePickerSlideEvent {
     SyncWithOsToggled {
         enabled: bool,
     },
-    /// Emitted when the user clicks the "隐私设置" link on the terminal
+    /// Emitted when the user clicks the "Privacy Settings" link on the terminal
     /// intention theme slide. The parent orchestrator is expected to open the
     /// privacy settings (e.g. via a LoginSlideView in privacy-only mode).
     PrivacySettingsRequested,
@@ -48,7 +48,7 @@ pub enum ThemePickerSlideAction {
     ToggleSyncWithOs,
     BackClicked,
     NextClicked,
-    /// Dispatched when the user clicks the "隐私设置" link in the
+    /// Dispatched when the user clicks the "Privacy Settings" link in the
     /// terminal-intention disclaimer block below the theme options.
     PrivacySettingsClicked,
 }

@@ -1,4 +1,4 @@
-use ::ai::api_keys::{custom_inference_smoke_override_enabled, ApiKeyManager, ApiKeys};
+use ::ai::api_keys::{ApiKeyManager, ApiKeys};
 use enum_iterator::all;
 use itertools::Itertools;
 use pathfinder_geometry::vector::vec2f;
@@ -60,7 +60,9 @@ use crate::ai::execution_profiles::model_menu_items::available_model_menu_items;
 use crate::ai::execution_profiles::profiles::{
     AIExecutionProfilesModel, AIExecutionProfilesModelEvent, ClientProfileId,
 };
-use crate::ai::execution_profiles::{AIExecutionProfile, ActionPermission, WriteToPtyPermission};
+use crate::ai::execution_profiles::{
+    AIExecutionProfile, AIExecutionProfileAppExt, ActionPermission, WriteToPtyPermission,
+};
 use crate::ai::llms::{LLMContextWindow, LLMId, LLMPreferences, LLMPreferencesEvent};
 use crate::ai::mcp::TemplatableMCPServerManager;
 use crate::ai::paths::host_native_absolute_path;
@@ -79,8 +81,8 @@ use crate::settings::{
     AwsBedrockCredentialsEnabled, CanUseWarpCreditsForFallback, CodeSettings,
     CodebaseContextEnabled, FileBasedMcpEnabled, GitOperationsAutogenEnabled,
     IncludeAgentCommandsInHistory, InputSettings, IntelligentAutosuggestionsEnabled, MemoryEnabled,
-    NLDInTerminalEnabled, NaturalLanguageAutosuggestionsEnabled, RuleSuggestionsEnabled,
-    SharedBlockTitleGenerationEnabled, ShouldRenderCLIAgentToolbar,
+    NLDInTerminalEnabled, NaturalLanguageAutosuggestionsEnabled, PromptSubmissionMode,
+    RuleSuggestionsEnabled, SharedBlockTitleGenerationEnabled, ShouldRenderCLIAgentToolbar,
     ShouldRenderUseAgentToolbarForUserCommands, ShouldShowOzUpdatesInZeroState, ShowAgentTips,
     ShowConversationHistory, ShowHintText, ThinkingDisplayMode, VoiceInputEnabled,
     WarpDriveContextEnabled,
@@ -321,6 +323,28 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                     mode.command_palette_description(),
                     builder(SettingsAction::AI(
                         AISettingsPageAction::SetThinkingDisplayMode(mode),
+                    )),
+                    ai_context.clone() & !id!(context_flag),
+                )
+                .with_group(bindings::BindingGroup::WarpAi.as_str())
+            })
+            .collect();
+        app.register_fixed_bindings(mode_bindings);
+    }
+    if FeatureFlag::QueueSlashCommand.is_enabled() {
+        use warpui::keymap::FixedBinding;
+
+        let ai_context = context.clone() & id!(flags::IS_ANY_AI_ENABLED);
+        let mode_bindings: Vec<FixedBinding> = PromptSubmissionMode::iter()
+            .map(|mode| {
+                let context_flag = match mode {
+                    PromptSubmissionMode::Interrupt => flags::PROMPT_SUBMISSION_INTERRUPT,
+                    PromptSubmissionMode::Queue => flags::PROMPT_SUBMISSION_QUEUE,
+                };
+                FixedBinding::empty(
+                    mode.command_palette_description(),
+                    builder(SettingsAction::AI(
+                        AISettingsPageAction::SetPromptSubmissionMode(mode),
                     )),
                     ai_context.clone() & !id!(context_flag),
                 )
@@ -609,6 +633,7 @@ pub struct AISettingsPageView {
     last_synced_context_window_editor_value: Option<u32>,
 
     thinking_display_mode_dropdown: ViewHandle<Dropdown<AISettingsPageAction>>,
+    default_prompt_submission_mode_dropdown: ViewHandle<Dropdown<AISettingsPageAction>>,
     #[cfg(feature = "local_fs")]
     conversation_layout_dropdown: ViewHandle<Dropdown<AISettingsPageAction>>,
 
@@ -747,6 +772,18 @@ impl AISettingsPageView {
             thinking_display_mode_dropdown.update(ctx, |dropdown, ctx| {
                 dropdown.set_selected_by_action(
                     AISettingsPageAction::SetThinkingDisplayMode(current_mode),
+                    ctx,
+                );
+            });
+        }
+
+        let default_prompt_submission_mode_dropdown =
+            OtherAIWidget::create_default_prompt_submission_mode_dropdown(ctx);
+        {
+            let current_mode = AISettings::as_ref(ctx).default_prompt_submission_mode;
+            default_prompt_submission_mode_dropdown.update(ctx, |dropdown, ctx| {
+                dropdown.set_selected_by_action(
+                    AISettingsPageAction::SetPromptSubmissionMode(current_mode),
                     ctx,
                 );
             });
@@ -1151,6 +1188,16 @@ impl AISettingsPageView {
                             );
                         });
                 }
+                AISettingsChangedEvent::PromptSubmissionMode { .. } => {
+                    let current_mode = AISettings::as_ref(ctx).default_prompt_submission_mode;
+                    me.default_prompt_submission_mode_dropdown
+                        .update(ctx, |dropdown, ctx| {
+                            dropdown.set_selected_by_action(
+                                AISettingsPageAction::SetPromptSubmissionMode(current_mode),
+                                ctx,
+                            );
+                        });
+                }
                 _ => (),
             }
             ctx.notify();
@@ -1511,11 +1558,8 @@ impl AISettingsPageView {
         });
 
         // Custom inference
-        let custom_inference_smoke_override_enabled =
-            Self::custom_inference_smoke_override_enabled();
-        let custom_inference_controls_enabled = (is_any_ai_enabled
-            && UserWorkspaces::as_ref(ctx).is_custom_inference_enabled(ctx))
-            || custom_inference_smoke_override_enabled;
+        let custom_inference_controls_enabled =
+            is_any_ai_enabled && UserWorkspaces::as_ref(ctx).is_custom_inference_enabled(ctx);
         let custom_inference_add_button = ctx.add_typed_action_view(|_| {
             ActionButton::new("+ 添加自定义模型", SecondaryTheme)
                 .with_size(ButtonSize::Small)
@@ -1673,6 +1717,7 @@ impl AISettingsPageView {
             mcp_denylist_dropdown,
             mcp_denylist_mouse_state_handles,
             thinking_display_mode_dropdown,
+            default_prompt_submission_mode_dropdown,
             #[cfg(feature = "local_fs")]
             conversation_layout_dropdown,
             profile_views,
@@ -1756,17 +1801,10 @@ impl AISettingsPageView {
             })
             .collect()
     }
-    fn custom_inference_smoke_override_enabled() -> bool {
-        custom_inference_smoke_override_enabled()
-    }
-
     fn can_use_custom_inference_controls(app: &AppContext) -> bool {
-        let smoke_override_enabled = Self::custom_inference_smoke_override_enabled();
-
-        (FeatureFlag::CustomInferenceEndpoints.is_enabled() || smoke_override_enabled)
-            && (AISettings::as_ref(app).is_any_ai_enabled(app) || smoke_override_enabled)
-            && (UserWorkspaces::as_ref(app).is_custom_inference_enabled(app)
-                || smoke_override_enabled)
+        FeatureFlag::CustomInferenceEndpoints.is_enabled()
+            && AISettings::as_ref(app).is_any_ai_enabled(app)
+            && UserWorkspaces::as_ref(app).is_custom_inference_enabled(app)
     }
 
     fn show_add_custom_endpoint_modal(&mut self, ctx: &mut ViewContext<Self>) {
@@ -2774,6 +2812,7 @@ pub enum AISettingsPageAction {
     ToggleShowAgentTips,
     ToggleShowOzUpdatesInZeroState,
     SetThinkingDisplayMode(ThinkingDisplayMode),
+    SetPromptSubmissionMode(PromptSubmissionMode),
     AttemptLoginGatedUpgrade,
     RemoveCLIAgentToolbarEnabledCommand(String),
     RemoveFromCommandExecutionAllowlist(AgentModeCommandExecutionPredicate),
@@ -3218,6 +3257,14 @@ impl TypedActionView for AISettingsPageView {
             AISettingsPageAction::SetThinkingDisplayMode(mode) => {
                 AISettings::handle(ctx).update(ctx, |settings, ctx| {
                     report_if_error!(settings.thinking_display_mode.set_value(*mode, ctx));
+                });
+                ctx.notify();
+            }
+            AISettingsPageAction::SetPromptSubmissionMode(mode) => {
+                AISettings::handle(ctx).update(ctx, |settings, ctx| {
+                    report_if_error!(settings
+                        .default_prompt_submission_mode
+                        .set_value(*mode, ctx));
                 });
                 ctx.notify();
             }
@@ -5545,7 +5592,7 @@ impl SettingsWidget for AIInputWidget {
     type View = AISettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "oz Agent ai 输入 自然语言检测 自动检测 提示词 终端 命令 历史 shell 执行"
+        "oz Agent ai 输入 自然语言检测 自动检测 提示词 终端 命令 历史 shell 执行 队列 中断 提交 自动排队 响应中 默认"
     }
 
     fn render(
@@ -5614,6 +5661,25 @@ impl SettingsWidget for AIInputWidget {
             &view.local_only_icon_tooltip_states,
             app,
         ));
+
+        if FeatureFlag::QueueSlashCommand.is_enabled() {
+            widget_children.push(render_dropdown_item(
+                appearance,
+                "默认提示提交模式",
+                Some(
+                    "当 Agent 仍在响应时提交新提示的处理方式。你可以在每个会话中使用自动排队开关覆盖此设置。",
+                ),
+                None,
+                LocalOnlyIconState::for_setting(
+                    PromptSubmissionMode::storage_key(),
+                    PromptSubmissionMode::sync_to_cloud(),
+                    &mut view.local_only_icon_tooltip_states.borrow_mut(),
+                    app,
+                ),
+                (!is_any_ai_enabled).then(|| appearance.theme().disabled_ui_text_color()),
+                &view.default_prompt_submission_mode_dropdown,
+            ));
+        }
 
         Flex::column().with_children(widget_children).finish()
     }
@@ -6231,6 +6297,28 @@ impl OtherAIWidget {
             dropdown
         })
     }
+
+    fn create_default_prompt_submission_mode_dropdown(
+        ctx: &mut ViewContext<AISettingsPageView>,
+    ) -> ViewHandle<Dropdown<AISettingsPageAction>> {
+        let items: Vec<DropdownItem<AISettingsPageAction>> = PromptSubmissionMode::iter()
+            .map(|mode| {
+                DropdownItem::new(
+                    mode.display_name(),
+                    AISettingsPageAction::SetPromptSubmissionMode(mode),
+                )
+            })
+            .collect();
+
+        ctx.add_typed_action_view(|ctx| {
+            let mut dropdown = Dropdown::new(ctx);
+            dropdown.set_top_bar_max_width(AI_SETTINGS_DROPDOWN_WIDTH);
+            dropdown.set_menu_width(AI_SETTINGS_DROPDOWN_WIDTH, ctx);
+            dropdown.set_menu_max_height(AI_SETTINGS_DROPDOWN_MAX_HEIGHT, ctx);
+            dropdown.add_items(items, ctx);
+            dropdown
+        })
+    }
 }
 
 impl SettingsWidget for OtherAIWidget {
@@ -6777,7 +6865,9 @@ impl SettingsWidget for CloudAgentComputerUseWidget {
         appearance: &Appearance,
         app: &AppContext,
     ) -> Box<dyn Element> {
-        use crate::ai::execution_profiles::{CloudAgentComputerUseState, ComputerUsePermission};
+        use crate::ai::execution_profiles::{
+            resolve_cloud_agent_computer_use_state, CloudAgentComputerUseState,
+        };
 
         let is_any_ai_enabled = AISettings::as_ref(app).is_any_ai_enabled(app);
 
@@ -6785,7 +6875,7 @@ impl SettingsWidget for CloudAgentComputerUseWidget {
         let CloudAgentComputerUseState {
             enabled: is_checked,
             is_forced_by_org,
-        } = ComputerUsePermission::resolve_cloud_agent_state(app);
+        } = resolve_cloud_agent_computer_use_state(app);
 
         // Toggle is disabled if forced by org settings OR if AI is globally disabled
         let is_disabled = is_forced_by_org || !is_any_ai_enabled;
@@ -7439,15 +7529,10 @@ impl SettingsWidget for ApiKeysWidget {
         let is_byo_enabled = UserWorkspaces::as_ref(app).is_byo_api_key_enabled(app);
         let is_custom_inference_enabled =
             UserWorkspaces::as_ref(app).is_custom_inference_enabled(app);
-        let custom_inference_smoke_override_enabled =
-            AISettingsPageView::custom_inference_smoke_override_enabled();
         let provider_keys_enabled = is_any_ai_enabled && is_byo_enabled;
-        let custom_inference_controls_enabled = (is_any_ai_enabled && is_custom_inference_enabled)
-            || custom_inference_smoke_override_enabled;
-        let custom_inference_flag_on = FeatureFlag::CustomInferenceEndpoints.is_enabled()
-            || custom_inference_smoke_override_enabled;
-        let show_custom_inference = custom_inference_flag_on
-            && (is_custom_inference_enabled || custom_inference_smoke_override_enabled);
+        let custom_inference_controls_enabled = is_any_ai_enabled && is_custom_inference_enabled;
+        let custom_inference_flag_on = FeatureFlag::CustomInferenceEndpoints.is_enabled();
+        let show_custom_inference = custom_inference_flag_on && is_custom_inference_enabled;
 
         let mut column = Flex::column().with_child(render_separator(appearance));
 

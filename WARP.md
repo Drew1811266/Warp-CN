@@ -31,7 +31,7 @@ Environment variables:
 
 ### Linting and Formatting
 - `./script/presubmit` - Run all presubmit checks (fmt, clippy, tests)
-- `cargo fmt` - Format code
+- `./script/format` - Format code
 - `cargo clippy --workspace --all-targets --all-features --tests -- -D warnings` - Run clippy
 - `./script/run-clang-format.py -r --extensions 'c,h,cpp,m' ./crates/warpui/src/ ./app/src/` - Format C/C++/Obj-C code
 - `find . -name "*.wgsl" -exec wgslfmt --check {} +` - Check WGSL shader formatting
@@ -129,10 +129,11 @@ This is a Rust-based terminal emulator with a custom UI framework called **WarpU
   ```
 
 **Pull Request Workflow**:
-- **ALWAYS** run cargo fmt and cargo clippy (the versions specified in ./script/presubmit) before opening a PR or pushing updates to an existing PR branch
+- **ALWAYS** run `./script/format` and `cargo clippy` (the versions specified in ./script/presubmit) before opening a PR or pushing updates to an existing PR branch
 - Those commands must pass completely before creating or updating a pull request
-- Specifically, ensure `cargo fmt` and `cargo clippy` checks pass
+- Specifically, ensure `./script/format` and `cargo clippy` checks pass
 - If they fail, fix all issues before proceeding with the PR
+- Do not create public pull requests or public issues that disclose a non-public security vulnerability. Refer users to `SECURITY.md` for the proper disclosure methods instead.
 - This applies to:
   - Opening new pull requests
   - Pushing new commits to existing PR branches

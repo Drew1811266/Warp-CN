@@ -751,7 +751,7 @@ source = "Settings"
 target = "设置"
 context = "Workspace user/menu entry for opening settings."
 status = "active"
-expected_count = 1
+expected_count = 3
 
 [[replace]]
 key = "workspace.vertical_tabs.new_session"
@@ -2492,9 +2492,9 @@ context = "Legacy reviewed zh-Hans localization entry"
 [[replace]]
 path = "app/src/workspace/cli_install.rs"
 source = "User canceled"
-target = "用户已取消"
+target = "User canceled"
 status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
+context = "Reviewed preserve: osascript stderr cancellation sentinel used for control flow, not user-visible UI copy."
 
 [[replace]]
 path = "app/src/workspace/cli_install.rs"
@@ -3370,13 +3370,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 path = "app/src/workspace/view.rs"
 source = "No active terminal session to hand off. Focus a pane and try again."
 target = "没有可交接的活动终端会话。请聚焦一个窗格后重试。"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/workspace/view.rs"
-source = "Cloud handoff isn't available for orchestrated agent conversations."
-target = "编排式 Agent 对话不支持云端交接。"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -5582,13 +5575,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 path = "app/src/workspace/mod.rs"
 source = "Activate next pane"
 target = "激活下一个窗格"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/workspace/mod.rs"
-source = "Toggle Mouse Reporting"
-target = "切换鼠标报告"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -20041,20 +20027,8 @@ status = "active"
 context = "Phase 14 reviewed preserve: settings section parse key, context flag, or already-localized display label"
 [[replace]]
 path = "app/src/settings_view/mod.rs"
-source = "MCP 服务器"
-target = "MCP 服务器"
-status = "active"
-context = "Phase 14 reviewed preserve: settings section parse key, context flag, or already-localized display label"
-[[replace]]
-path = "app/src/settings_view/mod.rs"
 source = "Warp Agent"
 target = "Warp Agent"
-status = "active"
-context = "Phase 14 reviewed preserve: settings section parse key, context flag, or already-localized display label"
-[[replace]]
-path = "app/src/settings_view/mod.rs"
-source = "第三方 CLI Agent"
-target = "第三方 CLI Agent"
 status = "active"
 context = "Phase 14 reviewed preserve: settings section parse key, context flag, or already-localized display label"
 [[replace]]
@@ -28541,34 +28515,6 @@ context = "Phase 16 reviewed preserve: MCP transport logs, identifiers, and data
 # Phase 17: small completion passes
 
 [[replace]]
-path = "app/src/auth/auth_manager/user_persistence.rs"
-source = "User"
-target = "用户"
-status = "active"
-context = "Phase 17 small-surface visible copy"
-
-[[replace]]
-path = "app/src/auth/auth_manager/user_persistence.rs"
-source = "use auth_tokens.refresh_token instead"
-target = "use auth_tokens.refresh_token instead"
-status = "active"
-context = "Phase 17 reviewed preserve: auth storage keys, redirect URLs, component IDs, logs, and theme/font names"
-
-[[replace]]
-path = "app/src/auth/auth_manager/user_persistence.rs"
-source = "secure storage error"
-target = "secure storage error"
-status = "active"
-context = "Phase 17 reviewed preserve: auth storage keys, redirect URLs, component IDs, logs, and theme/font names"
-
-[[replace]]
-path = "app/src/auth/auth_manager/user_persistence.rs"
-source = "failed to serialize or deserialize a PersistedUser struct"
-target = "failed to serialize or deserialize a PersistedUser struct"
-status = "active"
-context = "Phase 17 reviewed preserve: auth storage keys, redirect URLs, component IDs, logs, and theme/font names"
-
-[[replace]]
 path = "app/src/auth/auth_manager.rs"
 source = "Dropping auth redirect with stale state for already-logged-in user"
 target = "Dropping auth redirect with stale state for already-logged-in user"
@@ -28597,27 +28543,6 @@ status = "active"
 context = "Phase 17 reviewed preserve: auth storage keys, redirect URLs, component IDs, logs, and theme/font names"
 
 [[replace]]
-path = "app/src/auth/auth_state.rs"
-source = "{API_KEY_PREFIX}{api_key_value}"
-target = "{API_KEY_PREFIX}{api_key_value}"
-status = "active"
-context = "Phase 17 reviewed preserve: auth storage keys, redirect URLs, component IDs, logs, and theme/font names"
-
-[[replace]]
-path = "app/src/auth/auth_state.rs"
-source = "Found persisted user with empty refresh token; clearing secure storage entry"
-target = "Found persisted user with empty refresh token; clearing secure storage entry"
-status = "active"
-context = "Phase 17 reviewed preserve: auth storage keys, redirect URLs, component IDs, logs, and theme/font names"
-
-[[replace]]
-path = "app/src/auth/auth_state.rs"
-source = "Tried to update Firebase tokens without Firebase credentials"
-target = "Tried to update Firebase tokens without Firebase credentials"
-status = "active"
-context = "Phase 17 reviewed preserve: auth storage keys, redirect URLs, component IDs, logs, and theme/font names"
-
-[[replace]]
 path = "app/src/auth/auth_view_body.rs"
 source = "Anonymous user initiated sign-up from unexpected AuthView variant"
 target = "Anonymous user initiated sign-up from unexpected AuthView variant"
@@ -28635,13 +28560,6 @@ context = "Phase 17 reviewed preserve: auth storage keys, redirect URLs, compone
 path = "app/src/auth/auth_view_modal.rs"
 source = "Received URL without refresh token query param: {}"
 target = "Received URL without refresh token query param: {}"
-status = "active"
-context = "Phase 17 reviewed preserve: auth storage keys, redirect URLs, component IDs, logs, and theme/font names"
-
-[[replace]]
-path = "app/src/auth/credentials.rs"
-source = "returnSecureToken"
-target = "returnSecureToken"
 status = "active"
 context = "Phase 17 reviewed preserve: auth storage keys, redirect URLs, component IDs, logs, and theme/font names"
 
@@ -28670,13 +28588,6 @@ context = "Phase 17 reviewed preserve: auth storage keys, redirect URLs, compone
 path = "app/src/auth/login_slide.rs"
 source = "Adeberry"
 target = "Adeberry"
-status = "active"
-context = "Phase 17 reviewed preserve: auth storage keys, redirect URLs, component IDs, logs, and theme/font names"
-
-[[replace]]
-path = "app/src/auth/mod.rs"
-source = "wk-"
-target = "wk-"
 status = "active"
 context = "Phase 17 reviewed preserve: auth storage keys, redirect URLs, component IDs, logs, and theme/font names"
 
@@ -40787,27 +40698,6 @@ status = "active"
 context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
 
 [[replace]]
-path = "app/src/ai/agent_sdk/common.rs"
-source = "550e8400-e29b-41d4-a716-446655440000"
-target = "550e8400-e29b-41d4-a716-446655440000"
-status = "active"
-context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
-
-[[replace]]
-path = "app/src/ai/agent_sdk/common.rs"
-source = "not-a-run-id"
-target = "not-a-run-id"
-status = "active"
-context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
-
-[[replace]]
-path = "app/src/ai/agent_sdk/common.rs"
-source = "Invalid run ID 'not-a-run-id'"
-target = "Invalid run ID 'not-a-run-id'"
-status = "active"
-context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
-
-[[replace]]
 path = "app/src/ai/agent_sdk/driver/git_credentials.rs"
 source = "Oz"
 target = "Oz"
@@ -40984,20 +40874,6 @@ context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contra
 
 [[replace]]
 path = "app/src/ai/agent_sdk/driver/harness/claude_code/parent_bridge.rs"
-source = "Lead-agent updates arrived from Oz. Treat the latest lead-agent instructions below as authoritative.n"
-target = "Lead-agent updates arrived from Oz. Treat the latest lead-agent instructions below as authoritative.n"
-status = "active"
-context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
-
-[[replace]]
-path = "app/src/ai/agent_sdk/driver/harness/claude_code/parent_bridge.rs"
-source = "nnMore lead-agent messages are still staged and will be surfaced on a later turn."
-target = "nnMore lead-agent messages are still staged and will be surfaced on a later turn."
-status = "active"
-context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
-
-[[replace]]
-path = "app/src/ai/agent_sdk/driver/harness/claude_code/parent_bridge.rs"
 source = "Failed to stage Claude lead-agent message {message_id} at sequence {}: {err:#}"
 target = "Failed to stage Claude lead-agent message {message_id} at sequence {}: {err:#}"
 status = "active"
@@ -41028,13 +40904,6 @@ context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contra
 path = "app/src/ai/agent_sdk/driver/harness/claude_code/parent_bridge.rs"
 source = "(no subject)"
 target = "(no subject)"
-status = "active"
-context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
-
-[[replace]]
-path = "app/src/ai/agent_sdk/driver/harness/claude_code/parent_bridge.rs"
-source = "---nLead-agent message"
-target = "---nLead-agent message"
 status = "active"
 context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
 
@@ -41380,55 +41249,6 @@ source = "Failed to download artifact '{}' from signed URL"
 target = "无法从签名 URL 下载 artifact {}"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
-
-[[replace]]
-path = "app/src/ai/artifact_download.rs"
-source = "artifact-123"
-target = "artifact-123"
-status = "active"
-context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
-
-[[replace]]
-path = "app/src/ai/artifact_download.rs"
-source = "daily summary"
-target = "daily summary"
-status = "active"
-context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
-
-[[replace]]
-path = "app/src/ai/artifact_download.rs"
-source = "report.txt"
-target = "report.txt"
-status = "active"
-context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
-
-[[replace]]
-path = "app/src/ai/artifact_download.rs"
-source = "artifact-artifact-123.txt"
-target = "artifact-artifact-123.txt"
-status = "active"
-context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
-
-[[replace]]
-path = "app/src/ai/artifact_download.rs"
-source = "screenshot-123"
-target = "screenshot-123"
-status = "active"
-context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
-
-[[replace]]
-path = "app/src/ai/artifact_download.rs"
-source = "dashboard screenshot"
-target = "dashboard screenshot"
-status = "active"
-context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
-
-[[replace]]
-path = "app/src/ai/artifact_download.rs"
-source = "artifact-screenshot-123"
-target = "artifact-screenshot-123"
-status = "active"
-context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
 
 [[replace]]
 path = "app/src/ai/blocklist/block/cli.rs"
@@ -42383,126 +42203,127 @@ status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "The Agent chooses the safest path: acting on its own when confident, and asking for approval when uncertain."
 target = "Agent 会选择最安全的路径：有把握时自主行动，不确定时请求批准。"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "Give the Agent full autonomy  — no manual approval ever required."
 target = "让 Agent 完全自主，无需任何手动批准。"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "Require explicit approval before the Agent takes any action."
 target = "Agent 执行任何操作前都必须明确获得批准。"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "The agent will ask for permission the first time it needs to interact with a running command. After that, it will continue automatically for the rest of that command."
 target = "Agent 首次需要与正在运行的命令交互时会请求权限。之后，它会在该命令剩余期间自动继续。"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "The agent will always ask for permission to interact with a running command."
 target = "Agent 每次与正在运行的命令交互前都会请求权限。"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "Computer use tools are disabled and will not be available to the Agent."
 target = "Computer use 工具已停用，Agent 无法使用。"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "Require explicit approval before the Agent uses computer use tools."
 target = "Agent 使用 computer use 工具前必须明确获得批准。"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "Give the Agent full autonomy to use computer use tools without approval."
 target = "允许 Agent 无需批准即可自主使用 computer use 工具。"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "Unknown setting."
 target = "未知设置。"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
+expected_count = 2
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "The Agent cannot run child agents and the run_agents tool will not be available."
 target = "Agent 不能运行子 Agent，run_agents 工具将不可用。"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "Give the Agent full autonomy to run child agents without approval."
 target = "允许 Agent 无需批准即可自主运行子 Agent。"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "Require explicit approval before the Agent runs child agents."
 target = "Agent 运行子 Agent 前必须明确获得批准。"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "Never ask"
 target = "从不询问"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "Ask unless auto-approve"
 target = "自动批准外询问"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "Always ask"
 target = "始终询问"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "The Agent may ask a question and pause for your response, but will continue automatically when auto-approve is on."
 target = "Agent 可以提问并暂停等待你的回答；开启自动批准时会自动继续。"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "The Agent will not ask questions and will continue with its best judgment."
 target = "Agent 不会提问，会根据最佳判断继续。"
 status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "The Agent may ask a question and will pause for your response even when auto-approve is on."
 target = "Agent 可以提问，即使开启自动批准也会暂停等待你的回答。"
 status = "active"
@@ -42516,14 +42337,14 @@ status = "active"
 context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "Agent Mode Eval"
 target = "Agent Mode Eval"
 status = "active"
 context = "Phase 28 reviewed preserve: provider CLI commands, prompt/tool contracts, schemas, IDs, test fixtures, and diagnostics"
 
 [[replace]]
-path = "app/src/ai/execution_profiles/mod.rs"
+path = "crates/cloud_object_models/src/ai_execution_profile.rs"
 source = "Default (CLI)"
 target = "默认（CLI）"
 status = "active"
@@ -42965,8 +42786,8 @@ context = "Phase 29 Settings/modals visible or searchable copy"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
-source = "oz agent ai input natural language detection autodetection prompt terminal command commands history shell executed execution"
-target = "oz Agent ai 输入 自然语言检测 自动检测 提示词 终端 命令 历史 shell 执行"
+source = "oz agent ai input natural language detection autodetection prompt terminal command commands history shell executed execution queue interrupt submission submit auto-queue response while responding default"
+target = "oz Agent ai 输入 自然语言检测 自动检测 提示词 终端 命令 历史 shell 执行 队列 中断 提交 自动排队 响应中 默认"
 status = "active"
 context = "Phase 29 Settings/modals visible or searchable copy"
 
@@ -43181,14 +43002,14 @@ status = "active"
 context = "Phase 29 Settings/modals visible or searchable copy"
 
 [[replace]]
-path = "app/src/settings_view/code_page.rs"
+path = "app/src/remote_server/server_model.rs"
 source = "Cannot index remote codebase because the maximum number of codebase indexes has been reached."
 target = "已达到代码库索引数量上限，无法为远程代码库建立索引。"
 status = "active"
 context = "Phase 29 Settings/modals visible or searchable copy"
 
 [[replace]]
-path = "app/src/settings_view/code_page.rs"
+path = "app/src/remote_server/server_model.rs"
 source = "Cannot index remote codebase because indexing did not start."
 target = "索引未启动，无法为远程代码库建立索引。"
 status = "active"
@@ -44339,34 +44160,6 @@ context = "Phase 34 terminal visible UI translation"
 path = "app/src/terminal/writeable_pty/remote_server_controller.rs"
 source = "glibc {version}"
 target = "glibc {version}"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/writeable_pty/remote_server_controller.rs"
-source = "moira@moira.devbox.namespace"
-target = "moira@moira.devbox.namespace"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/writeable_pty/remote_server_controller.rs"
-source = "moira.devbox.namespace"
-target = "moira.devbox.namespace"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/writeable_pty/remote_server_controller.rs"
-source = "ssh-testing"
-target = "ssh-testing"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/writeable_pty/remote_server_controller.rs"
-source = "kevinyang@ssh-testing"
-target = "kevinyang@ssh-testing"
 status = "active"
 context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
 
@@ -45527,20 +45320,6 @@ context = "Phase 35 reviewed AI/Agent prompt/protocol/internal preserve"
 
 [[replace]]
 path = "app/src/ai/blocklist/orchestration_event_streamer.rs"
-source = "register_consumer for {conversation_id:?}: {consumer_id:?} (total={})"
-target = "register_consumer for {conversation_id:?}: {consumer_id:?} (total={})"
-status = "active"
-context = "Phase 35 reviewed AI/Agent prompt/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/ai/blocklist/orchestration_event_streamer.rs"
-source = "unregister_consumer for {conversation_id:?}: {consumer_id:?} (remaining={remaining})"
-target = "unregister_consumer for {conversation_id:?}: {consumer_id:?} (remaining={remaining})"
-status = "active"
-context = "Phase 35 reviewed AI/Agent prompt/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/ai/blocklist/orchestration_event_streamer.rs"
 source = "Failed to fetch task harness for {conversation_id:?} task_id={task_id}: {err:#}"
 target = "Failed to fetch task harness for {conversation_id:?} task_id={task_id}: {err:#}"
 status = "active"
@@ -45951,13 +45730,6 @@ source = "Dropping {} orchestration events after exhausting retries"
 target = "Dropping {} orchestration events after exhausting retries"
 status = "active"
 context = "Phase 35 reviewed AI/Agent prompt/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/ai/agent_sdk/driver/harness/claude_code/wake_driver.rs"
-source = "New lead-agent messages are available. Read the latest lead-agent updates and continue the task accordingly."
-target = "有新的主 Agent 消息可用。请阅读最新的主 Agent 更新，并据此继续任务。"
-status = "active"
-context = "Phase 35 AI/Agent visible UI translation"
 
 [[replace]]
 path = "app/src/ai/agent_sdk/driver/harness/claude_code/wake_driver.rs"
@@ -49367,13 +49139,6 @@ context = "Phase 44 auth-secret FTUX visible copy"
 
 [[replace]]
 path = "app/src/terminal/view/ambient_agent/auth_secret_ftux_view.rs"
-source = "Please enter a name for the secret."
-target = "请输入密钥名称。"
-status = "active"
-context = "Phase 44 auth-secret FTUX visible copy"
-
-[[replace]]
-path = "app/src/terminal/view/ambient_agent/auth_secret_ftux_view.rs"
 source = "API key '{name}' saved."
 target = "API 密钥“{name}”已保存。"
 status = "active"
@@ -52187,38 +51952,6 @@ status = "active"
 context = "Phase 56 reviewed preserve: terminal event/state identifier"
 
 [[replace]]
-path = "app/src/terminal/cli_agent_sessions/listener/mod.rs"
-source = "Agent turn complete"
-target = "Agent turn complete"
-status = "active"
-context = "Phase 57 reviewed preserve: CLI agent notification test fixture"
-preserve_terms = ["Agent"]
-expected_count = 4
-
-[[replace]]
-path = "app/src/terminal/cli_agent_sessions/listener/mod.rs"
-source = "I've updated the README with the new instructions."
-target = "I've updated the README with the new instructions."
-status = "active"
-context = "Phase 57 reviewed preserve: CLI agent notification test fixture"
-expected_count = 2
-
-[[replace]]
-path = "app/src/terminal/cli_agent_sessions/listener/mod.rs"
-source = "Approval requested: rm -rf /tmp/foo"
-target = "Approval requested: rm -rf /tmp/foo"
-status = "active"
-context = "Phase 57 reviewed preserve: CLI agent notification test fixture with shell command"
-expected_count = 2
-
-[[replace]]
-path = "app/src/terminal/cli_agent_sessions/listener/mod.rs"
-source = "some-title"
-target = "some-title"
-status = "active"
-context = "Phase 57 reviewed preserve: CLI agent notification test fixture"
-
-[[replace]]
 path = "app/src/terminal/cli_agent_sessions/plugin_manager/mod.rs"
 source = "{cli_name} {}"
 target = "{cli_name} {}"
@@ -53332,27 +53065,6 @@ context = "Phase 59 reviewed preserve: display format with ID"
 path = "app/src/ai/agent_events/driver.rs"
 source = "Ignoring agent event cursor persistence failure at sequence {since_sequence}: {err:#}"
 target = "Ignoring agent event cursor persistence failure at sequence {since_sequence}: {err:#}"
-status = "active"
-context = "Phase 59 reviewed preserve: diagnostic log"
-
-[[replace]]
-path = "app/src/ai/agent_events/driver.rs"
-source = "Agent event stream closed for {:?}, reconnecting in {backoff:?}"
-target = "Agent event stream closed for {:?}, reconnecting in {backoff:?}"
-status = "active"
-context = "Phase 59 reviewed preserve: diagnostic log"
-
-[[replace]]
-path = "app/src/ai/agent_events/driver.rs"
-source = "Agent event stream failed {failures} consecutive times for {:?}, retrying in {backoff:?}: {err:#}"
-target = "Agent event stream failed {failures} consecutive times for {:?}, retrying in {backoff:?}: {err:#}"
-status = "active"
-context = "Phase 59 reviewed preserve: diagnostic log"
-
-[[replace]]
-path = "app/src/ai/agent_events/driver.rs"
-source = "Agent event stream failed for {:?}, retrying in {backoff:?}: {err:#}"
-target = "Agent event stream failed for {:?}, retrying in {backoff:?}: {err:#}"
 status = "active"
 context = "Phase 59 reviewed preserve: diagnostic log"
 
@@ -54833,20 +54545,6 @@ preserve_terms = ["Markdown", "Warp"]
 
 [[replace]]
 path = "app/src/terminal/view/queued_prompts_panel.rs"
-source = "Edit queued prompt"
-target = "编辑排队提示"
-status = "active"
-context = "Phase 72 queued prompts panel action tooltip"
-
-[[replace]]
-path = "app/src/terminal/view/queued_prompts_panel.rs"
-source = "Delete queued prompt"
-target = "删除排队提示"
-status = "active"
-context = "Phase 72 queued prompts panel action tooltip"
-
-[[replace]]
-path = "app/src/terminal/view/queued_prompts_panel.rs"
 source = "{count} queued"
 target = "{count} 个排队中"
 status = "active"
@@ -55705,15 +55403,7 @@ status = "active"
 context = "Phase 81 remote codebase search unavailable message"
 
 [[replace]]
-path = "app/src/ai/local_child_harnesses.rs"
-source = "Local Claude Code child agents are temporarily disabled."
-target = "本地 Claude Code 子 Agent 暂时已停用。"
-status = "active"
-context = "Phase 81 local child harness disabled message"
-preserve_terms = ["Claude Code", "Agent"]
-
-[[replace]]
-path = "app/src/ai/local_child_harnesses.rs"
+path = "app/src/ai/local_harness_setup.rs"
 source = "Local Codex child agents are temporarily disabled."
 target = "本地 Codex 子 Agent 暂时已停用。"
 status = "active"
@@ -55727,3 +55417,318 @@ target = "MCP 服务器"
 status = "active"
 context = "Phase 81 templatable MCP object type name"
 preserve_terms = ["MCP"]
+
+# 0.19 upstream stable adaptation: reviewed visible candidates
+
+[[replace]]
+key = "0.19.workspace.tab_group.new_group"
+path = "app/src/workspace/view.rs"
+source = "New Group"
+target = "新建分组"
+context = "0.19 vertical tab group rename default text"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.move_up"
+path = "app/src/workspace/view.rs"
+source = "Move group up"
+target = "上移分组"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.move_down"
+path = "app/src/workspace/view.rs"
+source = "Move group down"
+target = "下移分组"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.close_all"
+path = "app/src/workspace/view.rs"
+source = "Close all tabs in group"
+target = "关闭分组中的所有标签页"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.close_other_tabs"
+path = "app/src/workspace/view.rs"
+source = "Close other tabs"
+target = "关闭其他标签页"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.close_above"
+path = "app/src/workspace/view.rs"
+source = "Close tabs above"
+target = "关闭上方标签页"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.close_below"
+path = "app/src/workspace/view.rs"
+source = "Close tabs below"
+target = "关闭下方标签页"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.ungroup"
+path = "app/src/workspace/view.rs"
+source = "Ungroup tabs"
+target = "取消标签页分组"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.new_tab"
+path = "app/src/workspace/view.rs"
+source = "New tab in group"
+target = "在分组中新建标签页"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.rename"
+path = "app/src/workspace/view.rs"
+source = "Rename"
+target = "重命名"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.untitled"
+path = "app/src/workspace/view.rs"
+source = "Untitled group"
+target = "未命名分组"
+context = "0.19 vertical tab group fallback label"
+status = "active"
+
+[[replace]]
+key = "0.19.queued_prompts.initial_locked"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "The first cloud-mode prompt cannot be changed."
+target = "第一个云模式提示无法更改。"
+context = "0.19 queued prompts panel tooltip"
+status = "active"
+
+[[replace]]
+key = "0.19.queued_prompts.wait_environment"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "Prompts cannot be sent until environment setup is complete."
+target = "环境设置完成前无法发送提示。"
+context = "0.19 queued prompts panel disabled send tooltip"
+status = "active"
+
+[[replace]]
+key = "0.19.queued_prompts.full_terminal_agent"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "Send to full terminal use agent"
+target = "发送给完整终端 Use Agent"
+context = "0.19 queued prompts panel send-now tooltip"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "0.19.queued_prompts.edit_tooltip"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "Edit"
+target = "编辑"
+context = "0.19 queued prompts row action tooltip"
+status = "active"
+
+[[replace]]
+key = "0.19.queued_prompts.delete_tooltip"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "Delete"
+target = "删除"
+context = "0.19 queued prompts row action tooltip"
+status = "active"
+
+[[replace]]
+key = "0.19.queued_prompts.send_now"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "Send now"
+target = "立即发送"
+context = "0.19 queued prompts send-now action tooltip"
+status = "active"
+expected_count = 2
+
+[[replace]]
+key = "0.19.settings.ai.default_prompt_submission_mode"
+path = "app/src/settings_view/ai_page.rs"
+source = "Default prompt submission mode"
+target = "默认提示提交模式"
+context = "0.19 AI settings dropdown label for queued prompt behavior"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.ai.default_prompt_submission_mode.description"
+path = "app/src/settings_view/ai_page.rs"
+source = "What happens when you submit a new prompt while the agent is still responding. You can override this per conversation using the auto-queue toggle."
+target = "当 Agent 仍在响应时提交新提示的处理方式。你可以在每个会话中使用自动排队开关覆盖此设置。"
+context = "0.19 AI settings dropdown description for queued prompt behavior"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "0.19.settings.main.iap.search_terms"
+path = "app/src/settings_view/main_page.rs"
+source = "iap staging gcloud proxy credentials"
+target = "iap staging gcloud proxy credentials IAP 预发布 凭据"
+context = "0.19 settings search terms for staging IAP credentials"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.main.iap.not_loaded"
+path = "app/src/settings_view/main_page.rs"
+source = "Not yet loaded"
+target = "尚未加载"
+context = "0.19 settings staging IAP credential status"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.main.iap.refreshing"
+path = "app/src/settings_view/main_page.rs"
+source = "Refreshing…"
+target = "刷新中..."
+context = "0.19 settings staging IAP credential status/button label"
+status = "active"
+expected_count = 2
+
+[[replace]]
+key = "0.19.settings.main.iap.loaded"
+path = "app/src/settings_view/main_page.rs"
+source = "Loaded (refreshes in ~{mins}m)"
+target = "已加载（约 {mins} 分钟后刷新）"
+context = "0.19 settings staging IAP credential status"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.main.iap.injected_token"
+path = "app/src/settings_view/main_page.rs"
+source = "Using injected token (WARP_IAP_TOKEN)"
+target = "正在使用注入的令牌（WARP_IAP_TOKEN）"
+context = "0.19 settings staging IAP credential status"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.main.iap.label"
+path = "app/src/settings_view/main_page.rs"
+source = "Staging IAP credentials"
+target = "预发布 IAP 凭据"
+context = "0.19 settings staging IAP credential label"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.main.iap.refresh"
+path = "app/src/settings_view/main_page.rs"
+source = "Refresh"
+target = "刷新"
+context = "0.19 settings staging IAP credential button"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.section.environments"
+path = "app/src/settings_view/mod.rs"
+source = "Environments"
+target = "环境"
+context = "0.19 settings cloud platform subpage label"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.api_key.learn_more"
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Learn more"
+target = "了解更多"
+context = "0.19 create API key modal documentation hyperlink"
+status = "active"
+preserve_terms = ["API"]
+
+[[replace]]
+key = "0.19.settings.billing.remaining_with_limit"
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "/ {} remaining"
+target = "/ {} 剩余"
+context = "0.19 billing usage remaining credits label"
+status = "active"
+
+[[replace]]
+key = "0.19.agent.conversation_details.metadata_unavailable.title"
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Run metadata is not available"
+target = "运行元数据不可用"
+context = "0.19 shared session conversation details access-denied title"
+status = "active"
+
+[[replace]]
+key = "0.19.agent.conversation_details.metadata_unavailable.description"
+path = "app/src/ai/conversation_details_panel.rs"
+source = "You can view this shared session, but run metadata is only visible to users with access to this run."
+target = "你可以查看此共享会话，但运行元数据仅对有权访问此运行的用户可见。"
+context = "0.19 shared session conversation details access-denied description"
+status = "active"
+
+[[replace]]
+key = "0.19.local_harness.claude_install_required"
+path = "app/src/ai/local_harness_setup.rs"
+source = "Install Claude Code to use this local harness."
+target = "安装 Claude Code 以使用此本地 harness。"
+context = "0.19 local harness disabled tooltip"
+status = "active"
+preserve_terms = ["Claude Code"]
+
+[[replace]]
+key = "0.19.orchestration_controls.admin_disabled"
+path = "app/src/ai/blocklist/inline_action/orchestration_controls.rs"
+source = "Disabled by your administrator"
+target = "已被管理员停用"
+context = "0.19 orchestration harness dropdown disabled tooltip"
+status = "active"
+
+[[replace]]
+key = "0.19.claude_plugin.install_not_effective"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/claude.rs"
+source = "Platform plugin installation did not take effect"
+target = "Platform 插件安装未生效"
+context = "0.19 Claude Code platform plugin install error"
+status = "active"
+
+[[replace]]
+key = "0.19.claude_plugin.update_not_effective"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/claude.rs"
+source = "Platform plugin update did not take effect"
+target = "Platform 插件更新未生效"
+context = "0.19 Claude Code platform plugin update error"
+status = "active"
+
+[[replace]]
+key = "0.19.agent_label.usage_rollup"
+path = "app/src/ai/blocklist/usage/rollup.rs"
+source = "Agent"
+target = "Agent"
+context = "0.19 visible product term; preserve Agent per glossary"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "0.19.run_agents.duplicates_error"
+path = "app/src/ai/blocklist/action_model/execute/run_agents.rs"
+source = "Requested agent(s) have already been launched: {duplicate_list}. Do not start duplicate child agents; send any follow-up with send_message_to_agent using the existing agent id(s): {addresses}."
+target = "请求的 Agent 已经启动：{duplicate_list}。请不要启动重复的子 Agent；如需继续，请使用 send_message_to_agent 并传入现有 Agent ID：{addresses}。"
+context = "0.19 user-facing duplicate child-agent launch guidance"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "0.19.agent_label.harness_session_header"
+path = "app/src/terminal/view/ambient_agent/block/harness_session_header.rs"
+source = "Agent"
+target = "Agent"
+context = "0.19 visible product term; preserve Agent per glossary"
+status = "active"
+preserve_terms = ["Agent"]

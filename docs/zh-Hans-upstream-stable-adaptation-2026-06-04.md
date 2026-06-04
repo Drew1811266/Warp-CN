@@ -1,0 +1,233 @@
+# zh-Hans 0.19 Upstream Stable Adaptation
+
+Date: 2026-06-04
+
+## Baseline
+
+| Item | Value |
+| --- | --- |
+| Previous fork release | `0.18 / RC38` |
+| Previous stable source baseline | `origin/stable_release/v0.2026.05.27.09.22.stable` |
+| New upstream stable tag | `v0.2026.06.03.09.49.stable_00` |
+| New upstream stable commit | `2249469e5d24e472cee6ce97d3d324293f67db71` |
+| New upstream stable tree | `efe8ae7822765eb267792d441e4b1e7ddb7f8e53` |
+| Adaptation branch | `codex/zh-Hans-0.19-upstream-stable-adaptation` |
+| Adaptation worktree | `/Users/drew/Project/warp-cn-0.19-adaptation` |
+
+## Upstream Diff Scope
+
+```text
+952 files changed, 47307 insertions(+), 19826 deletions(-)
+changed_app_src=439
+changed_crates=460
+changed_resources=8
+changed_script=8
+changed_github=2
+changed_specs=16
+manifest_active_entries=7943
+manifest_files=552
+changed_manifest_files=170
+entries_on_changed_files=4616
+```
+
+## Initial Decision
+
+The adaptation uses a clean upstream-stable worktree plus imported durable Warp CN localization assets. Chinese source files are regenerated from the manifest instead of merged as the durable source of truth.
+
+## Gate Status
+
+```text
+manifest validation: passed
+glossary check: passed
+metadata summary: passed
+dry-run initial: entries=7943 files=552 already_applied=0 would_change=5658 missing=69
+manifest drift repair: passed
+dry-run repaired: entries=7899 files=550 already_applied=0 would_change=5682 missing=0
+release inventory smoke: covered=8494 candidates=83 coverage=99.0%
+overlay apply: passed
+overlay idempotent: entries=7899 files=550 already_applied=5681 would_change=0 missing=0
+cargo fmt: passed
+inventory coverage: passed; release covered=8534 candidates=0 coverage=100.0%
+translation update idempotent: entries=7937 files=550 already_applied=5717 would_change=0 missing=0
+full audit: passed; actionable rows=0
+privacy guard: passed
+python compile: passed
+python unit tests: passed; ran 66 tests in final lightweight validation
+low-load gate: defer-heavy-gate
+cargo check: passed by Task 7 reviewer
+bundle refresh: deferred
+GUI launch: deferred
+public RC: not ready; 11 strict evidence blockers
+```
+
+## Manifest Drift Repair
+
+Task 5 repaired all strict manifest drift before applying the overlay.
+
+```text
+initial missing: 69
+final missing: 0
+entries before: 7943
+entries after: 7899
+files before: 552
+files after: 550
+would_change after repair: 5682
+```
+
+Classification summary:
+
+- Path-only moves: 23 entries, primarily execution profile copy moved from `app/src/ai/execution_profiles/mod.rs` and related settings surfaces into `crates/cloud_object_models/src/ai_execution_profile.rs`, remote codebase index errors moved into `app/src/remote_server/server_model.rs`, and the local Codex child-agent disabled copy moved into `app/src/ai/local_harness_setup.rs`.
+- Source text drift: 1 search-keyword entry in `app/src/settings_view/ai_page.rs` was expanded for the new queue/interruption/default response settings.
+- Occurrence drift: `Settings` in `app/src/workspace/view.rs` now has three expected occurrences; `Unknown setting.` in `crates/cloud_object_models/src/ai_execution_profile.rs` now has two expected occurrences.
+- Removed stale overlay entries: 68 old entries were removed where the upstream source file or string no longer exists in the 0.19 stable tree. These were stale auth persistence internals, test fixtures, artifact IDs, SSH hostnames, CLI-agent notification fixtures, diagnostic logs, deleted workspace/menu copy, and deleted queued-prompt/auth-secret strings.
+- Ignore additions: 4 moved auth-crate exact paths and 21 reviewed literal patterns were added for internal storage/auth details, fixtures, fake IDs, hostnames, and Claude mailbox protocol snippets that should not become user-visible translation candidates.
+
+Task 5 did not apply the overlay and did not edit upstream Rust source files. The release inventory command was run only as a parser smoke check after ignore changes; full inventory review remains Task 7.
+
+## Overlay Application
+
+Task 6 applied the repaired manifest to the 0.19 stable source tree and formatted the Rust workspace.
+
+```text
+applied replacements: 5681
+dry-run after apply: entries=7899 files=550 already_applied=5681 would_change=0 missing=0
+cargo fmt: passed
+```
+
+During formatting, `cargo fmt` exposed invalid Rust generated for ordinary string literals whose localized targets contain embedded double quotes. The overlay tool now escapes replacement text when writing normal Rust strings, and `script/test_zh_apply_localization.py` covers the idempotent quote-preserving case. This was required for the CLI install AppleScript prompts and the Command Search sample query `# 在文件中查找 "foo"` to remain valid Rust while still matching the manifest on dry-run.
+
+The `User canceled` osascript stderr token remains in English because it is a control-flow sentinel used to detect administrator prompt cancellation. The returned cancellation errors remain localized.
+
+## 0.19 Candidate Translation Update
+
+Task 7 reviewed the release inventory candidates after applying the baseline overlay.
+
+```text
+onboarding coverage: covered=314 candidates=0 coverage=100.0%
+workspace coverage: covered=874 candidates=0 coverage=100.0%
+search coverage: covered=267 candidates=0 coverage=100.0%
+settings coverage: covered=2040 candidates=0 coverage=100.0%
+modals coverage: covered=5177 candidates=0 coverage=100.0%
+release coverage before Task 7 edits: covered=8494 candidates=83 coverage=99.0%
+release coverage after Task 7 edits: covered=8534 candidates=0 coverage=100.0%
+dry-run after Task 7 edits: entries=7937 files=550 already_applied=5717 would_change=0 missing=0
+```
+
+Task 7 added 36 reviewed manifest entries and narrow ignore rules for internal-only 0.19 strings. User-visible updates covered vertical tab group menus, queued prompt actions, AI prompt submission settings, staging IAP credential status, shared-session metadata access, Claude Code platform plugin user errors, and duplicate child-agent guidance. Internal logs, protocol IDs, config keys, position IDs, test assertions, and orchestration viewer diagnostics were ignored with literal patterns instead of translated.
+
+See `docs/zh-Hans-translation-audit-0.19.md` for the Task 7 summary.
+
+## Script And Privacy Validation
+
+Task 8 validated the imported Warp CN scripts after the 0.19 overlay and candidate update.
+
+```text
+privacy guard: passed
+python compile: passed
+python unit tests at Task 8: ran 64 tests, OK
+python unit tests in final lightweight validation: ran 66 tests, OK
+public RC status: total=11 public_rc_required=11
+strict evidence lint: fail, missing evidence=11
+```
+
+Public-RC blocker categories remain unchanged and are not source-localization blockers:
+
+```text
+blocked-no-backend-fixture: 5
+blocked-no-disposable-object: 3
+blocked-no-isolated-account: 3
+```
+
+The strict evidence lint failure is expected until current-cycle GUI evidence is produced for all 11 required rows. Evidence report and queue JSON were written to `/tmp/zh-0.19-public-rc-evidence-report.json` and `/tmp/zh-0.19-public-rc-evidence-queue.json`.
+
+## Full Translation Audit
+
+Task 9 generated deterministic per-entry audit artifacts for every manifest row.
+
+```text
+full audit output: docs/zh-Hans-full-translation-audit-0.19/
+entries reviewed: 7937
+blocked-public-rc: 1034
+simulated-accepted: 1772
+simulated-accepted-with-note: 5131
+needs-copy-review: 0
+needs-functional-review: 0
+json validation: passed
+```
+
+The audit produced no actionable copy or functional review rows. The `blocked-public-rc` rows map to the 11 GUI evidence requirements already tracked by public-RC status.
+
+## Low-Load Rust And Bundle Gates
+
+Task 10 did not run additional heavy validation because the low-load gate deferred heavy work.
+
+```text
+decision: defer-heavy-gate
+reason: probe 1: load average exceeds 2.50
+reason: probe 1: hot process Codex (Renderer) at 37.9%
+reason: probe 1: hot process syspolicyd at 37.5%
+reason: probe 1: hot process WindowServer at 35.1%
+reason: probe 1: hot process codex at 25.6%
+reason: probe 2: load average exceeds 2.50
+reason: probe 2: hot process WindowServer at 35.4%
+reason: probe 2: hot process Codex (Renderer) at 25.9%
+cargo check: not rerun in Task 10
+bundle refresh: deferred
+GUI launch: deferred
+```
+
+Task 7 code review independently ran `cargo check -q` successfully after the translation update, but Task 10 heavy gates remain deferred under the low-load policy.
+
+## GUI Evidence Gate
+
+Task 11 did not launch Warp or collect GUI evidence.
+
+```text
+GUI launch: deferred
+reason: low-load heavy gate deferred current-cycle heavy work
+approval status: explicit GUI evidence approval still required
+public-RC implication: no current-cycle GUI evidence may be claimed
+```
+
+The existing non-destructive GUI smoke matrix remains the correct next manual
+gate, but it must be executed only after the heavy gate is allowed and after the
+user approves GUI evidence collection.
+
+## Release Documentation Refresh
+
+Task 12 updated the repository-facing 0.19 release records:
+
+```text
+README.md
+docs/zh-Hans-development-guide.md
+docs/zh-Hans-release-candidate-2026-06-04-rc39.md
+docs/zh-Hans-release-notes-0.19-draft.md
+docs/zh-Hans-official-release-next-development-tasks.md
+```
+
+These records deliberately use `ready-for-source-localization;
+heavy-gates-deferred` instead of public-RC or final release wording.
+
+## Final Readiness
+
+Task 13 handoff state:
+
+```text
+0.19 source-localization candidate: ready for continued engineering verification
+manifest validation: passed
+glossary check: passed
+dry-run idempotency: passed
+release inventory candidates: 0
+full audit actionable rows: 0
+privacy/scripts/docs lightweight gates: passed in-cycle
+serial heavy cargo gate: deferred
+bundle refresh: deferred
+GUI evidence: deferred and requires explicit approval
+public RC: not ready; 11 strict evidence blockers
+GitHub publish: pending explicit user approval
+version tag: pending explicit user approval
+```
+
+The next development cycle should start from
+`docs/zh-Hans-official-release-next-development-tasks.md` and create a new RC
+record after rerunning the deferred heavy/GUI gates.

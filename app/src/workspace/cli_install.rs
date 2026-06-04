@@ -42,7 +42,7 @@ fn create_symlink_with_admin(source: &Path, target: &Path) -> Result<()> {
 
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
-        if stderr.contains("用户已取消") || stderr.contains("cancelled") {
+        if stderr.contains("User canceled") || stderr.contains("cancelled") {
             return Err(anyhow!("用户已取消安装。"));
         }
         return Err(anyhow!("使用管理员权限创建符号链接失败：{stderr}"));
@@ -76,7 +76,7 @@ fn remove_file_with_admin(target: &Path) -> Result<()> {
 
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
-        if stderr.contains("用户已取消") || stderr.contains("cancelled") {
+        if stderr.contains("User canceled") || stderr.contains("cancelled") {
             return Err(anyhow!("用户已取消卸载。"));
         }
         return Err(anyhow!("使用管理员权限移除文件失败：{stderr}"));

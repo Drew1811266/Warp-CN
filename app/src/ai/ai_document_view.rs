@@ -400,10 +400,9 @@ impl AIDocumentView {
         // Create Update Agent button
         // Read the actual configured keybinding for the save action
         let save_action = keybinding_name_to_keystroke(SAVE_FILE_BINDING_NAME, ctx)
-            .map(|k| format!("按 {}", k.displayed()))
+            .map(|k| k.displayed())
             .unwrap_or("点击“更新 Agent”".to_string());
-        let tooltip_text =
-            format!("此计划包含 Agent 尚未感知的更改。{save_action} 可停止 Agent 当前任务并发送更新后的计划");
+        let tooltip_text = format!("此计划包含 Agent 尚未感知的更改。{save_action} 可停止 Agent 当前任务并发送更新后的计划");
         let update_plan_button = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("更新 Agent", PrimaryTheme)
                 .with_size(ButtonSize::Small)

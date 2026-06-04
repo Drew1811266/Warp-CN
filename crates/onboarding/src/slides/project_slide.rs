@@ -4,17 +4,17 @@ use warp_core::ui::appearance::Appearance;
 use warp_core::ui::color::coloru_with_opacity;
 use warp_core::ui::theme::color::internal_colors;
 use warp_core::ui::Icon;
-use warpui::elements::{
+use warpui_core::elements::{
     Align, ClippedScrollStateHandle, ConstrainedBox, Container, CrossAxisAlignment, Flex,
     MouseStateHandle, ParentElement, Shrinkable,
 };
-use warpui::fonts::Weight;
-use warpui::keymap::Keystroke;
-use warpui::platform::file_picker::{FilePickerConfiguration, FilePickerError};
-use warpui::prelude::{MainAxisAlignment, MainAxisSize, Vector2F};
-use warpui::ui_components::button::{ButtonVariant, TextAndIcon, TextAndIconAlignment};
-use warpui::ui_components::components::{UiComponent as _, UiComponentStyles};
-use warpui::{
+use warpui_core::fonts::Weight;
+use warpui_core::keymap::Keystroke;
+use warpui_core::platform::file_picker::{FilePickerConfiguration, FilePickerError};
+use warpui_core::prelude::{MainAxisAlignment, MainAxisSize, Vector2F};
+use warpui_core::ui_components::button::{ButtonVariant, TextAndIcon, TextAndIconAlignment};
+use warpui_core::ui_components::components::{UiComponent as _, UiComponentStyles};
+use warpui_core::{
     AppContext, Element, Entity, ModelHandle, SingletonEntity as _, TypedActionView, View,
     ViewContext,
 };
@@ -95,7 +95,7 @@ impl ProjectSlide {
             Align::new(self.render_open_folder_button(appearance, settings)).finish(),
         ];
 
-        // Only show the "自动初始化项目" checkbox when AgentView is NOT enabled.
+        // Only show the "Initialize project automatically" checkbox when AgentView is NOT enabled.
         // When AgentView is enabled, initialization is handled differently through the callout flow.
         if !agent_modality_enabled {
             if let ProjectOnboardingSettings::Project {

@@ -172,19 +172,25 @@ fn match_data_countable_zero_is_not_truthy() {
 #[test]
 fn subpage_display_names_are_correct() {
     assert_eq!(SettingsSection::WarpAgent.to_string(), "Warp Agent");
-    assert_eq!(SettingsSection::AgentProfiles.to_string(), "配置档");
-    assert_eq!(SettingsSection::AgentMCPServers.to_string(), "MCP 服务器");
-    assert_eq!(SettingsSection::Knowledge.to_string(), "知识");
+    assert_eq!(SettingsSection::AgentProfiles.to_string(), "Profiles");
+    assert_eq!(SettingsSection::AgentMCPServers.to_string(), "MCP servers");
+    assert_eq!(SettingsSection::Knowledge.to_string(), "Knowledge");
     assert_eq!(
         SettingsSection::ThirdPartyCLIAgents.to_string(),
-        "第三方 CLI Agent"
+        "Third party CLI agents"
     );
-    assert_eq!(SettingsSection::CodeIndexing.to_string(), "索引与项目");
+    assert_eq!(
+        SettingsSection::CodeIndexing.to_string(),
+        "Indexing and projects"
+    );
     assert_eq!(
         SettingsSection::EditorAndCodeReview.to_string(),
-        "编辑器与代码审查"
+        "Editor and Code Review"
     );
-    assert_eq!(SettingsSection::CloudEnvironments.to_string(), "环境");
+    assert_eq!(
+        SettingsSection::CloudEnvironments.to_string(),
+        "Environments"
+    );
     assert_eq!(
         SettingsSection::OzCloudAPIKeys.to_string(),
         "Oz Cloud API Keys"

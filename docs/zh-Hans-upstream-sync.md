@@ -388,3 +388,14 @@ Decision:
 - Upstream freshness blocker is cleared for stable refs as of 2026-05-31.
 - No merge or rebase is needed because the latest fetched stable tag is unchanged and the current branch is not behind it.
 - Public-RC readiness still depends on GUI evidence and state fixture records.
+
+## zh-Hans stable refresh 2026-06-04 0.19 adaptation
+
+- Selected upstream base: `v0.2026.06.03.09.49.stable_00`
+- Selected upstream commit: `2249469e5d24e472cee6ce97d3d324293f67db71`
+- Selected upstream tree: `efe8ae7822765eb267792d441e4b1e7ddb7f8e53`
+- Selected upstream branch: `stable_release/v0.2026.06.03.09.49.stable`
+- Adaptation branch: `codex/zh-Hans-0.19-upstream-stable-adaptation`
+- Worktree: `/Users/drew/Project/warp-cn-0.19-adaptation`
+- Strategy: clean upstream stable worktree plus durable zh-Hans asset import, followed by manifest overlay regeneration.
+- Public-release posture: blocked until 0.19 command-line gates, fresh bundle, GUI evidence, and public-RC evidence gates are complete.

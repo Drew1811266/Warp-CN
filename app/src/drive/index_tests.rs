@@ -1,5 +1,5 @@
+use cloud_objects::cloud_object::ServerPermissions;
 use warp_core::ui::appearance::Appearance;
-use warp_server_client::cloud_object::ServerPermissions;
 use warpui::platform::WindowStyle;
 use warpui::{AddSingletonModel, App, SingletonEntity, TypedActionView, ViewHandle};
 
@@ -133,8 +133,8 @@ fn test_retry_menu_item_visibility() {
             let menu_items = index.menu_items(&Space::Personal, &warp_drive_item_id, ctx);
             assert_eq!(menu_items.len(), 5);
             assert_eq!(label_for_menu_item(&menu_items[0]), "Edit");
-            assert_eq!(label_for_menu_item(&menu_items[1]), "复制工作流文本");
-            assert_eq!(label_for_menu_item(&menu_items[2]), "共享");
+            assert_eq!(label_for_menu_item(&menu_items[1]), "Copy workflow text");
+            assert_eq!(label_for_menu_item(&menu_items[2]), "Share");
             assert_eq!(label_for_menu_item(&menu_items[3]), "Duplicate");
             assert_eq!(label_for_menu_item(&menu_items[4]), "Export");
         });
@@ -146,8 +146,8 @@ fn test_retry_menu_item_visibility() {
             assert_eq!(menu_items.len(), 6);
             assert_eq!(label_for_menu_item(&menu_items[0]), "Retry");
             assert_eq!(label_for_menu_item(&menu_items[1]), "Edit");
-            assert_eq!(label_for_menu_item(&menu_items[2]), "复制工作流文本");
-            assert_eq!(label_for_menu_item(&menu_items[3]), "共享");
+            assert_eq!(label_for_menu_item(&menu_items[2]), "Copy workflow text");
+            assert_eq!(label_for_menu_item(&menu_items[3]), "Share");
             assert_eq!(label_for_menu_item(&menu_items[4]), "Duplicate");
             assert_eq!(label_for_menu_item(&menu_items[5]), "Export");
         });
@@ -160,8 +160,8 @@ fn test_retry_menu_item_visibility() {
             let menu_items = index.menu_items(&Space::Personal, &warp_drive_item_id, ctx);
             assert_eq!(menu_items.len(), 5);
             assert_eq!(label_for_menu_item(&menu_items[0]), "Edit");
-            assert_eq!(label_for_menu_item(&menu_items[1]), "复制工作流文本");
-            assert_eq!(label_for_menu_item(&menu_items[2]), "共享");
+            assert_eq!(label_for_menu_item(&menu_items[1]), "Copy workflow text");
+            assert_eq!(label_for_menu_item(&menu_items[2]), "Share");
             assert_eq!(label_for_menu_item(&menu_items[3]), "Duplicate");
             assert_eq!(label_for_menu_item(&menu_items[4]), "Export");
         });
