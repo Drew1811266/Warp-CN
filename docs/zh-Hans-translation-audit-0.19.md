@@ -13,6 +13,11 @@ manifest validation: passed
 glossary check: passed
 dry-run: entries=7937 files=550 already_applied=5717 would_change=0 missing=0
 release inventory coverage: covered=8534 candidates=0 coverage=100.0%
+full audit output: docs/zh-Hans-full-translation-audit-0.19/
+full audit entries: 7937
+full audit actionable rows: 0
+full audit blocked-public-rc rows: 1034
+json validation: passed
 ```
 
 ## Reviewed 0.19 Hotspots

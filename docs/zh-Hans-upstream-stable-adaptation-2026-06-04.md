@@ -49,7 +49,7 @@ overlay idempotent: entries=7899 files=550 already_applied=5681 would_change=0 m
 cargo fmt: passed
 inventory coverage: passed; release covered=8534 candidates=0 coverage=100.0%
 translation update idempotent: entries=7937 files=550 already_applied=5717 would_change=0 missing=0
-full audit: not run
+full audit: passed; actionable rows=0
 privacy guard: passed
 python compile: passed
 python unit tests: passed; ran 64 tests
@@ -138,3 +138,20 @@ blocked-no-isolated-account: 3
 ```
 
 The strict evidence lint failure is expected until current-cycle GUI evidence is produced for all 11 required rows. Evidence report and queue JSON were written to `/tmp/zh-0.19-public-rc-evidence-report.json` and `/tmp/zh-0.19-public-rc-evidence-queue.json`.
+
+## Full Translation Audit
+
+Task 9 generated deterministic per-entry audit artifacts for every manifest row.
+
+```text
+full audit output: docs/zh-Hans-full-translation-audit-0.19/
+entries reviewed: 7937
+blocked-public-rc: 1034
+simulated-accepted: 1772
+simulated-accepted-with-note: 5131
+needs-copy-review: 0
+needs-functional-review: 0
+json validation: passed
+```
+
+The audit produced no actionable copy or functional review rows. The `blocked-public-rc` rows map to the 11 GUI evidence requirements already tracked by public-RC status.

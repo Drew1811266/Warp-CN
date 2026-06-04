@@ -33,7 +33,7 @@ from zh_apply_localization import (  # noqa: E402
 
 
 DEFAULT_MANIFEST = REPO_ROOT / "resources/localization/zh-Hans-overrides.toml"
-DEFAULT_OUTPUT_DIR = REPO_ROOT / "docs/zh-Hans-full-translation-audit-0.18"
+DEFAULT_OUTPUT_DIR = REPO_ROOT / "docs/zh-Hans-full-translation-audit-0.19"
 
 CJK_RE = re.compile(r"[\u3400-\u9fff]")
 PLACEHOLDER_RE = re.compile(r"\{[^{}]*\}")
@@ -462,6 +462,13 @@ def _format_counter(counter: Counter[str]) -> str:
     return "".join(f"- {key}: {counter[key]}\n" for key in sorted(counter))
 
 
+def _audit_version_from_output_dir(path: Path) -> str:
+    match = re.search(r"zh-Hans-full-translation-audit-(.+)$", path.name)
+    if match:
+        return match.group(1)
+    return "current"
+
+
 def _write_summary(rows: list[AuditRow], path: Path, manifest: Path) -> None:
     decisions = Counter(row.decision for row in rows)
     token_status = Counter(row.token_status for row in rows)
@@ -475,7 +482,7 @@ def _write_summary(rows: list[AuditRow], path: Path, manifest: Path) -> None:
     ]
 
     lines = [
-        "# zh-Hans Full Translation Audit 0.18",
+        f"# zh-Hans Full Translation Audit {_audit_version_from_output_dir(path.parent)}",
         "",
         "Scope: Codex simulated per-entry review for every `[[replace]]` row in the zh-Hans override manifest.",
         "",
