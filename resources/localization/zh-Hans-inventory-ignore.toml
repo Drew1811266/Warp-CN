@@ -147,6 +147,13 @@ exact_paths = [
   "app/src/ai/mcp/http_client.rs",
   "app/src/ai/request_usage_model.rs",
   "app/src/ai/restored_conversations.rs",
+  # Reviewed 0.19 adaptation Task 5: auth persistence moved into the shared
+  # auth crate. These files contain keychain/storage keys, serde compatibility
+  # names, API-key prefixes, and auth diagnostics rather than visible UI copy.
+  "crates/warp_server_auth/src/auth_state.rs",
+  "crates/warp_server_auth/src/credentials.rs",
+  "crates/warp_server_auth/src/lib.rs",
+  "crates/warp_server_auth/src/user/persistence.rs",
 ]
 
 line_patterns = [
@@ -284,6 +291,29 @@ literal_patterns = [
   "^Persisted SQLite content for document \\{id\\} is the same as the current content$",
   # Reviewed Phase 82: workspace/settings feature, telemetry, and UI state IDs.
   "^(Show_Base_Model_Picker_In_Prompt|HasSettingsToImport|SettingsViewInTab|WarpDrive_BelongsToTeam)$",
+  # Reviewed 0.19 adaptation Task 5: moved test fixtures, artifact IDs, fake
+  # run IDs, SSH hostnames, and Claude mailbox protocol snippets.
+  "^550e8400-e29b-41d4-a716-446655440000$",
+  "^not-a-run-id$",
+  "^Invalid run ID 'not-a-run-id'$",
+  "^artifact-123$",
+  "^daily summary$",
+  "^report\\.txt$",
+  "^artifact-artifact-123\\.txt$",
+  "^screenshot-123$",
+  "^dashboard screenshot$",
+  "^artifact-screenshot-123$",
+  "^Agent turn complete$",
+  "^I've updated the README with the new instructions\\.$",
+  "^Approval requested: rm -rf /tmp/foo$",
+  "^some-title$",
+  "^moira@moira\\.devbox\\.namespace$",
+  "^moira\\.devbox\\.namespace$",
+  "^kevinyang@ssh-testing$",
+  "^ssh-testing$",
+  "^Oz mailbox update for this child run\\.$",
+  "^A lead agent mailbox message is available for this child run\\. Review the mailbox context and continue the task\\.$",
+  "^Additional lead agent mailbox messages remain queued and may be surfaced later\\.$",
 ]
 
 internal_words = [
