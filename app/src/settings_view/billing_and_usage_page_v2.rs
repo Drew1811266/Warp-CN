@@ -2191,7 +2191,7 @@ fn render_balance_card(
     .finish();
 
     let remaining_label_text = match total {
-        Some(limit) => format!("/ {} remaining", limit.separate_with_commas()),
+        Some(limit) => format!("/ {} 剩余", limit.separate_with_commas()),
         None => "remaining".to_string(),
     };
     let remaining_label = Text::new_inline(remaining_label_text, appearance.ui_font_family(), 14.)

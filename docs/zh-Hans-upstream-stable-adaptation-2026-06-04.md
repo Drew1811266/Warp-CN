@@ -47,7 +47,8 @@ release inventory smoke: covered=8494 candidates=83 coverage=99.0%
 overlay apply: passed
 overlay idempotent: entries=7899 files=550 already_applied=5681 would_change=0 missing=0
 cargo fmt: passed
-inventory coverage: full Task 7 not run
+inventory coverage: passed; release covered=8534 candidates=0 coverage=100.0%
+translation update idempotent: entries=7937 files=550 already_applied=5717 would_change=0 missing=0
 full audit: not run
 privacy guard: not run
 low-load gate: not run
@@ -94,3 +95,22 @@ cargo fmt: passed
 During formatting, `cargo fmt` exposed invalid Rust generated for ordinary string literals whose localized targets contain embedded double quotes. The overlay tool now escapes replacement text when writing normal Rust strings, and `script/test_zh_apply_localization.py` covers the idempotent quote-preserving case. This was required for the CLI install AppleScript prompts and the Command Search sample query `# 在文件中查找 "foo"` to remain valid Rust while still matching the manifest on dry-run.
 
 The `User canceled` osascript stderr token remains in English because it is a control-flow sentinel used to detect administrator prompt cancellation. The returned cancellation errors remain localized.
+
+## 0.19 Candidate Translation Update
+
+Task 7 reviewed the release inventory candidates after applying the baseline overlay.
+
+```text
+onboarding coverage: covered=314 candidates=0 coverage=100.0%
+workspace coverage: covered=874 candidates=0 coverage=100.0%
+search coverage: covered=267 candidates=0 coverage=100.0%
+settings coverage: covered=2040 candidates=0 coverage=100.0%
+modals coverage: covered=5177 candidates=0 coverage=100.0%
+release coverage before Task 7 edits: covered=8494 candidates=83 coverage=99.0%
+release coverage after Task 7 edits: covered=8534 candidates=0 coverage=100.0%
+dry-run after Task 7 edits: entries=7937 files=550 already_applied=5717 would_change=0 missing=0
+```
+
+Task 7 added 36 reviewed manifest entries and narrow ignore rules for internal-only 0.19 strings. User-visible updates covered vertical tab group menus, queued prompt actions, AI prompt submission settings, staging IAP credential status, shared-session metadata access, Claude Code platform plugin user errors, and duplicate child-agent guidance. Internal logs, protocol IDs, config keys, position IDs, test assertions, and orchestration viewer diagnostics were ignored with literal patterns instead of translated.
+
+See `docs/zh-Hans-translation-audit-0.19.md` for the Task 7 summary.

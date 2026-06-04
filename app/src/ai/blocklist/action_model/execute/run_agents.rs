@@ -490,9 +490,7 @@ fn duplicate_launched_agents_reason(
         .join(", ");
 
     Some(format!(
-        "Requested agent(s) have already been launched: {duplicate_list}. \
-         Do not start duplicate child agents; send any follow-up with send_message_to_agent \
-         using the existing agent id(s): {addresses}."
+        "请求的 Agent 已经启动：{duplicate_list}。请不要启动重复的子 Agent；如需继续，请使用 send_message_to_agent 并传入现有 Agent ID：{addresses}。"
     ))
 }
 

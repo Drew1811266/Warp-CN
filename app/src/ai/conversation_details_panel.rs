@@ -79,9 +79,9 @@ const HARNESS_CIRCLE_SIZE: f32 = 16.0;
 const HARNESS_ICON_IN_CIRCLE: f32 = 9.0;
 const LABEL_VALUE_GAP: f32 = 4.0;
 const SECTION_HEADER_GAP: f32 = 8.0;
-const RUN_METADATA_ACCESS_DENIED_TITLE: &str = "Run metadata is not available";
+const RUN_METADATA_ACCESS_DENIED_TITLE: &str = "运行元数据不可用";
 const RUN_METADATA_ACCESS_DENIED_DESCRIPTION: &str =
-    "You can view this shared session, but run metadata is only visible to users with access to this run.";
+    "你可以查看此共享会话，但运行元数据仅对有权访问此运行的用户可见。";
 
 /// Panel rendering mode.
 #[derive(Debug, Clone, PartialEq)]

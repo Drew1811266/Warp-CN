@@ -727,7 +727,7 @@ pub fn populate_harness_picker<A: OrchestrationControlAction, V: View>(
                 let tooltip = match local_setup_state {
                     Some(LocalHarnessSetupState::MissingHarness { tooltip }) => tooltip,
                     Some(LocalHarnessSetupState::ProductDisabled { message }) => message,
-                    Some(LocalHarnessSetupState::Ready) | None => "Disabled by your administrator",
+                    Some(LocalHarnessSetupState::Ready) | None => "已被管理员停用",
                 };
                 fields = fields.with_tooltip(tooltip);
             }

@@ -55417,3 +55417,318 @@ target = "MCP 服务器"
 status = "active"
 context = "Phase 81 templatable MCP object type name"
 preserve_terms = ["MCP"]
+
+# 0.19 upstream stable adaptation: reviewed visible candidates
+
+[[replace]]
+key = "0.19.workspace.tab_group.new_group"
+path = "app/src/workspace/view.rs"
+source = "New Group"
+target = "新建分组"
+context = "0.19 vertical tab group rename default text"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.move_up"
+path = "app/src/workspace/view.rs"
+source = "Move group up"
+target = "上移分组"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.move_down"
+path = "app/src/workspace/view.rs"
+source = "Move group down"
+target = "下移分组"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.close_all"
+path = "app/src/workspace/view.rs"
+source = "Close all tabs in group"
+target = "关闭分组中的所有标签页"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.close_other_tabs"
+path = "app/src/workspace/view.rs"
+source = "Close other tabs"
+target = "关闭其他标签页"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.close_above"
+path = "app/src/workspace/view.rs"
+source = "Close tabs above"
+target = "关闭上方标签页"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.close_below"
+path = "app/src/workspace/view.rs"
+source = "Close tabs below"
+target = "关闭下方标签页"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.ungroup"
+path = "app/src/workspace/view.rs"
+source = "Ungroup tabs"
+target = "取消标签页分组"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.new_tab"
+path = "app/src/workspace/view.rs"
+source = "New tab in group"
+target = "在分组中新建标签页"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.rename"
+path = "app/src/workspace/view.rs"
+source = "Rename"
+target = "重命名"
+context = "0.19 vertical tab group context menu action"
+status = "active"
+
+[[replace]]
+key = "0.19.workspace.tab_group.untitled"
+path = "app/src/workspace/view.rs"
+source = "Untitled group"
+target = "未命名分组"
+context = "0.19 vertical tab group fallback label"
+status = "active"
+
+[[replace]]
+key = "0.19.queued_prompts.initial_locked"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "The first cloud-mode prompt cannot be changed."
+target = "第一个云模式提示无法更改。"
+context = "0.19 queued prompts panel tooltip"
+status = "active"
+
+[[replace]]
+key = "0.19.queued_prompts.wait_environment"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "Prompts cannot be sent until environment setup is complete."
+target = "环境设置完成前无法发送提示。"
+context = "0.19 queued prompts panel disabled send tooltip"
+status = "active"
+
+[[replace]]
+key = "0.19.queued_prompts.full_terminal_agent"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "Send to full terminal use agent"
+target = "发送给完整终端 Use Agent"
+context = "0.19 queued prompts panel send-now tooltip"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "0.19.queued_prompts.edit_tooltip"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "Edit"
+target = "编辑"
+context = "0.19 queued prompts row action tooltip"
+status = "active"
+
+[[replace]]
+key = "0.19.queued_prompts.delete_tooltip"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "Delete"
+target = "删除"
+context = "0.19 queued prompts row action tooltip"
+status = "active"
+
+[[replace]]
+key = "0.19.queued_prompts.send_now"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "Send now"
+target = "立即发送"
+context = "0.19 queued prompts send-now action tooltip"
+status = "active"
+expected_count = 2
+
+[[replace]]
+key = "0.19.settings.ai.default_prompt_submission_mode"
+path = "app/src/settings_view/ai_page.rs"
+source = "Default prompt submission mode"
+target = "默认提示提交模式"
+context = "0.19 AI settings dropdown label for queued prompt behavior"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.ai.default_prompt_submission_mode.description"
+path = "app/src/settings_view/ai_page.rs"
+source = "What happens when you submit a new prompt while the agent is still responding. You can override this per conversation using the auto-queue toggle."
+target = "当 Agent 仍在响应时提交新提示的处理方式。你可以在每个会话中使用自动排队开关覆盖此设置。"
+context = "0.19 AI settings dropdown description for queued prompt behavior"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "0.19.settings.main.iap.search_terms"
+path = "app/src/settings_view/main_page.rs"
+source = "iap staging gcloud proxy credentials"
+target = "iap staging gcloud proxy credentials IAP 预发布 凭据"
+context = "0.19 settings search terms for staging IAP credentials"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.main.iap.not_loaded"
+path = "app/src/settings_view/main_page.rs"
+source = "Not yet loaded"
+target = "尚未加载"
+context = "0.19 settings staging IAP credential status"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.main.iap.refreshing"
+path = "app/src/settings_view/main_page.rs"
+source = "Refreshing…"
+target = "刷新中..."
+context = "0.19 settings staging IAP credential status/button label"
+status = "active"
+expected_count = 2
+
+[[replace]]
+key = "0.19.settings.main.iap.loaded"
+path = "app/src/settings_view/main_page.rs"
+source = "Loaded (refreshes in ~{mins}m)"
+target = "已加载（约 {mins} 分钟后刷新）"
+context = "0.19 settings staging IAP credential status"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.main.iap.injected_token"
+path = "app/src/settings_view/main_page.rs"
+source = "Using injected token (WARP_IAP_TOKEN)"
+target = "正在使用注入的令牌（WARP_IAP_TOKEN）"
+context = "0.19 settings staging IAP credential status"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.main.iap.label"
+path = "app/src/settings_view/main_page.rs"
+source = "Staging IAP credentials"
+target = "预发布 IAP 凭据"
+context = "0.19 settings staging IAP credential label"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.main.iap.refresh"
+path = "app/src/settings_view/main_page.rs"
+source = "Refresh"
+target = "刷新"
+context = "0.19 settings staging IAP credential button"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.section.environments"
+path = "app/src/settings_view/mod.rs"
+source = "Environments"
+target = "环境"
+context = "0.19 settings cloud platform subpage label"
+status = "active"
+
+[[replace]]
+key = "0.19.settings.api_key.learn_more"
+path = "app/src/settings_view/platform/create_api_key_modal.rs"
+source = "Learn more"
+target = "了解更多"
+context = "0.19 create API key modal documentation hyperlink"
+status = "active"
+preserve_terms = ["API"]
+
+[[replace]]
+key = "0.19.settings.billing.remaining_with_limit"
+path = "app/src/settings_view/billing_and_usage_page_v2.rs"
+source = "/ {} remaining"
+target = "/ {} 剩余"
+context = "0.19 billing usage remaining credits label"
+status = "active"
+
+[[replace]]
+key = "0.19.agent.conversation_details.metadata_unavailable.title"
+path = "app/src/ai/conversation_details_panel.rs"
+source = "Run metadata is not available"
+target = "运行元数据不可用"
+context = "0.19 shared session conversation details access-denied title"
+status = "active"
+
+[[replace]]
+key = "0.19.agent.conversation_details.metadata_unavailable.description"
+path = "app/src/ai/conversation_details_panel.rs"
+source = "You can view this shared session, but run metadata is only visible to users with access to this run."
+target = "你可以查看此共享会话，但运行元数据仅对有权访问此运行的用户可见。"
+context = "0.19 shared session conversation details access-denied description"
+status = "active"
+
+[[replace]]
+key = "0.19.local_harness.claude_install_required"
+path = "app/src/ai/local_harness_setup.rs"
+source = "Install Claude Code to use this local harness."
+target = "安装 Claude Code 以使用此本地 harness。"
+context = "0.19 local harness disabled tooltip"
+status = "active"
+preserve_terms = ["Claude Code"]
+
+[[replace]]
+key = "0.19.orchestration_controls.admin_disabled"
+path = "app/src/ai/blocklist/inline_action/orchestration_controls.rs"
+source = "Disabled by your administrator"
+target = "已被管理员停用"
+context = "0.19 orchestration harness dropdown disabled tooltip"
+status = "active"
+
+[[replace]]
+key = "0.19.claude_plugin.install_not_effective"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/claude.rs"
+source = "Platform plugin installation did not take effect"
+target = "Platform 插件安装未生效"
+context = "0.19 Claude Code platform plugin install error"
+status = "active"
+
+[[replace]]
+key = "0.19.claude_plugin.update_not_effective"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/claude.rs"
+source = "Platform plugin update did not take effect"
+target = "Platform 插件更新未生效"
+context = "0.19 Claude Code platform plugin update error"
+status = "active"
+
+[[replace]]
+key = "0.19.agent_label.usage_rollup"
+path = "app/src/ai/blocklist/usage/rollup.rs"
+source = "Agent"
+target = "Agent"
+context = "0.19 visible product term; preserve Agent per glossary"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "0.19.run_agents.duplicates_error"
+path = "app/src/ai/blocklist/action_model/execute/run_agents.rs"
+source = "Requested agent(s) have already been launched: {duplicate_list}. Do not start duplicate child agents; send any follow-up with send_message_to_agent using the existing agent id(s): {addresses}."
+target = "请求的 Agent 已经启动：{duplicate_list}。请不要启动重复的子 Agent；如需继续，请使用 send_message_to_agent 并传入现有 Agent ID：{addresses}。"
+context = "0.19 user-facing duplicate child-agent launch guidance"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "0.19.agent_label.harness_session_header"
+path = "app/src/terminal/view/ambient_agent/block/harness_session_header.rs"
+source = "Agent"
+target = "Agent"
+context = "0.19 visible product term; preserve Agent per glossary"
+status = "active"
+preserve_terms = ["Agent"]

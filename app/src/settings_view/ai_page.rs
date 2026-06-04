@@ -5665,11 +5665,9 @@ impl SettingsWidget for AIInputWidget {
         if FeatureFlag::QueueSlashCommand.is_enabled() {
             widget_children.push(render_dropdown_item(
                 appearance,
-                "Default prompt submission mode",
+                "默认提示提交模式",
                 Some(
-                    "What happens when you submit a new prompt while the agent is still \
-                     responding. You can override this per conversation using the auto-queue \
-                     toggle.",
+                    "当 Agent 仍在响应时提交新提示的处理方式。你可以在每个会话中使用自动排队开关覆盖此设置。",
                 ),
                 None,
                 LocalOnlyIconState::for_setting(

@@ -6807,10 +6807,7 @@ impl Workspace {
         // Seed the editor with the existing name, or the "New Group" default
         // label when the group is unnamed. `insert_selected_text` selects the
         // seeded text so the user can type to replace it instantly.
-        let seed_text = group
-            .name
-            .clone()
-            .unwrap_or_else(|| "New Group".to_string());
+        let seed_text = group.name.clone().unwrap_or_else(|| "新建分组".to_string());
 
         self.current_workspace_state
             .set_tab_group_being_renamed(group_id);
@@ -9304,14 +9301,14 @@ impl Workspace {
             let mut items = vec![];
             if has_tabs_above {
                 items.push(
-                    MenuItemFields::new("Move group up")
+                    MenuItemFields::new("上移分组")
                         .with_on_select_action(WorkspaceAction::MoveTabGroupUp(group_id))
                         .into_item(),
                 );
             }
             if has_tabs_below {
                 items.push(
-                    MenuItemFields::new("Move group down")
+                    MenuItemFields::new("下移分组")
                         .with_on_select_action(WorkspaceAction::MoveTabGroupDown(group_id))
                         .into_item(),
                 );
@@ -9320,26 +9317,26 @@ impl Workspace {
         };
 
         let close_section = {
-            let mut items = vec![MenuItemFields::new("Close all tabs in group")
+            let mut items = vec![MenuItemFields::new("关闭分组中的所有标签页")
                 .with_on_select_action(WorkspaceAction::CloseTabGroup(group_id))
                 .into_item()];
             if has_tabs_outside {
                 items.push(
-                    MenuItemFields::new("Close other tabs")
+                    MenuItemFields::new("关闭其他标签页")
                         .with_on_select_action(WorkspaceAction::CloseTabsOutsideGroup(group_id))
                         .into_item(),
                 );
             }
             if has_tabs_above {
                 items.push(
-                    MenuItemFields::new("Close tabs above")
+                    MenuItemFields::new("关闭上方标签页")
                         .with_on_select_action(WorkspaceAction::CloseTabsAboveGroup(group_id))
                         .into_item(),
                 );
             }
             if has_tabs_below {
                 items.push(
-                    MenuItemFields::new("Close tabs below")
+                    MenuItemFields::new("关闭下方标签页")
                         .with_on_select_action(WorkspaceAction::CloseTabsBelowGroup(group_id))
                         .into_item(),
                 );
@@ -9350,15 +9347,15 @@ impl Workspace {
         let mut menu_items = vec![];
         for section_items in [
             vec![
-                MenuItemFields::new("Ungroup tabs")
+                MenuItemFields::new("取消标签页分组")
                     .with_on_select_action(WorkspaceAction::UngroupTabs(group_id))
                     .into_item(),
-                MenuItemFields::new("New tab in group")
+                MenuItemFields::new("在分组中新建标签页")
                     .with_on_select_action(WorkspaceAction::NewTabInGroup(group_id))
                     .into_item(),
             ],
             move_section,
-            vec![MenuItemFields::new("Rename")
+            vec![MenuItemFields::new("重命名")
                 .with_on_select_action(WorkspaceAction::RenameTabGroup(group_id))
                 .into_item()],
             close_section,
@@ -9405,7 +9402,7 @@ impl Workspace {
                     .tab_groups
                     .get(&group_id)
                     .and_then(|g| g.name.clone())
-                    .unwrap_or_else(|| "Untitled group".to_string());
+                    .unwrap_or_else(|| "未命名分组".to_string());
                 MenuItemFields::new(label)
                     .with_on_select_action(WorkspaceAction::MoveTabToGroup {
                         tab_index,

@@ -1085,7 +1085,7 @@ impl SettingsWidget for IapCredentialsWidget {
     type View = MainSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "iap staging gcloud proxy credentials"
+        "iap staging gcloud proxy credentials IAP 预发布 凭据"
     }
 
     fn render(
@@ -1103,18 +1103,18 @@ impl SettingsWidget for IapCredentialsWidget {
         let disabled: ColorU = appearance.theme().disabled_ui_text_color().into();
         let active: ColorU = appearance.theme().active_ui_text_color().into();
         let (status_text, status_color): (String, ColorU) = match &state {
-            IapCredentialsState::Missing => ("Not yet loaded".to_string(), disabled),
-            IapCredentialsState::Refreshing { .. } => ("Refreshing…".to_string(), active),
+            IapCredentialsState::Missing => ("尚未加载".to_string(), disabled),
+            IapCredentialsState::Refreshing { .. } => ("刷新中...".to_string(), active),
             IapCredentialsState::Loaded(cached) => {
                 let remaining = cached
                     .expires_at
                     .saturating_duration_since(instant::Instant::now());
                 let mins = remaining.as_secs() / 60;
-                (format!("Loaded (refreshes in ~{mins}m)"), active)
+                (format!("已加载（约 {mins} 分钟后刷新）"), active)
             }
             IapCredentialsState::Failed { message, .. } => (format!("Failed: {message}"), ansi_red),
             IapCredentialsState::EnvInjected { .. } => {
-                ("Using injected token (WARP_IAP_TOKEN)".to_string(), active)
+                ("正在使用注入的令牌（WARP_IAP_TOKEN）".to_string(), active)
             }
         };
 
@@ -1122,7 +1122,7 @@ impl SettingsWidget for IapCredentialsWidget {
 
         let label = Align::new(
             Text::new_inline(
-                "Staging IAP credentials".to_string(),
+                "预发布 IAP 凭据".to_string(),
                 appearance.ui_font_family(),
                 REGULAR_TEXT_FONT_SIZE,
             )
@@ -1154,9 +1154,9 @@ impl SettingsWidget for IapCredentialsWidget {
                 self.refresh_button_mouse_state.clone(),
             )
             .with_text_label(if is_refreshing {
-                "Refreshing…".into()
+                "刷新中...".into()
             } else {
-                "Refresh".into()
+                "刷新".into()
             })
             .with_style(UiComponentStyles {
                 font_size: Some(12.),

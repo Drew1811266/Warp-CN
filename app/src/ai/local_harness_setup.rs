@@ -5,7 +5,7 @@ use crate::util::path::resolve_executable;
 
 /// Tooltip shown when a local harness is product-enabled but its CLI is missing.
 pub(crate) const LOCAL_HARNESS_INSTALLATION_REQUIRED_TOOLTIP: &str =
-    "Install Claude Code to use this local harness.";
+    "安装 Claude Code 以使用此本地 harness。";
 
 /// Client-side readiness for using a harness in local orchestration.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]

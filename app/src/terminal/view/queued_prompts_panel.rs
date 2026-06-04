@@ -51,10 +51,9 @@ use crate::view_components::action_button::{ActionButton, ButtonSize, NakedTheme
 const MAX_PROMPT_LINES: f32 = 5.;
 /// Max characters shown in a row's single-line preview before truncation.
 const PROMPT_PREVIEW_MAX_CHARS: usize = 500;
-const INITIAL_CLOUD_MODE_PROMPT_TOOLTIP: &str = "The first cloud-mode prompt cannot be changed.";
-const SEND_NOW_DURING_CLOUD_SETUP_TOOLTIP: &str =
-    "Prompts cannot be sent until environment setup is complete.";
-const SEND_NOW_TO_FULL_TERMINAL_USE_AGENT_TOOLTIP: &str = "Send to full terminal use agent";
+const INITIAL_CLOUD_MODE_PROMPT_TOOLTIP: &str = "第一个云模式提示无法更改。";
+const SEND_NOW_DURING_CLOUD_SETUP_TOOLTIP: &str = "环境设置完成前无法发送提示。";
+const SEND_NOW_TO_FULL_TERMINAL_USE_AGENT_TOOLTIP: &str = "发送给完整终端 Use Agent";
 
 /// Returns the position-cache id used to look up a row's bounding rect during a drag.
 /// Indexed by the row's current visual index so swaps maintain stable lookups.
@@ -77,13 +76,13 @@ fn build_row_state(
             INITIAL_CLOUD_MODE_PROMPT_TOOLTIP,
         )
     } else {
-        ("Edit", "Delete")
+        ("编辑", "删除")
     };
 
     let send_now_button = ctx.add_typed_action_view(move |_| {
         ActionButton::new("", NakedTheme)
             .with_icon(TerminalIcon::ArrowUp)
-            .with_tooltip("Send now")
+            .with_tooltip("立即发送")
             .with_size(ButtonSize::XSmall)
             .with_disabled_theme(NakedTheme)
             .on_click(move |ctx| {
@@ -308,7 +307,7 @@ impl QueuedPromptsPanelView {
             } else if lrc_subagent_in_progress {
                 SEND_NOW_TO_FULL_TERMINAL_USE_AGENT_TOOLTIP
             } else {
-                "Send now"
+                "立即发送"
             };
             send_now_button.update(ctx, |button, ctx| {
                 button.set_disabled(disabled, ctx);

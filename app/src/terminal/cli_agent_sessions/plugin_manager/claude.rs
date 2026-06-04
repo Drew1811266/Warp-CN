@@ -195,7 +195,7 @@ impl CliAgentPluginManager for ClaudeCodePluginManager {
         if still_outdated {
             log.push_str("Post-install version check: platform plugin is still outdated\n");
             return Err(PluginInstallError {
-                message: "Platform plugin installation did not take effect".to_owned(),
+                message: "Platform 插件安装未生效".to_owned(),
                 log,
             });
         }
@@ -218,7 +218,7 @@ impl CliAgentPluginManager for ClaudeCodePluginManager {
         if still_outdated {
             log.push_str("Post-update version check: platform plugin is still outdated\n");
             return Err(PluginInstallError {
-                message: "Platform plugin update did not take effect".to_owned(),
+                message: "Platform 插件更新未生效".to_owned(),
                 log,
             });
         }
