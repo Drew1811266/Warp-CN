@@ -1,0 +1,300 @@
+# Ignore rules for zh-Hans localization inventory.
+#
+# Keep this conservative. Add new entries only after reviewing candidates with:
+#   python3 script/zh_localization_inventory.py <path> --status candidate
+# Do not hide visible labels, buttons, descriptions, toasts, dialogs, or user-facing errors.
+
+path_parts = [
+  "/tests/",
+  "/test_data/",
+  "/models/onnx/",
+  "/resources/bundled/",
+]
+
+exact_paths = [
+  # Reviewed Round 4 non-UI sources: serialization/schema data, theme ids,
+  # and terminal protocol/parser internals.
+  "app/src/ai/agent/conversation_yaml.rs",
+  "app/src/themes/theme.rs",
+  # Reviewed P4-M4: debug/display labels for terminal action enum variants,
+  # not rendered as end-user UI copy.
+  "app/src/terminal/view/action.rs",
+  "app/src/terminal/model/ansi/mod.rs",
+  "app/src/terminal/model/ansi/dcs_hooks.rs",
+  # Reviewed Phase 15: SSH prompt detection, command parsing, option lists,
+  # and command examples. These literals are parser/input fixtures rather than
+  # UI copy; translating them would break detection or examples.
+  "app/src/terminal/ssh/util.rs",
+  # Reviewed Phase 16: cloud handoff snapshot upload/declaration plumbing,
+  # git command arguments, blob names, and diagnostic logs. These are
+  # protocol/internal operation strings, not product UI copy.
+  "app/src/ai/agent_sdk/driver/snapshot.rs",
+  # Reviewed Phase 13: cross-window tab drag diagnostic state/log strings.
+  # They are emitted through logging/debug state and are not rendered as
+  # product UI labels, buttons, descriptions, toasts, dialogs, or user-facing
+  # errors.
+  "app/src/workspace/cross_window_tab_drag.rs",
+  # Reviewed Phase 74: terminal model invariants, protocol/control markers,
+  # ref-test fixtures, command templates, platform identifiers, and internal
+  # diagnostics. These candidates are not rendered as product UI copy, and
+  # translating them risks breaking tests, shell/protocol behavior, or log
+  # searchability.
+  "app/src/terminal/find/model.rs",
+  "app/src/terminal/history.rs",
+  "app/src/terminal/local_tty/docker_sandbox.rs",
+  "app/src/terminal/local_tty/server/protocol.rs",
+  "app/src/terminal/local_tty/windows/pipes.rs",
+  "app/src/terminal/model/block/interaction_mode.rs",
+  "app/src/terminal/model/blockgrid.rs",
+  "app/src/terminal/model/blocks.rs",
+  "app/src/terminal/model/early_output.rs",
+  "app/src/terminal/model/iterm_image.rs",
+  "app/src/terminal/model/kitty.rs",
+  "app/src/terminal/model/session/command_executor.rs",
+  "app/src/terminal/package_installers.rs",
+  "app/src/terminal/ref_tests/mod.rs",
+  "app/src/terminal/writeable_pty/pty_controller.rs",
+  # Reviewed Phase 74: AI/Agent API conversion diagnostics, response stream
+  # retry logs, git URL parsing helpers, passive suggestion logs, MCP/skill
+  # filenames, and LLM builtin-label detection literals. These are parser,
+  # schema, identifier, or diagnostic strings rather than visible UI copy.
+  "app/src/ai/agent/api/convert_conversation.rs",
+  "app/src/ai/agent/api/convert_from.rs",
+  "app/src/ai/blocklist/block/model/model_impl.rs",
+  "app/src/ai/blocklist/controller/response_stream.rs",
+  "app/src/ai/blocklist/handoff/touched_repos.rs",
+  "app/src/ai/blocklist/passive_suggestions/legacy.rs",
+  "app/src/ai/llms.rs",
+  "app/src/ai/mcp/reconnecting_peer.rs",
+  "app/src/ai/skills/file_watchers/utils.rs",
+  "app/src/ai/skills/skill_utils.rs",
+  # Reviewed Phase 79: post-RC15 preserve-only residue. These files contain
+  # package descriptors, denylist enum names, terminal renderer cache IDs,
+  # terminal-server logging plumbing, grid/header invariants, recording
+  # filename templates, remote TTY endpoint/env snippets, API conversion
+  # diagnostics, Agent message hydration logs, MCP scan logs, WASM support
+  # diagnostics, and Next Command parser diagnostics. The remaining English
+  # candidates are not visible UI copy and translating them risks breaking
+  # contracts, logs, command parsing, or artifact naming.
+  "app/src/ai/agent/api/convert_to.rs",
+  "app/src/ai/agent_events/message_hydrator.rs",
+  "app/src/ai/mcp/file_based_manager.rs",
+  "app/src/ai/mcp/templatable_manager/wasm.rs",
+  "app/src/ai/predict/next_command_model.rs",
+  "app/src/terminal/cli_agent_sessions/plugin_manager/opencode.rs",
+  "app/src/terminal/command_corrections_denylist.rs",
+  "app/src/terminal/grid_renderer.rs",
+  "app/src/terminal/local_tty/server/logging.rs",
+  "app/src/terminal/model/grid/grid_storage/resize.rs",
+  "app/src/terminal/model/grid/resize.rs",
+  "app/src/terminal/model/header_grid.rs",
+  "app/src/terminal/recorder.rs",
+  "app/src/terminal/remote_tty/event_loop.rs",
+  # Reviewed Phase 80: remaining Terminal non-UI residue. These files contain
+  # viewport/debug metadata, type descriptions, renderer/model invariants,
+  # thread names, terminal-server diagnostics, WSL registry constants, executor
+  # debug names, tmux command templates, locale templates, and internal event
+  # logs. Visible strings in mixed files are handled through manifest entries
+  # or path-specific literal patterns below instead of broad exact-path ignores.
+  "app/src/terminal/block_list_viewport.rs",
+  "app/src/terminal/color.rs",
+  "app/src/terminal/event_listener.rs",
+  "app/src/terminal/find/model/alt_screen.rs",
+  "app/src/terminal/find/model/block_list.rs",
+  "app/src/terminal/input/inline_menu/message_bar.rs",
+  "app/src/terminal/local_tty/event_loop.rs",
+  "app/src/terminal/local_tty/server/event_loop.rs",
+  "app/src/terminal/local_tty/server/mod.rs",
+  "app/src/terminal/model/bootstrap.rs",
+  "app/src/terminal/model/grid/grid_storage.rs",
+  "app/src/terminal/model/grid/storage.rs",
+  "app/src/terminal/model/session/command_executor/noop_command_executor.rs",
+  "app/src/terminal/model/session/command_executor/tmux_executor.rs",
+  "app/src/terminal/model/tmux/mod.rs",
+  "app/src/terminal/model_events.rs",
+  "app/src/terminal/platform.rs",
+  "app/src/terminal/wsl/model.rs",
+  # Reviewed Phase 81: AI/Agent non-UI residue. These files contain API
+  # feature flags, source-location formatting, markdown/control-code wrappers,
+  # stable task/conversation IDs, notification/UI position IDs, admin CLI
+  # unsupported option diagnostics, harness support argument validation,
+  # secret handling assertions, passive-suggestion logs, action cancellation
+  # diagnostics, parser regexes, persistence diagnostics, and request-usage
+  # logs. User-visible action errors and labels are handled in the manifest.
+  "app/src/ai/agent/api.rs",
+  "app/src/ai/agent/comment.rs",
+  "app/src/ai/agent/util.rs",
+  "app/src/ai/agent_conversations_model/entry.rs",
+  "app/src/ai/agent_management/notifications/item_rendering.rs",
+  "app/src/ai/agent_sdk/admin.rs",
+  "app/src/ai/agent_sdk/harness_support.rs",
+  "app/src/ai/agent_sdk/secret.rs",
+  "app/src/ai/ambient_agents/spawn.rs",
+  "app/src/ai/blocklist/action_model.rs",
+  "app/src/ai/blocklist/action_model/execute/request_file_edits.rs",
+  "app/src/ai/blocklist/action_model/execute/upload_artifact.rs",
+  "app/src/ai/blocklist/block/cli_controller.rs",
+  "app/src/ai/blocklist/block/model.rs",
+  "app/src/ai/blocklist/block/view_impl/comments.rs",
+  "app/src/ai/blocklist/controller/input_context.rs",
+  "app/src/ai/blocklist/controller/pending_response_streams.rs",
+  "app/src/ai/blocklist/controller/slash_command.rs",
+  "app/src/ai/blocklist/passive_suggestions/maa.rs",
+  "app/src/ai/blocklist/persistence.rs",
+  "app/src/ai/conversation_utils.rs",
+  "app/src/ai/control_code_parser.rs",
+  "app/src/ai/mcp/gallery.rs",
+  "app/src/ai/mcp/http_client.rs",
+  "app/src/ai/request_usage_model.rs",
+  "app/src/ai/restored_conversations.rs",
+]
+
+line_patterns = [
+  "#[cfg",
+  "cfg!(",
+  "feature =",
+  "target_family",
+  "#[serde",
+  "serde(",
+  "toml_path:",
+  "log::",
+  "TelemetryEvent::",
+  "send_telemetry",
+  "search_tags",
+  "search_keywords",
+  "id!(",
+  "ui_name()",
+  ".expect(",
+  "debug_assert",
+  "panic!",
+  "anyhow!",
+  "tracing::",
+  "debug!(",
+  "info!(",
+  "warn!(",
+  "error!(",
+  "println!(",
+  "eprintln!(",
+  ".context(",
+  "with_context(",
+  "bail!(",
+  "ensure!(",
+  "format_err!",
+  "Error::",
+]
+
+literal_patterns = [
+  "^<block:\\{\\}>$",
+  "^\\{truncated\\}\\.\\.\\.$",
+  "^none>$",
+  "^--porcelain$",
+  "^(ExternalSecretsMenu|EmbeddingSearchMenu|SearchBar|WelcomePalette)$",
+  "^Warp Drive$",
+  "^OpenProjectConvo action unexpectedly handled in command palette for project: \\{project_name\\}$",
+  "^Notebook in search results has neither a name nor command match result\\.$",
+  "^Unable to convert session working directory into OS-native path$",
+  "^Ignoring duplicate results for source \\{data_source_id:\\?\\} that was already marked finished$",
+  "^command `\\{\\}` sets both TERMINAL_VIEW and AGENT_VIEW, which is unsatisfiable$",
+  "^duplicate slash command name: \\{name\\}$",
+  "^hint should mention `\\{lower\\}`$",
+  "^hint should mention `none`$",
+  "^/orchestrate deploy services$",
+  "^deploy services$",
+  "^just a normal query$",
+  "^/planning something$",
+  # Reviewed Phase 79: stable internal cache/state keys, schema template
+  # placeholders, and config type identifiers. These are not UI strings.
+  "^AvailableHarnesses$",
+  "^AIRequestLimitInfo$",
+  "^Option<String>$",
+  "^\\{\\{\\{json\\}\\}\\}$",
+  "^\\{UNIQUENESS_KEY_PREFIX\\}_\\{\\}$",
+  # Reviewed Phase 80: terminal UI/test identifiers, stable shortcuts,
+  # command templates, file names, and formatting snippets that are not
+  # translatable prose.
+  "^Cmd \\+$",
+  "^Ctrl \\+$",
+  "^\\{title\\}\\{secondary_suffix\\}$",
+  "^\\{key_text\\}-$",
+  "^cloud_mode_v2_slash_row_\\{visible_idx\\}$",
+  "^Attempted to execute slash command with no handler: \\{\\}$",
+  "^\\{prefix\\}\\{skill_name\\}.*$",
+  "^\\[tui\\]nnotification_condition = \"always\"$",
+  "^EnableAutoReloadModalBody$",
+  "^Identifies a specific inline menu\\.$",
+  "^Nested clickable message items are not supported$",
+  "^Nested interactive message items are not supported$",
+  "^ProfileModelSelectorOpen$",
+  "^ProfileModelSelector$",
+  "^meta-`$",
+  "^\\{user\\}@\\{hostname\\}:$",
+  "^<iframe src=\"\\{embed_link\\}\" title=\"\\{title\\}\" style=\"width: \\{width\\}px; height: \\{height\\}px; border:0; overflow:hidden;\" allow=\"clipboard-read; clipboard-write\"></iframe>$",
+  "^ParticipantAvatar$",
+  "^Tried to close role request modal when no terminal pane ID was present$",
+  "^(SharerGrantBody|SharerResponseBody|ViewerRequestBody|ShareSessionModalBody|ShareModalDeniedBody)$",
+  "^Viewer is more than \\{TOO_MANY_BUFFERED_EVENTS\\} events ahead of next_event_no$",
+  "^\\[orch-viewer\\] cannot request child pane materialization for conv=\\{conversation_id:\\?\\}: parent terminal view is gone$",
+  "^(HarnessSessionHeader|CloudModeSetupCommandBlock|CloudModeSetupTextBlock|HarnessSelector|HostSelector|ModelSelector)$",
+  "^\\{prefix\\}_progress_indicator_\\{index\\}$",
+  "^\\{seconds\\}\\.\\{tenths\\}s$",
+  "^Nested cloud mode has no pane stack; cannot pop to start sibling cloud mode session$",
+  "^Nested cloud mode pane stack depth <= 1; cannot pop to start sibling cloud mode session$",
+  "^Pane stack not available; cannot insert ambient agent entry block for cloud mode$",
+  "^(OnboardingDriveSharingBlock|InitEnvironmentBlock|EnvironmentSetupModeSelector|PassiveCodeDiff|PluginInstructionsBlock|SharerInactivityModalBody|SshRemoteServerFailedBanner|WarpifySuccessBlockVisible|WarpifySuccessBlock)$",
+  "^(agents\\.md|warp\\.md)$",
+  "^\\{prefix\\}\\{\\}$",
+  "^queued_prompts_panel:\\{panel_view_id:\\?\\}:row:\\{index\\}$",
+  "^Unable to find firebase uid for viewer \\{participant_id:\\?\\} when updating role$",
+  "^, \"tmux\": false$",
+  "^<Your RC file>$",
+  "^\\.ps1$",
+  "^pwsh\\.ps1$",
+  "^1234abcd5678efgh$",
+  # Reviewed Phase 81: AI/Agent UI/cache IDs, placeholders, stable display
+  # keys, schema fields, and formatting snippets.
+  "^(AgentTodosPopup-in-progress|AgentTodosPopup|AgentTypeSelector|AgentNotificationToastStack|CompactAgentInput|KeyboardNavigableButtons|PendingUserQueryBlock)$",
+  "^notification_toast_\\{id:\\?\\}$",
+  "^\\{ITEM_POSITION_PREFIX\\}\\{(index|idx)\\}$",
+  "^Esc$",
+  "^\\{\\} \\(\\{count\\}\\)$",
+  "^Harness$",
+  "^\\{label\\}: \\{name\\}$",
+  "^\\{label\\}: \\{line\\}$",
+  "^<keybinding>$",
+  "^\\.warp$",
+  "^\\{\\} \\(\\{suffix\\}\\)$",
+  "^(HasOptions|HasItems)$",
+  "^<block:\\(\\[\\^>\\]\\+\\)>$",
+  "^<\\(workflow\\\\\\|notebook\\\\\\|plan\\\\\\|rule\\):\\(\\[\\^>\\]\\+\\)>$",
+  "^<change:\\(\\[\\^>\\]\\+\\)>$",
+  "^\\{results_count\\} \\{results_label\\}$",
+  "^AgentModeAutoReadFiles$",
+  "^`n$",
+  "^\\{e:#\\}$",
+  "^agent_mode_workflow_position_\\{\\}$",
+  "^rule_position_\\{\\}$",
+  "^~\\{mult:\\.1\\}$",
+  "^\\(\\{formatted_cost\\}\\)$",
+  "^\\s+\\(\\{formatted_cost\\}\\)$",
+  "^Warp$",
+  "^u\\{E500\\}$",
+  "^\\{uuid\\}\\.log$",
+  "^McpCredentials$",
+  "^Creating document \\{id\\} from persisted SQLite content \\(conversation not restored\\)$",
+  "^Persisted SQLite content for document \\{id\\} is the same as the current content$",
+  # Reviewed Phase 82: workspace/settings feature, telemetry, and UI state IDs.
+  "^(Show_Base_Model_Picker_In_Prompt|HasSettingsToImport|SettingsViewInTab|WarpDrive_BelongsToTeam)$",
+]
+
+internal_words = [
+  "darwin",
+  "default_as_true",
+  "integration_tests",
+  "linux",
+  "local_fs",
+  "macos",
+  "test",
+  "unknown",
+  "wasm",
+  "windows",
+]
