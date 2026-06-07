@@ -44,6 +44,15 @@ URL_RE = re.compile(r"https?://[^\s)>\]\"'“”]+")
 BACKTICK_RE = re.compile(r"`([^`]+)`")
 SLASH_COMMAND_RE = re.compile(r"(?<![\w$])/[a-z][a-z0-9][a-z0-9_.-]*")
 ANGLE_TOKEN_RE = re.compile(r"<[A-Za-z][A-Za-z0-9_.:-]*>")
+MOJIBAKE_SIGNATURES = (
+    "\ufffd",
+    "Ã",
+    "Â",
+    "â€™",
+    "â€œ",
+    "â€",
+    "ä¸",
+)
 
 DISPLAY_UNIT_SLASH_TOKENS = {
     "/day",
@@ -153,6 +162,15 @@ class AuditRow:
     copy_status: str
     functional_status: str
     notes: str
+    module: str
+    module_group: str
+    source_length: int
+    target_length: int
+    length_ratio: float
+    machine_copy_score: int
+    mojibake_status: str
+    ui_density_risk: str
+    review_lane: str
 
 
 def _sorted_unique(values: Iterable[str]) -> list[str]:
@@ -267,6 +285,117 @@ def _public_rc_rows_for(path: str, source: str, target: str, risk_tags: list[str
     return _sorted_unique(rows)
 
 
+def _module_for_path(path: str) -> str:
+    parts = path.split("/")
+    if len(parts) >= 3 and parts[0] in {"app", "crates"}:
+        return "/".join(parts[:3])
+    if len(parts) >= 2:
+        return "/".join(parts[:2])
+    return path or "unknown"
+
+
+def _module_group_for_path(path: str) -> str:
+    lower = path.lower()
+    if "billing" in lower or "quota" in lower or "credit" in lower:
+        return "billing-quota"
+    if "teams" in lower or "team" in lower or "ownership" in lower:
+        return "teams-ownership"
+    if path.startswith("app/src/ai"):
+        return "ai-agent"
+    if path.startswith("app/src/terminal"):
+        return "terminal-command"
+    if path.startswith("app/src/settings_view"):
+        return "settings"
+    if path.startswith("app/src/workspace"):
+        return "workspace"
+    if path.startswith("app/src/drive"):
+        return "warp-drive"
+    if path.startswith("app/src/search"):
+        return "search-command-palette"
+    if path.startswith("crates/onboarding"):
+        return "onboarding"
+    if path.startswith("app/src/auth"):
+        return "auth-account"
+    return "other-reviewed"
+
+
+def _length_ratio(source: str, target: str) -> float:
+    if not source:
+        return 0.0
+    return round(len(target) / len(source), 2)
+
+
+def _mojibake_status(source: str, target: str) -> str:
+    source_hits = [signature for signature in MOJIBAKE_SIGNATURES if signature in source]
+    target_hits = [signature for signature in MOJIBAKE_SIGNATURES if signature in target]
+    if source_hits and target_hits:
+        return "source-and-target-issue"
+    if target_hits:
+        return "target-issue"
+    if source_hits:
+        return "source-issue"
+    return "clean"
+
+
+def _ui_density_risk(path: str, source: str, target: str, context: str) -> str:
+    haystack = f"{path}\n{source}\n{context}".lower()
+    compact_terms = (
+        "button",
+        "menu",
+        "modal",
+        "toast",
+        "tab",
+        "label",
+        "placeholder",
+        "title",
+        "toggle",
+        "settings",
+        "toolbar",
+    )
+    compact_surface = any(term in haystack for term in compact_terms)
+    ratio = _length_ratio(source, target)
+    if len(source) < 100 and len(target) > max(len(source) * 2.6, len(source) + 44):
+        return "high"
+    if compact_surface and len(source) < 100 and (
+        len(target) > max(len(source) * 2.1, len(source) + 28) or ratio >= 2.4
+    ):
+        return "note"
+    return "clean"
+
+
+def _machine_copy_score(
+    copy_status: str,
+    copy_notes: list[str],
+    risk_tags: list[str],
+    ui_density_risk: str,
+    mojibake_status: str,
+) -> int:
+    if copy_status == "issue" or mojibake_status.endswith("issue"):
+        return 0
+    if copy_notes or ui_density_risk != "clean" or "english-preserved" in risk_tags:
+        return 1
+    return 2
+
+
+def _review_lane(
+    decision: str,
+    functional_status: str,
+    copy_status: str,
+    public_rc_rows: list[str],
+    ui_density_risk: str,
+    mojibake_status: str,
+) -> str:
+    if decision == "needs-functional-review" or functional_status != "clean":
+        return "functional"
+    if decision == "needs-copy-review" or copy_status != "clean":
+        return "copy"
+    if mojibake_status != "clean" or ui_density_risk != "clean":
+        return "layout"
+    if public_rc_rows:
+        return "public-rc"
+    return "accepted"
+
+
 def _copy_notes(source: str, target: str) -> tuple[str, list[str]]:
     notes: list[str] = []
 
@@ -370,6 +499,8 @@ def _build_rows(replacements: list[dict[str, object]], glossary) -> list[AuditRo
         risk_tags = _classify_risks(path, source, target, context)
         public_rc_rows = _public_rc_rows_for(path, source, target, risk_tags)
         copy_status, copy_notes = _copy_notes(source, target)
+        mojibake_status = _mojibake_status(source, target)
+        ui_density_risk = _ui_density_risk(path, source, target, context)
         decision, confidence, decision_notes, functional_status = _decide(
             token_status=token_status,
             glossary_errors=glossary_errors,
@@ -410,6 +541,28 @@ def _build_rows(replacements: list[dict[str, object]], glossary) -> list[AuditRo
                 copy_status=copy_status,
                 functional_status=functional_status,
                 notes=" | ".join(_sorted_unique(notes)),
+                module=_module_for_path(path),
+                module_group=_module_group_for_path(path),
+                source_length=len(source),
+                target_length=len(target),
+                length_ratio=_length_ratio(source, target),
+                machine_copy_score=_machine_copy_score(
+                    copy_status=copy_status,
+                    copy_notes=copy_notes,
+                    risk_tags=risk_tags,
+                    ui_density_risk=ui_density_risk,
+                    mojibake_status=mojibake_status,
+                ),
+                mojibake_status=mojibake_status,
+                ui_density_risk=ui_density_risk,
+                review_lane=_review_lane(
+                    decision=decision,
+                    functional_status=functional_status,
+                    copy_status=copy_status,
+                    public_rc_rows=public_rc_rows,
+                    ui_density_risk=ui_density_risk,
+                    mojibake_status=mojibake_status,
+                ),
             )
         )
 

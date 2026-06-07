@@ -107,6 +107,20 @@ class PublicRcEvidenceCandidateTests(unittest.TestCase):
         self.assertFalse(result.ok)
         self.assertIn("object_name must be zh-smoke-delete-environment", result.errors)
 
+    def test_custom_endpoint_row_rejects_wrong_object_name(self) -> None:
+        blockers, evidence = self.load_docs()
+        path = self.write_candidate(
+            candidate_text(row_id="GUI-WS-06").replace(
+                "artifact_kind: redacted-text",
+                "object_name: production-endpoint-123\nartifact_kind: redacted-text",
+            )
+        )
+
+        result = preflight_candidate(blockers, evidence, row_id="GUI-WS-06", artifact_path=path)
+
+        self.assertFalse(result.ok)
+        self.assertIn("object_name must be zh-smoke-delete-endpoint", result.errors)
+
     def test_json_and_markdown_outputs_are_stable(self) -> None:
         blockers, evidence = self.load_docs()
         result = preflight_candidate(blockers, evidence, row_id="GUI-SET-05", artifact_path=self.write_candidate(candidate_text()))

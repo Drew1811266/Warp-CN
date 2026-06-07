@@ -40,6 +40,31 @@ blocked-no-disposable-object: 3
 矩阵中的 blocked 行不能只靠 fixture 或源码检查升级；必须同时更新
 registry、阶段记录和对应的 redacted GUI/backend/account 证据。
 
+## 0.19 Self-Defined Complete Release GUI Scope
+
+| Area | Required for 0.19 | Evidence Type | Official backend required |
+| --- | --- | --- | --- |
+| App launch | yes | current-cycle screenshot or reviewer note | no |
+| Onboarding visible copy | yes | screenshot or static asset decision | no |
+| Workspace shell | yes | screenshot or reviewer note | no |
+| Command search（界面文案：命令搜索） | yes | screenshot or reviewer note | no |
+| Settings core pages | yes | screenshot or reviewer note | no |
+| AI settings entry | yes | screenshot or reviewer note | no |
+| Login callback | no | known limitation or isolated account lane | no official approval, but requires isolated account |
+| Billing / quota / Cloud | no | known limitation | yes |
+| Delete / transfer real objects | no | cancel-first proof only | no official approval, but requires disposable object approval |
+
+## 0.19 Current-Cycle GUI Smoke Result - 2026-06-07
+
+| Area | Canonical Status | Reviewer Note |
+| --- | --- | --- |
+| App launch | verified-current-cycle | `WarpOss.app` opened foreground `~` workspace and `设置` windows; no raw screenshot is committed. |
+| Workspace shell | verified-current-cycle | New workspace window `~` displayed `搜索标签页...`, `新会话`, and accessibility text `输入 shell 命令` / `命令输入`; no shell command was executed. |
+| Command search（界面文案：命令搜索） | verified-current-cycle | `视图 > 命令搜索` opened a panel with `命令搜索`, `我想找...`, `历史记录`, `示例查询`, and `搜索历史记录、工作流等`. |
+| Settings core pages | verified-current-cycle | Settings navigation and core labels were visible and readable in Chinese. |
+| AI settings entry | verified-current-cycle | `Warp Agent` settings page was visible with AI labels and descriptions; no private credentials were entered. |
+| Dangerous confirmation cancel path | blocked-no-disposable-object | No approved disposable object exists for this cycle, so no real destructive dialog was opened and no mutation was attempted. |
+
 ## 前置检查
 
 每次 GUI 冒烟前先跑命令行 gate：

@@ -15,11 +15,11 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 ## 当前状态
 
-当前版本：`0.19`
+当前版本：`0.20 self-defined complete release snapshot`
 
-最后核验记录：`2026-06-04 RC39`
+最后核验记录：`2026-06-07`
 
-当前结论：`ready-for-source-localization; heavy-gates-deferred`。也就是说，当前 0.19 上游 stable 源码树的汉化 overlay、manifest 漂移修复、候选翻译、脚本测试和全量翻译审计已经完成，但本轮没有把它提升为公开 RC。电脑负载保护 gate 返回 `defer-heavy-gate`，因此额外串行 Rust 编译、bundle refresh 和 GUI launch 证据都已延期。公开 RC 仍需要补齐 GUI、隔离账号、后端 fixture、一次性对象和静态图证据。
+当前结论：`self-defined-complete-release-snapshot`。也就是说，本仓库的 0.20 自定义汉化版已经完成源码级 overlay 校验、2026-06-07 packaging preflight、当前周期 GUI smoke，以及静态 onboarding 资产 known limitation 记录；它仍不是公开 RC，也不是 Warp 官方中文版本。公开 RC 仍需要补齐隔离账号、后端 fixture、一次性对象和更高保证证据闭环。
 
 ## 汉化进度
 
@@ -76,7 +76,7 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 1. 用隔离账号验证登录、账号状态、Settings、custom inference 等路径。
 2. 为 Billing、Cloud、managed secret、team 等外部状态路径补齐 fixture 或可控测试证据。
 3. 重新生成或设计确认 onboarding 静态 PNG，当前仍有历史英文静态图残留需要单独资产分支处理。
-4. 在电脑负载可控时重新跑 heavy gate、串行 `cargo check -j 1 -p warp`、bundle refresh 和 GUI launch gate；本轮 0.19 适配因低负载 gate 返回 `defer-heavy-gate` 而延期。
+4. 0.20 自定义汉化版的当前周期 GUI smoke 状态为 `verified-current-cycle-with-known-limitations-documented`，bundle preparation 和打包验证已完成；危险确认取消路径仍受 `blocked-no-disposable-object` 限制，public-RC 所需的更高保证 GUI/backend/account/object 证据仍未闭环。
 5. 继续做逐条翻译审查，重点检查语义、术语一致性、UI 容量和功能安全，而不是盲目增加条目。
 6. 对外描述上游状态时使用显式 tag/commit/tree 证据；当前 0.19 适配工作树基于官方上游 `v0.2026.06.03.09.49.stable_00`，commit `2249469e5d24e472cee6ce97d3d324293f67db71`。
 7. 等待或推动 Warp 官方 i18n 框架成熟后，把当前 manifest 迁移为官方 `zh-CN` locale。
@@ -123,7 +123,7 @@ git lfs pull
 sh script/install_privacy_hooks.sh
 ```
 
-低负载校验汉化状态：
+校验汉化状态：
 
 ```bash
 python3 script/zh_apply_localization.py --validate-manifest
@@ -159,7 +159,7 @@ open -n target/debug/bundle/osx/WarpOss.app
 
 ## 常用验证
 
-日常 README、清单或脚本改动建议使用低负载验证：
+日常 README、清单或脚本改动建议使用常规验证：
 
 ```bash
 python3 script/privacy_guard.py --all-tracked
@@ -172,15 +172,15 @@ cargo fmt --check
 git diff --check
 ```
 
-重型 gate 前先运行散热保护检查：
+如需临时降低电脑压力，可以手动运行可选散热保护检查：
 
 ```bash
 python3 script/zh_low_load_gate.py --probes 2 --wait-seconds 60 --max-load 2.50 --max-hot-process-percent 25
 ```
 
-只有输出 `decision: run-heavy-gate` 时才继续跑 Rust compile、bundle 和 GUI。
+这只是可选保护工具，不再作为 Rust compile、bundle 或 GUI 验证的前置条件。
 
-发布前再补充重型 gate。为避免本地电脑过热，建议串行、低并发运行：
+发布前再补充重型 gate：
 
 ```bash
 CARGO_BUILD_JOBS=1 cargo check -j 1 -p warp
@@ -220,6 +220,20 @@ expected_count = 1
 主要文档：
 
 - `docs/zh-Hans-development-guide.md`：汉化开发、审计、验证、GUI 证据、public-RC 和上游同步的主开发手册。
+- `docs/zh-Hans-release-notes-0.20.md`：Warp CN 0.20 自定义汉化版发行说明，记录当前开发快照、验证结果和 known limitations。
+- `docs/zh-Hans-self-defined-complete-release-plan.md`：Warp CN 0.19 自定义汉化完成版目标、验收标准和官方后端范围声明。
+- `docs/zh-Hans-self-defined-complete-release-next-development-tasks-2026-06-07.md`：取消低负载限制后的 0.19 自定义汉化完成版后续开发任务队列。
+- `docs/zh-Hans-self-defined-complete-release-execution-status-2026-06-07.md`：0.19 自定义汉化完成版 Subagent-Driven 执行状态、验证结果、工作树分类和发布 hold。
+- `docs/superpowers/plans/2026-06-07-zh-Hans-self-defined-complete-release-followup.md`：0.19 自定义汉化完成版后续实现计划，适合 Subagent-Driven 或 Inline Execution 执行。
+- `docs/superpowers/plans/2026-06-06-zh-Hans-self-defined-complete-release.md`：0.19 自定义汉化完成版初版后续开发任务计划。
+- `docs/zh-Hans-self-defined-complete-release-checklist-0.19.md`：0.19 自定义汉化完成版最终冻结 checklist。
+- `docs/zh-Hans-official-release-development-plan.md`：正式汉化发行版目标、准入标准、public-RC lane 和发布路线图。
+- `docs/zh-Hans-official-release-7-lane-development-guide.md`：正式汉化发行版 7 条 lane 的执行入口，覆盖私有审批、证据脱敏、blocker 关闭、测试环境、翻译质量、打包发布和最终验收。
+- `docs/zh-Hans-official-release-7-lane-execution-status-2026-06-03.md`：本轮 Subagent-Driven 分 lane 执行状态，记录已准备事项、阻塞项、low-load gate 和轻量验证结果。
+- `docs/zh-Hans-private-approval-routing-2026-06-03.md`：backend fixture 私有审批路由状态，只记录公开路由结论和待办，不包含私有证据。
+- `docs/zh-Hans-test-environment-approval-readiness-2026-06-03.md`：isolated account 和 disposable object 测试环境审批准备状态，只记录 allowlist、no-go 和待批准 packet。
+- `docs/zh-Hans-official-release-next-development-tasks.md`：正式发行 R3-R7 后续任务队列和阻塞条件。
+- `docs/zh-Hans-public-rc-independent-lanes-execution.md`：等待官方 backend fixture 审批期间可并行推进的 isolated account、disposable object、release notes、packaging preflight 和 translation rescan 执行边界。
 - `docs/zh-Hans-localization.md`：总体维护记录和阶段索引。
 - `docs/zh-Hans-release-candidate-2026-06-04-rc39.md`：当前 RC39 记录。
 - `docs/zh-Hans-upstream-stable-adaptation-2026-06-04.md`：0.19 上游 stable 适配记录。

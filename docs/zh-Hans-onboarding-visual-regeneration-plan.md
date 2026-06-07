@@ -69,3 +69,35 @@ documentation only; no PNGs were modified in Phase 77.
 No PNG was modified in Phase 61.
 
 The status remains `still-visual-residue` because the deferred assets have not yet been regenerated or design-approved.
+
+## 0.19 Self-Defined Complete Release Asset Decision
+
+The `50` deferred source onboarding PNGs remain asset-branch work. They are not
+silently considered completed for Warp CN 0.19 self-defined complete release,
+and they do not clear public-RC evidence rows.
+
+For the self-defined 0.19 release, onboarding visual residue must be represented
+as `pending-replacement` or `known-limitation-documented` until current-cycle
+Chinese assets or explicit design approval exist.
+
+These are 0.19-local documentation statuses. They do not replace the broader RC
+asset workflow statuses `visual-regenerated`, `design-approved`, or
+`still-visual-residue`.
+
+| Screen | Decision | Required Action |
+| --- | --- | --- |
+| Welcome local fixture onboarding screen | replace | regenerate current-cycle zh-Hans screenshot or keep documented limitation |
+| Theme choice onboarding screen | replace | regenerate current-cycle zh-Hans screenshot or keep documented limitation |
+| Agent choice onboarding screen | replace | regenerate current-cycle zh-Hans screenshot or keep documented limitation |
+
+No PNG was modified for this 0.19 planning pass.
+
+## 0.19 Static Asset Release Decision
+
+For Warp CN 0.19 self-defined complete release, onboarding static PNG English
+residue is treated as `known-limitation-documented`. Source-level UI
+localization remains complete, but inherited static onboarding images may still
+need future regeneration.
+
+This decision does not modify PNG files, does not clear public-RC evidence rows,
+and does not replace the future asset-only branch workflow.

@@ -26,6 +26,7 @@ REQUIRED_FIELDS = (
 DISPOSABLE_OBJECT_NAMES = {
     "GUI-SET-06": "zh-smoke-delete-environment",
     "GUI-WS-04": "zh-smoke-delete-secret",
+    "GUI-WS-06": "zh-smoke-delete-endpoint",
     "GUI-WS-07": "zh-smoke-public-rc-team",
 }
 
