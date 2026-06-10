@@ -13,6 +13,20 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 本项目不以“官方中文版本”“公开 RC”或“可代表 Warp 官方发布”为目标。仓库中保留的 public-RC 证据脚本和 blocker registry 只是未来如果要做更高保证公开发布时的辅助材料，不影响当前个人使用版完成状态。
 
+## 快速下载体验
+
+当前提供 macOS Apple Silicon（arm64）个人体验包：
+
+- 下载：[Warp-CN-0.20.1-macos-arm64-dev.zip](https://github.com/Drew1811266/Warp-CN/releases/latest/download/Warp-CN-0.20.1-macos-arm64-dev.zip)
+- SHA256：`f96f83fa05f7ff2d0b8e05a95a3ed5d0536e0c000a687c1de1e0fb45520b94d3`
+
+下载后解压 `WarpOss.app`，然后在 Finder 中右键选择“打开”。这个体验包是 ad-hoc 签名的开发版包，没有经过 Apple Developer ID 签名和公证；如果 macOS 拦截，可以在确认来源后用以下命令移除下载隔离标记：
+
+```bash
+xattr -dr com.apple.quarantine WarpOss.app
+open -n WarpOss.app
+```
+
 ## 界面预览
 
 以下截图来自本仓库源码构建的隔离本地 profile，不包含真实账号、密钥或历史会话数据。
