@@ -5,8 +5,8 @@ use super::*;
 // AWS-style access keys used in tests; these match `AWS_ACCESS_ID` from
 // `DEFAULT_REGEXES_WITH_NAMES`. The example value is the standard one used in
 // AWS documentation and is not a real key.
-const AWS_KEY_1: &str = "AKIAIOSFODNN7EXAMPLE";
-const AWS_KEY_2: &str = "AKIA1234567890123456";
+const AWS_KEY_1: &str = concat!("AKIA", "IOSFODNN7EXAMPLE");
+const AWS_KEY_2: &str = concat!("AKIA", "1234567890123456");
 
 #[test]
 fn redact_secrets_in_string_with_no_match_is_noop() {

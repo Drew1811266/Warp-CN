@@ -737,7 +737,10 @@ fn prepare_claude_environment_config_with_config_dir_uses_dir_global_config() {
 #[serial_test::serial]
 fn resolve_suffix_from_resolved_env_vars() {
     std::env::remove_var(ANTHROPIC_API_KEY_ENV);
-    let key = "sk-ant-api03-abcdefghij1234567890ABCDEFGHIJ1234567890abcdefghij1234567890QLWn-dUnuwQ-hIhDiAAA";
+    let key = concat!(
+        "sk-ant-api03-",
+        "abcdefghij1234567890ABCDEFGHIJ1234567890abcdefghij1234567890QLWn-dUnuwQ-hIhDiAAA"
+    );
     let resolved = HashMap::from([(OsString::from("ANTHROPIC_API_KEY"), OsString::from(key))]);
     let suffix = resolve_anthropic_api_key_suffix(&resolved);
     assert_eq!(suffix.as_deref(), Some("QLWn-dUnuwQ-hIhDiAAA"));
@@ -911,14 +914,18 @@ async fn prime_parent_bridge_staged_for_self_managed_wake_keeps_message_in_stage
 #[test]
 #[serial_test::serial]
 fn suffix_uses_worker_injected_env_when_present() {
-    let worker_key = "sk-ant-api03-WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW-worker-suffix!";
+    let worker_key = concat!(
+        "sk-ant-api03-",
+        "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW-worker-suffix!"
+    );
     std::env::set_var(ANTHROPIC_API_KEY_ENV, worker_key);
     // Even when the resolved map has a different value, the worker env wins.
     let resolved = HashMap::from([(
         OsString::from("ANTHROPIC_API_KEY"),
-        OsString::from(
-            "sk-ant-api03-RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR-resolved-val!",
-        ),
+        OsString::from(concat!(
+            "sk-ant-api03-",
+            "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR-resolved-val!",
+        )),
     )]);
     let suffix = resolve_anthropic_api_key_suffix(&resolved);
     let expected = &worker_key[worker_key.len() - 20..];

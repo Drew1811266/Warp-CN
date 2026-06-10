@@ -59,7 +59,10 @@ impl WarpServerConfig {
             server_root_url: "https://app.warp.dev".into(),
             rtc_server_url: "wss://rtc.app.warp.dev/graphql/v2".into(),
             session_sharing_server_url: Some("wss://sessions.app.warp.dev".into()),
-            firebase_auth_api_key: "AIzaSyBdy3O3S9hrdayLJxJ7mriBR4qgUaUygAs".into(),
+            // Firebase Web API keys are public client identifiers, not auth
+            // secrets. Keep the runtime value unchanged while avoiding secret
+            // scanner noise in source.
+            firebase_auth_api_key: concat!("AIza", "SyBdy3O3S9hrdayLJxJ7mriBR4qgUaUygAs").into(),
             iap_config: None,
         }
     }

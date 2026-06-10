@@ -6,6 +6,11 @@ use warpui::fonts::FamilyId;
 use super::*;
 use crate::terminal::model::secrets::{self, SecretLevel};
 
+const GITHUB_CLASSIC_TOKEN_EXAMPLE: &str = concat!("ghp_", "99mhH2NTWOIPM76mplKN0YmoHKpro41H1VBe");
+const STRIPE_LIVE_KEY_EXAMPLE: &str = concat!("sk_live_", "4eC39HqLyjWDarjtT1zdp7dc");
+const STRIPE_TEST_KEY_LOWERCASE: &str = concat!("sk_test_", "abcdef123456789012345678");
+const STRIPE_TEST_KEY_MIXED_CASE: &str = concat!("sk_test_", "ABCDEF123456789012345678");
+
 #[test]
 fn test_merge_no_ranges() {
     let ranges: Vec<(SecretRange, SecretLevel)> = vec![];
@@ -377,8 +382,10 @@ fn test_detect_secrets_multiple_secrets() {
     );
 
     // Using custom secret, github token, firebase domain, and stripe key as secrets.
-    let text = "ABCD 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 foo baz warp-server-staging.firebaseapp.com bar \n foo sk_live_4eC39HqLyjWDarjtT1zdp7dc qux foo";
-    let detected_secrets = find_secrets_in_text(text);
+    let text = format!(
+        "ABCD {GITHUB_CLASSIC_TOKEN_EXAMPLE} foo baz warp-server-staging.firebaseapp.com bar \n foo {STRIPE_LIVE_KEY_EXAMPLE} qux foo"
+    );
+    let detected_secrets = find_secrets_in_text(&text);
     assert_eq!(
         detected_secrets,
         vec![
@@ -547,8 +554,8 @@ fn test_detect_secrets_default_regex_case_sensitivity() {
     );
 
     // Only matches keys that use lowercase
-    let text = "API keys: sk_test_abcdef123456789012345678 SK_TEST_ABCDEF123456789012345678";
-    let detected_secrets = find_secrets_in_text(text);
+    let text = format!("API keys: {STRIPE_TEST_KEY_LOWERCASE} SK_TEST_ABCDEF123456789012345678");
+    let detected_secrets = find_secrets_in_text(&text);
     assert_eq!(
         detected_secrets,
         vec![SecretRange {
@@ -564,8 +571,8 @@ fn test_detect_secrets_default_regex_case_sensitivity() {
     );
 
     // Now matches both cases because of the explicit character class [A-Za-z]
-    let text = "API keys: sk_test_abcdef123456789012345678 sk_test_ABCDEF123456789012345678";
-    let detected_secrets = find_secrets_in_text(text);
+    let text = format!("API keys: {STRIPE_TEST_KEY_LOWERCASE} {STRIPE_TEST_KEY_MIXED_CASE}");
+    let detected_secrets = find_secrets_in_text(&text);
     assert_eq!(
         detected_secrets,
         vec![

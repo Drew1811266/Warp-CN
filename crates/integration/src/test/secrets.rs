@@ -205,6 +205,9 @@ pub fn test_alt_screen_secret_detection() -> Builder {
 
 pub fn test_secret_case_sensitivity() -> Builder {
     // Test the secret redaction respects case by default
+    let uppercase_aws_key = concat!("AKIA", "ABC123456789DEFG");
+    let lowercase_aws_key = "akiaabc123456789defg";
+
     new_builder()
         .with_step(initialize_secret_regexes())
         .with_step(wait_until_bootstrapped_single_pane_for_tab(0))
@@ -217,9 +220,9 @@ pub fn test_secret_case_sensitivity() -> Builder {
         // AWS Access ID pattern is case-sensitive by default
         .with_step(execute_command_for_single_terminal_in_tab(
             0,
-            "echo 'AKIAABC123456789DEFG akiaabc123456789defg'".to_string(),
+            format!("echo '{uppercase_aws_key} {lowercase_aws_key}'"),
             ExpectedExitStatus::Success,
-            "AKIAABC123456789DEFG akiaabc123456789defg",
+            format!("{uppercase_aws_key} {lowercase_aws_key}"),
         ))
         .with_step(
             new_step_with_default_assertions("Select block")

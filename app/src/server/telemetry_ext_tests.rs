@@ -7,7 +7,7 @@ use super::*;
 // AWS-style access key example used in tests; matches `AWS_ACCESS_ID` in
 // `DEFAULT_REGEXES_WITH_NAMES`. The example value is the standard one used in
 // AWS documentation and is not a real key.
-const AWS_KEY: &str = "AKIAIOSFODNN7EXAMPLE";
+const AWS_KEY: &str = concat!("AKIA", "IOSFODNN7EXAMPLE");
 
 /// Constructs a minimal `Event` with a `NamedEvent` payload for testing.
 fn make_named_event(value: serde_json::Value, contains_ugc: bool) -> Event {

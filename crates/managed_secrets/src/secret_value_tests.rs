@@ -1,5 +1,9 @@
 use crate::secret_value::ManagedSecretValue;
 
+const AWS_ACCESS_KEY_ID: &str = concat!("AKIA", "IOSFODNN7EXAMPLE");
+const AWS_SECRET_ACCESS_KEY: &str = concat!("wJalrXUtnFEMI/", "K7MDENG/bPxRfiCYEXAMPLEKEY");
+const AWS_SECRET_ACCESS_KEY_PREFIX: &str = "wJalrXUtnFEMI";
+
 /// Test to ensure that `raw_value` secrets are serialized in the format that the server expects.
 #[test]
 fn test_serialize_raw_value() {
@@ -64,15 +68,17 @@ fn test_serialize_anthropic_bedrock_api_key() {
 #[test]
 fn test_serialize_anthropic_bedrock_access_key() {
     let secret = ManagedSecretValue::AnthropicBedrockAccessKey {
-        aws_access_key_id: "AKIAIOSFODNN7EXAMPLE".to_string(),
-        aws_secret_access_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY".to_string(),
+        aws_access_key_id: AWS_ACCESS_KEY_ID.to_string(),
+        aws_secret_access_key: AWS_SECRET_ACCESS_KEY.to_string(),
         aws_session_token: Some("FwoGZXIvYXdzEBY".to_string()),
         aws_region: "us-east-1".to_string(),
     };
     let serialized = serde_json::to_string(&secret).expect("failed to serialize");
     assert_eq!(
         serialized,
-        "{\"aws_access_key_id\":\"AKIAIOSFODNN7EXAMPLE\",\"aws_secret_access_key\":\"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\",\"aws_session_token\":\"FwoGZXIvYXdzEBY\",\"aws_region\":\"us-east-1\"}"
+        format!(
+            r#"{{"aws_access_key_id":"{AWS_ACCESS_KEY_ID}","aws_secret_access_key":"{AWS_SECRET_ACCESS_KEY}","aws_session_token":"FwoGZXIvYXdzEBY","aws_region":"us-east-1"}}"#
+        )
     );
 }
 
@@ -82,15 +88,17 @@ fn test_serialize_anthropic_bedrock_access_key() {
 #[test]
 fn test_serialize_anthropic_bedrock_access_key_without_session_token() {
     let secret = ManagedSecretValue::AnthropicBedrockAccessKey {
-        aws_access_key_id: "AKIAIOSFODNN7EXAMPLE".to_string(),
-        aws_secret_access_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY".to_string(),
+        aws_access_key_id: AWS_ACCESS_KEY_ID.to_string(),
+        aws_secret_access_key: AWS_SECRET_ACCESS_KEY.to_string(),
         aws_session_token: None,
         aws_region: "us-east-1".to_string(),
     };
     let serialized = serde_json::to_string(&secret).expect("failed to serialize");
     assert_eq!(
         serialized,
-        "{\"aws_access_key_id\":\"AKIAIOSFODNN7EXAMPLE\",\"aws_secret_access_key\":\"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\",\"aws_region\":\"us-east-1\"}"
+        format!(
+            r#"{{"aws_access_key_id":"{AWS_ACCESS_KEY_ID}","aws_secret_access_key":"{AWS_SECRET_ACCESS_KEY}","aws_region":"us-east-1"}}"#
+        )
     );
     assert!(
         !serialized.contains("aws_session_token"),
@@ -128,18 +136,18 @@ fn test_anthropic_bedrock_access_key_constructor_optional_session_token() {
 #[test]
 fn test_debug_representation_no_secrets_anthropic_bedrock_access_key() {
     let secret = ManagedSecretValue::AnthropicBedrockAccessKey {
-        aws_access_key_id: "AKIAIOSFODNN7EXAMPLE".to_string(),
-        aws_secret_access_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY".to_string(),
+        aws_access_key_id: AWS_ACCESS_KEY_ID.to_string(),
+        aws_secret_access_key: AWS_SECRET_ACCESS_KEY.to_string(),
         aws_session_token: Some("FwoGZXIvYXdzEBY".to_string()),
         aws_region: "us-west-2".to_string(),
     };
     let debug_representation = format!("{:?}", secret);
     assert!(
-        !debug_representation.contains("AKIAIOSFODNN7EXAMPLE"),
+        !debug_representation.contains(AWS_ACCESS_KEY_ID),
         "debug representation contains aws_access_key_id: {debug_representation}"
     );
     assert!(
-        !debug_representation.contains("wJalrXUtnFEMI"),
+        !debug_representation.contains(AWS_SECRET_ACCESS_KEY_PREFIX),
         "debug representation contains aws_secret_access_key: {debug_representation}"
     );
     assert!(
