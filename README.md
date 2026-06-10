@@ -27,6 +27,10 @@ xattr -dr com.apple.quarantine /Applications/WarpOss.app
 open -n /Applications/WarpOss.app
 ```
 
+## 系统要求
+
+本项目的 macOS 要求与 Warp 官方要求保持一致：macOS 10.14 或更高版本，并且硬件支持 Metal。当前发布的体验包只提供 Apple Silicon（arm64）构建；Apple Silicon Mac 的实际系统范围是 macOS 11 Big Sur 或更高版本。
+
 ## 界面预览
 
 以下截图来自本仓库源码构建的隔离本地 profile，不包含真实账号、密钥或历史会话数据。
