@@ -281,21 +281,30 @@ use crate::util::bindings::custom_tag_to_keystroke;
 impl Display for SettingsSection {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            SettingsSection::About => write!(f, "关于"),
+            SettingsSection::Account => write!(f, "账号"),
+            SettingsSection::MCPServers => write!(f, "MCP 服务器"),
             SettingsSection::BillingAndUsage => write!(f, "账单和用量"),
+            SettingsSection::Appearance => write!(f, "外观"),
+            SettingsSection::Features => write!(f, "功能"),
             SettingsSection::Keybindings => write!(f, "键盘快捷键"),
-            SettingsSection::SharedBlocks => write!(f, "Shared blocks"),
-            SettingsSection::MCPServers => write!(f, "MCP Servers"),
+            SettingsSection::Privacy => write!(f, "隐私"),
+            SettingsSection::Referrals => write!(f, "推荐"),
+            SettingsSection::SharedBlocks => write!(f, "共享块"),
+            SettingsSection::Teams => write!(f, "团队"),
             SettingsSection::WarpDrive => write!(f, "Warp Drive"),
+            SettingsSection::Warpify => write!(f, "Warpify"),
+            SettingsSection::AI => write!(f, "Agent"),
             SettingsSection::WarpAgent => write!(f, "Warp Agent"),
-            SettingsSection::AgentProfiles => write!(f, "Profiles"),
-            SettingsSection::AgentMCPServers => write!(f, "MCP servers"),
-            SettingsSection::Knowledge => write!(f, "Knowledge"),
-            SettingsSection::ThirdPartyCLIAgents => write!(f, "Third party CLI agents"),
-            SettingsSection::CodeIndexing => write!(f, "Indexing and projects"),
-            SettingsSection::EditorAndCodeReview => write!(f, "Editor and Code Review"),
+            SettingsSection::AgentProfiles => write!(f, "配置档"),
+            SettingsSection::AgentMCPServers => write!(f, "MCP 服务器"),
+            SettingsSection::Knowledge => write!(f, "知识"),
+            SettingsSection::ThirdPartyCLIAgents => write!(f, "第三方 CLI Agent"),
+            SettingsSection::Code => write!(f, "代码"),
+            SettingsSection::CodeIndexing => write!(f, "索引和项目"),
+            SettingsSection::EditorAndCodeReview => write!(f, "编辑器和代码审查"),
             SettingsSection::CloudEnvironments => write!(f, "环境"),
             SettingsSection::OzCloudAPIKeys => write!(f, "Oz Cloud API Keys"),
-            _ => write!(f, "{self:?}"),
         }
     }
 }
@@ -372,28 +381,40 @@ impl FromStr for SettingsSection {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "About" => Ok(Self::About),
+            "关于" => Ok(Self::About),
             "Account" => Ok(Self::Account),
+            "账号" => Ok(Self::Account),
             "AI" => Ok(Self::AI),
             "MCP Servers" => Ok(Self::MCPServers),
             "账单和用量" => Ok(Self::BillingAndUsage),
             "Appearance" => Ok(Self::Appearance),
+            "外观" => Ok(Self::Appearance),
             "Code" => Ok(Self::Code),
+            "代码" => Ok(Self::Code),
             "Features" => Ok(Self::Features),
+            "功能" => Ok(Self::Features),
             "键盘快捷键" => Ok(Self::Keybindings),
             "Privacy" => Ok(Self::Privacy),
+            "隐私" => Ok(Self::Privacy),
             "Referrals" => Ok(Self::Referrals),
+            "推荐" => Ok(Self::Referrals),
             "Shared blocks" => Ok(Self::SharedBlocks),
+            "共享块" => Ok(Self::SharedBlocks),
             "团队" => Ok(Self::Teams),
             "Warpify" => Ok(Self::Warpify),
             "WarpDrive" | "Warp Drive" => Ok(Self::WarpDrive),
             // This page was called "Oz" at one point, keep for backward compatibility.
             "Oz" | "Warp Agent" => Ok(Self::WarpAgent),
-            "Profiles" | "AgentProfiles" => Ok(Self::AgentProfiles),
-            "MCP servers" | "AgentMCPServers" => Ok(Self::AgentMCPServers),
-            "Knowledge" => Ok(Self::Knowledge),
-            "Third party CLI agents" | "ThirdPartyCLIAgents" => Ok(Self::ThirdPartyCLIAgents),
-            "Indexing and projects" | "CodeIndexing" => Ok(Self::CodeIndexing),
-            "Editor and Code Review" | "EditorAndCodeReview" => Ok(Self::EditorAndCodeReview),
+            "Profiles" | "AgentProfiles" | "配置档" => Ok(Self::AgentProfiles),
+            "MCP servers" | "AgentMCPServers" | "MCP 服务器" => Ok(Self::AgentMCPServers),
+            "Knowledge" | "知识" => Ok(Self::Knowledge),
+            "Third party CLI agents" | "ThirdPartyCLIAgents" | "第三方 CLI Agent" => {
+                Ok(Self::ThirdPartyCLIAgents)
+            }
+            "Indexing and projects" | "CodeIndexing" | "索引和项目" => Ok(Self::CodeIndexing),
+            "Editor and Code Review" | "EditorAndCodeReview" | "编辑器和代码审查" => {
+                Ok(Self::EditorAndCodeReview)
+            }
             "CloudEnvironments" => Ok(Self::CloudEnvironments),
             "Oz Cloud API Keys" | "OzCloudAPIKeys" => Ok(Self::OzCloudAPIKeys),
             _ => Err(()),
@@ -1278,7 +1299,7 @@ impl SettingsView {
             )),
             SettingsNavItem::Page(SettingsSection::BillingAndUsage),
             SettingsNavItem::Umbrella(SettingsUmbrella::new(
-                "Code",
+                "代码",
                 vec![
                     SettingsSection::CodeIndexing,
                     SettingsSection::EditorAndCodeReview,

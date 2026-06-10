@@ -441,17 +441,15 @@ impl PromptSubmissionMode {
     /// Display name for the settings dropdown.
     pub fn display_name(&self) -> &'static str {
         match self {
-            PromptSubmissionMode::Interrupt => "Interrupt response",
-            PromptSubmissionMode::Queue => "Queue until response finishes",
+            PromptSubmissionMode::Interrupt => "中断响应",
+            PromptSubmissionMode::Queue => "排队直到响应完成",
         }
     }
 
     pub fn command_palette_description(&self) -> &'static str {
         match self {
-            PromptSubmissionMode::Interrupt => "Set default prompt submission: interrupt response",
-            PromptSubmissionMode::Queue => {
-                "Set default prompt submission: queue until response finishes"
-            }
+            PromptSubmissionMode::Interrupt => "设置默认提示提交方式：中断响应",
+            PromptSubmissionMode::Queue => "设置默认提示提交方式：排队直到响应完成",
         }
     }
 }

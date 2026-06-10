@@ -7,9 +7,9 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 ## 当前状态
 
-当前版本：`0.20.3`
+当前版本：`0.20.4`
 
-当前结论：个人使用目标下的汉化版已经完成。项目已经完成源码级简体中文 overlay、核心界面覆盖、基础构建验证和当前周期 GUI 冒烟检查，可以作为本地中文 Warp fork 使用。
+当前结论：个人使用目标下的汉化版已经完成。项目已经完成源码级简体中文 overlay、核心界面覆盖、基础构建验证和当前周期 GUI 冒烟检查，可以作为本地中文 Warp fork 使用。`0.20.4` 进一步补齐了设置界面导航、Agent 子页和默认提示提交模式等可见中文文案。
 
 本项目不以“官方中文版本”“公开 RC”或“可代表 Warp 官方发布”为目标。仓库中保留的 public-RC 证据脚本和 blocker registry 只是未来如果要做更高保证公开发布时的辅助材料，不影响当前个人使用版完成状态。
 
@@ -17,8 +17,8 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 当前提供 macOS Apple Silicon（arm64）个人体验包：
 
-- 下载：[Warp-CN-0.20.3-macos-arm64-release.dmg](https://github.com/Drew1811266/Warp-CN/releases/latest/download/Warp-CN-0.20.3-macos-arm64-release.dmg)
-- SHA256：`dd505182451b4a40d57a52191c5aa44692fff5d33dec3e63c0f490d4fa1b121d`
+- 下载：[Warp-CN-0.20.4-macos-arm64-release.dmg](https://github.com/Drew1811266/Warp-CN/releases/latest/download/Warp-CN-0.20.4-macos-arm64-release.dmg)
+- SHA256：`f8c3d20a0e35cc657fcc59ea5a63183462a97694e4cce66c2d4ffe003fc71b9e`
 
 下载后打开 DMG，将 `WarpOss.app` 拖入 `Applications`，然后在 Finder 中右键选择“打开”。这个体验包是 ad-hoc 签名的 release 构建，没有经过 Apple Developer ID 签名和公证；如果 macOS 拦截，可以在确认来源后用以下命令移除下载隔离标记：
 
