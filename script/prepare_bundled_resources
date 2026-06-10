@@ -43,6 +43,7 @@ CARGO_PROFILE="${3:-}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 RESOURCES_SRC="$REPO_ROOT/resources"
+APP_BUNDLED_SRC="$REPO_ROOT/app/assets/bundled"
 
 # Validate that the source resources directory exists
 if [ ! -d "$RESOURCES_SRC" ]; then
@@ -53,11 +54,26 @@ fi
 # Create the destination directory if it doesn't exist
 mkdir -p "$DEST_DIR"
 
-# Copy bundled resources
+# Copy bundled resources.
+#
+# UI assets such as bundled/png, bundled/svg, and bundled/fonts live under
+# app/assets/bundled. Repo-managed runtime resources such as bundled skills live
+# under resources/bundled. Merge both trees into the app bundle so native builds
+# can resolve the same asset paths that are embedded in the Rust binary.
+echo "Copying bundled resources to $DEST_DIR/bundled"
+rm -rf "$DEST_DIR/bundled"
+mkdir -p "$DEST_DIR/bundled"
+
+if [ -d "$APP_BUNDLED_SRC" ]; then
+  echo "Copying app UI assets from $APP_BUNDLED_SRC"
+  cp -R "$APP_BUNDLED_SRC"/. "$DEST_DIR/bundled"/
+else
+  echo "Warning: No app bundled assets directory found at $APP_BUNDLED_SRC" >&2
+fi
+
 if [ -d "$RESOURCES_SRC/bundled" ]; then
-  echo "Copying bundled resources to $DEST_DIR/bundled"
-  rm -rf "$DEST_DIR/bundled"
-  cp -R "$RESOURCES_SRC/bundled" "$DEST_DIR/bundled"
+  echo "Copying repo bundled resources from $RESOURCES_SRC/bundled"
+  cp -R "$RESOURCES_SRC/bundled"/. "$DEST_DIR/bundled"/
 else
   echo "Warning: No bundled directory found at $RESOURCES_SRC/bundled" >&2
 fi
