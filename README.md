@@ -7,7 +7,7 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 ## 当前状态
 
-当前版本：`0.20.2`
+当前版本：`0.20.3`
 
 当前结论：个人使用目标下的汉化版已经完成。项目已经完成源码级简体中文 overlay、核心界面覆盖、基础构建验证和当前周期 GUI 冒烟检查，可以作为本地中文 Warp fork 使用。
 
@@ -17,10 +17,10 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 当前提供 macOS Apple Silicon（arm64）个人体验包：
 
-- 下载：[Warp-CN-0.20.2-macos-arm64-dev.dmg](https://github.com/Drew1811266/Warp-CN/releases/latest/download/Warp-CN-0.20.2-macos-arm64-dev.dmg)
-- SHA256：`cdbdd9a96c678c180d9fe1088e021b707f742d1d5850d868122176fe061f2b54`
+- 下载：[Warp-CN-0.20.3-macos-arm64-release.dmg](https://github.com/Drew1811266/Warp-CN/releases/latest/download/Warp-CN-0.20.3-macos-arm64-release.dmg)
+- SHA256：`dd505182451b4a40d57a52191c5aa44692fff5d33dec3e63c0f490d4fa1b121d`
 
-下载后打开 DMG，将 `WarpOss.app` 拖入 `Applications`，然后在 Finder 中右键选择“打开”。这个体验包是 ad-hoc 签名的开发版包，没有经过 Apple Developer ID 签名和公证；如果 macOS 拦截，可以在确认来源后用以下命令移除下载隔离标记：
+下载后打开 DMG，将 `WarpOss.app` 拖入 `Applications`，然后在 Finder 中右键选择“打开”。这个体验包是 ad-hoc 签名的 release 构建，没有经过 Apple Developer ID 签名和公证；如果 macOS 拦截，可以在确认来源后用以下命令移除下载隔离标记：
 
 ```bash
 xattr -dr com.apple.quarantine /Applications/WarpOss.app
