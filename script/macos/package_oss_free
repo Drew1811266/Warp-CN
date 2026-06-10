@@ -1,0 +1,282 @@
+#!/usr/bin/env bash
+#
+# Build a free-distribution Warp CN macOS DMG for the OSS channel.
+#
+# This intentionally avoids Developer ID signing and notarization. It also
+# avoids `cargo bundle`, which currently panics in this checkout with
+# Term(ColorOutOfRange). The output is still a release-lto app bundle with
+# bundled UI resources, corrected Info.plist metadata, DockTilePlugin when
+# available, an executable CLI wrapper, ad-hoc hardened-runtime signing, and a
+# simple APFS/UDZO DMG containing WarpOss.app plus an Applications symlink.
+
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: script/macos/package_oss_free --version <version> [--skip-build]
+
+Options:
+  --version <version>  Release version to stamp into Info.plist and filenames.
+  --skip-build         Reuse target/aarch64-apple-darwin/release-lto/warp-oss.
+  -h, --help           Show this help.
+
+Example:
+  script/macos/package_oss_free --version 0.20.5
+EOF
+}
+
+VERSION=""
+SKIP_BUILD=false
+
+while (($#)); do
+  case "$1" in
+    --version)
+      if [[ $# -lt 2 || "${2:0:1}" == "-" ]]; then
+        echo "Error: --version requires a value" >&2
+        exit 2
+      fi
+      VERSION="$2"
+      shift 2
+      ;;
+    --skip-build)
+      SKIP_BUILD=true
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Error: unknown argument: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+if [[ -z "$VERSION" ]]; then
+  echo "Error: --version is required" >&2
+  usage >&2
+  exit 2
+fi
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$REPO_ROOT"
+
+export MACOSX_DEPLOYMENT_TARGET="${MACOSX_DEPLOYMENT_TARGET:-10.14}"
+
+RELEASE_CHANNEL="oss"
+CARGO_PROFILE="release-lto"
+TARGET="aarch64-apple-darwin"
+WARP_BIN="warp-oss"
+WARP_APP_NAME="WarpOss"
+BUNDLE_ID="dev.warp.WarpOss"
+WARP_SCHEME_NAME="warposs"
+
+PACKAGE_ROOT="$REPO_ROOT/target/warp-cn-free-$VERSION"
+BUNDLE_DIR="$PACKAGE_ROOT/bundle/osx"
+APP_DIR="$BUNDLE_DIR/$WARP_APP_NAME.app"
+CONTENTS_DIR="$APP_DIR/Contents"
+MACOS_DIR="$CONTENTS_DIR/MacOS"
+RESOURCES_DIR="$CONTENTS_DIR/Resources"
+PLUGINS_DIR="$CONTENTS_DIR/PlugIns"
+INFO_PLIST="$CONTENTS_DIR/Info.plist"
+DMG_STAGE="$PACKAGE_ROOT/dmg-stage"
+DMG_PATH="$REPO_ROOT/target/Warp-CN-$VERSION-macos-arm64-release.dmg"
+SCHEMA_CACHE="$PACKAGE_ROOT/settings_schema.json"
+
+if [[ "$SKIP_BUILD" != true ]]; then
+  echo "Building $WARP_BIN for $TARGET with profile $CARGO_PROFILE"
+  (
+    cd app
+    cargo build \
+      --profile "$CARGO_PROFILE" \
+      --bin "$WARP_BIN" \
+      --target "$TARGET" \
+      --features release_bundle,extern_plist
+  )
+else
+  echo "Skipping Rust build; reusing existing release-lto binary"
+fi
+
+BINARY_PATH="$REPO_ROOT/target/$TARGET/$CARGO_PROFILE/$WARP_BIN"
+if [[ ! -x "$BINARY_PATH" ]]; then
+  echo "Error: built binary not found or not executable: $BINARY_PATH" >&2
+  exit 1
+fi
+
+echo "Preparing app bundle at $APP_DIR"
+rm -rf "$PACKAGE_ROOT" "$DMG_PATH"
+mkdir -p "$MACOS_DIR" "$RESOURCES_DIR"
+cp "$BINARY_PATH" "$MACOS_DIR/$WARP_BIN"
+
+# Add the framework rpath that the official bundle script adds. It may already
+# exist on reused binaries, so duplicate-rpath failures are non-fatal.
+install_name_tool -add_rpath "@executable_path/../Frameworks" "$MACOS_DIR/$WARP_BIN" 2>/dev/null || true
+
+cat > "$INFO_PLIST" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleDevelopmentRegion</key>
+  <string>English</string>
+  <key>CFBundleDisplayName</key>
+  <string>$WARP_APP_NAME</string>
+  <key>CFBundleExecutable</key>
+  <string>$WARP_BIN</string>
+  <key>CFBundleIconFile</key>
+  <string>$WARP_APP_NAME.icns</string>
+  <key>CFBundleIdentifier</key>
+  <string>$BUNDLE_ID</string>
+  <key>CFBundleInfoDictionaryVersion</key>
+  <string>6.0</string>
+  <key>CFBundleName</key>
+  <string>$WARP_APP_NAME</string>
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+  <key>CFBundleShortVersionString</key>
+  <string>$VERSION</string>
+  <key>CFBundleVersion</key>
+  <string>$VERSION</string>
+  <key>CSResourcesFileMapped</key>
+  <true/>
+  <key>LSApplicationCategoryType</key>
+  <string>public.app-category.developer-tools</string>
+  <key>LSMinimumSystemVersion</key>
+  <string>11.0</string>
+  <key>LSRequiresCarbon</key>
+  <true/>
+  <key>NSHighResolutionCapable</key>
+  <true/>
+  <key>NSHumanReadableCopyright</key>
+  <string>© 2026, Denver Technologies, Inc</string>
+  <key>WarpVersion</key>
+  <string>$VERSION</string>
+</dict>
+</plist>
+EOF
+
+echo "Applying common macOS plist metadata"
+WARP_PLIST_PATH="$INFO_PLIST" WARP_SCHEME_NAME="$WARP_SCHEME_NAME" ./script/update_plist
+
+plutil -replace CFBundleShortVersionString -string "$VERSION" "$INFO_PLIST"
+plutil -replace CFBundleVersion -string "$VERSION" "$INFO_PLIST"
+plutil -replace WarpVersion -string "$VERSION" "$INFO_PLIST"
+plutil -insert SUPPORTS_CHAT_GPT_WORK_WITH_APPS -bool true "$INFO_PLIST" 2>/dev/null || \
+  plutil -replace SUPPORTS_CHAT_GPT_WORK_WITH_APPS -bool true "$INFO_PLIST"
+plutil -insert LSBackgroundOnly -bool false "$INFO_PLIST" 2>/dev/null || \
+  plutil -replace LSBackgroundOnly -bool false "$INFO_PLIST"
+plutil -insert SMAuthorizedClients -xml "<array><string>$BUNDLE_ID</string></array>" "$INFO_PLIST" 2>/dev/null || \
+  plutil -replace SMAuthorizedClients -xml "<array><string>$BUNDLE_ID</string></array>" "$INFO_PLIST"
+plutil -insert NSServices -xml "
+<array>
+  <dict>
+    <key>NSMenuItem</key>
+    <dict><key>default</key><string>New $WARP_APP_NAME Tab Here</string></dict>
+    <key>NSMessage</key><string>openTab</string>
+    <key>NSRequiredContext</key>
+    <dict><key>NSTextContent</key><string>FilePath</string></dict>
+    <key>NSSendTypes</key>
+    <array><string>NSFilenamesPboardType</string><string>public.plain-text</string></array>
+  </dict>
+  <dict>
+    <key>NSMenuItem</key>
+    <dict><key>default</key><string>New $WARP_APP_NAME Window Here</string></dict>
+    <key>NSMessage</key><string>openWindow</string>
+    <key>NSRequiredContext</key>
+    <dict><key>NSTextContent</key><string>FilePath</string></dict>
+    <key>NSSendTypes</key>
+    <array><string>NSFilenamesPboardType</string><string>public.plain-text</string></array>
+  </dict>
+</array>" "$INFO_PLIST" 2>/dev/null || true
+
+echo "Preparing app icon"
+ICON_SOURCE="$REPO_ROOT/app/channels/$RELEASE_CHANNEL/icon/no-padding/512x512.png"
+ICON_DEST="$RESOURCES_DIR/$WARP_APP_NAME.icns"
+EXISTING_ICON=""
+for candidate in \
+  "$REPO_ROOT/target/release-lto-manual-$VERSION/bundle/osx/$WARP_APP_NAME.app/Contents/Resources/$WARP_APP_NAME.icns" \
+  "$REPO_ROOT/target/release-lto-manual/bundle/osx/$WARP_APP_NAME.app/Contents/Resources/$WARP_APP_NAME.icns" \
+  "$REPO_ROOT/target/debug/bundle/osx/$WARP_APP_NAME.app/Contents/Resources/$WARP_APP_NAME.icns"; do
+  if [[ -f "$candidate" ]]; then
+    EXISTING_ICON="$candidate"
+    break
+  fi
+done
+
+if [[ -n "$EXISTING_ICON" ]]; then
+  cp "$EXISTING_ICON" "$ICON_DEST"
+elif [[ -f "$ICON_SOURCE" ]]; then
+  ICONSET_DIR="$(mktemp -d)/$WARP_APP_NAME.iconset"
+  mkdir -p "$ICONSET_DIR"
+  for size in 16 32 64 128 256 512; do
+    sips -z "$size" "$size" "$ICON_SOURCE" --out "$ICONSET_DIR/icon_${size}x${size}.png" >/dev/null
+  done
+  sips -z 32 32 "$ICON_SOURCE" --out "$ICONSET_DIR/icon_16x16@2x.png" >/dev/null
+  sips -z 64 64 "$ICON_SOURCE" --out "$ICONSET_DIR/icon_32x32@2x.png" >/dev/null
+  sips -z 256 256 "$ICON_SOURCE" --out "$ICONSET_DIR/icon_128x128@2x.png" >/dev/null
+  sips -z 512 512 "$ICON_SOURCE" --out "$ICONSET_DIR/icon_256x256@2x.png" >/dev/null
+  cp "$ICON_SOURCE" "$ICONSET_DIR/icon_512x512.png"
+  iconutil -c icns "$ICONSET_DIR" -o "$ICON_DEST"
+else
+  echo "Error: no icon source found for $RELEASE_CHANNEL" >&2
+  exit 1
+fi
+
+DOCK_TILE_PLUGIN_DIR="$REPO_ROOT/target/$CARGO_PROFILE/WarpDockTilePlugin.docktileplugin"
+if [[ -d "$DOCK_TILE_PLUGIN_DIR" ]]; then
+  echo "Copying DockTilePlugin"
+  mkdir -p "$PLUGINS_DIR"
+  cp -R "$DOCK_TILE_PLUGIN_DIR" "$PLUGINS_DIR/"
+  plutil -insert NSDockTilePlugIn -string "WarpDockTilePlugin.docktileplugin" "$INFO_PLIST" 2>/dev/null || \
+    plutil -replace NSDockTilePlugIn -string "WarpDockTilePlugin.docktileplugin" "$INFO_PLIST"
+  plutil -replace MainAppBundleIdentifier -string "$BUNDLE_ID" \
+    "$PLUGINS_DIR/WarpDockTilePlugin.docktileplugin/Contents/Info.plist" 2>/dev/null || \
+    plutil -insert MainAppBundleIdentifier -string "$BUNDLE_ID" \
+      "$PLUGINS_DIR/WarpDockTilePlugin.docktileplugin/Contents/Info.plist"
+else
+  echo "Warning: DockTilePlugin not found at $DOCK_TILE_PLUGIN_DIR; continuing without it" >&2
+fi
+
+echo "Preparing bundled resources"
+if ! cargo about --version >/dev/null 2>&1; then
+  echo "cargo-about is unavailable; skipping THIRD_PARTY_LICENSES.txt generation for this free local package"
+  export NO_LICENSES=1
+fi
+SETTINGS_SCHEMA_CACHE="$SCHEMA_CACHE" GIT_RELEASE_TAG="$VERSION" \
+  ./script/prepare_bundled_resources "$RESOURCES_DIR" "$RELEASE_CHANNEL" "$CARGO_PROFILE"
+
+echo "Creating CLI wrapper"
+mkdir -p "$RESOURCES_DIR/bin"
+cat > "$RESOURCES_DIR/bin/$WARP_BIN" <<EOF
+#!/bin/bash
+script_dir="\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
+exec -a "\$0" "\$script_dir/../../MacOS/$WARP_BIN" "\$@"
+EOF
+chmod +x "$RESOURCES_DIR/bin/$WARP_BIN"
+
+echo "Ad-hoc signing app bundle"
+codesign --force --deep --options runtime --sign - "$APP_DIR" --entitlements script/Debug-Entitlements.plist
+codesign --verify --deep --strict "$APP_DIR"
+
+echo "Creating DMG at $DMG_PATH"
+rm -rf "$DMG_STAGE" "$DMG_PATH"
+mkdir -p "$DMG_STAGE"
+ditto "$APP_DIR" "$DMG_STAGE/$WARP_APP_NAME.app"
+ln -s /Applications "$DMG_STAGE/Applications"
+hdiutil create \
+  -volname "Warp CN $VERSION" \
+  -srcfolder "$DMG_STAGE" \
+  -ov \
+  -format UDZO \
+  -fs APFS \
+  "$DMG_PATH" >/dev/null
+
+echo "Verifying DMG and output"
+test -f "$DMG_PATH"
+shasum -a 256 "$DMG_PATH"
+ls -lh "$DMG_PATH"
+
+echo "app_path=$APP_DIR"
+echo "dmg_path=$DMG_PATH"
