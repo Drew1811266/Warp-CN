@@ -185,7 +185,7 @@ use crate::terminal::view::ambient_agent::{AmbientAgentViewModel, AmbientAgentVi
 use crate::terminal::view::{
     CodeDiffAction, RichContentLink, RichContentLinkTooltipInfo, TerminalAction,
 };
-use crate::terminal::{ShellLaunchData, TerminalModel, TerminalView};
+use crate::terminal::{prompt, ShellLaunchData, TerminalModel, TerminalView};
 use crate::ui_components::icons::Icon;
 use crate::util::link_detection::*;
 #[cfg(feature = "local_fs")]
@@ -5408,6 +5408,53 @@ impl AIBlock {
         };
         let output = output.get();
         output.format_for_copy(Some(self.action_model.as_ref(app)))
+    }
+
+    /// Gets this AI block's text as a rendered text selection should copy it when
+    /// a terminal block-list selection fully crosses the rich content block.
+    pub fn full_rendered_text_for_blocklist_selection(&self, app: &AppContext) -> Option<String> {
+        let mut parts = Vec::new();
+
+        let home_dir = dirs::home_dir().map(|path| path.display().to_string());
+        let display_path = prompt::display_path_string(
+            self.current_working_directory
+                .as_ref()
+                .or(home_dir.as_ref()),
+            home_dir.as_deref(),
+        );
+        if !display_path.is_empty() {
+            parts.push(display_path);
+        }
+
+        let prompt_text = self.get_prompt_text(app);
+        if !prompt_text.is_empty() {
+            parts.push(prompt_text);
+        }
+
+        let output_text = self
+            .model
+            .status(app)
+            .output_to_render()
+            .map(|output| {
+                output
+                    .get()
+                    .format_rendered_text_for_selection(Some(self.action_model.as_ref(app)))
+            })
+            .unwrap_or_default();
+        if !output_text.is_empty() {
+            let avatar_initial = self
+                .user_display_name
+                .chars()
+                .next()
+                .map(|initial| format!("{} ", initial.to_uppercase().collect::<String>()));
+            if let Some(avatar_initial) = avatar_initial {
+                parts.push(format!("{avatar_initial}{output_text}"));
+            } else {
+                parts.push(output_text);
+            }
+        }
+
+        (!parts.is_empty()).then(|| parts.join("\n"))
     }
 
     /// Gets AI output text for copying from the preceding user query until the next user query

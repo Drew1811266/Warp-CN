@@ -14,7 +14,6 @@ use super::{
 };
 use crate::cmd_or_ctrl_shift;
 use crate::integration_testing::block::assert_num_blocks_in_model;
-use crate::integration_testing::command_palette::open_command_palette_and_run_action;
 use crate::integration_testing::step::{
     assert_no_pending_model_events, new_step_with_default_assertions,
     new_step_with_default_assertions_for_pane,
@@ -30,6 +29,7 @@ use crate::settings::PrivacySettings;
 use crate::terminal::input::InputSuggestionsMode;
 use crate::terminal::model::terminal_model::BlockIndex;
 use crate::terminal::shell::ShellType;
+use crate::terminal::view::TerminalAction;
 
 pub fn wait_until_bootstrapped_single_pane_for_tab(tab_index: usize) -> TestStep {
     wait_until_bootstrapped_pane(tab_index, 0)
@@ -66,10 +66,18 @@ pub fn wait_until_bootstrapped_pane(tab_index: usize, pane_index: usize) -> Test
 }
 
 pub fn open_context_menu_for_selected_block() -> Vec<TestStep> {
-    let mut steps = open_command_palette_and_run_action("Open Block Context Menu");
-    let last = steps.pop().expect("steps should not be empty");
-    steps.push(last.add_assertion(assert_context_menu_is_open(true)));
-    steps
+    vec![
+        new_step_with_default_assertions("Open block context menu for selected block")
+            .with_action(|app, window_id, _| {
+                let terminal_view_id = single_terminal_view_for_tab(app, window_id, 0).id();
+                app.dispatch_typed_action(
+                    window_id,
+                    &[terminal_view_id],
+                    &TerminalAction::OpenBlockListContextMenu,
+                );
+            })
+            .add_assertion(assert_context_menu_is_open(true)),
+    ]
 }
 
 /// Runs the completer with the given input text, waiting up to 2 seconds for the completer to return

@@ -8,6 +8,7 @@ use warpui::windowing::WindowManager;
 use warpui::{async_assert, async_assert_eq, App, SingletonEntity, ViewHandle, WindowId};
 
 use super::util::ExpectedOutput;
+use crate::ai::agent::AIAgentContext;
 use crate::ai::blocklist::agent_view::AgentViewState;
 use crate::integration_testing::view_getters::{
     single_input_view_for_tab, single_terminal_view, single_terminal_view_for_tab, terminal_view,
@@ -691,6 +692,42 @@ pub fn assert_input_editor_contents(
         input_view.read(app, |view, ctx| {
             let contents = view.buffer_text(ctx);
             async_assert_eq!(&contents, expected_contents, "Incorrect input box contents:\nExpected {expected_contents:?}\nActual: {contents:?}")
+        })
+    })
+}
+
+pub fn assert_agent_context_contains_block(
+    tab_index: usize,
+    expected_command: impl AsRef<str>,
+    expected_output_fragment: impl AsRef<str>,
+) -> AssertionCallback {
+    let expected_command = expected_command.as_ref().to_owned();
+    let expected_output_fragment = expected_output_fragment.as_ref().to_owned();
+    Box::new(move |app, window_id| {
+        let terminal_view = single_terminal_view_for_tab(app, window_id, tab_index);
+        terminal_view.read(app, |view, ctx| {
+            let contexts = view
+                .ai_context_model()
+                .as_ref(ctx)
+                .pending_context(ctx, true);
+            let attached_blocks = contexts
+                .iter()
+                .filter_map(|context| match context {
+                    AIAgentContext::Block(block) => Some(block.as_ref()),
+                    _ => None,
+                })
+                .collect::<Vec<_>>();
+
+            if attached_blocks.iter().any(|block| {
+                block.command == expected_command
+                    && block.output.contains(expected_output_fragment.as_str())
+            }) {
+                AssertionOutcome::Success
+            } else {
+                AssertionOutcome::failure(format!(
+                    "Expected Agent context block command {expected_command:?} with output containing {expected_output_fragment:?}; attached blocks were {attached_blocks:?}"
+                ))
+            }
         })
     })
 }

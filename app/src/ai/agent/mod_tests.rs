@@ -309,5 +309,32 @@ fn format_for_copy_preserves_visual_markdown_sections() {
     );
 }
 
+#[test]
+fn format_rendered_text_for_selection_strips_markdown_and_adds_list_markers() {
+    let output = AIAgentOutput {
+        messages: vec![AIAgentOutputMessage {
+            id: MessageId::new("message-1".to_string()),
+            message: AIAgentOutputMessageType::Text(AIAgentText {
+                sections: vec![AIAgentTextSection::PlainText {
+                    text: "### This is a dummy title\n* Hi there\n* Second item"
+                        .to_string()
+                        .into(),
+                }],
+            }),
+            citations: Vec::new(),
+        }],
+        ..Default::default()
+    };
+
+    assert_eq!(
+        output.format_rendered_text_for_selection(None),
+        "This is a dummy title\n•  Hi there\n•  Second item"
+    );
+    assert_eq!(
+        output.format_for_copy(None),
+        "### This is a dummy title\n* Hi there\n* Second item"
+    );
+}
+
 #[path = "suggestions_tests.rs"]
 mod suggestions;

@@ -14,7 +14,6 @@ use crate::integration_testing::terminal::{
 };
 use crate::integration_testing::view_getters::{single_terminal_view, terminal_view};
 use crate::terminal::model::rich_content::RichContentType;
-use crate::terminal::view::WithinBlockBanner;
 
 /// Sets environment variables needed by the Google Cloud SDK.
 pub fn setup_gcloud_sdk() -> TestStep {
@@ -95,19 +94,16 @@ pub fn assert_subshell_banner_is_showing() -> TestStep {
     TestStep::new("Assert the Warpify banner is visible")
         .add_assertion(move |app, window_id| {
             let terminal_view = single_terminal_view(app, window_id);
-            terminal_view.read(app, |view, _ctx| {
-                async_assert!(matches!(
-                    view.model
-                        .lock()
-                        .block_list_mut()
-                        .active_block()
-                        .block_banner(),
-                    Some(WithinBlockBanner::WarpifyBanner(..))
-                ))
+            terminal_view.read(app, |view, ctx| {
+                async_assert!(
+                    view.integration_test_has_subshell_warpify_prompt(ctx),
+                    "Expected a subshell warpify prompt in the block banner or footer"
+                )
             })
         })
         // Wait for outstanding model events to finish before moving to the next step
         .add_named_assertion("no pending model events", assert_no_pending_model_events())
+        .set_timeout(Duration::from_secs(5))
         .set_post_step_pause(Duration::from_millis(50))
 }
 

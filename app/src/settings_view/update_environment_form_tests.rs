@@ -29,6 +29,22 @@ use crate::workspaces::team_tester::TeamTesterStatus;
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::workspaces::workspace::Workspace;
 
+const REPOS_LABEL: &str = "仓库";
+const REPOS_HELPER_TEXT: &str = "输入 owner/repo 并按 Enter 添加，或从下拉菜单中选择。";
+const AUTH_WITH_GITHUB_TEXT: &str = "使用 GitHub 授权";
+const RETRY_TEXT: &str = "重试";
+const SUGGEST_IMAGE_TEXT: &str = "建议镜像";
+const GENERATING_TEXT: &str = "正在生成…";
+const CUSTOM_DOCKER_IMAGE_TEXT: &str = "自定义 Docker 镜像";
+const LAUNCH_AGENT_TEXT: &str = "启动 Agent";
+const GITHUB_AUTH_REQUIRED_TEXT: &str = "需要授予 GitHub 仓库访问权限，才能建议 Docker 镜像";
+const AUTHENTICATE_TEXT: &str = "认证";
+const SHARE_WITH_TEAM_TEXT: &str = "与团队共享";
+const PERSONAL_ENV_WARNING_TEXT: &str =
+    "个人环境不能与外部集成或团队 API 密钥一起使用。为获得最佳体验，请使用共享环境。";
+const CREATE_ENVIRONMENT_TEXT: &str = "创建环境";
+const CANCEL_TEXT: &str = "取消";
+
 #[test]
 fn test_parse_repo_input_owner_repo() {
     let (owner, repo) = UpdateEnvironmentForm::parse_repo_input("owner/repo")
@@ -415,11 +431,11 @@ fn test_render_repos_field_loading_state() {
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("Repo(s)"),
+                text_content.contains(REPOS_LABEL),
                 "Expected 'Repo(s)' label in rendered content: {text_content}"
             );
             assert!(
-                text_content.contains("Loading..."),
+                text_content.contains("正在加载..."),
                 "Expected 'Loading...' in rendered content: {text_content}"
             );
         });
@@ -445,11 +461,11 @@ fn test_render_repos_field_authed_state() {
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("Repo(s)"),
+                text_content.contains(REPOS_LABEL),
                 "Expected 'Repo(s)' label in rendered content: {text_content}"
             );
             assert!(
-                text_content.contains("Type owner/repo and press Enter"),
+                text_content.contains(REPOS_HELPER_TEXT),
                 "Expected helper text in rendered content: {text_content}"
             );
         });
@@ -478,11 +494,11 @@ fn test_render_repos_field_auth_required() {
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("Repo(s)"),
+                text_content.contains(REPOS_LABEL),
                 "Expected 'Repo(s)' label in rendered content: {text_content}"
             );
             assert!(
-                text_content.contains("Auth with GitHub"),
+                text_content.contains(AUTH_WITH_GITHUB_TEXT),
                 "Expected 'Auth with GitHub' in rendered content: {text_content}"
             );
         });
@@ -511,7 +527,7 @@ fn test_render_repos_field_error_state() {
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("Repo(s)"),
+                text_content.contains(REPOS_LABEL),
                 "Expected 'Repo(s)' label in rendered content: {text_content}"
             );
             assert!(
@@ -519,7 +535,7 @@ fn test_render_repos_field_error_state() {
                 "Expected error message in rendered content: {text_content}"
             );
             assert!(
-                text_content.contains("Retry"),
+                text_content.contains(RETRY_TEXT),
                 "Expected 'Retry' in rendered content: {text_content}"
             );
         });
@@ -587,7 +603,7 @@ fn test_render_repos_field_with_selected_repos() {
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("Repo(s)"),
+                text_content.contains(REPOS_LABEL),
                 "Expected 'Repo(s)' label in rendered content: {text_content}"
             );
             assert!(
@@ -763,7 +779,7 @@ fn test_render_docker_image_field_shows_suggest_image_button_on_create() {
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("Suggest image"),
+                text_content.contains(SUGGEST_IMAGE_TEXT),
                 "Expected suggest-image button text in rendered content: {text_content}"
             );
         });
@@ -803,7 +819,7 @@ fn test_render_docker_image_field_shows_suggest_image_button_on_edit() {
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("Suggest image"),
+                text_content.contains(SUGGEST_IMAGE_TEXT),
                 "Expected suggest-image button text in rendered content: {text_content}"
             );
         });
@@ -838,7 +854,7 @@ fn test_render_docker_image_field_shows_generating_state() {
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("Generating"),
+                text_content.contains(GENERATING_TEXT),
                 "Expected generating state in rendered content: {text_content}"
             );
         });
@@ -877,7 +893,7 @@ fn test_render_docker_image_field_shows_custom_image_warning() {
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("custom Docker image"),
+                text_content.contains(CUSTOM_DOCKER_IMAGE_TEXT),
                 "Expected custom image messaging in rendered content: {text_content}"
             );
             assert!(
@@ -885,7 +901,7 @@ fn test_render_docker_image_field_shows_custom_image_warning() {
                 "Expected reason text in rendered content: {text_content}"
             );
             assert!(
-                text_content.contains("Launch agent"),
+                text_content.contains(LAUNCH_AGENT_TEXT),
                 "Expected 'Launch agent' action in rendered content: {text_content}"
             );
         });
@@ -923,13 +939,11 @@ fn test_render_docker_image_field_shows_github_auth_required_message() {
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains(
-                    "You need to grant access to your GitHub repos to suggest a Docker image"
-                ),
+                text_content.contains(GITHUB_AUTH_REQUIRED_TEXT),
                 "Expected GitHub auth required message in rendered content: {text_content}"
             );
             assert!(
-                text_content.contains("Authenticate"),
+                text_content.contains(AUTHENTICATE_TEXT),
                 "Expected 'Authenticate' action in rendered content: {text_content}"
             );
         });
@@ -965,13 +979,11 @@ fn test_create_environment_form_with_team_can_toggle_share_with_team_and_renders
             let element = view_handle.as_ref(ctx).render(ctx);
             let text_content = element.debug_text_content().unwrap_or_default();
             assert!(
-                text_content.contains("Share with team"),
+                text_content.contains(SHARE_WITH_TEAM_TEXT),
                 "Expected 'Share with team' checkbox label in rendered content: {text_content}"
             );
             assert!(
-                !text_content.contains(
-                    "Personal environments cannot be used with external integrations or team API keys",
-                ),
+                !text_content.contains(PERSONAL_ENV_WARNING_TEXT),
                 "Did not expect the warning to render when share_with_team is enabled: {text_content}"
             );
 
@@ -987,9 +999,7 @@ fn test_create_environment_form_with_team_can_toggle_share_with_team_and_renders
             let element = view_handle.as_ref(ctx).render(ctx);
             let text_content = element.debug_text_content().unwrap_or_default();
             assert!(
-                text_content.contains(
-                    "Personal environments cannot be used with external integrations or team API keys",
-                ),
+                text_content.contains(PERSONAL_ENV_WARNING_TEXT),
                 "Expected the warning to render when share_with_team is disabled: {text_content}"
             );
         });
@@ -1015,7 +1025,7 @@ fn test_create_environment_form_without_team_does_not_render_checkbox_and_defaul
             let element = view_handle.as_ref(ctx).render(ctx);
             let text_content = element.debug_text_content().unwrap_or_default();
             assert!(
-                !text_content.contains("Share with team"),
+                !text_content.contains(SHARE_WITH_TEAM_TEXT),
                 "Did not expect 'Share with team' checkbox label in rendered content: {text_content}"
             );
         });
@@ -1027,27 +1037,27 @@ fn test_environment_form_copy_orchestration_modal_overrides_settings_defaults() 
     let default_copy = EnvironmentFormCopy::default();
     let orchestration_copy = EnvironmentFormCopy::orchestration_modal();
 
-    assert_eq!(default_copy.name_placeholder, "Environment name");
-    assert_eq!(default_copy.docker_image_label, "Docker image reference");
+    assert_eq!(default_copy.name_placeholder, "环境名称");
+    assert_eq!(default_copy.docker_image_label, "Docker 镜像引用");
     assert!(default_copy.show_description_character_count);
 
-    assert_eq!(orchestration_copy.name_placeholder, "e.g., dev-env");
+    assert_eq!(orchestration_copy.name_placeholder, "例如，dev-env");
     assert_eq!(
         orchestration_copy.repos_placeholder_authed,
-        "Browse GitHub repos..."
+        "浏览 GitHub 仓库..."
     );
-    assert_eq!(orchestration_copy.docker_image_label, "Docker image");
+    assert_eq!(orchestration_copy.docker_image_label, "Docker 镜像");
     assert_eq!(
         orchestration_copy.docker_image_placeholder,
-        "e.g., node:20-alpine"
+        "例如，node:20-alpine"
     );
     assert_eq!(
         orchestration_copy.setup_commands_placeholder,
-        "e.g., node start"
+        "例如，node start"
     );
     assert_eq!(
         orchestration_copy.setup_commands_helper,
-        "Press Enter or click the submit button to add each command."
+        "按 Enter 或点击提交按钮以添加每条命令。"
     );
     assert!(!orchestration_copy.show_description_character_count);
 }
@@ -1099,11 +1109,11 @@ fn test_orchestration_modal_form_configuration_renders_footer_actions_without_te
                 .debug_text_content()
                 .unwrap_or_default();
             assert!(
-                submit_text.contains("Create environment"),
+                submit_text.contains(CREATE_ENVIRONMENT_TEXT),
                 "Expected footer submit label in rendered content: {submit_text}"
             );
             assert!(
-                cancel_text.contains("Cancel"),
+                cancel_text.contains(CANCEL_TEXT),
                 "Expected footer cancel action in rendered content: {cancel_text}"
             );
 
@@ -1113,7 +1123,7 @@ fn test_orchestration_modal_form_configuration_renders_footer_actions_without_te
                 .debug_text_content()
                 .unwrap_or_default();
             assert!(
-                !text_content.contains("Share with team"),
+                !text_content.contains(SHARE_WITH_TEAM_TEXT),
                 "Did not expect team-sharing controls in orchestration modal form: {text_content}"
             );
             assert!(
@@ -1121,7 +1131,7 @@ fn test_orchestration_modal_form_configuration_renders_footer_actions_without_te
                 "Did not expect settings character count in orchestration modal form: {text_content}"
             );
             assert!(
-                !text_content.contains("Type owner/repo and press Enter"),
+                !text_content.contains(REPOS_HELPER_TEXT),
                 "Did not expect settings repo helper text in orchestration modal form: {text_content}"
             );
         });

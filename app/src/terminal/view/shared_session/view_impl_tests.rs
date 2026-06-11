@@ -70,12 +70,12 @@ fn test_prompt_context_menu_items_shared_session_viewer_no_edit_prompt() {
             assert_eq!(items.len(), 3);
 
             // We expect the prompt menu items to be something like the following when no context chips exist:
-            // Copy prompt
+            // 复制提示符
             // ------------
-            // Edit prompt (disabled for shared-session viewers)
-            assert_eq!(items[0].fields().unwrap().label(), "Copy prompt");
+            // 编辑提示符（共享会话查看者禁用）
+            assert_eq!(items[0].fields().unwrap().label(), "复制提示符");
             assert!(items[1].is_separator());
-            assert_eq!(items[2].fields().unwrap().label(), "Edit prompt");
+            assert_eq!(items[2].fields().unwrap().label(), "编辑提示符");
             assert!(items[2].fields().unwrap().is_disabled());
         });
     })

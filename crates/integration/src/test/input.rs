@@ -11,7 +11,8 @@ use warp::integration_testing::terminal::util::{
     current_shell_starter_and_version, ExpectedExitStatus,
 };
 use warp::integration_testing::terminal::{
-    execute_command_for_single_terminal_in_tab, wait_until_bootstrapped_single_pane_for_tab,
+    execute_command_for_single_terminal_in_tab, execute_echo_str,
+    wait_until_bootstrapped_single_pane_for_tab,
 };
 use warp::integration_testing::view_getters::{
     single_input_view_for_tab, single_terminal_view_for_tab,
@@ -123,6 +124,12 @@ pub fn test_latest_buffer_operations() -> Builder {
                     latest_buffer_operations_are_empty(0, true),
                 ),
         )
+}
+
+pub fn test_zh_terminal_cjk_input_roundtrip() -> Builder {
+    new_builder()
+        .with_step(wait_until_bootstrapped_single_pane_for_tab(0))
+        .with_step(execute_echo_str(0, "Warp CN 中文输出测试"))
 }
 
 pub fn test_middle_click_paste() -> Builder {

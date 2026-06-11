@@ -91,6 +91,9 @@ const CODEBASE_INDEX_LIMIT_REACHED: &str =
     "你已达到当前套餐的代码库索引数量上限。请删除现有索引以自动索引新的代码库。";
 #[cfg(not(target_family = "wasm"))]
 const REMOTE_CODEBASE_INDEX_LIMIT_REACHED_FAILURE: &str = "已达到代码库索引数量上限";
+#[cfg(not(target_family = "wasm"))]
+const REMOTE_CODEBASE_INDEX_LIMIT_REACHED_FAILURE_EN: &str =
+    "maximum number of codebase indexes has been reached";
 
 /// Identifies which subpage of the Code settings the user is viewing.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -120,10 +123,10 @@ impl CodeSubpage {
 
 #[cfg(not(target_family = "wasm"))]
 fn remote_codebase_index_limit_reached(status: &RemoteCodebaseIndexStatus) -> bool {
-    status
-        .failure_message
-        .as_deref()
-        .is_some_and(|message| message.contains(REMOTE_CODEBASE_INDEX_LIMIT_REACHED_FAILURE))
+    status.failure_message.as_deref().is_some_and(|message| {
+        message.contains(REMOTE_CODEBASE_INDEX_LIMIT_REACHED_FAILURE)
+            || message.contains(REMOTE_CODEBASE_INDEX_LIMIT_REACHED_FAILURE_EN)
+    })
 }
 
 #[cfg(all(test, not(target_family = "wasm")))]

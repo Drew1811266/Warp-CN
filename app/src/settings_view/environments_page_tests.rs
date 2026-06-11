@@ -137,6 +137,17 @@ fn empty_card_mouse_states() -> EmptyMouseStates {
     )
 }
 
+const VIEW_MY_RUNS_TEXT: &str = "查看我的运行";
+const QUICK_SETUP_TEXT: &str = "快速设置";
+const USE_THE_AGENT_TEXT: &str = "使用 Agent";
+const LAUNCH_AGENT_TEXT: &str = "启动 Agent";
+const RECOMMENDED_BADGE_TEXT: &str = "推荐";
+const LAST_USED_NEVER_TEXT: &str = "上次使用：从未";
+const LAST_EDITED_TEXT: &str = "上次编辑：";
+const LAST_USED_TEXT: &str = "上次使用：";
+const PERSONAL_HEADER_TEXT: &str = "个人";
+const SHARED_TEAM_HEADER_TEXT: &str = "由 WARP 和 KATARINA'S TEAM 共享";
+
 #[test]
 fn test_render_environments_list_with_single_environment() {
     App::test((), |mut app| async move {
@@ -184,7 +195,7 @@ fn test_render_environments_list_with_single_environment() {
                 text_content
             );
             assert!(
-                text_content.contains("View my runs"),
+                text_content.contains(VIEW_MY_RUNS_TEXT),
                 "Expected 'View my runs' link in rendered content: {}",
                 text_content
             );
@@ -251,7 +262,7 @@ fn test_render_environments_list_with_multiple_environments() {
                 text_content
             );
             assert!(
-                text_content.contains("View my runs"),
+                text_content.contains(VIEW_MY_RUNS_TEXT),
                 "Expected 'View my runs' link in rendered content: {}",
                 text_content
             );
@@ -306,7 +317,7 @@ fn test_render_environment_card_with_minimal_config() {
                 text_content
             );
             assert!(
-                text_content.contains("View my runs"),
+                text_content.contains(VIEW_MY_RUNS_TEXT),
                 "Expected 'View my runs' link in rendered content: {}",
                 text_content
             );
@@ -373,7 +384,7 @@ fn test_render_environment_card_with_github_repos() {
                 text_content
             );
             assert!(
-                text_content.contains("View my runs"),
+                text_content.contains(VIEW_MY_RUNS_TEXT),
                 "Expected 'View my runs' link in rendered content: {}",
                 text_content
             );
@@ -442,7 +453,7 @@ fn test_render_environment_card_with_setup_commands() {
                 text_content
             );
             assert!(
-                text_content.contains("View my runs"),
+                text_content.contains(VIEW_MY_RUNS_TEXT),
                 "Expected 'View my runs' link in rendered content: {}",
                 text_content
             );
@@ -527,7 +538,7 @@ fn test_render_environment_card_with_all_features() {
                 text_content
             );
             assert!(
-                text_content.contains("View my runs"),
+                text_content.contains(VIEW_MY_RUNS_TEXT),
                 "Expected 'View my runs' link in rendered content: {}",
                 text_content
             );
@@ -586,7 +597,7 @@ fn test_render_environment_card_with_empty_setup_commands() {
                 text_content
             );
             assert!(
-                text_content.contains("View my runs"),
+                text_content.contains(VIEW_MY_RUNS_TEXT),
                 "Expected 'View my runs' link in rendered content: {}",
                 text_content
             );
@@ -753,11 +764,11 @@ fn test_render_list_page_with_personal_and_team_environments_shows_section_heade
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("PERSONAL"),
+                text_content.contains(PERSONAL_HEADER_TEXT),
                 "Expected 'Personal' section header in rendered content: {text_content}"
             );
             assert!(
-                text_content.contains("SHARED BY WARP AND KATARINA'S TEAM"),
+                text_content.contains(SHARED_TEAM_HEADER_TEXT),
                 "Expected shared section header in rendered content: {text_content}"
             );
         });
@@ -799,7 +810,7 @@ fn test_render_list_page_with_only_personal_environments_shows_personal_header()
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("PERSONAL"),
+                text_content.contains(PERSONAL_HEADER_TEXT),
                 "Expected 'Personal' header in rendered content: {text_content}"
             );
         });
@@ -858,21 +869,21 @@ fn test_render_empty_state_shows_github_remote_and_local_rows() {
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("Quick setup"),
+                text_content.contains(QUICK_SETUP_TEXT),
                 "Expected quick setup row title in rendered content: {}",
                 text_content
             );
             assert!(
-                text_content.contains("Suggested"),
+                text_content.contains(RECOMMENDED_BADGE_TEXT),
                 "Expected 'Suggested' badge text in rendered content: {}",
                 text_content
             );
             // GitHub button text depends on async auth state, so just check that one of the
             // expected states is present (Loading, Get started, Authorize, or Retry)
-            let has_github_button = text_content.contains("Get started")
-                || text_content.contains("Authorize")
-                || text_content.contains("Loading...")
-                || text_content.contains("Retry");
+            let has_github_button = text_content.contains("开始使用")
+                || text_content.contains("授权")
+                || text_content.contains("正在加载...")
+                || text_content.contains("重试");
             assert!(
                 has_github_button,
                 "Expected GitHub button text in rendered content: {}",
@@ -880,27 +891,25 @@ fn test_render_empty_state_shows_github_remote_and_local_rows() {
             );
 
             assert!(
-                text_content.contains("Use the agent"),
+                text_content.contains(USE_THE_AGENT_TEXT),
                 "Expected 'Use the agent' row title in rendered content: {}",
                 text_content
             );
             assert!(
-                text_content.contains("Launch agent"),
+                text_content.contains(LAUNCH_AGENT_TEXT),
                 "Expected 'Launch agent' button text in rendered content: {}",
                 text_content
             );
 
             assert!(
-                !text_content.contains("Manually create an environment"),
+                !text_content.contains("手动创建环境"),
                 "Did not expect old manual-create empty-state row title in rendered content: {}",
                 text_content
             );
 
             // Basic ordering: GitHub row should appear above local repos row.
-            let github_pos = text_content.find("Quick setup").unwrap_or(usize::MAX);
-            let local_pos = text_content
-                .find("Use the agent")
-                .unwrap_or(usize::MAX);
+            let github_pos = text_content.find(QUICK_SETUP_TEXT).unwrap_or(usize::MAX);
+            let local_pos = text_content.find(USE_THE_AGENT_TEXT).unwrap_or(usize::MAX);
             assert!(
                 github_pos < local_pos,
                 "Expected GitHub row to appear before local row (github_pos={github_pos}, local_pos={local_pos}): {text_content}"
@@ -928,7 +937,7 @@ fn test_render_empty_state_github_card_loading_state() {
 
             // Just verify the empty state renders the key components
             assert!(
-                text_content.contains("Quick setup"),
+                text_content.contains(QUICK_SETUP_TEXT),
                 "Expected quick setup row in rendered content: {}",
                 text_content
             );
@@ -955,7 +964,7 @@ fn test_render_empty_state_github_card_error_state_shows_retry() {
 
             // Just verify the empty state renders the key components
             assert!(
-                text_content.contains("Quick setup"),
+                text_content.contains(QUICK_SETUP_TEXT),
                 "Expected quick setup row in rendered content: {}",
                 text_content
             );
@@ -982,7 +991,7 @@ fn test_render_empty_state_github_card_unauthed_state_shows_authorize() {
 
             // Just verify the empty state renders the key components
             assert!(
-                text_content.contains("Quick setup"),
+                text_content.contains(QUICK_SETUP_TEXT),
                 "Expected quick setup row in rendered content: {}",
                 text_content
             );
@@ -1006,12 +1015,12 @@ fn test_environment_setup_mode_selector_renders_options() {
             let text_content = element.debug_text_content().unwrap_or_default();
 
             assert!(
-                text_content.contains("Quick setup"),
+                text_content.contains(QUICK_SETUP_TEXT),
                 "Expected Quick setup option in rendered content: {}",
                 text_content
             );
             assert!(
-                text_content.contains("Use the agent"),
+                text_content.contains(USE_THE_AGENT_TEXT),
                 "Expected Use the agent option in rendered content: {}",
                 text_content
             );
@@ -1382,17 +1391,17 @@ fn test_render_environment_card_with_last_used_never() {
             // Use debug_text_content to verify the rendered text
             let text_content = element.debug_text_content().unwrap_or_default();
             assert!(
-                text_content.contains("Last used: never"),
+                text_content.contains(LAST_USED_NEVER_TEXT),
                 "Expected 'Last used: never' in rendered text: {}",
                 text_content
             );
             assert!(
-                text_content.contains("Last edited:"),
+                text_content.contains(LAST_EDITED_TEXT),
                 "Expected 'Last edited:' in rendered text: {}",
                 text_content
             );
             assert!(
-                text_content.contains("View my runs"),
+                text_content.contains(VIEW_MY_RUNS_TEXT),
                 "Expected 'View my runs' link in rendered text: {}",
                 text_content
             );
@@ -1454,22 +1463,22 @@ fn test_render_environment_card_with_last_used_timestamp() {
             // Use debug_text_content to verify the rendered text
             let text_content = element.debug_text_content().unwrap_or_default();
             assert!(
-                text_content.contains("Last edited:"),
+                text_content.contains(LAST_EDITED_TEXT),
                 "Expected 'Last edited:' in rendered text: {}",
                 text_content
             );
             assert!(
-                text_content.contains("Last used:"),
+                text_content.contains(LAST_USED_TEXT),
                 "Expected 'Last used:' in rendered text: {}",
                 text_content
             );
             assert!(
-                !text_content.contains("never"),
+                !text_content.contains("从未"),
                 "Did not expect 'never' in rendered text: {}",
                 text_content
             );
             assert!(
-                text_content.contains("View my runs"),
+                text_content.contains(VIEW_MY_RUNS_TEXT),
                 "Expected 'View my runs' link in rendered text: {}",
                 text_content
             );

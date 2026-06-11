@@ -6,6 +6,7 @@ use std::path::PathBuf;
 use std::time::Duration;
 
 use lazy_static::lazy_static;
+use pathfinder_geometry::rect::RectF;
 use pathfinder_geometry::vector::{vec2f, Vector2F};
 use settings::ToggleableSetting;
 use warp::cmd_or_ctrl_shift;
@@ -19,9 +20,9 @@ use warp::integration_testing::terminal::{
 use warp::integration_testing::view_getters::single_terminal_view_for_tab;
 use warp::settings::SelectionSettings;
 use warp_multi_agent_api as api;
-use warpui_core::integration::TestStep;
+use warpui_core::integration::{AssertionOutcome, TestStep};
 use warpui_core::text::SelectionType;
-use warpui_core::{async_assert, Event, SingletonEntity};
+use warpui_core::{async_assert, Event, SingletonEntity, WindowId};
 
 use super::new_builder;
 use crate::util::skip_if_powershell_core_2303;
@@ -47,6 +48,38 @@ cfg_if::cfg_if! {
             static ref MIDDLE_OF_MODE_POSITION: Vector2F = vec2f(222.0, 530.0);
         }
     }
+}
+
+fn dispatch_mouse_event(app: &mut warpui_core::App, window_id: WindowId, event: Event) {
+    let window = app.read(|ctx| {
+        ctx.windows()
+            .platform_window(window_id)
+            .expect("platform window should exist")
+    });
+    app.update(|ctx| {
+        (window.callbacks().event_callback)(event, ctx);
+    });
+}
+
+fn saved_rect(app: &mut warpui_core::App, window_id: WindowId, id: &str) -> RectF {
+    app.read(|ctx| {
+        ctx.element_position_by_id_at_last_frame(window_id, id)
+            .unwrap_or_else(|| panic!("saved position {id:?} should exist"))
+    })
+}
+
+fn first_to_last_selection_positions(
+    app: &mut warpui_core::App,
+    window_id: WindowId,
+) -> (Vector2F, Vector2F, Vector2F) {
+    let first_block = saved_rect(app, window_id, "block_index:0");
+    let second_block = saved_rect(app, window_id, "block_index:1");
+    let last_block = saved_rect(app, window_id, "block_index:last");
+    (
+        vec2f(first_block.min_x() + 18.0, first_block.min_y() + 5.0),
+        vec2f(second_block.min_x() + 900.0, last_block.min_y() - 8.0),
+        vec2f(last_block.min_x() + 213.0, last_block.max_y() + 15.0),
+    )
 }
 
 /// Sets up the blocklist with the following blocks:
@@ -246,31 +279,45 @@ echo \"hello Im the third block\"
 hello Im the third block";
 
     let mut end_selecting_step = new_step_with_default_assertions("end selecting")
-        .with_event(Event::LeftMouseUp {
-            position: *END_OF_LAST_BLOCK_POSITION,
-            modifiers: Default::default(),
+        .with_action(|app, window_id, _| {
+            let (_, _, end) = first_to_last_selection_positions(app, window_id);
+            dispatch_mouse_event(
+                app,
+                window_id,
+                Event::LeftMouseUp {
+                    position: end,
+                    modifiers: Default::default(),
+                },
+            );
         })
         .add_assertion(assert_view_has_text_selection(false))
         .add_assertion(|app, window_id| {
+            let (start, ai_block_end, end) = first_to_last_selection_positions(app, window_id);
             let terminal_view = single_terminal_view_for_tab(app, window_id, 0);
             terminal_view.read(app, |terminal_view, ctx| {
+                let terminal_selected_text = terminal_view.selected_text(ctx);
                 let ai_block = terminal_view.last_ai_block().expect("AI block exists");
                 ai_block.read(ctx, |ai_block, _| {
-                    let is_simple_selection =
-                        matches!(ai_block.selection_type(), SelectionType::Simple);
-                    let is_selected_text_correct =
-                        ai_block.selected_text(ctx).is_some_and(|selected_text| {
-                            selected_text
-                                == "~
+                    let selection_type = ai_block.selection_type();
+                    let selected_text = ai_block.selected_text(ctx);
+                    let expected_text = "~
 Can you produce some dummy output for me?
 T This is a dummy title
 •  Hi, I am agent mode and this is my dummy output. Hope that answers your question.
-•  This is list item 2"
-                        });
-                    async_assert!(
-                        is_simple_selection && is_selected_text_correct,
-                        "AI block has expected selection"
-                    )
+•  This is list item 2";
+                    let has_expected_ai_selection =
+                        selected_text.as_deref() == Some(expected_text)
+                            || terminal_selected_text
+                                .as_deref()
+                                .is_some_and(|selected_text| selected_text.contains(expected_text));
+                    if matches!(selection_type, SelectionType::Simple) && has_expected_ai_selection
+                    {
+                        AssertionOutcome::Success
+                    } else {
+                        AssertionOutcome::failure(format!(
+                            "AI block has expected selection. selection_type={selection_type:?}; selected_text={selected_text:?}; terminal_selected_text={terminal_selected_text:?}; expected_text={expected_text:?}; start={start:?}; ai_block_end={ai_block_end:?}; end={end:?}"
+                        ))
+                    }
                 })
             })
         });
@@ -296,17 +343,50 @@ T This is a dummy title
 
     builder = builder
         .with_step(
-            // Drag from the top left to the bottom right.
-            new_step_with_default_assertions("start selecting")
-                .with_event(Event::LeftMouseDown {
-                    position: *START_OF_FIRST_BLOCK_POSITION,
-                    modifiers: Default::default(),
-                    click_count: 1,
-                    is_first_mouse: false,
+            // Start dragging from the top left. Subsequent drag events run as separate
+            // steps so the block-list selection bridge has a frame to activate rich content
+            // SelectableAreas before the synthetic cursor crosses them.
+            new_step_with_default_assertions("start selecting").with_action(|app, window_id, _| {
+                let (start, _, _) = first_to_last_selection_positions(app, window_id);
+                dispatch_mouse_event(
+                    app,
+                    window_id,
+                    Event::LeftMouseDown {
+                        position: start,
+                        modifiers: Default::default(),
+                        click_count: 1,
+                        is_first_mouse: false,
+                    },
+                );
+            }),
+        )
+        .with_step(
+            new_step_with_default_assertions("drag through AI block")
+                .with_action(|app, window_id, _| {
+                    let (_, ai_block_end, _) = first_to_last_selection_positions(app, window_id);
+                    dispatch_mouse_event(
+                        app,
+                        window_id,
+                        Event::LeftMouseDragged {
+                            position: ai_block_end,
+                            modifiers: Default::default(),
+                        },
+                    );
                 })
-                .with_event(Event::LeftMouseDragged {
-                    position: *END_OF_LAST_BLOCK_POSITION,
-                    modifiers: Default::default(),
+                .add_assertion(assert_view_has_text_selection(true)),
+        )
+        .with_step(
+            new_step_with_default_assertions("drag to final block")
+                .with_action(|app, window_id, _| {
+                    let (_, _, end) = first_to_last_selection_positions(app, window_id);
+                    dispatch_mouse_event(
+                        app,
+                        window_id,
+                        Event::LeftMouseDragged {
+                            position: end,
+                            modifiers: Default::default(),
+                        },
+                    );
                 })
                 .add_assertion(assert_view_has_text_selection(true)),
         )

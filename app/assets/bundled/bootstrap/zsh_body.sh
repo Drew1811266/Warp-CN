@@ -748,7 +748,6 @@ if [[ -z $WARP_BOOTSTRAPPED ]]; then
 
     if [[ -n "${RPROMPT:-}" && "${RPROMPT:-}" != *"$rprompt_prefix"* ]]; then
       ORIGINAL_RPROMPT=$RPROMPT
-      RPROMPT="$rprompt_prefix$RPROMPT$suffix"
     fi
 
     # The "%{" and "%}" indicate to zsh that the sequence between the markers
@@ -782,8 +781,10 @@ if [[ -z $WARP_BOOTSTRAPPED ]]; then
 
     # Do not synthesize an empty right prompt. Even without visible content, zsh reserves
     # right-prompt layout space and may corrupt wrapped command redraws in the command grid.
-    if [[ -n "${RPROMPT:-}" && "${RPROMPT:-}" != "%{"*"%}" ]]; then
-      RPROMPT="%{${RPROMPT:-}%}"
+    # Hide only Warp's OSC markers from zsh's width calculation; the right prompt text itself
+    # must remain visible so zsh renders it and Warp can capture it in the right-prompt grid.
+    if [[ -n "${ORIGINAL_RPROMPT:-}" ]]; then
+      RPROMPT="%{$rprompt_prefix%}$ORIGINAL_RPROMPT%{$suffix%}"
     fi
 
     # Ensure that this is always the last precmd hook. This prevents any other precmd hook, which might

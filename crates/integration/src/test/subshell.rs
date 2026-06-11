@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::process::Command;
 
 use settings::Setting as _;
 use warp::integration_testing::step::new_step_with_default_assertions;
@@ -22,6 +23,14 @@ use warpui_core::{async_assert, UpdateModel};
 use super::{new_builder, Builder};
 use crate::util::skip_if_powershell_core_2303;
 
+fn should_run_local_subshell_test(shell: &str) -> bool {
+    skip_if_powershell_core_2303()
+        && Command::new(shell)
+            .arg("--version")
+            .status()
+            .is_ok_and(|status| status.success())
+}
+
 /// Generates an integration test that asserts that a local subshell of the given shell type can be
 /// successfully bootstrapped.
 macro_rules! generate_can_bootstrap_local_subshell_for_shell {
@@ -34,7 +43,7 @@ macro_rules! generate_can_bootstrap_local_subshell_for_shell {
                 // to hedge against this.
                 .use_tmp_filesystem_for_test_root_directory()
                 // TODO(CORE-2730): Re-enable once powershell has subshell support
-                .set_should_run_test(skip_if_powershell_core_2303)
+                .set_should_run_test(|| should_run_local_subshell_test($shell))
                 .with_step(wait_until_bootstrapped_single_pane_for_tab(0))
                 .with_step(enter_local_subshell_command($shell))
                 .with_step(assert_subshell_banner_is_showing())

@@ -8867,6 +8867,49 @@ impl TerminalView {
         self.open_secret_tool_tip.is_some()
     }
 
+    #[cfg(feature = "integration_tests")]
+    pub fn integration_test_has_subshell_warpify_prompt(&self, app: &AppContext) -> bool {
+        let has_in_block_banner = {
+            let mut model = self.model.lock();
+            model
+                .block_list_mut()
+                .active_block()
+                .block_banner()
+                .and_then(|banner| banner.warpify_mode())
+                .is_some_and(|mode| matches!(mode, WarpificationMode::Subshell { .. }))
+        };
+
+        has_in_block_banner
+            || self
+                .use_agent_footer
+                .as_ref(app)
+                .warpify_mode(app)
+                .is_some_and(|mode| matches!(mode, WarpificationMode::Subshell { .. }))
+    }
+
+    #[cfg(feature = "integration_tests")]
+    pub fn integration_test_rprompt_debug_state(&self, app: &AppContext) -> String {
+        let (prompt_text, input_rprompt_text) = self.input.as_ref(app).prompt_and_rprompt_text(app);
+        let honor_ps1 = *SessionSettings::as_ref(app).honor_ps1.value();
+        let input_settings = InputSettings::as_ref(app);
+        let stored_input_type = *input_settings.input_box_type.value();
+        let computed_input_type = input_settings.input_type(app);
+        let model = self.model.lock();
+        let active_block = model.block_list().active_block();
+        let rprompt_grid = active_block.rprompt_grid();
+
+        format!(
+            "honor_ps1={honor_ps1}; stored_input_type={stored_input_type:?}; \
+             computed_input_type={computed_input_type:?}; \
+             prompt={prompt_text:?}; input_rprompt={input_rprompt_text:?}; \
+             grid_finished={}; grid_has_content={}; should_display={}; grid_text={:?}",
+            rprompt_grid.finished(),
+            rprompt_grid.has_received_content(),
+            active_block.should_display_rprompt(&self.size_info),
+            rprompt_grid.contents_to_string(false, None),
+        )
+    }
+
     fn handle_sessions_event(&mut self, event: SessionsEvent, ctx: &mut ViewContext<Self>) {
         match event {
             SessionsEvent::SessionInitialized { .. } => {
@@ -26929,7 +26972,7 @@ impl TypedActionView for TerminalView {
 
 impl View for TerminalView {
     fn ui_name() -> &'static str {
-        "终端"
+        "Terminal"
     }
 
     fn render(&self, app: &AppContext) -> Box<dyn Element> {

@@ -44,3 +44,17 @@ pub fn assert_command_palette_has_results() -> AssertionCallback {
         })
     })
 }
+
+/// Asserts that the command palette currently has no search results.
+pub fn assert_command_palette_has_no_results() -> AssertionCallback {
+    Box::new(move |app, window_id| {
+        let palette = command_palette_view(app, window_id);
+
+        palette.read(app, |palette, ctx| {
+            async_assert!(
+                palette.search_results(ctx).next().is_none(),
+                "Expected command palette to have no results, but it had at least one"
+            )
+        })
+    })
+}

@@ -2,8 +2,8 @@ use warpui::integration::{AssertionOutcome, TestStep};
 use warpui::{App, WindowId};
 
 use crate::integration_testing::command_palette::assertions::{
-    assert_command_palette_has_results, assert_command_palette_is_closed,
-    assert_command_palette_is_open,
+    assert_command_palette_has_no_results, assert_command_palette_has_results,
+    assert_command_palette_is_closed, assert_command_palette_is_open,
 };
 use crate::util::bindings::cmd_or_ctrl_shift;
 
@@ -60,6 +60,14 @@ pub fn open_command_palette_and_run_action(action: &str) -> Vec<TestStep> {
         TestStep::new(format!("Run {action} in command palette").as_str())
             .with_keystrokes(&["enter"]),
     ]
+}
+
+/// Test step to search for an `action` and verify it is unavailable.
+pub fn open_command_palette_and_assert_no_results(action: &str) -> TestStep {
+    TestStep::new(format!("Type {action} in command palette and expect no results").as_str())
+        .with_keystrokes(&[cmd_or_ctrl_shift("p")])
+        .with_typed_characters(&[action])
+        .add_assertion(assert_command_palette_has_no_results())
 }
 
 /// Test step to close the command palette.

@@ -174,16 +174,16 @@ pub fn test_up_arrow_history_enters_shift_tab_for_workflow() -> Builder {
             ),
         )
         .with_step(
-            new_step_with_default_assertions("Update \"string\" workflow parameter")
+            new_step_with_default_assertions("Update \"file\" workflow parameter")
                 .with_keystrokes(&[
-                    "shift-tab", // this should cause the first argument to be highlighted
+                    "shift-tab", // this highlights the argument under the cursor.
                 ])
                 .with_typed_characters(&[
-                    "bye", // this should result in us replacing the first argument
+                    "bye", // this replaces the file argument at the end of the command.
                 ])
                 .add_named_assertion(
-                    "First workflow parameter is substituted",
-                    assert_input_editor_contents(0, "sed -i '' '/bye/d' foo"),
+                    "File workflow parameter is substituted",
+                    assert_input_editor_contents(0, "sed -i '' '/hello/d' bye"),
                 ),
         )
         .with_step(
@@ -191,8 +191,8 @@ pub fn test_up_arrow_history_enters_shift_tab_for_workflow() -> Builder {
                 .with_keystrokes(&["shift-tab"])
                 .with_typed_characters(&["baz"])
                 .add_named_assertion(
-                    "Second workflow parameter is substituted",
-                    assert_input_editor_contents(0, "sed -i '' '/bye/d' baz"),
+                    "String workflow parameter is substituted",
+                    assert_input_editor_contents(0, "sed -i '' '/baz/d' bye"),
                 ),
         )
 }

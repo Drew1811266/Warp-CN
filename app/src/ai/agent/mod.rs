@@ -27,7 +27,9 @@ use ai::skills::ParsedSkill;
 use chrono::{DateTime, Local, TimeDelta};
 use comment::ReviewComment;
 use derivative::Derivative;
-use markdown_parser::{parse_markdown, FormattedTable, FormattedText, FormattedTextInline};
+use markdown_parser::{
+    parse_markdown, FormattedTable, FormattedText, FormattedTextInline, FormattedTextLine,
+};
 use parking_lot::RwLock;
 use serde::{Deserialize, Serialize};
 use session_sharing_protocol::common::ParticipantId;
@@ -37,6 +39,7 @@ use uuid::Uuid;
 use warp_core::features::FeatureFlag;
 use warp_editor::render::model::LineCount;
 use warp_multi_agent_api::{diff_hunk as diff_hunk_api, AgentEvent, AgentType};
+use warpui::elements::ListNumbering;
 
 pub use self::api::{MaybeAIAgentOutputMessage, MessageToAIAgentOutputMessageError};
 use super::llms::LLMId;
@@ -584,6 +587,76 @@ impl AIAgentOutput {
         // Remove trailing empty lines
         while result.last() == Some(&String::new()) {
             result.pop();
+        }
+
+        result.join("\n")
+    }
+
+    /// Format this output the way text selection reads rendered markdown inside an AI block.
+    /// This is intentionally separate from [`Self::format_for_copy`], which preserves markdown
+    /// for explicit copy-menu actions.
+    pub(crate) fn format_rendered_text_for_selection(
+        &self,
+        action_model: Option<&crate::ai::blocklist::BlocklistAIActionModel>,
+    ) -> String {
+        let mut result = Vec::new();
+
+        for message in &self.messages {
+            match &message.message {
+                AIAgentOutputMessageType::Text(text) => {
+                    for section in &text.sections {
+                        match section {
+                            AIAgentTextSection::PlainText { text } => {
+                                let rendered = text.rendered_text_for_selection();
+                                if !rendered.is_empty() {
+                                    result.push(rendered);
+                                }
+                            }
+                            AIAgentTextSection::Table { table } => {
+                                result.push(table.rendered_lines().join("\n"));
+                            }
+                            AIAgentTextSection::Code { .. }
+                            | AIAgentTextSection::Image { .. }
+                            | AIAgentTextSection::MermaidDiagram { .. } => {
+                                result.push(format!("{}", MarkdownTextSection(section)));
+                            }
+                        }
+                    }
+                }
+                AIAgentOutputMessageType::Action(action) => {
+                    if let Some(action_model) = action_model {
+                        if let Some(action_result) = action_model.get_action_result(&action.id) {
+                            result.push(format!("{}", MarkdownActionResult(&action_result.result)));
+                        }
+                    }
+                }
+                AIAgentOutputMessageType::TodoOperation(operation) => {
+                    result.push(format!("{operation}"));
+                }
+                AIAgentOutputMessageType::Subagent(subagent) => {
+                    result.push(format!("{subagent}"));
+                }
+                AIAgentOutputMessageType::CommentsAddressed {
+                    comments: comment_ids,
+                } => {
+                    result.push(format!("已处理 {} 条评论", comment_ids.len()));
+                }
+                AIAgentOutputMessageType::DebugOutput { text } => {
+                    result.push(format!("[DEBUG] {text}"));
+                }
+                AIAgentOutputMessageType::MessagesReceivedFromAgents { messages } => {
+                    result.push(format!("已收到 {} 条消息", messages.len()));
+                }
+                AIAgentOutputMessageType::EventsFromAgents { event_ids } => {
+                    result.push(format!("已收到 {} 个 Agent 事件", event_ids.len()));
+                }
+                AIAgentOutputMessageType::Reasoning { .. }
+                | AIAgentOutputMessageType::Summarization { .. }
+                | AIAgentOutputMessageType::WebSearch(_)
+                | AIAgentOutputMessageType::WebFetch(_)
+                | AIAgentOutputMessageType::ArtifactCreated(_)
+                | AIAgentOutputMessageType::SkillInvoked(_) => {}
+            }
         }
 
         result.join("\n")
@@ -1331,6 +1404,70 @@ impl AgentOutputText {
         let parsed_result = parse_markdown(self.markdown_text.as_str());
         self.formatted_lines = parsed_result.map(|formatted| formatted.into()).ok();
     }
+
+    fn rendered_text_for_selection(&self) -> String {
+        let Some(formatted_lines) = &self.formatted_lines else {
+            return self.text().to_owned();
+        };
+        let formatted_text = formatted_lines.formatted_text_arc();
+        let mut list_numbering = ListNumbering::new();
+        let mut lines = Vec::new();
+
+        for line in &formatted_text.lines {
+            match line {
+                FormattedTextLine::Heading(header) => {
+                    list_numbering.reset();
+                    lines.push(inline_text(&header.text));
+                }
+                FormattedTextLine::Line(texts) => {
+                    list_numbering.reset();
+                    lines.push(inline_text(texts));
+                }
+                FormattedTextLine::TaskList(list) => {
+                    list_numbering.reset();
+                    lines.push(inline_text(&list.text));
+                }
+                FormattedTextLine::OrderedList(texts) => {
+                    let label = list_numbering
+                        .advance(texts.indented_text.indent_level, texts.number)
+                        .display_label;
+                    lines.push(format!(
+                        "{label}. {}",
+                        inline_text(&texts.indented_text.text)
+                    ));
+                }
+                FormattedTextLine::UnorderedList(texts) => {
+                    let bullet = match texts.indent_level + 1 {
+                        1 => "•",
+                        2 => "◦",
+                        _ => "▪",
+                    };
+                    lines.push(format!("{bullet:<3}{}", inline_text(&texts.text)));
+                }
+                FormattedTextLine::CodeBlock(texts) => {
+                    list_numbering.reset();
+                    lines.push(format!("\n{}\n", texts.code));
+                }
+                FormattedTextLine::Table(table) => {
+                    list_numbering.reset();
+                    lines.push(table.to_plain_text());
+                }
+                FormattedTextLine::LineBreak
+                | FormattedTextLine::HorizontalRule
+                | FormattedTextLine::Embedded(_)
+                | FormattedTextLine::Image(_) => {
+                    list_numbering.reset();
+                    lines.push(String::new());
+                }
+            }
+        }
+
+        lines.join("\n")
+    }
+}
+
+fn inline_text(text: &FormattedTextInline) -> String {
+    text.iter().map(|fragment| fragment.text.as_str()).collect()
 }
 
 impl From<String> for AgentOutputText {

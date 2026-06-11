@@ -115,9 +115,9 @@ fn test_aws_access_id() {
     let aws_access_key_id = test_secret(&["ASIA", "ZRUF5DH7SYC4A3NF"]);
     let amazon_credentials = format!(
         r#"{{
-        "Credentials": {
+        "Credentials": {{
             "AccessKeyId": "{aws_access_key_id}",
-        }
+        }}
       }}"#
     );
     assert_regex_match_found(regexes::AWS_ACCESS_ID, &amazon_credentials);

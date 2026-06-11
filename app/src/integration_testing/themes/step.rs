@@ -5,7 +5,7 @@ use crate::integration_testing::command_palette::open_command_palette_and_run_ac
 use crate::integration_testing::view_getters::workspace_view;
 
 pub fn open_theme_picker() -> Vec<TestStep> {
-    let mut steps = open_command_palette_and_run_action("Open Theme Picker");
+    let mut steps = open_command_palette_and_run_action("打开主题选择器");
     let last = steps.pop().expect("steps should not be empty");
     steps.push(last.add_assertion(|app, window_id| {
         let workspace = workspace_view(app, window_id);

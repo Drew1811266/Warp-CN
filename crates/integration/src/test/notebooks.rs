@@ -90,9 +90,7 @@ pub fn test_close_notebook_tab() -> Builder {
                 }),
         )
         // Change the tab title so we can identify it.
-        .with_steps(open_command_palette_and_run_action(
-            "Rename the Current Tab",
-        ))
+        .with_steps(open_command_palette_and_run_action("重命名当前标签页"))
         .with_step(TestStep::new("Set tab title").with_input_string("tab2", Some(&["enter"])))
         // Refocus the first notebook pane.
         .with_step(

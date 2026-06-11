@@ -1769,13 +1769,13 @@ pub fn init(app: &mut AppContext) {
             FixedBinding::new(
                 "ctrl-r",
                 WorkspaceAction::ShowCommandSearch(Default::default()),
-                id!("输入") & !id!("VoltronActive"),
+                id!("Input") & !id!("VoltronActive"),
             ),
         ]);
     }
 
     app.register_fixed_bindings(vec![
-        FixedBinding::new("ctrl-d", InputAction::CtrlD, id!("输入")),
+        FixedBinding::new("ctrl-d", InputAction::CtrlD, id!("Input")),
         FixedBinding::custom(
             CustomAction::History,
             InputAction::Up,
@@ -1783,7 +1783,7 @@ pub fn init(app: &mut AppContext) {
             // We need to ensure the workflow info box is not open as the "up" arrow
             // key is used to navigate the environment variables dropdown.
             // Same goes with the LLM menu.
-            id!("输入")
+            id!("Input")
                 & !id!("IMEOpen")
                 & !id!("VoltronActive")
                 & !id!("WorkflowInfoBox")
@@ -1806,7 +1806,7 @@ pub fn init(app: &mut AppContext) {
         "清屏",
         InputAction::ClearScreen,
     )
-    .with_context_predicate(id!("输入"))
+    .with_context_predicate(id!("Input"))
     .with_key_binding("ctrl-l")]);
 
     app.register_editable_bindings([
@@ -1815,14 +1815,14 @@ pub fn init(app: &mut AppContext) {
             "向上滚动一页终端输出",
             InputAction::PageUp,
         )
-        .with_context_predicate(id!("输入") & !id!("IMEOpen"))
+        .with_context_predicate(id!("Input") & !id!("IMEOpen"))
         .with_key_binding("pageup"),
         EditableBinding::new(
             "terminal:scroll_down_one_page",
             "向下滚动一页终端输出",
             InputAction::PageDown,
         )
-        .with_context_predicate(id!("输入") & !id!("IMEOpen"))
+        .with_context_predicate(id!("Input") & !id!("IMEOpen"))
         .with_key_binding("pagedown"),
     ]);
 
@@ -1836,7 +1836,7 @@ pub fn init(app: &mut AppContext) {
     )
     .with_group(bindings::BindingGroup::Settings.as_str())
     .with_context_predicate(
-        id!("输入")
+        id!("Input")
             & id!(SharedSessionStatus::ActiveSharer.as_keymap_context())
             & !id!("LongRunningCommand")
             & !id!(flags::ACTIVE_AGENT_VIEW)
@@ -1851,7 +1851,7 @@ pub fn init(app: &mut AppContext) {
             "（实验性）切换经典补全模式",
             InputAction::ToggleClassicCompletionsMode,
         )
-        .with_context_predicate(id!("输入"))]);
+        .with_context_predicate(id!("Input"))]);
     }
 
     // Register editable bindings relating to Command Search.
@@ -1869,7 +1869,7 @@ pub fn init(app: &mut AppContext) {
         // Therefore, this binding is guarded with !id!("VimNormalMode"). Note that although there
         // is usually a conflict between these, that isn't always the case if the user has
         // re-mapped CommandSearch to something else. However, we don't account for that here.
-        .with_context_predicate(id!("输入") & !id!("VoltronActive") & !id!("VimNormalMode"))
+        .with_context_predicate(id!("Input") & !id!("VoltronActive") & !id!("VimNormalMode"))
         .with_custom_action(CustomAction::CommandSearch),
         EditableBinding::new(
             "input:search_command_history",
@@ -1879,14 +1879,14 @@ pub fn init(app: &mut AppContext) {
                 init_content: Default::default(),
             }),
         )
-        .with_context_predicate(id!("输入") & !id!("VoltronActive"))
+        .with_context_predicate(id!("Input") & !id!("VoltronActive"))
         .with_custom_action(CustomAction::HistorySearch),
         EditableBinding::new(
             OPEN_COMPLETIONS_KEYBINDING_NAME,
             "打开补全菜单",
             InputAction::MaybeOpenCompletionSuggestions,
         )
-        .with_context_predicate(id!("输入"))
+        .with_context_predicate(id!("Input"))
         .with_key_binding("tab"),
     ]);
 
@@ -1896,7 +1896,7 @@ pub fn init(app: &mut AppContext) {
             "工作流",
             InputAction::SelectAndRefreshVoltron(VoltronItem::Workflows),
         )
-        .with_context_predicate(id!("输入"))
+        .with_context_predicate(id!("Input"))
         .with_custom_action(custom_action)]);
     }
 
@@ -1908,7 +1908,7 @@ pub fn init(app: &mut AppContext) {
             FixedBinding::new(
                 "ctrl-shift-R",
                 InputAction::SelectAndRefreshVoltron(VoltronItem::Workflows),
-                id!("输入"),
+                id!("Input"),
             ),
         ]);
     }
@@ -1920,7 +1920,7 @@ pub fn init(app: &mut AppContext) {
             InputAction::ShowAiCommandSearch,
         )
         .with_context_predicate(
-            id!("输入")
+            id!("Input")
                 & !id!(SharedSessionStatus::reader().as_keymap_context())
                 & id!(flags::IS_ANY_AI_ENABLED)
                 & !id!("AIInput"),
@@ -1935,7 +1935,7 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| !FeatureFlag::AgentView.is_enabled())
         .with_group(bindings::BindingGroup::WarpAi.as_str())
         .with_context_predicate(
-            id!("输入") & id!(flags::IS_ANY_AI_ENABLED) & id!("TerminalView_NonEmptyBlockList"),
+            id!("Input") & id!(flags::IS_ANY_AI_ENABLED) & id!("TerminalView_NonEmptyBlockList"),
         )
         .with_mac_key_binding("cmd-shift-N")
         .with_linux_or_windows_key_binding("ctrl-alt-shift-N"),
@@ -1947,7 +1947,7 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| FeatureFlag::AgentMode.is_enabled())
         .with_group(bindings::BindingGroup::WarpAi.as_str())
         .with_context_predicate(
-            id!("输入")
+            id!("Input")
                 & id!("UniversalDeveloperInput")
                 & id!(flags::IS_ANY_AI_ENABLED)
                 & !id!("IMEOpen"),
@@ -1958,7 +1958,7 @@ pub fn init(app: &mut AppContext) {
             "清除并重置 AI 上下文菜单查询",
             InputAction::ClearAndResetAIContextMenuQuery,
         )
-        .with_context_predicate(id!("输入") & id!("AIContextMenuOpen") & !id!("IMEOpen"))
+        .with_context_predicate(id!("Input") & id!("AIContextMenuOpen") & !id!("IMEOpen"))
         .with_mac_key_binding("cmd-shift-backspace")
         .with_linux_or_windows_key_binding("ctrl-shift-backspace"),
     ]);
@@ -1970,7 +1970,7 @@ pub fn init(app: &mut AppContext) {
                 bindings as slash_command_bindings, bindings::DefaultSlashCommandBinding,
             };
 
-            let context_predicate = id!("输入")
+            let context_predicate = id!("Input")
                 & !id!("IMEOpen")
                 & id!(command.name)
                 & !id!(flags::ACTIVE_INLINE_AGENT_VIEW)
@@ -2001,7 +2001,7 @@ pub fn init(app: &mut AppContext) {
     app.register_fixed_bindings([FixedBinding::new(
         cmd_or_ctrl_shift("e"),
         InputAction::TryHandlePassiveCodeDiff(CodeDiffAction::Edit),
-        id!("输入")
+        id!("Input")
             & id!(flags::CODE_SUGGESTIONS_FLAG)
             & id!(flags::PASSIVE_CODE_DIFF_KEYBINDINGS_ENABLED),
     )]);
@@ -2010,7 +2010,7 @@ pub fn init(app: &mut AppContext) {
         app.register_fixed_bindings([FixedBinding::new(
             "shift-?",
             InputAction::ToggleAgentViewShortcuts,
-            id!("输入")
+            id!("Input")
                 & !id!("IMEOpen")
                 & id!(flags::EMPTY_INPUT_BUFFER)
                 & id!(flags::ACTIVE_AGENT_VIEW)
@@ -15238,7 +15238,7 @@ impl TypedActionView for Input {
 
 impl View for Input {
     fn ui_name() -> &'static str {
-        "输入"
+        "Input"
     }
 
     fn accessibility_contents(&self, _: &AppContext) -> Option<AccessibilityContent> {

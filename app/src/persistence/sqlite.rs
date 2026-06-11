@@ -2214,7 +2214,16 @@ fn read_node(conn: &mut SqliteConnection, node: model::PaneNode) -> Result<PaneN
                     let source = code_pane
                         .source_data
                         .as_deref()
-                        .and_then(|data| serde_json::from_str::<CodeSource>(data).ok());
+                        .and_then(|data| serde_json::from_str::<CodeSource>(data).ok())
+                        .or_else(|| {
+                            tabs.iter().find_map(|tab| {
+                                tab.path.clone().map(|path| CodeSource::Link {
+                                    path,
+                                    range_start: None,
+                                    range_end: None,
+                                })
+                            })
+                        });
 
                     LeafContents::Code(CodePaneSnapShot::Local {
                         tabs,

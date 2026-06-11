@@ -123,12 +123,12 @@ fn test_modal_show_renders_expected_copy_with_empty_repos_message() {
             let selected_section = modal.render_selected_section(appearance);
             let selected_text = selected_section.debug_text_content().unwrap_or_default();
             assert!(
-                selected_text.contains("Selected repos"),
+                selected_text.contains("已选择仓库"),
                 "Expected selected section title in rendered content: {}",
                 selected_text
             );
             assert!(
-                selected_text.contains("No repos selected yet"),
+                selected_text.contains("尚未选择仓库"),
                 "Expected selected empty-state message in rendered content: {}",
                 selected_text
             );
@@ -136,13 +136,12 @@ fn test_modal_show_renders_expected_copy_with_empty_repos_message() {
             let available_section = modal.render_available_section(appearance);
             let available_text = available_section.debug_text_content().unwrap_or_default();
             assert!(
-                available_text.contains("Available indexed repos"),
+                available_text.contains("可用的已索引仓库"),
                 "Expected available section title in rendered content: {}",
                 available_text
             );
             assert!(
-                available_text
-                    .contains("No locally indexed repos found yet. Index a repo, then try again."),
+                available_text.contains("尚未找到本地已索引仓库。请先索引一个仓库，然后重试。"),
                 "Expected available empty-state message in rendered content: {}",
                 available_text
             );

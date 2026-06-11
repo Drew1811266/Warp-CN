@@ -252,9 +252,9 @@ impl WorkflowsMoreInfoView {
         appearance: &Appearance,
     ) -> Box<dyn Element> {
         let label = if cloud_workflow.model().data.is_agent_mode_workflow() {
-            "Edit prompt"
+            "编辑提示符"
         } else {
-            "Edit workflow"
+            "编辑工作流"
         };
         let workflow = cloud_workflow.clone();
         render_hoverable_card_button(

@@ -51,10 +51,10 @@ const DROPDOWN_WIDTH: f32 = 72.;
 const MODAL_CONTENT_FONT_SIZE: f32 = 14.;
 const CHECKBOX_SIZE: f32 = 16.;
 
-const MODAL_TITLE: &str = "Edit prompt";
-const WARP_PROMPT_SECTION_HEADER: &str = "Warp terminal prompt";
-const SHELL_PROMPT_SECTION_HEADER: &str = "Shell prompt (PS1)";
-const RESTORE_DEFAULT_BUTTON: &str = "Restore default";
+const MODAL_TITLE: &str = "编辑提示符";
+const WARP_PROMPT_SECTION_HEADER: &str = "Warp 终端提示符";
+const SHELL_PROMPT_SECTION_HEADER: &str = "Shell 提示符 (PS1)";
+const RESTORE_DEFAULT_BUTTON: &str = "恢复默认";
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;

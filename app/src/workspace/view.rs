@@ -593,6 +593,7 @@ const SHOW_SETTINGS_KEYBINDING_NAME: &str = "workspace:show_settings";
 pub const TOGGLE_COMMAND_PALETTE_KEYBINDING_NAME: &str = "workspace:toggle_command_palette";
 
 const USER_AVATAR_BUTTON_POSITION_ID: &str = "workspace:user_avatar_button";
+const RESOURCE_CENTER_BUTTON_POSITION_ID: &str = "resource_center_button";
 const NOTIFICATIONS_MAILBOX_POSITION_ID: &str = "workspace:notifications_mailbox";
 pub(crate) const JUMP_TO_LATEST_TOAST_BINDING_NAME: &str = "workspace:jump_to_latest_toast";
 pub(crate) const TOGGLE_NOTIFICATION_MAILBOX_BINDING_NAME: &str =
@@ -20040,7 +20041,11 @@ impl Workspace {
             button = stack.finish();
         }
 
-        Align::new(button).finish()
+        SavePosition::new(
+            Align::new(button).finish(),
+            RESOURCE_CENTER_BUTTON_POSITION_ID,
+        )
+        .finish()
     }
 
     fn render_settings_button(&self, appearance: &Appearance) -> Box<dyn Element> {
@@ -24239,7 +24244,7 @@ impl TypedActionView for Workspace {
 
 impl View for Workspace {
     fn ui_name() -> &'static str {
-        "工作区"
+        "Workspace"
     }
 
     fn self_or_child_interacted_with(&self, ctx: &mut ViewContext<Self>) {

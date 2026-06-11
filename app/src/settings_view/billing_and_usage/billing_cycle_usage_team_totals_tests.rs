@@ -48,7 +48,7 @@ fn team_aggregate_visibility_yields_overall_card_only() {
         &entries_two_per_source(),
         &visibility(UsageVisibilityGranularity::TeamAggregate),
     );
-    assert_eq!(titles(&summaries), vec!["Overall usage"]);
+    assert_eq!(titles(&summaries), vec!["总体使用量"]);
 }
 
 #[test]
@@ -59,7 +59,7 @@ fn own_only_visibility_yields_overall_card_only() {
         &entries_two_per_source(),
         &visibility(UsageVisibilityGranularity::OwnOnly),
     );
-    assert_eq!(titles(&summaries), vec!["Overall usage"]);
+    assert_eq!(titles(&summaries), vec!["总体使用量"]);
 }
 
 #[test]
@@ -68,7 +68,7 @@ fn per_user_totals_visibility_yields_overall_card_only() {
         &entries_two_per_source(),
         &visibility(UsageVisibilityGranularity::PerUserTotals),
     );
-    assert_eq!(titles(&summaries), vec!["Overall usage"]);
+    assert_eq!(titles(&summaries), vec!["总体使用量"]);
 }
 
 #[test]
@@ -80,7 +80,7 @@ fn full_breakdown_visibility_returns_three_cards_with_partitioned_sums() {
 
     assert_eq!(
         titles(&summaries),
-        vec!["Overall usage", "Local agent usage", "Cloud agent usage"]
+        vec!["总体使用量", "本地 Agent 使用量", "云端 Agent 使用量"]
     );
 
     // Overall = Local + Cloud; Local card = only Local entries; Cloud card =

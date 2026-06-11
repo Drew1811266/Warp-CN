@@ -229,16 +229,16 @@ fn add_horizontal_tab_context_metadata_copy_steps(
         .with_step(
             open_tab_context_menu("Open tab context menu for title copy").add_assertion(
                 assert_saved_positions_absent(&[
-                    "Copy branch",
-                    "Copy pane title",
-                    "Copy working directory",
-                    "Copy pull request link",
+                    "复制分支",
+                    "复制窗格标题",
+                    "复制工作目录",
+                    "复制 PR 链接",
                 ]),
             ),
         )
         .with_step(
             new_step_with_default_assertions("Copy tab title from tab context menu")
-                .with_click_on_saved_position("Copy tab title")
+                .with_click_on_saved_position("复制标签页标题")
                 .add_assertion(assert_clipboard_contains_string(
                     METADATA_TAB_TITLE.to_string(),
                 )),
@@ -255,7 +255,7 @@ fn add_vertical_tab_context_metadata_copy_steps(
         ))
         .with_step(
             new_step_with_default_assertions("Copy branch from tab context menu")
-                .with_click_on_saved_position("Copy branch")
+                .with_click_on_saved_position("复制分支")
                 .add_assertion(assert_clipboard_contains_string(
                     METADATA_BRANCH.to_string(),
                 )),
@@ -265,7 +265,7 @@ fn add_vertical_tab_context_metadata_copy_steps(
         ))
         .with_step(
             new_step_with_default_assertions("Copy tab title from tab context menu")
-                .with_click_on_saved_position("Copy tab title")
+                .with_click_on_saved_position("复制标签页标题")
                 .add_assertion(assert_clipboard_contains_string(
                     METADATA_TAB_TITLE.to_string(),
                 )),
@@ -275,7 +275,7 @@ fn add_vertical_tab_context_metadata_copy_steps(
         ))
         .with_step(
             new_step_with_default_assertions("Copy working directory from tab context menu")
-                .with_click_on_saved_position("Copy working directory")
+                .with_click_on_saved_position("复制工作目录")
                 .add_assertion(assert_clipboard_contains_home()),
         )
 }
@@ -290,7 +290,7 @@ fn add_vertical_pane_context_metadata_copy_steps(
         ))
         .with_step(
             new_step_with_default_assertions("Copy branch from pane context menu")
-                .with_click_on_saved_position("Copy branch")
+                .with_click_on_saved_position("复制分支")
                 .add_assertion(assert_clipboard_contains_string(
                     METADATA_BRANCH.to_string(),
                 )),
@@ -300,7 +300,7 @@ fn add_vertical_pane_context_metadata_copy_steps(
         ))
         .with_step(
             new_step_with_default_assertions("Copy pane title from pane context menu")
-                .with_click_on_saved_position("Copy pane title")
+                .with_click_on_saved_position("复制窗格标题")
                 .add_assertion(assert_clipboard_contains_string(
                     METADATA_CLICKED_PANE_TITLE.to_string(),
                 )),
@@ -310,7 +310,7 @@ fn add_vertical_pane_context_metadata_copy_steps(
         ))
         .with_step(
             new_step_with_default_assertions("Copy working directory from pane context menu")
-                .with_click_on_saved_position("Copy working directory")
+                .with_click_on_saved_position("复制工作目录")
                 .add_assertion(assert_clipboard_contains_home()),
         )
 }

@@ -252,6 +252,7 @@ integration_tests! {
     test_block_filtering_clear_blocklist,
     test_autosuggestions_are_hidden_when_opening_tab_completions,
     test_latest_buffer_operations,
+    test_zh_terminal_cjk_input_roundtrip,
 
     test_pass_control_sequences_to_long_running_block,
     test_settings_file_migration_from_native_store,

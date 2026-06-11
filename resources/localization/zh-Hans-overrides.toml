@@ -22143,9 +22143,9 @@ context = "Phase 15 terminal visible copy"
 [[replace]]
 path = "app/src/terminal/input.rs"
 source = "Input"
-target = "输入"
+target = "Input"
 status = "active"
-context = "Phase 15 terminal visible copy"
+context = "Phase 15 reviewed preserve: Input view/keymap context identifier"
 
 [[replace]]
 path = "app/src/terminal/view/block_onboarding/onboarding_agentic_suggestions_block.rs"
@@ -33267,9 +33267,9 @@ context = "Phase 21 reviewed preserve: terminal internal IDs, logs, parser/proto
 [[replace]]
 path = "app/src/terminal/view.rs"
 source = "Terminal"
-target = "终端"
+target = "Terminal"
 status = "active"
-context = "Phase 21 terminal visible copy"
+context = "Phase 21 reviewed preserve: Terminal view/keymap context identifier"
 
 [[replace]]
 path = "app/src/terminal/view.rs"
@@ -35677,9 +35677,9 @@ context = "Phase 22 settings/workspace visible copy"
 [[replace]]
 path = "app/src/workspace/view.rs"
 source = "Workspace"
-target = "工作区"
+target = "Workspace"
 status = "active"
-context = "Phase 22 settings/workspace visible copy"
+context = "Phase 22 reviewed preserve: Workspace view/keymap context identifier"
 
 [[replace]]
 path = "app/src/workspace/view.rs"
@@ -42997,9 +42997,9 @@ context = "Phase 29 Settings/modals visible or searchable copy"
 [[replace]]
 path = "app/src/settings_view/code_page.rs"
 source = "maximum number of codebase indexes has been reached"
-target = "已达到代码库索引数量上限"
+target = "maximum number of codebase indexes has been reached"
 status = "active"
-context = "Phase 29 Settings/modals visible or searchable copy"
+context = "Phase 29 reviewed preserve: canonical server English failure fragment"
 
 [[replace]]
 path = "app/src/remote_server/server_model.rs"

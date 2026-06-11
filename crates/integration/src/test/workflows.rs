@@ -47,11 +47,10 @@ pub fn test_create_personal_workflow_pane_from_command_palette() -> Builder {
             assert_no_workflow_pane_open(),
         ))
         .with_steps(
-            open_command_palette_and_run_action("Create a New Personal Workflow")
-                .add_named_assertion(
-                    "There should be one workflow pane open",
-                    assert_open_workflow_pane_count_equals(1),
-                ),
+            open_command_palette_and_run_action("创建新的个人工作流").add_named_assertion(
+                "There should be one workflow pane open",
+                assert_open_workflow_pane_count_equals(1),
+            ),
         )
 }
 
@@ -69,14 +68,14 @@ pub fn test_create_team_workflow_pane_from_command_palette() -> Builder {
                 .set_post_step_pause(Duration::from_millis(250)),
         )
         .with_steps(
-            open_command_palette_and_run_action("Create a New Team Workflow").add_named_assertion(
+            open_command_palette_and_run_action("创建新的团队工作流").add_named_assertion(
                 "There should still not be any panes open",
                 assert_no_team_workflow_pane_open(),
             ),
         )
         .with_step(go_online())
         .with_steps(
-            open_command_palette_and_run_action("Create a New Team Workflow").add_named_assertion(
+            open_command_palette_and_run_action("创建新的团队工作流").add_named_assertion(
                 "There should be an open workflow pane",
                 assert_open_team_workflow_pane_count_equals(1),
             ),

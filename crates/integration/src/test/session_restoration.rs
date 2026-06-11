@@ -544,7 +544,7 @@ pub fn test_restore_snapshot_with_settings_page() -> Builder {
         .with_step(wait_until_bootstrapped_single_pane_for_tab(0))
         .with_step(
             TestStep::new("Verify settings pane restoration")
-                .add_assertion(assert_pane_title(0, 1, "Settings"))
+                .add_assertion(assert_pane_title(0, 1, "设置"))
                 .add_assertion(move |app, window_id| {
                     // Verify the settings view exists and is on the Referrals page.
                     let settings_views: Vec<ViewHandle<SettingsView>> = app

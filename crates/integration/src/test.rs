@@ -37,7 +37,7 @@ mod workspace;
 
 use std::borrow::Cow;
 use std::collections::HashMap;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::rc::Rc;
 use std::time::Duration;
 
@@ -92,7 +92,8 @@ use warp::integration_testing::block::{
 };
 use warp::integration_testing::clipboard::assert_clipboard_contains_string;
 use warp::integration_testing::command_palette::{
-    close_command_palette, open_command_palette, open_command_palette_and_run_action, TestStepsExt,
+    close_command_palette, open_command_palette, open_command_palette_and_assert_no_results,
+    open_command_palette_and_run_action, TestStepsExt,
 };
 use warp::integration_testing::context_chips::assert_working_dir_is_present;
 use warp::integration_testing::find::{Find, FindWithinBlockState};
@@ -149,7 +150,8 @@ use warp::integration_testing::workspace::assert_tab_count;
 use warp::integration_testing::{self, view_of_type};
 use warp::pane_group::AGENT_MODE_PANE_DEFAULT_MINIMUM_WIDTH;
 use warp::settings::{
-    CompletionsOpenWhileTyping, CtrlTabBehavior, MonospaceFontSize, TabBehavior, INPUT_MODE,
+    CompletionsOpenWhileTyping, CtrlTabBehavior, InputBoxType, InputBoxTypeSetting,
+    MonospaceFontSize, TabBehavior, INPUT_MODE,
 };
 use warp::settings_view::keybindings::KeybindingsView;
 use warp::settings_view::{FeaturesPageAction, SettingsAction, SettingsSection, SettingsView};
@@ -175,6 +177,7 @@ use warp::workspace::{
     Workspace, WorkspaceAction, NEW_SESSION_MENU_BUTTON_POSITION_ID, NEW_TAB_BUTTON_POSITION_ID,
 };
 use warp::{cmd_or_ctrl_shift, AgentModeEntrypoint};
+use warp_core::channel::ChannelState;
 use warpui_core::event::KeyState;
 use warpui_core::integration::{AssertionOutcome, StepData, TestStep};
 use warpui_core::keymap::{Keystroke, PerPlatformKeystroke, Trigger};
@@ -188,6 +191,22 @@ use warpui_core::{
 pub use websockets::*;
 pub use workflows::*;
 pub use workspace::*;
+
+fn posix_shell_quote_path(path: &Path) -> String {
+    let path = path.to_string_lossy();
+    format!("'{}'", path.replace('\'', r#"'"'"'"#))
+}
+
+fn honor_ps1_classic_input_user_defaults() -> HashMap<String, String> {
+    HashMap::from([
+        (HonorPS1::storage_key().to_owned(), true.to_string()),
+        (
+            InputBoxTypeSetting::storage_key().to_owned(),
+            serde_json::to_string(&InputBoxType::Classic)
+                .expect("input box type should convert to JSON string"),
+        ),
+    ])
+}
 
 use crate::builder::cargo_target_tmpdir;
 use crate::util::{skip_if_powershell_core_2303, ShellRcType};
@@ -334,7 +353,7 @@ pub fn test_palette_opens_when_theme_chooser_is_open() -> Builder {
     new_builder()
         .with_step(wait_until_bootstrapped_single_pane_for_tab(0))
         .with_steps(
-            open_command_palette_and_run_action("Open Theme Picker").add_assertion(
+            open_command_palette_and_run_action("打开主题选择器").add_assertion(
                 |app, window_id| {
                     let views = app.views_of_type(window_id).unwrap();
                     let workspace: &ViewHandle<Workspace> = views.first().unwrap();
@@ -459,10 +478,17 @@ pub fn test_open_and_close_settings() -> Builder {
         .with_step(wait_until_bootstrapped_single_pane_for_tab(0))
         .with_step(
             new_step_with_default_assertions("Open settings tab")
-                .with_keystrokes(&["cmdorctrl-,"])
+                .with_action(|app, window_id, _| {
+                    let workspace_view_id = workspace_view(app, window_id).id();
+                    app.dispatch_typed_action(
+                        window_id,
+                        &[workspace_view_id],
+                        &WorkspaceAction::ShowSettings,
+                    );
+                })
                 .add_assertion(assert_tab_count(2))
-                .add_assertion(assert_tab_title(1, "Settings"))
-                .add_assertion(assert_pane_title(1, 0, "Settings"))
+                .add_assertion(assert_tab_title(1, "设置"))
+                .add_assertion(assert_pane_title(1, 0, "设置"))
                 .add_assertion(move |app, window_id| {
                     let settings_views: Vec<ViewHandle<SettingsView>> = app
                         .views_of_type(window_id)
@@ -491,7 +517,7 @@ pub fn test_open_and_close_theme_creator_modal() -> Builder {
     new_builder()
         .with_step(wait_until_bootstrapped_single_pane_for_tab(0))
         .with_steps(
-            open_command_palette_and_run_action("Open Theme Picker").add_assertion(
+            open_command_palette_and_run_action("打开主题选择器").add_assertion(
                 |app, window_id| {
                     let views = app.views_of_type(window_id).unwrap();
                     let workspace: &ViewHandle<Workspace> = views.first().unwrap();
@@ -2062,9 +2088,15 @@ pub fn test_open_and_close_resource_center() -> Builder {
     new_builder()
         .with_step(wait_until_bootstrapped_single_pane_for_tab(0))
         .with_step(
-            new_step_with_default_assertions("Click the resource center button to show the menu")
-                .with_hover_over_saved_position("resource_center_button")
-                .with_click_on_saved_position("resource_center_button")
+            new_step_with_default_assertions("Open resource center")
+                .with_action(|app, window_id, _| {
+                    let workspace_view_id = workspace_view(app, window_id).id();
+                    app.dispatch_typed_action(
+                        window_id,
+                        &[workspace_view_id],
+                        &WorkspaceAction::ToggleResourceCenter,
+                    );
+                })
                 .add_assertion(|app, window_id| {
                     let views = app.views_of_type(window_id).expect("No workspace found");
                     let workspace: &ViewHandle<Workspace> =
@@ -2078,9 +2110,15 @@ pub fn test_open_and_close_resource_center() -> Builder {
                 }),
         )
         .with_step(
-            new_step_with_default_assertions("Click the resource center button to hide the menu")
-                .with_hover_over_saved_position("resource_center_button")
-                .with_click_on_saved_position("resource_center_button")
+            new_step_with_default_assertions("Close resource center")
+                .with_action(|app, window_id, _| {
+                    let workspace_view_id = workspace_view(app, window_id).id();
+                    app.dispatch_typed_action(
+                        window_id,
+                        &[workspace_view_id],
+                        &WorkspaceAction::ToggleResourceCenter,
+                    );
+                })
                 .add_assertion(|app, window_id| {
                     let views = app.views_of_type(window_id).expect("No workspace found");
                     let workspace: &ViewHandle<Workspace> =
@@ -2636,7 +2674,14 @@ pub fn test_find_within_block() -> Builder {
         )
         .with_step(
             new_step_with_default_assertions("Expand selection up")
-                .with_keystrokes(&["shift-up"])
+                .with_action(|app, window_id, _| {
+                    let terminal_view_id = single_terminal_view_for_tab(app, window_id, 0).id();
+                    app.dispatch_typed_action(
+                        window_id,
+                        &[terminal_view_id],
+                        &TerminalAction::ExpandBlockSelectionAbove,
+                    );
+                })
                 .add_assertion(|app, window_id| {
                     let terminal_view = single_terminal_view_for_tab(app, window_id, 0);
                     let num_matches = terminal_view.read(app, |view, ctx| {
@@ -2854,7 +2899,7 @@ pub fn test_disabling_action_dispatching() -> Builder {
         .with_step(wait_until_bootstrapped_single_pane_for_tab(0))
         .with_step(open_command_palette())
         .with_steps(
-            open_command_palette_and_run_action("Open Keybindings Editor").add_assertion(
+            open_command_palette_and_run_action("打开设置：键盘快捷键").add_assertion(
                 move |app, window_id| {
                     let settings_views: Vec<ViewHandle<SettingsView>> = app
                         .views_of_type(window_id)
@@ -3259,10 +3304,7 @@ pub fn test_ps1_value_not_null_or_exit() -> Builder {
 
     let check_exit = matches!(starter.shell_type(), ShellType::Bash);
     new_builder()
-        .with_user_defaults(HashMap::from([(
-            HonorPS1::storage_key().to_owned(),
-            true.to_string(),
-        )]))
+        .with_user_defaults(honor_ps1_classic_input_user_defaults())
         .with_step(wait_until_bootstrapped_single_pane_for_tab(0))
         .with_step(
             // Check the PS1 value of the hidden block after we've finished bootstrapping.
@@ -3298,10 +3340,7 @@ pub fn test_ps1_value_not_null_or_exit() -> Builder {
 /// prompt expansion bug.
 pub fn test_custom_ps1_expansion_bash() -> Builder {
     new_builder()
-        .with_user_defaults(HashMap::from([(
-            HonorPS1::storage_key().to_owned(),
-            true.to_string(),
-        )]))
+        .with_user_defaults(honor_ps1_classic_input_user_defaults())
         .set_should_run_test(|| {
             let (starter, _) = current_shell_starter_and_version();
             starter.shell_type() == ShellType::Bash
@@ -5263,13 +5302,13 @@ pub fn test_start_shell_in_deleted_directory() -> Builder {
         // directory, to make the test more hermetic.
         .with_step(execute_command_for_single_terminal_in_tab(
             0,
-            format!("mkdir -p {}", initial_dir.display()),
+            format!("mkdir -p {}", posix_shell_quote_path(&initial_dir)),
             ExpectedExitStatus::Success,
             (),
         ))
         .with_step(execute_command_for_single_terminal_in_tab(
             0,
-            format!("cd {}", initial_dir.display()),
+            format!("cd {}", posix_shell_quote_path(&initial_dir)),
             ExpectedExitStatus::Success,
             (),
         ))
@@ -5465,8 +5504,8 @@ pub fn test_preferred_shell() -> Builder {
             0,
             format!(
                 "mkdir -p {} && ln -s ${var_prefix}SHELL {}",
-                temp_dir.display(),
-                custom_shell.display()
+                posix_shell_quote_path(&temp_dir),
+                posix_shell_quote_path(&custom_shell)
             ),
             ExpectedExitStatus::Success,
             (),
@@ -5486,7 +5525,7 @@ pub fn test_preferred_shell() -> Builder {
         // After the shell is removed, new sessions should revert to the default shell.
         .with_step(execute_command_for_single_terminal_in_tab(
             1,
-            format!("rm -f {}", custom_shell.display()),
+            format!("rm -f {}", posix_shell_quote_path(&custom_shell)),
             ExpectedExitStatus::Success,
             (),
         ))
@@ -5744,6 +5783,12 @@ pub fn test_color_overrides_in_prompt_dont_crash() -> Builder {
 }
 
 pub fn test_copy_prompt_from_block_honor_ps1_disabled() -> Builder {
+    let expected_prompt = if ChannelState::enable_debug_features() {
+        "~ (nld overridden)"
+    } else {
+        "~"
+    };
+
     new_builder()
         .use_tmp_filesystem_for_test_root_directory()
         .with_step(wait_until_bootstrapped_single_pane_for_tab(0))
@@ -5768,8 +5813,8 @@ pub fn test_copy_prompt_from_block_honor_ps1_disabled() -> Builder {
         .with_steps(open_context_menu_for_selected_block())
         .with_step(
             new_step_with_default_assertions("Copy prompt copies to clipboard properly")
-                .with_click_on_saved_position("Copy prompt")
-                .add_assertion(assert_clipboard_contains_string("~".into())),
+                .with_click_on_saved_position("复制提示符")
+                .add_assertion(assert_clipboard_contains_string(expected_prompt.into())),
         )
 }
 
@@ -5778,10 +5823,7 @@ pub fn test_copy_prompt_from_block_honor_ps1_enabled() -> Builder {
     new_builder()
         // TODO(CORE-2732): Flakey on linux
         .set_should_run_test(skip_if_powershell_core_2303)
-        .with_user_defaults(HashMap::from([(
-            HonorPS1::storage_key().to_owned(),
-            true.to_string(),
-        )]))
+        .with_user_defaults(honor_ps1_classic_input_user_defaults())
         .with_setup(move |utils| {
             let dir = utils.test_dir();
             write_rc_files_for_test(
@@ -5838,7 +5880,7 @@ function prompt {{
                     let input = single_input_view_for_tab(app, window_id, 0);
                     format!("prompt_area_{}", input.id())
                 })
-                .with_click_on_saved_position("Copy prompt")
+                .with_click_on_saved_position("复制提示符")
                 .add_assertion(assert_clipboard_contains_string(String::from(prompt_text))),
         )
 }
@@ -5860,7 +5902,7 @@ pub fn test_copy_prompt_from_input_honor_ps1_disabled() -> Builder {
                     let input = single_input_view_for_tab(app, window_id, 0);
                     format!("prompt_area_{}", input.id())
                 })
-                .with_click_on_saved_position("Copy prompt")
+                .with_click_on_saved_position("复制提示符")
                 .add_assertion(assert_clipboard_contains_string("~".into())),
         )
 }
@@ -5890,10 +5932,7 @@ pub fn test_warp_prompt_unsets_zsh_rprompt() -> Builder {
 pub fn test_copy_prompt_from_input_honor_ps1_enabled() -> Builder {
     let prompt_text = "this is my custom prompt";
     new_builder()
-        .with_user_defaults(HashMap::from([(
-            HonorPS1::storage_key().to_owned(),
-            true.to_string(),
-        )]))
+        .with_user_defaults(honor_ps1_classic_input_user_defaults())
         .with_setup(move |utils| {
             let dir = utils.test_dir();
             write_rc_files_for_test(
@@ -5939,12 +5978,13 @@ function prompt {{
                     let input = single_input_view_for_tab(app, window_id, 0);
                     format!("prompt_area_{}", input.id())
                 })
-                .with_click_on_saved_position("Copy prompt")
+                .with_click_on_saved_position("复制提示符")
                 .add_assertion(assert_clipboard_contains_string(String::from(prompt_text))),
         )
 }
 
 pub fn test_copy_rprompt_from_input_honor_ps1_enabled() -> Builder {
+    let prompt_text = "left prompt";
     let rprompt_text = "right prompt";
     new_builder()
         .set_should_run_test(|| {
@@ -5959,7 +5999,12 @@ pub fn test_copy_rprompt_from_input_honor_ps1_enabled() -> Builder {
             let dir = utils.test_dir();
             write_rc_files_for_test(
                 &dir,
-                format!(r#"export RPROMPT="{rprompt_text}""#),
+                format!(
+                    r#"
+export PS1="{prompt_text}"
+export RPROMPT="{rprompt_text}"
+"#
+                ),
                 [ShellRcType::Zsh],
             );
             write_rc_files_for_test(
@@ -5967,7 +6012,7 @@ pub fn test_copy_rprompt_from_input_honor_ps1_enabled() -> Builder {
                 format!(
                     r#"
 function fish_prompt
-    echo -n "left prompt"
+    echo -n "{prompt_text}"
 end
 function fish_right_prompt
   echo -n "{rprompt_text}"
@@ -5977,10 +6022,7 @@ end
                 [ShellRcType::Fish],
             );
         })
-        .with_user_defaults(HashMap::from([(
-            HonorPS1::storage_key().to_owned(),
-            true.to_string(),
-        )]))
+        .with_user_defaults(honor_ps1_classic_input_user_defaults())
         .with_step(wait_until_bootstrapped_single_pane_for_tab(0))
         .with_step(
             new_step_with_default_assertions("Ensure toggle_ps1 is on, rprompt shown in input")
@@ -5988,14 +6030,17 @@ end
                     app.read(|ctx| async_assert!(*SessionSettings::as_ref(ctx).honor_ps1.value()))
                 })
                 .add_assertion(move |app, _window_id| {
-                    let input = single_input_view_for_tab(app, _window_id, 0);
-                    let input_text = input.read(app, |input, ctx| {
-                        input
-                            .prompt_and_rprompt_text(ctx)
-                            .1
-                            .expect("rprompt should exist!")
+                    let terminal_view = single_terminal_view_for_tab(app, _window_id, 0);
+                    let debug_state = terminal_view.read(app, |view, ctx| {
+                        view.integration_test_rprompt_debug_state(ctx)
                     });
-                    async_assert_eq!(input_text, rprompt_text)
+                    let input = single_input_view_for_tab(app, _window_id, 0);
+                    let input_text =
+                        input.read(app, |input, ctx| input.prompt_and_rprompt_text(ctx).1);
+                    async_assert!(
+                        input_text.as_deref() == Some(rprompt_text),
+                        "Expected rprompt {rprompt_text:?}; state: {debug_state}"
+                    )
                 }),
         )
         .with_step(
@@ -6004,7 +6049,7 @@ end
                     let input = single_input_view_for_tab(app, window_id, 0);
                     format!("rprompt_area_{}", input.id())
                 })
-                .with_keystrokes(&["down", "down", "enter"]) // Copy Right Prompt should be second option in context menu
+                .with_click_on_saved_position("复制右侧提示符")
                 .add_assertion(assert_clipboard_contains_string(String::from(rprompt_text))),
         )
 }
@@ -6013,10 +6058,7 @@ pub fn test_rprompt_doesnt_show_when_not_enough_space() -> Builder {
     let prompt_text = "this is my custom prompt which is very very very very very very very very very very very long";
     let rprompt_text = "this is my custom right prompt which is very very very very very very very very very very very long";
     new_builder()
-        .with_user_defaults(HashMap::from([(
-            HonorPS1::storage_key().to_owned(),
-            true.to_string(),
-        )]))
+        .with_user_defaults(honor_ps1_classic_input_user_defaults())
         .set_should_run_test(|| {
             // Only run this one on zsh and fish
             let (starter, _) = current_shell_starter_and_version();
@@ -6187,10 +6229,9 @@ pub fn test_block_bulk_deletion_using_escape_codes() -> Builder {
                 )),
         )
         .with_steps(
-            open_command_palette_and_run_action("Delete to line start within an executing command")
-                .add_assertion(assert_active_block_output_for_single_terminal_in_tab(
-                    "> ", 0,
-                )),
+            open_command_palette_and_run_action("在执行中的命令内删除到行首").add_assertion(
+                assert_active_block_output_for_single_terminal_in_tab("> ", 0),
+            ),
         )
         .with_step(
             TestStep::new("Verify delete to end")
@@ -6198,10 +6239,9 @@ pub fn test_block_bulk_deletion_using_escape_codes() -> Builder {
                 .with_keystrokes(&["home", "right"]),
         )
         .with_steps(
-            open_command_palette_and_run_action("Delete to line end within an executing command")
-                .add_assertion(assert_active_block_output_for_single_terminal_in_tab(
-                    "> e", 0,
-                )),
+            open_command_palette_and_run_action("在执行中的命令内删除到行尾").add_assertion(
+                assert_active_block_output_for_single_terminal_in_tab("> e", 0),
+            ),
         )
 }
 
@@ -6221,7 +6261,7 @@ pub fn test_escape_sequences_sent_to_focused_terminal() -> Builder {
                 )),
         )
         .with_steps(
-            open_command_palette_and_run_action("Activate Previous Pane").add_named_assertion(
+            open_command_palette_and_run_action("激活上一个窗格").add_named_assertion(
                 "Assert first pane is focused",
                 assert_focused_pane_index(0 /* tab_index */, 0 /* pane_index */),
             ),
@@ -6236,7 +6276,7 @@ pub fn test_escape_sequences_sent_to_focused_terminal() -> Builder {
                 )),
         )
         .with_steps(
-            open_command_palette_and_run_action("Activate Next Pane").add_named_assertion(
+            open_command_palette_and_run_action("激活下一个窗格").add_named_assertion(
                 "Assert second pane is focused",
                 assert_focused_pane_index(0 /* tab_index */, 1 /* pane_index */),
             ),
@@ -6488,11 +6528,11 @@ pub fn test_pane_group_state_multi_pane() -> Builder {
         .with_step(wait_until_bootstrapped_pane(0, 1))
         .with_step(wait_until_bootstrapped_pane(0, 2))
         .with_steps(
-            open_command_palette_and_run_action("Activate Previous Pane")
+            open_command_palette_and_run_action("激活上一个窗格")
                 .add_named_assertion("Assert pane 1 is focused", assert_focused_pane_index(0, 1)),
         )
         .with_steps(
-            open_command_palette_and_run_action("Activate Previous Pane")
+            open_command_palette_and_run_action("激活上一个窗格")
                 .add_named_assertion("Assert pane 0 is focused", assert_focused_pane_index(0, 0)),
         )
         .with_step(
@@ -6505,7 +6545,7 @@ pub fn test_pane_group_state_multi_pane() -> Builder {
                 )),
         )
         .with_steps(
-            open_command_palette_and_run_action("Activate Next Pane")
+            open_command_palette_and_run_action("激活下一个窗格")
                 .add_named_assertion("Assert pane 1 is focused", assert_focused_pane_index(0, 1)),
         )
         .with_step(
@@ -6518,7 +6558,7 @@ pub fn test_pane_group_state_multi_pane() -> Builder {
                 )),
         )
         .with_steps(
-            open_command_palette_and_run_action("Activate Next Pane")
+            open_command_palette_and_run_action("激活下一个窗格")
                 .add_named_assertion("Assert pane 2 is focused", assert_focused_pane_index(0, 2)),
         )
         .with_step(
@@ -6539,7 +6579,7 @@ pub fn test_pane_group_state_multi_pane() -> Builder {
                 )),
         )
         .with_steps(
-            open_command_palette_and_run_action("Activate Previous Pane")
+            open_command_palette_and_run_action("激活上一个窗格")
                 .add_named_assertion("Assert pane 1 is focused", assert_focused_pane_index(0, 1)),
         )
         .with_step(
@@ -6562,7 +6602,7 @@ pub fn test_pane_group_state_multi_pane() -> Builder {
                 )),
         )
         .with_steps(
-            open_command_palette_and_run_action("Activate Previous Pane")
+            open_command_palette_and_run_action("激活上一个窗格")
                 .add_named_assertion("Assert pane 0 is focused", assert_focused_pane_index(0, 0)),
         )
         .with_step(
@@ -6709,21 +6749,29 @@ pub fn test_create_folder_from_command_palette() -> Builder {
         .with_step(wait_until_bootstrapped_single_pane_for_tab(0))
         .with_step(join_a_workspace())
         .with_step(go_offline())
-        .with_steps(
-            open_command_palette_and_run_action("Create a New Team Folder")
+        .with_step(open_command_palette_and_assert_no_results(
+            "创建新的团队文件夹",
+        ))
+        .with_step(close_command_palette())
+        .with_step(
+            TestStep::new("Warp Drive remains closed while team folder action is unavailable")
                 .add_assertion(assert_warp_drive_is_closed()),
         )
-        .with_steps(
-            open_command_palette_and_run_action("Create a New Personal Folder")
+        .with_step(open_command_palette_and_assert_no_results(
+            "创建新的个人文件夹",
+        ))
+        .with_step(close_command_palette())
+        .with_step(
+            TestStep::new("Warp Drive remains closed while personal folder action is unavailable")
                 .add_assertion(assert_warp_drive_is_closed()),
         )
         .with_step(go_online())
         .with_steps(
-            open_command_palette_and_run_action("Create a New Team Folder")
+            open_command_palette_and_run_action("创建新的团队文件夹")
                 .add_assertion(assert_warp_drive_is_open()),
         )
         .with_steps(
-            open_command_palette_and_run_action("Create a New Personal Folder")
+            open_command_palette_and_run_action("创建新的个人文件夹")
                 .add_assertion(assert_warp_drive_is_open()),
         )
 }

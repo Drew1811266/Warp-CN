@@ -1533,7 +1533,9 @@ fn read_selected_text_from_ai_block(view_id: EntityId, app: &AppContext) -> Opti
 
     let ai_block = app.view_with_id::<AIBlock>(active_window_id, view_id)?;
     let ai_block_view = app.view(&ai_block);
-    ai_block_view.selected_text(app)
+    ai_block_view
+        .selected_text(app)
+        .or_else(|| ai_block_view.full_rendered_text_for_blocklist_selection(app))
 }
 
 /// Given the view id of a pending user query block, return the active selected text in that block.

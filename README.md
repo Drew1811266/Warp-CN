@@ -7,9 +7,9 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 ## 当前状态
 
-当前版本：`0.20.5`
+当前版本：`0.20.6`
 
-当前结论：个人使用目标下的汉化版已经完成。项目已经完成源码级简体中文 overlay、核心界面覆盖、基础构建验证和当前周期 GUI 冒烟检查，可以作为本地中文 Warp fork 使用。`0.20.5` 进一步规范了免费路线 macOS Apple Silicon DMG 打包流程，使用 `release-lto` 构建、完整 bundled UI 资源、正确版本元数据和 ad-hoc 签名。
+当前结论：个人使用目标下的汉化版已经完成。项目已经完成源码级简体中文 overlay、核心界面覆盖、基础构建验证和当前周期功能测试，可以作为本地中文 Warp fork 使用。`0.20.6` 修复了汉化后暴露的快捷键上下文、命令面板、菜单、终端输入、快照恢复、子 shell、AI block 选择复制等功能回归，并继续使用 `release-lto` 构建、完整 bundled UI 资源、正确版本元数据和 ad-hoc 签名的免费路线 macOS Apple Silicon DMG。
 
 本项目不以“官方中文版本”“公开 RC”或“可代表 Warp 官方发布”为目标。仓库中保留的 public-RC 证据脚本和 blocker registry 只是未来如果要做更高保证公开发布时的辅助材料，不影响当前个人使用版完成状态。
 
@@ -17,8 +17,8 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 当前提供 macOS Apple Silicon（arm64）个人体验包：
 
-- 下载：[Warp-CN-0.20.5-macos-arm64-release.dmg](https://github.com/Drew1811266/Warp-CN/releases/latest/download/Warp-CN-0.20.5-macos-arm64-release.dmg)
-- SHA256：`332fad238be467a8b786dac84f3329425a1fe2ff5046d80ae862f0d9fe8d52f0`
+- 下载：[Warp-CN-0.20.6-macos-arm64-release.dmg](https://github.com/Drew1811266/Warp-CN/releases/latest/download/Warp-CN-0.20.6-macos-arm64-release.dmg)
+- SHA256：`0a3cce012e1a43d75a5e39d05a29f25d8a63382415d2a7493123306e03489888`
 
 下载后打开 DMG，将 `WarpOss.app` 拖入 `Applications`，然后在 Finder 中右键选择“打开”。这个体验包是 ad-hoc 签名的 release 构建，没有经过 Apple Developer ID 签名和公证；如果 macOS 拦截，可以在确认来源后用以下命令移除下载隔离标记：
 
@@ -107,7 +107,7 @@ open -n target/debug/bundle/osx/WarpOss.app
 
 ```bash
 python3 script/zh_low_load_gate.py --probes 1 --wait-seconds 10 --max-load 12 --max-hot-process-percent 250
-script/macos/package_oss_free --version 0.20.5
+script/macos/package_oss_free --version 0.20.6
 ```
 
 这个脚本会生成 `release-lto` 构建、补齐 app bundle 资源和版本元数据、执行 ad-hoc 签名，并输出 `target/Warp-CN-<version>-macos-arm64-release.dmg`。它不需要 Apple Developer Program，也不会执行 Developer ID 签名或 Apple 公证。
@@ -195,6 +195,7 @@ expected_count = 1
 - `docs/zh-Hans-upstream-sync.md`：同步上游 Warp stable 的流程。
 - `docs/zh-Hans-review-checklist.md`：翻译质量和模块审查清单。
 - `docs/zh-Hans-functional-risk-register.md`：高风险字符串处理规则。
+- `docs/zh-Hans-localization-functional-test-plan.md`：排查汉化是否影响功能的分层测试方案。
 - `docs/zh-Hans-evidence-policy.md`：截图、录屏和 GUI 证据的隐私处理规则。
 
 同步上游后，推荐先修复 manifest drift，再重新应用 overlay，并用 inventory 检查新增候选英文字符串。中文源码可以再生成，长期需要维护的是翻译清单、术语表、忽略规则和验证脚本。

@@ -4321,9 +4321,9 @@ fn test_prompt_context_menu_items_for_ps1() {
             let items = view.prompt_context_menu_items(ctx);
             let len = items.len();
             assert_eq!(len, 3);
-            assert_eq!(items[0].fields().unwrap().label(), "Copy prompt");
+            assert_eq!(items[0].fields().unwrap().label(), "复制提示符");
             assert!(items[1].is_separator());
-            assert_eq!(items[2].fields().unwrap().label(), "Edit prompt");
+            assert_eq!(items[2].fields().unwrap().label(), "编辑提示符");
             assert!(!items[2].fields().unwrap().is_disabled());
         });
     })
@@ -4372,19 +4372,16 @@ fn test_prompt_context_menu_items_for_context_chips() {
             assert_eq!(items.len(), 5);
 
             // We expect the prompt menu items to be something like the following when context chips are used:
-            // Copy prompt
+            // 复制提示符
             // ------------
             // <context chip specific actions>
             // ------------
-            // Edit prompt
-            assert_eq!(items[0].fields().unwrap().label(), "Copy prompt");
+            // 编辑提示符
+            assert_eq!(items[0].fields().unwrap().label(), "复制提示符");
             assert!(items[1].is_separator());
-            assert_eq!(
-                items[2].fields().unwrap().label(),
-                "Copy Time (12-hour format)"
-            );
+            assert_eq!(items[2].fields().unwrap().label(), "复制时间（12 小时制）");
             assert!(items[3].is_separator());
-            assert_eq!(items[4].fields().unwrap().label(), "Edit prompt");
+            assert_eq!(items[4].fields().unwrap().label(), "编辑提示符");
             assert!(!items[4].fields().unwrap().is_disabled());
         });
     })
@@ -4418,12 +4415,12 @@ fn test_prompt_context_menu_items_for_no_context_chips() {
             assert_eq!(items.len(), 3);
 
             // We expect the prompt menu items to be something like the following when no context chips exist:
-            // Copy prompt
+            // 复制提示符
             // ------------
-            // Edit prompt
-            assert_eq!(items[0].fields().unwrap().label(), "Copy prompt");
+            // 编辑提示符
+            assert_eq!(items[0].fields().unwrap().label(), "复制提示符");
             assert!(items[1].is_separator());
-            assert_eq!(items[2].fields().unwrap().label(), "Edit prompt");
+            assert_eq!(items[2].fields().unwrap().label(), "编辑提示符");
             assert!(!items[2].fields().unwrap().is_disabled());
         });
     })
@@ -4459,8 +4456,8 @@ fn test_prompt_context_menu_items_for_agent_toolbelt_flag() {
                     .filter_map(|item| item.fields().map(|fields| fields.label()))
                     .collect::<Vec<_>>();
 
-                assert!(!labels.contains(&"Edit prompt"));
-                assert!(!labels.contains(&"Edit agent toolbelt"));
+                assert!(!labels.contains(&"编辑提示符"));
+                assert!(!labels.contains(&"编辑 Agent 工具栏"));
             });
         }
 
@@ -4472,8 +4469,8 @@ fn test_prompt_context_menu_items_for_agent_toolbelt_flag() {
                     .iter()
                     .filter_map(|item| item.fields().map(|fields| fields.label()))
                     .collect::<Vec<_>>();
-                assert!(!labels.contains(&"Edit prompt"));
-                assert!(labels.contains(&"Edit agent toolbelt"));
+                assert!(!labels.contains(&"编辑提示符"));
+                assert!(labels.contains(&"编辑 Agent 工具栏"));
             });
         }
     })
