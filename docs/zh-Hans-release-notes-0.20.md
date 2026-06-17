@@ -50,6 +50,21 @@ public_rc_required: 11
 - 发行说明明确非官方 fork 边界。
 - 官方后端状态和高风险对象路径按 known limitations 管理。
 
+## Windows 支线
+
+Windows 版复用同一套简体中文源码级 overlay，不单独维护第二份主界面翻译。当前 Windows 专属补充范围是 Inno Setup 安装器语言包、安装任务、资源管理器右键菜单和 OSS 安装包命名。
+
+Windows OSS 安装器由 `script/windows/bundle.ps1` 生成，推荐优先验证 `x64`：
+
+```powershell
+python script\zh_apply_localization.py --validate-manifest
+python script\zh_apply_localization.py --check-glossary
+python -m unittest discover -s script -p "test_zh_*.py"
+.\script\windows\bundle.ps1 -CHANNEL oss -ARCH x64 -RELEASE_TAG "0.20.6-cn-win.1"
+```
+
+未签名输出命名为 `Warp-CN-0.20.6-cn-win.1-windows-x64-oss-unsigned.exe`。公开发布时需要附带 SHA256，并明确未签名安装器可能触发 Windows SmartScreen。
+
 ## Known Limitations
 
 Warp CN 0.20 自定义汉化版不声称以下官方后端或高风险对象路径已完成 full public-RC evidence closure：

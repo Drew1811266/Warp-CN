@@ -37,6 +37,23 @@ if ($RELEASE_TAG) {
     $env:GIT_RELEASE_TAG = $RELEASE_TAG
 }
 
+# Also accept the sign tool command via env var before output names are computed.
+if (-not $SIGN_TOOL_CMD -and $env:SIGN_TOOL_CMD) {
+    $SIGN_TOOL_CMD = $env:SIGN_TOOL_CMD
+}
+
+if ($env:GIT_RELEASE_TAG) {
+    $RELEASE_VERSION = $env:GIT_RELEASE_TAG
+} else {
+    $RELEASE_VERSION = '0.1.0-dev'
+}
+
+if ($SIGN_TOOL_CMD) {
+    $SIGNING_LABEL = 'signed'
+} else {
+    $SIGNING_LABEL = 'unsigned'
+}
+
 # Use provided ARCH parameter if set, otherwise detect from system
 if (-not $ARCH) {
     if ($env:PROCESSOR_ARCHITECTURE -eq 'AMD64') {
@@ -126,7 +143,11 @@ if (("$CHANNEL" -eq 'local') -or ("$CHANNEL" -eq 'dev')) {
 $BINARY_PATH = "$CARGO_TARGET_OUTPUT_DIR\$BINARY_NAME"
 $BUNDLE_ID = "dev.warp.$APP_NAME"
 $INSTALLER_OUTPUT_DIR = "$WINDOWS_INSTALLER_DIR\Output"
-$INSTALLER_NAME = "$($APP_NAME)$($FILE_ENDING)"
+if ("$CHANNEL" -eq 'oss') {
+    $INSTALLER_NAME = "Warp-CN-$($RELEASE_VERSION)-windows-$($ARCH)-oss-$($SIGNING_LABEL)"
+} else {
+    $INSTALLER_NAME = "$($APP_NAME)$($FILE_ENDING)"
+}
 $INSTALLER_PATH = "$($INSTALLER_OUTPUT_DIR)\$($INSTALLER_NAME).exe"
 $PDB_PATH = "$CARGO_TARGET_OUTPUT_DIR\$WARP_BIN.pdb"
 
@@ -198,14 +219,10 @@ $ISCC_ARGS = @(
     "/DMyAppExeName=$BINARY_NAME",
     "/DTargetProfileDir=$CARGO_TARGET_OUTPUT_DIR",
     "/DMyAppName=$APP_NAME",
-    "/DMyAppVersion=$env:GIT_RELEASE_TAG",
+    "/DMyAppVersion=$RELEASE_VERSION",
     "/DArch=$ARCH",
     "/DOutputName=$INSTALLER_NAME"
 )
-# Also accept the sign tool command via env var
-if (-not $SIGN_TOOL_CMD -and $env:SIGN_TOOL_CMD) {
-    $SIGN_TOOL_CMD = $env:SIGN_TOOL_CMD
-}
 if ($SIGN_TOOL_CMD) {
     $ISCC_ARGS += '/DSIGN_TOOL=1'
     $ISCC_ARGS += "/Scodesign=$SIGN_TOOL_CMD"

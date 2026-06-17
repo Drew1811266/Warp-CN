@@ -1,73 +1,85 @@
-# Inno Setup installer script
+# Warp CN Windows 打包说明
 
-## What is `windows-installer.iss`?
+## 目标
 
-On Windows, programs are conventionally installed using an installer, also known as an installation wizard.
-The installer is a single executable that takes care of:
-* Creating a directory to store the program's files
-* Downloading assets
-* Initializing registry entries
-* Creating a desktop icon
-* ... and more, depending on the application's needs.
+Windows 版不重新翻译主界面。它复用仓库现有的 `resources/localization/zh-Hans-overrides.toml` 源码级 overlay，只补 Windows 专属用户可见面：
 
+- Inno Setup 安装器语言包。
+- “添加到 PATH”安装任务。
+- 资源管理器右键菜单中的“新标签页打开”和“新窗口打开”动作。
+- Windows OSS 安装包输出命名。
 
-`windows-installer.iss` is an **Inno Setup script**:
-a configuration file for building a Warp installer.
-The Inno Setup Compiler takes a script file and generates an installer executable.
-This is roughly equivalent to the bundling process on MacOS.
+## 依赖
 
+在 Windows 上构建安装器需要：
 
-## How to edit the installer
+- Git for Windows。
+- Rust MSVC toolchain。
+- Visual Studio 2022 Build Tools 和 Windows SDK。
+- CMake、jq、cargo 构建辅助工具。
+- Inno Setup 6，并确保 `ISCC.exe` 在 `PATH` 中。
 
-See the Inno Setup documentation: [Inno Setup Help](https://jrsoftware.org/ishelp/).
-This script can be edited manually using any code editor.
-However, it requires the Inno Setup compiler to be turned into a `.exe` file.
+可以先运行：
 
-
-## How to compile this installer
-
-First, ensure you've set up your environment.
-* Download and install the [Inno Setup Compiler](https://jrsoftware.org/isdl.php).
-* Run `cargo build` to ensure the installer uses the latest version of Warp.
-
-### Option 1: Use the CLI
-1. Add the Inno Setup Command-line Compiler executable to your shell path.
-By default, it is located at `C:\Program Files (x86)\Inno Setup 6\ISCC.exe`.
-2. Compile the installer:
-```shell
-iscc .\script\windows\windows-installer.iss
-```
-3. Run the generated executable:
-```shell
-.\script\windows\Output\Warp-Windows-Setup.exe
+```powershell
+.\script\windows\bootstrap.ps1
 ```
 
-The script begins with a series of preprocessor definitions.
-From the command line, use the `/D` flag to emulate preprocessor definitions
-and override the hardcoded defaults.
-Usage: `iscc <script path> /D<name>[=<value>]`
+## 构建 Windows OSS 安装器
 
-The following constants can be overwritten:
-* `MyAppVersion` (default: `0.1.0`)
-* `MyAppExeName` (default: `warp.exe`)
-* `ReleaseChannel` (default: `dev`)
-* `TargetProfileDir` (default: `debug`)
+先运行汉化和 Windows 专属回归测试：
 
-### Option 2: Use the GUI
-1. Open the Inno Setup application and select this script.
-2. Click the "compile" button. This will generate an installer executable in a directory called `Output` at the same level as this script.
-2. To run the installer, click the "run" button in Inno Setup.
-
-
-## Using icons
-
-Windows has its own icon file format that bundles together multiple icon sizes.
-App icons are located in `app/channels/<channel_name>/icon/no-padding`.
-The `.ico` files are generated using imagemagick:
-
-```shell
-convert 16x16.png 32x32.png 48x48.png 64x64.png 256x256.png icon.ico
+```powershell
+python script\zh_apply_localization.py --validate-manifest
+python script\zh_apply_localization.py --check-glossary
+python -m unittest discover -s script -p "test_zh_*.py"
 ```
 
-Note that sizes above 256x256 are not supported.
-See the [Inno Setup docs](https://jrsoftware.org/ishelp/index.php?topic=setup_setupiconfile).
+构建 x64：
+
+```powershell
+.\script\windows\bundle.ps1 -CHANNEL oss -ARCH x64 -RELEASE_TAG "0.20.6-cn-win.1"
+```
+
+构建 ARM64：
+
+```powershell
+.\script\windows\bundle.ps1 -CHANNEL oss -ARCH arm64 -RELEASE_TAG "0.20.6-cn-win.1"
+```
+
+未签名 OSS 安装器输出到 `script\windows\Output`，命名格式为：
+
+```text
+Warp-CN-<version>-windows-<x64|arm64>-oss-unsigned.exe
+```
+
+如果通过 `-SIGN_TOOL_CMD` 参数或 `SIGN_TOOL_CMD` 环境变量传入 signtool 命令，输出名会使用 `signed` 后缀，并由 Inno Setup 对安装器和卸载器执行签名。
+
+## 手动编译 Inno Setup 脚本
+
+通常应使用 `bundle.ps1`，因为它会先构建二进制、复制 bundled resources、写入版本元数据并传入正确的预处理参数。只有调试安装器脚本本身时，才直接调用：
+
+```powershell
+ISCC .\script\windows\windows-installer.iss `
+  /DReleaseChannel=oss `
+  /DMyAppExeName=warp-oss.exe `
+  /DTargetProfileDir=target\x86_64-pc-windows-msvc\rlto `
+  /DMyAppName=WarpOss `
+  /DMyAppVersion=0.20.6-cn-win.1 `
+  /DArch=x64 `
+  /DOutputName=Warp-CN-0.20.6-cn-win.1-windows-x64-oss-unsigned
+```
+
+## 验证重点
+
+安装后至少检查：
+
+- 安装向导显示简体中文。
+- PATH 任务显示“将 Warp 添加到 PATH”。
+- 资源管理器目录和目录背景右键菜单显示中文动作。
+- `warp-oss.cmd` 可从 PATH 调起。
+- PowerShell、cmd、WSL 常用 shell 能正常打开。
+- 中文输入法、复制、粘贴、新建 tab/window 正常。
+- 卸载后清理 `{app}\bin` 和 PATH 项。
+
+未签名安装器可能触发 Windows SmartScreen。公开 release 前应在 release notes 中明确写出未签名状态和 SHA256。
