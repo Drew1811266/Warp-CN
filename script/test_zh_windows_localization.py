@@ -10,6 +10,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 WINDOWS_INSTALLER = REPO_ROOT / "script" / "windows" / "windows-installer.iss"
 WINDOWS_BUNDLE = REPO_ROOT / "script" / "windows" / "bundle.ps1"
+WINDOWS_LANGUAGE_PACK = REPO_ROOT / "script" / "windows" / "languages" / "ChineseSimplified.isl"
+WINDOWS_LANGUAGE_LICENSE = REPO_ROOT / "script" / "windows" / "languages" / "ChineseSimplified.LICENSE"
 
 
 class WindowsInstallerLocalizationTests(unittest.TestCase):
@@ -17,7 +19,10 @@ class WindowsInstallerLocalizationTests(unittest.TestCase):
         installer = WINDOWS_INSTALLER.read_text(encoding="utf-8")
 
         self.assertIn('Name: "chinesesimplified"', installer)
-        self.assertIn('MessagesFile: "compiler:Languages\\ChineseSimplified.isl"', installer)
+        self.assertIn('MessagesFile: "languages\\ChineseSimplified.isl"', installer)
+        self.assertTrue(WINDOWS_LANGUAGE_PACK.is_file())
+        self.assertTrue(WINDOWS_LANGUAGE_LICENSE.is_file())
+        self.assertIn("LanguageName=简体中文", WINDOWS_LANGUAGE_PACK.read_text(encoding="utf-8"))
 
     def test_windows_shell_visible_strings_use_chinese_custom_messages(self) -> None:
         installer = WINDOWS_INSTALLER.read_text(encoding="utf-8")

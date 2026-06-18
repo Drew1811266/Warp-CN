@@ -88,7 +88,7 @@ SignedUninstaller=yes
 #endif
 
 [Languages]
-Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
+Name: "chinesesimplified"; MessagesFile: "languages\ChineseSimplified.isl"
 
 [CustomMessages]
 chinesesimplified.PathTask=将 Warp 添加到 PATH

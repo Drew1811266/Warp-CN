@@ -52,7 +52,7 @@ public_rc_required: 11
 
 ## Windows 支线
 
-Windows 版复用同一套简体中文源码级 overlay，不单独维护第二份主界面翻译。当前 Windows 专属补充范围是 Inno Setup 安装器语言包、安装任务、资源管理器右键菜单和 OSS 安装包命名。
+Windows 版复用同一套简体中文源码级 overlay，不单独维护第二份主界面翻译。当前 Windows 专属补充范围是项目内固定的 Inno Setup 简体中文安装器语言包、安装任务、资源管理器右键菜单和 OSS 安装包命名。
 
 Windows OSS 安装器由 `script/windows/bundle.ps1` 生成，推荐优先验证 `x64`：
 

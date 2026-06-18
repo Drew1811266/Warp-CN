@@ -19,6 +19,8 @@ Windows 版不重新翻译主界面。它复用仓库现有的 `resources/locali
 - CMake、jq、cargo 构建辅助工具。
 - Inno Setup 6，并确保 `ISCC.exe` 在 `PATH` 中。
 
+仓库已经固定包含 `script\windows\languages\ChineseSimplified.isl`，安装器会从项目内读取简体中文 Inno 语言包，不依赖本机 Inno Setup 安装目录是否额外安装该语言文件。
+
 可以先运行：
 
 ```powershell
