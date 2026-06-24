@@ -3259,8 +3259,8 @@ impl From<&AISettingsPageAction> for LoginGatedFeature {
     fn from(val: &AISettingsPageAction) -> LoginGatedFeature {
         use AISettingsPageAction::*;
         match val {
-            AttemptLoginGatedUpgrade => "升级 AI 用量",
-            _ => "未知原因",
+            AttemptLoginGatedUpgrade => "Upgrade AI Usage",
+            _ => "Unknown reason",
         }
     }
 }

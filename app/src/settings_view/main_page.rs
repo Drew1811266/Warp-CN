@@ -142,10 +142,10 @@ impl From<&MainPageAction> for LoginGatedFeature {
     fn from(val: &MainPageAction) -> LoginGatedFeature {
         use MainPageAction::*;
         match val {
-            Upgrade { .. } => "升级套餐",
-            GenerateStripeBillingPortalLink { .. } => "生成 Stripe 账单门户链接",
-            ToggleSettingsSync => "切换设置同步",
-            _ => "未知原因",
+            Upgrade { .. } => "Upgrade Plan",
+            GenerateStripeBillingPortalLink { .. } => "Generate Stripe Billing Portal Link",
+            ToggleSettingsSync => "Toggle Settings Sync",
+            _ => "Unknown reason",
         }
     }
 }

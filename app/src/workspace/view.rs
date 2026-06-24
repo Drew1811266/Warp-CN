@@ -17440,7 +17440,7 @@ impl Workspace {
         {
             AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                 auth_manager.attempt_login_gated_feature(
-                    "运行 Agent 模式工作流",
+                    "Run Agent Mode Workflow",
                     AuthViewVariant::RequireLoginCloseable,
                     ctx,
                 )
@@ -24505,7 +24505,7 @@ impl TypedActionView for Workspace {
             AttemptLoginGatedAIUpgrade => {
                 AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                     auth_manager.attempt_login_gated_feature(
-                        "升级 AI 用量",
+                        "Upgrade AI Usage",
                         AuthViewVariant::RequireLoginCloseable,
                         ctx,
                     )

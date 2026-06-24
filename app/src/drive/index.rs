@@ -404,10 +404,10 @@ impl From<&DriveIndexAction> for LoginGatedFeature {
     fn from(val: &DriveIndexAction) -> LoginGatedFeature {
         use DriveIndexAction::*;
         match val {
-            OpenTeamSettingsPage => "打开团队设置",
-            ViewPlans { .. } => "查看方案",
-            ManageBilling { .. } => "管理账单",
-            _ => "未知原因",
+            OpenTeamSettingsPage => "Open Team Settings",
+            ViewPlans { .. } => "View Plans",
+            ManageBilling { .. } => "Manage Billing",
+            _ => "Unknown reason",
         }
     }
 }
@@ -4868,7 +4868,7 @@ impl DriveIndex {
         if self.auth_state.is_anonymous_or_logged_out() {
             AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                 auth_manager.attempt_login_gated_feature(
-                    "共享对象",
+                    "Share Object",
                     AuthViewVariant::ShareRequirementCloseable,
                     ctx,
                 )

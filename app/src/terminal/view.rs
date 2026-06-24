@@ -20876,7 +20876,7 @@ impl TerminalView {
         {
             AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                 auth_manager.attempt_login_gated_feature(
-                    "共享块",
+                    "Share Block",
                     AuthViewVariant::ShareRequirementCloseable,
                     ctx,
                 )
@@ -26713,7 +26713,7 @@ impl TypedActionView for TerminalView {
             AttemptLoginGatedFeature => {
                 AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                     auth_manager.attempt_login_gated_feature(
-                        "升级 AI 用量",
+                        "Upgrade AI Usage",
                         AuthViewVariant::RequireLoginCloseable,
                         ctx,
                     )

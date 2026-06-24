@@ -2231,62 +2231,6 @@ status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
-path = "app/src/workspace/action.rs"
-source = "Importing to a team drive"
-target = "正在导入到团队 Drive"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/workspace/action.rs"
-source = "Creating a team notebook"
-target = "正在创建团队笔记本"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/workspace/action.rs"
-source = "Creating a team workflow"
-target = "正在创建团队工作流"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/workspace/action.rs"
-source = "Creating a team folder"
-target = "正在创建团队文件夹"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/workspace/action.rs"
-source = "Creating a team environment variable collection"
-target = "正在创建团队环境变量集合"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/workspace/action.rs"
-source = "Creating a team prompt"
-target = "正在创建团队提示词"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/workspace/action.rs"
-source = "Sharing a session"
-target = "正在共享会话"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/workspace/action.rs"
-source = "Unknown reason"
-target = "未知原因"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
 path = "app/src/workspace/bonus_grant_notification_model.rs"
 source = "{} Reload Credits have been added to your {}."
 target = "{} 点 Reload 额度已添加到你的 {}。"
@@ -3251,13 +3195,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 path = "app/src/workspace/view.rs"
 source = "Cannot open a new terminal session"
 target = "无法打开新的终端会话"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/workspace/view.rs"
-source = "Run Agent Mode Workflow"
-target = "运行 Agent 模式工作流"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -4567,13 +4504,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 path = "app/src/search/command_search/view.rs"
 source = "No results found."
 target = "未找到结果。"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/search/command_search/view.rs"
-source = "Upgrade AI Usage"
-target = "升级 AI 用量"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -6352,34 +6282,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 path = "app/src/settings_view/main_page.rs"
 source = "Log out"
 target = "退出登录"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/main_page.rs"
-source = "Upgrade Plan"
-target = "升级套餐"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/main_page.rs"
-source = "Generate Stripe Billing Portal Link"
-target = "生成 Stripe 账单门户链接"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/main_page.rs"
-source = "Toggle Settings Sync"
-target = "切换设置同步"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/main_page.rs"
-source = "Unknown reason"
-target = "未知原因"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -8816,20 +8718,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 path = "app/src/settings_view/ai_page.rs"
 source = "Select coding agent"
 target = "选择编码 Agent"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/ai_page.rs"
-source = "Upgrade AI Usage"
-target = "升级 AI 用量"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/ai_page.rs"
-source = "Unknown reason"
-target = "未知原因"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -12328,27 +12216,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "app/src/settings_view/billing_and_usage_page.rs"
-source = "Upgrade Plan"
-target = "升级套餐"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/billing_and_usage_page.rs"
-source = "Generate Stripe Billing Portal Link"
-target = "生成 Stripe 账单门户链接"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/billing_and_usage_page.rs"
-source = "Unknown reason"
-target = "未知原因"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/billing_and_usage_page.rs"
 source = "1 credit remaining"
 target = "剩余 1 点额度"
 status = "active"
@@ -13427,13 +13294,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "app/src/drive/index.rs"
-source = "Open Team Settings"
-target = "打开团队设置"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/drive/index.rs"
 source = "Drag or move a personal workflow or notebook here to share it with your team."
 target = "将个人工作流或 Notebook 拖到这里或移动到这里，以与团队共享。"
 status = "active"
@@ -13499,13 +13359,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 path = "app/src/drive/index.rs"
 source = "Delete forever"
 target = "永久删除"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/drive/index.rs"
-source = "Share Object"
-target = "共享对象"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -17824,13 +17677,6 @@ context = "Workflow title for commands suggested by Oz/Agent mode."
 status = "active"
 preserve_terms = ["Oz"]
 expected_count = 1
-
-[[replace]]
-key = "workspace.ai.upgrade_usage"
-path = "app/src/workspace/view.rs"
-source = "Upgrade AI Usage"
-target = "升级 AI 用量"
-context = "Login-gated AI usage upgrade action title."
 status = "active"
 preserve_terms = ["AI"]
 expected_count = 1
@@ -28585,27 +28431,6 @@ context = "Phase 17 small-surface visible copy"
 
 [[replace]]
 path = "app/src/drive/index.rs"
-source = "View Plans"
-target = "查看方案"
-status = "active"
-context = "Phase 17 small-surface visible copy"
-
-[[replace]]
-path = "app/src/drive/index.rs"
-source = "Manage Billing"
-target = "管理账单"
-status = "active"
-context = "Phase 17 small-surface visible copy"
-
-[[replace]]
-path = "app/src/drive/index.rs"
-source = "Unknown reason"
-target = "未知原因"
-status = "active"
-context = "Phase 17 small-surface visible copy"
-
-[[replace]]
-path = "app/src/drive/index.rs"
 source = "Untitled"
 target = "未命名"
 status = "active"
@@ -32173,13 +31998,6 @@ context = "Phase 21 reviewed preserve: terminal internal IDs, logs, parser/proto
 
 [[replace]]
 path = "app/src/terminal/view.rs"
-source = "Share Block"
-target = "共享块"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/view.rs"
 source = "{}n{}"
 target = "{}n{}"
 status = "active"
@@ -32618,13 +32436,6 @@ source = "Failed to enter inline agent view for tag-in: {e}"
 target = "Failed to enter inline agent view for tag-in: {e}"
 status = "active"
 context = "Phase 21 reviewed preserve: terminal internal IDs, logs, parser/protocol strings, command examples, test fixtures, and position identifiers"
-
-[[replace]]
-path = "app/src/terminal/view.rs"
-source = "Upgrade AI Usage"
-target = "升级 AI 用量"
-status = "active"
-context = "Phase 21 terminal visible copy"
 
 [[replace]]
 path = "app/src/terminal/view.rs"
@@ -33367,118 +33178,6 @@ context = "Phase 22 reviewed preserve: debug commands, state IDs, test fixtures,
 path = "app/src/settings_view/referrals_page.rs"
 source = "referrals invites"
 target = "推荐 邀请"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Leave Team"
-target = "离开团队"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Delete Team"
-target = "删除团队"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Create Team"
-target = "创建团队"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Delete Pending Email Invitation"
-target = "删除待处理的电子邮件邀请"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Remove User From Team"
-target = "从团队中移除用户"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Add Domain Restrictions"
-target = "添加域名限制"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Delete Domain Restriction"
-target = "删除域名限制"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Send Email Invites"
-target = "发送电子邮件邀请"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Generate Upgrade Link"
-target = "生成升级链接"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Generate Stripe Billing Portal Link"
-target = "生成 Stripe 账单门户链接"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Open Admin Panel"
-target = "打开管理员面板"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Contact Support"
-target = "联系支持"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Contact Sales"
-target = "联系销售"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Toggle Team Discoverability"
-target = "切换团队可发现性"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Join Team With Team Discovery"
-target = "通过团队发现加入团队"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/settings_view/teams_page.rs"
-source = "Unknown reason"
-target = "未知原因"
 status = "active"
 context = "Phase 22 settings/workspace visible copy"
 

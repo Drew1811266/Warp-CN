@@ -240,24 +240,24 @@ impl From<&TeamsPageAction> for LoginGatedFeature {
     fn from(val: &TeamsPageAction) -> LoginGatedFeature {
         use TeamsPageAction::*;
         match val {
-            LeaveTeam => "离开团队",
-            ShowDeleteTeamConfirmationDialog => "删除团队",
-            CreateTeam => "创建团队",
-            DeletePendingEmailInvitation { .. } => "删除待处理的电子邮件邀请",
-            RemoveUserFromTeam { .. } => "从团队中移除用户",
-            AddDomainRestrictions { .. } => "添加域名限制",
-            DeleteDomainRestriction { .. } => "删除域名限制",
-            SendEmailInvites { .. } => "发送电子邮件邀请",
-            GenerateUpgradeLink { .. } => "生成升级链接",
-            GenerateStripeBillingPortalLink { .. } => "生成 Stripe 账单门户链接",
-            OpenAdminPanel { .. } => "打开管理员面板",
-            ContactSupport => "联系支持",
-            ContactSales => "联系销售",
+            LeaveTeam => "Leave Team",
+            ShowDeleteTeamConfirmationDialog => "Delete Team",
+            CreateTeam => "Create Team",
+            DeletePendingEmailInvitation { .. } => "Delete Pending Email Invitation",
+            RemoveUserFromTeam { .. } => "Remove User From Team",
+            AddDomainRestrictions { .. } => "Add Domain Restrictions",
+            DeleteDomainRestriction { .. } => "Delete Domain Restriction",
+            SendEmailInvites { .. } => "Send Email Invites",
+            GenerateUpgradeLink { .. } => "Generate Upgrade Link",
+            GenerateStripeBillingPortalLink { .. } => "Generate Stripe Billing Portal Link",
+            OpenAdminPanel { .. } => "Open Admin Panel",
+            ContactSupport => "Contact Support",
+            ContactSales => "Contact Sales",
             ToggleTeamDiscoverability { .. } | ToggleTeamDiscoverabilityBeforeCreation => {
-                "切换团队可发现性"
+                "Toggle Team Discoverability"
             }
-            JoinTeamWithTeamDiscovery { .. } => "通过团队发现加入团队",
-            _ => "未知原因",
+            JoinTeamWithTeamDiscovery { .. } => "Join Team With Team Discovery",
+            _ => "Unknown reason",
         }
     }
 }

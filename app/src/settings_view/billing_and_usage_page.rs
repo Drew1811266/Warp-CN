@@ -1059,9 +1059,9 @@ impl From<&BillingAndUsagePageAction> for LoginGatedFeature {
     fn from(val: &BillingAndUsagePageAction) -> LoginGatedFeature {
         use BillingAndUsagePageAction::*;
         match val {
-            Upgrade { .. } => "升级套餐",
-            GenerateStripeBillingPortalLink { .. } => "生成 Stripe 账单门户链接",
-            _ => "未知原因",
+            Upgrade { .. } => "Upgrade Plan",
+            GenerateStripeBillingPortalLink { .. } => "Generate Stripe Billing Portal Link",
+            _ => "Unknown reason",
         }
     }
 }
