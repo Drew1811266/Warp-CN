@@ -9,7 +9,7 @@ Warp CN 是基于 [Warp](https://github.com/warpdotdev/warp) 开源客户端维�
 
 当前版本：`0.20.6`
 
-当前结论：个人使用目标下的汉化版已经完成。项目已经完成源码级简体中文 overlay、核心界面覆盖、基础构建验证和当前周期功能测试，可以作为本地中文 Warp fork 使用。`0.20.6` 修复了汉化后暴露的快捷键上下文、命令面板、菜单、终端输入、快照恢复、子 shell、AI block 选择复制等功能回归，并继续使用 `release-lto` 构建、完整 bundled UI 资源、正确版本元数据和 ad-hoc 签名的免费路线 macOS Apple Silicon DMG。
+当前结论：个人使用目标下的汉化版已经完成。项目已经完成源码级简体中文 overlay、核心界面覆盖、基础构建验证和当前周期功能测试，可以作为本地中文 Warp fork 使用。`0.20.6` 修复了汉化后暴露的快捷键上下文、命令面板、菜单、终端输入、快照恢复、子 shell、AI block 选择复制等功能回归，并继续使用 `release-lto` 构建、完整 bundled UI 资源、正确版本元数据和 ad-hoc 签名的免费路线 macOS Apple Silicon DMG。Windows 支线复用同一套源码级汉化 overlay，并额外补齐 Inno Setup 安装器、PATH 任务和资源管理器右键菜单等 Windows 专属用户可见文案。
 
 本项目不以“官方中文版本”“公开 RC”或“可代表 Warp 官方发布”为目标。仓库中保留的 public-RC 证据脚本和 blocker registry 只是未来如果要做更高保证公开发布时的辅助材料，不影响当前个人使用版完成状态。
 
@@ -27,9 +27,13 @@ xattr -dr com.apple.quarantine /Applications/WarpOss.app
 open -n /Applications/WarpOss.app
 ```
 
+Windows 体验包使用同一套汉化源码构建，发布时按独立 release asset 上传，命名格式为 `Warp-CN-<version>-windows-<x64|arm64>-oss-<signed|unsigned>.exe`。没有 Authenticode 代码签名时文件名会带 `unsigned`，Windows SmartScreen 可能提示风险；确认来源后再运行。
+
 ## 系统要求
 
 本项目的 macOS 要求与 Warp 官方要求保持一致：macOS 10.14 或更高版本，并且硬件支持 Metal。当前发布的体验包只提供 Apple Silicon（arm64）构建；Apple Silicon Mac 的实际系统范围是 macOS 11 Big Sur 或更高版本。
+
+Windows 构建要求与 Warp Windows 客户端保持一致：Windows 10 版本 1903 / Build 18362 或更高版本，推荐 Windows 11。当前 Windows 打包脚本支持 `x64` 和 `arm64`，优先验证 `x64`。
 
 ## 界面预览
 
@@ -66,6 +70,9 @@ Warp CN 当前采用源码级 overlay，而不是运行时语言包。翻译条�
 | `script/zh_apply_localization.py` | 应用、校验和统计翻译清单 |
 | `script/zh_localization_inventory.py` | 扫描候选英文字符串和覆盖率 |
 | `script/zh_export_locale.py` | 导出 JSON/YAML locale 雏形，方便未来迁移 |
+| `script/windows/windows-installer.iss` | Windows Inno Setup 安装器、右键菜单和安装任务文案 |
+| `script/windows/bundle.ps1` | Windows `x64` / `arm64` OSS 安装包构建入口 |
+| `script/test_zh_windows_localization.py` | Windows 专属汉化和安装包命名回归测试 |
 | `script/privacy_guard.py` | 检查截图、录屏、账号、token 等敏感产物 |
 
 `zh_apply_localization.py` 是幂等的：源码还是英文时会替换为中文；源码已经是中文时会视为已应用；如果英文原文和中文目标都找不到，会报告上游字符串可能已经漂移。
@@ -111,6 +118,18 @@ script/macos/package_oss_free --version 0.20.6
 ```
 
 这个脚本会生成 `release-lto` 构建、补齐 app bundle 资源和版本元数据、执行 ad-hoc 签名，并输出 `target/Warp-CN-<version>-macos-arm64-release.dmg`。它不需要 Apple Developer Program，也不会执行 Developer ID 签名或 Apple 公证。
+
+生成 Windows x64 OSS 安装器：
+
+```powershell
+.\script\windows\bootstrap.ps1
+python script\zh_apply_localization.py --validate-manifest
+python script\zh_apply_localization.py --check-glossary
+python -m unittest discover -s script -p "test_zh_*.py"
+.\script\windows\bundle.ps1 -CHANNEL oss -ARCH x64 -RELEASE_TAG "0.20.6-cn-win.1"
+```
+
+输出文件位于 `script\windows\Output\Warp-CN-0.20.6-cn-win.1-windows-x64-oss-unsigned.exe`。如需 Windows ARM64，把 `-ARCH x64` 改为 `-ARCH arm64`；如提供 `-SIGN_TOOL_CMD` 或 `SIGN_TOOL_CMD` 环境变量，输出文件名会使用 `signed` 后缀。
 
 > [!NOTE]
 > 当前 app crate 的 package 名称是 `warp`，因此请使用 `cargo check -p warp`。旧文档里的 `cargo check -p app` 不适用于当前 workspace。
