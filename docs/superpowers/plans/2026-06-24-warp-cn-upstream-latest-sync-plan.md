@@ -23,7 +23,7 @@
 - GitHub latest dev release checked on 2026-06-24: `v0.2026.06.09.19.54.dev_00`.
 - Latest fetched upstream source commit checked on 2026-06-24 after implementation-start refresh: `origin/master` at `6691e1e0e0408be8bdcb1891e3a795564cedd897`.
 - `origin/master` subject: `Make the New API key modal's Agent picker searchable (#12972)`.
-- Current divergence after recording the plan on the sync branch: `git rev-list --left-right --count HEAD...origin/master` returned `895 305`.
+- Divergence measured at sync-planning commit `61ca8ac7`: `git rev-list --left-right --count 61ca8ac7...origin/master` returned `895 305`. Later local documentation commits increase the left-side count until the upstream merge happens.
 - Current diff scale: `git diff --shortstat HEAD..origin/master` returned `1914 files changed, 101928 insertions(+), 803509 deletions(-)`.
 
 ## Non-Goals
@@ -169,7 +169,7 @@ git merge-base --is-ancestor HEAD "$UPSTREAM_BASE"; echo "head_ancestor_of_upstr
 git rev-list --left-right --count HEAD..."$UPSTREAM_BASE"
 ```
 
-Expected current base SHA unless refreshed deliberately:
+Expected current base SHA unless refreshed deliberately. The divergence command returns `895 305` at sync-planning commit `61ca8ac7`; if additional local-only documentation commits were added before this step, the left-side number will increase by that commit count.
 
 ```text
 6691e1e0e0408be8bdcb1891e3a795564cedd897

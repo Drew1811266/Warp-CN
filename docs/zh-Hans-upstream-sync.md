@@ -420,7 +420,8 @@ was performed in this step.
 - Selected upstream source date: `2026-06-23T19:42:07-07:00`
 - Stable source branch still available: `stable_release/v0.2026.06.03.09.49.stable`
 - Stable source branch commit: `2249469e5d24e472cee6ce97d3d324293f67db71`
-- Ahead/behind against selected latest source: `895 305`
+- Ahead/behind against selected latest source at sync-planning commit `61ca8ac7`: `895 305`
+- Ahead/behind after committing this baseline record is expected to increase on the left side by one local documentation commit.
 - Diff scale against selected latest source: `1914 files changed, 101928 insertions(+), 803509 deletions(-)`
 
 Release API evidence:
