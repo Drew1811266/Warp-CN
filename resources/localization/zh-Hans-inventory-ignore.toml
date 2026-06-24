@@ -241,6 +241,9 @@ line_patterns = [
   "\"Share Object\",",
   "\"Share Block\",",
   "\"Upgrade AI Usage\",",
+  # Reviewed 0.20.7 release fix: this is a SettingsSection parser
+  # compatibility key. The visible team label is already localized in Display.
+  "\"Teams\" | \"团队\" => Ok(Self::Teams),",
 ]
 
 literal_patterns = [

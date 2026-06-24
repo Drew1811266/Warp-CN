@@ -171,6 +171,16 @@ fn match_data_countable_zero_is_not_truthy() {
 
 #[test]
 fn subpage_display_names_are_correct() {
+    assert_eq!(SettingsSection::About.to_string(), "关于");
+    assert_eq!(SettingsSection::Account.to_string(), "账号");
+    assert_eq!(SettingsSection::MCPServers.to_string(), "MCP 服务器");
+    assert_eq!(SettingsSection::Appearance.to_string(), "外观");
+    assert_eq!(SettingsSection::Features.to_string(), "功能");
+    assert_eq!(SettingsSection::Privacy.to_string(), "隐私");
+    assert_eq!(SettingsSection::Referrals.to_string(), "推荐");
+    assert_eq!(SettingsSection::Scripting.to_string(), "脚本");
+    assert_eq!(SettingsSection::SharedBlocks.to_string(), "共享块");
+    assert_eq!(SettingsSection::Teams.to_string(), "团队");
     assert_eq!(SettingsSection::WarpAgent.to_string(), "Warp Agent");
     assert_eq!(SettingsSection::AgentProfiles.to_string(), "配置档");
     assert_eq!(SettingsSection::AgentMCPServers.to_string(), "MCP 服务器");
@@ -206,7 +216,15 @@ fn subpage_from_str_parses_display_names() {
         Ok(SettingsSection::WarpAgent)
     );
     assert_eq!(
+        SettingsSection::from_str("MCP 服务器"),
+        Ok(SettingsSection::AgentMCPServers)
+    );
+    assert_eq!(
         SettingsSection::from_str("Profiles"),
+        Ok(SettingsSection::AgentProfiles)
+    );
+    assert_eq!(
+        SettingsSection::from_str("配置档"),
         Ok(SettingsSection::AgentProfiles)
     );
     assert_eq!(
@@ -214,7 +232,15 @@ fn subpage_from_str_parses_display_names() {
         Ok(SettingsSection::Knowledge)
     );
     assert_eq!(
+        SettingsSection::from_str("知识"),
+        Ok(SettingsSection::Knowledge)
+    );
+    assert_eq!(
         SettingsSection::from_str("Indexing and projects"),
+        Ok(SettingsSection::CodeIndexing)
+    );
+    assert_eq!(
+        SettingsSection::from_str("索引和项目"),
         Ok(SettingsSection::CodeIndexing)
     );
     assert_eq!(
@@ -222,8 +248,69 @@ fn subpage_from_str_parses_display_names() {
         Ok(SettingsSection::EditorAndCodeReview)
     );
     assert_eq!(
+        SettingsSection::from_str("编辑器和代码审查"),
+        Ok(SettingsSection::EditorAndCodeReview)
+    );
+    assert_eq!(
         SettingsSection::from_str("Oz Cloud API Keys"),
         Ok(SettingsSection::OzCloudAPIKeys)
+    );
+}
+
+#[test]
+fn top_level_from_str_parses_zh_hans_display_names() {
+    assert_eq!(
+        SettingsSection::from_str("关于"),
+        Ok(SettingsSection::About)
+    );
+    assert_eq!(
+        SettingsSection::from_str("账号"),
+        Ok(SettingsSection::Account)
+    );
+    assert_eq!(
+        SettingsSection::from_str("MCP Servers"),
+        Ok(SettingsSection::MCPServers)
+    );
+    assert_eq!(
+        SettingsSection::from_str("账单和用量"),
+        Ok(SettingsSection::BillingAndUsage)
+    );
+    assert_eq!(
+        SettingsSection::from_str("外观"),
+        Ok(SettingsSection::Appearance)
+    );
+    assert_eq!(
+        SettingsSection::from_str("功能"),
+        Ok(SettingsSection::Features)
+    );
+    assert_eq!(
+        SettingsSection::from_str("键盘快捷键"),
+        Ok(SettingsSection::Keybindings)
+    );
+    assert_eq!(
+        SettingsSection::from_str("隐私"),
+        Ok(SettingsSection::Privacy)
+    );
+    assert_eq!(
+        SettingsSection::from_str("推荐"),
+        Ok(SettingsSection::Referrals)
+    );
+    assert_eq!(
+        SettingsSection::from_str("脚本"),
+        Ok(SettingsSection::Scripting)
+    );
+    assert_eq!(
+        SettingsSection::from_str("共享块"),
+        Ok(SettingsSection::SharedBlocks)
+    );
+    assert_eq!(
+        SettingsSection::from_str("团队"),
+        Ok(SettingsSection::Teams)
+    );
+    assert_eq!(SettingsSection::from_str("代码"), Ok(SettingsSection::Code));
+    assert_eq!(
+        SettingsSection::from_str("环境"),
+        Ok(SettingsSection::CloudEnvironments)
     );
 }
 

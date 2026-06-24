@@ -42350,13 +42350,6 @@ status = "active"
 context = "Phase 29 Settings/modals visible or searchable copy"
 
 [[replace]]
-path = "app/src/settings_view/mod.rs"
-source = "Teams"
-target = "团队"
-status = "active"
-context = "Phase 29 Settings/modals visible or searchable copy"
-
-[[replace]]
 path = "app/src/settings_view/privacy/add_regex_modal.rs"
 source = "e.g. \"Google API Key\""
 target = "例如，Google API Key"
@@ -55074,6 +55067,62 @@ path = "app/src/settings_view/scripting_page.rs"
 source = "Scripting"
 target = "脚本"
 context = "Task 6 scripting settings page title"
+status = "active"
+
+[[replace]]
+key = "release0207.settings.section_mcp_zh"
+path = "app/src/settings_view/mod.rs"
+source = "MCP 服务器"
+target = "MCP 服务器"
+context = "0.20.7 release fix: reviewed localized settings section label and zh-Hans parser alias"
+status = "active"
+
+[[replace]]
+key = "release0207.settings.section_third_party_cli_zh"
+path = "app/src/settings_view/mod.rs"
+source = "第三方 CLI Agent"
+target = "第三方 CLI Agent"
+context = "0.20.7 release fix: reviewed localized settings section label and zh-Hans parser alias"
+status = "active"
+
+[[replace]]
+key = "release0207.settings.parse_billing_and_usage_key"
+path = "app/src/settings_view/mod.rs"
+source = "BillingAndUsage"
+target = "BillingAndUsage"
+context = "0.20.7 release fix: preserve SettingsSection parser compatibility key"
+status = "active"
+
+[[replace]]
+key = "release0207.settings.parse_keybindings_key"
+path = "app/src/settings_view/mod.rs"
+source = "Keybindings"
+target = "Keybindings"
+context = "0.20.7 release fix: preserve SettingsSection parser compatibility key"
+status = "active"
+
+[[replace]]
+key = "release0207.settings.parse_scripting_key"
+path = "app/src/settings_view/mod.rs"
+source = "Scripting"
+target = "Scripting"
+context = "0.20.7 release fix: preserve SettingsSection parser compatibility key"
+status = "active"
+
+[[replace]]
+key = "release0207.settings.parse_shared_blocks_key"
+path = "app/src/settings_view/mod.rs"
+source = "SharedBlocks"
+target = "SharedBlocks"
+context = "0.20.7 release fix: preserve SettingsSection parser compatibility key"
+status = "active"
+
+[[replace]]
+key = "release0207.agent_input.prompt_cache_expired_tooltip"
+path = "app/src/ai/blocklist/agent_view/agent_input_footer/mod.rs"
+source = "{context_remaining_tooltip} · 提示词缓存已过期"
+target = "{context_remaining_tooltip} · 提示词缓存已过期"
+context = "0.20.7 release fix: reviewed localized prompt-cache expiry tooltip"
 status = "active"
 
 [[replace]]

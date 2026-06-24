@@ -2023,7 +2023,7 @@ impl AgentInputFooter {
                 && expiry.is_some_and(|expiry| expiry <= Local::now());
             let context_remaining_tooltip = format!("剩余 {remaining_pct}% 上下文");
             let tooltip = if is_cache_expired {
-                format!("{context_remaining_tooltip} · prompt cache expired")
+                format!("{context_remaining_tooltip} · 提示词缓存已过期")
             } else {
                 context_remaining_tooltip
             };
