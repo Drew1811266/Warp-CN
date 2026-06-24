@@ -602,7 +602,7 @@ impl AiAccessSlide {
 
         let copy_url_link = ui_builder
             .link(
-                "copy the URL".into(),
+                "复制 URL".into(),
                 None,
                 Some(Box::new(|ctx| {
                     ctx.dispatch_typed_action(AiAccessSlideAction::CopyUpgradeUrlClicked);
@@ -616,7 +616,7 @@ impl AiAccessSlide {
 
         let paste_token_link = ui_builder
             .link(
-                "Click here".into(),
+                "点击此处".into(),
                 None,
                 Some(Box::new(|ctx| {
                     ctx.dispatch_typed_action(
@@ -636,7 +636,7 @@ impl AiAccessSlide {
             .with_child(
                 Container::new(
                     ui_builder
-                        .span("If your browser hasn't launched, ")
+                        .span("如果浏览器没有打开，")
                         .with_style(text_styles)
                         .build()
                         .finish(),
@@ -647,7 +647,7 @@ impl AiAccessSlide {
             .with_child(copy_url_link)
             .with_child(
                 ui_builder
-                    .span(" and open the page manually. ")
+                    .span(" 并手动打开页面。")
                     .with_style(text_styles)
                     .build()
                     .finish(),
@@ -655,7 +655,7 @@ impl AiAccessSlide {
             .with_child(paste_token_link)
             .with_child(
                 ui_builder
-                    .span(" to paste your token from the browser.")
+                    .span("以粘贴浏览器中的令牌。")
                     .with_style(text_styles)
                     .build()
                     .finish(),

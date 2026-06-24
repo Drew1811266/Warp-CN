@@ -657,7 +657,7 @@ impl GlobalSearchView {
             };
 
             let mut editor = EditorView::new(options, ctx);
-            editor.set_placeholder_text("Search in files", ctx);
+            editor.set_placeholder_text("在文件中搜索", ctx);
             editor
         });
 
@@ -671,7 +671,7 @@ impl GlobalSearchView {
         let case_sensitivity_button = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new_with_boxed_theme(String::new(), Arc::new(NakedTheme))
                 .with_icon(UiIcon::CaseSensitivity)
-                .with_tooltip("Toggle Case Sensitivity")
+                .with_tooltip("切换大小写敏感")
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(GlobalSearchAction::ToggleCaseSensitivity);
@@ -681,7 +681,7 @@ impl GlobalSearchView {
         let regex_button = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new_with_boxed_theme(String::new(), Arc::new(NakedTheme))
                 .with_icon(UiIcon::Regex)
-                .with_tooltip("Toggle Regex")
+                .with_tooltip("切换正则表达式")
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(GlobalSearchAction::ToggleRegexSearch);
@@ -2090,7 +2090,7 @@ impl View for GlobalSearchView {
         let appearance = Appearance::as_ref(app);
         let theme = appearance.theme();
 
-        let search_label = Text::new_inline("Search", appearance.ui_font_family(), 14.)
+        let search_label = Text::new_inline("搜索", appearance.ui_font_family(), 14.)
             .with_color(blended_colors::text_sub(theme, theme.background()))
             .finish();
 
@@ -2151,11 +2151,11 @@ impl View for GlobalSearchView {
         } else if self.is_search_in_progress && self.total_match_count == 0 {
             "Searching…".to_string()
         } else if !self.is_search_in_progress && self.total_match_count == 0 {
-            "No results found. Review your gitignore files.".to_string()
+            "未找到结果。请检查你的 gitignore 文件。".to_string()
         } else {
             match self.total_match_count {
-                1 => format!("1 result in {files} {file_word}"),
-                n => format!("{n} results in {files} {file_word}"),
+                1 => format!("在 {files} 个 {file_word} 中有 1 个结果"),
+                n => format!("在 {files} 个 {file_word} 中有 {n} 个结果"),
             }
         };
 
@@ -2177,7 +2177,8 @@ impl View for GlobalSearchView {
             font_color: Some(blended_colors::text_sub(theme, theme.background())),
             ..Default::default()
         };
-        let capped_message = "The result set only contains a subset of all matches. Be more specific in your search to narrow down results.".to_string();
+        let capped_message =
+            "结果集只包含所有匹配项的一部分。请使用更具体的搜索来缩小结果范围。".to_string();
         let capped_text = Span::new(capped_message, capped_text_styles)
             .with_soft_wrap()
             .build()
@@ -2326,19 +2327,14 @@ impl GlobalSearchView {
     }
 
     fn render_pre_search_state(&self, app: &AppContext) -> Box<dyn Element> {
-        self.render_zero_state(
-            Icon::Search,
-            "Global search",
-            "Search in files across your current directories.",
-            app,
-        )
+        self.render_zero_state(Icon::Search, "全局搜索", "在当前目录中跨文件搜索。", app)
     }
 
     fn render_unavailable_state(&self, app: &AppContext) -> Box<dyn Element> {
         self.render_zero_state(
             Icon::AlertTriangle,
-            "Global search unavailable",
-            "Global search requires access to your local workspace. Open a new session or navigate to an active session to view.",
+            "全局搜索不可用",
+            "全局搜索需要访问你的本地工作区。打开新会话或切换到活动会话即可查看。",
             app,
         )
     }
@@ -2346,7 +2342,7 @@ impl GlobalSearchView {
     fn render_remote_state(&self, app: &AppContext) -> Box<dyn Element> {
         self.render_zero_state(
             Icon::AlertTriangle,
-            "Global search unavailable",
+            "全局搜索不可用",
             "Global search isn't available for this remote session.",
             app,
         )
@@ -2363,8 +2359,8 @@ impl GlobalSearchView {
     fn render_unsupported_session_state(&self, app: &AppContext) -> Box<dyn Element> {
         self.render_zero_state(
             Icon::AlertTriangle,
-            "Global search unavailable",
-            "Global search doesn't currently work in Git Bash or WSL.",
+            "全局搜索不可用",
+            "全局搜索目前无法在 Git Bash 或 WSL 中使用。",
             app,
         )
     }

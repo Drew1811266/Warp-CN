@@ -177,13 +177,8 @@ fn write_glab_config(credentials: &[GitCredential], home: &std::path::Path) -> R
     }
 
     write_secret_file(&tmp_path, &yaml)?;
-    std::fs::rename(&tmp_path, &path).with_context(|| {
-        format!(
-            "Failed to rename {} to {}",
-            tmp_path.display(),
-            path.display()
-        )
-    })?;
+    std::fs::rename(&tmp_path, &path)
+        .with_context(|| format!("无法将 {} 重命名为 {}", tmp_path.display(), path.display()))?;
 
     Ok(())
 }

@@ -28,20 +28,20 @@ pub use callout::{OnboardingCalloutView, OnboardingKeybindings};
 /// Shared by the intention slide's agent card checklist and the login slide's
 /// skip-login confirmation dialog so the two always stay in sync.
 pub const AI_FEATURES: &[&str] = &[
-    "Warp agents",
-    "Oz Cloud Agents Platform",
-    "Prompt suggestions",
-    "Next command predictions",
+    "Warp Agent",
+    "Oz 云端 Agent 平台",
+    "提示词建议",
+    "下一条命令预测",
     "Full Terminal Use",
-    "Codebase Context",
-    "Remote Control with Claude Code, Codex, and other agents",
+    "代码库上下文",
+    "使用 Claude Code、Codex 和其他 Agent 进行远程控制",
 ];
 
 /// User-facing names of the Warp Drive features enabled when the terminal
 /// intention is selected with Warp Drive turned on. Shared by the login slide's
 /// skip-login confirmation dialog so the list stays in sync with any future
 /// surfaces that need it.
-pub const WARP_DRIVE_FEATURES: &[&str] = &["Warp Drive", "Session Sharing"];
+pub const WARP_DRIVE_FEATURES: &[&str] = &["Warp Drive", "会话共享"];
 
 cfg_if::cfg_if! {
     if #[cfg(feature = "bin")] {

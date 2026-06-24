@@ -105,13 +105,10 @@ impl SearchItemTrait for SearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        format!("Selected tab: {}.", self.tab.title)
+        format!("已选择标签页：{}。", self.tab.title)
     }
 
     fn accessibility_help_message(&self) -> Option<String> {
-        Some(format!(
-            "Press enter to navigate to tab: {}.",
-            self.tab.title
-        ))
+        Some(format!("按 Enter 导航到标签页：{}。", self.tab.title))
     }
 }

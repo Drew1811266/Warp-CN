@@ -29,9 +29,9 @@ pub enum StartAgentOutcome {
 fn invalid_local_child_harness_error(harness_type: &str) -> String {
     let harness_name = harness_type.trim();
     if harness_name.is_empty() {
-        "Local child harness type is missing.".to_string()
+        "缺少本地子运行框架类型。".to_string()
     } else {
-        format!("Unsupported local child harness '{harness_name}'.")
+        format!("不支持的本地子运行框架“{harness_name}”。")
     }
 }
 
@@ -184,11 +184,9 @@ impl StartAgentExecutor {
                 });
             }
             None => {
-                log::error!(
-                    "No agent identifier found for child conversation {child_conversation_id:?}"
-                );
+                log::error!("未找到子对话 {child_conversation_id:?} 的 Agent 标识符");
                 let _ = pending.sender.try_send(StartAgentOutcome::Error(
-                    "Server did not assign an agent identifier".to_string(),
+                    "服务器未分配 Agent 标识符".to_string(),
                 ));
             }
         }
@@ -363,9 +361,7 @@ impl StartAgentExecutor {
                 let Some(parent_run_id) = parent_run_id else {
                     return ActionExecution::Sync(AIAgentActionResultType::StartAgent(
                         StartAgentResult::Error {
-                            error:
-                                "Local Oz child agents require the parent run_id to be available."
-                                    .to_string(),
+                            error: "本地 Oz 子 Agent 需要可用的父 run_id。".to_string(),
                             version,
                         },
                     ));
@@ -405,9 +401,7 @@ impl StartAgentExecutor {
                 let Some(parent_run_id) = parent_run_id else {
                     return ActionExecution::Sync(AIAgentActionResultType::StartAgent(
                         StartAgentResult::Error {
-                            error:
-                                "Local harness child agents require the parent run_id to be available."
-                                    .to_string(),
+                            error: "本地运行框架子 Agent 需要可用的父 run_id。".to_string(),
                             version,
                         },
                     ));
@@ -437,8 +431,7 @@ impl StartAgentExecutor {
                 if Harness::parse_orchestration_harness(&harness_type) == Some(Harness::OpenCode) {
                     return ActionExecution::Sync(AIAgentActionResultType::StartAgent(
                         StartAgentResult::Error {
-                            error: "Remote child agents do not support the opencode harness yet."
-                                .to_string(),
+                            error: "远程子 Agent 暂不支持 opencode 运行框架。".to_string(),
                             version,
                         },
                     ));
@@ -450,8 +443,7 @@ impl StartAgentExecutor {
                 // it here so that agent authors can opt into running without an environment.
                 if environment_id.trim().is_empty() {
                     log::warn!(
-                        "Starting remote child agent with empty environment_id; the child will run \
-                         with an empty environment."
+                        "正在以空 environment_id 启动远程子 Agent；该子 Agent 将在空环境中运行。"
                     );
                 }
                 let parent_run_id = BlocklistAIHistoryModel::as_ref(ctx)
@@ -460,8 +452,7 @@ impl StartAgentExecutor {
                 let Some(parent_run_id) = parent_run_id else {
                     return ActionExecution::Sync(AIAgentActionResultType::StartAgent(
                         StartAgentResult::Error {
-                            error: "Remote child agents require the parent run_id to be available."
-                                .to_string(),
+                            error: "远程子 Agent 需要可用的父 run_id。".to_string(),
                             version,
                         },
                     ));
@@ -596,16 +587,14 @@ fn start_agent_error_message_for_status(
         ConversationStatus::Error => Some(
             error_message
                 .filter(|message| !message.trim().is_empty())
-                .unwrap_or("Child agent failed to initialize")
+                .unwrap_or("子 Agent 初始化失败")
                 .to_string(),
         ),
-        ConversationStatus::Cancelled => {
-            Some("Child agent was cancelled before initialization".to_string())
-        }
+        ConversationStatus::Cancelled => Some("子 Agent 在初始化前已取消".to_string()),
         ConversationStatus::Blocked { blocked_action } => {
             let blocked_action = blocked_action.trim();
             Some(if blocked_action.is_empty() {
-                "Child agent startup was blocked before initialization".to_string()
+                "子 Agent 启动在初始化前被阻止".to_string()
             } else {
                 blocked_action.to_string()
             })

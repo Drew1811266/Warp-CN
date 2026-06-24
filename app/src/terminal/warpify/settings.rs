@@ -19,7 +19,7 @@ maybe_define_setting!(AddedSubshellCommands, group: WarpifySettings, {
     sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "warpify.subshells.added_subshell_commands",
-    description: "Additional regex patterns for commands that should be recognized as subshells.",
+    description: "用于识别为子 shell 的额外命令正则模式。",
 });
 
 maybe_define_setting!(SubshellCommandsDenylist, group: WarpifySettings, {
@@ -29,7 +29,7 @@ maybe_define_setting!(SubshellCommandsDenylist, group: WarpifySettings, {
     sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "warpify.subshells.subshell_commands_denylist",
-    description: "Commands that should not trigger the subshell warpification prompt.",
+    description: "不应触发子 shell Warpify 提示的命令。",
 });
 
 maybe_define_setting!(SshHostsDenylist, group: WarpifySettings, {
@@ -39,7 +39,7 @@ maybe_define_setting!(SshHostsDenylist, group: WarpifySettings, {
     sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "warpify.ssh.ssh_hosts_denylist",
-    description: "SSH hosts that should not trigger the warpification prompt.",
+    description: "不应触发 Warpify 提示的 SSH 主机。",
 });
 
 maybe_define_setting!(EnableSshWarpification, group: WarpifySettings, {
@@ -49,7 +49,7 @@ maybe_define_setting!(EnableSshWarpification, group: WarpifySettings, {
     sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "warpify.ssh.enable_ssh_warpification",
-    description: "Whether to enable Warp features in SSH sessions.",
+    description: "是否在 SSH 会话中启用 Warp 功能。",
 });
 
 // NOTE: This setting has been unified into `enable_ssh_warpification` and is no
@@ -82,7 +82,7 @@ maybe_define_setting!(UseSshTmuxWrapper, group: WarpifySettings, {
     sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "warpify.ssh.use_ssh_tmux_wrapper",
-    description: "Deprecated: whether to use a tmux-based wrapper for SSH warpification.",
+    description: "已废弃：是否使用基于 tmux 的包装器进行 SSH Warpify。",
 });
 
 // When set, the user previously opted into the now-deprecated tmux SSH wrapper and should
@@ -114,10 +114,7 @@ maybe_define_setting!(SshTmuxDeprecationNoticePending, group: WarpifySettings, {
     settings_value::SettingsValue,
 )]
 #[serde(rename_all = "snake_case")]
-#[schemars(
-    description = "Controls SSH extension installation behavior.",
-    rename_all = "snake_case"
-)]
+#[schemars(description = "控制 SSH 扩展安装行为。", rename_all = "snake_case")]
 pub enum SshExtensionInstallMode {
     /// Always prompt the user before installing (default).
     #[default]
@@ -135,15 +132,15 @@ maybe_define_setting!(SshExtensionInstallModeSetting, group: WarpifySettings, {
     sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "warpify.ssh.ssh_extension_install_mode",
-    description: "Controls SSH extension installation behavior.",
+    description: "控制 SSH 扩展安装行为。",
 });
 
 impl SshExtensionInstallMode {
     pub fn display_name(&self) -> &'static str {
         match self {
-            SshExtensionInstallMode::AlwaysAsk => "Always ask",
-            SshExtensionInstallMode::AlwaysInstall => "Always install",
-            SshExtensionInstallMode::NeverInstall => "Never install",
+            SshExtensionInstallMode::AlwaysAsk => "始终询问",
+            SshExtensionInstallMode::AlwaysInstall => "始终安装",
+            SshExtensionInstallMode::NeverInstall => "永不安装",
         }
     }
 }

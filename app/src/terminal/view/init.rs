@@ -265,7 +265,7 @@ pub fn init(app: &mut AppContext) {
     #[cfg(windows)]
     app.register_editable_bindings([EditableBinding::new(
         "terminal:alternate_terminal_paste",
-        "Alternate terminal paste",
+        "备用终端粘贴",
         TerminalAction::Paste,
     )
     .with_key_binding("ctrl-v")
@@ -303,7 +303,7 @@ pub fn init(app: &mut AppContext) {
         //    of focus location or active-block state; fix for #9916)
         EditableBinding::new(
             OPEN_CLI_AGENT_RICH_INPUT_KEYBINDING,
-            "Toggle CLI Agent Rich Input",
+            "切换 CLI Agent 富输入",
             TerminalAction::ToggleCLIAgentRichInput,
         )
         .with_key_binding("ctrl-g")
@@ -323,7 +323,7 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             "terminal:warpify_subshell",
-            "Warpify subshell",
+            "Warpify 子 shell",
             TerminalAction::TriggerSubshellBootstrap,
         )
         .with_key_binding("ctrl-i")
@@ -332,7 +332,7 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             ACCEPT_PROMPT_SUGGESTION_KEYBINDING,
-            "Accept Prompt Suggestion",
+            "接受提示建议",
             TerminalAction::ResolvePromptSuggestion(PromptSuggestionResolution::Accept {
                 interaction_source: InteractionSource::Keybinding,
             }),
@@ -353,9 +353,9 @@ pub fn init(app: &mut AppContext) {
         EditableBinding::new(
             CANCEL_COMMAND_KEYBINDING,
             if cfg!(windows) {
-                "Copy text or cancel active process"
+                "复制文本或取消活动进程"
             } else {
-                "Cancel active process"
+                "取消活动进程"
             },
             TerminalAction::CtrlC,
         )
@@ -363,53 +363,49 @@ pub fn init(app: &mut AppContext) {
         .with_context_predicate(id!("Terminal") & !id!("IMEOpen")),
         EditableBinding::new(
             "terminal:focus_input",
-            "Focus terminal input",
+            "聚焦终端输入",
             TerminalAction::FocusInputAndClearSelection,
         )
         .with_custom_action(CustomAction::FocusInput)
         .with_context_predicate(id!("Terminal")),
         // Paste is not rebindable on the web.
         #[cfg(not(target_family = "wasm"))]
-        EditableBinding::new("terminal:paste", "Paste", TerminalAction::Paste)
+        EditableBinding::new("terminal:paste", "粘贴", TerminalAction::Paste)
             .with_custom_action(CustomAction::Paste)
             .with_context_predicate(id!("Terminal") & !id!("IMEOpen")),
-        EditableBinding::new("terminal:copy", "Copy", TerminalAction::Copy)
+        EditableBinding::new("terminal:copy", "复制", TerminalAction::Copy)
             .with_custom_action(CustomAction::Copy)
             .with_context_predicate(id!("Terminal") & !id!("IMEOpen")),
         EditableBinding::new(
             "terminal:reinput_commands",
-            "Reinput selected commands",
+            "重新输入所选命令",
             TerminalAction::ReinputCommands,
         )
         .with_context_predicate(
-            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "None"),
+            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "无"),
         ),
         EditableBinding::new(
             "terminal:reinput_commands_with_sudo",
-            "Reinput selected commands as root",
+            "以 root 重新输入所选命令",
             TerminalAction::ReinputCommandsWithSudo,
         )
         .with_context_predicate(
-            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "None"),
+            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "无"),
         ),
-        EditableBinding::new(
-            "terminal:find",
-            "Find in Terminal",
-            TerminalAction::ShowFindBar,
-        )
-        .with_key_binding(cmd_or_ctrl_shift("f"))
-        .with_custom_action(CustomAction::Find)
-        .with_context_predicate(id!("Terminal")),
+        EditableBinding::new("terminal:find", "在终端中查找", TerminalAction::ShowFindBar)
+            .with_key_binding(cmd_or_ctrl_shift("f"))
+            .with_custom_action(CustomAction::Find)
+            .with_context_predicate(id!("Terminal")),
         EditableBinding::new(
             "terminal:select_bookmark_up",
-            "Select the closest bookmark up",
+            "选择上方最近的书签",
             TerminalAction::SelectBookmarkUp,
         )
         .with_key_binding("alt-up")
         .with_context_predicate(id!("Terminal") & !id!("IMEOpen")),
         EditableBinding::new(
             "terminal:select_bookmark_down",
-            "Select the closest bookmark down",
+            "选择下方最近的书签",
             TerminalAction::SelectBookmarkDown,
         )
         .with_key_binding("alt-down")
@@ -431,37 +427,35 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             "terminal:open_block_list_context_menu_via_keybinding",
-            "Open block context menu",
+            "打开块上下文菜单",
             TerminalAction::OpenBlockListContextMenu,
         )
         .with_mac_key_binding("ctrl-m")
         .with_context_predicate(
-            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "None"),
+            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "无"),
         ),
         EditableBinding::new(
             "terminal:toggle_teams_modal",
-            "Toggle team workflows modal",
+            "切换团队工作流弹窗",
             TerminalAction::OpenWorkflowModal,
         )
         .with_key_binding(cmd_or_ctrl_shift("s"))
         .with_context_predicate(
-            id!("Terminal")
-                & !id!("IMEOpen")
-                & ne!("TerminalView_BlockSelectionCardinality", "None"),
+            id!("Terminal") & !id!("IMEOpen") & ne!("TerminalView_BlockSelectionCardinality", "无"),
         ),
         EditableBinding::new(
             "terminal:copy_git_branch",
-            "Copy git branch",
+            "复制 Git 分支",
             TerminalAction::CopyGitBranch,
         )
         .with_context_predicate(
             id!("Terminal")
-                & (eq!("TerminalView_BlockSelectionCardinality", "One")
-                    | eq!("TerminalView_BlockSelectionCardinality", "None")),
+                & (eq!("TerminalView_BlockSelectionCardinality", "一个")
+                    | eq!("TerminalView_BlockSelectionCardinality", "无")),
         ),
         EditableBinding::new(
             "terminal:clear_blocks",
-            "Clear Blocks",
+            "清除块",
             TerminalAction::ClearBuffer,
         )
         .with_custom_action(CustomAction::ClearBlocks)
@@ -470,7 +464,7 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             "terminal:executing_command_move_cursor_word_left",
-            "Move cursor one word to the left within an executing command",
+            "在执行中的命令内将光标向左移动一个单词",
             TerminalAction::ControlSequence(Vec::from(EscCodes::WORD_LEFT)),
         )
         .with_mac_key_binding("alt-left")
@@ -478,7 +472,7 @@ pub fn init(app: &mut AppContext) {
         .with_context_predicate(id!("Terminal") & !id!("IMEOpen") & id!("LongRunningCommand")),
         EditableBinding::new(
             "terminal:executing_command_move_cursor_word_right",
-            "Move cursor one word to the right within an executing command",
+            "在执行中的命令内将光标向右移动一个单词",
             TerminalAction::ControlSequence(Vec::from(EscCodes::WORD_RIGHT)),
         )
         .with_mac_key_binding("alt-right")
@@ -486,7 +480,7 @@ pub fn init(app: &mut AppContext) {
         .with_context_predicate(id!("Terminal") & !id!("IMEOpen") & id!("LongRunningCommand")),
         EditableBinding::new(
             "terminal:executing_command_move_cursor_home",
-            "Move cursor home within an executing command",
+            "在执行中的命令内将光标移到开头",
             TerminalAction::ControlSequence(vec![escape_sequences::C0::SOH]),
         )
         // We already have bindings for home/end (the keybindings for this on Linux and Mac) that
@@ -495,14 +489,14 @@ pub fn init(app: &mut AppContext) {
         .with_context_predicate(id!("Terminal") & !id!("IMEOpen") & id!("LongRunningCommand")),
         EditableBinding::new(
             "terminal:executing_command_move_cursor_end",
-            "Move cursor end within an executing command",
+            "在执行中的命令内将光标移到末尾",
             TerminalAction::ControlSequence(vec![escape_sequences::C0::ENQ]),
         )
         .with_mac_key_binding("cmd-right")
         .with_context_predicate(id!("Terminal") & !id!("IMEOpen") & id!("LongRunningCommand")),
         EditableBinding::new(
             "terminal:executing_command_delete_word_left",
-            "Delete word left within an executing command",
+            "在执行中的命令内删除左侧单词",
             TerminalAction::ControlSequence(vec![escape_sequences::C0::ETB]),
         )
         .with_mac_key_binding("alt-backspace")
@@ -510,7 +504,7 @@ pub fn init(app: &mut AppContext) {
         .with_context_predicate(id!("Terminal") & !id!("IMEOpen") & id!("LongRunningCommand")),
         EditableBinding::new(
             "terminal:executing_command_delete_line_start",
-            "Delete to line start within an executing command",
+            "在执行中的命令内删除到行首",
             TerminalAction::ControlSequence(vec![escape_sequences::C0::NAK]),
         )
         .with_context_predicate(id!("Terminal") & !id!("IMEOpen") & id!("LongRunningCommand"))
@@ -519,7 +513,7 @@ pub fn init(app: &mut AppContext) {
         .with_mac_key_binding("cmd-backspace"),
         EditableBinding::new(
             "terminal:executing_command_delete_line_end",
-            "Delete to line end within an executing command",
+            "在执行中的命令内删除到行尾",
             TerminalAction::ControlSequence(vec![escape_sequences::C0::VT]),
         )
         .with_context_predicate(id!("Terminal") & !id!("IMEOpen") & id!("LongRunningCommand"))
@@ -527,7 +521,7 @@ pub fn init(app: &mut AppContext) {
         .with_mac_key_binding("cmd-delete"),
         EditableBinding::new(
             "terminal:backward_tabulation",
-            "Backward tabulation within an executing command",
+            "在执行中的命令内反向制表",
             TerminalAction::ControlSequence(EscCodes::build_escape_sequence_with_c1(
                 escape_sequences::C1::CSI,
                 EscCodes::BACKWARD_TABULATION,
@@ -542,7 +536,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             SELECT_PREVIOUS_BLOCK_ACTION_NAME,
-            "Select previous block",
+            "选择上一个块",
             TerminalAction::SelectPriorBlock,
         )
         .with_custom_action(CustomAction::SelectBlockAbove)
@@ -551,7 +545,7 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             SELECT_NEXT_BLOCK_ACTION_NAME,
-            "Select next block",
+            "选择下一个块",
             TerminalAction::SelectNextBlock,
         )
         .with_custom_action(CustomAction::SelectBlockBelow)
@@ -560,64 +554,60 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             "terminal:open_share_block_modal",
-            "Share selected block",
+            "共享所选块",
             TerminalAction::OpenShareModal,
         )
         .with_custom_action(CustomAction::CreateBlockPermalink)
         .with_context_predicate(
-            id!("Terminal") & eq!("TerminalView_BlockSelectionCardinality", "One"),
+            id!("Terminal") & eq!("TerminalView_BlockSelectionCardinality", "一个"),
         ),
         EditableBinding::new(
             "terminal:bookmark_selected_block",
-            "Bookmark selected block",
+            "收藏所选块",
             TerminalAction::BookmarkSelectedBlock,
         )
         .with_custom_action(CustomAction::ToggleBookmarkBlock)
         .with_context_predicate(
-            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "None"),
+            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "无"),
         ),
         EditableBinding::new(
             "terminal:find",
-            "Find within selected block",
+            "在所选块内查找",
             TerminalAction::ShowFindBar,
         )
         .with_custom_action(CustomAction::FindWithinBlock)
         .with_context_predicate(
-            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "None"),
+            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "无"),
         ),
-        EditableBinding::new(
-            "terminal:copy",
-            "Copy command and output",
-            TerminalAction::Copy,
-        )
-        .with_custom_action(CustomAction::CopyBlock)
-        .with_context_predicate(
-            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "None"),
-        ),
+        EditableBinding::new("terminal:copy", "复制命令和输出", TerminalAction::Copy)
+            .with_custom_action(CustomAction::CopyBlock)
+            .with_context_predicate(
+                id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "无"),
+            ),
         EditableBinding::new(
             "terminal:copy_outputs",
-            "Copy command output",
+            "复制命令输出",
             TerminalAction::CopyOutputs,
         )
         .with_custom_action(CustomAction::CopyBlockOutput)
         .with_context_predicate(
-            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "None"),
+            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "无"),
         ),
         EditableBinding::new(
             "terminal:copy_commands",
-            "Copy command",
+            "复制命令",
             TerminalAction::CopyCommands,
         )
         .with_custom_action(CustomAction::CopyBlockCommand)
         .with_context_predicate(
-            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "None"),
+            id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "无"),
         ),
     ]);
 
     app.register_editable_bindings([
         EditableBinding::new(
             "terminal:scroll_up_one_line",
-            "Scroll terminal output up one line",
+            "向上滚动一行终端输出",
             TerminalAction::Scroll {
                 delta: 1.0.into_lines(),
             },
@@ -625,7 +615,7 @@ pub fn init(app: &mut AppContext) {
         .with_context_predicate(id!("Terminal") & id!("TerminalView_NonEmptyBlockList")),
         EditableBinding::new(
             "terminal:scroll_down_one_line",
-            "Scroll terminal output down one line",
+            "向下滚动一行终端输出",
             TerminalAction::Scroll {
                 delta: -(1.0.into_lines()),
             },
@@ -636,7 +626,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "terminal:scroll_up_one_page",
-            "Scroll terminal output up one page",
+            "向上滚动一页终端输出",
             TerminalAction::PageUp,
         )
         .with_key_binding("pageup")
@@ -648,7 +638,7 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             "terminal:scroll_down_one_page",
-            "Scroll terminal output down one page",
+            "向下滚动一页终端输出",
             TerminalAction::PageDown,
         )
         .with_key_binding("pagedown")
@@ -662,21 +652,21 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "terminal:scroll_to_top_of_selected_block",
-        "Scroll to top of selected block",
+        "滚动到所选块顶部",
         TerminalAction::ScrollToTopOfSelectedBlocks,
     )
     .with_custom_action(CustomAction::ScrollToTopOfSelectedBlocks)
     .with_context_predicate(
-        id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "None"),
+        id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "无"),
     )]);
     app.register_editable_bindings([EditableBinding::new(
         "terminal:scroll_to_bottom_of_selected_block",
-        "Scroll to bottom of selected block",
+        "滚动到所选块底部",
         TerminalAction::ScrollToBottomOfSelectedBlocks,
     )
     .with_custom_action(CustomAction::ScrollToBottomOfSelectedBlocks)
     .with_context_predicate(
-        id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "None"),
+        id!("Terminal") & ne!("TerminalView_BlockSelectionCardinality", "无"),
     )]);
 
     // Register a mac only keybinding for selecting all blocks that uses the "Select All" mac menu
@@ -690,7 +680,7 @@ pub fn init(app: &mut AppContext) {
             // from the menus and doesn't conflict with cmd-A in the editor.
             EditableBinding::new(
                 "terminal:select_all_blocks",
-                "Select all blocks",
+                "选择所有块",
                 TerminalAction::SelectAllBlocks,
             )
             .with_context_predicate(
@@ -699,7 +689,7 @@ pub fn init(app: &mut AppContext) {
             .with_custom_action(CustomAction::SelectAll),
             EditableBinding::new(
                 "terminal:select_all_blocks",
-                "Select all blocks",
+                "选择所有块",
                 TerminalAction::SelectAllBlocks,
             )
             .with_context_predicate(
@@ -710,7 +700,7 @@ pub fn init(app: &mut AppContext) {
     } else {
         app.register_editable_bindings([EditableBinding::new(
             "terminal:select_all_blocks",
-            "Select all blocks",
+            "选择所有块",
             TerminalAction::SelectAllBlocks,
         )
         .with_context_predicate(
@@ -721,7 +711,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "terminal:expand_block_selection_above",
-            "Expand selected blocks above",
+            "向上扩展所选块",
             TerminalAction::ExpandBlockSelectionAbove,
         )
         .with_key_binding("shift-up")
@@ -733,7 +723,7 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             "terminal:expand_block_selection_below",
-            "Expand selected blocks below",
+            "向下扩展所选块",
             TerminalAction::ExpandBlockSelectionBelow,
         )
         .with_key_binding("shift-down")
@@ -748,11 +738,10 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "terminal:ask_ai_assistant",
-            BindingDescription::new("Attach Selected Block as Agent Context")
-                .with_custom_description(
-                    bindings::MAC_MENUS_CONTEXT,
-                    "Attach Selection as Agent Context",
-                ),
+            BindingDescription::new("将所选块附加为 Agent 上下文").with_custom_description(
+                bindings::MAC_MENUS_CONTEXT,
+                "将所选内容附加为 Agent 上下文",
+            ),
             TerminalAction::ContextMenu(ContextMenuAction::AskAI(AskAISource::SelectedBlocks)),
         )
         .with_enabled(|| FeatureFlag::AgentMode.is_enabled())
@@ -762,18 +751,17 @@ pub fn init(app: &mut AppContext) {
         // context.
         .with_context_predicate(
             id!("Terminal")
-                & ne!("TerminalView_BlockSelectionCardinality", "None")
+                & ne!("TerminalView_BlockSelectionCardinality", "无")
                 & !id!("ActiveBlockTextSelection")
                 & !id!("ActiveAltScreenSelection")
                 & id!(flags::IS_ANY_AI_ENABLED),
         ),
         EditableBinding::new(
             "terminal:ask_ai_assistant",
-            BindingDescription::new("Attach Selected Text as Agent Context")
-                .with_custom_description(
-                    bindings::MAC_MENUS_CONTEXT,
-                    "Attach Selection as Agent Context",
-                ),
+            BindingDescription::new("将所选文本附加为 Agent 上下文").with_custom_description(
+                bindings::MAC_MENUS_CONTEXT,
+                "将所选内容附加为 Agent 上下文",
+            ),
             TerminalAction::ContextMenu(ContextMenuAction::AskAI(
                 AskAISource::SelectedTerminalText,
             )),
@@ -792,7 +780,7 @@ pub fn init(app: &mut AppContext) {
         // this is a block selection or text selection later on.
         EditableBinding::new(
             "terminal:ask_ai_assistant",
-            "Ask Warp AI about Selection",
+            "向 Warp AI 询问所选内容",
             TerminalAction::ContextMenu(ContextMenuAction::AskAI(AskAISource::SelectedBlockOrText)),
         )
         .with_enabled(|| !FeatureFlag::AgentMode.is_enabled())
@@ -801,7 +789,7 @@ pub fn init(app: &mut AppContext) {
         .with_context_predicate(
             id!("Terminal")
                 & id!(flags::IS_ANY_AI_ENABLED)
-                & (eq!("TerminalView_BlockSelectionCardinality", "One")
+                & (eq!("TerminalView_BlockSelectionCardinality", "一个")
                     | id!("ActiveBlockTextSelection")
                     | id!("ActiveAltScreenSelection")),
         ),
@@ -810,7 +798,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "terminal:ask_ai_assistant_last_block",
-            "Ask Warp AI about last block",
+            "向 Warp AI 询问上一个块",
             TerminalAction::ContextMenu(ContextMenuAction::AskAI(AskAISource::LastBlock)),
         )
         .with_enabled(|| !FeatureFlag::AgentMode.is_enabled())
@@ -821,7 +809,7 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             "terminal:ask_ai_assistant",
-            "Ask Warp AI",
+            "询问 Warp AI",
             TerminalAction::ContextMenu(ContextMenuAction::AskAI(AskAISource::SelectedInputText)),
         )
         .with_enabled(|| !FeatureFlag::AgentMode.is_enabled())
@@ -833,7 +821,7 @@ pub fn init(app: &mut AppContext) {
     if FeatureFlag::CommandCorrectionKey.is_enabled() {
         app.register_editable_bindings([EditableBinding::new(
             "input:insert_command_correction",
-            "Insert Command Correction",
+            "插入命令纠正",
             TerminalAction::InsertMostRecentCommandCorrection,
         )
         .with_context_predicate(id!("Terminal"))]);
@@ -842,7 +830,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "terminal:onboarding_flow",
-            "Setup Guide",
+            "设置指南",
             TerminalAction::OnboardingFlow(OnboardingVersion::Legacy),
         )
         .with_context_predicate(
@@ -851,7 +839,7 @@ pub fn init(app: &mut AppContext) {
         // UniversalInput callout debug bindings
         EditableBinding::new(
             "terminal:agent_onboarding_flow_legacy_terminal",
-            "[Debug] Onboarding Callout: WarpInput - Terminal",
+            "[调试] Onboarding Callout：WarpInput - 终端",
             TerminalAction::OnboardingFlow(OnboardingVersion::Legacy),
         )
         .with_enabled(|| {
@@ -862,7 +850,7 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             "terminal:agent_onboarding_flow_universal_input_project",
-            "[Debug] Onboarding Callout: WarpInput - Project",
+            "[调试] Onboarding Callout：WarpInput - 项目",
             TerminalAction::OnboardingFlow(OnboardingVersion::Agent(
                 AgentOnboardingVersion::UniversalInput { has_project: true },
             )),
@@ -875,7 +863,7 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             "terminal:agent_onboarding_flow_universal_input_no_project",
-            "[Debug] Onboarding Callout: WarpInput - No Project",
+            "[调试] Onboarding Callout：WarpInput - 无项目",
             TerminalAction::OnboardingFlow(OnboardingVersion::Agent(
                 AgentOnboardingVersion::UniversalInput { has_project: false },
             )),
@@ -889,7 +877,7 @@ pub fn init(app: &mut AppContext) {
         // AgentModality callout debug bindings
         EditableBinding::new(
             "terminal:agent_onboarding_flow_modality_project",
-            "[Debug] Onboarding Callout: Modality - Project",
+            "[调试] Onboarding Callout：Modality - 项目",
             TerminalAction::OnboardingFlow(OnboardingVersion::Agent(
                 AgentOnboardingVersion::AgentModality {
                     has_project: true,
@@ -905,7 +893,7 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             "terminal:agent_onboarding_flow_modality_no_project",
-            "[Debug] Onboarding Callout: Modality - No Project",
+            "[调试] Onboarding Callout：Modality - 无项目",
             TerminalAction::OnboardingFlow(OnboardingVersion::Agent(
                 AgentOnboardingVersion::AgentModality {
                     has_project: false,
@@ -921,7 +909,7 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             "terminal:agent_onboarding_flow_modality_terminal",
-            "[Debug] Onboarding Callout: Modality - Terminal",
+            "[调试] Onboarding Callout：Modality - 终端",
             TerminalAction::OnboardingFlow(OnboardingVersion::Agent(
                 AgentOnboardingVersion::AgentModality {
                     has_project: false,
@@ -939,7 +927,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "workspace:open_settings_import_page",
-        "Import External Settings",
+        "导入外部设置",
         TerminalAction::ImportSettings,
     )
     .with_context_predicate(id!("Terminal") & id!(flags::HAS_SETTINGS_TO_IMPORT_FLAG))]);
@@ -947,7 +935,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "terminal:share_current_session",
-            "Share current session",
+            "共享当前会话",
             TerminalAction::OpenShareSessionModal {
                 source: SharedSessionActionSource::CommandPalette,
             },
@@ -962,7 +950,7 @@ pub fn init(app: &mut AppContext) {
         }),
         EditableBinding::new(
             "terminal:stop_sharing_current_session",
-            "Stop sharing current session",
+            "停止共享当前会话",
             TerminalAction::StopSharingCurrentSession {
                 source: SharedSessionActionSource::CommandPalette,
             },
@@ -974,7 +962,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         TOGGLE_BLOCK_FILTER_KEYBINDING,
-        "Toggle block filter on selected or last block",
+        "切换所选或最后一个块的过滤器",
         TerminalAction::ToggleBlockFilterOnSelectedOrLastBlock(ToggleBlockFilterSource::Binding),
     )
     .with_mac_key_binding("shift-alt-F")
@@ -982,7 +970,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "terminal:toggle_snackbar_in_active_pane",
-        "Toggle Sticky Command Header in Active Pane",
+        "切换活动窗格的粘性命令头",
         TerminalAction::ToggleSnackbarInActivePane,
     )
     .with_context_predicate(id!("Terminal"))]);
@@ -990,7 +978,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             TOGGLE_AUTOEXECUTE_MODE_KEYBINDING,
-            "Toggle Auto-execute Mode",
+            "切换自动执行模式",
             TerminalAction::ToggleAutoexecuteMode,
         )
         .with_key_binding("cmdorctrl-shift-I")
@@ -999,7 +987,7 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| FeatureFlag::FastForwardAutoexecuteButton.is_enabled()),
         EditableBinding::new(
             TOGGLE_QUEUE_NEXT_PROMPT_KEYBINDING,
-            "Toggle Queue Next Prompt",
+            "切换下一个提示排队",
             TerminalAction::ToggleQueueNextPrompt,
         )
         .with_key_binding("cmdorctrl-shift-J")
@@ -1008,7 +996,7 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| FeatureFlag::QueueSlashCommand.is_enabled()),
         EditableBinding::new(
             "terminal:generate_codebase_index",
-            "[Debug] Generate codebase index",
+            "[调试] 生成代码库索引",
             TerminalAction::GenerateCodebaseIndex,
         )
         .with_group(bindings::BindingGroup::WarpAi.as_str())
@@ -1044,7 +1032,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "workspace:write_codebase_index",
-        BindingDescription::new("Write current codebase index snapshot"),
+        BindingDescription::new("写入当前代码库索引快照"),
         TerminalAction::WriteCodebaseIndex,
     )
     .with_enabled(|| FeatureFlag::CodebaseIndexPersistence.is_enabled())
@@ -1052,7 +1040,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "terminal:load_agent_mode_conversation",
-        "Load agent mode conversation (from debug link in clipboard)",
+        "加载 Agent 模式对话（来自剪贴板中的调试链接）",
         TerminalAction::LoadAgentModeConversation,
     )
     .with_enabled(ChannelState::enable_debug_features)
@@ -1060,7 +1048,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "terminal:toggle_session_recording",
-        "Toggle PTY Recording for Session",
+        "切换会话 PTY 录制",
         TerminalAction::ToggleSessionRecording,
     )
     .with_enabled(|| cfg!(feature = "local_fs") && ChannelState::enable_debug_features())
@@ -1068,14 +1056,14 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "workspace:init_project_rules",
-        BindingDescription::new("Initiate project for warp"),
+        BindingDescription::new("初始化 Warp 项目"),
         TerminalAction::InitProject,
     )
     .with_context_predicate(id!("Workspace") & id!(flags::IS_ANY_AI_ENABLED))]);
 
     app.register_editable_bindings([EditableBinding::new(
         "workspace:add_current_dir_as_project",
-        BindingDescription::new("Add current folder as project"),
+        BindingDescription::new("将当前文件夹添加为项目"),
         TerminalAction::AddProjectAtCurrentDirectory,
     )
     .with_enabled(|| FeatureFlag::Projects.is_enabled())
@@ -1084,7 +1072,7 @@ pub fn init(app: &mut AppContext) {
     #[cfg(not(target_arch = "wasm32"))]
     app.register_editable_bindings([EditableBinding::new(
         "terminal:toggle_conversation_details_panel",
-        "Toggle Conversation Details Panel",
+        "切换对话详情面板",
         TerminalAction::ToggleConversationDetailsPanel,
     )
     .with_group(bindings::BindingGroup::WarpAi.as_str())
@@ -1222,7 +1210,7 @@ fn register_input_mode_bindings(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             SET_INPUT_MODE_AGENT_ACTION_NAME,
-            "Set Input Mode to Agent Mode",
+            "将输入模式设为 Agent 模式",
             TerminalAction::SetInputModeAgent,
         )
         .with_group(bindings::BindingGroup::WarpAi.as_str())
@@ -1231,7 +1219,7 @@ fn register_input_mode_bindings(app: &mut AppContext) {
         .with_linux_or_windows_key_binding("ctrl-i"),
         EditableBinding::new(
             SET_INPUT_MODE_TERMINAL_ACTION_NAME,
-            "Set Input Mode to Terminal Mode",
+            "将输入模式设为终端模式",
             TerminalAction::SetInputModeTerminal,
         )
         .with_group(bindings::BindingGroup::WarpAi.as_str())
@@ -1240,7 +1228,7 @@ fn register_input_mode_bindings(app: &mut AppContext) {
         .with_linux_or_windows_key_binding("ctrl-i"),
         EditableBinding::new(
             TOGGLE_HIDE_CLI_RESPONSES_KEYBINDING,
-            "Toggle Hide CLI Responses",
+            "切换隐藏 CLI 响应",
             TerminalAction::ToggleHideCliResponses,
         )
         .with_key_binding("cmdorctrl-g")

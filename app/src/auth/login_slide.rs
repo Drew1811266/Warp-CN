@@ -71,7 +71,7 @@ pub fn init(app: &mut AppContext) {
         FixedBinding::custom(
             CustomAction::Paste,
             LoginSlideAction::PasteAuthUrl,
-            "Paste",
+            "粘贴",
             id!(LoginSlideView::ui_name()),
         ),
         FixedBinding::standard(
@@ -307,7 +307,7 @@ impl LoginSlideView {
                 },
                 ctx,
             );
-            editor.set_placeholder_text("Auth Token", ctx);
+            editor.set_placeholder_text("认证令牌", ctx);
             editor
         });
 
@@ -499,9 +499,9 @@ impl LoginSlideView {
     /// Terminal+Drive), since there are no AI features to opt out of there.
     fn privacy_disclaimer_prefix(&self) -> &'static str {
         if self.ai_enabled {
-            "If you'd like to opt out of analytics and AI features, you can adjust your "
+            "如需停用分析和 AI 功能，你可以调整"
         } else {
-            "If you'd like to opt out of analytics, you can adjust your "
+            "如需停用分析，你可以调整"
         }
     }
 
@@ -525,12 +525,12 @@ impl LoginSlideView {
 
         let (title_text, subtitle_text) = match self.login_purpose() {
             LoginPurpose::WarpDrive => (
-                "Get started with Warp Drive",
-                "Connect your account to save and share notebooks, workflows, and more across devices.",
+                "开始使用 Warp Drive",
+                "连接账号以在多台设备间保存和共享笔记本、工作流等内容。",
             ),
             LoginPurpose::WarpAgent => (
-                "Get started with AI",
-                "Connect your account to enable AI-powered planning, coding, and automation.",
+                "开始使用 AI",
+                "连接账号以启用 AI 驱动的规划、编码和自动化。",
             ),
             LoginPurpose::ThirdParty => (
                 "Create an account",
@@ -564,7 +564,7 @@ impl LoginSlideView {
         let tos_line = Flex::row()
             .with_child(
                 ui_builder
-                    .span("By continuing, you agree to Warp's ")
+                    .span("继续即表示你同意 Warp 的")
                     .with_style(disclaimer_styles)
                     .build()
                     .finish(),
@@ -572,7 +572,7 @@ impl LoginSlideView {
             .with_child(
                 ui_builder
                     .link(
-                        "Terms of Service".into(),
+                        "服务条款".into(),
                         Some(TOS_URL.into()),
                         None,
                         self.tos_mouse_state.clone(),
@@ -598,7 +598,7 @@ impl LoginSlideView {
             .with_child(
                 ui_builder
                     .link(
-                        "Privacy Settings".into(),
+                        "隐私设置".into(),
                         None,
                         Some(Box::new(|ctx| {
                             ctx.dispatch_typed_action(LoginSlideAction::ShowPrivacySettings);
@@ -639,7 +639,7 @@ impl LoginSlideView {
         let back_button = self.back_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Back".into()),
+                content: button::Content::Label("返回".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -652,9 +652,9 @@ impl LoginSlideView {
 
         let cmd_enter = Keystroke::parse("cmdorctrl-enter").unwrap_or_default();
         let skip_label = match self.login_purpose() {
-            LoginPurpose::WarpDrive => "Disable Warp Drive",
-            LoginPurpose::WarpAgent => "Disable AI features",
-            LoginPurpose::ThirdParty => "Skip for now",
+            LoginPurpose::WarpDrive => "禁用 Warp Drive",
+            LoginPurpose::WarpAgent => "禁用 AI 功能",
+            LoginPurpose::ThirdParty => "暂时跳过",
         };
         let skip_button = self.skip_button.render(
             appearance,
@@ -675,7 +675,7 @@ impl LoginSlideView {
         let login_button = self.login_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Continue".into()),
+                content: button::Content::Label("继续".into()),
                 theme: &button::themes::Primary,
                 options: button::Options {
                     keystroke: Some(enter),
@@ -721,7 +721,7 @@ impl LoginSlideView {
         };
 
         let title = FormattedTextElement::from_str(
-            "Sign in on your browser to continue",
+            "在浏览器中登录以继续",
             appearance.ui_font_family(),
             36.,
         )
@@ -738,7 +738,7 @@ impl LoginSlideView {
                 Flex::row()
                     .with_child(
                         ui_builder
-                            .span("If your browser hasn't launched, ")
+                            .span("如果浏览器没有打开，")
                             .with_style(sub_text_styles)
                             .build()
                             .finish(),
@@ -746,7 +746,7 @@ impl LoginSlideView {
                     .with_child(
                         ui_builder
                             .link(
-                                "copy the URL".into(),
+                                "复制 URL".into(),
                                 None,
                                 Some(Box::new(|ctx| {
                                     ctx.dispatch_typed_action(LoginSlideAction::CopyLoginUrl);
@@ -759,7 +759,7 @@ impl LoginSlideView {
                     )
                     .with_child(
                         ui_builder
-                            .span(" and open")
+                            .span(" 并手动打开")
                             .with_style(sub_text_styles)
                             .build()
                             .finish(),
@@ -768,7 +768,7 @@ impl LoginSlideView {
             )
             .with_child(
                 ui_builder
-                    .span("the page manually.")
+                    .span("该页面。")
                     .with_style(sub_text_styles)
                     .build()
                     .finish(),
@@ -822,7 +822,7 @@ impl LoginSlideView {
                 .with_child(
                     ui_builder
                         .link(
-                            "Click here to paste your token from the browser".into(),
+                            "点击此处粘贴浏览器中的令牌".into(),
                             None,
                             Some(Box::new(|ctx| {
                                 ctx.dispatch_typed_action(LoginSlideAction::EnterToken);
@@ -851,7 +851,7 @@ impl LoginSlideView {
         let back_button = self.browser_back_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Back".into()),
+                content: button::Content::Label("返回".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -879,15 +879,14 @@ impl LoginSlideView {
     ) -> Vec<Box<dyn Element>> {
         let theme = appearance.theme();
 
-        let title =
-            FormattedTextElement::from_str("Privacy Settings", appearance.ui_font_family(), 36.)
-                .with_color(internal_colors::text_main(
-                    theme,
-                    theme.background().into_solid(),
-                ))
-                .with_weight(Weight::Medium)
-                .with_alignment(TextAlignment::Left)
-                .finish();
+        let title = FormattedTextElement::from_str("隐私设置", appearance.ui_font_family(), 36.)
+            .with_color(internal_colors::text_main(
+                theme,
+                theme.background().into_solid(),
+            ))
+            .with_weight(Weight::Medium)
+            .with_alignment(TextAlignment::Left)
+            .finish();
 
         let actions = PrivacySettingsActions {
             toggle_telemetry: LoginSlideAction::ToggleTelemetry,
@@ -911,7 +910,7 @@ impl LoginSlideView {
         let back_button = self.done_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Back".into()),
+                content: button::Content::Label("返回".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -949,16 +948,16 @@ impl LoginSlideView {
             &'static str,
         ) = match self.login_purpose() {
             LoginPurpose::WarpDrive => (
-                "Are you sure you want to disable Warp Drive?",
-                "Warp Drive lets you save workflows and knowledge across devices and share them with your team. By continuing, you won't have access to the following features:",
+                "确定要禁用 Warp Drive 吗？",
+                "Warp Drive 可让你跨设备保存工作流和知识，并与团队共享。继续后，你将无法使用以下功能：",
                 WARP_DRIVE_FEATURES,
-                "Enable Warp Drive",
+                "启用 Warp Drive",
             ),
             LoginPurpose::WarpAgent => (
-                "Are you sure you want to disable AI features?",
-                "Warp is better with AI. By continuing, you won't have access to any of the following features:",
+                "确定要禁用 AI 功能吗？",
+                "Warp 配合 AI 会更强。继续后，你将无法使用以下功能：",
                 AI_FEATURES,
-                "Enable AI features",
+                "启用 AI 功能",
             ),
             LoginPurpose::ThirdParty => (
                 "Are you sure you want to skip login?",
@@ -1003,7 +1002,7 @@ impl LoginSlideView {
         let confirm_button = self.dialog_skip_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Skip for now".into()),
+                content: button::Content::Label("暂时跳过".into()),
                 theme: &button::themes::Primary,
                 options: button::Options {
                     keystroke: Some(dialog_enter),

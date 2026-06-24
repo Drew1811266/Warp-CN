@@ -226,7 +226,7 @@ impl AgentSlide {
     fn render_header(&self, appearance: &Appearance) -> Box<dyn Element> {
         let title = appearance
             .ui_builder()
-            .paragraph("Customize your Warp Agent")
+            .paragraph("自定义 Warp Agent")
             .with_style(UiComponentStyles {
                 font_size: Some(36.),
                 font_weight: Some(Weight::Medium),
@@ -236,7 +236,7 @@ impl AgentSlide {
             .finish();
 
         let subtitle = FormattedTextElement::from_str(
-            "Select your Warp Agent's defaults.",
+            "设置 Warp Agent 的默认行为。",
             appearance.ui_font_family(),
             16.,
         )
@@ -322,7 +322,7 @@ impl AgentSlide {
         settings: &AgentDevelopmentSettings,
         app: &AppContext,
     ) -> Box<dyn Element> {
-        let header = self.render_section_header("Default model", appearance);
+        let header = self.render_section_header("默认模型", appearance);
 
         let expanded = self.is_model_list_expanded;
         let chip = self.render_collapsed_model_chip(appearance, settings, app, expanded);
@@ -621,7 +621,7 @@ impl AgentSlide {
             };
 
             let trailing: Box<dyn Element> = if is_default {
-                make_pill("Recommended")
+                make_pill("推荐")
             } else {
                 Empty::new().finish()
             };
@@ -668,7 +668,7 @@ impl AgentSlide {
     }
 
     fn render_autonomy_workspace_enforced(&self, appearance: &Appearance) -> Box<dyn Element> {
-        let header = self.render_section_header("Autonomy", appearance);
+        let header = self.render_section_header("自主程度", appearance);
 
         let theme = appearance.theme();
         let background_for_text = theme.background().into_solid();
@@ -677,7 +677,7 @@ impl AgentSlide {
         let title_color = internal_colors::text_main(theme, background_for_text);
         let subtitle_color = internal_colors::text_sub(theme, background_for_text);
 
-        let title_el = Text::new("Set by Team Workspace", ui_font_family, 14.0)
+        let title_el = Text::new("由团队工作区设置", ui_font_family, 14.0)
             .with_color(title_color)
             .with_style(Properties {
                 weight: Weight::Normal,
@@ -686,18 +686,14 @@ impl AgentSlide {
             .with_line_height_ratio(1.0)
             .finish();
 
-        let subtitle_el = Text::new(
-            "Autonomy settings are configured as part of your team workspace.",
-            ui_font_family,
-            12.0,
-        )
-        .with_color(subtitle_color)
-        .with_style(Properties {
-            weight: Weight::Normal,
-            ..Default::default()
-        })
-        .with_line_height_ratio(1.0)
-        .finish();
+        let subtitle_el = Text::new("自主程度设置由团队工作区统一配置。", ui_font_family, 12.0)
+            .with_color(subtitle_color)
+            .with_style(Properties {
+                weight: Weight::Normal,
+                ..Default::default()
+            })
+            .with_line_height_ratio(1.0)
+            .finish();
 
         let content = Flex::column()
             .with_cross_axis_alignment(CrossAxisAlignment::Start)
@@ -723,7 +719,7 @@ impl AgentSlide {
         appearance: &Appearance,
         settings: &AgentDevelopmentSettings,
     ) -> Box<dyn Element> {
-        let header = self.render_section_header("Autonomy", appearance);
+        let header = self.render_section_header("自主程度", appearance);
 
         // The rows now take the full column width (vs. the previous three-across layout),
         // so they no longer need the extra height that came from cramped subtitle wrapping.
@@ -738,20 +734,20 @@ impl AgentSlide {
         let autonomy_options: [(AgentAutonomy, &str, &str, MouseStateHandle); 3] = [
             (
                 AgentAutonomy::Full,
-                "Full",
-                "Warp Agent runs commands, writes code, and reads files without asking.",
+                "完全",
+                "Warp Agent 无需确认即可运行命令、写代码和读取文件。",
                 self.autonomy_full_mouse_state.clone(),
             ),
             (
                 AgentAutonomy::Partial,
-                "Partial",
-                "Warp Agent can plan, read files, and execute low-risk commands. Asks before making any changes or executing sensitive commands.",
+                "部分",
+                "Warp Agent 可以规划、读取文件并执行低风险命令；修改文件或执行敏感命令前会请求确认。",
                 self.autonomy_partial_mouse_state.clone(),
             ),
             (
                 AgentAutonomy::None,
-                "None",
-                "Warp Agent takes no actions without your approval.",
+                "无",
+                "Warp Agent 未经你批准不会执行任何操作。",
                 self.autonomy_none_mouse_state.clone(),
             ),
         ];
@@ -801,7 +797,7 @@ impl AgentSlide {
         let back_button = self.back_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Back".into()),
+                content: button::Content::Label("返回".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -832,7 +828,7 @@ impl AgentSlide {
         let next_button = self.next_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Next".into()),
+                content: button::Content::Label("下一步".into()),
                 theme: &button::themes::Primary,
                 options: button::Options {
                     keystroke: Some(enter),

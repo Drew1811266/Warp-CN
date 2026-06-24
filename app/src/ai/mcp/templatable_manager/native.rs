@@ -96,12 +96,9 @@ enum LegacyToTemplatableMCPConversionError {
 impl fmt::Display for LegacyToTemplatableMCPConversionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Self::TemplateAlreadyExists => write!(f, "templatable MCP server already exists"),
-            Self::NoDBConnection => write!(f, "failed to connect to database"),
-            Self::InstallationFailed => write!(
-                f,
-                "created template successfully, but could not create installation"
-            ),
+            Self::TemplateAlreadyExists => write!(f, "可模板化 MCP server 已存在"),
+            Self::NoDBConnection => write!(f, "连接数据库失败"),
+            Self::InstallationFailed => write!(f, "模板已成功创建，但无法创建安装项"),
         }
     }
 }
@@ -763,7 +760,7 @@ impl TemplatableMCPServerManager {
                     if mode.is_reconnect() {
                         self.notify_reconnect_waiters(
                             installation_uuid,
-                            Err("Template contains no servers".to_string()),
+                            Err("模板不包含 server".to_string()),
                         );
                     }
                     return;
@@ -800,7 +797,7 @@ impl TemplatableMCPServerManager {
                     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
                             DismissibleToast::error(
-                                "PATH required to launch MCP server. Please open a new terminal session to autopopulate PATH."
+                                "启动 MCP server 需要 PATH。请打开新的终端会话以自动填充 PATH。"
                                     .to_string(),
                             ),
                             window_id,
@@ -812,7 +809,7 @@ impl TemplatableMCPServerManager {
                 if mode.is_reconnect() {
                     self.notify_reconnect_waiters(
                         installation_uuid,
-                        Err("PATH not available".to_string()),
+                        Err("PATH 不可用".to_string()),
                     );
                 }
                 return;
@@ -924,7 +921,11 @@ impl TemplatableMCPServerManager {
                                     manager.pending_oauth_csrf.insert(csrf_state, uuid);
                                 }
                                 ctx.open_url(&auth_url);
-                                manager.change_server_state(uuid, MCPServerState::Authenticating, ctx);
+                                manager.change_server_state(
+                                    uuid,
+                                    MCPServerState::Authenticating,
+                                    ctx,
+                                );
                             })
                             .await
                             .map_err(|err| {
@@ -944,7 +945,7 @@ impl TemplatableMCPServerManager {
                                     ToastStack::handle(ctx).update(ctx, |stack, ctx| {
                                         stack.add_ephemeral_toast(
                                             DismissibleToast::default(format!(
-                                                "Successfully authenticated {server_name} MCP server"
+                                                "已成功认证 {server_name} MCP server"
                                             )),
                                             active_window_id,
                                             ctx,
@@ -1710,10 +1711,7 @@ impl TemplatableMCPServerManager {
             .get(&installation_uuid)
             .cloned()
         else {
-            self.notify_reconnect_waiters(
-                installation_uuid,
-                Err("Installation not found".to_string()),
-            );
+            self.notify_reconnect_waiters(installation_uuid, Err("未找到安装项".to_string()));
             return;
         };
 

@@ -400,11 +400,11 @@ impl Debug for ExecutedExecutorCommandEvent {
 
 #[derive(thiserror::Error, Debug)]
 pub enum ParseGeneratorOutputError {
-    #[error("Failed to parse exit code: {0:?}")]
+    #[error("解析退出码失败：{0:?}")]
     ExitCodeParseFailure(ParseIntError),
-    #[error("Corrupted DCS. Should be of the format <command_id>;<exit_code>;<output>. ")]
+    #[error("DCS 已损坏。格式应为 <command_id>;<exit_code>;<output>。 ")]
     Corrupted,
-    #[error("Failed to convert to Utf8: {0:?}")]
+    #[error("转换为 Utf8 失败：{0:?}")]
     Utf8DecodingFailure(FromUtf8Error),
 }
 
@@ -435,16 +435,16 @@ impl Debug for Event {
             Event::Bell => write!(f, "Bell"),
             Event::Exit { reason } => write!(f, "Exit({reason:?})"),
             Event::CursorBlinkingChange(blinking) => write!(f, "CursorBlinking({blinking})"),
-            Event::PreInteractiveSSHSession => write!(f, "Pre-Interactive SSH Session"),
+            Event::PreInteractiveSSHSession => write!(f, "交互前 SSH 会话"),
             Event::SSH(remote_shell) => write!(f, "SSH(remote shell: {remote_shell}"),
-            Event::SSHControlMasterError => write!(f, "SSH ControlMaster error"),
-            Event::TerminalModeSwapped(_) => write!(f, "Terminal mode swapped"),
+            Event::SSHControlMasterError => write!(f, "SSH ControlMaster 错误"),
+            Event::TerminalModeSwapped(_) => write!(f, "终端模式已切换"),
             Event::DetectedEndOfSshLogin(check_type) => {
                 write!(f, "DetectedEndOfSshLogin: {check_type:?}")
             }
             Event::ExecutedInBandCommand(event) => write!(
                 f,
-                "Executed in-band command with ID {} and exit code {}",
+                "已执行 ID 为 {} 的带内命令，退出码为 {}",
                 event.command_id, event.exit_code
             ),
             Event::InitSubshell(event) => {

@@ -1414,7 +1414,7 @@ pub(crate) fn fork_button_action(
         }
     } else {
         ForkButtonAction {
-            tooltip: "Fork conversation",
+            tooltip: "复刻对话",
             command_name: commands::FORK.name,
         }
     }

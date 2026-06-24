@@ -216,8 +216,8 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "crates/onboarding/src/slides/agent_slide.rs"
-source = "Select your in-app agent's defaults."
-target = "设置内置 Agent 的默认行为。"
+source = "Select your Warp Agent's defaults."
+target = "设置 Warp Agent 的默认行为。"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -232,13 +232,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 path = "crates/onboarding/src/slides/agent_slide.rs"
 source = "Recommended"
 target = "推荐"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/agent_slide.rs"
-source = "Premium"
-target = "高级"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -272,8 +265,8 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "crates/onboarding/src/slides/agent_slide.rs"
-source = "Runs commands, writes code, and reads files without asking."
-target = "无需确认即可运行命令、写代码和读取文件。"
+source = "Warp Agent runs commands, writes code, and reads files without asking."
+target = "Warp Agent 无需确认即可运行命令、写代码和读取文件。"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -286,8 +279,8 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "crates/onboarding/src/slides/agent_slide.rs"
-source = "Can plan, read files, and execute low-risk commands. Asks before making any changes or executing sensitive commands."
-target = "可以规划、读取文件并执行低风险命令；修改文件或执行敏感命令前会请求确认。"
+source = "Warp Agent can plan, read files, and execute low-risk commands. Asks before making any changes or executing sensitive commands."
+target = "Warp Agent 可以规划、读取文件并执行低风险命令；修改文件或执行敏感命令前会请求确认。"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -300,36 +293,8 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "crates/onboarding/src/slides/agent_slide.rs"
-source = "Takes no actions without your approval."
-target = "未经你批准不会执行任何操作。"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/agent_slide.rs"
-source = "Disable Warp Agent"
-target = "禁用 Warp Agent"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/agent_slide.rs"
-source = "Upgrade for access to premium models."
-target = "升级以使用高级模型。"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/agent_slide.rs"
-source = "State-of-the-art models require paid plans."
-target = "前沿模型需要付费计划。"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/agent_slide.rs"
-source = "Upgrade"
-target = "升级"
+source = "Warp Agent takes no actions without your approval."
+target = "Warp Agent 未经你批准不会执行任何操作。"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -702,7 +667,7 @@ target = "暂时跳过"
 key = "auth.login.skip_for_now"
 context = "Secondary action allowing users to skip login during onboarding."
 status = "active"
-expected_count = 1
+expected_count = 2
 
 [[replace]]
 path = "app/src/workspace/view.rs"
@@ -899,139 +864,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 path = "app/src/workspace/view/vertical_tabs.rs"
 source = "Show details on hover"
 target = "悬停时显示详情"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Let's get started."
-target = "开始使用。"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Agent driven development with Warp's built-in agent"
-target = "使用 Warp 内置 Agent 进行开发"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Iterate, plan, and build with Oz: Warp's built-in agent. Available locally or in the cloud."
-target = "使用 Oz（Warp 内置 Agent）迭代、规划和构建，可在本地或云端运行。"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Classic terminal with third-party agents"
-target = "经典终端与第三方 Agent"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "A modern terminal that supports third-party agents (Claude Code, Codex, Gemini CLI) and classic terminal workflows."
-target = "支持 Claude Code、Codex、Gemini CLI 等第三方 Agent 和经典终端工作流的现代终端。"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Free"
-target = "免费"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Back"
-target = "返回"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Get Warping"
-target = "开始使用 Warp"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Subscribe"
-target = "订阅"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Next"
-target = "下一步"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Subscribe to access agent driven development in Warp."
-target = "订阅以使用 Warp 的 Agent 驱动开发。"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "1,500 credits per month"
-target = "每月 1,500 点额度"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Access to frontier OpenAI, Anthropic, and Google models"
-target = "可使用 OpenAI、Anthropic 和 Google 的前沿模型"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Access to Reload credits and volume-based discounts"
-target = "可使用 Reload 额度和阶梯折扣"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Extended cloud agents access"
-target = "更多云端 Agent 使用额度"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Highest codebase indexing limits"
-target = "最高代码库索引额度"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Unlimited Warp Drive objects and collaboration"
-target = "不限量 Warp Drive 对象和协作"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Private email support"
-target = "专属邮件支持"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "Unlimited cloud conversation storage"
-target = "不限量云端对话存储"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -1679,7 +1511,7 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "crates/onboarding/src/lib.rs"
-source = "Oz cloud agents platform"
+source = "Oz Cloud Agents Platform"
 target = "Oz 云端 Agent 平台"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
@@ -1700,22 +1532,15 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "crates/onboarding/src/lib.rs"
-source = "Codebase context"
+source = "Codebase Context"
 target = "代码库上下文"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "crates/onboarding/src/lib.rs"
-source = "Remote control with Claude Code, Codex, and other agents"
+source = "Remote Control with Claude Code, Codex, and other agents"
 target = "使用 Claude Code、Codex 和其他 Agent 进行远程控制"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/lib.rs"
-source = "Agents over SSH"
-target = "通过 SSH 使用 Agent"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -1923,51 +1748,37 @@ status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
-path = "crates/onboarding/src/model.rs"
-source = "Starting at ${}/mo"
-target = "${}/月起"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/agent_slide.rs"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
 source = "copy the URL"
 target = "复制 URL"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
-path = "crates/onboarding/src/slides/agent_slide.rs"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
 source = "Click here"
 target = "点击此处"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
-path = "crates/onboarding/src/slides/agent_slide.rs"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
 source = "If your browser hasn't launched, "
 target = "如果浏览器没有打开，"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
-path = "crates/onboarding/src/slides/agent_slide.rs"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
 source = " and open the page manually. "
 target = " 并手动打开页面。"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
-path = "crates/onboarding/src/slides/agent_slide.rs"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
 source = " to paste your token from the browser."
 target = "以粘贴浏览器中的令牌。"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "crates/onboarding/src/slides/agent_slide.rs"
-source = "Plan successfully activated. All premium models are available."
-target = "计划已成功激活。所有高级模型现已可用。"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -2519,8 +2330,8 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "app/src/workspace/cli_install.rs"
-source = "Cannot install: {:?} exists but is not a symlink. Please remove it manually first."
-target = "无法安装：{:?} 已存在但不是符号链接。请先手动移除。"
+source = "Cannot install {command_name}: {:?} exists but is not a symlink. Please remove it manually first."
+target = "无法安装 {command_name}：{:?} 已存在但不是符号链接。请先手动移除。"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -2533,8 +2344,8 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "app/src/workspace/cli_install.rs"
-source = "Cannot uninstall: {:?} exists but is not a symlink. Please remove it manually."
-target = "无法卸载：{:?} 已存在但不是符号链接。请手动移除。"
+source = "Cannot uninstall {command_name}: {:?} exists but is not a symlink. Please remove it manually."
+target = "无法卸载 {command_name}：{:?} 已存在但不是符号链接。请手动移除。"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -3186,8 +2997,8 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "app/src/workspace/view.rs"
-source = "Failed to install Oz command: {error}"
-target = "安装 Oz 命令失败：{error}"
+source = "Failed to install Oz command"
+target = "安装 Oz 命令失败"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -3200,8 +3011,8 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "app/src/workspace/view.rs"
-source = "Failed to uninstall Oz command: {error}"
-target = "卸载 Oz 命令失败：{error}"
+source = "Failed to uninstall Oz command"
+target = "卸载 Oz 命令失败"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -4203,13 +4014,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 path = "app/src/search/command_palette/new_session/search_item.rs"
 source = "Press enter to launch this session."
 target = "按 Enter 启动此会话。"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/search/command_palette/tabs/search_item.rs"
-source = "[Tab {}] {}"
-target = "[标签页 {}] {}"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -6335,48 +6139,6 @@ status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
-path = "app/src/search/welcome_palette/view.rs"
-source = "Code, build, or search for anything..."
-target = "输入代码、构建任务或搜索任何内容..."
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/search/welcome_palette/view.rs"
-source = "No results found"
-target = "未找到结果"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/search/welcome_palette/view.rs"
-source = "Add repository {keystroke}"
-target = "添加仓库 {keystroke}"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/search/welcome_palette/view.rs"
-source = "Add repository"
-target = "添加仓库"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/search/welcome_palette/view.rs"
-source = "Terminal session {keystroke}"
-target = "终端会话 {keystroke}"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/search/welcome_palette/view.rs"
-source = "Terminal session"
-target = "终端会话"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
 path = "app/src/settings_view/mod.rs"
 source = "Settings"
 target = "设置"
@@ -7869,20 +7631,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "app/src/settings_view/features_page.rs"
-source = "Warp SSH Wrapper"
-target = "Warp SSH 包装器"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/features_page.rs"
-source = "This change will take effect in new sessions"
-target = "此更改将在新会话中生效"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/features_page.rs"
 source = "Receive desktop notifications from Warp"
 target = "接收来自 Warp 的桌面通知"
 status = "active"
@@ -8359,13 +8107,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "app/src/settings_view/privacy_page.rs"
-source = "On the free tier, analytics must be enabled to use AI features."
-target = "免费套餐必须启用分析才能使用 AI 功能。"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/privacy_page.rs"
 source = "Manage your data"
 target = "管理你的数据"
 status = "active"
@@ -8590,20 +8331,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 
 [[replace]]
 path = "app/src/settings_view/warpify_page.rs"
-source = "SSH session detection for Warpification"
-target = "Warpification 的 SSH 会话检测"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/warpify_page.rs"
-source = "The tmux ssh wrapper works in many situations where the default one does not, but may require you to hit a button to warpify. Takes effect in new tabs."
-target = "tmux SSH 包装器可在许多默认方式无效的场景下工作，但可能需要你点击按钮来 Warpify。此设置会在新标签页中生效。"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/warpify_page.rs"
 source = "Controls the installation behavior for Warp's SSH extension when a remote host doesn't have it installed."
 target = "控制远程主机未安装 Warp SSH 扩展时的安装行为。"
 status = "active"
@@ -8613,13 +8340,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 path = "app/src/settings_view/warpify_page.rs"
 source = "command (supports regex)"
 target = "命令（支持正则）"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/warpify_page.rs"
-source = "host (supports regex)"
-target = "主机（支持正则）"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -8690,20 +8410,6 @@ context = "Legacy reviewed zh-Hans localization entry"
 path = "app/src/settings_view/warpify_page.rs"
 source = "Install SSH extension"
 target = "安装 SSH 扩展"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/warpify_page.rs"
-source = "Use Tmux Warpification"
-target = "使用 Tmux Warpification"
-status = "active"
-context = "Legacy reviewed zh-Hans localization entry"
-
-[[replace]]
-path = "app/src/settings_view/warpify_page.rs"
-source = "Denylisted hosts"
-target = "主机拒绝列表"
 status = "active"
 context = "Legacy reviewed zh-Hans localization entry"
 
@@ -19055,12 +18761,6 @@ status = "active"
 context = "Phase 14 features page visible label"
 [[replace]]
 path = "app/src/settings_view/features_page.rs"
-source = "Warp SSH wrapper"
-target = "Warp SSH 包装器"
-status = "active"
-context = "Phase 14 features page visible label"
-[[replace]]
-path = "app/src/settings_view/features_page.rs"
 source = "show tooltip on click on links"
 target = "点击链接时显示工具提示"
 status = "active"
@@ -19261,12 +18961,6 @@ context = "Phase 14 reviewed preserve: telemetry/search/internal setting token"
 path = "app/src/settings_view/features_page.rs"
 source = "ToggleAutocompleteSymbols"
 target = "ToggleAutocompleteSymbols"
-status = "active"
-context = "Phase 14 reviewed preserve: telemetry/search/internal setting token"
-[[replace]]
-path = "app/src/settings_view/features_page.rs"
-source = "ToggleSshWrapper"
-target = "ToggleSshWrapper"
 status = "active"
 context = "Phase 14 reviewed preserve: telemetry/search/internal setting token"
 [[replace]]
@@ -19799,12 +19493,6 @@ status = "active"
 context = "Phase 14 reviewed preserve: telemetry/search/internal setting token"
 [[replace]]
 path = "app/src/settings_view/features_page.rs"
-source = "ssh wrapper"
-target = "ssh wrapper"
-status = "active"
-context = "Phase 14 reviewed preserve: telemetry/search/internal setting token"
-[[replace]]
-path = "app/src/settings_view/features_page.rs"
 source = "desktop notifications"
 target = "desktop notifications"
 status = "active"
@@ -20261,26 +19949,8 @@ status = "active"
 context = "Phase 14 reviewed preserve: settings section parse key, context flag, or already-localized display label"
 [[replace]]
 path = "app/src/settings_view/mod.rs"
-source = "Use `SSH_TMUX_WRAPPER_CONTEXT_FLAG` for new ssh warpification logic"
-target = "Use `SSH_TMUX_WRAPPER_CONTEXT_FLAG` for new ssh warpification logic"
-status = "active"
-context = "Phase 14 reviewed preserve: settings section parse key, context flag, or already-localized display label"
-[[replace]]
-path = "app/src/settings_view/mod.rs"
-source = "SSH_Wrapper"
-target = "SSH_Wrapper"
-status = "active"
-context = "Phase 14 reviewed preserve: settings section parse key, context flag, or already-localized display label"
-[[replace]]
-path = "app/src/settings_view/mod.rs"
 source = "SSH_Warpification"
 target = "SSH_Warpification"
-status = "active"
-context = "Phase 14 reviewed preserve: settings section parse key, context flag, or already-localized display label"
-[[replace]]
-path = "app/src/settings_view/mod.rs"
-source = "SSH_Tmux_Wrapper"
-target = "SSH_Tmux_Wrapper"
 status = "active"
 context = "Phase 14 reviewed preserve: settings section parse key, context flag, or already-localized display label"
 [[replace]]
@@ -21939,13 +21609,6 @@ context = "Phase 15 terminal visible copy"
 
 [[replace]]
 path = "app/src/terminal/input.rs"
-source = "Skill not found: {}"
-target = "未找到技能：{}"
-status = "active"
-context = "Phase 15 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/input.rs"
 source = "No active conversation to export"
 target = "没有可导出的活跃对话"
 status = "active"
@@ -22256,13 +21919,6 @@ context = "Phase 15 terminal visible copy"
 path = "app/src/terminal/view/init.rs"
 source = "Warpify subshell"
 target = "Warpify 子 shell"
-status = "active"
-context = "Phase 15 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/view/init.rs"
-source = "Warpify ssh session"
-target = "Warpify SSH 会话"
 status = "active"
 context = "Phase 15 terminal visible copy"
 
@@ -23600,8 +23256,8 @@ context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
 path = "app/src/ai/agent_sdk/driver/error_classification.rs"
-source = "Terminal session failed to start. Please try running your task again."
-target = "终端会话启动失败。请尝试重新运行任务。"
+source = "Terminal session failed to start: {error}"
+target = "终端会话启动失败：{error}"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
@@ -23670,8 +23326,8 @@ context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
 path = "app/src/ai/agent_sdk/driver/error_classification.rs"
-source = "One or more MCP servers failed to start. Check that your MCP server configuration is valid and the server process is runnable."
-target = "一个或多个 MCP server 启动失败。请检查 MCP server 配置是否有效，并确认 server 进程可以运行。"
+source = "One or more MCP servers failed to start:nn{server_lines}nnCheck that each server's configuration is valid and that it is reachable from the agent's environment."
+target = "一个或多个 MCP server 启动失败：nn{server_lines}nn请检查每个 server 的配置是否有效，并确认它可从 Agent 环境访问。"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
@@ -24405,8 +24061,8 @@ context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
 path = "app/src/ai/agent_sdk/driver.rs"
-source = "Failed to start MCP servers"
-target = "启动 MCP server 失败"
+source = "Failed to start MCP servers: {}"
+target = "启动 MCP server 失败：{}"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
@@ -25405,41 +25061,6 @@ status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/blocklist/agent_view/child_agent_status_card.rs"
-source = "ChildAgentStatusCard"
-target = "ChildAgentStatusCard"
-status = "active"
-context = "Phase 16 reviewed preserve: Agent view component IDs, debug diagnostics, and shell/plugin protocol fragments"
-
-[[replace]]
-path = "app/src/ai/blocklist/agent_view/child_agent_status_card.rs"
-source = "Agent"
-target = "Agent"
-status = "active"
-context = "Phase 16 AI/Agent visible copy"
-
-[[replace]]
-path = "app/src/ai/blocklist/agent_view/child_agent_status_card.rs"
-source = "Untitled"
-target = "未命名"
-status = "active"
-context = "Phase 16 AI/Agent visible copy"
-
-[[replace]]
-path = "app/src/ai/blocklist/agent_view/child_agent_status_card.rs"
-source = "Missing mouse state handle for child agent card {:?}"
-target = "Missing mouse state handle for child agent card {:?}"
-status = "active"
-context = "Phase 16 reviewed preserve: Agent view component IDs, debug diagnostics, and shell/plugin protocol fragments"
-
-[[replace]]
-path = "app/src/ai/blocklist/agent_view/child_agent_status_card.rs"
-source = "Missing dismiss mouse state handle for child agent card {:?}"
-target = "Missing dismiss mouse state handle for child agent card {:?}"
-status = "active"
-context = "Phase 16 reviewed preserve: Agent view component IDs, debug diagnostics, and shell/plugin protocol fragments"
-
-[[replace]]
 path = "app/src/ai/blocklist/agent_view/controller.rs"
 source = "Already in agent mode."
 target = "已处于 Agent 模式。"
@@ -26260,20 +25881,6 @@ context = "Phase 16 reviewed preserve: Agent view IDs, icon glyphs, and dynamic 
 
 [[replace]]
 path = "app/src/ai/blocklist/block/view_impl/common.rs"
-source = "{error_message}nnWill resume conversation when network connectivity is restored..."
-target = "{error_message}nn网络连接恢复后将继续对话..."
-status = "active"
-context = "Phase 16 AI/Agent visible copy"
-
-[[replace]]
-path = "app/src/ai/blocklist/block/view_impl/common.rs"
-source = "{error_message}nnAttempting to resume conversation..."
-target = "{error_message}nn正在尝试继续对话..."
-status = "active"
-context = "Phase 16 AI/Agent visible copy"
-
-[[replace]]
-path = "app/src/ai/blocklist/block/view_impl/common.rs"
 source = "{ERROR_APOLOGY_TEXT}nn{error_message}"
 target = "{ERROR_APOLOGY_TEXT}nn{error_message}"
 status = "active"
@@ -26973,7 +26580,7 @@ status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/blocklist/block/view_impl/output.rs"
+path = "app/src/terminal/input/slash_commands/mod.rs"
 source = "Fork conversation"
 target = "复刻对话"
 status = "active"
@@ -27421,16 +27028,9 @@ status = "active"
 context = "Phase 16 reviewed preserve: AI controller logs, provider names, and stream diagnostics"
 
 [[replace]]
-path = "app/src/ai/blocklist/controller.rs"
+path = "app/src/ai/blocklist/controller/response_stream.rs"
 source = "generate_multi_agent_output stream ended without emitting StreamFinished event."
 target = "generate_multi_agent_output stream ended without emitting StreamFinished event."
-status = "active"
-context = "Phase 16 reviewed preserve: AI controller logs, provider names, and stream diagnostics"
-
-[[replace]]
-path = "app/src/ai/blocklist/controller.rs"
-source = "Request did not successfully complete"
-target = "Request did not successfully complete"
 status = "active"
 context = "Phase 16 reviewed preserve: AI controller logs, provider names, and stream diagnostics"
 
@@ -28163,84 +27763,84 @@ status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "Failed to initialize client: {}"
 target = "初始化客户端失败：{}"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "Failed to initialize server: {}"
 target = "初始化 server 失败：{}"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "Failed to establish connection: {}"
 target = "建立连接失败：{}"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "Runtime error: {}"
 target = "运行时错误：{}"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "Server returned an error. Please check server logs for details."
 target = "Server 返回错误。请查看 server 日志了解详情。"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "Failed to send data to server. Connection may have been lost."
 target = "向 server 发送数据失败。连接可能已丢失。"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "Connection closed unexpectedly. The server may have crashed."
 target = "连接意外关闭。Server 可能已崩溃。"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "Server sent an unexpected response. The server may be incompatible."
 target = "Server 返回了意外响应。该 server 可能不兼容。"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "Operation was cancelled with reason: {}"
 target = "操作已取消，原因：{}"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "Unknown reason"
 target = "未知原因"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "Connection timed out after {} seconds. The server may be unresponsive."
 target = "连接在 {} 秒后超时。Server 可能无响应。"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "Service error: {}"
 target = "服务错误：{}"
 status = "active"
@@ -28394,91 +27994,91 @@ status = "active"
 context = "Phase 16 reviewed preserve: MCP transport logs, identifiers, and database/runtime diagnostics"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "[note] Attention! There may be sensitive information (such as API keys) in these logs. Make sure to redact any secrets before sharing with others."
 target = "[note] 注意！这些日志中可能包含敏感信息（例如 API 密钥）。与他人共享前，请务必遮盖所有密钥。"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "[info] MCP: Using stdio transport"
 target = "[info] MCP: Using stdio transport"
 status = "active"
 context = "Phase 16 reviewed preserve: MCP transport logs, identifiers, and database/runtime diagnostics"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "cmd.exe"
 target = "cmd.exe"
 status = "active"
 context = "Phase 16 reviewed preserve: MCP transport logs, identifiers, and database/runtime diagnostics"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "[warn] MCP: Skipping empty environment variable: {name}"
 target = "[warn] MCP: Skipping empty environment variable: {name}"
 status = "active"
 context = "Phase 16 reviewed preserve: MCP transport logs, identifiers, and database/runtime diagnostics"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "<inherited from Warp's process cwd>"
 target = "<继承自 Warp 进程 cwd>"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "[error] MCP: Failed to spawn '{server_name}': command '{command_for_log}' not found (cwd: {cwd_display}). If your MCP server depends on a specific working directory, set the `working_directory` field in your config to override the default."
 target = "[error] MCP: Failed to spawn '{server_name}': command '{command_for_log}' not found (cwd: {cwd_display}). If your MCP server depends on a specific working directory, set the `working_directory` field in your config to override the default."
 status = "active"
 context = "Phase 16 reviewed preserve: MCP transport logs, identifiers, and database/runtime diagnostics"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "[info] MCP [pid: {pid}] stderr: {buf}"
 target = "[info] MCP [pid: {pid}] stderr: {buf}"
 status = "active"
 context = "Phase 16 reviewed preserve: MCP transport logs, identifiers, and database/runtime diagnostics"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "[info] MCP: Using Streaming HTTP transport"
 target = "[info] MCP: Using Streaming HTTP transport"
 status = "active"
 context = "Phase 16 reviewed preserve: MCP transport logs, identifiers, and database/runtime diagnostics"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "[info] MCP: Using (legacy) SSE transport (due to preflight failing with a 404)"
 target = "[info] MCP: Using (legacy) SSE transport (due to preflight failing with a 404)"
 status = "active"
 context = "Phase 16 reviewed preserve: MCP transport logs, identifiers, and database/runtime diagnostics"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "[error] MCP: preflight connection to MCP server failed: {err:#}"
 target = "[error] MCP: preflight connection to MCP server failed: {err:#}"
 status = "active"
 context = "Phase 16 reviewed preserve: MCP transport logs, identifiers, and database/runtime diagnostics"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "[info] MCP: Connected to server: {server_info:#?}"
 target = "[info] MCP: Connected to server: {server_info:#?}"
 status = "active"
 context = "Phase 16 reviewed preserve: MCP transport logs, identifiers, and database/runtime diagnostics"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "Unexpected status code: {status}"
 target = "意外的状态码：{status}"
 status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "Server requires authentication, which is not yet supported."
 target = "Server 需要认证，但当前尚不支持。"
 status = "active"
@@ -28492,21 +28092,21 @@ status = "active"
 context = "Phase 16 AI/Agent visible copy"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "[info] MCP: Sending request: {json}"
 target = "[info] MCP: Sending request: {json}"
 status = "active"
 context = "Phase 16 reviewed preserve: MCP transport logs, identifiers, and database/runtime diagnostics"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "[warn] MCP: Failed to send request: {e:#}"
 target = "[warn] MCP: Failed to send request: {e:#}"
 status = "active"
 context = "Phase 16 reviewed preserve: MCP transport logs, identifiers, and database/runtime diagnostics"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/native.rs"
+path = "crates/mcp/src/runtime.rs"
 source = "[info] MCP: Received response: {json}"
 target = "[info] MCP: Received response: {json}"
 status = "active"
@@ -30470,13 +30070,6 @@ status = "active"
 context = "Phase 17 reviewed preserve: onboarding telemetry/debug strings, model IDs, theme names, font names, and command examples"
 
 [[replace]]
-path = "crates/onboarding/src/slides/free_user_no_ai_slide.rs"
-source = "u{2022} {item_text}"
-target = "u{2022} {item_text}"
-status = "active"
-context = "Phase 17 reviewed preserve: onboarding telemetry/debug strings, model IDs, theme names, font names, and command examples"
-
-[[replace]]
 path = "crates/onboarding/src/slides/theme_picker_slide.rs"
 source = "Theme {}"
 target = "Theme {}"
@@ -30825,174 +30418,6 @@ context = "Phase 21 terminal visible copy"
 path = "app/src/terminal/shared_session/viewer/network.rs"
 source = "Failed to perform action. Please try again."
 target = "执行操作失败。请重试。"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "tmux is not installed on the remote machine. Please install tmux and try again."
-target = "远程机器上未安装 tmux。请安装 tmux 后重试。"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "The tmux version available on the remote machine is below 3.0. Please install tmux 3.0 or greater using a different method and try again."
-target = "远程机器上的 tmux 版本低于 3.0。请用其他方式安装 tmux 3.0 或更高版本后重试。"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "tmux failed to execute on the remote machine. Please re-install tmux and try again."
-target = "tmux 未能在远程机器上执行。请重新安装 tmux 后重试。"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "Warpifying the session hit a timeout."
-target = "Warpify 会话超时。"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "Unsupported shell. Please set bash, zsh, or fish as your default shell and try again."
-target = "不支持的 shell。请将 bash、zsh 或 fish 设为默认 shell 后重试。"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "The tmux install hit an unexpected error. Please install tmux manually and try again."
-target = "tmux 安装遇到意外错误。请手动安装 tmux 后重试。"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "{SSH_GITHUB_ISSUE_URL}&warp-version={version}"
-target = "{SSH_GITHUB_ISSUE_URL}&warp-version={version}"
-status = "active"
-context = "Phase 21 SSH Warpify error copy and reviewed URL/report fragments"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "SSH tmux bug report: {title:?}"
-target = "SSH tmux bug report: {title:?}"
-status = "active"
-context = "Phase 21 SSH Warpify error copy and reviewed URL/report fragments"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "{url}&title={title}"
-target = "{url}&title={title}"
-status = "active"
-context = "Phase 21 SSH Warpify error copy and reviewed URL/report fragments"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "tmux Not Installed"
-target = "未安装 tmux"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "Unsupported Tmux Version"
-target = "不支持的 tmux 版本"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "tmux Failed"
-target = "tmux 失败"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "tmux Install Timeout"
-target = "tmux 安装超时"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "SSH Warpify Timeout"
-target = "SSH Warpify 超时"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "Unsupported Shell"
-target = "不支持的 shell"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "tmux Install Failed"
-target = "tmux 安装失败"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "Error Warpifying session"
-target = "Warpify 会话时出错"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "SshErrorBlockVisible"
-target = "SshErrorBlockVisible"
-status = "active"
-context = "Phase 21 SSH Warpify error copy and reviewed URL/report fragments"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "SshErrorBlock"
-target = "SshErrorBlock"
-status = "active"
-context = "Phase 21 SSH Warpify error copy and reviewed URL/report fragments"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "We are actively working on improving the stability of SSH in Warp. Please consider "
-target = "We are actively working on improving the stability of SSH in Warp. Please consider "
-status = "active"
-context = "Phase 21 SSH Warpify error copy and reviewed URL/report fragments"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "filing an issue"
-target = "提交 issue"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = " on GitHub so we can better identify the problem."
-target = " 到 GitHub，帮助我们更好地定位问题。"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "Warpify without TMUX"
-target = "不使用 TMUX 进行 Warpify"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/ssh/error.rs"
-source = "Continue without Warpification"
-target = "不进行 Warpify 并继续"
 status = "active"
 context = "Phase 21 terminal visible copy"
 
@@ -32069,13 +31494,6 @@ context = "Phase 21 terminal visible copy"
 
 [[replace]]
 path = "app/src/terminal/view.rs"
-source = "emit_long_running_command_agent_interaction_state_changed: agent_has_control={agent_has_control}, emitting state={state:?}"
-target = "emit_long_running_command_agent_interaction_state_changed: agent_has_control={agent_has_control}, emitting state={state:?}"
-status = "active"
-context = "Phase 21 reviewed preserve: terminal internal IDs, logs, parser/protocol strings, command examples, test fixtures, and position identifiers"
-
-[[replace]]
-path = "app/src/terminal/view.rs"
 source = "command not long-running. ignoring control seq on terminal."
 target = "command not long-running. ignoring control seq on terminal."
 status = "active"
@@ -32260,13 +31678,6 @@ context = "Phase 21 terminal visible copy"
 path = "app/src/terminal/view.rs"
 source = "Could not find session {session_id:?} in sessions model after being notified that the session had bootstrapped!"
 target = "Could not find session {session_id:?} in sessions model after being notified that the session had bootstrapped!"
-status = "active"
-context = "Phase 21 reviewed preserve: terminal internal IDs, logs, parser/protocol strings, command examples, test fixtures, and position identifiers"
-
-[[replace]]
-path = "app/src/terminal/view.rs"
-source = "cd \"{path}\""
-target = "cd \"{path}\""
 status = "active"
 context = "Phase 21 reviewed preserve: terminal internal IDs, logs, parser/protocol strings, command examples, test fixtures, and position identifiers"
 
@@ -33203,20 +32614,6 @@ context = "Phase 21 terminal visible copy"
 
 [[replace]]
 path = "app/src/terminal/view.rs"
-source = "SSH Session"
-target = "SSH 会话"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/view.rs"
-source = "SSH session"
-target = "SSH 会话"
-status = "active"
-context = "Phase 21 terminal visible copy"
-
-[[replace]]
-path = "app/src/terminal/view.rs"
 source = "Failed to enter inline agent view for tag-in: {e}"
 target = "Failed to enter inline agent view for tag-in: {e}"
 status = "active"
@@ -33324,13 +32721,6 @@ context = "Phase 21 reviewed preserve: terminal internal IDs, logs, parser/proto
 path = "app/src/terminal/view.rs"
 source = "ActiveAltScreenSelection"
 target = "ActiveAltScreenSelection"
-status = "active"
-context = "Phase 21 reviewed preserve: terminal internal IDs, logs, parser/protocol strings, command examples, test fixtures, and position identifiers"
-
-[[replace]]
-path = "app/src/terminal/view.rs"
-source = "SshWarpificationBanner"
-target = "SshWarpificationBanner"
 status = "active"
 context = "Phase 21 reviewed preserve: terminal internal IDs, logs, parser/protocol strings, command examples, test fixtures, and position identifiers"
 
@@ -33527,8 +32917,8 @@ context = "Phase 22 settings/workspace visible copy"
 
 [[replace]]
 path = "app/src/settings_view/appearance_page.rs"
-source = "customize custom app icon icons"
-target = "自定义 app 图标 图标"
+source = "customize custom app icon icons dock cmd tab app switcher"
+target = "自定义 app 图标 图标 dock cmd tab app switcher"
 status = "active"
 context = "Phase 22 settings/workspace visible copy"
 
@@ -35123,13 +34513,6 @@ context = "Phase 22 settings/workspace visible copy"
 
 [[replace]]
 path = "app/src/workspace/view/global_search/view.rs"
-source = "Global search requires access to your local workspace, which isn't supported in remote sessions"
-target = "全局搜索需要访问你的本地工作区，远程会话不支持此功能。"
-status = "active"
-context = "Phase 22 settings/workspace visible copy"
-
-[[replace]]
-path = "app/src/workspace/view/global_search/view.rs"
 source = "Global search doesn't currently work in Git Bash or WSL."
 target = "全局搜索目前无法在 Git Bash 或 WSL 中使用。"
 status = "active"
@@ -36616,15 +35999,15 @@ context = "Phase 23 reviewed preserve: CLI templates, logs, protocol/status IDs,
 
 [[replace]]
 path = "app/src/ai/agent_sdk/driver/harness/codex.rs"
-source = "{cli_name} resume --dangerously-bypass-approvals-and-sandbox {session_id} \"$(cat '{prompt_path}')\""
-target = "{cli_name} resume --dangerously-bypass-approvals-and-sandbox {session_id} \"$(cat '{prompt_path}')\""
+source = "{cli_name} resume --dangerously-bypass-approvals-and-sandbox {CODEX_BYPASS_HOOK_TRUST_FLAG} {session_id} \"$(cat '{prompt_path}')\""
+target = "{cli_name} resume --dangerously-bypass-approvals-and-sandbox {CODEX_BYPASS_HOOK_TRUST_FLAG} {session_id} \"$(cat '{prompt_path}')\""
 status = "active"
 context = "Phase 23 reviewed preserve: CLI templates, logs, protocol/status IDs, examples, and test fixtures"
 
 [[replace]]
 path = "app/src/ai/agent_sdk/driver/harness/codex.rs"
-source = "{cli_name} --dangerously-bypass-approvals-and-sandbox \"$(cat '{prompt_path}')\""
-target = "{cli_name} --dangerously-bypass-approvals-and-sandbox \"$(cat '{prompt_path}')\""
+source = "{cli_name} --dangerously-bypass-approvals-and-sandbox {CODEX_BYPASS_HOOK_TRUST_FLAG} \"$(cat '{prompt_path}')\""
+target = "{cli_name} --dangerously-bypass-approvals-and-sandbox {CODEX_BYPASS_HOOK_TRUST_FLAG} \"$(cat '{prompt_path}')\""
 status = "active"
 context = "Phase 23 reviewed preserve: CLI templates, logs, protocol/status IDs, examples, and test fixtures"
 
@@ -37199,13 +36582,6 @@ context = "Phase 23 AI SDK/editor/environment visible copy"
 path = "app/src/ai/agent_sdk/mod.rs"
 source = "The 'conversation' subcommand is not available in this build"
 target = "此构建中不可使用 'conversation' 子命令"
-status = "active"
-context = "Phase 23 AI SDK/editor/environment visible copy"
-
-[[replace]]
-path = "app/src/ai/agent_sdk/mod.rs"
-source = "The 'message' subcommand is not available in this build"
-target = "此构建中不可使用 'message' 子命令"
 status = "active"
 context = "Phase 23 AI SDK/editor/environment visible copy"
 
@@ -39047,34 +38423,6 @@ context = "Phase 27 terminal visible/user-facing copy"
 
 [[replace]]
 path = "app/src/terminal/event.rs"
-source = "TmuxControlModeReady(primary_pane: {primary_pane})"
-target = "TmuxControlModeReady(primary_pane: {primary_pane})"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/event.rs"
-source = "RemoteWarpificationIsUnavailable"
-target = "RemoteWarpificationIsUnavailable"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/event.rs"
-source = "SshTmuxInstaller({installer:?})"
-target = "SshTmuxInstaller({installer:?})"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/event.rs"
-source = "TmuxInstallFailed(line: {line}, command: {command})"
-target = "TmuxInstallFailed(line: {line}, command: {command})"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/event.rs"
 source = "Executed in-band command with ID {} and exit code {}"
 target = "已执行 ID 为 {} 的带内命令，退出码为 {}"
 status = "active"
@@ -39091,13 +38439,6 @@ context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug str
 path = "app/src/terminal/event.rs"
 source = "SourcedRcFileInSubshell({event:?})"
 target = "SourcedRcFileInSubshell({event:?})"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/event.rs"
-source = "InitSsh({event:?})"
-target = "InitSsh({event:?})"
 status = "active"
 context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
 
@@ -39124,8 +38465,8 @@ context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug str
 
 [[replace]]
 path = "app/src/terminal/event.rs"
-source = "AgentTaggedInChanged(is_tagged_in: {is_tagged_in})"
-target = "AgentTaggedInChanged(is_tagged_in: {is_tagged_in})"
+source = "AgentTaggedInChanged(block_id: {block_id:?}, is_tagged_in: {is_tagged_in})"
+target = "AgentTaggedInChanged(block_id: {block_id:?}, is_tagged_in: {is_tagged_in})"
 status = "active"
 context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
 
@@ -39831,8 +39172,8 @@ context = "Phase 27 terminal visible/user-facing copy"
 
 [[replace]]
 path = "app/src/terminal/model/session.rs"
-source = "cat {history_file}"
-target = "cat {history_file}"
+source = "cat '{escaped_history_file}'"
+target = "cat '{escaped_history_file}'"
 status = "active"
 context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
 
@@ -39915,8 +39256,8 @@ context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug str
 
 [[replace]]
 path = "app/src/terminal/model/terminal_model.rs"
-source = "Received invalid shell name in init_subshell: {} | is_tmux_ssh: {}"
-target = "Received invalid shell name in init_subshell: {} | is_tmux_ssh: {}"
+source = "Received invalid shell name in init_subshell: {}"
+target = "Received invalid shell name in init_subshell: {}"
 status = "active"
 context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
 
@@ -39931,20 +39272,6 @@ context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug str
 path = "app/src/terminal/model/terminal_model.rs"
 source = "Parsed generator output for command {}"
 target = "Parsed generator output for command {}"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/model/terminal_model.rs"
-source = "$$$rn"
-target = "$$$rn"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/model/terminal_model.rs"
-source = "Could not parse tmux generator output: {:?}"
-target = "Could not parse tmux generator output: {:?}"
 status = "active"
 context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
 
@@ -39985,43 +39312,8 @@ context = "Phase 27 terminal visible/user-facing copy"
 
 [[replace]]
 path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "reason=scrollback_too_large"
-target = "reason=scrollback_too_large"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "Shared session sharer lifecycle: event={event} session_id={:?} source_type={source_type} source_task_id={source_task_id:?} {details}"
-target = "Shared session sharer lifecycle: event={event} session_id={:?} source_type={source_type} source_task_id={source_task_id:?} {details}"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "reason={reason:?}"
-target = "reason={reason:?}"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "trigger=heartbeat_idle_timeout"
-target = "trigger=heartbeat_idle_timeout"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
 source = "Failed to send message over selection_throttled_tx channel in sharer network: {e}"
 target = "Failed to send message over selection_throttled_tx channel in sharer network: {e}"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "outcome=transport_error"
-target = "outcome=transport_error"
 status = "active"
 context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
 
@@ -40034,41 +39326,6 @@ context = "Phase 27 terminal visible/user-facing copy"
 
 [[replace]]
 path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "outcome=attempting_transport_recovery"
-target = "outcome=attempting_transport_recovery"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "Shared session sharer lifecycle: event=reconnect_attempt session_id={session_id:?} source_type={source_type} source_task_id={source_task_id:?}"
-target = "Shared session sharer lifecycle: event=reconnect_attempt session_id={session_id:?} source_type={source_type} source_task_id={source_task_id:?}"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "outcome=waiting_for_server_confirmation"
-target = "outcome=waiting_for_server_confirmation"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "outcome=retry_pending"
-target = "outcome=retry_pending"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "outcome=transport_retries_exhausted"
-target = "outcome=transport_retries_exhausted"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
 source = "Failed to reconnect to shared session, and retries exhausted: {e}"
 target = "重新连接共享会话失败，重试次数已用尽：{e}"
 status = "active"
@@ -40076,66 +39333,10 @@ context = "Phase 27 terminal visible/user-facing copy"
 
 [[replace]]
 path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "direction=downstream"
-target = "direction=downstream"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "stage={stage}"
-target = "stage={stage}"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "trigger=websocket_closed"
-target = "trigger=websocket_closed"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
 source = "Websocket closed before starting session"
 target = "会话启动前 Websocket 已关闭"
 status = "active"
 context = "Phase 27 terminal visible/user-facing copy"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "outcome=active_sharer"
-target = "outcome=active_sharer"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "outcome=session_resumed"
-target = "outcome=session_resumed"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "outcome=server_rejected_resume"
-target = "outcome=server_rejected_resume"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "reason={reason_label}"
-target = "reason={reason_label}"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
-
-[[replace]]
-path = "app/src/terminal/shared_session/sharer/network.rs"
-source = "reason=exceeded_size_limit"
-target = "reason=exceeded_size_limit"
-status = "active"
-context = "Phase 27 reviewed preserve: shell commands, parser/protocol/debug strings, env vars, product names, and test fixtures"
 
 [[replace]]
 path = "app/src/terminal/view/init.rs"
@@ -41924,20 +41125,6 @@ context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
 path = "app/src/ai/blocklist/prompt/prompt_alert.rs"
-source = "To use AI features,"
-target = "要使用 AI 功能，"
-status = "active"
-context = "Phase 28 AI/Agent visible/user-facing copy"
-
-[[replace]]
-path = "app/src/ai/blocklist/prompt/prompt_alert.rs"
-source = "enable analytics"
-target = "启用分析"
-status = "active"
-context = "Phase 28 AI/Agent visible/user-facing copy"
-
-[[replace]]
-path = "app/src/ai/blocklist/prompt/prompt_alert.rs"
 source = "No internet connection"
 target = "无网络连接"
 status = "active"
@@ -42478,13 +41665,6 @@ context = "Phase 28 AI/Agent visible/user-facing copy"
 
 [[replace]]
 path = "app/src/ai/get_relevant_files/remote_search/native.rs"
-source = "Remote codebase search is unavailable because the remote server is not connected."
-target = "远程服务器未连接，远程代码库搜索不可用。"
-status = "active"
-context = "Phase 28 AI/Agent visible/user-facing copy"
-
-[[replace]]
-path = "app/src/ai/get_relevant_files/remote_search/native.rs"
 source = "Remote codebase search is using a stale index because incremental sync could not be requested"
 target = "远程代码库搜索正在使用过期索引，因为无法请求增量同步"
 status = "active"
@@ -42786,8 +41966,8 @@ context = "Phase 29 Settings/modals visible or searchable copy"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
-source = "oz agent ai input natural language detection autodetection prompt terminal command commands history shell executed execution queue interrupt submission submit auto-queue response while responding default"
-target = "oz Agent ai 输入 自然语言检测 自动检测 提示词 终端 命令 历史 shell 执行 队列 中断 提交 自动排队 响应中 默认"
+source = "oz agent ai input natural language detection autodetection prompt terminal command commands history shell executed execution queue interrupt submission submit auto-queue response while responding default long-running long running lrc"
+target = "oz Agent ai 输入 自然语言检测 自动检测 提示词 终端 命令 历史 shell 执行 队列 中断 提交 自动排队 响应中 默认 长时间运行 long-running lrc"
 status = "active"
 context = "Phase 29 Settings/modals visible or searchable copy"
 
@@ -42821,15 +42001,15 @@ context = "Phase 29 Settings/modals visible or searchable copy"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
-source = "other oz updates zero state empty changelog new conversation agent what's new use agent footer toolbar layout chip chips rearrange re-arrange thinking expanded reasoning collapse never show hide conversation history"
-target = "other oz 更新 空状态 empty changelog 新会话 Agent what's new use agent footer toolbar layout chip chips rearrange thinking expanded reasoning collapse never show hide 会话历史"
+source = "other oz updates zero state empty changelog new conversation agent what's new use agent footer toolbar layout chip chips rearrange re-arrange thinking expanded reasoning collapse never show orchestration messages child agents collapse expand hide conversation history"
+target = "other oz 更新 空状态 empty changelog 新会话 Agent what's new use agent footer toolbar layout chip chips rearrange thinking expanded reasoning collapse never show orchestration messages child agents collapse expand hide 会话历史"
 status = "active"
 context = "Phase 29 Settings/modals visible or searchable copy"
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
-source = "third party cli coding agent claude codex gemini toolbar footer layout chip chips rearrange re-arrange bar command regex auto show rich input dismiss"
-target = "第三方 CLI coding Agent Claude Codex Gemini toolbar footer layout chip chips rearrange bar 命令 正则 自动 显示 rich input dismiss"
+source = "third party cli coding agent claude codex gemini toolbar footer layout chip chips rearrange re-arrange bar command regex auto show rich input dismiss ctrl enter submit newline"
+target = "第三方 CLI coding Agent Claude Codex Gemini toolbar footer layout chip chips rearrange bar 命令 正则 自动 显示 rich input dismiss ctrl enter submit newline"
 status = "active"
 context = "Phase 29 Settings/modals visible or searchable copy"
 
@@ -42884,8 +42064,8 @@ context = "Phase 29 reviewed preserve: settings examples, search tags, date form
 
 [[replace]]
 path = "app/src/settings_view/ai_page.rs"
-source = "api keys bring your own byo openai anthropic google claude gemini gpt custom inference endpoint"
-target = "API 密钥 自带 byo openai anthropic google claude gemini gpt 自定义推理端点 endpoint"
+source = "api keys bring your own byo openai anthropic google claude gemini gpt custom inference endpoint grok supergrok xai subscription"
+target = "API 密钥 自带 byo openai anthropic google claude gemini gpt 自定义推理端点 endpoint grok supergrok xai subscription"
 status = "active"
 context = "Phase 29 Settings/modals visible or searchable copy"
 
@@ -43835,139 +43015,6 @@ status = "active"
 context = "Phase 29 reviewed preserve: settings examples, search tags, date formats, IDs, commands, and diagnostics"
 
 [[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "CommandOutput"
-target = "CommandOutput"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "Ok({output:?})"
-target = "Ok({output:?})"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "Err({errors:?})"
-target = "Err({errors:?})"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "Exit"
-target = "Exit"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "Unknown"
-target = "Unknown"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "ParseError"
-target = "ParseError"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "WindowClose"
-target = "WindowClose"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "Received non-% character at the beginning of a line"
-target = "Received non-% character at the beginning of a line"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "window-close"
-target = "window-close"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "unlinked-window-close"
-target = "unlinked-window-close"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "Extraneous byte after %exit"
-target = "Extraneous byte after %exit"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "%end"
-target = "%end"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "%error"
-target = "%error"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "Non-digit character in %output pane number"
-target = "Non-digit character in %output pane number"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "Unexpected character after %output"
-target = "Unexpected character after %output"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "Non-octal digit found in output escape sequence"
-target = "Non-octal digit found in output escape sequence"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "Unescaped character < ASCII 32 found in output"
-target = "Unescaped character < ASCII 32 found in output"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "Non-digit character in %window-close window number"
-target = "Non-digit character in %window-close window number"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/parser.rs"
-source = "Unexpected character after %window-close"
-target = "Unexpected character after %window-close"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
 path = "app/src/terminal/model/secrets.rs"
 source = "IPv4 Address"
 target = "IPv4 地址"
@@ -44472,62 +43519,6 @@ status = "active"
 context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
 
 [[replace]]
-path = "app/src/terminal/ssh/install_tmux.rs"
-source = "Install with {package_manager}"
-target = "使用 {package_manager} 安装"
-status = "active"
-context = "Phase 34 terminal visible UI translation"
-
-[[replace]]
-path = "app/src/terminal/ssh/install_tmux.rs"
-source = "Install to ~/.warp"
-target = "安装到 ~/.warp"
-status = "active"
-context = "Phase 34 terminal visible UI translation"
-
-[[replace]]
-path = "app/src/terminal/ssh/install_tmux.rs"
-source = "Run this script to install tmux?"
-target = "运行此脚本来安装 tmux？"
-status = "active"
-context = "Phase 34 terminal visible UI translation"
-
-[[replace]]
-path = "app/src/terminal/ssh/install_tmux.rs"
-source = "Install tmux?"
-target = "安装 tmux？"
-status = "active"
-context = "Phase 34 terminal visible UI translation"
-
-[[replace]]
-path = "app/src/terminal/ssh/install_tmux.rs"
-source = "SshInstallTmuxBlock"
-target = "SshInstallTmuxBlock"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/ssh/install_tmux.rs"
-source = "Why do I need tmux?"
-target = "为什么需要 tmux？"
-status = "active"
-context = "Phase 34 terminal visible UI translation"
-
-[[replace]]
-path = "app/src/terminal/ssh/install_tmux.rs"
-source = "Linux"
-target = "Linux"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/ssh/install_tmux.rs"
-source = "Darwin"
-target = "Darwin"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
 path = "app/src/terminal/view/block_onboarding/onboarding_agentic_suggestions_block.rs"
 source = "the Warp themes directory."
 target = "Warp 主题目录。"
@@ -44718,13 +43709,6 @@ context = "Phase 34 terminal visible UI translation"
 
 [[replace]]
 path = "app/src/terminal/local_tty/terminal_manager.rs"
-source = "[sharer] UniversalDeveloperInputContextUpdated: applying LRC interaction_state={interaction_state:?}"
-target = "[sharer] UniversalDeveloperInputContextUpdated: applying LRC interaction_state={interaction_state:?}"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/local_tty/terminal_manager.rs"
 source = "Shared session local lifecycle: event={event} session_id={session_id:?} source_type={source_type} source_task_id={source_task_id:?} {details}"
 target = "Shared session local lifecycle: event={event} session_id={session_id:?} source_type={source_type} source_task_id={source_task_id:?} {details}"
 status = "active"
@@ -44839,13 +43823,6 @@ context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
 path = "app/src/terminal/view/load_ai_conversation.rs"
 source = "AgentHarness flag is disabled; ignoring CLI agent block snapshot"
 target = "AgentHarness flag is disabled; ignoring CLI agent block snapshot"
-status = "active"
-context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/terminal/view/load_ai_conversation.rs"
-source = "cd \"{path}\""
-target = "cd \"{path}\""
 status = "active"
 context = "Phase 34 reviewed terminal parser/protocol/internal preserve"
 
@@ -45074,20 +44051,6 @@ status = "active"
 context = "Phase 34 terminal visible UI translation"
 
 [[replace]]
-path = "app/src/terminal/ssh/install_tmux.rs"
-source = "In order to Warpify your SSH session, a more recent version of tmux (>=3.0) must be installed. "
-target = "要 Warpify 你的 SSH 会话，必须安装较新版本的 tmux（>=3.0）。"
-status = "active"
-context = "Phase 34 terminal visible UI translation"
-
-[[replace]]
-path = "app/src/terminal/ssh/install_tmux.rs"
-source = "In order to Warpify your SSH session, tmux must be installed. "
-target = "要 Warpify 你的 SSH 会话，必须安装 tmux。"
-status = "active"
-context = "Phase 34 terminal visible UI translation"
-
-[[replace]]
 path = "app/src/terminal/view/load_ai_conversation.rs"
 source = "couldn't find original conversation directory "
 target = "找不到原始对话目录"
@@ -45243,22 +44206,8 @@ context = "Phase 35 AI/Agent visible UI translation"
 
 [[replace]]
 path = "app/src/ai/blocklist/action_model/execute/start_agent.rs"
-source = "Local harness child agents require orchestration v2."
-target = "本地运行框架子 Agent 需要 orchestration v2。"
-status = "active"
-context = "Phase 35 AI/Agent visible UI translation"
-
-[[replace]]
-path = "app/src/ai/blocklist/action_model/execute/start_agent.rs"
 source = "Local harness child agents require the parent run_id to be available."
 target = "本地运行框架子 Agent 需要可用的父 run_id。"
-status = "active"
-context = "Phase 35 AI/Agent visible UI translation"
-
-[[replace]]
-path = "app/src/ai/blocklist/action_model/execute/start_agent.rs"
-source = "Remote child agents require orchestration v2."
-target = "远程子 Agent 需要 orchestration v2。"
 status = "active"
 context = "Phase 35 AI/Agent visible UI translation"
 
@@ -45364,13 +44313,6 @@ context = "Phase 35 reviewed AI/Agent prompt/protocol/internal preserve"
 path = "app/src/ai/blocklist/orchestration_event_streamer.rs"
 source = "Tearing down dormant Claude wake listener for {conversation_id:?} (gen={})"
 target = "Tearing down dormant Claude wake listener for {conversation_id:?} (gen={})"
-status = "active"
-context = "Phase 35 reviewed AI/Agent prompt/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/ai/blocklist/orchestration_event_streamer.rs"
-source = "Opening SSE stream for {conversation_id:?} (gen={generation}, run_ids={run_ids:?}, since={cursor})"
-target = "Opening SSE stream for {conversation_id:?} (gen={generation}, run_ids={run_ids:?}, since={cursor})"
 status = "active"
 context = "Phase 35 reviewed AI/Agent prompt/protocol/internal preserve"
 
@@ -45614,20 +44556,6 @@ context = "Phase 35 reviewed AI/Agent prompt/protocol/internal preserve"
 
 [[replace]]
 path = "app/src/ai/blocklist/action_model/execute/grep.rs"
-source = " -e {escaped_query}"
-target = " -e {escaped_query}"
-status = "active"
-context = "Phase 35 reviewed AI/Agent prompt/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/ai/blocklist/action_model/execute/grep.rs"
-source = " \"{target_path}\""
-target = " \"{target_path}\""
-status = "active"
-context = "Phase 35 reviewed AI/Agent prompt/protocol/internal preserve"
-
-[[replace]]
-path = "app/src/ai/blocklist/action_model/execute/grep.rs"
 source = "grep --color=never -nrIHE --devices=skip"
 target = "grep --color=never -nrIHE --devices=skip"
 status = "active"
@@ -45635,15 +44563,15 @@ context = "Phase 35 reviewed AI/Agent prompt/protocol/internal preserve"
 
 [[replace]]
 path = "app/src/ai/blocklist/action_model/execute/grep.rs"
-source = " -e \"{}\""
-target = " -e \"{}\""
+source = " -e {}"
+target = " -e {}"
 status = "active"
 context = "Phase 35 reviewed AI/Agent prompt/protocol/internal preserve"
 
 [[replace]]
 path = "app/src/ai/blocklist/action_model/execute/grep.rs"
-source = "Get-ChildItem -Path \"{}\" -Recurse -File | Select-String -NoEmphasis -CaseSensitive -Pattern {}"
-target = "Get-ChildItem -Path \"{}\" -Recurse -File | Select-String -NoEmphasis -CaseSensitive -Pattern {}"
+source = "Get-ChildItem -Path {} -Recurse -File | Select-String -NoEmphasis -CaseSensitive -Pattern {}"
+target = "Get-ChildItem -Path {} -Recurse -File | Select-String -NoEmphasis -CaseSensitive -Pattern {}"
 status = "active"
 context = "Phase 35 reviewed AI/Agent prompt/protocol/internal preserve"
 
@@ -45660,62 +44588,6 @@ source = "Failed to parse line number in Grep output: {:?}"
 target = "无法解析 Grep 输出中的行号：{:?}"
 status = "active"
 context = "Phase 35 AI/Agent visible UI translation"
-
-[[replace]]
-path = "app/src/ai/blocklist/orchestration_events.rs"
-source = "Child conversation not found"
-target = "未找到子对话"
-status = "active"
-context = "Phase 35 AI/Agent visible UI translation"
-
-[[replace]]
-path = "app/src/ai/blocklist/orchestration_events.rs"
-source = "Child conversation has no agent identifier"
-target = "子对话没有 Agent 标识符"
-status = "active"
-context = "Phase 35 AI/Agent visible UI translation"
-
-[[replace]]
-path = "app/src/ai/blocklist/orchestration_events.rs"
-source = "Cannot send lifecycle event with unspecified type"
-target = "无法发送未指定类型的生命周期事件"
-status = "active"
-context = "Phase 35 AI/Agent visible UI translation"
-
-[[replace]]
-path = "app/src/ai/blocklist/orchestration_events.rs"
-source = "Source conversation not found"
-target = "未找到源对话"
-status = "active"
-context = "Phase 35 AI/Agent visible UI translation"
-
-[[replace]]
-path = "app/src/ai/blocklist/orchestration_events.rs"
-source = "Source conversation has no server token — cannot send events"
-target = "源对话没有服务器令牌，无法发送事件"
-status = "active"
-context = "Phase 35 AI/Agent visible UI translation"
-
-[[replace]]
-path = "app/src/ai/blocklist/orchestration_events.rs"
-source = "Unknown agent address: {agent_id}"
-target = "未知 Agent 地址：{agent_id}"
-status = "active"
-context = "Phase 35 AI/Agent visible UI translation"
-
-[[replace]]
-path = "app/src/ai/blocklist/orchestration_events.rs"
-source = "No target agents provided"
-target = "未提供目标 Agent"
-status = "active"
-context = "Phase 35 AI/Agent visible UI translation"
-
-[[replace]]
-path = "app/src/ai/blocklist/orchestration_events.rs"
-source = "Failed to send child-agent message: source_conversation_id={source_conversation_id:?} target_agent_ids={target_agent_ids:?} subject={subject:?} error={error}"
-target = "Failed to send child-agent message: source_conversation_id={source_conversation_id:?} target_agent_ids={target_agent_ids:?} subject={subject:?} error={error}"
-status = "active"
-context = "Phase 35 reviewed AI/Agent prompt/protocol/internal preserve"
 
 [[replace]]
 path = "app/src/ai/blocklist/orchestration_events.rs"
@@ -46941,8 +45813,8 @@ context = "Phase 36 reviewed settings/workspace/internal preserve"
 
 [[replace]]
 path = "app/src/workspace/auto_handoff.rs"
-source = "Triggering auto handoff to cloud for conversation {conversation_id:?} in window {window_id:?} via {trigger:?}"
-target = "Triggering auto handoff to cloud for conversation {conversation_id:?} in window {window_id:?} via {trigger:?}"
+source = "Triggering auto handoff to cloud for conversation {:?} in window {:?} via {trigger:?}"
+target = "Triggering auto handoff to cloud for conversation {:?} in window {:?} via {trigger:?}"
 status = "active"
 context = "Phase 36 reviewed settings/workspace/internal preserve"
 
@@ -46955,8 +45827,8 @@ context = "Phase 36 reviewed settings/workspace/internal preserve"
 
 [[replace]]
 path = "app/src/workspace/cli_install.rs"
-source = "CLI installed successfully without admin privileges: {:?} -> {}"
-target = "CLI installed successfully without admin privileges: {:?} -> {}"
+source = "{command_name} installed successfully without admin privileges: {:?} -> {}"
+target = "{command_name} installed successfully without admin privileges: {:?} -> {}"
 status = "active"
 context = "Phase 36 reviewed settings/workspace/internal preserve"
 
@@ -47823,8 +46695,8 @@ context = "Phase 42 reviewed preserve: shell command template/env var"
 
 [[replace]]
 path = "app/src/terminal/local_shell/mod.rs"
-source = "string join : $PATH"
-target = "string join : $PATH"
+source = "printf '{PATH_CAPTURE_START}%s{PATH_CAPTURE_END}' (string join : $PATH)"
+target = "printf '{PATH_CAPTURE_START}%s{PATH_CAPTURE_END}' (string join : $PATH)"
 status = "active"
 context = "Phase 42 reviewed preserve: shell command template/env var"
 
@@ -48242,83 +47114,6 @@ status = "active"
 context = "Phase 42 reviewed preserve: ANSI keyboard protocol sequence"
 
 [[replace]]
-path = "app/src/terminal/model/tmux/commands.rs"
-source = "primary window pane"
-target = "primary window pane"
-status = "active"
-context = "Phase 42 reviewed preserve: tmux command parser literal"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/commands.rs"
-source = "background window"
-target = "background window"
-status = "active"
-context = "Phase 42 reviewed preserve: tmux command parser literal"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/commands.rs"
-source = "Tmux control mode commands must take place on one line: `{escaped_command}`"
-target = "Tmux control mode commands must take place on one line: `{escaped_command}`"
-status = "active"
-context = "Phase 42 reviewed preserve: tmux command validation diagnostic"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/commands.rs"
-source = "Tmux control mode command contains a newline: `{escaped_command}`"
-target = "Tmux control mode command contains a newline: `{escaped_command}`"
-status = "active"
-context = "Phase 42 reviewed preserve: tmux command validation diagnostic"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/commands.rs"
-source = "-c '{escaped_path}'"
-target = "-c '{escaped_path}'"
-status = "active"
-context = "Phase 42 reviewed preserve: tmux command option"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/commands.rs"
-source = "-e "
-target = "-e "
-status = "active"
-context = "Phase 42 reviewed preserve: tmux command option"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/commands.rs"
-source = "refresh-client -C {num_cols},{num_rows}n"
-target = "refresh-client -C {num_cols},{num_rows}n"
-status = "active"
-context = "Phase 42 reviewed preserve: tmux command literal"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/commands.rs"
-source = "set destroy-unattached onn"
-target = "set destroy-unattached onn"
-status = "active"
-context = "Phase 42 reviewed preserve: tmux command literal"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/commands.rs"
-source = "set window-size smallestn"
-target = "set window-size smallestn"
-status = "active"
-context = "Phase 42 reviewed preserve: tmux command literal"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/commands.rs"
-source = "^{PRIMARY_WINDOW_PANE_PREFIX}: @([[:digit:]]+) %([[:digit:]]+)$"
-target = "^{PRIMARY_WINDOW_PANE_PREFIX}: @([[:digit:]]+) %([[:digit:]]+)$"
-status = "active"
-context = "Phase 42 reviewed preserve: tmux parser regex"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/commands.rs"
-source = "^{BACKGROUND_WINDOW_PREFIX}: @([[:digit:]]+) %([[:digit:]]+)$"
-target = "^{BACKGROUND_WINDOW_PREFIX}: @([[:digit:]]+) %([[:digit:]]+)$"
-status = "active"
-context = "Phase 42 reviewed preserve: tmux parser regex"
-
-[[replace]]
 path = "app/src/terminal/shared_session/mod.rs"
 source = "SharedSessionStatus_NotShared"
 target = "SharedSessionStatus_NotShared"
@@ -48422,20 +47217,6 @@ source = "prompt_area_{view_id}"
 target = "prompt_area_{view_id}"
 status = "active"
 context = "Phase 42 reviewed preserve: terminal prompt position id"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/commands.rs"
-source = """list-panes -F "#{{?pane_active,{PRIMARY_WINDOW_PANE_PREFIX}: ,}}#{{window_id}} #{{pane_id}}"n"""
-target = """list-panes -F "#{{?pane_active,{PRIMARY_WINDOW_PANE_PREFIX}: ,}}#{{window_id}} #{{pane_id}}"n"""
-status = "active"
-context = "Phase 42 reviewed preserve: tmux command literal"
-
-[[replace]]
-path = "app/src/terminal/model/tmux/commands.rs"
-source = """new-window -d {set_directory} {set_env_vars} -PF "{BACKGROUND_WINDOW_PREFIX}: #{{window_id}} #{{pane_id}}" '(builtin echo -n "^^^{command_id}|||"; {escaped_command}; builtin echo "|||$?\$\$\$")|command cat; command sleep 1'{newline}"""
-target = """new-window -d {set_directory} {set_env_vars} -PF "{BACKGROUND_WINDOW_PREFIX}: #{{window_id}} #{{pane_id}}" '(builtin echo -n "^^^{command_id}|||"; {escaped_command}; builtin echo "|||$?\$\$\$")|command cat; command sleep 1'{newline}"""
-status = "active"
-context = "Phase 42 reviewed preserve: tmux command literal"
 
 [[replace]]
 path = "app/src/ai/agent_sdk/artifact_upload.rs"
@@ -49019,56 +47800,42 @@ status = "active"
 context = "Phase 43 reviewed preserve: MCP config filename"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/oauth.rs"
+path = "crates/mcp/src/oauth.rs"
 source = "TemplatableMcpCredentials"
 target = "TemplatableMcpCredentials"
 status = "active"
 context = "Phase 43 reviewed preserve: MCP secure-storage key"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/oauth.rs"
+path = "crates/mcp/src/oauth.rs"
 source = "FileBasedMcpCredentials"
 target = "FileBasedMcpCredentials"
 status = "active"
 context = "Phase 43 reviewed preserve: MCP secure-storage key"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/oauth.rs"
+path = "crates/mcp/src/oauth.rs"
 source = "File-based MCP server {uuid} requires OAuth authentication; skipping in headless mode. To use this server, authenticate it in the Warp desktop app first."
 target = "基于文件的 MCP 服务器 {uuid} 需要 OAuth 认证；正在无头模式下跳过。要使用此服务器，请先在 Warp 桌面应用中完成认证。"
 status = "active"
 context = "Phase 43 AI/Agent MCP OAuth user-facing error"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/oauth.rs"
+path = "crates/mcp/src/oauth.rs"
 source = "MCP server requires OAuth authentication. Please authenticate this server in the Warp desktop app first, then try again."
 target = "MCP 服务器需要 OAuth 认证。请先在 Warp 桌面应用中认证此服务器，然后重试。"
 status = "active"
 context = "Phase 43 AI/Agent MCP OAuth user-facing error"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/oauth.rs"
-source = "Warp"
-target = "Warp"
-status = "active"
-context = "Phase 43 reviewed preserve: OAuth client display name"
-
-[[replace]]
-path = "app/src/ai/mcp/templatable_manager/oauth.rs"
-source = "unknown error"
-target = "未知错误"
-status = "active"
-context = "Phase 43 AI/Agent MCP OAuth user-facing error"
-
-[[replace]]
-path = "app/src/ai/mcp/templatable_manager/oauth.rs"
+path = "app/src/ai/mcp/templatable_manager/native.rs"
 source = "Invalid OAuth callback path: expected '/oauth2callback', got '{}'"
 target = "Invalid OAuth callback path: expected '/oauth2callback', got '{}'"
 status = "active"
 context = "Phase 43 reviewed preserve: OAuth callback protocol diagnostic"
 
 [[replace]]
-path = "app/src/ai/mcp/templatable_manager/oauth.rs"
+path = "app/src/ai/mcp/templatable_manager/native.rs"
 source = "Corresponding file or cloud-based server not found for installation UUID {installation_uuid}"
 target = "Corresponding file or cloud-based server not found for installation UUID {installation_uuid}"
 status = "active"
@@ -49973,8 +48740,8 @@ context = "Phase 50 Warpify setting description visible/config copy"
 
 [[replace]]
 path = "app/src/terminal/warpify/settings.rs"
-source = "Whether to use a tmux-based wrapper for SSH warpification."
-target = "是否使用基于 tmux 的包装器进行 SSH Warpify。"
+source = "Deprecated: whether to use a tmux-based wrapper for SSH warpification."
+target = "已废弃：是否使用基于 tmux 的包装器进行 SSH Warpify。"
 status = "active"
 context = "Phase 50 Warpify setting description visible/config copy"
 
@@ -50315,8 +49082,8 @@ context = "Phase 51 reviewed preserve: executor diagnostic"
 
 [[replace]]
 path = "app/src/terminal/model/session/command_executor/remote_command_executor.rs"
-source = "cd '{current_directory_path}' && "
-target = "cd '{current_directory_path}' && "
+source = "cd '{escaped_path}' && "
+target = "cd '{escaped_path}' && "
 status = "active"
 context = "Phase 51 reviewed preserve: SSH command template"
 
@@ -50523,13 +49290,6 @@ source = "Failed to reconnect. Please try again later."
 target = "重新连接失败。请稍后重试。"
 status = "active"
 context = "Phase 51 shared-session viewer visible toast"
-
-[[replace]]
-path = "app/src/terminal/shared_session/viewer/terminal_manager.rs"
-source = "[viewer] UniversalDeveloperInputContextUpdated: applying LRC interaction_state={interaction_state:?}"
-target = "[viewer] UniversalDeveloperInputContextUpdated: applying LRC interaction_state={interaction_state:?}"
-status = "active"
-context = "Phase 51 reviewed preserve: shared-session debug diagnostic"
 
 [[replace]]
 path = "app/src/terminal/shared_session/viewer/terminal_manager.rs"
@@ -51286,35 +50046,35 @@ status = "active"
 context = "Phase 52 reviewed preserve: skill manager log diagnostic"
 
 [[replace]]
-path = "app/src/ai/skills/skill_manager.rs"
+path = "app/src/ai/skills/bundled.rs"
 source = "SKILL.md"
 target = "SKILL.md"
 status = "active"
 context = "Phase 52 reviewed preserve: skill filename"
 
 [[replace]]
-path = "app/src/ai/skills/skill_manager.rs"
+path = "app/src/ai/skills/bundled.rs"
 source = "Failed to parse bundled skill at {}"
 target = "Failed to parse bundled skill at {}"
 status = "active"
 context = "Phase 52 reviewed preserve: skill manager log diagnostic"
 
 [[replace]]
-path = "app/src/ai/skills/skill_manager.rs"
+path = "app/src/ai/skills/bundled.rs"
 source = "Could not resolve bundled skill ID, skipping skill"
 target = "Could not resolve bundled skill ID, skipping skill"
 status = "active"
 context = "Phase 52 reviewed preserve: skill manager safe_warn diagnostic"
 
 [[replace]]
-path = "app/src/ai/skills/skill_manager.rs"
+path = "app/src/ai/skills/bundled.rs"
 source = "Could not resolve bundled skill ID from {}, skipping skill"
 target = "Could not resolve bundled skill ID from {}, skipping skill"
 status = "active"
 context = "Phase 52 reviewed preserve: skill manager full diagnostic"
 
 [[replace]]
-path = "app/src/ai/skills/skill_manager.rs"
+path = "app/src/ai/skills/bundled.rs"
 source = "settings_schema.json"
 target = "settings_schema.json"
 status = "active"
@@ -51322,14 +50082,14 @@ context = "Phase 52 reviewed preserve: bundled resource filename"
 expected_count = 2
 
 [[replace]]
-path = "app/src/ai/skills/skill_manager.rs"
+path = "app/src/ai/skills/bundled.rs"
 source = "pr-comments"
 target = "pr-comments"
 status = "active"
 context = "Phase 52 reviewed preserve: bundled skill ID"
 
 [[replace]]
-path = "app/src/ai/skills/skill_manager.rs"
+path = "app/src/ai/skills/bundled.rs"
 source = "modify-settings"
 target = "modify-settings"
 status = "active"
@@ -52010,51 +50770,6 @@ status = "active"
 context = "Phase 57 CLI plugin update toast"
 
 [[replace]]
-path = "app/src/terminal/ssh/warpify.rs"
-source = "Warpifying SSH Session..."
-target = "正在对 SSH 会话启用 Warpify..."
-status = "active"
-context = "Phase 57 SSH Warpify title"
-preserve_terms = ["SSH", "Warpify"]
-
-[[replace]]
-path = "app/src/terminal/ssh/warpify.rs"
-source = "Bring Warp's features to your remote session. Blocks, full text editing, auto-complete, Oz, and more. "
-target = "将 Warp 功能带到你的远程会话。块、全文编辑、自动补全、Oz 等。 "
-status = "active"
-context = "Phase 57 SSH Warpify description"
-preserve_terms = ["Oz"]
-
-[[replace]]
-path = "app/src/terminal/ssh/warpify.rs"
-source = "Learn more"
-target = "了解更多"
-status = "active"
-context = "Phase 57 SSH Warpify docs link"
-
-[[replace]]
-path = "app/src/terminal/ssh/warpify.rs"
-source = "SshWarpifyBlock"
-target = "SshWarpifyBlock"
-status = "active"
-context = "Phase 57 reviewed preserve: view type identifier"
-
-[[replace]]
-path = "app/src/terminal/ssh/warpify.rs"
-source = "InitSsh"
-target = "InitSsh"
-status = "active"
-context = "Phase 57 reviewed preserve: bootstrap hook name"
-
-[[replace]]
-path = "app/src/terminal/ssh/warpify.rs"
-source = "Darwin"
-target = "Darwin"
-status = "active"
-context = "Phase 57 reviewed preserve: OS selector literal"
-expected_count = 2
-
-[[replace]]
 path = "app/src/terminal/view/agent_view.rs"
 source = "Cannot start a new conversation while agent is monitoring a command."
 target = "Agent 正在监视命令，无法开始新对话。"
@@ -52495,7 +51210,7 @@ target = "Warpify 子 shell"
 status = "active"
 context = "Phase 57 Warpify footer button"
 preserve_terms = ["Warpify"]
-expected_count = 2
+expected_count = 1
 
 [[replace]]
 path = "app/src/terminal/view/use_agent_footer/warpify_footer.rs"
@@ -52526,14 +51241,6 @@ source = "Dismiss"
 target = "关闭"
 status = "active"
 context = "Phase 57 Warpify footer button"
-
-[[replace]]
-path = "app/src/terminal/view/use_agent_footer/warpify_footer.rs"
-source = "Warpify SSH session"
-target = "Warpify SSH 会话"
-status = "active"
-context = "Phase 57 Warpify footer mode label"
-preserve_terms = ["Warpify", "SSH"]
 
 [[replace]]
 path = "app/src/terminal/view/zero_state_block.rs"
@@ -52638,14 +51345,6 @@ context = "Phase 58 reviewed preserve: AI tool diff failure contract"
 
 [[replace]]
 path = "app/src/ai/blocklist/action_model/execute/file_glob.rs"
-source = "'{pattern}'"
-target = "'{pattern}'"
-status = "active"
-context = "Phase 58 reviewed preserve: shell glob quoting"
-expected_count = 2
-
-[[replace]]
-path = "app/src/ai/blocklist/action_model/execute/file_glob.rs"
 source = "git ls-files -c -o --exclude-standard -- {pattern_args}"
 target = "git ls-files -c -o --exclude-standard -- {pattern_args}"
 status = "active"
@@ -52653,29 +51352,29 @@ context = "Phase 58 reviewed preserve: git command template"
 
 [[replace]]
 path = "app/src/ai/blocklist/action_model/execute/file_glob.rs"
-source = " -name '{pattern}'"
-target = " -name '{pattern}'"
+source = "-name {}"
+target = "-name {}"
 status = "active"
 context = "Phase 58 reviewed preserve: find command template"
 
 [[replace]]
 path = "app/src/ai/blocklist/action_model/execute/file_glob.rs"
-source = " -o"
-target = " -o"
+source = " -o "
+target = " -o "
 status = "active"
 context = "Phase 58 reviewed preserve: find command operator"
 
 [[replace]]
 path = "app/src/ai/blocklist/action_model/execute/file_glob.rs"
-source = "find \"{target_path}\" -type f {pattern_args}"
-target = "find \"{target_path}\" -type f {pattern_args}"
+source = "find {} -type f {pattern_args}"
+target = "find {} -type f {pattern_args}"
 status = "active"
 context = "Phase 58 reviewed preserve: find command template"
 
 [[replace]]
 path = "app/src/ai/blocklist/action_model/execute/file_glob.rs"
-source = "Get-ChildItem -File -Recurse -Include {pattern_args} -Path \"{target_path}\" | ForEach-Object {{ $_.FullName }}"
-target = "Get-ChildItem -File -Recurse -Include {pattern_args} -Path \"{target_path}\" | ForEach-Object {{ $_.FullName }}"
+source = "Get-ChildItem -File -Recurse -Include {pattern_args} -Path {} | ForEach-Object {{ $_.FullName }}"
+target = "Get-ChildItem -File -Recurse -Include {pattern_args} -Path {} | ForEach-Object {{ $_.FullName }}"
 status = "active"
 context = "Phase 58 reviewed preserve: PowerShell command template"
 
@@ -52835,22 +51534,22 @@ context = "Phase 58 reviewed preserve: AI tool execution result contract"
 
 [[replace]]
 path = "app/src/ai/blocklist/action_model/execute.rs"
-source = "if (Test-Path -PathType Leaf \"{path}\") {{ exit 0 }} else {{ exit 1 }}"
-target = "if (Test-Path -PathType Leaf \"{path}\") {{ exit 0 }} else {{ exit 1 }}"
+source = "if (Test-Path -PathType Leaf {escaped_path}) {{ exit 0 }} else {{ exit 1 }}"
+target = "if (Test-Path -PathType Leaf {escaped_path}) {{ exit 0 }} else {{ exit 1 }}"
 status = "active"
 context = "Phase 58 reviewed preserve: PowerShell file existence command"
 
 [[replace]]
 path = "app/src/ai/blocklist/action_model/execute.rs"
-source = "test -f \"{path}\""
-target = "test -f \"{path}\""
+source = "test -f {escaped_path}"
+target = "test -f {escaped_path}"
 status = "active"
 context = "Phase 58 reviewed preserve: POSIX file existence command"
 
 [[replace]]
 path = "app/src/ai/blocklist/action_model/execute.rs"
-source = "git -C \"{absolute_path}\" rev-parse"
-target = "git -C \"{absolute_path}\" rev-parse"
+source = "git -C {} rev-parse"
+target = "git -C {} rev-parse"
 status = "active"
 context = "Phase 58 reviewed preserve: git command template"
 
@@ -54194,27 +52893,6 @@ status = "active"
 context = "Phase 65 AI block completed todo summary"
 
 [[replace]]
-path = "app/src/ai/blocklist/inline_action/requested_script.rs"
-source = "Running..."
-target = "运行中..."
-status = "active"
-context = "Phase 65 requested script status label"
-
-[[replace]]
-path = "app/src/ai/blocklist/inline_action/requested_script.rs"
-source = "Expand to show script"
-target = "展开显示脚本"
-status = "active"
-context = "Phase 65 requested script status label"
-
-[[replace]]
-path = "app/src/ai/blocklist/inline_action/requested_script.rs"
-source = "Hide"
-target = "隐藏"
-status = "active"
-context = "Phase 65 requested script status label"
-
-[[replace]]
 path = "app/src/ai/blocklist/prompt/plan_and_todo_list.rs"
 source = "Agent is unaware of recent plan edits"
 target = "Agent 尚未感知最近的计划编辑"
@@ -54481,36 +53159,6 @@ target = "使用 AWS Bedrock？"
 status = "active"
 context = "Phase 72 AWS Bedrock inline banner title"
 preserve_terms = ["AWS Bedrock"]
-
-[[replace]]
-path = "app/src/terminal/view/inline_banner/ssh.rs"
-source = "Warp SSH wrapper enabled"
-target = "Warp SSH 包装器已启用"
-status = "active"
-context = "Phase 72 SSH wrapper inline banner title"
-preserve_terms = ["Warp", "SSH"]
-
-[[replace]]
-path = "app/src/terminal/view/inline_banner/ssh.rs"
-source = "Warp SSH wrapper disabled"
-target = "Warp SSH 包装器已禁用"
-status = "active"
-context = "Phase 72 SSH wrapper inline banner title"
-preserve_terms = ["Warp", "SSH"]
-
-[[replace]]
-path = "app/src/terminal/view/inline_banner/ssh.rs"
-source = "Learn more"
-target = "了解更多"
-status = "active"
-context = "Phase 72 SSH wrapper inline banner action"
-
-[[replace]]
-path = "app/src/terminal/view/inline_banner/ssh.rs"
-source = "Settings"
-target = "设置"
-status = "active"
-context = "Phase 72 SSH wrapper inline banner action"
 
 [[replace]]
 path = "app/src/terminal/view/open_in_warp.rs"
@@ -54884,14 +53532,6 @@ preserve_terms = ["Warp", "Pro", "Build"]
 
 [[replace]]
 path = "app/src/terminal/view/block_banner/warpify.rs"
-source = "Warpify SSH session"
-target = "Warpify SSH 会话"
-status = "active"
-context = "Phase 80 Warpify banner title"
-preserve_terms = ["Warpify", "SSH"]
-
-[[replace]]
-path = "app/src/terminal/view/block_banner/warpify.rs"
 source = "Warpify subshell"
 target = "Warpify 子 Shell"
 status = "active"
@@ -55260,13 +53900,6 @@ context = "Phase 81 AI action read MCP resource error"
 preserve_terms = ["MCP"]
 
 [[replace]]
-path = "app/src/ai/blocklist/action_model/execute/read_skill.rs"
-source = "Skill not found: {:?}"
-target = "未找到技能：{:?}"
-status = "active"
-context = "Phase 81 AI action read skill error"
-
-[[replace]]
 path = "app/src/ai/blocklist/action_model/execute/request_computer_use.rs"
 source = "Unknown platform"
 target = "未知平台"
@@ -55314,20 +53947,6 @@ source = "Failed to create environment: {error_message}"
 target = "创建环境失败：{error_message}"
 status = "active"
 context = "Phase 81 create environment inline action error"
-
-[[replace]]
-path = "app/src/ai/blocklist/inline_action/requested_action.rs"
-source = "Cancel"
-target = "取消"
-status = "active"
-context = "Phase 81 requested action button"
-
-[[replace]]
-path = "app/src/ai/blocklist/inline_action/requested_action.rs"
-source = "Run"
-target = "运行"
-status = "active"
-context = "Phase 81 requested action button"
 
 [[replace]]
 path = "app/src/ai/blocklist/suggested_agent_mode_workflow_modal.rs"
@@ -55502,7 +54121,7 @@ status = "active"
 
 [[replace]]
 key = "0.19.workspace.tab_group.untitled"
-path = "app/src/workspace/view.rs"
+path = "app/src/workspace/view/tab_grouping.rs"
 source = "Untitled group"
 target = "未命名分组"
 context = "0.19 vertical tab group fallback label"
@@ -55692,7 +54311,7 @@ status = "active"
 
 [[replace]]
 key = "0.19.claude_plugin.install_not_effective"
-path = "app/src/terminal/cli_agent_sessions/plugin_manager/claude.rs"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
 source = "Platform plugin installation did not take effect"
 target = "Platform 插件安装未生效"
 context = "0.19 Claude Code platform plugin install error"

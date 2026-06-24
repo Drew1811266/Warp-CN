@@ -184,12 +184,12 @@ struct AddedExchange {
 
 #[derive(thiserror::Error, Debug)]
 pub enum RestoreConversationError {
-    #[error("Restored conversation has no root task")]
+    #[error("恢复的对话没有根任务")]
     NoRootTask,
 }
 
 #[derive(thiserror::Error, Debug)]
-#[error("Subagent task not found")]
+#[error("未找到子 Agent 任务")]
 pub struct SubagentTaskNotFound;
 
 /// An Agent Mode conversation.
@@ -459,11 +459,7 @@ impl AIConversation {
                             Task::new_restored_subtask(task, parent_task, exchanges),
                         );
                     } else {
-                        log::error!(
-                            "Could not find parent task (id: {}) for task (id: {})",
-                            parent_id,
-                            task.id
-                        );
+                        log::error!("找不到任务（id: {}）的父任务（id: {}）", parent_id, task.id);
                     }
                 } else {
                     parentless_candidates.push((task, exchanges));
@@ -4036,29 +4032,29 @@ fn cleanup_conversation_search_temp_dir(
 
 #[derive(Debug, thiserror::Error)]
 pub enum UpdateConversationError {
-    #[error("Exchange not found.")]
+    #[error("未找到 exchange。")]
     ExchangeNotFound,
-    #[error("Could not update task: {0:?}")]
+    #[error("无法更新任务：{0:?}")]
     UpdateTask(#[from] UpdateTaskError),
-    #[error("Could not update upgrade optimistic task for server task: {0:?}")]
+    #[error("无法为服务器任务更新乐观升级任务：{0:?}")]
     UpgradeOptimisticTask(#[from] UpgradeOptimisticTaskError),
-    #[error("Could not extract messages: {0:?}")]
+    #[error("无法提取消息：{0:?}")]
     ExtractMessages(#[from] ExtractMessagesError),
-    #[error("Task not found.")]
+    #[error("未找到任务。")]
     TaskNotFound,
-    #[error("Task never initialized with CreateTask client action.")]
+    #[error("任务从未通过 CreateTask 客户端操作初始化。")]
     TaskNotInitialized,
-    #[error("Message not found.")]
+    #[error("未找到消息。")]
     MessageNotFound,
-    #[error("Attempted to update already-finished output.")]
+    #[error("尝试更新已完成的输出。")]
     OutputAlreadyFinished,
-    #[error("Attempted to update output that was never initialized.")]
+    #[error("尝试更新从未初始化的输出。")]
     OutputNeverInitialized,
-    #[error("Failed to convert API message to client type: {0}")]
+    #[error("无法将 API 消息转换为客户端类型：{0}")]
     ConversionError(#[from] MessageToAIAgentOutputMessageError),
-    #[error("No active task")]
+    #[error("没有活动任务")]
     NoActiveTask,
-    #[error("No pending request.")]
+    #[error("没有待处理请求。")]
     NoPendingRequest,
 }
 
@@ -4275,12 +4271,12 @@ pub enum ConversationStatus {
 impl std::fmt::Display for ConversationStatus {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ConversationStatus::InProgress => write!(f, "In progress"),
-            ConversationStatus::Success => write!(f, "Done"),
-            ConversationStatus::Error => write!(f, "Error"),
+            ConversationStatus::InProgress => write!(f, "进行中"),
+            ConversationStatus::Success => write!(f, "已完成"),
+            ConversationStatus::Error => write!(f, "错误"),
             ConversationStatus::TransientError => write!(f, "Reconnecting"),
-            ConversationStatus::Cancelled => write!(f, "Cancelled"),
-            ConversationStatus::Blocked { .. } => write!(f, "Blocked"),
+            ConversationStatus::Cancelled => write!(f, "已取消"),
+            ConversationStatus::Blocked { .. } => write!(f, "已阻塞"),
             ConversationStatus::WaitingForEvents => write!(f, "Waiting"),
         }
     }

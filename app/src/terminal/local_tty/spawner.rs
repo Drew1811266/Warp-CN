@@ -135,7 +135,7 @@ impl PtySpawner {
             } else if #[cfg(target_os = "windows")] {
                 Ok(Self {})
             } else {
-                unreachable!("Spawning a PTY is not supported on this platform.");
+                unreachable!("此平台不支持启动 PTY。");
             }
         }
     }
@@ -148,7 +148,7 @@ impl PtySpawner {
             } else if #[cfg(target_os = "windows")] {
                 Self {}
             } else {
-                unreachable!("Spawning a PTY for tests is not supported on this platform.");
+                unreachable!("此平台不支持为测试启动 PTY。");
             }
         }
     }
@@ -201,9 +201,7 @@ impl PtySpawner {
                          too long.",
                     ));
                 }
-                report_error!(err.context(
-                    "Failed to spawn pty via terminal server; falling back to spawning locally...",
-                ));
+                report_error!(err.context("通过终端服务器启动 PTY 失败，正在回退为本地启动...",));
                 is_fallback = true;
             } else {
                 send_telemetry_from_app_ctx!(

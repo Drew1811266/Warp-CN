@@ -6,11 +6,10 @@ use crate::util::path::resolve_executable;
 
 /// Tooltip shown when a local harness is product-enabled but its CLI is missing.
 pub(crate) const LOCAL_HARNESS_INSTALLATION_REQUIRED_TOOLTIP: &str =
-    "Install Claude Code to use this local harness.";
+    "安装 Claude Code 以使用此本地 harness。";
 pub(crate) const LOCAL_CODEX_HARNESS_INSTALLATION_REQUIRED_TOOLTIP: &str =
     "Install Codex to use this local harness.";
-pub(crate) const LOCAL_CODEX_HARNESS_DISABLED_MESSAGE: &str =
-    "Local Codex child agents are temporarily disabled.";
+pub(crate) const LOCAL_CODEX_HARNESS_DISABLED_MESSAGE: &str = "本地 Codex 子 Agent 暂时已停用。";
 
 /// Client-side readiness for using a harness in local orchestration.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]

@@ -663,12 +663,12 @@ pub fn render_citation(
                 .to_warp_drive_item(appearance)?;
             (
                 item.icon(appearance, Some(theme.active_ui_text_color())),
-                item.display_name().unwrap_or(String::from("Untitled")),
+                item.display_name().unwrap_or(String::from("无标题")),
             )
         }
         AIAgentCitation::WarpDocumentation { .. } => {
             let icon = Icon::Warp.to_warpui_icon(theme.foreground()).finish();
-            let name = String::from("Warp Docs");
+            let name = String::from("Warp 文档");
             (Some(icon), name)
         }
         AIAgentCitation::WebPage { url } => {
@@ -766,7 +766,7 @@ where
                         appearance
                             .ui_builder()
                             .link(
-                                "Manage AI Autonomy permissions".into(),
+                                "管理 AI Autonomy 权限".into(),
                                 None,
                                 Some(Box::new(move |ctx| {
                                     ctx.dispatch_typed_action(
@@ -841,7 +841,7 @@ pub fn render_autonomy_checkbox_setting_speedbump_footer(
                     appearance
                         .ui_builder()
                         .link(
-                            "Manage AI Autonomy permissions".into(),
+                            "管理 AI Autonomy 权限".into(),
                             None,
                             Some(Box::new(move |ctx| {
                                 ctx.dispatch_typed_action(

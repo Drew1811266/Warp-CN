@@ -741,7 +741,7 @@ impl AskUserQuestionView {
             ctx,
         );
         let skip_button = CompactibleActionButton::new(
-            "Skip all".to_string(),
+            "全部跳过".to_string(),
             Some(KeystrokeSource::Fixed(CTRL_C_KEYSTROKE.clone())),
             ButtonSize::InlineActionHeader,
             AskUserQuestionViewAction::SkipAll,
@@ -750,7 +750,7 @@ impl AskUserQuestionView {
             ctx,
         );
         let next_button = CompactibleActionButton::new(
-            "Next".to_string(),
+            "下一步".to_string(),
             Some(KeystrokeSource::Fixed(
                 Keystroke::parse("enter").expect("keystroke should parse"),
             )),
@@ -1045,7 +1045,7 @@ impl AskUserQuestionView {
             number,
             accepted_text
                 .clone()
-                .unwrap_or_else(|| "Other...".to_string()),
+                .unwrap_or_else(|| "其他...".to_string()),
             accepted_text.is_some(),
             false,
             true,
@@ -1061,7 +1061,7 @@ impl AskUserQuestionView {
         let initial_text = initial_text.map(String::from);
         let input = ctx.add_view(move |ctx| {
             let input = compact_agent_input::CompactAgentInput::new(ctx);
-            input.set_placeholder_text("Type your answer and press Enter", ctx);
+            input.set_placeholder_text("输入你的回答并按 Enter", ctx);
             if let Some(initial_text) = initial_text.as_deref() {
                 input.set_text(initial_text, ctx);
             }
@@ -1267,7 +1267,7 @@ impl AskUserQuestionView {
                 .finish(),
         );
         content.add_child(
-            HeaderConfig::new("Agent questions", app)
+            HeaderConfig::new("Agent 问题", app)
                 .with_icon(yellow_stop_icon(appearance))
                 .with_corner_radius_override(CornerRadius::with_top(Radius::Pixels(8.)))
                 .render_header(app, Some(header_right.finish())),
@@ -1321,7 +1321,7 @@ impl AskUserQuestionView {
 
     fn render_unavailable(&self, appearance: &Appearance, app: &AppContext) -> Box<dyn Element> {
         wrap_with_agent_output_item_spacing(
-            HeaderConfig::new("Questions unavailable".to_string(), app)
+            HeaderConfig::new("问题不可用".to_string(), app)
                 .with_icon(inline_action_icons::reverted_icon(appearance))
                 .render(app),
             app,
@@ -1361,12 +1361,12 @@ impl AskUserQuestionView {
             }
             AskUserQuestionResult::Error(_) | AskUserQuestionResult::Cancelled => (
                 None,
-                "Questions skipped".to_string(),
+                "已跳过问题".to_string(),
                 inline_action_icons::reverted_icon(appearance),
             ),
             AskUserQuestionResult::SkippedByAutoApprove { .. } => (
                 None,
-                "Questions skipped due to auto-approve".to_string(),
+                "已因自动批准跳过问题".to_string(),
                 inline_action_icons::reverted_icon(appearance),
             ),
         };
@@ -1451,7 +1451,7 @@ impl AskUserQuestionView {
         let theme = appearance.theme();
         let dropdown = self.speedbump_dropdown.as_ref()?;
         let row = render_autonomy_dropdown_setting_speedbump_footer(
-            "Allow the agent to ask questions:",
+            "允许 Agent 提问：",
             dropdown,
             settings_link_handle,
             app,
@@ -1471,7 +1471,7 @@ impl AskUserQuestionView {
     fn question_display_text(question: &AskUserQuestionItem) -> String {
         let mut text = question.question.clone();
         if question.is_multiselect() {
-            text.push_str(" (select all that apply)");
+            text.push_str("（可多选）");
         }
         text
     }
@@ -1817,15 +1817,15 @@ fn ask_user_question_completion_state(
 
     if answered_count == 0 {
         AskUserQuestionCompletionState {
-            label: "Questions skipped".to_string(),
+            label: "已跳过问题".to_string(),
             status_icon: inline_action_icons::reverted_icon(appearance),
         }
     } else {
         let label = if answered_count == total {
             if total == 1 {
-                "Answered question".to_string()
+                "已回答问题".to_string()
             } else {
-                format!("Answered all {total} questions")
+                format!("已回答全部 {total} 个问题")
             }
         } else {
             format!(
@@ -1861,7 +1861,7 @@ fn render_answers(
             "A: {}",
             answer
                 .map(AskUserQuestionAnswerItem::display_text)
-                .unwrap_or_else(|| "Skipped".to_string())
+                .unwrap_or_else(|| "已跳过".to_string())
         );
         let answer_label =
             render_text_with_markdown_support(&answer_text, font_size, muted_color, appearance);
