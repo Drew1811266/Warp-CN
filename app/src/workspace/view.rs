@@ -1,9 +1,11 @@
+pub(crate) mod auto_handoff_sleep_modal;
 mod build_plan_migration_modal;
 pub(crate) mod cloud_agent_capacity_modal;
 pub(crate) mod codex_modal;
 pub mod conversation_list;
 #[cfg(enable_crash_recovery)]
 mod crash_recovery;
+pub(crate) mod free_ai_removal_modal;
 pub(crate) mod free_tier_limit_hit_modal;
 pub mod global_search;
 pub(crate) mod launch_modal;
@@ -13,13 +15,15 @@ pub(crate) mod openwarp_launch_modal;
 pub(crate) mod orchestration_launch_modal;
 pub(crate) mod right_panel;
 mod startup_directory;
+mod tab_grouping;
 #[cfg(test)]
 #[path = "view_tests.rs"]
-mod tests;
+pub(crate) mod tests;
 mod vertical_tabs;
 #[cfg(target_family = "wasm")]
 mod wasm_view;
 
+use std::cell::RefCell;
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 #[cfg(feature = "local_fs")]
@@ -39,6 +43,10 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use ::settings::{Setting, ToggleableSetting};
 use ai::index::full_source_code_embedding::manager::CodebaseIndexManager;
+#[cfg(not(target_family = "wasm"))]
+use anyhow::Context as _;
+#[cfg(target_os = "macos")]
+use anyhow::Result;
 use autoupdate::AutoupdateStage;
 #[cfg(target_os = "macos")]
 use command::blocking::Command;
@@ -83,11 +91,12 @@ use warpui::clipboard::ClipboardContent;
 use warpui::elements::Percentage;
 use warpui::elements::{
     Align, Border, CacheOption, ChildAnchor, ChildView, Clipped, ConstrainedBox, Container,
-    CornerRadius, CrossAxisAlignment, Dismiss, DispatchEventResult, DraggableState, DropTarget,
-    Element, Empty, EventHandler, Expanded, Fill as ElementFill, Flex, Highlight, Hoverable,
-    Icon as WarpUiIcon, Image, MainAxisAlignment, MainAxisSize, MouseInBehavior, MouseStateHandle,
-    OffsetPositioning, ParentAnchor, ParentElement, ParentOffsetBounds, PositionedElementAnchor,
-    PositionedElementOffsetBounds, Radius, Rect, SavePosition, Shrinkable, Stack, Text,
+    CornerRadius, CrossAxisAlignment, Dismiss, DispatchEventResult, DragAxis, Draggable,
+    DraggableState, DropTarget, Element, Empty, EventHandler, Expanded, Fill as ElementFill, Flex,
+    Highlight, Hoverable, Icon as WarpUiIcon, Image, MainAxisAlignment, MainAxisSize,
+    MouseInBehavior, MouseStateHandle, OffsetPositioning, ParentAnchor, ParentElement,
+    ParentOffsetBounds, PositionedElementAnchor, PositionedElementOffsetBounds, Radius, Rect,
+    SavePosition, Shrinkable, Stack, Text,
 };
 use warpui::fonts::{Properties, Weight};
 use warpui::geometry::vector::{vec2f, Vector2F};
@@ -109,8 +118,9 @@ use warpui::{
 
 use self::vertical_tabs::telemetry::{VerticalTabsDisplayOption, VerticalTabsTelemetryEvent};
 use self::vertical_tabs::{
-    render_detail_sidecar, render_settings_popup, vtab_group_position_id, VerticalTabsPanelState,
-    VERTICAL_TABS_SETTINGS_BUTTON_POSITION_ID,
+    htab_group_position_id, pane_summary_kind, render_detail_sidecar, render_settings_popup,
+    render_summary_pane_kind_icons, vtab_group_position_id, SummaryPaneKind, SummaryPaneKindIcons,
+    VerticalTabsPanelState, VERTICAL_TABS_SETTINGS_BUTTON_POSITION_ID,
 };
 #[cfg(all(feature = "local_fs", not(target_family = "wasm")))]
 use super::action::AutoCloudHandoffTrigger;
@@ -120,8 +130,9 @@ use super::action::{
 };
 #[cfg(all(feature = "local_fs", not(target_family = "wasm")))]
 use super::auto_handoff::AutoCloudHandoffController;
+pub(crate) use super::close_session_confirmation_dialog::OpenDialogSource;
 use super::close_session_confirmation_dialog::{
-    CloseSessionConfirmationDialog, CloseSessionConfirmationEvent, OpenDialogSource,
+    CloseSessionConfirmationDialog, CloseSessionConfirmationEvent,
 };
 use super::delete_conversation_confirmation_dialog::{
     DeleteConversationConfirmationDialog, DeleteConversationConfirmationEvent,
@@ -147,10 +158,12 @@ use super::util::{
 use super::{util, ActiveSession, TabBarDropTargetData, TabBarLocation, WorkspaceRegistry};
 use crate::ai::active_agent_views_model::ActiveAgentViewsModel;
 use crate::ai::agent::api::ServerConversationToken;
+#[cfg(not(target_family = "wasm"))]
+use crate::ai::agent::conversation::AIAgentHarness;
 use crate::ai::agent::conversation::{AIConversation, AIConversationId};
 #[cfg(all(feature = "local_fs", not(target_family = "wasm")))]
 use crate::ai::agent::CancellationReason;
-use crate::ai::agent::EntrypointType;
+use crate::ai::agent::{AIAgentInput, EntrypointType};
 #[cfg(target_family = "wasm")]
 use crate::ai::agent_conversations_model::AgentConversationsModelEvent;
 use crate::ai::agent_conversations_model::{
@@ -164,9 +177,11 @@ use crate::ai::agent_management::notifications::NotificationFilter;
 use crate::ai::agent_management::telemetry::AgentManagementTelemetryEvent;
 use crate::ai::agent_management::view::{AgentManagementView, AgentManagementViewEvent};
 use crate::ai::agent_management::AgentManagementEvent;
-#[cfg(all(feature = "local_fs", not(target_family = "wasm")))]
-use crate::ai::ambient_agents::telemetry::HandoffEntryPoint;
+#[cfg(not(target_family = "wasm"))]
+use crate::ai::agent_sdk::driver::harness::{claude_transcript, codex_transcript};
 use crate::ai::ambient_agents::telemetry::{CloudAgentTelemetryEvent, CloudModeEntryPoint};
+#[cfg(all(feature = "local_fs", not(target_family = "wasm")))]
+use crate::ai::ambient_agents::telemetry::{HandoffEntryPoint, HandoffInjectionPath};
 use crate::ai::ambient_agents::AmbientAgentTaskId;
 use crate::ai::blocklist::agent_view::agent_input_footer::editor::AgentToolbarEditorMode;
 use crate::ai::blocklist::agent_view::editor::{AgentToolbarEditorEvent, AgentToolbarEditorModal};
@@ -187,8 +202,8 @@ use crate::ai::blocklist::suggested_rule_modal::{
     SuggestedRuleAndId, SuggestedRuleModal, SuggestedRuleModalEvent,
 };
 use crate::ai::blocklist::{
-    BlocklistAIHistoryEvent, PendingQueryState, QueuedQueryOrigin, SerializedBlockListItem,
-    SlashCommandRequest, FORK_PREFIX,
+    BlocklistAIHistoryEvent, PendingAttachment, PendingQueryState, QueuedQueryOrigin,
+    SerializedBlockListItem, SlashCommandRequest, FORK_PREFIX,
 };
 use crate::ai::cloud_agent_settings::CloudAgentSettings;
 #[cfg(target_family = "wasm")]
@@ -206,8 +221,8 @@ use crate::ai_assistant::panel::{AIAssistantPanelEvent, AIAssistantPanelView};
 use crate::ai_assistant::{AskAIType, AI_ASSISTANT_FEATURE_NAME, AI_ASSISTANT_LOGO_COLOR};
 use crate::app_state::{
     LeafContents, LeafSnapshot, LeftPanelDisplayedTab, LeftPanelSnapshot, NotebookPaneSnapshot,
-    PaneNodeSnapshot, PaneUuid, RightPanelSnapshot, SettingsPaneSnapshot, TabSnapshot,
-    TerminalPaneSnapshot, WindowSnapshot, WorkflowPaneSnapshot,
+    PaneNodeSnapshot, PaneUuid, RightPanelSnapshot, SettingsPaneSnapshot, TabGroupSnapshot,
+    TabSnapshot, TerminalPaneSnapshot, WindowSnapshot, WorkflowPaneSnapshot,
 };
 use crate::appearance::{Appearance, AppearanceManager};
 use crate::auth::auth_manager::{AuthManager, AuthManagerEvent};
@@ -301,6 +316,7 @@ use crate::search::command_search::searcher::{
 };
 use crate::search::command_search::settings::CommandSearchSettings;
 use crate::search::command_search::view::{CommandSearchEvent, CommandSearchView};
+#[cfg(target_family = "wasm")]
 use crate::search::slash_command_menu::static_commands::commands;
 use crate::search::{self, QueryFilter};
 use crate::server::cloud_objects::update_manager::{
@@ -339,7 +355,7 @@ use crate::shell_indicator::ShellIndicatorType;
 use crate::tab::{
     tab_position_id, uses_vertical_tabs, NewSessionMenuItem, PaneNameMenuTarget, SelectedTabColor,
     TabBarState, TabComponent, TabData, TabTelemetryAction, MOVE_TO_GROUP_LABEL,
-    TAB_BAR_BORDER_HEIGHT,
+    TAB_BAR_BORDER_HEIGHT, TAB_PIN_INDICATOR_ICON_SIZE,
 };
 use crate::tab_configs::action_sidecar::SidecarItemKind;
 use crate::tab_configs::remove_confirmation_dialog::{
@@ -366,6 +382,8 @@ use crate::terminal::enable_auto_reload_modal::{
     EnableAutoReloadModal, EnableAutoReloadModalEvent,
 };
 use crate::terminal::general_settings::GeneralSettings;
+#[cfg(not(target_family = "wasm"))]
+use crate::terminal::input::slash_commands::fork_button_action;
 use crate::terminal::input::{Input, MenuPositioning};
 use crate::terminal::keys_settings::KeysSettings;
 use crate::terminal::ligature_settings::should_use_ligature_rendering;
@@ -474,6 +492,9 @@ use crate::workspace::tab_settings::TabCloseButtonPosition;
 use crate::workspace::toast_stack::{
     ToastStack, ToastStack as WorkspaceToastStack, ToastStackEvent as WorkspaceToastStackEvent,
 };
+use crate::workspace::view::auto_handoff_sleep_modal::{
+    AutoHandoffSleepModal, AutoHandoffSleepModalEvent,
+};
 use crate::workspace::view::build_plan_migration_modal::{
     BuildPlanMigrationModal, BuildPlanMigrationModalEvent,
 };
@@ -481,6 +502,10 @@ use crate::workspace::view::cloud_agent_capacity_modal::{
     CloudAgentCapacityModal, CloudAgentCapacityModalEvent, CloudAgentCapacityModalVariant,
 };
 use crate::workspace::view::codex_modal::{CodexModal, CodexModalEvent};
+use crate::workspace::view::free_ai_removal_modal::{
+    FreeAiRemovalModal, FreeAiRemovalModalEvent, FreeAiRemovalModalTelemetryEvent,
+    FreeAiRemovalModalVariant,
+};
 use crate::workspace::view::free_tier_limit_hit_modal::{
     FreeTierLimitHitModal, FreeTierLimitHitModalEvent,
 };
@@ -536,7 +561,7 @@ const TAB_BAR_PILL_WIDTH: f32 = 100.;
 const PILL_FONT_SIZE: f32 = 12.;
 // We use the word "Warp" in the Update Ready button to make it obvious that the terminal is Warp.
 // This can lead to free advertising when users screen-share Warp when an update is available.
-const UPDATE_READY_TEXT: &str = "更新 Warp";
+const UPDATE_READY_TEXT: &str = "Update Warp";
 
 const TAB_BAR_OVERFLOW_MENU_WIDTH: f32 = 300.;
 
@@ -563,11 +588,9 @@ const ELLIPSE_SVG_PATH: &str = "bundled/svg/ellipse.svg";
 
 const AI_ASSISTANT_BUTTON_ID: &str = "workspace_view:ai_assistant_button";
 
-const VERSION_DEPRECATION_BANNER_TEXT: &str =
-    "你的应用版本过旧，部分功能可能无法正常工作。请立即更新。";
+const VERSION_DEPRECATION_BANNER_TEXT: &str = "Your app is out of date and some features may not work as expected. Please update immediately.";
 
-const VERSION_DEPRECATION_WITHOUT_PERMISSIONS_BANNER_TEXT: &str =
-    "如果不立即更新，部分 Warp 功能可能无法正常工作，但 Warp 当前无法执行更新。";
+const VERSION_DEPRECATION_WITHOUT_PERMISSIONS_BANNER_TEXT: &str = "Some Warp features may not work as expected without updating immediately, but Warp is unable to perform the update.";
 
 const ASK_AI_ASSISTANT_KEYBINDING_NAME: &str = "workspace:toggle_ai_assistant";
 const TOGGLE_RESOURCE_CENTER_KEYBINDING_NAME: &str = "workspace:toggle_resource_center";
@@ -587,13 +610,12 @@ const NEW_SESSION_SIDECAR_SEARCH_BOX_HORIZONTAL_PADDING: f32 = 12.;
 const NEW_SESSION_SIDECAR_SEARCH_BOX_VERTICAL_PADDING: f32 = 6.;
 const NEW_SESSION_SIDECAR_FOOTER_HORIZONTAL_PADDING: f32 = 16.;
 const NEW_SESSION_SIDECAR_FOOTER_VERTICAL_PADDING: f32 = 8.;
-const SESSION_CONFIG_TAB_CONFIG_CHIP_TEXT: &str = "在这里访问你的标签页配置。";
+const SESSION_CONFIG_TAB_CONFIG_CHIP_TEXT: &str = "Access your tab configs here.";
 const SESSION_CONFIG_TAB_CONFIG_CHIP_WIDTH: f32 = 206.;
 const SHOW_SETTINGS_KEYBINDING_NAME: &str = "workspace:show_settings";
 pub const TOGGLE_COMMAND_PALETTE_KEYBINDING_NAME: &str = "workspace:toggle_command_palette";
 
 const USER_AVATAR_BUTTON_POSITION_ID: &str = "workspace:user_avatar_button";
-const RESOURCE_CENTER_BUTTON_POSITION_ID: &str = "resource_center_button";
 const NOTIFICATIONS_MAILBOX_POSITION_ID: &str = "workspace:notifications_mailbox";
 pub(crate) const JUMP_TO_LATEST_TOAST_BINDING_NAME: &str = "workspace:jump_to_latest_toast";
 pub(crate) const TOGGLE_NOTIFICATION_MAILBOX_BINDING_NAME: &str =
@@ -647,10 +669,11 @@ const MAX_FORK_TOAST_TITLE_LENGTH: usize = 100;
 const MAX_WINDOW_TITLE_LENGTH: usize = 80;
 
 #[cfg(all(feature = "local_fs", not(target_family = "wasm")))]
-const AUTO_CLOUD_HANDOFF_PROMPT: &str = "从当前对话状态开始，在云端继续此本地 Warp Agent 任务。";
+const AUTO_CLOUD_HANDOFF_PROMPT: &str =
+    "Continue this local Warp Agent task in the cloud from the current conversation state.";
 
 /// The default display name used for the user if they have no associated display name.
-pub const DEFAULT_USER_DISPLAY_NAME: &str = "用户";
+pub const DEFAULT_USER_DISPLAY_NAME: &str = "User";
 
 lazy_static! {
     static ref OPENING_WARP_DRIVE_ON_START_UP: Arc<Mutex<bool>> = Arc::new(Mutex::new(false));
@@ -752,6 +775,7 @@ struct LocalToCloudHandoffOpenParams {
     launch: Option<PendingCloudLaunch>,
     environment_id: Option<SyncId>,
     intent: LocalToCloudHandoffIntent,
+    should_inject_continue: bool,
 }
 
 #[cfg(all(feature = "local_fs", not(target_family = "wasm")))]
@@ -881,7 +905,6 @@ enum DefaultSessionModeBehavior {
 struct CodeReviewPaneContext {
     repo_path: Option<LocalOrRemotePath>,
     diff_state_model: ModelHandle<DiffStateModel>,
-    terminal_view: WeakViewHandle<TerminalView>,
 }
 
 /// Parameters for updating the right panel's 'state.
@@ -919,6 +942,10 @@ enum PendingSessionConfigTabConfigChipTutorial {
     },
 }
 
+fn query_for_rewind_prefill(inputs: &[AIAgentInput]) -> Option<String> {
+    inputs.iter().find_map(AIAgentInput::display_query)
+}
+
 /// Snapshot of a tab used to move it between workspaces or into a new window.
 /// Built by `Workspace::tab_transfer_info_at_index` and consumed by
 /// `insert_transferred_tab_at_index`. Captures the pane group handle, visual
@@ -934,6 +961,29 @@ pub struct TransferredTab {
     pub is_right_panel_maximized: bool,
     pub draggable_state: DraggableState,
 }
+#[cfg(not(target_family = "wasm"))]
+struct ThirdPartyLocalContinuationLaunch {
+    command: String,
+}
+
+/// Per-`TabGroupId` hover state for the horizontal tab bar header.
+#[derive(Clone, Default)]
+struct HorizontalTabGroupMouseStates {
+    header: MouseStateHandle,
+}
+
+/// A unit the horizontal tab bar renders: either a single ungrouped tab or a
+/// contiguous run of same-group tabs collapsed into one group container.
+enum TabBarSlot {
+    Single {
+        index: usize,
+    },
+    Group {
+        group_id: TabGroupId,
+        first_index: usize,
+        run_len: usize,
+    },
+}
 
 pub struct Workspace {
     window_id: WindowId,
@@ -948,6 +998,8 @@ pub struct Workspace {
     traffic_light_mouse_states: TrafficLightMouseStates,
     /// Tab groups in this workspace, keyed by id.
     pub(crate) tab_groups: HashMap<TabGroupId, TabGroup>,
+    /// Per-group hover state for the horizontal tab bar.
+    horizontal_tab_group_mouse_states: RefCell<HashMap<TabGroupId, HorizontalTabGroupMouseStates>>,
     tab_rename_editor: ViewHandle<EditorView>,
     pane_rename_editor: ViewHandle<EditorView>,
     tab_group_rename_editor: ViewHandle<EditorView>,
@@ -963,6 +1015,8 @@ pub struct Workspace {
     show_tab_right_click_menu: Option<(usize, TabContextMenuAnchor)>,
     /// Open tab group more-options menu; reuses the `tab_right_click_menu` view.
     show_tab_group_right_click_menu: Option<(TabGroupId, TabContextMenuAnchor)>,
+    /// Open multi-tab selection menu (right-click on any tab in a multi-tab selection).
+    show_tab_selection_right_click_menu: Option<(usize, TabContextMenuAnchor)>,
     // TODO(CORE-2300): this used to be add_tab_dropdown_menu.
     // Because we are rolling out the change behind a feature flag,
     // keep this comment here until the feature flag is removed.
@@ -1029,12 +1083,17 @@ pub struct Workspace {
     oz_launch_modal: ModalWithTab<LaunchModal<OzLaunchSlide>>,
     openwarp_launch_modal: ViewHandle<OpenWarpLaunchModal>,
     orchestration_launch_modal: ViewHandle<OrchestrationLaunchModal>,
+    auto_handoff_sleep_modal: ViewHandle<AutoHandoffSleepModal>,
     enable_auto_reload_modal: ViewHandle<EnableAutoReloadModal>,
     build_plan_migration_modal: ViewHandle<BuildPlanMigrationModal>,
     codex_modal: ViewHandle<CodexModal>,
     cloud_agent_capacity_modal: ViewHandle<CloudAgentCapacityModal>,
     free_tier_limit_hit_modal: ViewHandle<FreeTierLimitHitModal>,
     free_tier_limit_check_triggered: bool,
+    free_ai_removal_modal: ViewHandle<FreeAiRemovalModal>,
+    /// Second instance of the free-AI-removal modal, opened on demand when a
+    /// Free user activates Prompt Suggestions while out of credits.
+    prompt_suggestions_unavailable_modal: ViewHandle<FreeAiRemovalModal>,
     toast_stack: ViewHandle<DismissibleToastStack<WorkspaceAction>>,
     agent_toast_stack: ViewHandle<AgentToastStack>,
     update_toast_stack: ViewHandle<DismissibleToastStack<WorkspaceAction>>,
@@ -1259,7 +1318,7 @@ impl Workspace {
                 },
                 ctx,
             );
-            editor.set_placeholder_text("搜索仓库", ctx);
+            editor.set_placeholder_text("Search repos", ctx);
             editor
         });
         ctx.subscribe_to_view(&editor, |me, editor_view, event, ctx| match event {
@@ -1295,7 +1354,7 @@ impl Workspace {
             EditorView::single_line(options, ctx)
         });
         editor.update(ctx, |editor, ctx| {
-            editor.set_placeholder_text("搜索标签页...", ctx);
+            editor.set_placeholder_text("Search tabs...", ctx);
         });
         ctx.subscribe_to_view(&editor, |me, editor_view, event, ctx| match event {
             EditorEvent::Edited(_) => {
@@ -2113,7 +2172,7 @@ impl Workspace {
                     log::warn!("Failed to remove tab config file: {e:?}");
                     self.toast_stack.update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
-                            DismissibleToast::error(format!("移除标签页配置失败：{e}")),
+                            DismissibleToast::error(format!("Failed to remove tab config: {e}")),
                             ctx,
                         );
                     });
@@ -2535,7 +2594,7 @@ impl Workspace {
                     me.shown_staging_banner_count += 1;
                     me.toast_stack.update(ctx, |toast_stack, ctx| {
                         let toast = DismissibleToast::error(
-                            "Staging API 调用失败。你的 IP 地址是否发生变化？".to_string(),
+                            "Staging API call failed. Did your IP address change?".to_string(),
                         )
                         .with_object_id("staging_access_blocked_toast".to_string());
                         toast_stack.add_ephemeral_toast(toast, ctx);
@@ -2615,18 +2674,20 @@ impl Workspace {
                             home_dir.as_ref().and_then(|h| h.to_str()),
                         );
                         let message = format!(
-                            "加载标签页配置 {friendly_path} 失败：{}",
+                            "Failed to load tab config {friendly_path}: {}",
                             error.error_message
                         );
                         let path = error.file_path.clone();
                         let toast = DismissibleToast::error(message)
                             .with_object_id(object_id.clone())
-                            .with_link(ToastLink::new("打开文件".to_string()).with_onclick_action(
-                                WorkspaceAction::OpenTabConfigErrorFile {
-                                    path,
-                                    toast_object_id: object_id,
-                                },
-                            ));
+                            .with_link(
+                                ToastLink::new("Open file".to_string()).with_onclick_action(
+                                    WorkspaceAction::OpenTabConfigErrorFile {
+                                        path,
+                                        toast_object_id: object_id,
+                                    },
+                                ),
+                            );
                         toast_stack.update(ctx, |toast_stack, ctx| {
                             toast_stack.add_persistent_toast(toast, ctx);
                         });
@@ -2821,6 +2882,23 @@ impl Workspace {
             me.handle_free_tier_limit_modal_event(event, ctx);
         });
 
+        let free_ai_removal_modal = ctx.add_typed_action_view(|ctx| {
+            FreeAiRemovalModal::new(FreeAiRemovalModalVariant::Notice, ctx)
+        });
+        ctx.subscribe_to_view(&free_ai_removal_modal, |me, _, event, ctx| {
+            me.handle_free_ai_removal_modal_event(event, ctx);
+        });
+
+        let prompt_suggestions_unavailable_modal = ctx.add_typed_action_view(|ctx| {
+            FreeAiRemovalModal::new(FreeAiRemovalModalVariant::PromptSuggestions, ctx)
+        });
+        ctx.subscribe_to_view(
+            &prompt_suggestions_unavailable_modal,
+            |me, _, event, ctx| {
+                me.handle_prompt_suggestions_unavailable_modal_event(event, ctx);
+            },
+        );
+
         let require_login_modal = Self::build_require_login_modal(ctx);
 
         let auth_override_warning_modal = Self::build_auth_override_warning_modal(ctx);
@@ -2849,6 +2927,11 @@ impl Workspace {
         let orchestration_launch_view = ctx.add_typed_action_view(OrchestrationLaunchModal::new);
         ctx.subscribe_to_view(&orchestration_launch_view, |me, _, event, ctx| {
             me.handle_orchestration_launch_modal_event(event, ctx);
+        });
+
+        let auto_handoff_sleep_view = ctx.add_typed_action_view(AutoHandoffSleepModal::new);
+        ctx.subscribe_to_view(&auto_handoff_sleep_view, |me, _, event, ctx| {
+            me.handle_auto_handoff_sleep_modal_event(event, ctx);
         });
 
         let launch_config_save_modal = Self::build_launch_config_save_modal(ctx);
@@ -3172,6 +3255,10 @@ impl Workspace {
                         me.focus_openwarp_launch_modal(ctx);
                     } else if model_ref.is_orchestration_launch_modal_open() {
                         me.focus_orchestration_launch_modal(ctx);
+                    } else if model_ref.is_auto_handoff_sleep_modal_open() {
+                        me.focus_auto_handoff_sleep_modal(ctx);
+                    } else if model_ref.is_free_ai_removal_modal_open() {
+                        me.focus_free_ai_removal_modal(ctx);
                     } else if model_ref.is_hoa_onboarding_open() {
                         me.show_hoa_onboarding_flow(ctx);
                     } else if model_ref.is_build_plan_migration_modal_open() {
@@ -3203,6 +3290,7 @@ impl Workspace {
             tab_bar_hover_state: Default::default(),
             traffic_light_mouse_states: Default::default(),
             tab_groups: HashMap::new(),
+            horizontal_tab_group_mouse_states: RefCell::default(),
             tab_rename_editor: Self::tab_rename_editor(ctx),
             pane_rename_editor: Self::pane_rename_editor(ctx),
             tab_group_rename_editor: Self::tab_group_rename_editor(ctx),
@@ -3217,6 +3305,7 @@ impl Workspace {
             tab_right_click_menu,
             show_tab_right_click_menu: None,
             show_tab_group_right_click_menu: None,
+            show_tab_selection_right_click_menu: None,
             new_session_dropdown_menu,
             show_new_session_dropdown_menu: None,
             changelog_model,
@@ -3309,6 +3398,7 @@ impl Workspace {
             },
             openwarp_launch_modal: openwarp_launch_view,
             orchestration_launch_modal: orchestration_launch_view,
+            auto_handoff_sleep_modal: auto_handoff_sleep_view,
             enable_auto_reload_modal,
             agent_management_view,
             notification_mailbox_view,
@@ -3317,6 +3407,8 @@ impl Workspace {
             cloud_agent_capacity_modal,
             free_tier_limit_hit_modal,
             free_tier_limit_check_triggered: false,
+            free_ai_removal_modal,
+            prompt_suggestions_unavailable_modal,
             lightbox_view: None,
             hoa_onboarding_flow: None,
             hoa_vtabs_callout_pinned_position: None,
@@ -3459,6 +3551,7 @@ impl Workspace {
             let is_relevant_update = matches!(
                 event,
                 BlocklistAIHistoryEvent::SetActiveConversation { .. }
+                    | BlocklistAIHistoryEvent::UpdatedConversationTitle { .. }
                     | BlocklistAIHistoryEvent::UpdatedConversationMetadata { .. }
                     | BlocklistAIHistoryEvent::RestoredConversations { .. }
                     | BlocklistAIHistoryEvent::UpdatedConversationArtifacts { .. }
@@ -3515,6 +3608,7 @@ impl Workspace {
                 | BlocklistAIHistoryEvent::ClearedConversationsInTerminalView { .. }
                 | BlocklistAIHistoryEvent::SplitConversation { .. }
                 | BlocklistAIHistoryEvent::RestoredConversations { .. }
+                | BlocklistAIHistoryEvent::UpdatedConversationTitle { .. }
                 | BlocklistAIHistoryEvent::UpdatedConversationMetadata { .. }
         ) && event.terminal_view_id().is_some_and(|terminal_view_id| {
             self.workspace_contains_terminal_view(terminal_view_id, ctx)
@@ -3643,7 +3737,8 @@ impl Workspace {
                 ..
             }
             | TabSettingsChangedEvent::VerticalTabsShowPrLink { .. }
-            | TabSettingsChangedEvent::VerticalTabsShowDiffStats { .. } => {
+            | TabSettingsChangedEvent::VerticalTabsShowDiffStats { .. }
+            | TabSettingsChangedEvent::HideTitleBarSearchBarInVerticalTabs { .. } => {
                 ctx.notify();
             }
             TabSettingsChangedEvent::VerticalTabsShowDetailsOnHover { .. } => {
@@ -3725,6 +3820,31 @@ impl Workspace {
                 let active_tab_index = window_snapshot.active_tab_index;
                 let restored_left_panel_open = window_snapshot.left_panel_open;
 
+                // Restore groups first so per-tab `group_id` assignments
+                // below can validate membership against a populated map.
+                if FeatureFlag::GroupedTabs.is_enabled() {
+                    self.tab_groups = window_snapshot
+                        .tab_groups
+                        .iter()
+                        .map(|group_snapshot| {
+                            (
+                                group_snapshot.id,
+                                TabGroup {
+                                    id: group_snapshot.id,
+                                    name: group_snapshot.name.clone(),
+                                    color: group_snapshot.color,
+                                    collapsed: group_snapshot.collapsed,
+                                    draggable_state: Default::default(),
+                                    // Only restore pinned state when the
+                                    // Pinned Tabs feature is enabled.
+                                    pinned: FeatureFlag::PinnedTabs.is_enabled()
+                                        && group_snapshot.pinned,
+                                },
+                            )
+                        })
+                        .collect();
+                }
+
                 window_snapshot
                     .tabs
                     .iter()
@@ -3740,6 +3860,15 @@ impl Workspace {
                         self.tabs[tab_index].default_directory_color =
                             saved_tab.default_directory_color;
                         self.tabs[tab_index].selected_color = saved_tab.selected_color;
+                        // Only restore pinned state when the Pinned Tabs
+                        // feature is enabled.
+                        if FeatureFlag::PinnedTabs.is_enabled() {
+                            self.tabs[tab_index].pinned = saved_tab.pinned;
+                        }
+                        // Drop the group reference if the group itself didn't restore.
+                        self.tabs[tab_index].group_id = saved_tab
+                            .group_id
+                            .filter(|group_id| self.tab_groups.contains_key(group_id));
 
                         let pane_group = self.tabs[tab_index].pane_group.clone();
 
@@ -4022,8 +4151,6 @@ impl Workspace {
         let open_warp_drive = if !show_warp_home {
             if self.should_trigger_get_started_onboarding(ctx) {
                 self.trigger_get_started_onboarding(ctx);
-            } else if FeatureFlag::WelcomeTab.is_enabled() {
-                self.add_welcome_tab(ctx);
             } else {
                 self.add_new_session_tab_with_default_mode(
                     NewSessionSource::Window,
@@ -4039,7 +4166,7 @@ impl Workspace {
         } else {
             let home_pane = super::home::create_home_pane(ctx);
             placeholder_pane = Some(home_pane.as_pane().id());
-            self.add_tab_from_existing_pane(home_pane, 0, ctx);
+            self.add_tab_from_existing_pane(home_pane, 0, None, ctx);
 
             // If we can't start a terminal session to run the onboarding flow, show the Warp Home
             // placeholder along with Warp Drive.
@@ -4213,7 +4340,9 @@ impl Workspace {
                 let Some(cloud_conversation) = cloud_conversation else {
                     log::error!("Failed to load conversation from server");
                     me.toast_stack.update(ctx, |view, ctx| {
-                        let new_toast = DismissibleToast::error("加载对话数据失败。".to_string());
+                        let new_toast = DismissibleToast::error(
+                            "Failed to load conversation data.".to_string(),
+                        );
                         view.add_ephemeral_toast(new_toast, ctx);
                     });
                     return;
@@ -4378,7 +4507,7 @@ impl Workspace {
         ));
 
         self.toast_stack.update(ctx, |toast_stack, ctx| {
-            let toast = DismissibleToast::default("远程控制链接已复制。".to_string());
+            let toast = DismissibleToast::default("Remote control link copied.".to_string());
             toast_stack.add_ephemeral_toast(toast, ctx);
         });
     }
@@ -4972,6 +5101,7 @@ impl Workspace {
                     subtitle,
                     window_id,
                     tab_index: tab_index + 1,
+                    color: tab.color(),
                 })
             })
             .collect()
@@ -5165,6 +5295,10 @@ impl Workspace {
         };
 
         self.active_tab_index = index;
+
+        // The range selection's anchor is the active tab, so any change to
+        // the active tab makes the existing selection stale; clear it.
+        self.clear_tab_multi_selection(ctx);
 
         if let Some(tab) = self.tabs.get(index) {
             let pane_group_id = tab.pane_group.id();
@@ -5370,21 +5504,19 @@ impl Workspace {
     /// If the CWD is within a directory that has a configured color, applies it.
     /// If the CWD moves outside all configured directories, the directory color is cleared.
     fn sync_codebase_tab_color(tab: &mut TabData, ctx: &mut ViewContext<Self>) {
-        let cwd = tab
+        let Some(cwd) = tab
             .pane_group
             .as_ref(ctx)
             .active_session_view(ctx)
-            .and_then(|tv| tv.as_ref(ctx).pwd_if_local(ctx));
-
-        let Some(cwd) = cwd else {
+            .and_then(|tv| tv.as_ref(ctx).canonical_session_pwd_if_local(ctx))
+        else {
             return;
         };
 
-        let cwd_path = Path::new(&cwd);
         let color = TabSettings::as_ref(ctx)
             .directory_tab_colors
             .value()
-            .color_for_directory(cwd_path)
+            .color_for_directory(cwd.as_path())
             .and_then(|c| c.ansi_color());
 
         tab.default_directory_color = color;
@@ -5481,7 +5613,7 @@ impl Workspace {
                     .unwrap_or_else(|| {
                         let title = configuration.title().trim();
                         if title.is_empty() {
-                            "未命名窗格".to_string()
+                            "Untitled pane".to_string()
                         } else {
                             title.to_string()
                         }
@@ -5827,7 +5959,7 @@ impl Workspace {
         if !FeatureFlag::ConfigurableToolbar.is_enabled() {
             return;
         }
-        let items = vec![MenuItemFields::new("重新排列工具栏项目")
+        let items = vec![MenuItemFields::new("Re-arrange toolbar items")
             .with_on_select_action(WorkspaceAction::OpenHeaderToolbarEditor)
             .into_item()];
         self.header_toolbar_context_menu
@@ -5854,28 +5986,42 @@ impl Workspace {
                 self.show_settings_with_section(Some(SettingsSection::WarpAgent), ctx);
             }
             #[allow(unused_variables)]
-            AIFactViewEvent::OpenFile(path) => {
+            AIFactViewEvent::OpenFile(location) => {
                 #[cfg(feature = "local_fs")]
                 {
-                    let settings = EditorSettings::as_ref(ctx);
-                    let target = resolve_file_target_with_editor_choice(
-                        path,
-                        *settings.open_file_editor,
-                        *settings.prefer_markdown_viewer,
-                        *settings.open_file_layout,
-                        None,
-                    );
-                    self.open_file_with_target(
-                        path.clone(),
-                        target,
-                        None,
-                        CodeSource::Link {
-                            path: path.clone(),
-                            range_start: None,
-                            range_end: None,
-                        },
-                        ctx,
-                    );
+                    match location {
+                        LocalOrRemotePath::Local(path) => {
+                            let settings = EditorSettings::as_ref(ctx);
+                            let target = resolve_file_target_with_editor_choice(
+                                path,
+                                *settings.open_file_editor,
+                                *settings.prefer_markdown_viewer,
+                                *settings.open_file_layout,
+                                None,
+                            );
+                            self.open_file_with_target(
+                                path.clone(),
+                                target,
+                                None,
+                                CodeSource::ProjectRules {
+                                    location: location.clone(),
+                                },
+                                ctx,
+                            );
+                        }
+                        LocalOrRemotePath::Remote(_) => {
+                            self.open_code(
+                                CodeSource::ProjectRules {
+                                    location: location.clone(),
+                                },
+                                EditorLayout::SplitPane,
+                                None,
+                                false,
+                                &[],
+                                ctx,
+                            );
+                        }
+                    }
                 }
             }
             AIFactViewEvent::InitializeProject(path) => {
@@ -6095,7 +6241,7 @@ impl Workspace {
                         self.open_code(
                             code_source,
                             crate::util::openable_file_type::EditorLayout::SplitPane,
-                            None,
+                            *line_col,
                             false,
                             &[],
                             ctx,
@@ -6308,7 +6454,7 @@ impl Workspace {
             #[cfg(target_os = "windows")]
             {
                 let is_terminal_default = effective_default == DefaultSessionMode::Terminal;
-                let mut terminal_item = MenuItemFields::new("终端")
+                let mut terminal_item = MenuItemFields::new("Terminal")
                     .with_on_select_action(WorkspaceAction::AddTerminalTab {
                         hide_homepage: false,
                     })
@@ -6345,7 +6491,7 @@ impl Workspace {
             // On other platforms, Terminal is a regular item.
             #[cfg(not(target_os = "windows"))]
             {
-                let mut terminal_item = MenuItemFields::new("终端")
+                let mut terminal_item = MenuItemFields::new("Terminal")
                     .with_on_select_action(WorkspaceAction::AddTerminalTab {
                         hide_homepage: false,
                     })
@@ -6362,7 +6508,7 @@ impl Workspace {
             && FeatureFlag::AgentView.is_enabled()
             && FeatureFlag::CloudMode.is_enabled()
         {
-            let mut cloud_item = MenuItemFields::new("云端 Agent")
+            let mut cloud_item = MenuItemFields::new("Cloud Agent")
                 .with_on_select_action(WorkspaceAction::AddAmbientAgentTab)
                 .with_icon(icons::Icon::LayoutAlt01);
             if effective_default == DefaultSessionMode::CloudAgent {
@@ -6373,7 +6519,7 @@ impl Workspace {
 
         // 3b. Local Docker Sandbox
         if FeatureFlag::LocalDockerSandbox.is_enabled() {
-            let mut docker_item = MenuItemFields::new("本地 Docker 沙盒")
+            let mut docker_item = MenuItemFields::new("Local Docker Sandbox")
                 .with_on_select_action(WorkspaceAction::AddDockerSandboxTab)
                 .with_icon(icons::Icon::Docker);
             if effective_default == DefaultSessionMode::DockerSandbox {
@@ -6433,14 +6579,14 @@ impl Workspace {
         if FeatureFlag::TabConfigs.is_enabled() {
             menu_items.push(MenuItem::Separator);
             menu_items.push(
-                MenuItemFields::new_submenu("新建 worktree 配置")
+                MenuItemFields::new_submenu("New worktree config")
                     .with_icon(icons::Icon::Dataflow02)
                     .into_item(),
             );
 
             // 6. New tab config — V0: opens the TOML template.
             menu_items.push(
-                MenuItemFields::new("新建标签页配置")
+                MenuItemFields::new("New tab config")
                     .with_on_select_action(WorkspaceAction::SelectNewSessionMenuItem(
                         NewSessionMenuItem::CreateNewTabConfig,
                     ))
@@ -6454,7 +6600,7 @@ impl Workspace {
         if FeatureFlag::GroupedTabs.is_enabled() {
             menu_items.push(MenuItem::Separator);
             menu_items.push(
-                MenuItemFields::new("新建标签页分组")
+                MenuItemFields::new("New tab group")
                     .with_on_select_action(WorkspaceAction::SelectNewSessionMenuItem(
                         NewSessionMenuItem::CreateNewTabGroup,
                     ))
@@ -6465,7 +6611,7 @@ impl Workspace {
 
         menu_items.push(MenuItem::Separator);
         menu_items.push(
-            MenuItemFields::new("重新打开已关闭会话")
+            MenuItemFields::new("Reopen closed session")
                 .with_on_select_action(WorkspaceAction::ReopenClosedSession)
                 .with_key_shortcut_label(reopen_closed_session_shortcut_label)
                 .with_disabled(UndoCloseStack::handle(ctx).as_ref(ctx).is_empty())
@@ -6747,16 +6893,16 @@ impl Workspace {
             ctx,
         );
         let new_tab_index = self.active_tab_index;
+
+        // Ensure that new tab groups always land below pinned items, but above
+        // any other items in the tab list.
+        let target = self.pinned_boundary_index(&self.tabs);
+
         if let Some(tab) = self.tabs.get_mut(new_tab_index) {
             tab.group_id = Some(group_id);
         }
 
-        // New tab groups always land at the top of the tab list.
-        if new_tab_index != 0 {
-            let tab = self.tabs.remove(new_tab_index);
-            self.tabs.insert(0, tab);
-            self.active_tab_index = 0;
-        }
+        self.move_tab_to_index(new_tab_index, target, ctx);
 
         ctx.dispatch_global_action("workspace:save_app", ());
         ctx.notify();
@@ -6769,6 +6915,7 @@ impl Workspace {
         let indices: Vec<usize> = group_member_indices(&self.tabs, group_id).collect();
         if indices.is_empty() {
             self.tab_groups.remove(&group_id);
+            ctx.dispatch_global_action("workspace:save_app", ());
             ctx.notify();
             return;
         }
@@ -6796,6 +6943,16 @@ impl Workspace {
     ) {
         if let Some(group) = self.tab_groups.get_mut(&group_id) {
             group.collapsed = !group.collapsed;
+            ctx.dispatch_global_action("workspace:save_app", ());
+            ctx.notify();
+        }
+    }
+
+    /// Ensures the group is expanded (not collapsed). No-op if the group does
+    /// not exist or is already expanded.
+    fn expand_tab_group(&mut self, group_id: TabGroupId, ctx: &mut ViewContext<Self>) {
+        if let Some(group) = self.tab_groups.get_mut(&group_id) {
+            group.collapsed = false;
             ctx.notify();
         }
     }
@@ -6808,7 +6965,10 @@ impl Workspace {
         // Seed the editor with the existing name, or the "New Group" default
         // label when the group is unnamed. `insert_selected_text` selects the
         // seeded text so the user can type to replace it instantly.
-        let seed_text = group.name.clone().unwrap_or_else(|| "新建分组".to_string());
+        let seed_text = group
+            .name
+            .clone()
+            .unwrap_or_else(|| "New Group".to_string());
 
         self.current_workspace_state
             .set_tab_group_being_renamed(group_id);
@@ -6828,8 +6988,15 @@ impl Workspace {
             });
     }
 
-    /// Creates a new group containing the tab and moves it to the top of
-    /// the tab list.
+    /// Creates a new group containing the tab. The new group is unpinned
+    /// regardless of whether the source tab was pinned — tab pinning and
+    /// group pinning are independent concepts, and the user can pin the new
+    /// group explicitly after creation. The block lands at the source tab's
+    /// original slot, except:
+    /// * If the tab was in an existing group, anchor past that group's last
+    ///   remaining member so the old group stays contiguous.
+    /// * If the tab was effectively pinned, clamp past the pinned region so
+    ///   the new (unpinned) group doesn't land inside the pinned area.
     fn new_tab_group_from_tab(&mut self, tab_index: usize, ctx: &mut ViewContext<Self>) {
         if !FeatureFlag::GroupedTabs.is_enabled() {
             return;
@@ -6844,9 +7011,28 @@ impl Workspace {
         let group_id = group.id;
         self.tab_groups.insert(group_id, group);
 
+        // If the tab we are making a group from, is already in a group
+        // our target index is directly after the group's last member.
+        // Otherwise it is the tab's current index.
+        let natural_target = previous_group_id
+            .and_then(|gid| self.index_after_group(gid))
+            .unwrap_or(tab_index);
+
+        // Our target index should always be after all existing pinned items.
+        let target = self.clamp_to_unpinned_region(&self.tabs, natural_target);
+
         self.tabs[tab_index].group_id = Some(group_id);
-        self.move_tab_to_index(tab_index, 0, ctx);
-        self.set_active_tab_index(0, ctx);
+        // Pin state is cleared when a new group with this tab is created.
+        self.tabs[tab_index].pinned = false;
+
+        self.move_tab_to_index(tab_index, target, ctx);
+
+        // The move above may have shifted the tab; the new group has exactly
+        // one member, so its position is the new active index.
+        let new_active = group_member_indices(&self.tabs, group_id)
+            .next()
+            .unwrap_or(tab_index);
+        self.set_active_tab_index(new_active, ctx);
 
         if let Some(prev_group_id) = previous_group_id {
             self.prune_empty_tab_group(prev_group_id, ctx);
@@ -6879,23 +7065,26 @@ impl Workspace {
         }
         let previous_group_id = tab.group_id;
 
-        let target_index = group_member_indices(&self.tabs, group_id)
-            .last()
-            .map(|i| i + 1)
-            .unwrap_or(self.tabs.len());
+        let target_index = self.index_after_group(group_id).unwrap_or(self.tabs.len());
         self.tabs[tab_index].group_id = Some(group_id);
+
+        // Moving a tab to a group, clear its pinned state.
+        self.tabs[tab_index].pinned = false;
+        self.expand_tab_group(group_id, ctx);
         self.move_tab_to_index(tab_index, target_index, ctx);
 
         if let Some(prev) = previous_group_id {
             self.prune_empty_tab_group(prev, ctx);
         }
 
+        self.focus_active_tab(ctx);
         ctx.dispatch_global_action("workspace:save_app", ());
         ctx.notify();
     }
 
     /// Removes the tab from its current group and repositions it just past
-    /// the group's last remaining member.
+    /// the group's last remaining member, or further if the group was pinned
+    /// (the removed tab is now unpinned and must clear the pinned region).
     fn remove_tab_from_group(&mut self, tab_index: usize, ctx: &mut ViewContext<Self>) {
         if !FeatureFlag::GroupedTabs.is_enabled() {
             return;
@@ -6907,14 +7096,22 @@ impl Workspace {
             return;
         };
 
+        // The target index is after the last tab in this group.
+        // If this group was pinned, we want to move this tab after
+        // the pinned region.
+        let target = self
+            .index_after_group(previous_group_id)
+            .map(|t| self.clamp_to_unpinned_region(&self.tabs, t));
+
         self.tabs[tab_index].group_id = None;
 
-        if let Some(last) = group_member_indices(&self.tabs, previous_group_id).last() {
-            self.move_tab_to_index(tab_index, last + 1, ctx);
+        if let Some(target) = target {
+            self.move_tab_to_index(tab_index, target, ctx);
         }
 
         self.prune_empty_tab_group(previous_group_id, ctx);
 
+        self.focus_active_tab(ctx);
         ctx.dispatch_global_action("workspace:save_app", ());
         ctx.notify();
     }
@@ -6923,12 +7120,40 @@ impl Workspace {
         if !FeatureFlag::GroupedTabs.is_enabled() || !self.tab_groups.contains_key(&group_id) {
             return;
         }
+        // Capture the group's contiguous member range and pinned state
+        // before mutating; we need them to relocate the block out of the
+        // pinned region when the group was pinned.
+        let was_pinned = self.tab_groups.get(&group_id).is_some_and(|g| g.pinned);
+        let member_range = group_member_index_range(&self.tabs, group_id);
+
         for tab in &mut self.tabs {
             if tab.group_id == Some(group_id) {
                 tab.group_id = None;
             }
         }
         self.tab_groups.remove(&group_id);
+
+        // If the group was pinned, we must reposition the group's
+        // members after the pinned area. They are now ungrouped and
+        // thus no longer pinned.
+        if was_pinned {
+            if let Some((first, last)) = member_range {
+                // Remove ungrouped tabs from the tab list.
+                let active_pane_group_id = self
+                    .tabs
+                    .get(self.active_tab_index)
+                    .map(|tab| tab.pane_group.id());
+                let drained: Vec<TabData> = self.tabs.drain(first..=last).collect();
+                // Recompute boundary now that the (formerly group-pinned)
+                // block has been removed from the list.
+                let target = self.pinned_boundary_index(&self.tabs);
+                // Place the ungrouped tabs at their new target index.
+                self.tabs.splice(target..target, drained);
+                self.restore_active_tab_index(active_pane_group_id);
+            }
+        }
+
+        ctx.dispatch_global_action("workspace:save_app", ());
         ctx.notify();
     }
 
@@ -6958,16 +7183,45 @@ impl Workspace {
             let new_idx = self.active_tab_index;
             // Resolve the destination from the group's existing members before
             // adding the new tab to the group.
-            let target_index = group_member_indices(&self.tabs, group_id)
-                .last()
-                .map(|last| last + 1)
-                .unwrap_or(self.tabs.len());
+            let target_index = self.index_after_group(group_id).unwrap_or(self.tabs.len());
             if let Some(tab) = self.tabs.get_mut(new_idx) {
                 tab.group_id = Some(group_id);
             }
             self.move_tab_to_index(new_idx, target_index, ctx);
         }
-        ctx.notify();
+        self.expand_tab_group(group_id, ctx);
+    }
+
+    /// True when the user-initiated reorder of `group_id` in `direction`
+    /// would not cross the pinned/unpinned boundary or go beyond the tab list bounds.
+    /// Used for the tab group menu which supports 'move group up/down' (or for htabs left/right).
+    pub(super) fn can_move_tab_group(&self, group_id: TabGroupId, direction: TabMovement) -> bool {
+        let Some((first, last)) = group_member_index_range(&self.tabs, group_id) else {
+            return false;
+        };
+        let group_pinned = self.tab_groups.get(&group_id).is_some_and(|g| g.pinned);
+        match direction {
+            TabMovement::Left => {
+                // Group can not move up/left if it is the first item.
+                if first == 0 {
+                    return false;
+                }
+                let neighbor = &self.tabs[first - 1];
+                // This group can only move up/left if it is pinned or the
+                // item before it is not pinned.
+                group_pinned || !self.is_tab_effectively_pinned(neighbor)
+            }
+            TabMovement::Right => {
+                // Group can not move down/right if it is the last item.
+                if last + 1 >= self.tabs.len() {
+                    return false;
+                }
+                let neighbor = &self.tabs[last + 1];
+                // This group can only move down.right if it is not pinned
+                // or the item after it is pinned.
+                !group_pinned || self.is_tab_effectively_pinned(neighbor)
+            }
+        }
     }
 
     /// Moves the whole group up or down by one "slot", where a slot is the
@@ -6988,14 +7242,14 @@ impl Workspace {
         if !FeatureFlag::GroupedTabs.is_enabled() {
             return;
         }
+        if !self.can_move_tab_group(group_id, direction) {
+            return;
+        }
         let Some((first, last)) = group_member_index_range(&self.tabs, group_id) else {
             return;
         };
         match direction {
             TabMovement::Left => {
-                if first == 0 {
-                    return;
-                }
                 // The upward neighbor is the tab directly above the group.
                 let above_index = first - 1;
                 // If that neighbor is itself grouped, land above its whole
@@ -7009,9 +7263,6 @@ impl Workspace {
                 self.move_group_block(group_id, target, ctx);
             }
             TabMovement::Right => {
-                if last + 1 >= self.tabs.len() {
-                    return;
-                }
                 // The downward neighbor is the tab directly below the group.
                 let below_index = last + 1;
                 // If that neighbor is itself grouped, expand to its whole
@@ -7257,9 +7508,18 @@ impl Workspace {
             return;
         }
 
+        let can_move_left = self.can_move_tab(tab_index, TabMovement::Left);
+        let can_move_right = self.can_move_tab(tab_index, TabMovement::Right);
         let menu_items = {
             let tab = &self.tabs[tab_index];
-            tab.menu_items(tab_index, self.tabs.len(), &self.tab_groups, ctx)
+            tab.menu_items(
+                tab_index,
+                self.tabs.len(),
+                &self.tab_groups,
+                can_move_left,
+                can_move_right,
+                ctx,
+            )
         };
         ctx.update_view(&self.tab_right_click_menu, |context_menu, view_ctx| {
             context_menu.set_items(menu_items, view_ctx);
@@ -7285,7 +7545,7 @@ impl Workspace {
             return;
         }
 
-        let menu_items = self.tab_group_menu_items(group_id);
+        let menu_items = self.tab_group_menu_items(group_id, uses_vertical_tabs(ctx));
         ctx.update_view(&self.tab_right_click_menu, |context_menu, view_ctx| {
             context_menu.set_items(menu_items, view_ctx);
         });
@@ -7322,19 +7582,24 @@ impl Workspace {
         let pane_name_target = match target {
             VerticalTabsPaneContextMenuTarget::ClickedPane(locator) => PaneNameMenuTarget {
                 locator,
-                rename_label: "重命名窗格",
-                reset_label: "重置窗格名称",
+                rename_label: "Rename pane",
+                reset_label: "Reset pane name",
             },
             VerticalTabsPaneContextMenuTarget::ActivePane(locator) => PaneNameMenuTarget {
                 locator,
-                rename_label: "重命名当前窗格",
-                reset_label: "重置当前窗格名称",
+                rename_label: "Rename active pane",
+                reset_label: "Reset active pane name",
             },
         };
+        let can_move_left = self.can_move_tab(tab_index, TabMovement::Left);
+        let can_move_right = self.can_move_tab(tab_index, TabMovement::Right);
+        let tab = &self.tabs[tab_index];
         let menu_items = tab.menu_items_with_pane_name_target(
             tab_index,
             self.tabs.len(),
             &self.tab_groups,
+            can_move_left,
+            can_move_right,
             Some(pane_name_target),
             ctx,
         );
@@ -7359,24 +7624,24 @@ impl Workspace {
         if FeatureFlag::Autoupdate.is_enabled() && ChannelState::show_autoupdate_menu_items() {
             if let Some(version) = ChannelState::app_version() {
                 menu_items.push(
-                    MenuItemFields::new(format!("当前版本为 {version}"))
+                    MenuItemFields::new(format!("Current version is {version}"))
                         .with_disabled(true)
                         .into_item(),
                 );
                 match autoupdate::get_update_state(ctx) {
                     AutoupdateStage::UpdateReady { new_version, .. }
                     | AutoupdateStage::UpdatedPendingRestart { new_version } => menu_items.push(
-                        MenuItemFields::new(format!("安装更新 ({})", new_version.version))
+                        MenuItemFields::new(format!("Install update ({})", new_version.version))
                             .with_on_select_action(WorkspaceAction::ApplyUpdate)
                             .into_item(),
                     ),
                     AutoupdateStage::Updating { new_version, .. } => menu_items.push(
-                        MenuItemFields::new(format!("正在更新到 ({})", new_version.version))
+                        MenuItemFields::new(format!("Updating to ({})", new_version.version))
                             .with_disabled(true)
                             .into_item(),
                     ),
                     AutoupdateStage::UnableToUpdateToNewVersion { .. } => menu_items.push(
-                        MenuItemFields::new("手动更新 Warp")
+                        MenuItemFields::new("Update Warp manually")
                             .with_on_select_action(WorkspaceAction::DownloadNewVersion)
                             .into_item(),
                     ),
@@ -7991,7 +8256,7 @@ impl Workspace {
         self.add_tab_with_pane_layout(
             panes_layout,
             Arc::new(HashMap::new()),
-            Some("设置".to_owned()),
+            Some("Settings".to_owned()),
             ctx,
         );
     }
@@ -8005,8 +8270,24 @@ impl Workspace {
         layout: EditorLayout,
         ctx: &mut ViewContext<Self>,
     ) {
-        // TODO(ben): It might be worth managing file-based notebooks via NotebookManager
-        //   (e.g. for open-or-switch behavior). See if it overcomplicates things.
+        let existing_file_pane = {
+            let pane_group = self.active_tab_pane_group();
+            pane_group
+                .as_ref(ctx)
+                .file_notebook_panes(ctx)
+                .find(|(pane_id, file_view)| {
+                    !pane_group.as_ref(ctx).is_pane_hidden_for_close(*pane_id)
+                        && file_view.as_ref(ctx).path() == Some(&path)
+                })
+                .map(|(pane_id, _)| pane_id)
+        };
+
+        if let Some(pane_id) = existing_file_pane {
+            self.active_tab_pane_group().update(ctx, |pane_group, ctx| {
+                pane_group.focus_pane_by_id(pane_id, ctx);
+            });
+            return;
+        }
         let pane = FilePane::new(
             Some(path),
             session,
@@ -8017,13 +8298,10 @@ impl Workspace {
 
         match layout {
             EditorLayout::NewTab => {
-                let new_tab_placement_setting = TabSettings::as_ref(ctx).new_tab_placement;
-                let new_idx = match new_tab_placement_setting {
-                    NewTabPlacement::AfterAllTabs => self.tab_count(),
-                    // Add tab after current tab
-                    NewTabPlacement::AfterCurrentTab => self.active_tab_index + 1,
-                };
-                self.add_tab_from_existing_pane(Box::new(pane), new_idx, ctx);
+                // File notebooks join the active tab's group (if any)
+                // and stay contiguous instead of splitting it.
+                let (new_idx, group_id) = self.new_tab_index_and_group(ctx);
+                self.add_tab_from_existing_pane(Box::new(pane), new_idx, group_id, ctx);
             }
             EditorLayout::SplitPane => {
                 self.active_tab_pane_group().update(ctx, |pane_group, ctx| {
@@ -8211,13 +8489,10 @@ impl Workspace {
 
         match layout {
             EditorLayout::NewTab => {
-                let new_tab_placement_setting = TabSettings::as_ref(ctx).new_tab_placement;
-                let new_idx = match new_tab_placement_setting {
-                    NewTabPlacement::AfterAllTabs => self.tab_count(),
-                    // Add tab after current tab
-                    NewTabPlacement::AfterCurrentTab => self.active_tab_index + 1,
-                };
-                self.add_tab_from_existing_pane(Box::new(pane), new_idx, ctx);
+                // A code file opened in a new tab joins the active tab's group
+                // (if any) and stays contiguous instead of splitting it.
+                let (new_idx, group_id) = self.new_tab_index_and_group(ctx);
+                self.add_tab_from_existing_pane(Box::new(pane), new_idx, group_id, ctx);
             }
             EditorLayout::SplitPane => {
                 self.active_tab_pane_group().update(ctx, |pane_group, ctx| {
@@ -8282,13 +8557,8 @@ impl Workspace {
         } else {
             // Feature flag disabled: use the original behavior of opening in a new tab
             let new_pane = CodeDiffPane::from_view(view, ctx);
-            let new_tab_placement_setting = TabSettings::as_ref(ctx).new_tab_placement;
-
-            let new_idx = match new_tab_placement_setting {
-                NewTabPlacement::AfterAllTabs => self.tab_count(),
-                NewTabPlacement::AfterCurrentTab => self.active_tab_index + 1,
-            };
-            self.add_tab_from_existing_pane(Box::new(new_pane), new_idx, ctx);
+            let (new_idx, group_id) = self.new_tab_index_and_group(ctx);
+            self.add_tab_from_existing_pane(Box::new(new_pane), new_idx, group_id, ctx);
         }
     }
 
@@ -8436,57 +8706,99 @@ impl Workspace {
         }
     }
 
-    /// Install the Warp CLI by creating a symlink in /usr/local/bin
+    /// Show an ephemeral success toast or persistent failure toast for a CLI command operation.
     #[cfg(target_os = "macos")]
-    fn install_cli(&mut self, ctx: &mut ViewContext<Self>) {
+    fn handle_cli_command_result(
+        &mut self,
+        result: Result<()>,
+        success_toast: DismissibleToast<WorkspaceAction>,
+        failure_message: &str,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        match result {
+            Ok(()) => {
+                self.toast_stack.update(ctx, |toast_stack, ctx| {
+                    toast_stack.add_ephemeral_toast(success_toast, ctx);
+                });
+            }
+            Err(error) => {
+                let error_message = format!("{failure_message}: {error}");
+                log::warn!("{error_message}");
+                self.toast_stack.update(ctx, |toast_stack, ctx| {
+                    let toast = DismissibleToast::error(error_message);
+                    toast_stack.add_persistent_toast(toast, ctx);
+                });
+            }
+        }
+    }
+
+    /// Install the Oz CLI by creating a symlink in /usr/local/bin
+    #[cfg(target_os = "macos")]
+    fn install_oz(&mut self, ctx: &mut ViewContext<Self>) {
+        ctx.spawn(async { cli_install::install_oz() }, |view, result, ctx| {
+            let command_name = ChannelState::channel().cli_command_name();
+            let message = format!("Successfully installed the Oz CLI! You can now run '{command_name}' from the command line.");
+            let toast = DismissibleToast::success(message).with_link(
+                ToastLink::new("Learn more".to_string())
+                    .with_href("https://docs.warp.dev/reference/cli".to_string()),
+            );
+            view.handle_cli_command_result(result, toast, "Failed to install Oz command", ctx);
+        });
+    }
+
+    /// Uninstall the Oz CLI by removing the symlink from /usr/local/bin
+    #[cfg(target_os = "macos")]
+    fn uninstall_oz(&mut self, ctx: &mut ViewContext<Self>) {
         ctx.spawn(
-            async { cli_install::install_cli() },
-            |view, result, ctx| match result {
-                Ok(_) => {
-                    let command_name = ChannelState::channel().cli_command_name();
-                    let message =
-                        format!("已成功安装 Oz CLI！你现在可以在命令行运行 '{command_name}'。");
-                    view.toast_stack.update(ctx, |toast_stack, ctx| {
-                        let toast = DismissibleToast::success(message.to_string()).with_link(
-                            ToastLink::new("了解更多".to_string())
-                                .with_href("https://docs.warp.dev/reference/cli".to_string()),
-                        );
-                        toast_stack.add_ephemeral_toast(toast, ctx);
-                    });
-                }
-                Err(error) => {
-                    let error_message = format!("安装 Oz 命令失败：{error}");
-                    log::error!("{error_message}");
-                    view.toast_stack.update(ctx, |toast_stack, ctx| {
-                        let toast = DismissibleToast::error(error_message);
-                        toast_stack.add_persistent_toast(toast, ctx);
-                    });
-                }
+            async { cli_install::uninstall_oz() },
+            |view, result, ctx| {
+                let toast = DismissibleToast::success(
+                    "Successfully uninstalled the Oz command.".to_string(),
+                );
+                view.handle_cli_command_result(
+                    result,
+                    toast,
+                    "Failed to uninstall Oz command",
+                    ctx,
+                );
             },
         );
     }
 
-    /// Uninstall the Warp CLI by removing the symlink from /usr/local/bin
+    /// Install the Warp Control CLI by creating a symlink in /usr/local/bin
     #[cfg(target_os = "macos")]
-    fn uninstall_cli(&mut self, ctx: &mut ViewContext<Self>) {
+    fn install_warpctrl(&mut self, ctx: &mut ViewContext<Self>) {
         ctx.spawn(
-            async { cli_install::uninstall_cli() },
-            |view, result, ctx| match result {
-                Ok(_) => {
-                    let message = "已成功卸载 Oz 命令。";
-                    view.toast_stack.update(ctx, |toast_stack, ctx| {
-                        let toast = DismissibleToast::success(message.to_string());
-                        toast_stack.add_ephemeral_toast(toast, ctx);
-                    });
-                }
-                Err(error) => {
-                    let error_message = format!("卸载 Oz 命令失败：{error}");
-                    log::error!("{error_message}");
-                    view.toast_stack.update(ctx, |toast_stack, ctx| {
-                        let toast = DismissibleToast::error(error_message);
-                        toast_stack.add_persistent_toast(toast, ctx);
-                    });
-                }
+            async { cli_install::install_warpctrl() },
+            |view, result, ctx| {
+                let command_name = ChannelState::channel().warpctrl_command_name();
+                let message = format!("Successfully installed the Warp Control CLI! You can now run '{command_name}' from the command line.");
+                let toast = DismissibleToast::success(message);
+                view.handle_cli_command_result(
+                    result,
+                    toast,
+                    "Failed to install Warp Control command",
+                    ctx,
+                );
+            },
+        );
+    }
+
+    /// Uninstall the Warp Control CLI by removing the symlink from /usr/local/bin
+    #[cfg(target_os = "macos")]
+    fn uninstall_warpctrl(&mut self, ctx: &mut ViewContext<Self>) {
+        ctx.spawn(
+            async { cli_install::uninstall_warpctrl() },
+            |view, result, ctx| {
+                let toast = DismissibleToast::success(
+                    "Successfully uninstalled the Warp Control command.".to_string(),
+                );
+                view.handle_cli_command_result(
+                    result,
+                    toast,
+                    "Failed to uninstall Warp Control command",
+                    ctx,
+                );
             },
         );
     }
@@ -8762,39 +9074,33 @@ impl Workspace {
         ctx: &mut ViewContext<Self>,
     ) {
         // If context is provided, use it directly. Otherwise, derive from active pane group.
-        let context_data: Option<(
-            Option<LocalOrRemotePath>,
-            ModelHandle<DiffStateModel>,
-            WeakViewHandle<TerminalView>,
-        )> = if let Some(context) = context {
-            Some((
-                context.repo_path.clone(),
-                context.diff_state_model.clone(),
-                context.terminal_view.clone(),
-            ))
-        } else {
-            let active_pane_group = self.active_tab_pane_group().clone();
-            // Read repo_path and terminal_view from the pane group (immutable context).
-            let read_result = active_pane_group.read(ctx, |pane_group, ctx| {
-                pane_group.active_session_view(ctx).map(|terminal_view| {
-                    let repo_path = terminal_view.as_ref(ctx).current_repo_path().cloned();
-                    (repo_path, terminal_view.downgrade())
-                })
-            });
-            // Resolve DiffStateModel outside the read closure (needs mutable context).
-            read_result.and_then(|(repo_path, terminal_view)| {
-                let diff_state_model = repo_path.as_ref().and_then(|rp| {
-                    self.working_directories_model.update(ctx, |model, ctx| {
-                        model.get_or_create_diff_state_model(rp.clone(), ctx)
+        let context_data: Option<(Option<LocalOrRemotePath>, ModelHandle<DiffStateModel>)> =
+            if let Some(context) = context {
+                Some((context.repo_path.clone(), context.diff_state_model.clone()))
+            } else {
+                let active_pane_group = self.active_tab_pane_group().clone();
+                // Read repo_path and preferred session from the pane group (immutable context).
+                let read_result = active_pane_group.read(ctx, |pane_group, ctx| {
+                    pane_group.active_session_view(ctx).map(|terminal_view| {
+                        let repo_path = terminal_view.as_ref(ctx).current_repo_path().cloned();
+                        let preferred_session = terminal_view.as_ref(ctx).active_block_session_id();
+                        (repo_path, preferred_session)
                     })
-                })?;
-                Some((repo_path, diff_state_model, terminal_view))
-            })
-        };
+                });
+                // Resolve DiffStateModel outside the read closure (needs mutable context).
+                read_result.and_then(|(repo_path, preferred_session)| {
+                    let diff_state_model = repo_path.as_ref().and_then(|rp| {
+                        self.working_directories_model.update(ctx, |model, ctx| {
+                            model.get_or_create_diff_state_model(rp.clone(), preferred_session, ctx)
+                        })
+                    })?;
+                    Some((repo_path, diff_state_model))
+                })
+            };
 
-        if let Some((repo, diff_state_model, terminal_view)) = context_data {
+        if let Some((repo, diff_state_model)) = context_data {
             self.right_panel_view.update(ctx, |right_pane_view, ctx| {
-                right_pane_view.open_code_review(repo, diff_state_model, terminal_view, ctx);
+                right_pane_view.open_code_review(repo, diff_state_model, ctx);
             });
         } else {
             self.right_panel_view.update(ctx, |right_panel_view, ctx| {
@@ -8822,9 +9128,13 @@ impl Workspace {
         }
 
         let repo_location = panel_context.repo_path.clone();
+        let preferred_session = panel_context
+            .terminal_view
+            .upgrade(ctx)
+            .and_then(|tv| tv.as_ref(ctx).active_block_session_id());
         let diff_state_model = repo_location.as_ref().and_then(|rp| {
             self.working_directories_model.update(ctx, |model, ctx| {
-                model.get_or_create_diff_state_model(rp.clone(), ctx)
+                model.get_or_create_diff_state_model(rp.clone(), preferred_session, ctx)
             })
         });
         let Some(diff_state_model) = diff_state_model else {
@@ -8833,7 +9143,6 @@ impl Workspace {
         let context = CodeReviewPaneContext {
             repo_path: repo_location,
             diff_state_model,
-            terminal_view: panel_context.terminal_view.clone(),
         };
 
         self.open_right_panel(
@@ -8933,28 +9242,25 @@ impl Workspace {
         let target_open_state =
             pane_group_handle.read(ctx, |pane_group, _| !pane_group.right_panel_open);
 
-        // Read repo_path and terminal_view from pane group (immutable context).
+        // Read repo_path and preferred session from pane group (immutable context).
         let read_result = pane_group_handle.read(ctx, |pane_group, ctx| {
             pane_group.active_session_view(ctx).map(|terminal_view| {
                 let repo_path = terminal_view.as_ref(ctx).current_repo_path().cloned();
-                (repo_path, terminal_view.downgrade())
+                let preferred_session = terminal_view.as_ref(ctx).active_block_session_id();
+                (repo_path, preferred_session)
             })
         });
         // Resolve DiffStateModel outside the read closure (needs mutable context).
         let context = read_result.and_then(
-            |(repo_path, terminal_view): (
-                Option<LocalOrRemotePath>,
-                WeakViewHandle<TerminalView>,
-            )| {
+            |(repo_path, preferred_session): (Option<LocalOrRemotePath>, Option<SessionId>)| {
                 let diff_state_model = repo_path.as_ref().and_then(|rp| {
                     self.working_directories_model.update(ctx, |model, ctx| {
-                        model.get_or_create_diff_state_model(rp.clone(), ctx)
+                        model.get_or_create_diff_state_model(rp.clone(), preferred_session, ctx)
                     })
                 })?;
                 Some(CodeReviewPaneContext {
                     repo_path,
                     diff_state_model,
-                    terminal_view,
                 })
             },
         );
@@ -9076,7 +9382,7 @@ impl Workspace {
                     ) =>
                 {
                     items.push(
-                        MenuItemFields::new("更新并重新启动 Warp")
+                        MenuItemFields::new("Update and relaunch Warp")
                             .with_on_select_action(WorkspaceAction::ApplyUpdate)
                             .with_override_text_color(appearance.theme().ansi_fg_red())
                             .into_item(),
@@ -9088,7 +9394,7 @@ impl Workspace {
                     ) =>
                 {
                     items.push(
-                        MenuItemFields::new(format!("正在更新到 ({})", new_version.version))
+                        MenuItemFields::new(format!("Updating to ({})", new_version.version))
                             .with_disabled(true)
                             .into_item(),
                     )
@@ -9099,7 +9405,7 @@ impl Workspace {
                     ) =>
                 {
                     items.push(
-                        MenuItemFields::new("手动更新 Warp")
+                        MenuItemFields::new("Update Warp manually")
                             .with_on_select_action(WorkspaceAction::DownloadNewVersion)
                             .with_override_text_color(appearance.theme().ansi_fg_red())
                             .into_item(),
@@ -9110,27 +9416,27 @@ impl Workspace {
         }
 
         items.extend([
-            MenuItemFields::new("新变化")
+            MenuItemFields::new("What's new")
                 .with_on_select_action(WorkspaceAction::ViewLatestChangelog)
                 .into_item(),
-            MenuItemFields::new("设置")
+            MenuItemFields::new("Settings")
                 .with_on_select_action(WorkspaceAction::ShowSettings)
                 .into_item(),
-            MenuItemFields::new("键盘快捷键")
+            MenuItemFields::new("Keyboard shortcuts")
                 .with_on_select_action(WorkspaceAction::ToggleKeybindingsPage)
                 .into_item(),
             MenuItem::Separator,
-            MenuItemFields::new("文档")
+            MenuItemFields::new("Documentation")
                 .with_on_select_action(WorkspaceAction::ViewUserDocs)
                 .into_item(),
-            MenuItemFields::new("反馈")
+            MenuItemFields::new("Feedback")
                 .with_on_select_action(WorkspaceAction::SendFeedback)
                 .into_item(),
         ]);
 
         #[cfg(not(target_family = "wasm"))]
         items.push(
-            MenuItemFields::new("查看 Warp 日志")
+            MenuItemFields::new("View Warp logs")
                 .with_on_select_action(WorkspaceAction::ViewLogs)
                 .into_item(),
         );
@@ -9144,7 +9450,7 @@ impl Workspace {
 
         if self.auth_state.is_anonymous_or_logged_out() {
             items.push(
-                MenuItemFields::new("注册")
+                MenuItemFields::new("Sign up")
                     .with_on_select_action(WorkspaceAction::SignupAnonymousUser)
                     .into_item(),
             );
@@ -9158,7 +9464,7 @@ impl Workspace {
 
         if is_on_paid_plan {
             items.push(
-                MenuItemFields::new("账单和用量")
+                MenuItemFields::new("Billing and usage")
                     .with_on_select_action(WorkspaceAction::ShowSettingsPage(
                         SettingsSection::BillingAndUsage,
                     ))
@@ -9166,21 +9472,21 @@ impl Workspace {
             );
         } else {
             items.push(
-                MenuItemFields::new("升级")
+                MenuItemFields::new("Upgrade")
                     .with_on_select_action(WorkspaceAction::ShowUpgrade)
                     .into_item(),
             );
         }
 
         items.push(
-            MenuItemFields::new("邀请好友")
+            MenuItemFields::new("Invite a friend")
                 .with_on_select_action(WorkspaceAction::ShowReferralSettingsPage)
                 .into_item(),
         );
 
         if !self.auth_state.is_anonymous_or_logged_out() {
             items.push(
-                MenuItemFields::new("退出登录")
+                MenuItemFields::new("Log out")
                     .with_on_select_action(WorkspaceAction::LogOut)
                     .into_item(),
             );
@@ -9280,6 +9586,7 @@ impl Workspace {
             MenuEvent::Close { via_select_item: _ } => {
                 self.show_tab_right_click_menu = None;
                 self.show_tab_group_right_click_menu = None;
+                self.show_tab_selection_right_click_menu = None;
                 self.hide_move_to_group_sidecar(ctx);
                 ctx.notify();
             }
@@ -9289,27 +9596,47 @@ impl Workspace {
         }
     }
 
-    /// Builds the tab group more-options menu items, grouped into sections.
-    fn tab_group_menu_items(&self, group_id: TabGroupId) -> Vec<MenuItem<WorkspaceAction>> {
+    /// Move/close directional labels read "up/down/above/below" in vertical
+    /// tabs and "left/right" in horizontal tabs; actions are unchanged.
+    fn tab_group_menu_items(
+        &self,
+        group_id: TabGroupId,
+        is_vertical: bool,
+    ) -> Vec<MenuItem<WorkspaceAction>> {
         let Some((first, last)) = group_member_index_range(&self.tabs, group_id) else {
             return vec![];
         };
         let has_tabs_above = first > 0;
         let has_tabs_below = last + 1 < self.tabs.len();
         let has_tabs_outside = (last - first + 1) < self.tabs.len();
+        // Move entries are hidden when the move would cross the
+        // pinned/unpinned boundary, or go beyond the tab list bounds
+        // so the user never sees an option that would be a no-op.
+        let can_move_up = has_tabs_above && self.can_move_tab_group(group_id, TabMovement::Left);
+        let can_move_down = has_tabs_below && self.can_move_tab_group(group_id, TabMovement::Right);
 
         let move_section = {
             let mut items = vec![];
-            if has_tabs_above {
+            if can_move_up {
+                let label = if is_vertical {
+                    "Move group up"
+                } else {
+                    "Move group left"
+                };
                 items.push(
-                    MenuItemFields::new("上移分组")
+                    MenuItemFields::new(label)
                         .with_on_select_action(WorkspaceAction::MoveTabGroupUp(group_id))
                         .into_item(),
                 );
             }
-            if has_tabs_below {
+            if can_move_down {
+                let label = if is_vertical {
+                    "Move group down"
+                } else {
+                    "Move group right"
+                };
                 items.push(
-                    MenuItemFields::new("下移分组")
+                    MenuItemFields::new(label)
                         .with_on_select_action(WorkspaceAction::MoveTabGroupDown(group_id))
                         .into_item(),
                 );
@@ -9318,26 +9645,36 @@ impl Workspace {
         };
 
         let close_section = {
-            let mut items = vec![MenuItemFields::new("关闭分组中的所有标签页")
+            let mut items = vec![MenuItemFields::new("Close all tabs in group")
                 .with_on_select_action(WorkspaceAction::CloseTabGroup(group_id))
                 .into_item()];
             if has_tabs_outside {
                 items.push(
-                    MenuItemFields::new("关闭其他标签页")
+                    MenuItemFields::new("Close other tabs")
                         .with_on_select_action(WorkspaceAction::CloseTabsOutsideGroup(group_id))
                         .into_item(),
                 );
             }
             if has_tabs_above {
+                let label = if is_vertical {
+                    "Close tabs above"
+                } else {
+                    "Close tabs to the left"
+                };
                 items.push(
-                    MenuItemFields::new("关闭上方标签页")
+                    MenuItemFields::new(label)
                         .with_on_select_action(WorkspaceAction::CloseTabsAboveGroup(group_id))
                         .into_item(),
                 );
             }
             if has_tabs_below {
+                let label = if is_vertical {
+                    "Close tabs below"
+                } else {
+                    "Close tabs to the right"
+                };
                 items.push(
-                    MenuItemFields::new("关闭下方标签页")
+                    MenuItemFields::new(label)
                         .with_on_select_action(WorkspaceAction::CloseTabsBelowGroup(group_id))
                         .into_item(),
                 );
@@ -9345,18 +9682,32 @@ impl Workspace {
             items
         };
 
+        let pin_section = if FeatureFlag::PinnedTabs.is_enabled() {
+            let (label, action) = if self.tab_groups.get(&group_id).is_some_and(|g| g.pinned) {
+                ("Unpin group", WorkspaceAction::UnpinTabGroup(group_id))
+            } else {
+                ("Pin group", WorkspaceAction::PinTabGroup(group_id))
+            };
+            vec![MenuItemFields::new(label)
+                .with_on_select_action(action)
+                .into_item()]
+        } else {
+            vec![]
+        };
+
         let mut menu_items = vec![];
         for section_items in [
+            pin_section,
             vec![
-                MenuItemFields::new("取消标签页分组")
+                MenuItemFields::new("Ungroup tabs")
                     .with_on_select_action(WorkspaceAction::UngroupTabs(group_id))
                     .into_item(),
-                MenuItemFields::new("在分组中新建标签页")
+                MenuItemFields::new("New tab in group")
                     .with_on_select_action(WorkspaceAction::NewTabInGroup(group_id))
                     .into_item(),
             ],
             move_section,
-            vec![MenuItemFields::new("重命名")
+            vec![MenuItemFields::new("Rename")
                 .with_on_select_action(WorkspaceAction::RenameTabGroup(group_id))
                 .into_item()],
             close_section,
@@ -9372,53 +9723,15 @@ impl Workspace {
         menu_items
     }
 
-    /// Builds the sidecar rows: every group except the tab's current one,
-    /// ordered by first member's tab index to match the tabs panel.
-    fn build_move_to_group_sidecar_items(
-        &self,
-        tab_index: usize,
-    ) -> Vec<MenuItem<WorkspaceAction>> {
-        let Some(tab) = self.tabs.get(tab_index) else {
-            return vec![];
-        };
-        let current_group_id = tab.group_id;
-
-        // Other groups paired with their first member's tab index, sorted so the menu
-        // matches panel order.
-        let sorted_other_groups = self
-            .tab_groups
-            .keys()
-            .copied()
-            .filter(|gid| Some(*gid) != current_group_id)
-            .filter_map(|gid| {
-                group_member_indices(&self.tabs, gid)
-                    .next()
-                    .map(|idx| (gid, idx))
-            })
-            .sorted_by_key(|(_, idx)| *idx);
-
-        sorted_other_groups
-            .map(|(group_id, _)| {
-                let label = self
-                    .tab_groups
-                    .get(&group_id)
-                    .and_then(|g| g.name.clone())
-                    .unwrap_or_else(|| "未命名分组".to_string());
-                MenuItemFields::new(label)
-                    .with_on_select_action(WorkspaceAction::MoveTabToGroup {
-                        tab_index,
-                        group_id,
-                    })
-                    .into_item()
-            })
-            .collect()
-    }
-
     /// Opens the sidecar when "Move to group" is hovered, hides it otherwise.
+    /// Handles both the single-tab pane menu and the multi-tab selection menu.
     fn update_move_to_group_sidecar(&mut self, ctx: &mut ViewContext<Self>) {
-        let Some((tab_index, _)) = self.show_tab_right_click_menu else {
+        // If neither menu is open, nothing to update.
+        if self.show_tab_right_click_menu.is_none()
+            && self.show_tab_selection_right_click_menu.is_none()
+        {
             return;
-        };
+        }
         // No hovered index = cursor left the menu (possibly onto the sidecar);
         // no label = hovered a non-label row (e.g. separator).
         let hovered = self.tab_right_click_menu.read(ctx, |menu, _| {
@@ -9442,7 +9755,13 @@ impl Workspace {
         };
 
         if label == MOVE_TO_GROUP_LABEL {
-            let items = self.build_move_to_group_sidecar_items(tab_index);
+            // Single-tab pane menu carries a `tab_index`; the multi-tab
+            // selection menu has no single source tab so we pass `None` and
+            // the sidecar builder infers the multi-tab selection.
+            let source_tab_index = self
+                .show_tab_right_click_menu
+                .map(|(tab_index, _)| tab_index);
+            let items = self.build_move_to_group_sidecar_items(source_tab_index);
             if items.is_empty() {
                 self.hide_move_to_group_sidecar(ctx);
                 return;
@@ -9479,6 +9798,48 @@ impl Workspace {
         ctx.notify();
     }
 
+    /// Shared between the single-tab pane menu and the multi-tab selection
+    /// menu render paths so the two parent menus can't drift apart in how
+    /// they position the "move to group" sidecar.
+    fn add_move_to_group_sidecar_overlay(&self, stack: &mut Stack, app: &AppContext) {
+        if !self.show_move_to_group_sidecar {
+            return;
+        }
+        let sidecar_element = SavePosition::new(
+            ChildView::new(&self.move_to_group_sidecar_menu).finish(),
+            MOVE_TO_GROUP_SIDECAR_POSITION_ID,
+        )
+        .finish();
+
+        // Flip the anchor side when the sidecar would overflow the window.
+        let render_left =
+            self.should_render_sidecar_left(MOVE_TO_GROUP_LABEL, MOVE_TO_GROUP_SIDECAR_WIDTH, app);
+        let (offset, parent_anchor, child_anchor) = if render_left {
+            (
+                vec2f(-4., 0.),
+                PositionedElementAnchor::TopLeft,
+                ChildAnchor::TopRight,
+            )
+        } else {
+            (
+                vec2f(4., 0.),
+                PositionedElementAnchor::TopRight,
+                ChildAnchor::TopLeft,
+            )
+        };
+
+        stack.add_positioned_overlay_child(
+            sidecar_element,
+            OffsetPositioning::offset_from_save_position_element(
+                MOVE_TO_GROUP_LABEL,
+                offset,
+                PositionedElementOffsetBounds::WindowByPosition,
+                parent_anchor,
+                child_anchor,
+            ),
+        );
+    }
+
     fn handle_move_to_group_sidecar_event(
         &mut self,
         event: &MenuEvent,
@@ -9486,10 +9847,11 @@ impl Workspace {
     ) {
         match event {
             MenuEvent::Close { via_select_item } => {
-                // Item dispatch fires `MoveTabToGroup` itself; we just tear
-                // down the parent menu on a real pick.
+                // Item dispatch fires the move action itself; we just tear down
+                // the parent menu (single-tab or multi-tab selection) on a pick.
                 if *via_select_item {
                     self.show_tab_right_click_menu = None;
+                    self.show_tab_selection_right_click_menu = None;
                 }
                 self.show_move_to_group_sidecar = false;
                 self.tab_right_click_menu.update(ctx, |menu, _| {
@@ -9612,7 +9974,7 @@ impl Workspace {
                 .with_height(NEW_SESSION_SIDECAR_SEARCH_BOX_HEIGHT)
                 .finish()
             }),
-            Some("搜索仓库".to_string()),
+            Some("Search repos".to_string()),
         )
         .with_no_interaction_on_hover()
         .no_highlight_on_hover()
@@ -9691,7 +10053,7 @@ impl Workspace {
                                 .with_main_axis_size(MainAxisSize::Max)
                                 .with_cross_axis_alignment(CrossAxisAlignment::Center)
                                 .with_child(
-                                    Text::new_inline(" + 添加新仓库", font_family, font_size)
+                                    Text::new_inline(" + Add new repo", font_family, font_size)
                                         .with_color(text_color.into())
                                         .finish(),
                                 )
@@ -9888,7 +10250,7 @@ impl Workspace {
         };
 
         match label.as_str() {
-            "新建 worktree 配置" => {
+            "New worktree config" => {
                 self.tab_config_action_sidecar_item = None;
                 let auto_select_first_repo = self.new_session_dropdown_menu.read(ctx, |menu, _| {
                     menu.last_selection_source() != Some(MenuSelectionSource::Pointer)
@@ -9900,7 +10262,7 @@ impl Workspace {
                 );
             }
             // Items that don't get any sidecar.
-            "新建标签页配置" => {
+            "New tab config" => {
                 self.tab_config_action_sidecar_item = None;
                 if self.show_new_session_sidecar {
                     self.show_new_session_sidecar = false;
@@ -10207,12 +10569,12 @@ impl Workspace {
             .unwrap_or_else(|| repo.to_string());
         let config_name = match worktree_branch_name {
             Some(name) if !name.is_empty() => {
-                format!("新建 worktree：{repo_display_name}，{name}")
+                format!("New worktree: {repo_display_name}, {name}")
             }
             _ if !base_branch.is_empty() => {
-                format!("新建 worktree：{repo_display_name}，{base_branch}")
+                format!("New worktree: {repo_display_name}, {base_branch}")
             }
-            _ => format!("新建 worktree：{repo_display_name}"),
+            _ => format!("New worktree: {repo_display_name}"),
         };
 
         let filename_hint = if let Some(name) = worktree_branch_name {
@@ -10477,10 +10839,12 @@ impl Workspace {
                     .unwrap_or_else(|| UserWorkspaces::upgrade_link(*user_id));
 
                 self.toast_stack.update(ctx, |view, ctx| {
-                    let new_toast = DismissibleToast::error("看起来你的 AI 额度已用完。".into())
-                        .with_link(
-                            ToastLink::new("升级以获取更多额度。".into()).with_href(upgrade_link),
-                        );
+                    let new_toast =
+                        DismissibleToast::error("Looks like you're out of AI credits.".into())
+                            .with_link(
+                                ToastLink::new("Upgrade for more credits.".into())
+                                    .with_href(upgrade_link),
+                            );
                     view.add_ephemeral_toast(new_toast, ctx);
                 });
             }
@@ -10854,7 +11218,7 @@ impl Workspace {
         } else {
             None
         };
-        let tabs = self
+        let tabs: Vec<TabSnapshot> = self
             .tab_views()
             .enumerate()
             .filter(|(tab_index, _)| Some(*tab_index) != transferred_tab_index)
@@ -10896,6 +11260,15 @@ impl Workspace {
                         .unwrap_or_default(),
                     left_panel,
                     right_panel,
+                    group_id: if FeatureFlag::GroupedTabs.is_enabled() {
+                        self.tabs.get(tab_index).and_then(|tab| tab.group_id)
+                    } else {
+                        None
+                    },
+                    // Only persist pinned state when the Pinned Tabs feature is
+                    // enabled.
+                    pinned: FeatureFlag::PinnedTabs.is_enabled()
+                        && self.tabs.get(tab_index).is_some_and(|tab| tab.pinned),
                 }
             })
             .filter(|tab| {
@@ -10912,6 +11285,26 @@ impl Workspace {
                 )
             })
             .collect();
+
+        // Skip orphan groups whose members were all filtered out above.
+        // This is a safety net and ensures empty groups are not saved/restored.
+        let tab_groups: Vec<TabGroupSnapshot> = if FeatureFlag::GroupedTabs.is_enabled() {
+            let referenced_group_ids: HashSet<TabGroupId> =
+                tabs.iter().filter_map(|tab| tab.group_id).collect();
+            self.tab_groups
+                .values()
+                .filter(|group| referenced_group_ids.contains(&group.id))
+                .map(|group| TabGroupSnapshot {
+                    id: group.id,
+                    name: group.name.clone(),
+                    color: group.color,
+                    collapsed: group.collapsed,
+                    pinned: FeatureFlag::PinnedTabs.is_enabled() && group.pinned,
+                })
+                .collect()
+        } else {
+            Vec::new()
+        };
 
         let resizable_data = ResizableData::handle(app);
         let modal_sizes = resizable_data.as_ref(app).get_all_handles(window_id);
@@ -10979,6 +11372,7 @@ impl Workspace {
             left_panel_width,
             right_panel_width,
             agent_management_filters,
+            tab_groups,
         }
     }
 
@@ -11264,6 +11658,12 @@ impl Workspace {
         let removed_pane_group_id = tab_data.pane_group.id();
         self.tab_mru_order.retain(|id| *id != removed_pane_group_id);
 
+        // If the closed tab was a group member, prune the group when it now
+        // has no remaining members.
+        if let Some(group_id) = tab_data.group_id {
+            self.prune_empty_tab_group(group_id, ctx);
+        }
+
         // Re-adopted child tabs leave no useful tab contents to restore; the
         // live pane already moved back.
         if add_to_undo_stack && !re_adopted {
@@ -11313,7 +11713,7 @@ impl Workspace {
     /// Checks if the provided tab indices need to be confirmed before closing, unless skip_confirmation is true.
     /// If none of them need confirmation (or the confirm setting is turned off), we close all the provided tabs.
     /// Returns true iff all of the tabs were closed.
-    fn close_tabs(
+    pub(crate) fn close_tabs(
         &mut self,
         tab_indices: impl Iterator<Item = usize>,
         dialog_source: OpenDialogSource,
@@ -11571,12 +11971,21 @@ impl Workspace {
             })
         }
         self.update_active_session(ctx);
+
+        // `on_window_closed` unregistered this workspace even though the close
+        // was restorable, and reopening reuses the view without re-running
+        // `Workspace::new`, so register it again.
+        let window_id = ctx.window_id();
+        let weak_handle = ctx.handle();
+        WorkspaceRegistry::handle(ctx).update(ctx, |registry, _| {
+            registry.register(window_id, weak_handle);
+        });
     }
 
     pub fn restore_closed_tab(
         &mut self,
         tab_index: usize,
-        tab_data: TabData,
+        mut tab_data: TabData,
         ctx: &mut ViewContext<Self>,
     ) {
         // When restoring a closed tab, we have to reattach its panes so that they know they're
@@ -11585,12 +11994,70 @@ impl Workspace {
             pane_group.reattach_panes(ctx);
         });
 
-        self.tabs.insert(tab_index, tab_data);
+        // If the tab belonged to a group, try to re-join it by appending after
+        // the group's current last member. If the group no longer exists (it was
+        // pruned when the tab was closed), drop the membership and fall back to
+        // the original index instead. On restoration, we must ensure the pin
+        // invariant holds. That is, pinned items appear before unpinned items.
+        let insert_index = if let Some(group_id) = tab_data.group_id {
+            if self.tab_groups.contains_key(&group_id) {
+                self.index_after_group(group_id).unwrap_or(self.tabs.len())
+            } else {
+                tab_data.group_id = None;
+                self.index_for_restored_tab(&tab_data, tab_index)
+            }
+        } else {
+            self.index_for_restored_tab(&tab_data, tab_index)
+        };
+
+        self.tabs.insert(insert_index, tab_data);
         self.tab_mru_order
-            .push(self.tabs[tab_index].pane_group.id());
-        self.activate_tab(tab_index, ctx);
+            .push(self.tabs[insert_index].pane_group.id());
+
+        // Expand the group so the restored tab is immediately visible.
+        if let Some(group_id) = self.tabs[insert_index].group_id {
+            self.expand_tab_group(group_id, ctx);
+        }
+
+        self.activate_tab(insert_index, ctx);
 
         ctx.notify();
+    }
+
+    /// Insertion index for a restored tab that is not part of an existing group.
+    /// If the tab was pinned, it must land at it's original index or the end of
+    /// the pinned region. If the tab is not pinned, it must land at it's original
+    /// index or after all pinned items.
+    fn index_for_restored_tab(&self, tab: &TabData, original_index: usize) -> usize {
+        let boundary = self.pinned_boundary_index(&self.tabs);
+        let region_clamped = if tab.pinned {
+            // Original index or before all unpinned items.
+            original_index.min(boundary)
+        } else {
+            // Original index or after all pinned items.
+            original_index.max(boundary)
+        };
+        // Safety net so the new index is not beyond the lists bounds.
+        // By definition of MRU ordering, this is not possible.
+        let index = region_clamped.min(self.tabs.len());
+
+        // Ensure that the index we are restoring to does not land
+        // in the middle of a group.
+        self.index_avoiding_group_split(index)
+    }
+
+    /// If `index` would split a group (same group on both sides of the slot),
+    /// returns the slot just past that group; otherwise returns `index`.
+    fn index_avoiding_group_split(&self, index: usize) -> usize {
+        if index == 0 || index >= self.tabs.len() {
+            return index;
+        }
+        let before = self.tabs[index - 1].group_id;
+        let after = self.tabs[index].group_id;
+        match before {
+            Some(group_id) if before == after => self.index_after_group(group_id).unwrap_or(index),
+            _ => index,
+        }
     }
 
     pub fn open_autoupdate_failure_link(&mut self, ctx: &mut ViewContext<Self>) {
@@ -11606,26 +12073,6 @@ impl Workspace {
             None,
             None,
             hide_homepage,
-            ctx,
-        );
-        ctx.notify();
-    }
-
-    fn add_welcome_tab(&mut self, ctx: &mut ViewContext<Self>) {
-        let startup_directory = self.get_new_tab_startup_directory(
-            NewSessionSource::Tab,
-            Some(ctx.window_id()),
-            None,
-            ctx,
-        );
-        self.add_tab_with_pane_layout(
-            PanesLayout::Snapshot(Box::new(PaneNodeSnapshot::Leaf(LeafSnapshot {
-                is_focused: true,
-                custom_vertical_tabs_title: None,
-                contents: LeafContents::Welcome { startup_directory },
-            }))),
-            Arc::new(HashMap::new()),
-            None,
             ctx,
         );
         ctx.notify();
@@ -11849,6 +12296,39 @@ impl Workspace {
         });
     }
 
+    /// Returns where a newly-opened tab should be inserted and the group it
+    /// should inherit, so it joins the active tab's group (keeping that group
+    /// contiguous) instead of splitting it. Honors the `NewTabPlacement`
+    /// setting within the group's bounds.
+    fn new_tab_index_and_group(&self, ctx: &AppContext) -> (usize, Option<TabGroupId>) {
+        let active_group_id = if FeatureFlag::GroupedTabs.is_enabled() {
+            self.tabs
+                .get(self.active_tab_index)
+                .and_then(|tab| tab.group_id)
+        } else {
+            None
+        };
+
+        let insert_idx = match TabSettings::as_ref(ctx).new_tab_placement {
+            // Land at the end of the group's contiguous run rather than past it
+            // so the "after all tabs" preference is honored within the group.
+            NewTabPlacement::AfterAllTabs => active_group_id
+                .and_then(|gid| self.index_after_group(gid))
+                .unwrap_or_else(|| self.tab_count()),
+            NewTabPlacement::AfterCurrentTab => self.active_tab_index + 1,
+        };
+
+        // A standalone (ungrouped) new tab must not land inside the pinned
+        // region; a tab joining a group already sits wherever its group lives.
+        let insert_idx = if active_group_id.is_none() {
+            self.clamp_to_unpinned_region(&self.tabs, insert_idx)
+        } else {
+            insert_idx
+        };
+
+        (insert_idx, active_group_id)
+    }
+
     pub fn add_tab_with_pane_layout(
         &mut self,
         panes_layout: PanesLayout,
@@ -11871,12 +12351,6 @@ impl Workspace {
 
         let is_new_terminal = matches!(panes_layout, PanesLayout::SingleTerminal(_));
         let is_restoration = matches!(panes_layout, PanesLayout::Snapshot(_));
-        // Capture the active tab's group membership so the new tab can inherit it.
-        let active_tab_group_id = if FeatureFlag::GroupedTabs.is_enabled() && !is_restoration {
-            active_tab.and_then(|tab| tab.group_id)
-        } else {
-            None
-        };
         let new_pane_group = ctx.add_typed_action_view(|ctx| {
             let mut pane_group = PaneGroup::new_with_panes_layout(
                 self.tips_completed.clone(),
@@ -11898,48 +12372,26 @@ impl Workspace {
             me.handle_file_tree_event(pane_group, event, ctx)
         });
 
-        let new_tab_placement_setting = TabSettings::as_ref(ctx).new_tab_placement;
+        // Compute where the new tab goes and which group it inherits, then
+        // insert it. An empty workspace has no active tab to key off of, so it
+        // takes index 0 with no group; the helper covers every other case.
+        let (insert_idx, inherited_group_id) = if self.tab_count() == 0 {
+            (0, None)
+        } else {
+            self.new_tab_index_and_group(ctx)
+        };
+        self.tabs.insert(insert_idx, TabData::new(new_pane_group));
+        self.tab_mru_order
+            .push(self.tabs[insert_idx].pane_group.id());
+        self.activate_tab_internal(insert_idx, ctx);
 
-        match new_tab_placement_setting {
-            NewTabPlacement::AfterAllTabs => {
-                // When inheriting a group, land at the end of the group's
-                // contiguous run instead of past it so the setting is
-                // honored within the group's bounds.
-                let insert_idx = active_tab_group_id
-                    .and_then(|gid| {
-                        group_member_indices(&self.tabs, gid)
-                            .last()
-                            .map(|last| last + 1)
-                    })
-                    .unwrap_or(self.tabs.len());
-                self.tabs.insert(insert_idx, TabData::new(new_pane_group));
-                self.tab_mru_order
-                    .push(self.tabs[insert_idx].pane_group.id());
-                self.activate_tab_internal(insert_idx, ctx);
-            }
-            // Add tab after current tab
-            _ => {
-                if self.tab_count() == 0 {
-                    self.tabs.push(TabData::new(new_pane_group));
-                    self.tab_mru_order
-                        .push(self.tabs.last().unwrap().pane_group.id());
-                    self.activate_tab_internal(self.tab_count() - 1, ctx);
-                } else {
-                    let insert_idx = self.active_tab_index + 1;
-                    self.tabs.insert(insert_idx, TabData::new(new_pane_group));
-                    self.tab_mru_order
-                        .push(self.tabs[insert_idx].pane_group.id());
-                    self.activate_tab_internal(insert_idx, ctx);
-                }
-            }
-        }
-
-        // Inherit the active tab's group membership. D
-        if let Some(group_id) = active_tab_group_id {
+        // Inherit the active tab's group membership.
+        if let Some(group_id) = inherited_group_id {
             let new_idx = self.active_tab_index;
             if let Some(new_tab) = self.tabs.get_mut(new_idx) {
                 new_tab.group_id = Some(group_id);
             }
+            self.expand_tab_group(group_id, ctx);
         }
 
         if !is_restoration {
@@ -11982,6 +12434,7 @@ impl Workspace {
         &mut self,
         pane: Box<dyn AnyPaneContent>,
         new_idx: usize,
+        group_id: Option<TabGroupId>,
         ctx: &mut ViewContext<Self>,
     ) {
         let new_pane_group = ctx.add_typed_action_view(|ctx| {
@@ -12008,6 +12461,15 @@ impl Workspace {
             self.tabs.insert(new_idx, TabData::new(new_pane_group));
             self.tab_mru_order.push(self.tabs[new_idx].pane_group.id());
             self.activate_tab_internal(new_idx, ctx);
+        }
+
+        // Join the active tab's group when one exists.
+        if let Some(group_id) = group_id {
+            let inserted_idx = self.active_tab_index;
+            if let Some(new_tab) = self.tabs.get_mut(inserted_idx) {
+                new_tab.group_id = Some(group_id);
+            }
+            self.expand_tab_group(group_id, ctx);
         }
     }
 
@@ -12071,7 +12533,7 @@ impl Workspace {
         self.add_tab_with_pane_layout(
             Default::default(),
             Arc::new(HashMap::new()),
-            Some("安装更新".to_owned()),
+            Some("Install Update".to_owned()),
             ctx,
         );
 
@@ -12121,12 +12583,10 @@ impl Workspace {
         };
         let pane = CodePane::new(source, line_and_column, ctx);
 
-        let new_tab_placement_setting = TabSettings::as_ref(ctx).new_tab_placement;
-        let new_idx = match new_tab_placement_setting {
-            NewTabPlacement::AfterAllTabs => self.tab_count(),
-            NewTabPlacement::AfterCurrentTab => self.active_tab_index + 1,
-        };
-        self.add_tab_from_existing_pane(Box::new(pane), new_idx, ctx);
+        // A code file opened in a new tab joins the active tab's group (if any)
+        // and stays contiguous instead of splitting it.
+        let (new_idx, group_id) = self.new_tab_index_and_group(ctx);
+        self.add_tab_from_existing_pane(Box::new(pane), new_idx, group_id, ctx);
     }
 
     pub fn add_tab_for_new_code_file(&mut self, ctx: &mut ViewContext<Self>) {
@@ -12175,12 +12635,10 @@ impl Workspace {
 
             match layout {
                 EditorLayout::NewTab => {
-                    let new_tab_placement_setting = TabSettings::as_ref(ctx).new_tab_placement;
-                    let new_idx = match new_tab_placement_setting {
-                        NewTabPlacement::AfterAllTabs => self.tab_count(),
-                        NewTabPlacement::AfterCurrentTab => self.active_tab_index + 1,
-                    };
-                    self.add_tab_from_existing_pane(Box::new(pane), new_idx, ctx);
+                    // A new code file opened in a new tab joins the active tab's
+                    // group (if any) and stays contiguous instead of splitting it.
+                    let (new_idx, group_id) = self.new_tab_index_and_group(ctx);
+                    self.add_tab_from_existing_pane(Box::new(pane), new_idx, group_id, ctx);
                 }
                 EditorLayout::SplitPane => {
                     self.active_tab_pane_group().update(ctx, |pane_group, ctx| {
@@ -12439,6 +12897,10 @@ impl Workspace {
         }
 
         let history_model = BlocklistAIHistoryModel::handle(ctx);
+        let is_local_conversation = history_model
+            .as_ref(ctx)
+            .get_conversation_metadata(&conversation_id)
+            .is_some_and(|m| m.has_local_data);
         let future = history_model
             .as_ref(ctx)
             .load_conversation_data(conversation_id, ctx);
@@ -12456,7 +12918,7 @@ impl Workspace {
                     ctx.notify();
                 });
                 WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                    let toast = DismissibleToast::error("加载对话失败。".to_owned());
+                    let toast = DismissibleToast::error("Failed to load conversation.".to_owned());
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
                 return;
@@ -12472,6 +12934,7 @@ impl Workspace {
                     conversation,
                     FeatureFlag::AgentView.is_enabled(),
                     RestoreConversationEntryBehavior::PreserveAgentViewState,
+                    is_local_conversation,
                     move |terminal_view, ctx| {
                         terminal_view.enter_agent_view_for_conversation(
                             None,
@@ -12516,7 +12979,7 @@ impl Workspace {
             let Some(conversation) = conversation else {
                 log::warn!("Failed to load conversation {conversation_id}");
                 WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                    let toast = DismissibleToast::error("加载对话失败。".to_owned());
+                    let toast = DismissibleToast::error("Failed to load conversation.".to_owned());
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
                 // Close the loading pane
@@ -12585,7 +13048,7 @@ impl Workspace {
             let Some(conversation) = conversation else {
                 log::warn!("Failed to load conversation {conversation_id}");
                 WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                    let toast = DismissibleToast::error("加载对话失败。".to_owned());
+                    let toast = DismissibleToast::error("Failed to load conversation.".to_owned());
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
                 // Close the loading tab
@@ -12647,6 +13110,95 @@ impl Workspace {
         }
     }
 
+    #[cfg(not(target_family = "wasm"))]
+    fn continue_third_party_conversation_locally(
+        &mut self,
+        task_id: AmbientAgentTaskId,
+        harness: AIAgentHarness,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        let window_id = ctx.window_id();
+        let ai_client = ServerApiProvider::as_ref(ctx).get_ai_client();
+
+        ctx.spawn(
+            async move {
+                let transcript_file = tempfile::Builder::new()
+                    .prefix("warp_run_transcript_")
+                    .suffix(".json")
+                    .tempfile()
+                    .context("Failed to create temporary transcript file")?;
+                let transcript_path = transcript_file.path().to_path_buf();
+
+                ai_client
+                    .download_run_transcript_to_path(&task_id, &transcript_path)
+                    .await
+                    .context("Failed to download run transcript")?;
+
+                let file = std::fs::File::open(&transcript_path)
+                    .context("Failed to open downloaded run transcript")?;
+                match harness {
+                    AIAgentHarness::ClaudeCode => {
+                        let launch =
+                            claude_transcript::rehydrate_claude_transcript_from_reader(file)?;
+                        Ok(ThirdPartyLocalContinuationLaunch {
+                            command: launch.command,
+                        })
+                    }
+                    AIAgentHarness::Codex => {
+                        let launch =
+                            codex_transcript::rehydrate_codex_transcript_from_reader(file)?;
+                        Ok(ThirdPartyLocalContinuationLaunch {
+                            command: launch.command,
+                        })
+                    }
+                    _ => anyhow::bail!(
+                        "Local continuation is not supported for this harness"
+                    ),
+                }
+            },
+            move |workspace, result, ctx| {
+                let launch = match result {
+                    Ok(launch) => launch,
+                    Err(err) => {
+                        log::warn!(
+                            "Failed to continue third-party conversation locally: {err:#}"
+                        );
+                        WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
+                            let toast = DismissibleToast::error(
+                                "Couldn't continue this conversation locally. Check the logs for details."
+                                    .to_owned(),
+                            );
+                            toast_stack.add_ephemeral_toast(toast, window_id, ctx);
+                        });
+                        return;
+                    }
+                };
+
+                let active_pane_group = workspace.active_tab_pane_group().clone();
+                let new_pane_id = active_pane_group.update(ctx, |pane_group, ctx| {
+                    pane_group.add_terminal_pane_ignoring_default_session_mode(
+                        PaneGroupDirection::Right,
+                        None,
+                        ctx,
+                    )
+                });
+
+                let Some(terminal_view) = active_pane_group
+                    .as_ref(ctx)
+                    .terminal_view_from_pane_id(new_pane_id, ctx)
+                else {
+                    log::error!(
+                        "Could not get terminal view handle when continuing third-party conversation locally."
+                    );
+                    return;
+                };
+
+                terminal_view.update(ctx, |terminal, ctx| {
+                    terminal.set_pending_command(&launch.command, ctx);
+                });
+            },
+        );
+    }
     /// Fork an existing AI conversation.
     /// Optionally summarizes the conversation after forking and/or sends an initial prompt.
     /// When cloud conversation storage is enabled and the source has a server token,
@@ -12660,6 +13212,7 @@ impl Workspace {
         summarize_after_fork: bool,
         summarization_prompt: Option<String>,
         initial_prompt: Option<String>,
+        initial_attachments: Vec<PendingAttachment>,
         destination: ForkedConversationDestination,
         ctx: &mut ViewContext<Self>,
     ) {
@@ -12703,7 +13256,7 @@ impl Workspace {
                 log::error!("Failed to load Oz conversation {conversation_id} for forking.");
                 WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     let toast = DismissibleToast::error(
-                        "加载要 fork 的对话失败。".to_owned(),
+                        "Failed to load conversation for forking.".to_owned(),
                     );
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
@@ -12745,6 +13298,7 @@ impl Workspace {
                             summarize_after_fork,
                             summarization_prompt,
                             initial_prompt,
+                            initial_attachments,
                             destination,
                             has_initial_query,
                             source_terminal_view_id,
@@ -12762,6 +13316,7 @@ impl Workspace {
                     summarize_after_fork,
                     summarization_prompt,
                     initial_prompt,
+                    initial_attachments,
                     destination,
                     has_initial_query,
                     source_terminal_view_id,
@@ -12785,6 +13340,7 @@ impl Workspace {
         summarize_after_fork: bool,
         summarization_prompt: Option<String>,
         initial_prompt: Option<String>,
+        initial_attachments: Vec<PendingAttachment>,
         destination: ForkedConversationDestination,
         has_initial_query: bool,
         source_terminal_view_id: Option<EntityId>,
@@ -12819,7 +13375,7 @@ impl Workspace {
             Err(e) => {
                 log::error!("Conversation forking failed. {e}.");
                 WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                    let toast = DismissibleToast::error("对话分叉失败。".to_owned());
+                    let toast = DismissibleToast::error("Conversation forking failed.".to_owned());
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
                 return;
@@ -12856,8 +13412,9 @@ impl Workspace {
                 Self::handle_forked_conversation_prompts(
                     terminal_view,
                     summarize_after_fork,
-                    summarization_prompt,
-                    initial_prompt,
+                    summarization_prompt.clone(),
+                    initial_prompt.clone(),
+                    initial_attachments.clone(),
                     forked_conversation_id,
                     ctx,
                 );
@@ -12908,8 +13465,9 @@ impl Workspace {
                 Self::handle_forked_conversation_prompts(
                     terminal_view,
                     summarize_after_fork,
-                    summarization_prompt,
-                    initial_prompt,
+                    summarization_prompt.clone(),
+                    initial_prompt.clone(),
+                    initial_attachments.clone(),
                     forked_conversation_id,
                     ctx,
                 );
@@ -12953,6 +13511,7 @@ impl Workspace {
                 summarize_after_fork,
                 summarization_prompt,
                 initial_prompt,
+                initial_attachments,
                 forked_conversation_id,
                 ctx,
             );
@@ -12968,11 +13527,14 @@ impl Workspace {
     }
 
     /// Handle sending summarize and/or initial prompt to a forked conversation.
+    /// If `initial_attachments` are provided, they are added to the new pane's context
+    /// model so they are included when the initial prompt is sent.
     fn handle_forked_conversation_prompts(
         terminal_view: ViewHandle<TerminalView>,
         summarize_after_fork: bool,
         summarization_prompt: Option<String>,
         initial_prompt: Option<String>,
+        initial_attachments: Vec<PendingAttachment>,
         forked_conversation_id: AIConversationId,
         ctx: &mut ViewContext<Self>,
     ) {
@@ -13002,6 +13564,16 @@ impl Workspace {
                     );
                 }
             } else if let Some(prompt) = initial_prompt {
+                // Add any attachments to the new pane's context model before sending,
+                // so images/files from the source pane are included with the prompt.
+                if !initial_attachments.is_empty() {
+                    terminal_view.ai_context_model().update(
+                        terminal_view_ctx,
+                        |context_model, ctx| {
+                            context_model.append_pending_attachments(initial_attachments, ctx);
+                        },
+                    );
+                }
                 terminal_view
                     .ai_controller()
                     .update(terminal_view_ctx, |controller, ctx| {
@@ -13052,7 +13624,7 @@ impl Workspace {
             .conversation(&conversation_id)
             .and_then(|c| c.title())
             .map(|s| s.to_string())
-            .unwrap_or_else(|| "对话".to_string());
+            .unwrap_or_else(|| "Conversation".to_string());
 
         let title = if source_title.chars().count() > MAX_FORK_TOAST_TITLE_LENGTH {
             let truncated: String = source_title
@@ -13065,7 +13637,7 @@ impl Workspace {
         };
 
         WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-            let toast = DismissibleToast::default(format!("已 fork {title}"));
+            let toast = DismissibleToast::default(format!("Forked \"{title}\""));
             toast_stack.add_ephemeral_toast(toast, window_id, ctx);
         });
     }
@@ -13111,6 +13683,44 @@ impl Workspace {
         });
     }
 
+    /// True when reordering the tab at `index` in `direction` would not
+    /// split a group or cross the pinned/unpinned boundary. Used by the
+    /// action handler to no-op blocked moves and by `modify_tab_menu_items`
+    /// to hide the entry.
+    pub(super) fn can_move_tab(&self, index: usize, direction: TabMovement) -> bool {
+        let Some(tab) = self.tabs.get(index) else {
+            return false;
+        };
+        let tab_pinned = self.is_tab_effectively_pinned(tab);
+        match direction {
+            TabMovement::Left => {
+                if index == 0 {
+                    return false;
+                }
+                let neighbor = &self.tabs[index - 1];
+                // A grouped tab can only reorder within its own group;
+                // crossing the group boundary would split its contiguous
+                // run (first member moving left, etc.).
+                if tab.group_id.is_some() {
+                    return tab.group_id == neighbor.group_id;
+                }
+                // Unpinned tab can't move up into the pinned region.
+                tab_pinned || !self.is_tab_effectively_pinned(neighbor)
+            }
+            TabMovement::Right => {
+                if index + 1 >= self.tabs.len() {
+                    return false;
+                }
+                let neighbor = &self.tabs[index + 1];
+                if tab.group_id.is_some() {
+                    return tab.group_id == neighbor.group_id;
+                }
+                // Pinned tab can't move down into the unpinned region.
+                !tab_pinned || self.is_tab_effectively_pinned(neighbor)
+            }
+        }
+    }
+
     /// Moves the tab at `index` one slot left/right, where a "slot" is either a
     /// single tab or an entire adjacent group. If the neighbor in the move
     /// direction belongs to a *different* group, the tab hops over that whole
@@ -13118,6 +13728,9 @@ impl Workspace {
     /// ungrouped tab, or reordering within the tab's own group, is an ordinary
     /// one-slot move.
     fn move_tab(&mut self, index: usize, direction: TabMovement, ctx: &mut ViewContext<Self>) {
+        if !self.can_move_tab(index, direction) {
+            return;
+        }
         let tabs_len = self.tabs.len();
         // The group the moved tab belongs to (if any), so we can distinguish
         // "reorder within my own group" from "hop over a different group".
@@ -13285,14 +13898,16 @@ impl Workspace {
                         let url = NOTIFICATIONS_TROUBLESHOOT_URL.to_string();
                         view.toast_stack.update(ctx, |toast_stack, ctx| {
                             let toast = DismissibleToast::error(
-                                "Warp 没有发送桌面通知的权限。".to_string(),
+                                "Warp doesn't have permission to send desktop notifications.".to_string(),
                             )
-                            .with_link(ToastLink::new("排查通知问题".to_string()).with_href(url));
+                            .with_link(ToastLink::new("Troubleshoot notifications".to_string()).with_href(url));
                             toast_stack.add_persistent_toast(toast, ctx);
                         });
                     }
                     RequestPermissionsOutcome::OtherError { error_message } => {
-                        log::error!("请求通知权限时发生未知错误。error_msg: {error_message}");
+                        log::error!(
+                            "Unknown error when requesting notification permissions. error_msg: {error_message}"
+                        );
                     }
                 }
                 send_telemetry_from_ctx!(
@@ -13941,13 +14556,13 @@ impl Workspace {
                                 .find(|binding| binding.name == "workspace:view_changelog")
                                 .and_then(|binding| trigger_to_keystroke(binding.trigger));
 
-                            let mut link = ToastLink::new("查看变更日志".to_owned())
+                            let mut link = ToastLink::new("View changelog".to_owned())
                                 .with_onclick_action(WorkspaceAction::ViewLatestChangelog);
                             if let Some(keystroke) = keystroke {
                                 link = link.with_keystroke(keystroke);
                             }
 
-                            let toast = DismissibleToast::default(String::from("Warp 已更新！"))
+                            let toast = DismissibleToast::default(String::from("Warp updated!"))
                                 .with_link(link);
 
                             stack.add_ephemeral_toast(toast, ctx);
@@ -14255,7 +14870,9 @@ impl Workspace {
                 me.handoff_environment_creation_modal = None;
                 me.toast_stack.update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-                        DismissibleToast::error(format!("创建环境失败：{error_message}")),
+                        DismissibleToast::error(format!(
+                            "Failed to create environment: {error_message}"
+                        )),
                         ctx,
                     );
                 });
@@ -14297,7 +14914,7 @@ impl Workspace {
             AuthSecretFtuxViewEvent::Failed { .. } => {}
         });
 
-        let title = "新建 API 密钥".to_string();
+        let title = "New API key".to_string();
         let modal = ctx.add_typed_action_view(|ctx| {
             Modal::new(Some(title), body, ctx).with_modal_style(UiComponentStyles {
                 width: Some(520.),
@@ -14381,7 +14998,9 @@ impl Workspace {
                 me.handoff_environment_creation_modal = None;
                 me.toast_stack.update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-                        DismissibleToast::error(format!("创建环境失败：{error_message}")),
+                        DismissibleToast::error(format!(
+                            "Failed to create environment: {error_message}"
+                        )),
                         ctx,
                     );
                 });
@@ -14417,7 +15036,9 @@ impl Workspace {
         let window_id = ctx.window_id();
         WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
             toast_stack.add_ephemeral_toast(
-                DismissibleToast::default("正在为此会话启动云端环境...".to_owned()),
+                DismissibleToast::default(
+                    "Starting cloud environment for this session...".to_owned(),
+                ),
                 window_id,
                 ctx,
             );
@@ -14499,7 +15120,7 @@ impl Workspace {
             WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                 toast_stack.add_ephemeral_toast(
                     DismissibleToast::error(
-                        "无法打开用于交接的云端窗格。请重试；如果问题持续，请重启 Warp。"
+                        "Couldn't open a cloud pane for handoff. Try again, or restart Warp if this keeps happening."
                             .to_owned(),
                     ),
                     window_id,
@@ -14524,6 +15145,7 @@ impl Workspace {
             submission_state: HandoffSubmissionState::Idle,
             auto_submit: launch,
             orchestration_handoff: None,
+            should_inject_continue: false,
         };
         model_handle.update(ctx, |model, model_ctx| {
             model.set_pending_handoff(Some(pending), model_ctx);
@@ -14569,7 +15191,8 @@ impl Workspace {
             WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                 toast_stack.add_ephemeral_toast(
                     DismissibleToast::error(
-                        "没有可交接的活动终端会话。请聚焦一个窗格后重试。".to_owned(),
+                        "No active terminal session to hand off. Focus a pane and try again."
+                            .to_owned(),
                     ),
                     window_id,
                     ctx,
@@ -14593,8 +15216,9 @@ impl Workspace {
         ctx: &mut ViewContext<Self>,
     ) {
         if let Some(conversation_id) = intent.expected_conversation_id() {
-            AutoCloudHandoffController::handle(ctx).update(ctx, |controller, _| {
-                controller.record_handoff_succeeded(conversation_id);
+            let window_id = ctx.window_id();
+            AutoCloudHandoffController::handle(ctx).update(ctx, |controller, ctx| {
+                controller.record_handoff_succeeded(conversation_id, window_id, ctx);
             });
         }
     }
@@ -14649,12 +15273,57 @@ impl Workspace {
             }
         };
 
+        // Chip, `&` Enter, and `/handoff` with no arg dispatch `launch: None`;
+        // synthesize an empty `PendingCloudLaunch` so auto-submit fires. The
+        // empty-prompt substitution happens in `build_handoff_spawn_request`.
+        // Attachments come from the source input for symmetry across entry points.
+        let launch = match (launch, intent) {
+            (
+                None,
+                LocalToCloudHandoffIntent::UserInitiated(
+                    HandoffEntryPoint::FooterChip
+                    | HandoffEntryPoint::Ampersand
+                    | HandoffEntryPoint::SlashCommand,
+                ),
+            ) => {
+                let attachments = source_view.update(ctx, |view, ctx| {
+                    let input = view.input().clone();
+                    input.update(ctx, |input, ctx| {
+                        input.collect_cloud_launch_attachments(ctx)
+                    })
+                });
+                Some(PendingCloudLaunch {
+                    prompt: String::new(),
+                    attachments,
+                })
+            }
+            (launch, _) => launch,
+        };
+
         let has_existing_conversation = source_conversation.as_ref().is_some_and(|c| !c.is_empty());
+
+        // Capture the source-conversation state once. An "active" source is
+        // non-empty AND in-progress/blocked; the wire-level substitution and
+        // the telemetry injection_path read the same bool so the two cannot
+        // drift across the in-progress cancellation below.
+        let source_conversation_active = source_conversation.as_ref().is_some_and(|c| {
+            !c.is_empty() && (c.status().is_in_progress() || c.status().is_blocked())
+        });
+        let empty_prompt = launch.as_ref().is_none_or(|l| l.prompt.is_empty());
+        let injection_path = if !empty_prompt {
+            HandoffInjectionPath::None
+        } else if source_conversation_active {
+            HandoffInjectionPath::Continue
+        } else {
+            HandoffInjectionPath::SnapshotRehydration
+        };
 
         send_telemetry_from_ctx!(
             CloudAgentTelemetryEvent::HandoffInitiated {
                 entry_point: intent.entry_point(),
                 forked_existing_conversation: has_existing_conversation,
+                empty_prompt,
+                injection_path,
             },
             ctx
         );
@@ -14680,9 +15349,7 @@ impl Workspace {
             return;
         }
 
-        if source_conversation.status().is_in_progress()
-            || source_conversation.status().is_blocked()
-        {
+        if source_conversation_active {
             let has_long_running_command =
                 source_view.as_ref(ctx).has_active_long_running_command();
 
@@ -14693,7 +15360,8 @@ impl Workspace {
                     WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
                             DismissibleToast::error(
-                                "命令运行时无法交接。请取消命令或等待其完成。".to_owned(),
+                                "Can't hand off while a command is running. Cancel the command or wait for it to finish."
+                                    .to_owned(),
                             ),
                             window_id,
                             ctx,
@@ -14729,7 +15397,8 @@ impl Workspace {
                 WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
                         DismissibleToast::error(
-                            "你的对话尚未同步到云端。请再发送一条消息，然后重新交接。".to_owned(),
+                            "Your conversation hasn't synced to the cloud yet. Try sending another message, then hand off again."
+                                .to_owned(),
                         ),
                         window_id,
                         ctx,
@@ -14745,7 +15414,7 @@ impl Workspace {
         let source_conversation_id = source_token.as_str().to_string();
         let title_for_fork = source_conversation
             .title()
-            .map(|t| format!("{t}（已移至云端）"));
+            .map(|t| format!("{t} (Moved to cloud)"));
         ctx.spawn(
             async move {
                 ai_client
@@ -14762,6 +15431,7 @@ impl Workspace {
                             launch,
                             environment_id,
                             intent,
+                            should_inject_continue: source_conversation_active,
                         },
                         ctx,
                     );
@@ -14781,7 +15451,8 @@ impl Workspace {
                         WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                             toast_stack.add_ephemeral_toast(
                                 DismissibleToast::error(
-                                    "无法开始交接。请检查网络连接后重试。".to_owned(),
+                                    "Couldn't start the handoff. Check your network connection and try again."
+                                        .to_owned(),
                                 ),
                                 window_id,
                                 ctx,
@@ -14797,6 +15468,7 @@ impl Workspace {
     /// Finishes the handoff after the fork RPC returns by restoring the forked
     /// conversation in a cloud pane and starting snapshot prep.
     #[cfg(all(feature = "local_fs", not(target_family = "wasm")))]
+    #[allow(clippy::too_many_arguments)]
     fn complete_local_to_cloud_handoff_open(
         &mut self,
         source_view: ViewHandle<TerminalView>,
@@ -14809,13 +15481,14 @@ impl Workspace {
             launch,
             environment_id,
             intent,
+            should_inject_continue,
         } = params;
         let show_user_feedback = intent.shows_user_feedback();
         let history_model = BlocklistAIHistoryModel::handle(ctx);
         // Materialize the fork locally so the new pane can restore it.
         let title_override = source_conversation
             .title()
-            .map(|t| format!("{t}（已移至云端）"));
+            .map(|t| format!("{t} (Moved to cloud)"));
         let local_fork = match history_model.update(ctx, |history_model, ctx| {
             history_model.fork_conversation(
                 &source_conversation,
@@ -14836,7 +15509,7 @@ impl Workspace {
                     WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
                             DismissibleToast::error(
-                                "无法在本地保存你的对话。请再发送一条消息，然后重新交接。"
+                                "Couldn't save your conversation locally. Try sending another message, then hand off again."
                                     .to_owned(),
                             ),
                             window_id,
@@ -14862,7 +15535,7 @@ impl Workspace {
                 WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
                         DismissibleToast::error(
-                            "无法打开用于交接的云端窗格。请重试；如果问题持续，请重启 Warp。"
+                            "Couldn't open a cloud pane for handoff. Try again, or restart Warp if this keeps happening."
                                 .to_owned(),
                         ),
                         window_id,
@@ -14927,6 +15600,7 @@ impl Workspace {
             submission_state: HandoffSubmissionState::Idle,
             auto_submit: launch,
             orchestration_handoff,
+            should_inject_continue,
         };
         model_handle.update(ctx, |model, model_ctx| {
             model.set_pending_handoff(Some(pending), model_ctx);
@@ -15038,7 +15712,9 @@ impl Workspace {
                             if let NotificationSendError::Other { error_message } =
                                 &notification_error
                             {
-                                log::error!("发送通知时发生未知错误。error_msg: {error_message}");
+                                log::error!(
+                                    "Unknown error when sending notification. error_msg: {error_message}"
+                                );
                             }
                             send_telemetry_from_ctx!(
                                 TelemetryEvent::NotificationFailedToSend {
@@ -15174,7 +15850,9 @@ impl Workspace {
 
                 if !object_found {
                     self.toast_stack.update(ctx, |toast_stack, ctx| {
-                        let toast = DismissibleToast::error(String::from("资源不存在或访问被拒绝"));
+                        let toast = DismissibleToast::error(String::from(
+                            "Resource not found or access denied",
+                        ));
                         toast_stack.add_ephemeral_toast(toast, ctx);
                     });
                     ctx.notify();
@@ -15524,12 +16202,10 @@ impl Workspace {
                     );
                     return;
                 };
-                let new_tab_index = match TabSettings::as_ref(ctx).new_tab_placement {
-                    NewTabPlacement::AfterAllTabs => self.tab_count(),
-                    NewTabPlacement::AfterCurrentTab => self.active_tab_index + 1,
-                };
+                // Ensure the new tab lands at the correct index and inherits correct group.
+                let (new_tab_index, group_id) = self.new_tab_index_and_group(ctx);
                 let source_pane_group = pane_group.downgrade();
-                self.add_tab_from_existing_pane(removed_pane, new_tab_index, ctx);
+                self.add_tab_from_existing_pane(removed_pane, new_tab_index, group_id, ctx);
                 // Mark the new tab so closing it can move the pane back.
                 if let Some(new_pane_group) =
                     self.get_pane_group_view(self.active_tab_index).cloned()
@@ -15564,7 +16240,13 @@ impl Workspace {
                             };
 
                             if let Some(pane) = pane {
-                                self.add_tab_from_existing_pane(pane, workspace_tab_index, ctx);
+                                // TODO(johnturcoo) inherit the tab group on pane drop.
+                                self.add_tab_from_existing_pane(
+                                    pane,
+                                    workspace_tab_index,
+                                    None,
+                                    ctx,
+                                );
 
                                 // If the setting is enabled, preserve the color of the original pane's
                                 // tab for the newly created tab.
@@ -16587,7 +17269,7 @@ impl Workspace {
             let window_id = ctx.window_id();
             WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                 let toast = DismissibleToast::default(
-                    "没有打开的终端窗格。请打开一个新窗格以附加为上下文。".to_owned(),
+                    "No terminal pane open. Open a new pane to attach as context.".to_owned(),
                 );
                 toast_stack.add_ephemeral_toast(toast, window_id, ctx);
             });
@@ -16606,7 +17288,8 @@ impl Workspace {
             {
                 let window_id = ctx.window_id();
                 WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                    let toast = DismissibleToast::default("此计划已在上下文中。".to_owned());
+                    let toast =
+                        DismissibleToast::default("This plan is already in context.".to_owned());
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
                 return;
@@ -16687,7 +17370,9 @@ impl Workspace {
             // The active terminal exists but is busy, and the fallback behavior is
             // RequireExisting or OpenIfNone. In those cases, show a toast and no-op.
             self.toast_stack.update(ctx, |toast_stack, ctx| {
-                let mut toast = DismissibleToast::error("此会话中仍有命令正在运行。".to_string());
+                let mut toast = DismissibleToast::error(
+                    "A command in this session is still running.".to_string(),
+                );
                 if let Some(id) = object_id {
                     toast = toast.with_object_id(id.uid());
                 }
@@ -16708,7 +17393,8 @@ impl Workspace {
 
         if !ContextFlag::CreateNewSession.is_enabled() {
             self.toast_stack.update(ctx, |toast_stack, ctx| {
-                let toast = DismissibleToast::error("无法打开新的终端会话".to_string());
+                let toast =
+                    DismissibleToast::error("Cannot open a new terminal session".to_string());
                 toast_stack.add_ephemeral_toast(toast, ctx);
             });
             return None;
@@ -16789,7 +17475,7 @@ impl Workspace {
         {
             AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                 auth_manager.attempt_login_gated_feature(
-                    "运行 Agent 模式工作流",
+                    "Run Agent Mode Workflow",
                     AuthViewVariant::RequireLoginCloseable,
                     ctx,
                 )
@@ -16950,7 +17636,7 @@ impl Workspace {
                                     self.toast_stack.update(ctx, |view, ctx| {
                                         view.add_ephemeral_toast(
                                             DismissibleToast::error(
-                                                "此工作流已不再可用。".to_string(),
+                                                "This workflow is no longer available.".to_string(),
                                             ),
                                             ctx,
                                         );
@@ -17135,11 +17821,11 @@ impl Workspace {
                                             },
                                         ) {
                                             new_toast = DismissibleToast::success(
-                                                "计划已同步到你的 Warp Drive".to_string(),
+                                                "Plan synced to your Warp Drive".to_string(),
                                             )
                                             .with_object_id(object_id_clone)
                                             .with_link(
-                                                ToastLink::new("查看".to_string())
+                                                ToastLink::new("View".to_string())
                                                     .with_onclick_action(
                                                         WorkspaceAction::ViewObjectInWarpDrive(
                                                             WarpDriveItemId::Object(
@@ -17161,7 +17847,7 @@ impl Workspace {
                                         || result.operation == ObjectOperation::Update
                                     {
                                         new_toast = new_toast.with_link(
-                                            ToastLink::new("查看".to_string()).with_onclick_action(
+                                            ToastLink::new("View".to_string()).with_onclick_action(
                                                 WorkspaceAction::ViewObjectInWarpDrive(
                                                     WarpDriveItemId::Object(
                                                         CloudObjectTypeAndId::Workflow(workflow.id),
@@ -17174,7 +17860,7 @@ impl Workspace {
 
                                 if result.operation == ObjectOperation::Trash {
                                     new_toast = new_toast.with_link(
-                                        ToastLink::new("撤销".to_string()).with_onclick_action(
+                                        ToastLink::new("Undo".to_string()).with_onclick_action(
                                             WorkspaceAction::UndoTrash(cloud_object_type_and_id),
                                         ),
                                     )
@@ -17211,19 +17897,25 @@ impl Workspace {
                                 let new_toast = if let Some(workflow) = cloned_workflow {
                                     DismissibleToast::error(message)
                                         .with_link(
-                                            ToastLink::new("请检出最新版本后重试。".to_string())
-                                                .with_onclick_action(
-                                                    WorkspaceAction::HandleConflictingWorkflow(
-                                                        workflow.id,
-                                                    ),
+                                            ToastLink::new(
+                                                "Check out the latest version and try again."
+                                                    .to_string(),
+                                            )
+                                            .with_onclick_action(
+                                                WorkspaceAction::HandleConflictingWorkflow(
+                                                    workflow.id,
                                                 ),
+                                            ),
                                         )
                                         .with_object_id(object_id)
                                 } else if let Some(env_var_collection) = cloned_env_var_collection {
                                     DismissibleToast::error(message)
                                         .with_link(
-                                            ToastLink::new("请检出最新版本后重试。".to_string())
-                                                .with_onclick_action(
+                                            ToastLink::new(
+                                                "Check out the latest version and try again."
+                                                    .to_string(),
+                                            )
+                                            .with_onclick_action(
                                                 WorkspaceAction::HandleConflictingEnvVarCollection(
                                                     env_var_collection.id,
                                                 ),
@@ -17730,11 +18422,11 @@ impl Workspace {
         } else {
             "enabled"
         };
-        let mut message = format!("你已{verb}鼠标报告。");
+        let mut message = format!("You {verb} mouse reporting.");
         if let Some(keystroke) =
             keybinding_name_to_keystroke("workspace:toggle_mouse_reporting", ctx)
         {
-            let _ = write!(message, " 按 {} 撤销。", keystroke.displayed());
+            let _ = write!(message, " Press {} to undo.", keystroke.displayed());
         }
 
         self.toast_stack.update(ctx, |view, ctx| {
@@ -17872,7 +18564,7 @@ impl Workspace {
                 let command = code.trim().to_string();
                 let args_state =
                     ArgumentsState::for_command_workflow(&Default::default(), command.clone());
-                let workflow = Workflow::new("来自 Warp AI 的命令", command)
+                let workflow = Workflow::new("Command from Warp AI", command)
                     .with_arguments(args_state.arguments);
                 self.run_workflow_in_active_input(
                     &WorkflowType::AIGenerated {
@@ -17927,6 +18619,29 @@ impl Workspace {
                 ctx.notify();
             }
         }
+    }
+
+    fn handle_auto_handoff_sleep_modal_event(
+        &mut self,
+        event: &AutoHandoffSleepModalEvent,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        match event {
+            AutoHandoffSleepModalEvent::Enable => {
+                AISettings::handle(ctx).update(ctx, |settings, ctx| {
+                    report_if_error!(settings.auto_handoff_on_sleep_enabled.set_value(true, ctx));
+                });
+                send_telemetry_from_ctx!(CloudAgentTelemetryEvent::SleepPromptEnabled, ctx);
+            }
+            AutoHandoffSleepModalEvent::Dismiss => {
+                send_telemetry_from_ctx!(CloudAgentTelemetryEvent::SleepPromptDismissed, ctx);
+            }
+        }
+        OneTimeModalModel::handle(ctx).update(ctx, |model, ctx| {
+            model.mark_auto_handoff_sleep_modal_dismissed(ctx);
+        });
+        self.focus_active_tab(ctx);
+        ctx.notify();
     }
 
     fn handle_oz_launch_modal_event(
@@ -17989,6 +18704,50 @@ impl Workspace {
                 });
             }
         }
+    }
+
+    fn handle_free_ai_removal_modal_event(
+        &mut self,
+        event: &FreeAiRemovalModalEvent,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        match event {
+            FreeAiRemovalModalEvent::Close => {
+                OneTimeModalModel::handle(ctx).update(ctx, |model, ctx| {
+                    model.mark_free_ai_removal_modal_dismissed(ctx);
+                });
+                self.focus_active_tab(ctx);
+                ctx.notify();
+            }
+        }
+    }
+
+    fn handle_prompt_suggestions_unavailable_modal_event(
+        &mut self,
+        event: &FreeAiRemovalModalEvent,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        match event {
+            FreeAiRemovalModalEvent::Close => {
+                self.current_workspace_state
+                    .is_prompt_suggestions_unavailable_modal_open = false;
+                self.focus_active_tab(ctx);
+                ctx.notify();
+            }
+        }
+    }
+
+    pub fn open_prompt_suggestions_unavailable_modal(&mut self, ctx: &mut ViewContext<Self>) {
+        self.current_workspace_state
+            .is_prompt_suggestions_unavailable_modal_open = true;
+        send_telemetry_from_ctx!(
+            FreeAiRemovalModalTelemetryEvent::Shown {
+                variant: FreeAiRemovalModalVariant::PromptSuggestions,
+            },
+            ctx
+        );
+        ctx.focus(&self.prompt_suggestions_unavailable_modal);
+        ctx.notify();
     }
 
     fn handle_codex_modal_event(&mut self, event: &CodexModalEvent, ctx: &mut ViewContext<Self>) {
@@ -18608,7 +19367,10 @@ impl Workspace {
 
         let body = appearance
             .ui_builder()
-            .wrappable_text("让 Warp AI 解释错误、建议命令或编写脚本。".to_owned(), true)
+            .wrappable_text(
+                "Ask Warp AI to explain errors, suggest commands or write scripts.".to_owned(),
+                true,
+            )
             .with_style(UiComponentStyles {
                 font_size: Some(12.),
                 font_color: Some(sub_text_color),
@@ -18672,8 +19434,269 @@ impl Workspace {
             is_drag_target,
             ctx,
         )
+        .with_multi_tab_selection(self.is_tab_in_multi_tab_selection(tab_index))
         .build()
         .finish()
+    }
+
+    /// Renders a contiguous run of grouped tabs as one tab-bar slot: header
+    /// + (when expanded) member tabs.
+    #[allow(clippy::too_many_arguments)]
+    fn render_horizontal_tab_group(
+        &self,
+        group: &TabGroup,
+        first_index: usize,
+        run_len: usize,
+        tab_bar_state: TabBarState,
+        is_first_in_bar: bool,
+        appearance: &Appearance,
+        ctx: &AppContext,
+    ) -> Box<dyn Element> {
+        let theme = appearance.theme();
+        let is_collapsed = group.collapsed;
+
+        let mouse_states = self
+            .horizontal_tab_group_mouse_states
+            .borrow_mut()
+            .entry(group.id)
+            .or_default()
+            .clone();
+
+        let member_range = first_index..first_index + run_len;
+        let any_member_active = !self.current_workspace_state.is_agent_management_view_open
+            && member_range.contains(&self.active_tab_index);
+
+        let mut row = Flex::row().with_cross_axis_alignment(CrossAxisAlignment::Center);
+        row.add_child(self.render_horizontal_tab_group_header(
+            group,
+            &mouse_states,
+            is_collapsed,
+            any_member_active,
+            appearance,
+            ctx,
+        ));
+
+        if !is_collapsed {
+            let close_button_position = if FeatureFlag::TabCloseButtonOnLeft.is_enabled() {
+                TabSettings::as_ref(ctx).close_button_position
+            } else {
+                TabCloseButtonPosition::default()
+            };
+            // When a group has only one member, suppress that member's per-tab
+            // `Draggable` so the parent group's `Draggable` picks up the drag
+            // instead, dragging the whole group rather than orphaning it.
+            let is_sole_member = group_has_single_member(&self.tabs, group.id);
+            for idx in member_range {
+                let tab = &self.tabs[idx];
+                let member = TabComponent::new(
+                    idx,
+                    tab_bar_state,
+                    tab,
+                    self.tab_rename_editor.clone(),
+                    close_button_position,
+                    false,
+                    ctx,
+                )
+                .for_grouped_member(is_sole_member)
+                .with_multi_tab_selection(self.is_tab_in_multi_tab_selection(idx))
+                .build()
+                .finish();
+                row.add_child(member);
+            }
+        }
+
+        // Pinned + expanded: trailing pin indicator after the last member.
+        let group_pinned = FeatureFlag::PinnedTabs.is_enabled() && group.pinned;
+        if group_pinned && !is_collapsed {
+            row.add_child(render_horizontal_group_pin_indicator(appearance));
+        }
+
+        // Additional padding on expanded groups,
+        // allowing tabs to be dropped into the last position of the group.
+        const EXPANDED_GROUP_TRAILING_PADDING: f32 = 8.;
+        let mut container = Container::new(row.finish()).with_border(
+            Border::all(1.)
+                // Left border only on the first slot to avoid double borders.
+                .with_sides(false, is_first_in_bar, false, true)
+                .with_border_fill(internal_colors::fg_overlay_1(theme)),
+        );
+        if !is_collapsed {
+            container = container.with_padding_right(EXPANDED_GROUP_TRAILING_PADDING);
+        }
+        let container = container.finish();
+
+        let group_id = group.id;
+        let group_draggable_state = group.draggable_state.clone();
+        let positioned_container = Draggable::new(group_draggable_state, container)
+            .on_drag_start(move |ctx, _, _| {
+                ctx.dispatch_typed_action(WorkspaceAction::StartGroupDrag(group_id));
+            })
+            .on_drag(move |ctx, _, rect, _| {
+                ctx.dispatch_typed_action(WorkspaceAction::DragGroup {
+                    group_id,
+                    position: rect,
+                });
+            })
+            .on_drop(move |ctx, _, _, _| {
+                ctx.dispatch_typed_action(WorkspaceAction::DropGroup);
+            })
+            .with_drag_axis(DragAxis::HorizontalOnly)
+            // Yield to a nested per-tab `Draggable` when it claims the mouse-down
+            // so dragging a member tab fires `DragTab`, not group drag.
+            .with_defer_to_handled_child_mouse_down()
+            .finish();
+
+        let positioned_container =
+            SavePosition::new(positioned_container, &htab_group_position_id(group_id)).finish();
+
+        // Flex = header + one per member so the group shrinks proportionally
+        // with sibling tabs. A collapsed group renders only its header, so it
+        // should claim a single slot's worth of flex.
+        let group_flex = if is_collapsed {
+            1.0
+        } else {
+            1.0 + run_len as f32
+        };
+        Shrinkable::new(group_flex, positioned_container).finish()
+    }
+
+    /// Header (icon collage + name) for a horizontal tab group. Click
+    /// toggles collapse; double-click renames; right-click opens the menu.
+    fn render_horizontal_tab_group_header(
+        &self,
+        group: &TabGroup,
+        mouse_states: &HorizontalTabGroupMouseStates,
+        is_collapsed: bool,
+        any_member_active: bool,
+        appearance: &Appearance,
+        ctx: &AppContext,
+    ) -> Box<dyn Element> {
+        let theme = appearance.theme();
+        let group_id = group.id;
+        let font_family = appearance.ui_font_family();
+        let main_text_color = theme.main_text_color(theme.background());
+
+        // When collapsed with an active hidden member, highlight the header
+        // so the active state stays visible.
+        let header_selected = is_collapsed && any_member_active;
+
+        let member_kinds = self.compute_group_member_kinds(group.id, ctx);
+        let icon_circle =
+            render_group_member_icon_collage(&member_kinds, GROUP_ICON_COLLAGE_SIZE, appearance);
+
+        let is_being_renamed = self
+            .current_workspace_state
+            .is_tab_group_being_renamed(group_id);
+        let name_element: Box<dyn Element> = if is_being_renamed {
+            ConstrainedBox::new(vertical_tabs::render_inline_tab_rename_editor(
+                &self.tab_group_rename_editor,
+                appearance,
+                ctx,
+            ))
+            .with_max_width(150.)
+            .finish()
+        } else {
+            let title = group
+                .name
+                .clone()
+                .unwrap_or_else(|| "New Group".to_string());
+            // Cap width so long names ellipsize and the tab bar's unbounded
+            // measurement stays finite.
+            ConstrainedBox::new(
+                Text::new_inline(title, font_family, 12.)
+                    .with_clip(ClipConfig::ellipsis())
+                    .with_color(main_text_color.into())
+                    .finish(),
+            )
+            .with_max_width(150.)
+            .finish()
+        };
+
+        let mut row = Flex::row()
+            .with_cross_axis_alignment(CrossAxisAlignment::Center)
+            .with_spacing(6.)
+            .with_child(icon_circle)
+            .with_child(name_element);
+        // Collapsed + pinned: pin indicator to the right of the name, where an
+        // ungrouped tab would show its close button. Expanded groups show the
+        // pin after their last member instead.
+        if FeatureFlag::PinnedTabs.is_enabled() && group.pinned && is_collapsed {
+            row.add_child(render_horizontal_group_pin_indicator(appearance));
+        }
+        let row = row.finish();
+
+        let header_active_bg = internal_colors::fg_overlay_2(theme);
+        let header_hover_bg = internal_colors::fg_overlay_1(theme);
+        let mut header = Hoverable::new(mouse_states.header.clone(), move |state| {
+            let bg: ElementFill = if header_selected {
+                header_active_bg.into()
+            } else if state.is_hovered() {
+                header_hover_bg.into()
+            } else {
+                ElementFill::None
+            };
+
+            Container::new(row)
+                .with_horizontal_padding(8.)
+                .with_vertical_padding(6.)
+                .with_background(bg)
+                .finish()
+        })
+        .with_cursor(Cursor::PointingHand)
+        .with_defer_events_to_children();
+
+        header = header.on_click(move |ctx, _, _| {
+            ctx.dispatch_typed_action(WorkspaceAction::ToggleTabGroupCollapsed(group_id));
+        });
+        header = header.on_double_click(move |ctx, _, _| {
+            ctx.dispatch_typed_action(WorkspaceAction::RenameTabGroup(group_id));
+        });
+
+        header = header.on_right_click(move |ctx, _, position| {
+            ctx.dispatch_typed_action(WorkspaceAction::ToggleTabGroupRightClickMenu {
+                group_id,
+                anchor: TabContextMenuAnchor::Pointer(position),
+            });
+        });
+        header.finish()
+    }
+
+    /// Returns up to 4 distinct pane-kind icons for the group's collage.
+    ///
+    /// Icons are drawn from the same pool each member tab's Summary view
+    /// uses, so the collage is always a subset of what's already visible on
+    /// the member tabs themselves — collapsing or expanding the group never
+    /// surfaces icons the user hasn't seen on a member tab.
+    ///
+    /// Example: two member tabs whose Summary views show `[Terminal, Code]`
+    /// and `[Code, Notebook]` produce a collage of `[Terminal, Code, Notebook]`.
+    fn compute_group_member_kinds(
+        &self,
+        group_id: TabGroupId,
+        ctx: &AppContext,
+    ) -> Vec<SummaryPaneKind> {
+        let mut kinds: Vec<SummaryPaneKind> = Vec::new();
+        for idx in group_member_indices(&self.tabs, group_id) {
+            let tab = &self.tabs[idx];
+            let pane_group = tab.pane_group.as_ref(ctx);
+            let pane_kinds: Vec<(EntityId, SummaryPaneKind)> = pane_group
+                .visible_pane_ids()
+                .iter()
+                .filter_map(|pane_id| {
+                    pane_summary_kind(pane_group, *pane_id, ctx)
+                        .map(|kind| (pane_id.creation_order_id(), kind))
+                })
+                .collect();
+            for kind in select_unique_pane_kinds(pane_kinds, 2) {
+                if !kinds.contains(&kind) {
+                    kinds.push(kind);
+                    if kinds.len() >= 4 {
+                        return kinds;
+                    }
+                }
+            }
+        }
+        kinds
     }
 
     /// Renders the tab at `tab_index` using the same render code path the live
@@ -18742,7 +19765,7 @@ impl Workspace {
                         icons::Icon::Grid,
                         &self.mouse_states.agent_management_view_button,
                         WorkspaceAction::ToggleAgentManagementView,
-                        "Agent 管理面板".to_string(),
+                        "Agent management panel".to_string(),
                         keybinding_name_to_display_string(
                             "workspace:toggle_agent_management_view",
                             ctx,
@@ -18772,7 +19795,7 @@ impl Workspace {
             if vertical_tabs_active {
                 (
                     self.vertical_tabs_panel_open,
-                    "标签页面板",
+                    "Tabs panel",
                     WorkspaceAction::ToggleVerticalTabsPanel,
                     "workspace:toggle_vertical_tabs_panel",
                     "workspace:toggle_vertical_tabs_panel",
@@ -18785,13 +19808,13 @@ impl Workspace {
                         .copied()
                         .unwrap_or(ToolPanelView::WarpDrive)
                     {
-                        ToolPanelView::ProjectExplorer => "项目资源管理器",
-                        ToolPanelView::GlobalSearch { .. } => "全局搜索",
+                        ToolPanelView::ProjectExplorer => "Project explorer",
+                        ToolPanelView::GlobalSearch { .. } => "Global search",
                         ToolPanelView::WarpDrive => "Warp Drive",
-                        ToolPanelView::ConversationListView => "Agent 对话",
+                        ToolPanelView::ConversationListView => "Agent conversations",
                     }
                 } else {
-                    "工具面板"
+                    "Tools panel"
                 };
                 (
                     self.active_tab_pane_group().as_ref(ctx).left_panel_open,
@@ -18839,13 +19862,13 @@ impl Workspace {
                 .copied()
                 .unwrap_or(ToolPanelView::WarpDrive)
             {
-                ToolPanelView::ProjectExplorer => "项目资源管理器",
-                ToolPanelView::GlobalSearch { .. } => "全局搜索",
+                ToolPanelView::ProjectExplorer => "Project explorer",
+                ToolPanelView::GlobalSearch { .. } => "Global search",
                 ToolPanelView::WarpDrive => "Warp Drive",
-                ToolPanelView::ConversationListView => "Agent 对话",
+                ToolPanelView::ConversationListView => "Agent conversations",
             }
         } else {
-            "工具面板"
+            "Tools panel"
         };
 
         SavePosition::new(
@@ -19002,7 +20025,7 @@ impl Workspace {
             button
                 .with_tooltip(self.render_tab_bar_icon_button_tooltip(
                     appearance,
-                    "代码审查面板".to_string(),
+                    "Code review panel".to_string(),
                     keybinding_name_to_display_string("workspace:toggle_right_panel", ctx),
                 ))
                 .build()
@@ -19095,7 +20118,7 @@ impl Workspace {
                         Shrinkable::new(
                             1.,
                             Text::new_inline(
-                                "搜索会话、Agent、文件...",
+                                "Search sessions, agents, files...",
                                 appearance.ui_font_family(),
                                 14.,
                             )
@@ -19243,7 +20266,7 @@ impl Workspace {
         let config = TabSettings::as_ref(ctx)
             .header_toolbar_chip_selection
             .clone();
-        if knowledge_center_closed && !self.is_theme_chooser_open() {
+        if knowledge_center_closed {
             let left_toolbar_buttons = config
                 .left_items()
                 .into_iter()
@@ -19275,25 +20298,33 @@ impl Workspace {
 
             let left_padding = self.compute_tab_bar_left_padding(ctx);
 
-            let tab_bar = Flex::row()
-                .with_main_axis_size(MainAxisSize::Max)
-                .with_cross_axis_alignment(CrossAxisAlignment::Center)
-                .with_child(tab_bar.finish())
-                .with_child(
-                    Shrinkable::new(
-                        1.,
-                        Clipped::new(
-                            Container::new(
-                                Align::new(self.render_title_bar_search_bar(appearance)).finish(),
-                            )
-                            .with_padding_left(TITLE_BAR_SEARCH_BAR_SLOT_PADDING)
-                            .with_padding_right(TITLE_BAR_SEARCH_BAR_SLOT_PADDING)
-                            .finish(),
+            // The title bar search bar can be hidden via a user setting; when hidden,
+            // an empty flexible slot keeps the right-side controls aligned to the right.
+            let hide_search_bar =
+                *TabSettings::as_ref(ctx).hide_title_bar_search_bar_in_vertical_tabs;
+            let search_bar_slot = if hide_search_bar {
+                Expanded::new(1., Empty::new().finish()).finish()
+            } else {
+                Shrinkable::new(
+                    1.,
+                    Clipped::new(
+                        Container::new(
+                            Align::new(self.render_title_bar_search_bar(appearance)).finish(),
                         )
+                        .with_padding_left(TITLE_BAR_SEARCH_BAR_SLOT_PADDING)
+                        .with_padding_right(TITLE_BAR_SEARCH_BAR_SLOT_PADDING)
                         .finish(),
                     )
                     .finish(),
                 )
+                .finish()
+            };
+
+            let tab_bar = Flex::row()
+                .with_main_axis_size(MainAxisSize::Max)
+                .with_cross_axis_alignment(CrossAxisAlignment::Center)
+                .with_child(tab_bar.finish())
+                .with_child(search_bar_slot)
                 .with_child(right_controls.finish())
                 .finish();
 
@@ -19321,12 +20352,17 @@ impl Workspace {
             };
 
             let drag_model = CrossWindowTabDrag::as_ref(ctx);
+            let is_any_group_dragging = self
+                .tab_groups
+                .values()
+                .any(|g| g.draggable_state.is_dragging());
             let tab_bar_state = TabBarState {
                 tab_count: self.tabs.len(),
                 active_tab_index,
                 is_any_tab_renaming: self.current_workspace_state.is_tab_being_renamed(),
                 is_any_tab_dragging: self.current_workspace_state.is_tab_being_dragged
-                    || drag_model.is_active(),
+                    || drag_model.is_active()
+                    || is_any_group_dragging,
                 hover_fixed_width,
             };
             // Collapse the detached-placeholder slot to 0 width while it
@@ -19352,31 +20388,72 @@ impl Workspace {
             // Ghost state for cross-window drag hovering over this tab bar.
             let ghost = drag_model.ghost_state_for_window(self.window_id);
 
-            for i in 0..self.tabs.len() {
-                // Insert ghost slot before tab `i` if the drag would land here.
-                if ghost.as_ref().is_some_and(|g| g.insertion_index == i) {
+            // Collapse tabs into render slots: each ungrouped tab is a
+            // `Single`, and each contiguous run of same-group tabs is one
+            // `Group`.
+            let slots = self.tab_bar_slots();
+
+            // Render each slot in the tab bar, either an individual tab or tab group.
+            for slot in &slots {
+                let start_index = match slot {
+                    TabBarSlot::Single { index } => *index,
+                    TabBarSlot::Group { first_index, .. } => *first_index,
+                };
+                // Insert ghost slot before this slot's first tab if the drag
+                // would land here.
+                if ghost
+                    .as_ref()
+                    .is_some_and(|g| g.insertion_index == start_index)
+                {
                     tab_bar.add_child(self.render_ghost_tab_slot(appearance, ctx));
                 }
-                let is_transferred = transferred_tab_index == Some(i);
-                if !is_transferred
-                    && self
-                        .hovered_tab_index
-                        .as_ref()
-                        .is_some_and(|hovered_index| match hovered_index {
-                            TabBarHoverIndex::BeforeTab(idx) => i == *idx,
-                            TabBarHoverIndex::OverTab(_) => false,
-                        })
-                {
-                    tab_bar.add_child(self.render_tab_hover_indicator(appearance));
-                }
-                if is_transferred {
-                    tab_bar.add_child(
-                        ConstrainedBox::new(self.render_tab_in_tab_bar(i, tab_bar_state, ctx))
-                            .with_width(0.)
-                            .finish(),
-                    );
-                } else {
-                    tab_bar.add_child(self.render_tab_in_tab_bar(i, tab_bar_state, ctx));
+
+                match slot {
+                    TabBarSlot::Group {
+                        group_id,
+                        first_index,
+                        run_len,
+                    } => {
+                        // Filtered above; the group must exist in `tab_groups`.
+                        let group = self.tab_groups[group_id].clone();
+                        tab_bar.add_child(self.render_horizontal_tab_group(
+                            &group,
+                            *first_index,
+                            *run_len,
+                            tab_bar_state,
+                            *first_index == 0,
+                            appearance,
+                            ctx,
+                        ));
+                    }
+                    TabBarSlot::Single { index } => {
+                        let i = *index;
+                        let is_transferred = transferred_tab_index == Some(i);
+                        if !is_transferred
+                            && self
+                                .hovered_tab_index
+                                .as_ref()
+                                .is_some_and(|hovered_index| match hovered_index {
+                                    TabBarHoverIndex::BeforeTab(idx) => i == *idx,
+                                    TabBarHoverIndex::OverTab(_) => false,
+                                })
+                        {
+                            tab_bar.add_child(self.render_tab_hover_indicator(appearance));
+                        }
+                        if is_transferred {
+                            tab_bar.add_child(
+                                ConstrainedBox::new(self.render_tab_in_tab_bar(
+                                    i,
+                                    tab_bar_state,
+                                    ctx,
+                                ))
+                                .with_width(0.)
+                                .finish(),
+                            );
+                        } else {
+                            tab_bar.add_child(self.render_tab_in_tab_bar(i, tab_bar_state, ctx));
+                        }
+                    }
                 }
             }
 
@@ -19498,7 +20575,7 @@ impl Workspace {
                 WorkspaceAction::ToggleNotificationMailbox {
                     select_first: false,
                 },
-                "通知".to_string(),
+                "Notifications".to_string(),
                 keybinding_name_to_display_string(TOGGLE_NOTIFICATION_MAILBOX_BINDING_NAME, ctx),
                 is_inbox_active,
                 false,
@@ -19659,9 +20736,7 @@ impl Workspace {
             .platform_window(self.window_id)
             .map(|window| window.fullscreen_state() == FullscreenState::Fullscreen)
             .unwrap_or(false);
-        if self.current_workspace_state.is_left_panel_open() {
-            0.
-        } else if is_window_fullscreen && cfg!(target_os = "macos") {
+        if is_window_fullscreen && cfg!(target_os = "macos") {
             // Full-screen mode on MacOS does not need as much padding (traffic lights are hidden).
             TAB_BAR_PADDING_LEFT
         } else {
@@ -19767,10 +20842,10 @@ impl Workspace {
         const BUTTON_WIDTH: f32 = 24. + SIDE_MENU_WIDTH;
         const BUTTON_LEFT_MARGIN: f32 = 4.;
 
-        let new_tab_tool_tip_label_text = "新建标签页".to_string();
+        let new_tab_tool_tip_label_text = "New Tab".to_string();
         let new_tab_tool_tip_sublabel_text =
             keybinding_name_to_display_string(NEW_TAB_BINDING_NAME, ctx);
-        let tab_configs_tool_tip_label_text = "标签页配置".to_string();
+        let tab_configs_tool_tip_label_text = "Tab configs".to_string();
         let tab_configs_tool_tip_sublabel_text =
             keybinding_name_to_display_string(TOGGLE_TAB_CONFIGS_MENU_BINDING_NAME, ctx);
         let appearance = Appearance::as_ref(ctx);
@@ -20041,11 +21116,7 @@ impl Workspace {
             button = stack.finish();
         }
 
-        SavePosition::new(
-            Align::new(button).finish(),
-            RESOURCE_CENTER_BUTTON_POSITION_ID,
-        )
-        .finish()
+        Align::new(button).finish()
     }
 
     fn render_settings_button(&self, appearance: &Appearance) -> Box<dyn Element> {
@@ -20055,7 +21126,7 @@ impl Workspace {
                 icons::Icon::Gear,
                 &self.mouse_states.settings_icon,
                 WorkspaceAction::ShowSettings,
-                "设置".to_string(),
+                "Settings".to_string(),
                 self.cached_keybindings[SHOW_SETTINGS_KEYBINDING_NAME].clone(),
                 false,
                 false,
@@ -20096,7 +21167,7 @@ impl Workspace {
                 Some(hovered_styles),
                 None,
             )
-            .with_centered_text_label(String::from("注册"));
+            .with_centered_text_label(String::from("Sign up"));
 
         Align::new(
             button
@@ -20138,7 +21209,7 @@ impl Workspace {
                 Some(hovered_styles),
                 None,
             )
-            .with_centered_text_label(String::from("注册"));
+            .with_centered_text_label(String::from("Sign up"));
 
         Align::new(
             button
@@ -20154,7 +21225,7 @@ impl Workspace {
     fn render_offline_button(&self, appearance: &Appearance) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder().clone();
 
-        let tool_tip_label_text = "离线时部分功能可能不可用".to_string();
+        let tool_tip_label_text = "Some features may be unavailable offline".to_string();
         let icon = ConstrainedBox::new(
             Container::new(
                 icons::Icon::CloudOffline
@@ -20511,7 +21582,7 @@ impl Workspace {
             AISettings::as_ref(app)
                 .is_any_ai_enabled(app)
                 .then(|| WorkspaceBannerButtonDetails {
-                    text: "使用 Oz 修复".to_owned(),
+                    text: "Fix with Oz".to_owned(),
                     action: WorkspaceAction::FixSettingsWithOz {
                         error_description: error.to_string(),
                     },
@@ -20526,7 +21597,7 @@ impl Workspace {
             description,
             secondary_button,
             button: Some(WorkspaceBannerButtonDetails {
-                text: "打开文件".to_owned(),
+                text: "Open file".to_owned(),
                 action: WorkspaceAction::OpenSettingsFile,
                 variant: BannerButtonVariant::Outlined,
                 icon: None,
@@ -20552,11 +21623,11 @@ impl Workspace {
         Some(WorkspaceBannerFields {
             banner_type: WorkspaceBanner::Reauth,
             severity: BannerSeverity::Warning,
-            heading: Some("你的登录已过期。".into()),
-            description: "请重新登录以恢复云端功能访问。".into(),
+            heading: Some("Your login has expired.".into()),
+            description: "Please sign in again to restore access to cloud-based features.".into(),
             secondary_button: None,
             button: Some(WorkspaceBannerButtonDetails {
-                text: "登录".into(),
+                text: "Sign in".into(),
                 action: WorkspaceAction::Reauth,
                 variant: BannerButtonVariant::Outlined,
                 icon: None,
@@ -20575,7 +21646,8 @@ impl Workspace {
                         if is_incoming_version_past_current(new_version.soft_cutoff.as_deref()) {
                             VERSION_DEPRECATION_WITHOUT_PERMISSIONS_BANNER_TEXT.to_owned()
                         } else {
-                            "有新版本可用，但 Warp 无法执行更新。".to_owned()
+                            "A new version is available but Warp is unable to perform the update."
+                                .to_owned()
                         };
 
                     Some(WorkspaceBannerFields {
@@ -20585,7 +21657,7 @@ impl Workspace {
                         description,
                         secondary_button: None,
                         button: Some(WorkspaceBannerButtonDetails {
-                            text: "手动更新 Warp".to_string(),
+                            text: "Update Warp manually".to_string(),
                             action: WorkspaceAction::DownloadNewVersion,
                             variant: BannerButtonVariant::Outlined,
                             icon: None,
@@ -20600,7 +21672,7 @@ impl Workspace {
                         if is_incoming_version_past_current(new_version.soft_cutoff.as_deref()) {
                             VERSION_DEPRECATION_WITHOUT_PERMISSIONS_BANNER_TEXT.to_owned()
                         } else {
-                            "Warp 无法启动新安装的版本。".to_owned()
+                            "Warp was unable to launch the new installed version.".to_owned()
                         };
 
                     Some(WorkspaceBannerFields {
@@ -20610,7 +21682,7 @@ impl Workspace {
                         description,
                         secondary_button: None,
                         button: Some(WorkspaceBannerButtonDetails {
-                            text: "手动更新 Warp".to_string(),
+                            text: "Update Warp manually".to_string(),
                             action: WorkspaceAction::DownloadNewVersion,
                             variant: BannerButtonVariant::Outlined,
                             icon: None,
@@ -20628,7 +21700,7 @@ impl Workspace {
                             description: VERSION_DEPRECATION_BANNER_TEXT.to_string(),
                             secondary_button: None,
                             button: Some(WorkspaceBannerButtonDetails {
-                                text: "立即更新".to_string(),
+                                text: "Update now".to_string(),
                                 action: WorkspaceAction::ApplyUpdate,
                                 variant: BannerButtonVariant::Outlined,
                                 icon: None,
@@ -20642,10 +21714,11 @@ impl Workspace {
                                     banner_type: WorkspaceBanner::VersionDeprecated,
                                     severity: BannerSeverity::Warning,
                                     heading: None,
-                                    description: "你的应用版本过旧，需要更新。".to_string(),
+                                    description: "Your app is out of date and needs to update."
+                                        .to_string(),
                                     secondary_button: None,
                                     button: Some(WorkspaceBannerButtonDetails {
-                                        text: "立即重启并更新应用".to_string(),
+                                        text: "Restart app and update now".to_string(),
                                         action: WorkspaceAction::ApplyUpdate,
                                         variant: BannerButtonVariant::Outlined,
                                         icon: None,
@@ -20753,7 +21826,7 @@ impl Workspace {
 
             if let Some(more_info_button_action) = more_info_button_action {
                 let more_info_details = WorkspaceBannerButtonDetails {
-                    text: "更多信息".to_owned(),
+                    text: "More info".to_owned(),
                     action: more_info_button_action,
                     variant: BannerButtonVariant::Outlined,
                     icon: None,
@@ -21277,13 +22350,13 @@ impl Workspace {
         let reporting_setings = AltScreenReporting::as_ref(app);
         let general_settings = GeneralSettings::as_ref(app);
         let theme_settings = ThemeSettings::as_ref(app);
-        let ssh_settings = SshSettings::as_ref(app);
         let warpify_settings = WarpifySettings::as_ref(app);
         let terminal_settings = TerminalSettings::as_ref(app);
         let window_settings = WindowSettings::as_ref(app);
         let pane_settings = PaneSettings::as_ref(app);
         let keys_settings = KeysSettings::as_ref(app);
         let command_search_settings = CommandSearchSettings::as_ref(app);
+        let ssh_settings = SshSettings::as_ref(app);
 
         let is_compact_mode =
             matches!(terminal_settings.spacing_mode.value(), SpacingMode::Compact);
@@ -21324,16 +22397,13 @@ impl Workspace {
             context.set.insert(flags::WARP_SAME_LINE_PROMPT_FLAG);
         }
 
-        if *ssh_settings.enable_legacy_ssh_wrapper.value() {
-            #[allow(deprecated)]
-            context.set.insert(flags::LEGACY_SSH_WRAPPER_CONTEXT_FLAG);
+        if *ssh_settings.reuse_existing_control_master.value() {
+            context
+                .set
+                .insert(flags::SSH_REUSE_CONTROL_MASTER_CONTEXT_FLAG);
         }
         if *warpify_settings.enable_ssh_warpification.value() {
             context.set.insert(flags::SSH_WARPIFICATION_CONTEXT_FLAG);
-        }
-
-        if *warpify_settings.use_ssh_tmux_wrapper.value() {
-            context.set.insert(flags::SSH_TMUX_WRAPPER_CONTEXT_FLAG);
         }
 
         if keys_settings.extra_meta_keys.left_alt {
@@ -21740,12 +22810,41 @@ impl Workspace {
             }
         }
 
+        match ai_settings.orchestration_message_display_mode {
+            crate::settings::OrchestrationMessageDisplayMode::ShowAndCollapse => {
+                context
+                    .set
+                    .insert(flags::ORCHESTRATION_MESSAGE_DISPLAY_SHOW_AND_COLLAPSE);
+            }
+            crate::settings::OrchestrationMessageDisplayMode::AlwaysShow => {
+                context
+                    .set
+                    .insert(flags::ORCHESTRATION_MESSAGE_DISPLAY_ALWAYS_SHOW);
+            }
+            crate::settings::OrchestrationMessageDisplayMode::AlwaysCollapse => {
+                context
+                    .set
+                    .insert(flags::ORCHESTRATION_MESSAGE_DISPLAY_ALWAYS_COLLAPSE);
+            }
+        }
+
         match ai_settings.default_prompt_submission_mode {
             crate::settings::PromptSubmissionMode::Interrupt => {
                 context.set.insert(flags::PROMPT_SUBMISSION_INTERRUPT);
             }
             crate::settings::PromptSubmissionMode::Queue => {
                 context.set.insert(flags::PROMPT_SUBMISSION_QUEUE);
+            }
+        }
+
+        match ai_settings.long_running_command_submission_mode {
+            crate::settings::LongRunningCommandSubmissionMode::SendImmediately => {
+                context.set.insert(flags::LRC_SUBMISSION_SEND_IMMEDIATELY);
+            }
+            crate::settings::LongRunningCommandSubmissionMode::QueueUntilCommandCompletes => {
+                context
+                    .set
+                    .insert(flags::LRC_SUBMISSION_QUEUE_UNTIL_COMMAND_COMPLETES);
             }
         }
 
@@ -21940,6 +23039,10 @@ impl Workspace {
         ctx.focus(&self.orchestration_launch_modal);
     }
 
+    fn focus_auto_handoff_sleep_modal(&mut self, ctx: &mut ViewContext<Self>) {
+        ctx.focus(&self.auto_handoff_sleep_modal);
+    }
+
     fn open_tab_and_focus_oz_launch_modal(&mut self, ctx: &mut ViewContext<Self>) {
         // Create a new tab with one terminal session titled "Introducing Oz"
         self.add_tab_with_pane_layout(
@@ -21950,7 +23053,7 @@ impl Workspace {
                 ..Default::default()
             })),
             Arc::new(HashMap::new()),
-            Some("认识 Oz".to_string()),
+            Some("Introducing Oz".to_string()),
             ctx,
         );
         self.oz_launch_modal.tab_pane_group_id = self
@@ -21962,6 +23065,10 @@ impl Workspace {
 
     fn focus_build_plan_migration_modal(&mut self, ctx: &mut ViewContext<Self>) {
         ctx.focus(&self.build_plan_migration_modal);
+    }
+
+    fn focus_free_ai_removal_modal(&mut self, ctx: &mut ViewContext<Self>) {
+        ctx.focus(&self.free_ai_removal_modal);
     }
 
     fn open_left_panel_view(&mut self, action: &LeftPanelAction, ctx: &mut ViewContext<Self>) {
@@ -22140,6 +23247,9 @@ impl TypedActionView for Workspace {
             ToggleTabRightClickMenu { tab_index, anchor } => {
                 self.toggle_tab_right_click_menu(*tab_index, *anchor, ctx)
             }
+            ToggleTabSelectionRightClickMenu { tab_index, anchor } => {
+                self.toggle_tab_selection_right_click_menu(*tab_index, *anchor, ctx)
+            }
             ToggleVerticalTabsPaneContextMenu {
                 tab_index,
                 target,
@@ -22167,6 +23277,14 @@ impl TypedActionView for Workspace {
                 group_id,
             } => self.move_tab_to_group(*tab_index, *group_id, ctx),
             RemoveTabFromGroup(tab_index) => self.remove_tab_from_group(*tab_index, ctx),
+            ShiftSelectTabRange { locator } => self.shift_select_tab_range(*locator, ctx),
+            ToggleTabMultiSelection { locator } => self.toggle_tab_multi_selection(*locator, ctx),
+            ClearTabMultiSelection => self.clear_tab_multi_selection(ctx),
+            NewTabGroupFromSelectedTabs => self.new_tab_group_from_selected_tabs(ctx),
+            MoveSelectedTabsToGroup { group_id } => {
+                self.move_selected_tabs_to_group(*group_id, ctx)
+            }
+            RemoveSelectedTabsFromGroup => self.remove_selected_tabs_from_group(ctx),
             ToggleTabGroupRightClickMenu { group_id, anchor } => {
                 self.toggle_tab_group_right_click_menu(*group_id, *anchor, ctx)
             }
@@ -22177,6 +23295,10 @@ impl TypedActionView for Workspace {
             CloseTabsOutsideGroup(group_id) => self.close_tabs_outside_group(*group_id, ctx),
             CloseTabsAboveGroup(group_id) => self.close_tabs_above_group(*group_id, ctx),
             CloseTabsBelowGroup(group_id) => self.close_tabs_below_group(*group_id, ctx),
+            PinTab(tab_index) => self.pin_tab(*tab_index, ctx),
+            UnpinTab(tab_index) => self.unpin_tab(*tab_index, ctx),
+            PinTabGroup(group_id) => self.pin_tab_group(*group_id, ctx),
+            UnpinTabGroup(group_id) => self.unpin_tab_group(*group_id, ctx),
             AddDefaultTab => {
                 let effective_mode = AISettings::as_ref(ctx).default_session_mode(ctx);
                 match effective_mode {
@@ -22206,11 +23328,7 @@ impl TypedActionView for Workspace {
                     // Terminal and Agent are handled by the existing path
                     // (add_terminal_tab applies DefaultSessionMode::Agent internally).
                     DefaultSessionMode::Terminal | DefaultSessionMode::Agent => {
-                        if FeatureFlag::WelcomeTab.is_enabled() {
-                            self.add_welcome_tab(ctx);
-                        } else {
-                            self.add_terminal_tab(false, ctx);
-                        }
+                        self.add_terminal_tab(false, ctx);
                     }
                 }
             }
@@ -22436,10 +23554,11 @@ impl TypedActionView for Workspace {
             FixSettingsWithOz { error_description } => {
                 use crate::ai::skills::SkillManager;
                 let modify_settings_skill = SkillManager::as_ref(ctx)
-                    .active_bundled_skill("modify-settings", ctx)
+                    .active_local_bundled_skill("modify-settings", ctx)
                     .cloned();
-                let query =
-                    format!("我的 settings.toml 文件有错误：{error_description}。请修复它。");
+                let query = format!(
+                    "My settings.toml file has an error: {error_description}. Please fix it."
+                );
                 self.active_tab_pane_group().update(ctx, |pane_group, ctx| {
                     pane_group.add_terminal_pane_in_agent_mode(None, None, ctx);
                     if let Some(terminal_view) = pane_group.focused_session_view(ctx) {
@@ -22506,6 +23625,9 @@ impl TypedActionView for Workspace {
                 search_query,
                 section,
             } => self.show_settings_with_search(search_query, *section, ctx),
+            OpenPromptSuggestionsUnavailableModal => {
+                self.open_prompt_suggestions_unavailable_modal(ctx)
+            }
             ShowThemeChooser(mode) => self.show_theme_chooser(Some(*mode), ctx),
             ShowThemeChooserForActiveTheme => self.show_theme_chooser_for_active_theme(ctx),
             IncreaseFontSize => self.increase_font_size(ctx),
@@ -22569,9 +23691,13 @@ impl TypedActionView for Workspace {
                 });
             }
             #[cfg(target_os = "macos")]
-            InstallCLI => self.install_cli(ctx),
+            InstallOz => self.install_oz(ctx),
             #[cfg(target_os = "macos")]
-            UninstallCLI => self.uninstall_cli(ctx),
+            UninstallOz => self.uninstall_oz(ctx),
+            #[cfg(target_os = "macos")]
+            InstallWarpctrl => self.install_warpctrl(ctx),
+            #[cfg(target_os = "macos")]
+            UninstallWarpctrl => self.uninstall_warpctrl(ctx),
             UndoRevertInCodeReviewPane { window_id, view_id } => {
                 self.undo_revert_in_code_review_pane(*window_id, *view_id, ctx)
             }
@@ -22722,11 +23848,14 @@ impl TypedActionView for Workspace {
             ToggleScrollReporting => self.toggle_scroll_reporting(ctx),
             ToggleFocusReporting => self.toggle_focus_reporting(ctx),
             StartTabDrag => {
+                // Drag supersedes any multi-selection; clear it to avoid stale highlights.
+                self.clear_tab_multi_selection(ctx);
                 // If we are renaming a tab, finish the rename before dragging.
                 self.finish_tab_rename(ctx);
                 self.current_workspace_state.is_tab_being_dragged = true;
             }
             StartGroupDrag(_group_id) => {
+                self.clear_tab_multi_selection(ctx);
                 self.finish_tab_group_rename(ctx);
             }
             DragGroup { group_id, position } => {
@@ -22805,20 +23934,25 @@ impl TypedActionView for Workspace {
                             .map(|terminal_view| {
                                 let repo_path =
                                     terminal_view.as_ref(ctx).current_repo_path().cloned();
-                                (repo_path, terminal_view.downgrade())
+                                let preferred_session =
+                                    terminal_view.as_ref(ctx).active_block_session_id();
+                                (repo_path, preferred_session)
                             })
                     });
-                    if let Some((repo_path, terminal_view)) = read_result {
+                    if let Some((repo_path, preferred_session)) = read_result {
                         let diff_state_model = repo_path.as_ref().and_then(|rp| {
                             self.working_directories_model.update(ctx, |model, ctx| {
-                                model.get_or_create_diff_state_model(rp.clone(), ctx)
+                                model.get_or_create_diff_state_model(
+                                    rp.clone(),
+                                    preferred_session,
+                                    ctx,
+                                )
                             })
                         });
                         if let Some(diff_state_model) = diff_state_model {
                             let context = CodeReviewPaneContext {
                                 repo_path,
                                 diff_state_model,
-                                terminal_view,
                             };
                             self.open_right_panel(
                                 &context,
@@ -22835,6 +23969,11 @@ impl TypedActionView for Workspace {
             OpenCodeReviewPanel(_) => {}
             ToggleVerticalTabsPanel => {
                 self.toggle_vertical_tabs_panel(ctx);
+            }
+            OpenVerticalTabsPanel => {
+                if !self.vertical_tabs_panel_open {
+                    self.toggle_vertical_tabs_panel(ctx);
+                }
             }
             ToggleNotificationMailbox { select_first } => {
                 if FeatureFlag::HOANotifications.is_enabled()
@@ -23013,6 +24152,15 @@ impl TypedActionView for Workspace {
                     ctx.notify();
                 }
             }
+            OpenAgentManagementView => {
+                if AISettings::as_ref(ctx).is_any_ai_enabled(ctx)
+                    && FeatureFlag::AgentManagementView.is_enabled()
+                {
+                    self.set_is_agent_management_view_open(true, ctx);
+                    ctx.focus(&self.agent_management_view);
+                    ctx.notify();
+                }
+            }
             ViewAgentRunsForEnvironment { environment_id } => {
                 if AISettings::as_ref(ctx).is_any_ai_enabled(ctx)
                     && FeatureFlag::AgentManagementView.is_enabled()
@@ -23139,6 +24287,15 @@ impl TypedActionView for Workspace {
                         continue;
                     }
                     tab.detached = false;
+                    // Tab's pin state is cleared when dropped into a group. The
+                    // tab group's pin state is the source of truth for its position.
+                    // This is to handle the case where a user wants to drag
+                    // to reorder pinned tabs within the pinned region, and drags
+                    // over a pinned tab group. It should not lose its pinned state
+                    // during the drag, so we commit it on drop.
+                    if tab.pinned && tab.group_id.is_some() {
+                        tab.pinned = false;
+                    }
                 }
                 send_telemetry_from_ctx!(TelemetryEvent::DragAndDropTab, ctx);
                 if is_cross_window {
@@ -23192,12 +24349,12 @@ impl TypedActionView for Workspace {
                     status.is_syncing_all_inputs(window_id)
                 });
                 let verb = if enabled { "enabled" } else { "disabled" };
-                let mut message = format!("你已{verb}所有标签页中的同步输入。");
+                let mut message = format!("You {verb} synchronized inputs in all tabs.");
                 if let Some(keystroke) = keybinding_name_to_keystroke(
                     "workspace:toggle_sync_all_terminal_inputs_in_all_tabs",
                     ctx,
                 ) {
-                    let _ = write!(message, " 按 {} 撤销。", keystroke.displayed());
+                    let _ = write!(message, " Press {} to undo.", keystroke.displayed());
                 }
                 self.toast_stack.update(ctx, |view, ctx| {
                     let new_toast = DismissibleToast::default(message);
@@ -23225,12 +24382,12 @@ impl TypedActionView for Workspace {
                     status.should_sync_this_pane_group(current_pane_group_id, window_id)
                 });
                 let verb = if enabled { "enabled" } else { "disabled" };
-                let mut message = format!("你已{verb}此标签页中的同步输入。");
+                let mut message = format!("You {verb} synchronized inputs in this tab.");
                 if let Some(keystroke) = keybinding_name_to_keystroke(
                     "workspace:toggle_sync_terminal_inputs_in_tab",
                     ctx,
                 ) {
-                    let _ = write!(message, " 按 {} 撤销。", keystroke.displayed());
+                    let _ = write!(message, " Press {} to undo.", keystroke.displayed());
                 }
                 self.toast_stack.update(ctx, |view, ctx| {
                     let new_toast = DismissibleToast::default(message);
@@ -23249,7 +24406,8 @@ impl TypedActionView for Workspace {
                 self.process_updated_sync_state(ctx);
 
                 self.toast_stack.update(ctx, |view, ctx| {
-                    let new_toast = DismissibleToast::success("已停用所有输入同步。".to_string());
+                    let new_toast =
+                        DismissibleToast::success("Disabled all synchronized inputs.".to_string());
                     view.add_ephemeral_toast(new_toast, ctx);
                 });
                 send_telemetry_from_ctx!(TelemetryEvent::DisableInputSync, ctx);
@@ -23368,7 +24526,7 @@ impl TypedActionView for Workspace {
             }
             RunAISuggestedCommand(code) => {
                 let command = code.trim().to_string();
-                let workflow = Workflow::new("来自 Oz 的命令", command);
+                let workflow = Workflow::new("Command from Oz", command);
                 self.run_workflow_in_active_input(
                     &WorkflowType::AIGenerated {
                         workflow,
@@ -23398,7 +24556,7 @@ impl TypedActionView for Workspace {
             AttemptLoginGatedAIUpgrade => {
                 AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                     auth_manager.attempt_login_gated_feature(
-                        "升级 AI 用量",
+                        "Upgrade AI Usage",
                         AuthViewVariant::RequireLoginCloseable,
                         ctx,
                     )
@@ -23683,6 +24841,7 @@ impl TypedActionView for Workspace {
                 summarize_after_fork,
                 summarization_prompt,
                 initial_prompt,
+                initial_attachments,
                 destination,
             } => {
                 self.fork_ai_conversation(
@@ -23691,6 +24850,7 @@ impl TypedActionView for Workspace {
                     *summarize_after_fork,
                     summarization_prompt.clone(),
                     initial_prompt.clone(),
+                    initial_attachments.clone(),
                     *destination,
                     ctx,
                 );
@@ -23703,9 +24863,14 @@ impl TypedActionView for Workspace {
                     false,
                     None,
                     None,
+                    vec![],
                     ForkedConversationDestination::SplitPane,
                     ctx,
                 );
+            }
+            #[cfg(not(target_family = "wasm"))]
+            ContinueThirdPartyConversationLocally { task_id, harness } => {
+                self.continue_third_party_conversation_locally(*task_id, *harness, ctx);
             }
             SummarizeAIConversation {
                 prompt,
@@ -23717,11 +24882,28 @@ impl TypedActionView for Workspace {
                 self.active_tab_pane_group().update(ctx, |pane_group, ctx| {
                     if let Some(terminal_view) = pane_group.active_session_view(ctx) {
                         terminal_view.update(ctx, |terminal, ctx| {
+                            #[cfg(target_family = "wasm")]
+                            let command_name = commands::FORK.name;
+
+                            #[cfg(not(target_family = "wasm"))]
+                            let command_name = {
+                                let is_cloud_agent_context = terminal.is_ambient_agent_session(ctx)
+                                    || terminal
+                                        .input()
+                                        .as_ref(ctx)
+                                        .is_cloud_mode_input_v2_composing(ctx);
+                                let conversation_id =
+                                    terminal.active_conversation_id(ctx).or_else(|| {
+                                        BlocklistAIHistoryModel::as_ref(ctx)
+                                            .active_conversation(terminal.id())
+                                            .map(|conv| conv.id())
+                                    });
+                                fork_button_action(conversation_id, is_cloud_agent_context, ctx)
+                                    .command_name
+                            };
+
                             terminal.input().update(ctx, |input, ctx| {
-                                input.replace_buffer_content(
-                                    &format!("{} ", commands::FORK.name),
-                                    ctx,
-                                );
+                                input.replace_buffer_content(&format!("{} ", command_name), ctx);
                                 ctx.focus_self();
                             });
                         });
@@ -23878,6 +25060,42 @@ impl TypedActionView for Workspace {
                 ctx.notify();
             }
             #[cfg(debug_assertions)]
+            OpenAutoHandoffSleepModal => {
+                OneTimeModalModel::handle(ctx).update(ctx, |model, ctx| {
+                    model.set_auto_handoff_sleep_modal_open(true, ctx);
+                });
+                ctx.notify();
+            }
+            #[cfg(debug_assertions)]
+            ResetAutoHandoffSleepModalState => {
+                let old_value = *AISettings::as_ref(ctx).did_show_auto_handoff_sleep_modal;
+                AISettings::handle(ctx).update(ctx, |ai_settings, ctx| {
+                    if let Err(e) = ai_settings
+                        .did_show_auto_handoff_sleep_modal
+                        .set_value(false, ctx)
+                    {
+                        log::warn!("Failed to reset auto-handoff sleep modal shown setting: {e}");
+                    }
+                });
+                let new_value = *AISettings::as_ref(ctx).did_show_auto_handoff_sleep_modal;
+                log::info!("Auto-handoff sleep modal state: old={old_value}, new={new_value}");
+            }
+            #[cfg(debug_assertions)]
+            TriggerAutoHandoffToCloud => {
+                log::info!("auto handoff: debug action triggering auto handoff to cloud");
+                // Defer past this in-progress workspace view update: while a
+                // view is updating, `update_view` removes it from its window,
+                // so the handoff's synchronous workspace lookup wouldn't find
+                // the dispatching workspace. The URI and sleep entry points
+                // don't run inside a view update, so they call directly.
+                ctx.spawn(async {}, |_, _, ctx| {
+                    super::auto_handoff::trigger_auto_handoff_to_cloud(
+                        super::action::AutoCloudHandoffTrigger::Uri,
+                        ctx,
+                    );
+                });
+            }
+            #[cfg(debug_assertions)]
             ResetOrchestrationLaunchModalState => {
                 let old_value =
                     *AISettings::as_ref(ctx).did_check_to_trigger_orchestration_launch_modal;
@@ -23899,6 +25117,25 @@ impl TypedActionView for Workspace {
                 );
             }
             #[cfg(debug_assertions)]
+            OpenFreeAiRemovalModal => {
+                OneTimeModalModel::handle(ctx).update(ctx, |model, ctx| {
+                    model.force_open_free_ai_removal_modal(ctx);
+                });
+                ctx.notify();
+            }
+            #[cfg(debug_assertions)]
+            ResetFreeAiRemovalModalState => {
+                AISettings::handle(ctx).update(ctx, |ai_settings, ctx| {
+                    if let Err(e) = ai_settings
+                        .did_check_to_trigger_free_ai_removal_modal
+                        .set_value(false, ctx)
+                    {
+                        log::warn!("Failed to reset free AI removal modal seen setting: {e}");
+                    }
+                });
+                log::info!("Free AI removal modal seen state has been reset");
+            }
+            #[cfg(debug_assertions)]
             InstallOpenCodeWarpPlugin => {
                 let message = set_opencode_warp_plugin("github:warpdotdev/opencode-warp-internal");
                 self.toast_stack.update(ctx, |view, ctx| {
@@ -23913,7 +25150,7 @@ impl TypedActionView for Workspace {
                         let entry = format!("file://{}", plugin_path.display());
                         set_opencode_warp_plugin(&entry)
                     }
-                    None => "无法确定主目录".to_string(),
+                    None => "Failed to determine home directory".to_string(),
                 };
                 self.toast_stack.update(ctx, |view, ctx| {
                     view.add_ephemeral_toast(DismissibleToast::default(message), ctx);
@@ -23933,7 +25170,7 @@ impl TypedActionView for Workspace {
 
                 self.toast_stack.update(ctx, |view, ctx| {
                     view.add_ephemeral_toast(
-                        DismissibleToast::default("正在采样进程 3 秒...".to_string()),
+                        DismissibleToast::default("Sampling process for 3 seconds...".to_string()),
                         ctx,
                     );
                 });
@@ -23994,20 +25231,20 @@ impl TypedActionView for Workspace {
                                     }
                                 }
 
-                                format!("进程采样已保存到 {output_path}")
+                                format!("Process sample saved to {output_path}")
                             }
                             Ok(Ok(output)) => {
                                 let stderr = String::from_utf8_lossy(&output.stderr);
                                 log::error!("sample command failed ({}): {stderr}", output.status);
-                                "进程采样失败（请检查日志）".to_string()
+                                "Failed to sample process (check logs)".to_string()
                             }
                             Ok(Err(io_err)) => {
                                 log::error!("Failed to run sample command: {io_err}");
-                                "进程采样失败（请检查日志）".to_string()
+                                "Failed to sample process (check logs)".to_string()
                             }
                             Err(join_err) => {
                                 log::error!("Sample task panicked: {join_err}");
-                                "进程采样失败（请检查日志）".to_string()
+                                "Failed to sample process (check logs)".to_string()
                             }
                         };
                         me.toast_stack.update(ctx, |view, ctx| {
@@ -24021,6 +25258,11 @@ impl TypedActionView for Workspace {
                     let is_showing = self.left_panel_view.as_ref(ctx).active_view()
                         == ToolPanelView::ProjectExplorer;
                     self.toggle_left_panel_view(&LeftPanelAction::ProjectExplorer, is_showing, ctx);
+                }
+            }
+            OpenProjectExplorer => {
+                if *CodeSettings::as_ref(ctx).show_project_explorer {
+                    self.open_left_panel_view(&LeftPanelAction::ProjectExplorer, ctx);
                 }
             }
             ToggleWarpDrive => {
@@ -24046,6 +25288,11 @@ impl TypedActionView for Workspace {
                         ctx,
                     );
                 }
+            }
+            ToggleHiddenFiles => {
+                CodeSettings::handle(ctx).update(ctx, |settings, ctx| {
+                    report_if_error!(settings.show_hidden_files.toggle_and_save_value(ctx));
+                });
             }
             OpenGlobalSearch => {
                 if FeatureFlag::GlobalSearch.is_enabled()
@@ -24083,6 +25330,11 @@ impl TypedActionView for Workspace {
                     );
                 }
             }
+            OpenConversationListView => {
+                if FeatureFlag::AgentViewConversationListView.is_enabled() {
+                    self.open_left_panel_view(&LeftPanelAction::ConversationListView, ctx);
+                }
+            }
             ShowRewindConfirmationDialog {
                 ai_block_view_id,
                 exchange_id,
@@ -24106,12 +25358,7 @@ impl TypedActionView for Workspace {
                 let user_query = BlocklistAIHistoryModel::as_ref(ctx)
                     .conversation(conversation_id)
                     .and_then(|c| c.root_task_exchanges().find(|e| e.id == *exchange_id))
-                    .and_then(|e| {
-                        e.input
-                            .iter()
-                            .find(|i| i.is_user_query())
-                            .and_then(|i| i.user_query())
-                    });
+                    .and_then(|e| query_for_rewind_prefill(&e.input));
 
                 // Dispatch to the active terminal to execute the rewind
                 if let Some(terminal_view) = self
@@ -24156,7 +25403,7 @@ impl TypedActionView for Workspace {
                         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                             toast_stack.add_ephemeral_toast(
                                 DismissibleToast::error(
-                                    "删除对话失败。请退出 Agent 视图后重试。".to_string(),
+                                    "Failed to delete conversation. Please exit the agent view and try again.".to_string(),
                                 ),
                                 window_id,
                                 ctx,
@@ -24171,7 +25418,7 @@ impl TypedActionView for Workspace {
                 send_telemetry_from_ctx!(TelemetryEvent::ConversationListItemDeleted, ctx);
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-                        DismissibleToast::success("对话已删除".to_string()),
+                        DismissibleToast::success("Conversation deleted".to_string()),
                         window_id,
                         ctx,
                     );
@@ -24340,6 +25587,9 @@ impl View for Workspace {
         }
         if *CodeSettings::as_ref(app).show_global_search {
             context.set.insert(flags::SHOW_GLOBAL_SEARCH);
+        }
+        if *CodeSettings::as_ref(app).show_hidden_files {
+            context.set.insert(flags::SHOW_HIDDEN_FILES);
         }
 
         if self.team_uid(app).is_some() {
@@ -24693,42 +25943,48 @@ impl View for Workspace {
                 && *TabSettings::as_ref(app).use_vertical_tabs
                 && self.vertical_tabs_panel_open;
             if tab_bar_mode.has_tab_bar() || is_vertical {
-                let positioning = match (is_vertical, right_click_menu_anchor) {
-                    (true, TabContextMenuAnchor::VerticalTabsKebab) => {
-                        // Anchor depends on which side the tabs panel is configured on.
-                        let tabs_side = Self::tabs_panel_side(
-                            &TabSettings::as_ref(app).header_toolbar_chip_selection,
-                        );
-                        let (anchor, child_anchor) = if tabs_side == PanelPosition::Left {
-                            (PositionedElementAnchor::BottomLeft, ChildAnchor::TopLeft)
-                        } else {
-                            (PositionedElementAnchor::BottomRight, ChildAnchor::TopRight)
-                        };
-                        Some(OffsetPositioning::offset_from_save_position_element(
-                            vertical_tabs::vtab_action_buttons_position_id(tab_idx),
-                            vec2f(0., 4.),
-                            PositionedElementOffsetBounds::WindowByPosition,
-                            anchor,
-                            child_anchor,
-                        ))
+                let positioning = if is_vertical {
+                    match right_click_menu_anchor {
+                        TabContextMenuAnchor::VerticalTabsKebab => {
+                            // Anchor depends on which side the tabs panel is configured on.
+                            let tabs_side = Self::tabs_panel_side(
+                                &TabSettings::as_ref(app).header_toolbar_chip_selection,
+                            );
+                            let (anchor, child_anchor) = if tabs_side == PanelPosition::Left {
+                                (PositionedElementAnchor::BottomLeft, ChildAnchor::TopLeft)
+                            } else {
+                                (PositionedElementAnchor::BottomRight, ChildAnchor::TopRight)
+                            };
+                            Some(OffsetPositioning::offset_from_save_position_element(
+                                vertical_tabs::vtab_action_buttons_position_id(tab_idx),
+                                vec2f(0., 4.),
+                                PositionedElementOffsetBounds::WindowByPosition,
+                                anchor,
+                                child_anchor,
+                            ))
+                        }
+                        TabContextMenuAnchor::Pointer(position) => {
+                            Some(OffsetPositioning::offset_from_parent(
+                                position,
+                                ParentOffsetBounds::WindowByPosition,
+                                ParentAnchor::TopLeft,
+                                ChildAnchor::TopLeft,
+                            ))
+                        }
                     }
-                    (true, TabContextMenuAnchor::Pointer(position)) => {
-                        Some(OffsetPositioning::offset_from_parent(
-                            position,
-                            ParentOffsetBounds::WindowByPosition,
-                            ParentAnchor::TopLeft,
-                            ChildAnchor::TopLeft,
-                        ))
+                } else {
+                    match right_click_menu_anchor {
+                        TabContextMenuAnchor::Pointer(position) => {
+                            Some(OffsetPositioning::offset_from_parent(
+                                position,
+                                ParentOffsetBounds::Unbounded,
+                                ParentAnchor::TopLeft,
+                                ChildAnchor::TopLeft,
+                            ))
+                        }
+                        // The kebab anchor only exists in the vertical tabs panel.
+                        TabContextMenuAnchor::VerticalTabsKebab => None,
                     }
-                    (false, TabContextMenuAnchor::Pointer(position)) => {
-                        Some(OffsetPositioning::offset_from_parent(
-                            position,
-                            ParentOffsetBounds::Unbounded,
-                            ParentAnchor::TopLeft,
-                            ChildAnchor::TopLeft,
-                        ))
-                    }
-                    (false, TabContextMenuAnchor::VerticalTabsKebab) => None,
                 };
                 if let Some(positioning) = positioning {
                     stack.add_positioned_overlay_child(
@@ -24737,45 +25993,41 @@ impl View for Workspace {
                     );
                 }
 
-                // Sidecar menu for the "Move to group" submenu parent. Mirrors
-                // the new-session sidecar's overflow-aware left/right anchoring.
-                if self.show_move_to_group_sidecar {
-                    let sidecar_element = SavePosition::new(
-                        ChildView::new(&self.move_to_group_sidecar_menu).finish(),
-                        MOVE_TO_GROUP_SIDECAR_POSITION_ID,
-                    )
-                    .finish();
+                self.add_move_to_group_sidecar_overlay(&mut stack, app);
+            }
+        }
 
-                    let render_left = self.should_render_sidecar_left(
-                        MOVE_TO_GROUP_LABEL,
-                        MOVE_TO_GROUP_SIDECAR_WIDTH,
-                        app,
-                    );
-                    let (offset, parent_anchor, child_anchor) = if render_left {
-                        (
-                            vec2f(-4., 0.),
-                            PositionedElementAnchor::TopLeft,
-                            ChildAnchor::TopRight,
-                        )
-                    } else {
-                        (
-                            vec2f(4., 0.),
-                            PositionedElementAnchor::TopRight,
-                            ChildAnchor::TopLeft,
-                        )
-                    };
+        // Multi-tab selection menu (reuses the `tab_right_click_menu` view).
+        // Rendered for both the horizontal tab bar and the vertical tabs panel
+        // — the right-click handlers on both surfaces dispatch the same action.
+        if let Some((_tab_idx, anchor)) = self.show_tab_selection_right_click_menu {
+            let is_vertical = FeatureFlag::VerticalTabs.is_enabled()
+                && *TabSettings::as_ref(app).use_vertical_tabs
+                && self.vertical_tabs_panel_open;
+            if tab_bar_mode.has_tab_bar() || is_vertical {
+                let position = match anchor {
+                    TabContextMenuAnchor::Pointer(position) => position,
+                    // The selection menu is never opened via the kebab button.
+                    TabContextMenuAnchor::VerticalTabsKebab => Vector2F::zero(),
+                };
+                // Vertical-tabs anchors against the window; the horizontal tab
+                // bar uses unbounded positioning to match the single-tab menu.
+                let bounds = if is_vertical {
+                    ParentOffsetBounds::WindowByPosition
+                } else {
+                    ParentOffsetBounds::Unbounded
+                };
+                stack.add_positioned_overlay_child(
+                    ChildView::new(&self.tab_right_click_menu).finish(),
+                    OffsetPositioning::offset_from_parent(
+                        position,
+                        bounds,
+                        ParentAnchor::TopLeft,
+                        ChildAnchor::TopLeft,
+                    ),
+                );
 
-                    stack.add_positioned_overlay_child(
-                        sidecar_element,
-                        OffsetPositioning::offset_from_save_position_element(
-                            MOVE_TO_GROUP_LABEL,
-                            offset,
-                            PositionedElementOffsetBounds::WindowByPosition,
-                            parent_anchor,
-                            child_anchor,
-                        ),
-                    );
-                }
+                self.add_move_to_group_sidecar_overlay(&mut stack, app);
             }
         }
 
@@ -24784,34 +26036,48 @@ impl View for Workspace {
             let is_vertical = FeatureFlag::VerticalTabs.is_enabled()
                 && *TabSettings::as_ref(app).use_vertical_tabs
                 && self.vertical_tabs_panel_open;
-            if is_vertical {
-                let positioning = match anchor {
-                    TabContextMenuAnchor::VerticalTabsKebab => {
-                        let tabs_side = Self::tabs_panel_side(
-                            &TabSettings::as_ref(app).header_toolbar_chip_selection,
-                        );
-                        let (anchor, child_anchor) = if tabs_side == PanelPosition::Left {
-                            (PositionedElementAnchor::BottomLeft, ChildAnchor::TopLeft)
-                        } else {
-                            (PositionedElementAnchor::BottomRight, ChildAnchor::TopRight)
-                        };
-                        OffsetPositioning::offset_from_save_position_element(
-                            vertical_tabs::vtab_group_kebab_position_id(group_id),
-                            vec2f(0., 4.),
-                            PositionedElementOffsetBounds::WindowByPosition,
-                            anchor,
-                            child_anchor,
-                        )
-                    }
-                    TabContextMenuAnchor::Pointer(position) => {
+            let positioning = match (is_vertical, anchor) {
+                (true, TabContextMenuAnchor::VerticalTabsKebab) => {
+                    let tabs_side = Self::tabs_panel_side(
+                        &TabSettings::as_ref(app).header_toolbar_chip_selection,
+                    );
+                    let (anchor, child_anchor) = if tabs_side == PanelPosition::Left {
+                        (PositionedElementAnchor::BottomLeft, ChildAnchor::TopLeft)
+                    } else {
+                        (PositionedElementAnchor::BottomRight, ChildAnchor::TopRight)
+                    };
+                    Some(OffsetPositioning::offset_from_save_position_element(
+                        vertical_tabs::vtab_group_kebab_position_id(group_id),
+                        vec2f(0., 4.),
+                        PositionedElementOffsetBounds::WindowByPosition,
+                        anchor,
+                        child_anchor,
+                    ))
+                }
+                (true, TabContextMenuAnchor::Pointer(position)) => {
+                    Some(OffsetPositioning::offset_from_parent(
+                        position,
+                        ParentOffsetBounds::WindowByPosition,
+                        ParentAnchor::TopLeft,
+                        ChildAnchor::TopLeft,
+                    ))
+                }
+                // Horizontal tab bar: the group header's right-click opens the
+                // menu at the pointer (matching the per-tab menu's Pointer arm).
+                (false, TabContextMenuAnchor::Pointer(position)) => {
+                    tab_bar_mode.has_tab_bar().then(|| {
                         OffsetPositioning::offset_from_parent(
                             position,
-                            ParentOffsetBounds::WindowByPosition,
+                            ParentOffsetBounds::Unbounded,
                             ParentAnchor::TopLeft,
                             ChildAnchor::TopLeft,
                         )
-                    }
-                };
+                    })
+                }
+                // The kebab anchor only exists in the vertical tabs panel.
+                (false, TabContextMenuAnchor::VerticalTabsKebab) => None,
+            };
+            if let Some(positioning) = positioning {
                 stack.add_positioned_overlay_child(
                     ChildView::new(&self.tab_right_click_menu).finish(),
                     positioning,
@@ -25177,6 +26443,21 @@ impl View for Workspace {
 
         if should_show_modal && one_time_modal_model.is_orchestration_launch_modal_open() {
             stack.add_child(ChildView::new(&self.orchestration_launch_modal).finish());
+        }
+
+        if should_show_modal && one_time_modal_model.is_auto_handoff_sleep_modal_open() {
+            stack.add_child(ChildView::new(&self.auto_handoff_sleep_modal).finish());
+        }
+
+        if should_show_modal && one_time_modal_model.is_free_ai_removal_modal_open() {
+            stack.add_child(ChildView::new(&self.free_ai_removal_modal).finish());
+        }
+
+        if self
+            .current_workspace_state
+            .is_prompt_suggestions_unavailable_modal_open
+        {
+            stack.add_child(ChildView::new(&self.prompt_suggestions_unavailable_modal).finish());
         }
 
         if let Some(hoa_flow) = &self.hoa_onboarding_flow {
@@ -25777,6 +27058,11 @@ impl Workspace {
         });
 
         let index = insertion_index.min(self.tabs.len());
+        // Safety net to ensure the tab lands after all pinned items.
+        let index = self.clamp_to_unpinned_region(&self.tabs, index);
+        // Never split a group: a drop that resolves to the middle of a group's
+        // run is pushed past the group's last member instead.
+        let index = self.clamp_past_group(index);
         let mut tab_data = TabData::new(pane_group);
         tab_data.selected_color = color.map_or(SelectedTabColor::Unset, SelectedTabColor::Color);
         tab_data.draggable_state = draggable_state;
@@ -25785,12 +27071,105 @@ impl Workspace {
         ctx.notify();
     }
 
+    /// If an insertion at `index` would land strictly inside a group's
+    /// contiguous run (i.e. between two members of the same group), pushes it
+    /// just past that group's last member so a cross-window drop can't split
+    /// the group. Mirrors `clamp_to_unpinned_region`'s "push past the
+    /// boundary" behavior; drops at a group's outer edges are left untouched.
+    fn clamp_past_group(&self, index: usize) -> usize {
+        // Record the group of the tab before our insertion.
+        let Some(before) = index
+            .checked_sub(1)
+            .and_then(|i| self.tabs.get(i))
+            .and_then(|tab| tab.group_id)
+        else {
+            return index;
+        };
+        // Record the group of the tab after our insertion.
+        let Some(after) = self.tabs.get(index).and_then(|tab| tab.group_id) else {
+            return index;
+        };
+        // If the group of the tabs before/after our insertion are the same
+        // we are landing in the middle of the group and must jump past this
+        // group.
+        if before != after {
+            return index;
+        }
+        group_member_index_range(&self.tabs, before).map_or(index, |(_, last)| last + 1)
+    }
+
     /// Returns the tab-bar index where a dragged tab would be inserted for
-    /// the given cursor position. Skips tabs clipped by the overflow area
-    /// (width below `MIN_VISIBLE_TAB_WIDTH`), and picks between horizontal
-    /// and vertical layout by comparing the spread of tab centers on each
-    /// axis.
+    /// the given cursor position, clamped to the unpinned region.
+    ///
+    /// Cross-window drags carry ungrouped, unpinned tabs, so the insertion
+    /// point — and the ghost slot drawn from it — must never land inside the
+    /// pinned prefix.
     pub(crate) fn tab_insertion_index_for_cursor(
+        &self,
+        window_id: WindowId,
+        cursor_position_on_screen: Vector2F,
+        ctx: &AppContext,
+    ) -> usize {
+        let raw_index =
+            self.raw_tab_insertion_index_for_cursor(window_id, cursor_position_on_screen, ctx);
+        let index = self.clamp_to_unpinned_region(&self.tabs, raw_index);
+        // Keep the ghost slot and the eventual drop out of the middle of a
+        // group so neither splits it.
+        self.clamp_past_group(index)
+    }
+
+    /// Collapses `self.tabs` into layout slots: each ungrouped tab is a `Single`,
+    /// and each contiguous run of same-group tabs becomes one `Group`. Shared by
+    /// tab/group rendering and insertion index calculations.
+    fn tab_bar_slots(&self) -> Vec<TabBarSlot> {
+        let grouped_tabs_enabled = FeatureFlag::GroupedTabs.is_enabled();
+        let mut slots: Vec<TabBarSlot> = Vec::with_capacity(self.tabs.len());
+        for (idx, tab) in self.tabs.iter().enumerate() {
+            let group_id = if grouped_tabs_enabled {
+                tab.group_id.filter(|gid| self.tab_groups.contains_key(gid))
+            } else {
+                None
+            };
+            match group_id {
+                Some(group_id) => {
+                    if let Some(TabBarSlot::Group {
+                        group_id: last_gid,
+                        run_len,
+                        ..
+                    }) = slots.last_mut()
+                    {
+                        if *last_gid == group_id {
+                            // Current tab continues the last group's run.
+                            *run_len += 1;
+                            continue;
+                        }
+                    }
+                    // We hav reached the last tab in a group.
+                    // Push this as a "Group" slot.
+                    slots.push(TabBarSlot::Group {
+                        group_id,
+                        first_index: idx,
+                        run_len: 1,
+                    });
+                }
+                // This tab is not part of a group. Push a "Single" slot.
+                None => slots.push(TabBarSlot::Single { index: idx }),
+            }
+        }
+        slots
+    }
+
+    /// Computes the tab-bar insertion index purely from cursor geometry,
+    /// independent of pinning. Walks the same layout slots the tab bar renders
+    /// (`tab_bar_slots`): each ungrouped tab is one row, and each group —
+    /// collapsed or expanded — is a single row at its container rect, so a
+    /// drop can only target the slot before or after the whole group. Skips
+    /// tabs/groups clipped by the overflow area (width below `MIN_VISIBLE_TAB_WIDTH`)
+    /// and picks between horizontal and vertical layout by comparing the
+    /// spread of row centers on each axis. A result that still resolves into a
+    /// group's range (e.g. the fallback past a trailing group) is pushed clear
+    /// by `clamp_past_group` in `tab_insertion_index_for_cursor`.
+    fn raw_tab_insertion_index_for_cursor(
         &self,
         window_id: WindowId,
         cursor_position_on_screen: Vector2F,
@@ -25802,40 +27181,57 @@ impl Workspace {
             return self.tabs.len();
         };
 
-        // Pre-compute the bounding rects of the tab bar / vertical tabs panel
-        // so we can defensively reject `tab_position_<index>` cache entries
-        // that don't lie within either of them. This guards
-        // `tab_insertion_index_for_cursor` against any future overlay /
-        // chip / preview that accidentally shares a SavePosition key with
-        // a real tab — see the `for_drag_ghost` flag on `TabComponent` and
-        // `vertical_tabs::render_tab_group_internal` for the original
-        // offender (the cross-window drag ghost chip).
+        // Pre-compute the bounding rect of the active tab presentation
+        // (vertical tabs panel or horizontal tab bar) so we can defensively
+        // reject `tab_position_<index>` cache entries that don't lie within
+        // it. This guards `tab_insertion_index_for_cursor` against any future
+        // overlay / chip / preview that accidentally shares a SavePosition
+        // key with a real tab — see the `for_drag_ghost` flag on
+        // `TabComponent` and `vertical_tabs::render_tab_group_internal` for
+        // the original offender (the cross-window drag ghost chip).
         let tab_bar_rects = tab_bar_rects_for_window(window_id, ctx);
 
         let cursor_in_window = cursor_position_on_screen - window_bounds.origin();
-        let mut visible_tabs = Vec::new();
-        for index in 0..self.tabs.len() {
-            if let Some(tab_position) =
-                ctx.element_position_by_id_at_last_frame(window_id, tab_position_id(index))
-            {
-                if tab_position.width() <= MIN_VISIBLE_TAB_WIDTH {
-                    continue;
+
+        // Resolve each layout slot to the (index, on-screen rect)
+        // it occupies. A group — collapsed or expanded — is one row at its
+        // container rect, so a drop can only land before or after the whole
+        // group, never inside; each ungrouped tab keeps its own row. Rects
+        // clipped by overflow or outside the tab bar are dropped.
+        let mut visible_tabs: Vec<(usize, RectF)> = Vec::with_capacity(self.tabs.len());
+        for slot in self.tab_bar_slots() {
+            match slot {
+                TabBarSlot::Single { index } => {
+                    if let Some(tab_position) =
+                        ctx.element_position_by_id_at_last_frame(window_id, tab_position_id(index))
+                    {
+                        // If we have at least one tab-bar-equivalent rect, require
+                        // that the candidate tab position be (mostly) inside one of
+                        // them. Use the rect center as the membership test — a tab
+                        // that's been rendered partway off-screen due to overflow
+                        // is fine to keep, but a rect that has nothing to do with
+                        // the tab bar (e.g. the floating chip that follows the
+                        // cursor anywhere in the window) gets rejected.
+                        if tab_position.width() > MIN_VISIBLE_TAB_WIDTH
+                            && rect_is_within_tab_bar(tab_position, &tab_bar_rects)
+                        {
+                            visible_tabs.push((index, tab_position));
+                        }
+                    }
                 }
-                // If we have at least one tab-bar-equivalent rect, require
-                // that the candidate tab position be (mostly) inside one of
-                // them. Use the rect center as the membership test — a tab
-                // that's been rendered partway off-screen due to overflow
-                // is fine to keep, but a rect that has nothing to do with
-                // the tab bar (e.g. the floating chip that follows the
-                // cursor anywhere in the window) gets rejected.
-                if !tab_bar_rects.is_empty()
-                    && !tab_bar_rects
-                        .iter()
-                        .any(|tb| tb.contains_point(tab_position.center()))
-                {
-                    continue;
+                TabBarSlot::Group {
+                    group_id,
+                    first_index,
+                    ..
+                } => {
+                    if let Some(container_rect) = group_container_rect(window_id, group_id, ctx) {
+                        if container_rect.width() > MIN_VISIBLE_TAB_WIDTH
+                            && rect_is_within_tab_bar(container_rect, &tab_bar_rects)
+                        {
+                            visible_tabs.push((first_index, container_rect));
+                        }
+                    }
                 }
-                visible_tabs.push((index, tab_position));
             }
         }
 
@@ -25843,10 +27239,10 @@ impl Workspace {
             return self.tabs.len();
         }
 
-        // Detect orientation from the axis with the larger spread between
-        // first and last tab centers (vertical panels stack along Y).
-        // With only one tab there is no spread to compare, so fall back to
-        // whether the vertical-tabs panel is open.
+        // Detect orientation from the axis with the larger spread between the
+        // first and last row centers (vertical panels stack along Y). With
+        // only one row there is no spread to compare, so fall back to whether
+        // the vertical-tabs panel is open.
         let is_vertical = if visible_tabs.len() >= 2 {
             let first = visible_tabs[0].1.center();
             let last = visible_tabs.last().expect("non-empty").1.center();
@@ -26091,10 +27487,39 @@ impl Workspace {
         ctx: &mut ViewContext<Self>,
     ) {
         const DETACH_SENSITIVITY: f32 = 10.0;
-        // Only detach when the drag leaves every tab-bar presentation on its
-        // perpendicular axis. Windows with vertical tabs still render the
-        // horizontal bar, so checking only the horizontal rect would make
-        // vertical reorders (which move along Y) spuriously trip the detach.
+        // `current_index` was captured by the tab's `Draggable` closure at
+        // render time. Mid-drag mutations (swaps, hops over collapsed
+        // blocks, membership changes) reorder `self.tabs`, and mouse events
+        // that arrive before the next repaint still carry the pre-mutation
+        // index — which can point at an innocent bystander. E.g. after the
+        // dragged tab hops over a collapsed block, the stale index lands on
+        // a member of that block and the membership logic below would rip
+        // it out of its group. The dragged tab is the one whose
+        // `DraggableState` reports an active drag, so trust that identity
+        // over the captured index.
+        //
+        // TODO(johnturcoo): determine the right shape for a long-term solution.
+        let current_index = if self
+            .tabs
+            .get(current_index)
+            .is_some_and(|tab| tab.draggable_state.is_dragging())
+        {
+            current_index
+        } else {
+            self.tabs
+                .iter()
+                .position(|tab| tab.draggable_state.is_dragging())
+                .unwrap_or(current_index)
+        };
+        if current_index >= self.tabs.len() {
+            return;
+        }
+        // Only detach when the drag leaves the active tab presentation on its
+        // perpendicular axis. `tab_bar_rects_for_window` returns just the rect
+        // for the layout that actually holds the tabs (the vertical panel in
+        // vertical-tabs mode, otherwise the horizontal bar), so a vertical
+        // reorder — which moves along Y inside the vertical panel — is tested
+        // on the panel's X axis and won't spuriously trip the detach.
         let drag_center = position.center();
         let rects = tab_bar_rects_for_window(ctx.window_id(), ctx);
         let is_drag_outside_tab_bar = if rects.is_empty() {
@@ -26126,8 +27551,42 @@ impl Workspace {
                         tab.draggable_state.adjust_mouse_position(adjustment);
                     }
                 }
-                DragResult::HandoffNeeded { target } => {
-                    self.perform_handoff(target, ctx);
+                DragResult::ReorderInSource => {
+                    // The cursor is back over the source window's own tab bar.
+                    // Reorder the existing detached placeholder in place, just
+                    // like an in-window drag, and report its new index so the
+                    // eventual drop puts the real tab back at this position.
+                    // Deliberately skip the group-reassignment logic used by
+                    // the normal reorder path below: the placeholder is
+                    // detached mid cross-window drag and shouldn't churn group
+                    // membership.
+                    let use_vertical_tabs = FeatureFlag::VerticalTabs.is_enabled()
+                        && *TabSettings::as_ref(ctx).use_vertical_tabs;
+                    let new_index = if use_vertical_tabs {
+                        self.calculate_updated_tab_index_vertical(current_index, position, ctx)
+                    } else {
+                        self.calculate_updated_tab_index(current_index, position, ctx)
+                    };
+                    if new_index != current_index {
+                        // Do not allow the placeholder to cross the pinned/unpinned
+                        // boundary, matching the constraint enforced by the normal
+                        // in-window reorder path.
+                        if self.is_tab_effectively_pinned(&self.tabs[current_index])
+                            != self.is_tab_effectively_pinned(&self.tabs[new_index])
+                        {
+                            return;
+                        }
+                        self.tabs.swap(new_index, current_index);
+                        if current_index == self.active_tab_index {
+                            self.set_active_tab_index(new_index, ctx);
+                        } else if new_index == self.active_tab_index {
+                            self.set_active_tab_index(current_index, ctx);
+                        }
+                        ctx.notify();
+                    }
+                    CrossWindowTabDrag::handle(ctx).update(ctx, |drag, _| {
+                        drag.set_source_placeholder_index(new_index);
+                    });
                 }
             }
             return;
@@ -26249,28 +27708,72 @@ impl Workspace {
             FeatureFlag::VerticalTabs.is_enabled() && *TabSettings::as_ref(ctx).use_vertical_tabs;
         let groups_enabled = FeatureFlag::GroupedTabs.is_enabled();
 
-        if use_vertical_tabs && groups_enabled {
+        if groups_enabled {
             // Reassign membership when the dragged tab's midpoint enters a
             // different expanded group. Collapsed groups are handled by the
             // safety-net hop below so we don't drop into it.
-            let midpoint_drag_y = (position.min_y() + position.max_y()) / 2.;
-            let hovered_group = self.target_group_at_y(midpoint_drag_y, ctx);
+            let midpoint_drag = if use_vertical_tabs {
+                (position.min_y() + position.max_y()) / 2.
+            } else {
+                (position.min_x() + position.max_x()) / 2.
+            };
+            let hovered_group = self.target_group_at_axis(midpoint_drag, use_vertical_tabs, ctx);
             let source_group = self.tabs[current_index].group_id;
             let expanded_target =
                 hovered_group.filter(|gid| !self.tab_groups.get(gid).is_some_and(|g| g.collapsed));
-            if expanded_target != source_group {
+            // A pinned tab keeps its individual pin while dragging over a
+            // pinned group (it's committed on drop — see the `DropTab` handler).
+            let was_pinned = self.tabs[current_index].pinned;
+            let target_group_pinned = expanded_target
+                .and_then(|gid| self.tab_groups.get(&gid))
+                .is_some_and(|g| g.pinned);
+            // Check if we are dragging a pinned tab into an unpinned group.
+            // This is not supported as pinned items can not leave the pinned area.
+            let pinned_into_unpinned_group =
+                was_pinned && expanded_target.is_some() && !target_group_pinned;
+
+            if expanded_target != source_group && !pinned_into_unpinned_group {
+                // Check if a tab is being dragged out of a pinned group.
+                // If the tab is currently pinned, that means the user is
+                // repositioning it within the pinned area, and passed over
+                // a group as part of the drag. In that case we do not want
+                // to flag this as a tab leaving a pinned group.
+                let leaving_pinned_group = expanded_target.is_none()
+                    && source_group
+                        .and_then(|gid| self.tab_groups.get(&gid))
+                        .is_some_and(|g| g.pinned)
+                    && !was_pinned;
+
+                // Capture the beginning of the unpinned region during the drag.
+                // If a tab is leaving a pinned group, this is the next position
+                // that it can land.
+                let unpinned_region_start =
+                    leaving_pinned_group.then(|| self.pinned_boundary_index(&self.tabs));
+
+                // The bounds of the group that a tab could be dragged into.
+                let target_group_range =
+                    expanded_target.and_then(|gid| group_member_index_range(&self.tabs, gid));
+
+                // Assign the tab to the group we're dragging over (or clear its
+                // group if none). This intentionally leaves the pin untouched:
+                // a pinned tab dragged into a pinned group keeps its pin for the
+                // duration of the drag and only loses it on drop (see the
+                // `DropTab` handler).
                 self.assign_tab_to_group(current_index, expanded_target, ctx);
+
                 // Hop into the target group's contiguous block so the group
                 // stays one rendered container. Vertical tab rendering only
                 // groups consecutive tabs, so leaving `current_index` outside
                 // the block would split the group across the panel.
-                if let Some(target_gid) = expanded_target {
-                    if let Some((first, last)) = group_member_index_range(&self.tabs, target_gid) {
-                        let insert_at = if current_index < first { first } else { last };
-                        if insert_at != current_index {
-                            self.hop_tab_to_index(current_index, insert_at, ctx);
-                        }
+                if let Some((first, last)) = target_group_range {
+                    let insert_at = if current_index < first { first } else { last };
+                    if insert_at != current_index {
+                        self.hop_tab_to_index(current_index, insert_at, ctx);
                     }
+                } else if let Some(target) = unpinned_region_start {
+                    // Relocate the now-unpinned tab to the first unpinned slot
+                    // so the pinned region stays contiguous.
+                    self.move_tab_to_index(current_index, target, ctx);
                 }
                 return;
             }
@@ -26283,6 +27786,16 @@ impl Workspace {
         };
 
         if new_index != current_index {
+            // Do not allow a tab to swap places with a neighbouring tab if the
+            // pinned states do not match. This prevents an unpinned tab from
+            // entering the pinned area (and vice versa). Dragging into a pinned tab
+            // group is already handled by grouping logic above.
+            if self.is_tab_effectively_pinned(&self.tabs[current_index])
+                != self.is_tab_effectively_pinned(&self.tabs[new_index])
+            {
+                return;
+            }
+
             // Prevent dropping into a collapsed group: if the swap target is a
             // collapsed-group member the dragged tab doesn't belong to, hop
             // past the whole block instead of swapping into it.
@@ -26396,8 +27909,11 @@ impl Workspace {
     ) -> usize {
         let midpoint_drag_x = (drag_position.min_x() + drag_position.max_x()) / 2.;
 
+        // Use `neighbor_drag_rect` (rather than reading `tab_position_id`
+        // directly) so members of a collapsed group fall back to the group's
+        // visible container rect instead of their stale last-expanded rect.
         let maybe_left_tab = if current_index > 0 {
-            ctx.element_position_by_id(tab_position_id(current_index - 1))
+            self.neighbor_drag_rect(current_index - 1, false, ctx)
         } else {
             None
         };
@@ -26408,7 +27924,7 @@ impl Workspace {
         }
 
         let maybe_right_tab = if current_index < self.tabs.len() - 1 {
-            ctx.element_position_by_id(tab_position_id(current_index + 1))
+            self.neighbor_drag_rect(current_index + 1, false, ctx)
         } else {
             None
         };
@@ -26434,7 +27950,7 @@ impl Workspace {
         let midpoint_drag_y = (drag_position.min_y() + drag_position.max_y()) / 2.;
 
         let maybe_above_tab = if current_index > 0 {
-            self.neighbor_drag_rect(current_index - 1, ctx)
+            self.neighbor_drag_rect(current_index - 1, true, ctx)
         } else {
             None
         };
@@ -26446,7 +27962,7 @@ impl Workspace {
         }
 
         let maybe_below_tab = if current_index < self.tabs.len() - 1 {
-            self.neighbor_drag_rect(current_index + 1, ctx)
+            self.neighbor_drag_rect(current_index + 1, true, ctx)
         } else {
             None
         };
@@ -26460,16 +27976,32 @@ impl Workspace {
         current_index
     }
 
-    /// Returns the group whose saved container rect contains `cursor_y`, if any.
-    /// A small edge margin at each end of the rect is treated as "between groups"
-    /// so the cursor can land in the ungrouped zone between adjacent groups.
-    fn target_group_at_y(&self, cursor_y: f32, ctx: &mut ViewContext<Self>) -> Option<TabGroupId> {
+    /// Returns the group whose saved container rect contains `cursor` along
+    /// the active axis, if any. A small edge margin at each end of the rect
+    /// is treated as "between groups" so the cursor can land in the
+    /// ungrouped zone between adjacent groups. `is_vertical` picks the
+    /// layout-correct `SavePosition` id and the axis to test along.
+    fn target_group_at_axis(
+        &self,
+        cursor: f32,
+        is_vertical: bool,
+        ctx: &mut ViewContext<Self>,
+    ) -> Option<TabGroupId> {
         const EDGE_MARGIN: f32 = 6.0;
         self.tab_groups.keys().copied().find(|group_id| {
-            ctx.element_position_by_id(vtab_group_position_id(*group_id))
-                .is_some_and(|rect| {
-                    rect.min_y() + EDGE_MARGIN <= cursor_y && cursor_y <= rect.max_y() - EDGE_MARGIN
-                })
+            let id = if is_vertical {
+                vtab_group_position_id(*group_id)
+            } else {
+                htab_group_position_id(*group_id)
+            };
+            ctx.element_position_by_id(id).is_some_and(|rect| {
+                let (min, max) = if is_vertical {
+                    (rect.min_y(), rect.max_y())
+                } else {
+                    (rect.min_x(), rect.max_x())
+                };
+                min + EDGE_MARGIN <= cursor && cursor <= max - EDGE_MARGIN
+            })
         })
     }
 
@@ -26478,10 +28010,13 @@ impl Workspace {
     /// For members of a collapsed group the per-tab `tab_position_id` rect
     /// is stale (the tab is no longer painted, but `PositionCache` keeps the
     /// last painted rect). Use the group container's rect instead so
-    /// midpoint comparisons fire at the visible header.
+    /// midpoint comparisons fire at the visible header. `is_vertical`
+    /// picks the layout-correct save-position id for the collapsed-group
+    /// fallback.
     fn neighbor_drag_rect(
         &self,
         neighbor_index: usize,
+        is_vertical: bool,
         ctx: &mut ViewContext<Self>,
     ) -> Option<RectF> {
         let neighbor_group_id = self.tabs.get(neighbor_index).and_then(|t| t.group_id);
@@ -26490,14 +28025,25 @@ impl Workspace {
             .is_some_and(|g| g.collapsed);
 
         if neighbor_in_collapsed_group {
-            return ctx.element_position_by_id(vtab_group_position_id(neighbor_group_id.unwrap()));
+            let group_id = neighbor_group_id.unwrap();
+            let id = if is_vertical {
+                vtab_group_position_id(group_id)
+            } else {
+                htab_group_position_id(group_id)
+            };
+            return ctx.element_position_by_id(id);
         }
 
         ctx.element_position_by_id(tab_position_id(neighbor_index))
     }
 
-    /// Swaps the group's entire member block with its above/below neighbor
-    /// when the dragged header's Y midpoint crosses the neighbor's midpoint.
+    /// Swaps the group's entire member block with its preceding/following
+    /// neighbor when the drag midpoint crosses the appropriate threshold on
+    /// the active axis. Per-axis thresholds match the per-tab swap logic:
+    /// vertical compares against the neighbor's midpoint (mirrors
+    /// `calculate_updated_tab_index_vertical`); horizontal compares against
+    /// the neighbor's leading/trailing edge (mirrors
+    /// `calculate_updated_tab_index`).
     pub(crate) fn on_group_drag(
         &mut self,
         group_id: TabGroupId,
@@ -26507,20 +28053,52 @@ impl Workspace {
         let Some((first, last)) = group_member_index_range(&self.tabs, group_id) else {
             return;
         };
-        let midpoint_drag_y = (position.min_y() + position.max_y()) / 2.;
+        // Reorders that would carry the block across the pinned/unpinned
+        // boundary are skipped below: a pinned group must stay in the pinned
+        // prefix and an unpinned group must stay out of it.
+        let group_pinned = self.tab_groups.get(&group_id).is_some_and(|g| g.pinned);
+        let is_vertical = uses_vertical_tabs(ctx);
+        let midpoint_drag = if is_vertical {
+            (position.min_y() + position.max_y()) / 2.
+        } else {
+            (position.min_x() + position.max_x()) / 2.
+        };
+        // Threshold for swapping toward the start of the bar (compared
+        // against the previous neighbor's rect). Vertical uses the
+        // neighbor's midpoint; horizontal uses its trailing edge so the
+        // swap fires as soon as the drag midpoint crosses into the
+        // neighbor, matching the per-tab horizontal swap rule.
+        let swap_before_threshold = |rect: RectF| -> f32 {
+            if is_vertical {
+                (rect.min_y() + rect.max_y()) / 2.
+            } else {
+                rect.max_x()
+            }
+        };
+        // Threshold for swapping toward the end of the bar (compared
+        // against the next neighbor's rect). Vertical uses the neighbor's
+        // midpoint; horizontal uses its leading edge.
+        let swap_after_threshold = |rect: RectF| -> f32 {
+            if is_vertical {
+                (rect.min_y() + rect.max_y()) / 2.
+            } else {
+                rect.min_x()
+            }
+        };
 
-        // Swap up: check the neighbor directly above the group's first member.
-        if first > 0 {
-            let above_index = first - 1;
-            if let Some(rect) = self.neighbor_drag_rect(above_index, ctx) {
-                let neighbor_midpoint = (rect.min_y() + rect.max_y()) / 2.;
-                if midpoint_drag_y < neighbor_midpoint {
-                    let target = if let Some(other_gid) = self.tabs[above_index].group_id {
+        // Swap toward the start of the bar: check the neighbor directly
+        // before the group's first member. Do not allow the swap if pinned
+        // states do not match.
+        if first > 0 && self.is_tab_effectively_pinned(&self.tabs[first - 1]) == group_pinned {
+            let before_index = first - 1;
+            if let Some(rect) = self.neighbor_drag_rect(before_index, is_vertical, ctx) {
+                if midpoint_drag < swap_before_threshold(rect) {
+                    let target = if let Some(other_gid) = self.tabs[before_index].group_id {
                         group_member_index_range(&self.tabs, other_gid)
                             .map(|(f, _)| f)
-                            .unwrap_or(above_index)
+                            .unwrap_or(before_index)
                     } else {
-                        above_index
+                        before_index
                     };
                     self.move_group_block(group_id, target, ctx);
                     return;
@@ -26528,23 +28106,26 @@ impl Workspace {
             }
         }
 
-        // Swap down: check the neighbor directly below the group's last member.
-        // Pass `below_block_last + 1` (the pre-drain target index); `move_group_block`
-        // accounts for the drain internally when `target > last`.
-        if last + 1 < self.tabs.len() {
-            let below_index = last + 1;
-            if let Some(rect) = self.neighbor_drag_rect(below_index, ctx) {
-                let neighbor_midpoint = (rect.min_y() + rect.max_y()) / 2.;
-                if midpoint_drag_y > neighbor_midpoint {
-                    let below_block_last = if let Some(other_gid) = self.tabs[below_index].group_id
+        // Swap toward the end of the bar: check the neighbor directly after
+        // the group's last member. Pass `after_block_last + 1` (the
+        // pre-drain target index); `move_group_block` accounts for the
+        // drain internally when `target > last`. Do not allow the swap if
+        // pinned states do not match.
+        if last + 1 < self.tabs.len()
+            && self.is_tab_effectively_pinned(&self.tabs[last + 1]) == group_pinned
+        {
+            let after_index = last + 1;
+            if let Some(rect) = self.neighbor_drag_rect(after_index, is_vertical, ctx) {
+                if midpoint_drag > swap_after_threshold(rect) {
+                    let after_block_last = if let Some(other_gid) = self.tabs[after_index].group_id
                     {
                         group_member_index_range(&self.tabs, other_gid)
                             .map(|(_, l)| l)
-                            .unwrap_or(below_index)
+                            .unwrap_or(after_index)
                     } else {
-                        below_index
+                        after_index
                     };
-                    self.move_group_block(group_id, below_block_last + 1, ctx);
+                    self.move_group_block(group_id, after_block_last + 1, ctx);
                 }
             }
         }
@@ -26553,6 +28134,147 @@ impl Workspace {
 
 fn should_reserve_traffic_light_space_in_tab_bar(side: TrafficLightSide) -> bool {
     side == TrafficLightSide::Right
+}
+
+/// Total width/height of the collage area in the group header.
+const GROUP_ICON_COLLAGE_SIZE: f32 = 22.0;
+
+/// Renders the diagonal pin indicator shown on a pinned horizontal tab group:
+/// trailing the members of an expanded group, or to the right of the name on a
+/// collapsed group's header.
+fn render_horizontal_group_pin_indicator(appearance: &Appearance) -> Box<dyn Element> {
+    let theme = appearance.theme();
+    ConstrainedBox::new(
+        Icon::PinFilledDiagonal
+            .to_warpui_icon(theme.main_text_color(theme.background()))
+            .finish(),
+    )
+    .with_width(TAB_PIN_INDICATOR_ICON_SIZE)
+    .with_height(TAB_PIN_INDICATOR_ICON_SIZE)
+    .finish()
+}
+
+/// Renders the icon block for a tab-group header from 0-4 deduped pane kinds.
+/// 1 or 2 icons reuse the vertical Summary `Single`/`Pair` layout so the
+/// group's icons read like a tab Summary view. 3 or 4 icons fall back to a
+/// corner collage (triangle for 3, 2x2 grid for 4) since Summary doesn't
+/// define a layout beyond 2 icons.
+fn render_group_member_icon_collage(
+    kinds: &[SummaryPaneKind],
+    total_size: f32,
+    appearance: &Appearance,
+) -> Box<dyn Element> {
+    let count = kinds.len().min(4);
+    if count == 0 {
+        return ConstrainedBox::new(Empty::new().finish())
+            .with_width(total_size)
+            .with_height(total_size)
+            .finish();
+    }
+    if count == 1 {
+        return render_summary_pane_kind_icons(
+            SummaryPaneKindIcons::Single(kinds[0].clone()),
+            total_size,
+            appearance,
+        );
+    }
+    if count == 2 {
+        return render_summary_pane_kind_icons(
+            SummaryPaneKindIcons::Pair {
+                primary: kinds[0].clone(),
+                secondary: kinds[1].clone(),
+            },
+            total_size,
+            appearance,
+        );
+    }
+
+    // icon_diameter = total/2 - 1 gives a constant 2 px gap between adjacent circles.
+    let icon_diameter = total_size / 2.0 - 1.0;
+    // Distance from the collage center to each icon center; keeps icon edges within bounds.
+    let icon_center_offset = total_size / 2.0 - icon_diameter / 2.0;
+
+    // 3 icons: equilateral triangle (one vertex down), vertically centered.
+    // 4 icons: 2×2 grid. This maps (number of icons, index of icon) -> position.
+    let positions: [Vector2F; 4] = if count == 3 {
+        let sqrt_3 = 3.0_f32.sqrt();
+        let r = 2.0 * icon_center_offset / sqrt_3;
+        [
+            vec2f(-r * sqrt_3 / 2.0, -0.75 * r),
+            vec2f(r * sqrt_3 / 2.0, -0.75 * r),
+            vec2f(0.0, 0.75 * r),
+            vec2f(0.0, 0.0), // unused
+        ]
+    } else {
+        [
+            vec2f(-icon_center_offset, -icon_center_offset),
+            vec2f(icon_center_offset, -icon_center_offset),
+            vec2f(-icon_center_offset, icon_center_offset),
+            vec2f(icon_center_offset, icon_center_offset),
+        ]
+    };
+
+    let mut stack = Stack::new().with_child(
+        ConstrainedBox::new(Empty::new().finish())
+            .with_width(total_size)
+            .with_height(total_size)
+            .finish(),
+    );
+    for (idx, kind) in kinds.iter().take(count).enumerate() {
+        let mini = vertical_tabs::render_summary_pane_kind_icon_circle(
+            kind.clone(),
+            icon_diameter,
+            appearance,
+        );
+
+        // Ambient icons place their brand circle at the top-left of a total_size
+        // element (leaving room for the cloud badge). Shift right-down by
+        // (1 - CIRCLE_RATIO)/2 * icon_diameter so the circle centers on the grid point.
+        let collage_pos = match &kind {
+            SummaryPaneKind::OzAgent { is_ambient: true }
+            | SummaryPaneKind::CLIAgent {
+                is_ambient: true, ..
+            } => {
+                let shift = icon_diameter
+                    * (1.0 - crate::ui_components::icon_with_status::CIRCLE_RATIO)
+                    / 2.0;
+                positions[idx] + vec2f(shift, shift)
+            }
+            _ => positions[idx],
+        };
+        stack.add_positioned_child(
+            mini,
+            OffsetPositioning::offset_from_parent(
+                collage_pos,
+                ParentOffsetBounds::Unbounded,
+                ParentAnchor::Center,
+                ChildAnchor::Center,
+            ),
+        );
+    }
+    stack.finish()
+}
+
+/// Dedupes pane kinds by `SummaryPaneKind` equality, ordered by
+/// `creation_order_id`, and takes the first `max_count`. Shared between
+/// the vertical-tabs Summary icon pair and the horizontal tab-group collage
+/// so both views select icons consistently for the same panes.
+fn select_unique_pane_kinds(
+    pane_kinds: impl IntoIterator<Item = (EntityId, SummaryPaneKind)>,
+    max_count: usize,
+) -> Vec<SummaryPaneKind> {
+    let mut pane_kinds: Vec<(EntityId, SummaryPaneKind)> = pane_kinds.into_iter().collect();
+    pane_kinds.sort_by_key(|(creation_order_id, _)| *creation_order_id);
+    let mut unique = Vec::new();
+    for (_, kind) in pane_kinds {
+        if !unique.contains(&kind) {
+            unique.push(kind);
+            if unique.len() >= max_count {
+                break;
+            }
+        }
+    }
+    unique
 }
 
 /// Returns the indices of every tab in `tabs` that belongs to `group_id`,
@@ -26578,20 +28300,70 @@ fn group_member_index_range(tabs: &[TabData], group_id: TabGroupId) -> Option<(u
     Some((first, last))
 }
 
-/// Returns every tab-bar-equivalent rect laid out in `window_id` (horizontal
-/// tab bar and/or vertical tabs panel). Both must be considered because a
-/// window with vertical tabs still renders the horizontal bar at the top.
+/// Returns `true` when `group_id` has exactly one member in `tabs`. Shared
+/// by both horizontal and vertical tab rendering to detect the "sole grouped
+/// member" case, where the per-tab `Draggable` is suppressed so the parent
+/// group's `Draggable` picks up the drag — dragging the only member of a
+/// group drags the entire group rather than orphaning it.
+pub(super) fn group_has_single_member(tabs: &[TabData], group_id: TabGroupId) -> bool {
+    group_member_index_range(tabs, group_id).is_some_and(|(first, last)| first == last)
+}
+
+/// Returns the save-position id of the tab presentation laid out for the
+/// current tab layout: the vertical tabs panel when vertical tabs are in use,
+/// otherwise the horizontal tab bar.
+///
+/// Uses the shared `uses_vertical_tabs` predicate — the same
+/// `FeatureFlag::VerticalTabs` + `use_vertical_tabs` check the tab bar uses to
+/// decide what to render (see `render_tab_bar_contents`) — so the id always
+/// points at wherever the tab strip is actually shown.
+pub(crate) fn active_tab_bar_position_id(app: &AppContext) -> &'static str {
+    if uses_vertical_tabs(app) {
+        VERTICAL_TABS_PANEL_POSITION_ID
+    } else {
+        TAB_BAR_POSITION_ID
+    }
+}
+
+/// Returns the tab-bar rect for `window_id`'s **active** tab layout, or an
+/// empty `Vec` if that presentation isn't laid out this frame.
+///
+/// Only the active presentation is a valid cross-window drop zone. In
+/// vertical-tabs mode the tabs live in the vertical panel and the horizontal
+/// bar at the top renders only toolbar controls (no tab strip), so it must
+/// not register as a drop target; in horizontal-tabs mode the reverse holds.
+/// Returning the inactive presentation's rect would light up a spurious
+/// insertion placeholder when a tab is dragged over it. Returned as a `Vec`
+/// (at most one rect) so callers can iterate uniformly.
 pub(crate) fn tab_bar_rects_for_window(window_id: WindowId, app: &AppContext) -> Vec<RectF> {
-    let mut rects = Vec::with_capacity(2);
-    if let Some(rect) = app.element_position_by_id_at_last_frame(window_id, TAB_BAR_POSITION_ID) {
-        rects.push(rect);
-    }
-    if let Some(rect) =
-        app.element_position_by_id_at_last_frame(window_id, VERTICAL_TABS_PANEL_POSITION_ID)
-    {
-        rects.push(rect);
-    }
-    rects
+    app.element_position_by_id_at_last_frame(window_id, active_tab_bar_position_id(app))
+        .into_iter()
+        .collect()
+}
+
+// Checks that the tab/group rect is not clipped by overflow area
+// (width below `MIN_VISIBLE_TAB_WIDTH`) and that the rect position
+// is inside at least one of the tab-bar-equivalent rects.
+fn rect_is_within_tab_bar(rect: RectF, tab_bar_rects: &[RectF]) -> bool {
+    tab_bar_rects.is_empty()
+        || tab_bar_rects
+            .iter()
+            .any(|tb| tb.contains_point(rect.center()))
+}
+
+/// Last-frame container rect for a tab group (collapsed or expanded). Reads the
+/// id for the current layout.
+fn group_container_rect(
+    window_id: WindowId,
+    group_id: TabGroupId,
+    app: &AppContext,
+) -> Option<RectF> {
+    let position_id = if uses_vertical_tabs(app) {
+        vtab_group_position_id(group_id)
+    } else {
+        htab_group_position_id(group_id)
+    };
+    app.element_position_by_id_at_last_frame(window_id, position_id)
 }
 
 /// Renders the floating chip shown in the target window during a cross-window
@@ -26671,7 +28443,7 @@ fn compute_default_panel_widths(
 #[cfg(debug_assertions)]
 fn set_opencode_warp_plugin(new_entry: &str) -> String {
     let Some(home) = dirs::home_dir() else {
-        return "无法确定主目录".to_string();
+        return "Failed to determine home directory".to_string();
     };
 
     let config_dir = home.join(".config/opencode");

@@ -12,7 +12,6 @@ use crate::ai::AIRequestUsageModel;
 use crate::auth::AuthStateProvider;
 use crate::network::NetworkStatus;
 use crate::server::ids::ServerId;
-use crate::settings::PrivacySettings;
 use crate::settings_view::SettingsSection;
 use crate::ui_components::icons::Icon;
 use crate::workspace::WorkspaceAction;
@@ -20,32 +19,28 @@ use crate::workspaces::user_workspaces::UserWorkspaces;
 
 const ANONYMOUS_USER_REQUEST_LIMIT_SOFT_GATE_PERCENTAGE: f32 = 0.5;
 
-const TELEMETRY_DISABLED_PRIMARY_TEXT: &str = "要使用 AI 功能，";
-const ENABLE_ANALYTICS_ACTION_TEXT: &str = "启用分析";
-const UPGRADE_TO_BUILD_ACTION_TEXT: &str = "upgrade";
-
-const NO_CONNECTION_PRIMARY_TEXT: &str = "无网络连接";
+const NO_CONNECTION_PRIMARY_TEXT: &str = "No internet connection";
 const ANONYMOUS_USER_REQUEST_LIMIT_SOFT_GATE_PRIMARY_TEXT: &str = "";
-const ANONYMOUS_USER_REQUEST_LIMIT_HARD_GATE_PRIMARY_TEXT: &str = "已达上限 -";
-const DELINQUENT_DUE_TO_PAYMENT_ISSUE_PRIMARY_TEXT: &str = "因付款问题受限";
-const OUT_OF_REQUESTS_PRIMARY_TEXT: &str = "积分已用完";
+const ANONYMOUS_USER_REQUEST_LIMIT_HARD_GATE_PRIMARY_TEXT: &str = "At Limit -";
+const DELINQUENT_DUE_TO_PAYMENT_ISSUE_PRIMARY_TEXT: &str = "Restricted due to payment issue";
+const OUT_OF_REQUESTS_PRIMARY_TEXT: &str = "Out of credits";
 
-const ANONYMOUS_USER_REQUEST_LIMIT_ACTION_TEXT: &str = "注册以获取更多 AI 积分";
-const DELINQUENT_DUE_TO_PAYMENT_ISSUE_ACTION_TEXT: &str = "管理账单";
-const OVERAGES_TOGGLEABLE_BUT_NOT_ENABLED_ACTION_TEXT: &str = "启用高级超额用量";
-const MONTHLY_OVERAGES_SPEND_LIMIT_REACHED_ACTION_TEXT: &str = "提高月度支出上限";
-const UPGRADE_TEXT: &str = "升级";
-const COMPARE_PLANS_TEXT: &str = "比较方案";
-const CONTACT_SUPPORT_TEXT: &str = "联系支持";
-const NON_ADMIN_CONTACT_ADMIN_TEXT: &str = "，请联系团队管理员";
-const NON_ADMIN_ASK_ADMIN_TO_ENABLE_OVERAGES_TEXT: &str = "，请让团队管理员启用超额用量";
-const NON_ADMIN_ASK_ADMIN_TO_INCREASE_OVERAGES_TEXT: &str = "，请让团队管理员提高超额用量";
+const ANONYMOUS_USER_REQUEST_LIMIT_ACTION_TEXT: &str = "Sign up for more AI credits";
+const DELINQUENT_DUE_TO_PAYMENT_ISSUE_ACTION_TEXT: &str = "Manage billing";
+const OVERAGES_TOGGLEABLE_BUT_NOT_ENABLED_ACTION_TEXT: &str = "Enable premium overages";
+const MONTHLY_OVERAGES_SPEND_LIMIT_REACHED_ACTION_TEXT: &str = "Increase monthly spend limit";
+const UPGRADE_TEXT: &str = "Upgrade";
+const COMPARE_PLANS_TEXT: &str = "Compare plans";
+const CONTACT_SUPPORT_TEXT: &str = "Contact support";
+const NON_ADMIN_CONTACT_ADMIN_TEXT: &str = ", contact a team admin";
+const NON_ADMIN_ASK_ADMIN_TO_ENABLE_OVERAGES_TEXT: &str = ", ask a team admin to enable overages";
+const NON_ADMIN_ASK_ADMIN_TO_INCREASE_OVERAGES_TEXT: &str =
+    ", ask a team admin to increase overages";
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PromptAlertAction {
     SignUpClickedForAnonymousUser,
     OpenSettingsClicked,
-    OpenPrivacySettingsClicked,
     ManageBillingClicked { team_uid: ServerId },
 }
 
@@ -53,7 +48,6 @@ pub enum PromptAlertAction {
 pub enum PromptAlertEvent {
     SignupAnonymousUser,
     OpenBillingAndUsagePage,
-    OpenPrivacyPage,
     OpenBillingPortal { team_uid: ServerId },
 }
 
@@ -62,9 +56,6 @@ pub enum PromptAlertEvent {
 pub enum PromptAlertState {
     /// The user is offline (no connection).
     NoConnection,
-    /// Telemetry is disabled and the user is on a free tier.
-    /// Free tier users must enable telemetry or upgrade to use AI features.
-    TelemetryDisabledOnFreeTier,
     /// An anonymous user has reached a certain percentage of requests used.
     /// This doesn't use a primary text to avoid being too in-your-face.
     AnonymousUserRequestLimitSoftGate,
@@ -92,7 +83,6 @@ impl PromptAlertView {
         let request_usage_model = AIRequestUsageModel::handle(ctx);
         let user_workspaces = UserWorkspaces::handle(ctx);
         let network_status = NetworkStatus::handle(ctx);
-        let privacy_settings = PrivacySettings::handle(ctx);
         let api_key_manager = ApiKeyManager::handle(ctx);
 
         ctx.subscribe_to_model(&request_usage_model, |me, _, _, ctx| {
@@ -106,11 +96,6 @@ impl PromptAlertView {
         });
 
         ctx.subscribe_to_model(&network_status, |me, _, _, ctx| {
-            me.state = Self::determine_state(ctx);
-            ctx.notify();
-        });
-
-        ctx.subscribe_to_model(&privacy_settings, |me, _, _, ctx| {
             me.state = Self::determine_state(ctx);
             ctx.notify();
         });
@@ -130,21 +115,6 @@ impl PromptAlertView {
         // First, if the user is offline, no AI features will work.
         if !NetworkStatus::as_ref(app).is_online() {
             return PromptAlertState::NoConnection;
-        }
-
-        // Check if telemetry is disabled for free tier users.
-        // Free tier users must enable telemetry or upgrade to use AI features.
-        let privacy_settings = PrivacySettings::as_ref(app);
-        if !privacy_settings.is_telemetry_enabled {
-            // Fail safe: if billing status is unknown, assume paid to avoid showing confusing message to paying users
-            let is_on_paid_plan = UserWorkspaces::as_ref(app)
-                .current_workspace()
-                .map(|w| w.billing_metadata.is_user_on_paid_plan())
-                .unwrap_or(true);
-
-            if !is_on_paid_plan {
-                return PromptAlertState::TelemetryDisabledOnFreeTier;
-            }
         }
 
         let request_usage_model = AIRequestUsageModel::as_ref(app);
@@ -225,11 +195,6 @@ impl PromptAlertView {
                     NO_CONNECTION_PRIMARY_TEXT,
                 ));
             }
-            PromptAlertState::TelemetryDisabledOnFreeTier => {
-                text_fragments.push(FormattedTextFragment::plain_text(
-                    TELEMETRY_DISABLED_PRIMARY_TEXT,
-                ));
-            }
             PromptAlertState::AnonymousUserRequestLimitSoftGate => {
                 text_fragments.push(FormattedTextFragment::plain_text(
                     ANONYMOUS_USER_REQUEST_LIMIT_SOFT_GATE_PRIMARY_TEXT,
@@ -270,28 +235,6 @@ impl PromptAlertView {
 
         match state {
             PromptAlertState::NoConnection => {}
-            PromptAlertState::TelemetryDisabledOnFreeTier => {
-                // Show "enable analytics" action link
-                text_fragments.push(FormattedTextFragment::plain_text("  "));
-                text_fragments.push(FormattedTextFragment::hyperlink_action(
-                    ENABLE_ANALYTICS_ACTION_TEXT,
-                    PromptAlertAction::OpenPrivacySettingsClicked,
-                ));
-
-                // Show "or upgrade to Build" link
-                text_fragments.push(FormattedTextFragment::plain_text(" or "));
-                let upgrade_url = if let Some(team) = UserWorkspaces::as_ref(app).current_team() {
-                    UserWorkspaces::upgrade_link_for_team(team.uid)
-                } else {
-                    let user_id = auth_state.user_id().unwrap_or_default();
-                    UserWorkspaces::upgrade_link(user_id)
-                };
-                text_fragments.push(FormattedTextFragment::hyperlink(
-                    UPGRADE_TO_BUILD_ACTION_TEXT,
-                    upgrade_url,
-                ));
-                text_fragments.push(FormattedTextFragment::plain_text("."));
-            }
             PromptAlertState::AnonymousUserRequestLimitSoftGate
             | PromptAlertState::AnonymousUserRequestLimitHardGate => {
                 text_fragments.push(FormattedTextFragment::plain_text("  "));
@@ -353,7 +296,7 @@ impl PromptAlertView {
                         let upgrade_text = if !has_admin_permissions {
                             COMPARE_PLANS_TEXT
                         } else if team.billing_metadata.can_upgrade_to_build_plan() {
-                            "升级到 Build"
+                            "Upgrade to Build"
                         } else {
                             UPGRADE_TEXT
                         };
@@ -372,7 +315,7 @@ impl PromptAlertView {
                     let label =
                         if let Some(workspace) = UserWorkspaces::as_ref(app).current_workspace() {
                             if workspace.billing_metadata.can_upgrade_to_build_plan() {
-                                "升级到 Build"
+                                "Upgrade to Build"
                             } else {
                                 UPGRADE_TEXT
                             }
@@ -384,7 +327,7 @@ impl PromptAlertView {
                 if UserWorkspaces::as_ref(app).is_byo_api_key_enabled(app) {
                     text_fragments.push(FormattedTextFragment::plain_text(" or "));
                     text_fragments.push(FormattedTextFragment::hyperlink_action(
-                        "使用你自己的 API 密钥",
+                        "use your own API keys",
                         WorkspaceAction::ShowSettingsPageWithSearch {
                             search_query: "api".to_string(),
                             section: Some(SettingsSection::WarpAgent),
@@ -401,7 +344,6 @@ fn does_alert_block_ai_requests(state: &PromptAlertState) -> bool {
     match state {
         PromptAlertState::AnonymousUserRequestLimitSoftGate | PromptAlertState::NoAlert => false,
         PromptAlertState::NoConnection
-        | PromptAlertState::TelemetryDisabledOnFreeTier
         | PromptAlertState::AnonymousUserRequestLimitHardGate
         | PromptAlertState::DelinquentDueToPaymentIssue
         | PromptAlertState::OveragesToggleableButNotEnabled
@@ -449,7 +391,7 @@ impl View for PromptAlertView {
         if suggest_buy_credits {
             text_fragments.push(FormattedTextFragment::plain_text("  "));
             text_fragments.push(FormattedTextFragment::hyperlink_action(
-                "添加积分",
+                "Add credits",
                 WorkspaceAction::ShowSettingsPage(SettingsSection::BillingAndUsage),
             ));
         } else {
@@ -522,9 +464,6 @@ impl TypedActionView for PromptAlertView {
             }
             PromptAlertAction::OpenSettingsClicked => {
                 ctx.emit(PromptAlertEvent::OpenBillingAndUsagePage);
-            }
-            PromptAlertAction::OpenPrivacySettingsClicked => {
-                ctx.emit(PromptAlertEvent::OpenPrivacyPage);
             }
             PromptAlertAction::ManageBillingClicked { team_uid } => {
                 ctx.emit(PromptAlertEvent::OpenBillingPortal {

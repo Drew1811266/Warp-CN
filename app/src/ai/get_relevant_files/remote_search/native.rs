@@ -64,7 +64,7 @@ pub(super) fn send_request(
     if !should_use_codebase_indexing(CodebaseAutoIndexingSurface::Remote, ctx) {
         return RemoteSearchRequest::Ready(SearchCodebaseResult::Failed {
             reason: SearchCodebaseFailureReason::CodebaseNotIndexed,
-            message: "远程代码库搜索未启用。".to_string(),
+            message: "Remote codebase search is not enabled.".to_string(),
         });
     }
 
@@ -72,15 +72,8 @@ pub(super) fn send_request(
         .active_repo_availability(&session_context, requested_codebase_path.as_deref());
     match availability {
         RemoteCodebaseSearchAvailability::Ready(search_context) => {
-            let Some(client) = remote_server::manager::RemoteServerManager::as_ref(ctx)
-                .client_for_host(&search_context.remote_path.host_id)
-                .cloned()
-            else {
-                return RemoteSearchRequest::Ready(SearchCodebaseResult::Failed {
-                    reason: SearchCodebaseFailureReason::ClientError,
-                    message: "远程服务器未连接，远程代码库搜索不可用。".to_string(),
-                });
-            };
+            let handle = remote_server::manager::RemoteServerManager::as_ref(ctx)
+                .host_request_handle(&search_context.remote_path.host_id);
             if search_context.is_stale {
                 let remote_path = search_context.remote_path.clone();
                 let sync_requested = remote_server::manager::RemoteServerManager::handle(ctx)
@@ -88,7 +81,9 @@ pub(super) fn send_request(
                         manager.trigger_codebase_incremental_sync(remote_path, ctx)
                     });
                 if !sync_requested {
-                    log::warn!("远程代码库搜索正在使用过期索引，因为无法请求增量同步");
+                    log::warn!(
+                        "Remote codebase search is using a stale index because incremental sync could not be requested"
+                    );
                 }
             }
             let store_client = ServerApiProvider::as_ref(ctx).get();
@@ -99,7 +94,7 @@ pub(super) fn send_request(
                             query,
                             partial_paths,
                             search_context,
-                            client,
+                            handle,
                             store_client,
                         )
                         .await
@@ -130,7 +125,7 @@ async fn execute_remote_codebase_search(
     query: String,
     partial_paths: Option<Vec<String>>,
     search_context: RemoteCodebaseSearchContext,
-    client: Arc<remote_server::client::RemoteServerClient>,
+    handle: remote_server::manager::HostRequestHandle,
     store_client: Arc<ServerApi>,
 ) -> Result<SearchCodebaseResult, anyhow::Error> {
     let root_hash = search_context.root_hash;
@@ -161,13 +156,14 @@ async fn execute_remote_codebase_search(
         .iter()
         .map(ToString::to_string)
         .collect_vec();
-    let metadata_response = client
+    let metadata_response = handle
         .get_fragment_metadata_from_hash(
             repo_path.clone(),
             root_hash_string,
             candidate_hash_strings,
         )
-        .await?;
+        .await
+        .map_err(|e| anyhow::anyhow!("Fragment metadata lookup failed: {e}"))?;
     if !metadata_response.missing_hashes.is_empty() {
         log::warn!(
             "Remote codebase search metadata lookup missed {} hashes for repo {}",
@@ -204,7 +200,7 @@ async fn execute_remote_codebase_search(
         return Ok(SearchCodebaseResult::Success { files: vec![] });
     }
 
-    let response = client
+    let response = handle
         .read_file_context(read_full_fragment_files_request(&parsed_fragment_metadata))
         .await?;
     if !response.failed_files.is_empty() && response.file_contexts.is_empty() {
@@ -216,13 +212,13 @@ async fn execute_remote_codebase_search(
                     .error
                     .as_ref()
                     .map(|error| error.message.as_str())
-                    .unwrap_or("未知错误");
+                    .unwrap_or("unknown error");
                 format!("{}: {reason}", file.path)
             })
             .join(", ");
         return Ok(SearchCodebaseResult::Failed {
             reason: SearchCodebaseFailureReason::InvalidFilePaths,
-            message: format!("读取远程搜索结果文件失败：{failed}"),
+            message: format!("Failed to read remote search result files: {failed}"),
         });
     }
     let file_contents = file_contents_from_response(response);
@@ -232,7 +228,7 @@ async fn execute_remote_codebase_search(
     );
     if !read_fragment_result.fail_to_read_path.is_empty() {
         log::warn!(
-            "远程代码库搜索读取 {} 个片段文件失败",
+            "Remote codebase search failed to read {} fragment file(s)",
             read_fragment_result.fail_to_read_path.len()
         );
     }
@@ -252,7 +248,7 @@ async fn execute_remote_codebase_search(
         return Ok(SearchCodebaseResult::Success { files: vec![] });
     }
 
-    let response = client
+    let response = handle
         .read_file_context(read_context_locations_request(&locations))
         .await?;
     if !response.failed_files.is_empty() && response.file_contexts.is_empty() {
@@ -264,13 +260,13 @@ async fn execute_remote_codebase_search(
                     .error
                     .as_ref()
                     .map(|error| error.message.as_str())
-                    .unwrap_or("未知错误");
+                    .unwrap_or("unknown error");
                 format!("{}: {reason}", file.path)
             })
             .join(", ");
         return Ok(SearchCodebaseResult::Failed {
             reason: SearchCodebaseFailureReason::InvalidFilePaths,
-            message: format!("读取远程搜索结果文件失败：{failed}"),
+            message: format!("Failed to read remote search result files: {failed}"),
         });
     }
     let files = response
@@ -411,23 +407,28 @@ fn remote_availability_failure(
     match availability {
         RemoteCodebaseSearchAvailability::NoConnectedHost => SearchCodebaseResult::Failed {
             reason: SearchCodebaseFailureReason::ClientError,
-            message: "远程主机未连接，远程代码库搜索不可用。".to_string(),
+            message:
+                "Remote codebase search is unavailable because the remote host is not connected."
+                    .to_string(),
         },
         RemoteCodebaseSearchAvailability::NoActiveRepo => SearchCodebaseResult::Failed {
             reason: SearchCodebaseFailureReason::CodebaseNotIndexed,
-            message: "当前远程目录不在已知代码库中。".to_string(),
+            message: "The current remote directory is not in a known codebase.".to_string(),
         },
         RemoteCodebaseSearchAvailability::NotIndexed { remote_path } => {
             SearchCodebaseResult::Failed {
                 reason: SearchCodebaseFailureReason::CodebaseNotIndexed,
-                message: format!("{} 处的远程代码库尚未建立索引。", remote_path.path.as_str()),
+                message: format!(
+                    "The remote codebase at {} is not indexed yet.",
+                    remote_path.path.as_str()
+                ),
             }
         }
         RemoteCodebaseSearchAvailability::Indexing { remote_path } => {
             SearchCodebaseResult::Failed {
                 reason: SearchCodebaseFailureReason::CodebaseNotIndexed,
                 message: format!(
-                    "{} 处的远程代码库仍在建立索引。请稍后重试。",
+                    "The remote codebase at {} is still being indexed. Try again later.",
                     remote_path.path.as_str()
                 ),
             }
@@ -438,13 +439,13 @@ fn remote_availability_failure(
         } => SearchCodebaseResult::Failed {
             reason: SearchCodebaseFailureReason::CodebaseNotIndexed,
             message: format!(
-                "{} 的远程代码库搜索不可用：{message}",
+                "Remote codebase search is unavailable for {}: {message}",
                 remote_path.path.as_str()
             ),
         },
         RemoteCodebaseSearchAvailability::Ready(_) => SearchCodebaseResult::Failed {
             reason: SearchCodebaseFailureReason::ClientError,
-            message: "远程代码库搜索意外不可用。".to_string(),
+            message: "Remote codebase search was unexpectedly unavailable.".to_string(),
         },
     }
 }

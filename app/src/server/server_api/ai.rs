@@ -1,4 +1,6 @@
 use std::collections::{HashMap, HashSet};
+#[cfg(not(target_family = "wasm"))]
+use std::path::Path;
 use std::time::Duration;
 
 use ai::index::full_source_code_embedding::store_client::{IntermediateNode, StoreClient};
@@ -109,6 +111,8 @@ use warp_graphql::queries::task_git_credentials::{
 };
 use warp_multi_agent_api::ConversationData;
 
+#[cfg(not(target_family = "wasm"))]
+use super::download::write_response_body_to_path;
 use super::harness_support::{UploadField, UploadFieldValue, UploadTarget};
 use super::ServerApi;
 use crate::ai::agent::api::ServerConversationToken;
@@ -143,9 +147,7 @@ use crate::ai_assistant::utils::TranscriptPart;
 use crate::ai_assistant::{AIGeneratedCommand, GenerateCommandsFromNaturalLanguageError};
 use crate::drive::workflows::ai_assist::{GeneratedCommandMetadata, GeneratedCommandMetadataError};
 use crate::persistence::model::ConversationUsageMetadata;
-use crate::server::graphql::{
-    default_request_options, get_request_context, get_user_facing_error_message,
-};
+use crate::server::graphql::{get_request_context, get_user_facing_error_message};
 use crate::terminal::model::block::SerializedBlock;
 #[cfg(not(feature = "agent_mode_evals"))]
 use crate::{
@@ -308,6 +310,18 @@ pub(crate) struct ForkConversationRequest {
 #[derive(Debug, Clone, serde::Deserialize)]
 pub struct ForkConversationResponse {
     pub forked_conversation_id: String,
+}
+
+/// Request body for `POST /agent/conversations/{conversation_id}/rename`.
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct RenameConversationRequest {
+    pub title: String,
+}
+
+/// Response body for `POST /agent/conversations/{conversation_id}/rename`.
+#[derive(Debug, Clone, serde::Deserialize)]
+pub struct RenameConversationResponse {
+    pub title: String,
 }
 
 #[derive(Debug, Clone, serde::Serialize)]
@@ -659,13 +673,13 @@ pub struct CreateFileArtifactUploadResponse {
 /// A single git credential entry returned by `taskGitCredentials`.
 #[derive(Clone)]
 pub struct GitCredential {
-    /// The GitHub token (OAuth user token or App installation token).
+    /// The provider's OAuth or installation access token.
     pub token: String,
-    /// The GitHub username. `None` for service-account (installation token) principals.
+    /// The provider-specific git username, when available.
     pub username: Option<String>,
-    /// The GitHub email. `None` for service-account principals.
+    /// The provider account's email, when available.
     pub email: Option<String>,
-    /// The host (always `"github.com"` in V1).
+    /// The managed git host, such as `"github.com"` or `"gitlab.com"`.
     pub host: String,
 }
 
@@ -843,6 +857,13 @@ pub(crate) fn build_run_followup_url(run_id: &AmbientAgentTaskId) -> String {
 pub(crate) fn build_fork_conversation_url(conversation_id: &str) -> String {
     format!(
         "agent/conversations/{}/fork",
+        urlencoding::encode(conversation_id)
+    )
+}
+
+pub(crate) fn build_rename_conversation_url(conversation_id: &str) -> String {
+    format!(
+        "agent/conversations/{}/rename",
         urlencoding::encode(conversation_id)
     )
 }
@@ -1097,6 +1118,13 @@ pub trait AIClient: 'static + Send + Sync {
         title: Option<String>,
     ) -> anyhow::Result<ForkConversationResponse, anyhow::Error>;
 
+    /// Rename a server-side conversation and return the normalized title.
+    async fn rename_conversation(
+        &self,
+        conversation_id: String,
+        title: String,
+    ) -> anyhow::Result<RenameConversationResponse, anyhow::Error>;
+
     async fn list_ambient_agent_tasks(
         &self,
         limit: i32,
@@ -1120,6 +1148,13 @@ pub trait AIClient: 'static + Send + Sync {
         &self,
         task_id: &AmbientAgentTaskId,
     ) -> anyhow::Result<serde_json::Value, anyhow::Error>;
+
+    #[cfg(not(target_family = "wasm"))]
+    async fn download_run_transcript_to_path(
+        &self,
+        run_id: &AmbientAgentTaskId,
+        destination: &Path,
+    ) -> anyhow::Result<(), anyhow::Error>;
 
     async fn submit_run_followup(
         &self,
@@ -1705,11 +1740,9 @@ impl AIClient for ServerApi {
 
         let response = operation
             .send_request(
-                self.client.clone(),
-                warp_graphql::client::RequestOptions {
-                    auth_token,
-                    ..default_request_options()
-                },
+                self.base_client.owned_http_client(),
+                self.base_client
+                    .graphql_request_options_with_token(auth_token),
             )
             .await?
             .data
@@ -1828,6 +1861,11 @@ impl AIClient for ServerApi {
         }
     }
 
+    #[tracing::instrument(skip_all, err, fields(
+        tags.cloud_agent = true,
+        config.worker_host = tracing::field::Empty,
+        config.harness = tracing::field::Empty
+    ))]
     async fn create_agent_task(
         &self,
         prompt: String,
@@ -1835,6 +1873,19 @@ impl AIClient for ServerApi {
         parent_run_id: Option<String>,
         config: Option<AgentConfigSnapshot>,
     ) -> anyhow::Result<AmbientAgentTaskId, anyhow::Error> {
+        if let Some(config) = &config {
+            if let Some(worker_host) = &config.worker_host {
+                tracing::Span::current().record("config.worker_host", worker_host);
+            }
+            if let Some(harness) = &config.harness {
+                let harness: Option<serde_json::Value> =
+                    serde_json::to_value(harness.harness_type).ok();
+                if let Some(serde_json::Value::String(harness)) = harness {
+                    tracing::Span::current().record("config.harness", harness);
+                }
+            }
+        }
+
         // Serialize the config to JSON if provided
         let agent_config_snapshot = config
             .map(|c| serde_json::to_string(&c))
@@ -1867,6 +1918,13 @@ impl AIClient for ServerApi {
         }
     }
 
+    #[tracing::instrument(skip_all, err, fields(
+        tags.cloud_agent = true,
+        ?task_state,
+        ?session_id,
+        ?conversation_id,
+        error_code = ?status_message.as_ref().map(|m| m.error_code)
+    ))]
     async fn update_agent_task(
         &self,
         task_id: AmbientAgentTaskId,
@@ -1938,6 +1996,18 @@ impl AIClient for ServerApi {
         Ok(response)
     }
 
+    async fn rename_conversation(
+        &self,
+        conversation_id: String,
+        title: String,
+    ) -> anyhow::Result<RenameConversationResponse, anyhow::Error> {
+        let request = RenameConversationRequest { title };
+        let response: RenameConversationResponse = self
+            .post_public_api(&build_rename_conversation_url(&conversation_id), &request)
+            .await?;
+        Ok(response)
+    }
+
     async fn list_ambient_agent_tasks(
         &self,
         limit: i32,
@@ -1958,6 +2028,7 @@ impl AIClient for ServerApi {
         Ok(response)
     }
 
+    #[tracing::instrument(skip_all, err, fields(tags.cloud_agent = true))]
     async fn get_ambient_agent_task(
         &self,
         task_id: &AmbientAgentTaskId,
@@ -2012,6 +2083,7 @@ impl AIClient for ServerApi {
         }
     }
 
+    #[tracing::instrument(skip_all, err, fields(tags.cloud_agent = true))]
     async fn get_ai_conversation(
         &self,
         server_conversation_token: ServerConversationToken,
@@ -2290,6 +2362,7 @@ impl AIClient for ServerApi {
         }
     }
 
+    #[tracing::instrument(skip_all, err, fields(tags.cloud_agent = true))]
     async fn get_task_attachments(
         &self,
         task_id: String,
@@ -2451,6 +2524,7 @@ impl AIClient for ServerApi {
         Ok(response)
     }
 
+    #[tracing::instrument(skip_all, err, fields(tags.cloud_agent = true))]
     async fn get_handoff_snapshot_attachments(
         &self,
         task_id: &AmbientAgentTaskId,
@@ -2471,6 +2545,18 @@ impl AIClient for ServerApi {
                     .unwrap_or_else(|| "application/octet-stream".to_string()),
             })
             .collect())
+    }
+
+    #[cfg(not(target_family = "wasm"))]
+    async fn download_run_transcript_to_path(
+        &self,
+        run_id: &AmbientAgentTaskId,
+        destination: &Path,
+    ) -> anyhow::Result<(), anyhow::Error> {
+        let response = self
+            .get_public_api_response(&format!("agent/runs/{run_id}/transcript"))
+            .await?;
+        write_response_body_to_path(response, destination).await
     }
 
     // --- Orchestrations V2 messaging ---
@@ -2583,7 +2669,7 @@ impl AIClient for ServerApi {
         request: GenerateCodeReviewContentRequest,
     ) -> Result<GenerateCodeReviewContentResponse, anyhow::Error> {
         let auth_token = self.get_or_refresh_access_token().await?;
-        let request_builder = self.client.post(format!(
+        let request_builder = self.base_client.http_client().post(format!(
             "{}/ai/generate_code_review_content",
             ChannelState::server_root_url()
         ));
@@ -2768,12 +2854,12 @@ impl From<warp_graphql::queries::get_feature_model_choices::LlmModelHost> for LL
             warp_graphql::queries::get_feature_model_choices::LlmModelHost::CustomEndpoint => {
                 LLMModelHost::CustomEndpoint
             }
+            warp_graphql::queries::get_feature_model_choices::LlmModelHost::GeminiEnterprise => {
+                LLMModelHost::GeminiEnterprise
+            }
             warp_graphql::queries::get_feature_model_choices::LlmModelHost::Other(value) => {
-                report_error!(
-                    anyhow!(
-                        "Unknown LlmModelHost '{value}'. Make sure to update client GraphQL types!"
-                    ),
-                    warp_core::errors::ReportErrorLogMode::OncePerRun
+                log::warn!(
+                    "Unknown LlmModelHost '{value}'. Make sure to update client GraphQL types!"
                 );
                 LLMModelHost::Unknown
             }
@@ -2948,6 +3034,7 @@ fn convert_usage_metadata(
     context_window_usage: f64,
     credits_spent: f64,
     platform_credits_spent: f64,
+    context_window_segments: &[warp_graphql::ai::ContextWindowSegment],
 ) -> ConversationUsageMetadata {
     ConversationUsageMetadata {
         was_summarized: summarized,
@@ -2957,6 +3044,7 @@ fn convert_usage_metadata(
         credits_spent_for_last_block: None,
         token_usage: vec![],
         tool_usage_metadata: Default::default(),
+        context_window_segments: context_window_segments.iter().map(Into::into).collect(),
     }
 }
 
@@ -2969,6 +3057,7 @@ impl TryFrom<warp_graphql::ai::AIConversation> for ServerAIConversationMetadata 
             value.usage.usage_metadata.context_window_usage,
             value.usage.usage_metadata.credits_spent,
             value.usage.usage_metadata.platform_credits_spent,
+            &value.usage.usage_metadata.context_window_segments,
         );
         let metadata = value.metadata.try_into()?;
         let permissions = value.permissions.try_into()?;
@@ -3015,6 +3104,7 @@ impl TryFrom<warp_graphql::queries::list_ai_conversations::AIConversationMetadat
             value.usage.usage_metadata.context_window_usage,
             value.usage.usage_metadata.credits_spent,
             value.usage.usage_metadata.platform_credits_spent,
+            &value.usage.usage_metadata.context_window_segments,
         );
         let metadata = value.metadata.try_into()?;
         let permissions = value.permissions.try_into()?;

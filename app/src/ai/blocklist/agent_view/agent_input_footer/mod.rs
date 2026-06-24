@@ -12,6 +12,7 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use ai::document::{AIDocumentId, AIDocumentVersion};
+use chrono::{DateTime, Local};
 use parking_lot::FairMutex;
 use pathfinder_color::ColorU;
 use pathfinder_geometry::vector::{vec2f, Vector2F};
@@ -36,10 +37,7 @@ use warpui::elements::{
     PositionedElementOffsetBounds, Radius, Shrinkable, Stack, Text, Wrap, WrapFill,
     WrapFillEntireRun, DEFAULT_UI_LINE_HEIGHT_RATIO,
 };
-#[cfg(feature = "voice_input")]
-use warpui::r#async::SpawnedFutureHandle;
-#[cfg(not(target_family = "wasm"))]
-use warpui::r#async::Timer;
+use warpui::r#async::{SpawnedFutureHandle, Timer};
 use warpui::{
     AppContext, Entity, EntityId, ModelHandle, SingletonEntity, TypedActionView, View, ViewContext,
     ViewHandle,
@@ -61,7 +59,7 @@ use crate::ai::AIRequestUsageModel;
 use crate::appearance::Appearance;
 use crate::auth::{AuthManager, AuthStateProvider};
 use crate::completer::SessionContext;
-use crate::context_chips::display_chip::{DisplayChip, DisplayChipConfig};
+use crate::context_chips::display_chip::{DisplayChip, DisplayChipConfig, PromptChipShellCommand};
 use crate::context_chips::prompt_type::PromptType;
 use crate::context_chips::{self, ContextChipKind};
 use crate::features::FeatureFlag;
@@ -76,7 +74,6 @@ use crate::settings::{
     AISettings, AISettingsChangedEvent, PrivacySettings, PrivacySettingsChangedEvent,
 };
 use crate::settings_view::SettingsSection;
-use crate::terminal::cli_agent_sessions::listener::agent_supports_rich_status;
 #[cfg(not(target_family = "wasm"))]
 use crate::terminal::cli_agent_sessions::plugin_manager::{
     compare_versions, plugin_manager_for, plugin_manager_for_with_shell, CliAgentPluginManager,
@@ -117,15 +114,16 @@ use crate::workspace::ToastStack;
 use crate::workspace::WorkspaceAction;
 use crate::workspaces::user_workspaces::UserWorkspaces;
 
-const ENABLE_NLD_TOOLTIP: &str = "启用终端命令自动检测";
-const DISABLE_NLD_TOOLTIP: &str = "停用终端命令自动检测";
+const ENABLE_NLD_TOOLTIP: &str = "Enable terminal command autodetection";
+const DISABLE_NLD_TOOLTIP: &str = "Disable terminal command autodetection";
 
-const FAST_FORWARD_ON_TOOLTIP: &str = "关闭自动批准所有 Agent 操作";
-const FAST_FORWARD_OFF_TOOLTIP: &str = "自动批准此任务的所有 Agent 操作";
-const FAST_FORWARD_LOCKED_TOOLTIP: &str = "云端 Agent 对话始终启用快进";
+const FAST_FORWARD_ON_TOOLTIP: &str = "Turn off auto-approve all agent actions";
+const FAST_FORWARD_OFF_TOOLTIP: &str = "Auto-approve all agent actions for this task";
+const FAST_FORWARD_LOCKED_TOOLTIP: &str =
+    "Fast forward is always enabled for cloud agent conversations";
 
-const START_REMOTE_CONTROL_TOOLTIP: &str = "启动远程控制";
-const START_REMOTE_CONTROL_LOGIN_REQUIRED_TOOLTIP: &str = "登录后使用 /remote-control";
+const START_REMOTE_CONTROL_TOOLTIP: &str = "Start remote control";
+const START_REMOTE_CONTROL_LOGIN_REQUIRED_TOOLTIP: &str = "Log in to use /remote-control";
 
 const CLOUD_MODE_V2_FOOTER_GAP: f32 = 4.;
 
@@ -249,6 +247,10 @@ pub struct AgentInputFooter {
     #[cfg(feature = "voice_input")]
     cli_transcription_handle: Option<SpawnedFutureHandle>,
     v2_model_selector: Option<ViewHandle<ModelSelector>>,
+
+    /// Pending one-shot timer that refreshes the context-window button at the
+    /// prompt-cache expiry instant so the yellow tint appears while idle.
+    prompt_cache_expiry_timer_handle: Option<SpawnedFutureHandle>,
 }
 
 impl AgentInputFooter {
@@ -307,7 +309,7 @@ impl AgentInputFooter {
         let mic_button = ctx.add_typed_action_view(|_ctx| {
             let button = ActionButton::new("", ActiveMicButtonTheme)
                 .with_icon(Icon::Microphone)
-                .with_tooltip("语音输入")
+                .with_tooltip("Voice input")
                 .with_size(button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left);
             #[cfg(feature = "voice_input")]
@@ -343,7 +345,7 @@ impl AgentInputFooter {
         let file_button = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", AgentInputButtonTheme)
                 .with_icon(Icon::Plus)
-                .with_tooltip("附加文件")
+                .with_tooltip("Attach file")
                 .with_size(button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .on_click(|ctx| {
@@ -372,20 +374,20 @@ impl AgentInputFooter {
         let handoff_to_cloud_button = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", AgentInputButtonTheme)
                 .with_icon(Icon::UploadCloud)
-                .with_tooltip("交接到云端（或输入 &）")
+                .with_tooltip("Hand off to cloud (or type &)")
                 .with_size(button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .on_click(|ctx| {
-                    ctx.dispatch_typed_action(AgentInputFooterAction::OpenHandoffPane);
+                    ctx.dispatch_typed_action(AgentInputFooterAction::HandoffChipClicked);
                 })
         });
 
         // CLI agent-specific buttons (only rendered when a CLI agent session is active).
         let cli_button_size = ButtonSize::AgentInputButton;
         let file_explorer_button = ctx.add_typed_action_view(|ctx| {
-            ActionButton::new("文件浏览器", AgentInputButtonTheme)
+            ActionButton::new("File explorer", AgentInputButtonTheme)
                 .with_icon(Icon::FileCopy)
-                .with_tooltip("打开文件浏览器")
+                .with_tooltip("Open file explorer")
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_keybinding(
@@ -400,7 +402,7 @@ impl AgentInputFooter {
         let rich_input_button = ctx.add_typed_action_view(|ctx| {
             ActionButton::new("Rich Input", AgentInputButtonTheme)
                 .with_icon(Icon::TextInput)
-                .with_tooltip("打开 Rich Input")
+                .with_tooltip("Open Rich Input")
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_keybinding(
@@ -415,7 +417,7 @@ impl AgentInputFooter {
         let settings_button = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", AgentInputButtonTheme)
                 .with_icon(Icon::Settings)
-                .with_tooltip("打开编码 Agent 设置")
+                .with_tooltip("Open coding agent settings")
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .on_click(|ctx| {
@@ -424,9 +426,11 @@ impl AgentInputFooter {
         });
 
         let install_plugin_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("启用通知", InstallPluginButtonTheme)
+            ActionButton::new("Enable notifications", InstallPluginButtonTheme)
                 .with_icon(Icon::Download)
-                .with_tooltip("安装 Warp 插件以在 Warp 中启用丰富的 Agent 通知")
+                .with_tooltip(
+                    "Install the Warp plugin to enable rich agent notifications within Warp",
+                )
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_adjoined_side(AdjoinedSide::Right)
@@ -436,9 +440,9 @@ impl AgentInputFooter {
         });
 
         let plugin_instructions_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("通知设置说明", InstallPluginButtonTheme)
+            ActionButton::new("Notifications setup instructions", InstallPluginButtonTheme)
                 .with_icon(Icon::Info)
-                .with_tooltip("查看安装 Warp 插件的说明")
+                .with_tooltip("View instructions to install the Warp plugin")
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_adjoined_side(AdjoinedSide::Right)
@@ -450,9 +454,9 @@ impl AgentInputFooter {
         });
 
         let update_plugin_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("更新 Warp 插件", InstallPluginButtonTheme)
+            ActionButton::new("Update Warp plugin", InstallPluginButtonTheme)
                 .with_icon(Icon::Download)
-                .with_tooltip("Warp 插件有新版本可用")
+                .with_tooltip("A new version of the Warp plugin is available")
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_adjoined_side(AdjoinedSide::Right)
@@ -462,9 +466,9 @@ impl AgentInputFooter {
         });
 
         let update_instructions_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("插件更新说明", InstallPluginButtonTheme)
+            ActionButton::new("Plugin update instructions", InstallPluginButtonTheme)
                 .with_icon(Icon::Info)
-                .with_tooltip("查看更新 Warp 插件的说明")
+                .with_tooltip("View instructions to update the Warp plugin")
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_adjoined_side(AdjoinedSide::Right)
@@ -479,7 +483,7 @@ impl AgentInputFooter {
             ActionButton::new("", InstallPluginButtonTheme)
                 .with_icon(Icon::X)
                 .with_size(cli_button_size)
-                .with_tooltip("关闭")
+                .with_tooltip("Dismiss")
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_adjoined_side(AdjoinedSide::Left)
                 .on_click(|ctx| {
@@ -504,12 +508,12 @@ impl AgentInputFooter {
                     me.plugin_chip_ready = false;
                 }
 
-                // When a listener connects for an agent with rich status,
-                // the plugin is verified installed — hide the chip.
-                // (Codex always has a listener but no actual plugin to install.)
+                // When a structured plugin connects, the plugin is verified
+                // installed — hide the chip. Codex's OSC 9 fallback is not a
+                // structured plugin, so its chip stays until the plugin connects.
                 if CLIAgentSessionsModel::as_ref(ctx)
                     .session(me.terminal_view_id)
-                    .is_some_and(|s| s.listener.is_some() && agent_supports_rich_status(&s.agent))
+                    .is_some_and(|s| s.supports_rich_status())
                 {
                     me.plugin_chip_ready = false;
                 }
@@ -519,7 +523,7 @@ impl AgentInputFooter {
                 #[cfg(not(target_family = "wasm"))]
                 if let CLIAgentSessionsModelEvent::Started { .. } = event {
                     if let Some(agent) = me.cli_agent(ctx) {
-                        let label = format!("启用 {} 通知", agent.display_name());
+                        let label = format!("Enable {} notifications", agent.display_name());
                         me.install_plugin_button.update(ctx, |button, ctx| {
                             button.set_label(label, ctx);
                         });
@@ -530,10 +534,7 @@ impl AgentInputFooter {
                                     |me, _, ctx: &mut ViewContext<Self>| {
                                         let suppress = CLIAgentSessionsModel::as_ref(ctx)
                                             .session(me.terminal_view_id)
-                                            .is_some_and(|s| {
-                                                s.listener.is_some()
-                                                    && agent_supports_rich_status(&s.agent)
-                                            });
+                                            .is_some_and(|s| s.supports_rich_status());
                                         if !suppress {
                                             me.plugin_chip_ready = true;
                                             ctx.notify();
@@ -555,8 +556,8 @@ impl AgentInputFooter {
                 let is_open = matches!(new_input_state, CLIAgentInputState::Open { .. });
                 me.rich_input_button.update(ctx, |button, ctx| {
                     if is_open {
-                        button.set_label("隐藏 Rich Input", ctx);
-                        button.set_tooltip(Some("隐藏 Rich Input"), ctx);
+                        button.set_label("Hide Rich Input", ctx);
+                        button.set_tooltip(Some("Hide Rich Input"), ctx);
                         button.set_keybinding(
                             Some(KeystrokeSource::Binding(
                                 OPEN_CLI_AGENT_RICH_INPUT_KEYBINDING,
@@ -565,7 +566,7 @@ impl AgentInputFooter {
                         );
                     } else {
                         button.set_label("Rich Input", ctx);
-                        button.set_tooltip(Some("打开 Rich Input"), ctx);
+                        button.set_tooltip(Some("Open Rich Input"), ctx);
                         button.set_keybinding(
                             Some(KeystrokeSource::Binding(
                                 OPEN_CLI_AGENT_RICH_INPUT_KEYBINDING,
@@ -590,10 +591,10 @@ impl AgentInputFooter {
         });
 
         let stop_remote_control_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("停止共享", RemoteControlButtonTheme)
+            ActionButton::new("Stop sharing", RemoteControlButtonTheme)
                 .with_icon(Icon::StopFilled)
                 .with_icon_ansi_color(AnsiColorIdentifier::Red)
-                .with_tooltip("停止共享")
+                .with_tooltip("Stop sharing")
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .on_click(|ctx| {
@@ -604,7 +605,7 @@ impl AgentInputFooter {
         let context_window_button = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", AgentInputButtonTheme)
                 .with_icon(Icon::ConversationContext0)
-                .with_tooltip("上下文窗口用量")
+                .with_tooltip("Context window usage")
                 .with_size(button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
         });
@@ -876,6 +877,7 @@ impl AgentInputFooter {
                     })
             }),
             v2_model_selector,
+            prompt_cache_expiry_timer_handle: None,
         };
         me.sync_fast_forward_button(ctx);
         me.sync_remote_control_button(ctx);
@@ -979,13 +981,16 @@ impl AgentInputFooter {
             }
         }
 
-        Flex::row()
+        let content = Flex::row()
             .with_main_axis_size(MainAxisSize::Max)
             .with_main_axis_alignment(MainAxisAlignment::SpaceBetween)
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
+            .with_spacing(CLOUD_MODE_V2_FOOTER_GAP)
             .with_child(left.finish())
             .with_child(right.finish())
-            .finish()
+            .finish();
+
+        Clipped::new(content).finish()
     }
 
     fn all_display_chips(&self) -> impl Iterator<Item = &ViewHandle<DisplayChip>> {
@@ -1081,10 +1086,9 @@ impl AgentInputFooter {
             let manager = plugin_manager_for(session.agent)?;
             let min_version = manager.minimum_plugin_version();
             let chip_key = plugin_chip_key(session.agent.command_prefix(), &session.remote_host);
-
-            // If the plugin is connected (listener present) and this agent supports
+            // If a structured plugin is connected and this agent supports
             // version-based updates, check the reported version.
-            if session.listener.is_some() && manager.supports_update() {
+            if session.supports_rich_status() && manager.supports_update() {
                 let needs_update = match &session.plugin_version {
                     // No version reported = pre-versioning plugin, definitely outdated.
                     None => true,
@@ -1198,7 +1202,9 @@ impl AgentInputFooter {
         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
             toast_stack.add_ephemeral_toast(
                 DismissibleToast::error(
-                    "无法自动安装插件。请再次点击组件以查看手动安装步骤。".to_owned(),
+                    "Could not automatically install plugin. \
+                     Please click the chip again for manual installation steps."
+                        .to_owned(),
                 ),
                 window_id,
                 ctx,
@@ -1346,7 +1352,7 @@ impl AgentInputFooter {
                                 DismissibleToast::error(format!("{error_label}: {err}"));
                             if let Some(log_path) = log_path {
                                 toast = toast.with_link(
-                                    ToastLink::new("查看日志了解详情".to_owned())
+                                    ToastLink::new("See logs for details".to_owned())
                                         .with_onclick_action(WorkspaceAction::OpenFilePath {
                                             path: log_path,
                                         }),
@@ -1373,10 +1379,10 @@ impl AgentInputFooter {
             .cli_agent(ctx)
             .and_then(plugin_manager_for)
             .map(|m| m.install_success_message())
-            .unwrap_or("Warp 插件已安装。请重启会话以激活。");
+            .unwrap_or("Warp plugin installed. Please restart the session to activate.");
         self.handle_plugin_operation(
-            "正在安装 Warp 插件...",
-            "无法安装 Warp 插件",
+            "Installing Warp plugin...",
+            "Failed to install Warp plugin",
             success_msg,
             PluginChipTelemetryKind::Install,
             |manager| async move { manager.install().await },
@@ -1390,10 +1396,10 @@ impl AgentInputFooter {
             .cli_agent(ctx)
             .and_then(plugin_manager_for)
             .map(|m| m.update_success_message())
-            .unwrap_or("Warp 插件已更新。请重启会话以激活。");
+            .unwrap_or("Warp plugin updated. Please restart the session to activate.");
         self.handle_plugin_operation(
-            "正在更新 Warp 插件...",
-            "无法更新 Warp 插件",
+            "Updating Warp plugin...",
+            "Failed to update Warp plugin",
             success_msg,
             PluginChipTelemetryKind::Update,
             |manager| async move { manager.update().await },
@@ -1767,7 +1773,7 @@ impl AgentInputFooter {
         match &self.cli_voice_input_state {
             CLIVoiceInputState::Stopped => {
                 if !crate::ai::AIRequestUsageModel::as_ref(ctx).can_request_voice() {
-                    self.show_cli_voice_error_toast("已达到语音输入限制", ctx);
+                    self.show_cli_voice_error_toast("Voice input limit reached", ctx);
                     return;
                 }
 
@@ -1883,11 +1889,11 @@ impl AgentInputFooter {
             }
             Err(e) => match e {
                 TranscribeError::QuotaLimit => {
-                    self.show_cli_voice_error_toast("已达到语音输入限制", ctx);
+                    self.show_cli_voice_error_toast("Voice input limit reached", ctx);
                 }
                 _ => {
                     log::error!("Failed to transcribe CLI voice input: {e:?}");
-                    self.show_cli_voice_error_toast("无法转写语音输入", ctx);
+                    self.show_cli_voice_error_toast("Failed to transcribe voice input", ctx);
                 }
             },
         }
@@ -1928,7 +1934,7 @@ impl AgentInputFooter {
         let window_id = ctx.window_id();
         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
             let toast = DismissibleToast::error(String::from(
-                "无法启动语音输入（你可能需要启用麦克风访问权限）",
+                "Failed to start voice input (you may need to enable Microphone access)",
             ));
             toast_stack.add_ephemeral_toast(toast, window_id, ctx);
         });
@@ -1941,7 +1947,7 @@ impl AgentInputFooter {
             if let Some(toggle_key) = settings.maybe_setup_first_time_voice(ctx) {
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     let toast = DismissibleToast::success(format!(
-                        "语音输入已启用。你也可以按住 `{}` 键激活语音输入（在“设置 > AI > 语音”中配置）",
+                        "Voice input is enabled. You can also press and hold the `{}` key to activate voice input (configure in Settings > AI > Voice)",
                         toggle_key.display_name()
                     ));
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
@@ -2013,13 +2019,62 @@ impl AgentInputFooter {
             let usage = conversation.context_window_usage();
             let icon = icon_for_context_window_usage(usage);
             let remaining_pct = ((1.0 - usage) * 100.0).round() as i32;
-            let tooltip = format!("剩余 {remaining_pct}% 上下文");
+
+            let expiry = conversation.latest_exchange().and_then(|exchange| {
+                let output = exchange.output_status.output()?;
+                output.get().model_info.as_ref()?.prompt_cache_expires_at
+            });
+            let is_cache_expired = FeatureFlag::PromptCacheExpiryWarning.is_enabled()
+                && expiry.is_some_and(|expiry| expiry <= Local::now());
+            let context_remaining_tooltip = format!("{remaining_pct}% context remaining");
+            let tooltip = if is_cache_expired {
+                format!("{context_remaining_tooltip} · prompt cache expired")
+            } else {
+                context_remaining_tooltip
+            };
 
             self.context_window_button.update(ctx, |button, ctx| {
                 button.set_icon(Some(icon), ctx);
+                if is_cache_expired {
+                    button.set_theme(WarningAgentInputButtonTheme, ctx);
+                } else {
+                    button.set_theme(AgentInputButtonTheme, ctx);
+                }
                 button.set_tooltip(Some(tooltip), ctx);
             });
+
+            self.reschedule_prompt_cache_expiry_timer(expiry, ctx);
         }
+    }
+
+    /// Schedules a refresh of the context-window button at the prompt-cache
+    /// expiry instant so the yellow tint appears while the conversation is idle.
+    fn reschedule_prompt_cache_expiry_timer(
+        &mut self,
+        expiry: Option<DateTime<Local>>,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        if let Some(handle) = self.prompt_cache_expiry_timer_handle.take() {
+            handle.abort();
+        }
+        if !FeatureFlag::PromptCacheExpiryWarning.is_enabled() {
+            return;
+        }
+        // Only future expiries need a timer; past ones already render as expired.
+        let Some(delay) = expiry.and_then(|expiry| (expiry - Local::now()).to_std().ok()) else {
+            return;
+        };
+        let handle = ctx.spawn(
+            async move {
+                Timer::after(delay).await;
+            },
+            |me, _, ctx| {
+                me.prompt_cache_expiry_timer_handle = None;
+                me.update_context_window_button(ctx);
+                ctx.notify();
+            },
+        );
+        self.prompt_cache_expiry_timer_handle = Some(handle);
     }
 
     fn render_toolbar_item(
@@ -2315,7 +2370,7 @@ fn render_ftu_callout(
                     Expanded::new(
                         1.,
                         Text::new(
-                            "现在使用 Full Terminal Agent 的默认模型。",
+                            "Now using Full Terminal Agent's default model.",
                             appearance.ui_font_family(),
                             appearance.monospace_font_size() - 2.,
                         )
@@ -2400,9 +2455,10 @@ pub enum AgentInputFooterAction {
     StartRemoteControl,
     StopRemoteControl,
     OpenCodingAgentSettings,
-    /// Open the local-to-cloud handoff pane. Dispatched by the
-    /// "Hand off to cloud" footer chip.
-    OpenHandoffPane,
+    /// User clicked the "Hand off to cloud" footer chip. The terminal `Input`
+    /// subscriber decides whether to dispatch the immediate empty-prompt
+    /// handoff or enter `&` compose mode based on the current input state.
+    HandoffChipClicked,
     ShowContextMenu {
         position: Vector2F,
     },
@@ -2599,12 +2655,16 @@ impl TypedActionView for AgentInputFooter {
                     widget_id: crate::settings_view::cli_agent_settings_widget_id(),
                 });
             }
-            AgentInputFooterAction::OpenHandoffPane => {
+            AgentInputFooterAction::HandoffChipClicked => {
                 if FeatureFlag::OzHandoff.is_enabled()
                     && FeatureFlag::HandoffLocalCloud.is_enabled()
                     && cfg!(all(feature = "local_fs", not(target_family = "wasm")))
                 {
-                    ctx.emit(AgentInputFooterEvent::OpenHandoffPane);
+                    // The terminal `Input` subscriber decides what to do with
+                    // the chip click — auto-handoff when the input buffer is
+                    // empty and the source conversation has content, or `&`
+                    // compose mode otherwise (preserving any in-flight prompt).
+                    ctx.emit(AgentInputFooterEvent::HandoffChipClicked);
                 }
             }
             AgentInputFooterAction::ShowContextMenu { position } => {
@@ -2632,7 +2692,7 @@ pub enum AgentInputFooterEvent {
     ToggledChipMenu {
         open: bool,
     },
-    TryExecuteChipCommand(String),
+    TryExecuteChipCommand(PromptChipShellCommand),
     PromptAlert(PromptAlertEvent),
     ModelSelectorOpened,
     ModelSelectorClosed,
@@ -2654,8 +2714,10 @@ pub enum AgentInputFooterEvent {
     #[cfg(not(target_family = "wasm"))]
     OpenPluginInstructionsPane(CLIAgent, PluginModalKind),
     /// Local-to-cloud handoff chip clicked. The terminal `Input` subscriber
-    /// activates `&` handoff-compose mode on the local input.
-    OpenHandoffPane,
+    /// either dispatches the immediate empty-prompt handoff (empty buffer +
+    /// source conversation with content) or activates `&` compose mode
+    /// (preserving any in-flight prompt).
+    HandoffChipClicked,
 }
 
 impl Entity for AgentInputFooter {
@@ -2806,6 +2868,43 @@ impl ActionButtonTheme for InstallPluginButtonTheme {
 
     fn should_opt_out_of_contrast_adjustment(&self) -> bool {
         true
+    }
+}
+
+/// Yellow-tinted variant of [`AgentInputButtonTheme`] used to flag a warning
+/// state on an input chip (e.g. expired prompt cache); slightly darker on hover.
+struct WarningAgentInputButtonTheme;
+
+impl ActionButtonTheme for WarningAgentInputButtonTheme {
+    fn background(&self, hovered: bool, appearance: &Appearance) -> Option<Fill> {
+        let yellow = appearance.theme().ansi_fg_yellow();
+        let base = appearance.theme().surface_1();
+        Some(if hovered {
+            base.blend(&Fill::Solid(yellow).with_opacity(45))
+        } else {
+            base.blend(&Fill::Solid(yellow).with_opacity(30))
+        })
+    }
+
+    fn text_color(
+        &self,
+        hovered: bool,
+        background: Option<Fill>,
+        appearance: &Appearance,
+    ) -> ColorU {
+        AgentInputButtonTheme.text_color(hovered, background, appearance)
+    }
+
+    fn border(&self, appearance: &Appearance) -> Option<ColorU> {
+        AgentInputButtonTheme.border(appearance)
+    }
+
+    fn should_opt_out_of_contrast_adjustment(&self) -> bool {
+        AgentInputButtonTheme.should_opt_out_of_contrast_adjustment()
+    }
+
+    fn font_properties(&self) -> Option<warpui::fonts::Properties> {
+        AgentInputButtonTheme.font_properties()
     }
 }
 

@@ -102,41 +102,46 @@ use crate::workspaces::workspace::CustomerType;
 
 pub const STATUS_ICON_SIZE_DELTA: f32 = 4.;
 pub const STATUS_FOOTER_VERTICAL_PADDING: f32 = 4.;
-pub const WAITING_FOR_USER_INPUT_MESSAGE: &str = "Agent 正在等待指令...";
+pub const WAITING_FOR_USER_INPUT_MESSAGE: &str = "Agent waiting for instructions...";
 const IMAGE_SOURCE_LINK_LINE_INDEX: usize = 1;
 
-const ERROR_APOLOGY_TEXT: &str = "抱歉，我无法完成该请求。";
-const INTERNAL_WARP_ERROR: &str = "内部 Warp 错误。";
+const ERROR_APOLOGY_TEXT: &str = "I'm sorry, I couldn't complete that request.";
+const INTERNAL_WARP_ERROR: &str = "Internal Warp error.";
 
-pub const LOAD_OUTPUT_MESSAGE: &str = "正在 Warp...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_ADJUSTING: &str = "正在调整任务...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_PASSIVE_CODE_GEN: &str = "正在生成修复...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_CREATING_DIFF: &str = "正在创建 diff...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_PREPARING_QUESTION: &str = "正在准备问题...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_GENERATING_PLAN: &str = "正在生成计划...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_UPDATING_PLAN: &str = "正在更新计划...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_CONVERSATION: &str = "正在总结对话...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_TOOL_CALL_RESULT: &str = "正在总结命令输出...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_SEARCH_CODEBASE: &str = "正在搜索代码库...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_READING_FILES: &str = "正在读取文件...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_GREP: &str = "正在 Grep...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_FILE_GLOB: &str = "正在查找文件...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_RUNNING_COMMAND: &str = "正在执行命令...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_WRITING_TO_COMMAND: &str = "正在写入命令输入...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_WAITING_FOR_COMMAND_COMPLETION: &str = "正在等待命令退出...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_WEB_SEARCH: &str = "正在搜索网页...";
-pub const LOAD_OUTPUT_MESSAGE_FOR_FETCHING_REVIEW_COMMENTS: &str = "正在获取 PR 评论...";
+pub const LOAD_OUTPUT_MESSAGE: &str = "Warping...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_ADJUSTING: &str = "Adjusting tasks...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_PASSIVE_CODE_GEN: &str = "Generating fix...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_CREATING_DIFF: &str = "Creating diff...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_PREPARING_QUESTION: &str = "Preparing question...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_GENERATING_PLAN: &str = "Generating plan...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_UPDATING_PLAN: &str = "Updating plan...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_CONVERSATION: &str = "Summarizing conversation...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_TOOL_CALL_RESULT: &str =
+    "Summarizing command output...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_SEARCH_CODEBASE: &str = "Searching codebase...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_READING_FILES: &str = "Reading files...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_GREP: &str = "Grepping...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_FILE_GLOB: &str = "Finding files...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_RUNNING_COMMAND: &str = "Executing command...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_WRITING_TO_COMMAND: &str = "Writing command input...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_WAITING_FOR_COMMAND_COMPLETION: &str =
+    "Waiting for command to exit...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_WEB_SEARCH: &str = "Searching the web...";
+pub const LOAD_OUTPUT_MESSAGE_FOR_FETCHING_REVIEW_COMMENTS: &str = "Fetching PR comments...";
 
 #[cfg(feature = "local_fs")]
 pub(crate) type ResolvedBlocklistImageSources = HashMap<String, Option<AssetSource>>;
 
 pub const BLOCKED_ACTION_MESSAGE_FOR_WRITE_TO_LONG_RUNNING_SHELL_COMMAND: &str =
-    "可以将以下内容写入这个正在运行的命令吗？";
-pub const BLOCKED_ACTION_MESSAGE_FOR_READING_FILES: &str = "允许访问以下文件吗？";
-pub const BLOCKED_ACTION_MESSAGE_FOR_SEARCHING_CODEBASE: &str = "允许访问以下仓库吗？";
-pub const BLOCKED_ACTION_MESSAGE_FOR_GREP_OR_FILE_GLOB: &str = "可以搜索此目录中的文件吗？";
+    "Can I write the following to this running command?";
+pub const BLOCKED_ACTION_MESSAGE_FOR_READING_FILES: &str = "Grant access to the following files?";
+pub const BLOCKED_ACTION_MESSAGE_FOR_SEARCHING_CODEBASE: &str =
+    "Grant access to the following repository?";
+pub const BLOCKED_ACTION_MESSAGE_FOR_GREP_OR_FILE_GLOB: &str =
+    "OK if I search the files in this directory?";
 
 const BLOCKLIST_VISUAL_SECTION_HEIGHT_LINE_MULTIPLIER: f32 = 10.0;
+const BLOCKLIST_MERMAID_MAX_HEIGHT_LINE_MULTIPLIER: f32 = 40.0;
 const INLINE_IMAGE_HEIGHT: f32 = 164.;
 const INLINE_IMAGE_MAX_WIDTH: f32 = 218.;
 const INLINE_IMAGE_SPACING: f32 = 32.;
@@ -341,10 +346,10 @@ pub fn render_warping_indicator<V: View>(
             }
             Some(AIAgentActionType::Grep { .. }) => LOAD_OUTPUT_MESSAGE_FOR_GREP.to_owned(),
             Some(AIAgentActionType::CallMCPTool { name, .. }) => {
-                format!("正在调用 “{name}” MCP 工具...")
+                format!("Calling \"{name}\" MCP tool...")
             }
             Some(AIAgentActionType::ReadMCPResource { name, .. }) => {
-                format!("正在读取 “{name}” MCP 资源...")
+                format!("Reading \"{name}\" MCP resource...")
             }
             Some(AIAgentActionType::FileGlob { .. })
             | Some(AIAgentActionType::FileGlobV2 { .. }) => {
@@ -393,11 +398,11 @@ pub fn render_warping_indicator<V: View>(
                         if let Some(remaining) = next_check_remaining {
                             let secs = remaining.as_secs();
                             let formatted = if secs < 60 {
-                                format!("{secs}秒")
+                                format!("{secs}s")
                             } else {
                                 format!("{}m", secs / 60)
                             };
-                            let suffix = format!(" · 下次检查将在 {formatted} 后");
+                            let suffix = format!(" · Next check in {formatted}");
 
                             // Keep the base message constant so the shimmering animation
                             // isn't interrupted every time the countdown ticks. The
@@ -433,8 +438,8 @@ pub fn render_warping_indicator<V: View>(
     if let Some(take_over_button_props) = props.take_over_lrc_control_button {
         has_buttons = true;
         buttons_row.add_child(render_switch_control_to_user_button(
-            "接管",
-            "接管命令控制权",
+            "Take over",
+            "Take over control of the command",
             take_over_button_props,
             appearance,
         ));
@@ -661,9 +666,9 @@ pub fn render_warping_indicator_base(
 pub fn format_elapsed_seconds(elapsed: std::time::Duration) -> String {
     let total_seconds = elapsed.as_secs();
     if total_seconds == 1 {
-        "1 秒".to_string()
+        "1 second".to_string()
     } else {
-        format!("{total_seconds} 秒")
+        format!("{total_seconds} seconds")
     }
 }
 
@@ -744,9 +749,9 @@ fn render_hide_responses_button(
 ) -> Box<dyn Element> {
     let theme = appearance.theme();
     let button_text = if should_hide_responses {
-        "显示回复"
+        "Show responses"
     } else {
-        "隐藏回复"
+        "Hide responses"
     };
     let text = Container::new(
         Text::new(
@@ -760,9 +765,9 @@ fn render_hide_responses_button(
     .finish();
 
     let tooltip_text = if should_hide_responses {
-        "显示 Agent 回复"
+        "Show agent responses"
     } else {
-        "隐藏 Agent 回复"
+        "Hide agent responses"
     };
 
     render_warping_indicator_button(
@@ -826,7 +831,7 @@ fn render_stop_button(props: ButtonProps, appearance: &Appearance) -> Box<dyn El
         appearance,
         stop_icon,
         props.keystroke,
-        "停止 Agent 任务".to_string(),
+        "Stop agent task".to_string(),
         props.is_active,
         false,
         |ctx: &mut EventContext<'_>| {
@@ -854,9 +859,9 @@ fn render_queue_next_prompt_button(
     .finish();
 
     let tooltip_text = if props.is_active {
-        "自动排队已开启：你的下一条提示将加入队列"
+        "Auto-queue is on: your next prompt will be queued"
     } else {
-        "Agent 回复时自动排队下一条提示"
+        "Auto-queue next prompt while agent is responding"
     };
 
     render_warping_indicator_button(
@@ -898,11 +903,11 @@ fn render_auto_approve_button(
     .finish();
 
     let tooltip_text = if props.is_locked {
-        "云端 Agent 对话始终启用快进"
+        "Fast forward is always enabled for cloud agent conversations"
     } else if is_active {
-        "关闭自动批准所有 Agent 操作"
+        "Turn off auto-approve all agent actions"
     } else {
-        "自动批准此任务的所有 Agent 操作"
+        "Auto-approve all agent actions for this task"
     };
 
     render_warping_indicator_button(
@@ -956,7 +961,7 @@ fn render_force_refresh_inline(
         // Mirror `render_output_status_text` exactly: same `Text` configuration plus
         // the `Container::with_margin_top(1.)` wrapper so this sits on the same
         // baseline as the adjacent `Last seen by agent ...` text.
-        let text = Text::new(" · 立即检查".to_string(), font_family, font_size)
+        let text = Text::new(" · Check now".to_string(), font_family, font_size)
             .with_color(color)
             .with_style(Properties::default())
             .with_clip(ClipConfig::end())
@@ -970,7 +975,7 @@ fn render_force_refresh_inline(
         let mut stack = Stack::new().with_child(text_with_margin);
         if state.is_hovered() {
             let tool_tip = ui_builder
-                .tool_tip("让 Agent 立即检查此命令，跳过计时器。".to_owned())
+                .tool_tip("Ask the agent to check this command now, skipping its timer.".to_owned())
                 .build()
                 .finish();
             stack.add_positioned_overlay_child(
@@ -1749,12 +1754,26 @@ enum VisualMarkdownAlignment {
     Center,
 }
 
+/// How a visual markdown block (image or mermaid diagram) is sized.
+#[derive(Clone, Copy, Debug)]
+enum VisualMarkdownSizing {
+    /// Fixed element height. Width is fixed when `width` is set, otherwise
+    /// bounded by `max_width`, otherwise falls back to a square of `height`.
+    FixedHeight {
+        height: f32,
+        width: Option<f32>,
+        max_width: Option<f32>,
+    },
+    /// Fill the available width, deriving the element height from the
+    /// image's intrinsic aspect ratio, capped at `max_height`. When the cap
+    /// applies, the width shrinks proportionally instead of letterboxing.
+    FitWidth { max_height: f32 },
+}
+
 #[derive(Clone)]
 struct VisualMarkdownBlockOptions<A: 'static> {
-    height: f32,
-    width: Option<f32>,
+    sizing: VisualMarkdownSizing,
     copy_action_factory: Option<CopyCodeActionFactory<A>>,
-    max_width: Option<f32>,
     alignment: VisualMarkdownAlignment,
     lightbox_trigger: Option<VisualMarkdownLightboxTrigger>,
     /// When `Some(non_empty)`, the rendered image is wrapped in the standard
@@ -1965,10 +1984,12 @@ fn render_inline_image_group_item<A: Action>(
         asset_source,
         indexed_image.image.markdown_source.clone(),
         VisualMarkdownBlockOptions {
-            height: INLINE_IMAGE_HEIGHT,
-            width: Some(width),
+            sizing: VisualMarkdownSizing::FixedHeight {
+                height: INLINE_IMAGE_HEIGHT,
+                width: Some(width),
+                max_width: None,
+            },
             copy_action_factory: render_context.copy_action_factory,
-            max_width: None,
             alignment: VisualMarkdownAlignment::Left,
             lightbox_trigger: lightbox_trigger_for_section(
                 render_context.lightbox_collection,
@@ -2058,10 +2079,12 @@ fn render_block_image_group_row<A: Action>(
         asset_source,
         indexed_image.image.markdown_source.clone(),
         VisualMarkdownBlockOptions {
-            height: BLOCK_IMAGE_THUMBNAIL_SIZE,
-            width: Some(BLOCK_IMAGE_THUMBNAIL_SIZE),
+            sizing: VisualMarkdownSizing::FixedHeight {
+                height: BLOCK_IMAGE_THUMBNAIL_SIZE,
+                width: Some(BLOCK_IMAGE_THUMBNAIL_SIZE),
+                max_width: None,
+            },
             copy_action_factory: render_context.copy_action_factory,
-            max_width: None,
             alignment: VisualMarkdownAlignment::Center,
             lightbox_trigger: lightbox_trigger_for_section(
                 render_context.lightbox_collection,
@@ -2122,14 +2145,23 @@ fn render_mermaid_diagram_section<A: Action>(
     }
     let appearance = Appearance::as_ref(app);
     let theme = appearance.theme();
+    let sizing = if matches!(asset_state, AssetState::Loaded { .. }) {
+        VisualMarkdownSizing::FitWidth {
+            max_height: mermaid_section_max_height(app),
+        }
+    } else {
+        VisualMarkdownSizing::FixedHeight {
+            height: visual_section_height(app),
+            width: None,
+            max_width: None,
+        }
+    };
     let mermaid_block = render_visual_markdown_block(
         asset_source,
         diagram.markdown_source.clone(),
         VisualMarkdownBlockOptions {
-            height: visual_section_height(app),
-            width: None,
+            sizing,
             copy_action_factory,
-            max_width: visual_section_max_width(&asset_state, visual_section_height(app)),
             alignment: VisualMarkdownAlignment::Center,
             lightbox_trigger: lightbox_trigger_for_section(lightbox_collection, section_index),
             // Mermaid diagrams don't carry CommonMark image titles.
@@ -2144,7 +2176,7 @@ fn render_mermaid_diagram_section<A: Action>(
         .finish();
 
     render_visual_card(
-        "Mermaid 图表".to_string(),
+        "Mermaid diagram".to_string(),
         Icon::Dataflow,
         Container::new(mermaid_canvas)
             .with_background(theme.background())
@@ -2190,15 +2222,30 @@ fn render_visual_markdown_block<A: Action>(
         .contain()
         .before_load(placeholder)
         .with_corner_radius(CornerRadius::with_all(Radius::Pixels(8.)));
-    let mut content = ConstrainedBox::new(Box::new(image)).with_height(options.height);
-    if let Some(width) = finite_positive_visual_size(options.width) {
-        content = content.with_width(width);
-    } else if let Some(max_width) = finite_positive_visual_size(options.max_width) {
-        content = content.with_max_width(max_width);
-    } else if let Some(fallback_width) = finite_positive_visual_size(Some(options.height)) {
-        content = content.with_width(fallback_width);
-    }
-    let content = content.finish();
+    let content = match options.sizing {
+        VisualMarkdownSizing::FixedHeight {
+            height,
+            width,
+            max_width,
+        } => {
+            let mut content = ConstrainedBox::new(Box::new(image)).with_height(height);
+            if let Some(width) = finite_positive_visual_size(width) {
+                content = content.with_width(width);
+            } else if let Some(max_width) = finite_positive_visual_size(max_width) {
+                content = content.with_max_width(max_width);
+            } else if let Some(fallback_width) = finite_positive_visual_size(Some(height)) {
+                content = content.with_width(fallback_width);
+            }
+            content.finish()
+        }
+        VisualMarkdownSizing::FitWidth { max_height } => {
+            let mut content = ConstrainedBox::new(Box::new(image.layout_using_paint_bounds()));
+            if let Some(max_height) = finite_positive_visual_size(Some(max_height)) {
+                content = content.with_max_height(max_height);
+            }
+            content.finish()
+        }
+    };
     let content = match options.alignment {
         VisualMarkdownAlignment::Left => Align::new(content).left().finish(),
         VisualMarkdownAlignment::Center => Align::new(content).finish(),
@@ -2355,10 +2402,17 @@ fn is_supported_blocklist_image_source(source: &str) -> bool {
 }
 
 fn visual_section_height(app: &AppContext) -> f32 {
+    blocklist_base_line_height(app) * BLOCKLIST_VISUAL_SECTION_HEIGHT_LINE_MULTIPLIER
+}
+
+fn mermaid_section_max_height(app: &AppContext) -> f32 {
+    blocklist_base_line_height(app) * BLOCKLIST_MERMAID_MAX_HEIGHT_LINE_MULTIPLIER
+}
+
+fn blocklist_base_line_height(app: &AppContext) -> f32 {
     rich_text_styles(Appearance::as_ref(app), FontSettings::as_ref(app))
         .base_line_height()
         .as_f32()
-        * BLOCKLIST_VISUAL_SECTION_HEIGHT_LINE_MULTIPLIER
 }
 
 const TABLE_BLOCK_CORNER_RADIUS: f32 = 8.0;
@@ -2982,6 +3036,16 @@ pub struct FailedOutputProps<'a> {
 pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<dyn Element> {
     let appearance = Appearance::as_ref(app);
 
+    // While an automatic retry/resume is still in flight, don't surface the underlying
+    // transport failure at all. These are typically transient and recover on their own,
+    // so showing the alarming "Warp lost connection" banner (plus debug info) for every
+    // blip is noisy and misleading. Render nothing during in-flight recovery; the full
+    // error banner is only shown once recovery has actually failed. Dogfood builds
+    // (Local/Dev) opt out so developers still see every transport failure aggressively.
+    if props.error.should_suppress_during_recovery() {
+        return Empty::new().finish();
+    }
+
     let error_text = match props.error {
         RenderableAIError::QuotaLimit {
             user_display_message,
@@ -2996,28 +3060,26 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
                     .to_string();
 
                 format!(
-                    "{ERROR_APOLOGY_TEXT}nn你已达到点数上限。点数上限将在 {formatted_next_refresh_time} 重置。",
+                    "{ERROR_APOLOGY_TEXT}\n\nYou've reached your credit limit. Your credit limit resets on {formatted_next_refresh_time}.",
                 )
             }
         }
-        RenderableAIError::ServerOverloaded => "Warp 当前负载过高。请稍后再试。".to_string(),
+        RenderableAIError::ServerOverloaded => {
+            "Warp is currently overloaded. Please try again later.".to_string()
+        }
         RenderableAIError::InternalWarpError => {
             format!("{ERROR_APOLOGY_TEXT}\n\n{INTERNAL_WARP_ERROR}")
         }
-        RenderableAIError::Other {
-            error_message,
-            will_attempt_resume,
-            waiting_for_network,
-        } => {
-            if *will_attempt_resume {
-                if *waiting_for_network {
-                    format!("{error_message}nn网络连接恢复后将继续对话...")
-                } else {
-                    format!("{error_message}nn正在尝试继续对话...")
-                }
-            } else {
-                format!("{ERROR_APOLOGY_TEXT}\n\n{error_message}")
-            }
+        RenderableAIError::Other { error_message, .. } => {
+            // A still-recovering `Other` error is handled by the early return above; once we
+            // reach here recovery has failed, so surface the error directly.
+            format!("{ERROR_APOLOGY_TEXT}\n\n{error_message}")
+        }
+        RenderableAIError::TransientNetworkError { .. } => {
+            // Recovering transient errors are handled by the early return above; once we
+            // reach here recovery has failed. These carry their own complete user-facing
+            // copy (plus debug info), so the apology prefix adds nothing.
+            props.error.to_string()
         }
         RenderableAIError::InvalidApiKey {
             provider,
@@ -3044,7 +3106,8 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
             }
             // Fallback for contexts that don't have the stateful view (e.g. CLI subagent)
             format!(
-                "{ERROR_APOLOGY_TEXT}nn用于 {model_name} 的 AWS 凭据已过期或缺失。请刷新 AWS 凭据。"
+                "{ERROR_APOLOGY_TEXT}\n\nAWS credentials expired or missing for {model_name}. \
+                 Please refresh your AWS credentials."
             )
         }
     };
@@ -3111,13 +3174,20 @@ fn render_invalid_api_key_error(
     .with_height(icon_size(app))
     .finish();
 
-    let alert_text = Text::new("提供的 API 密钥无效", appearance.ui_font_family(), 14.)
-        .with_color(error_color(appearance.theme()))
-        .with_selectable(false)
-        .finish();
+    let alert_text = Text::new(
+        "Provided API key is not valid",
+        appearance.ui_font_family(),
+        14.,
+    )
+    .with_color(error_color(appearance.theme()))
+    .with_selectable(false)
+    .finish();
 
     let detail_text = Text::new(
-        format!("使用 {model_name} 时未能通过 {provider} 认证。请再次确认 API 密钥是否正确。"),
+        format!(
+            "Failed to authenticate with {provider} when using {model_name}. \
+                     Double-check that your API key is correct."
+        ),
         appearance.ui_font_family(),
         14.,
     )
@@ -3146,12 +3216,12 @@ fn render_invalid_api_key_error(
             background: Some(internal_colors::fg_overlay_3(theme).into()),
             ..Default::default()
         })
-        .with_text_label("编辑 API 密钥".to_string())
+        .with_text_label("Edit API Keys".to_string())
         .with_cursor(Some(Cursor::PointingHand))
         .build()
         .on_click(move |ctx, _, _| {
             ctx.dispatch_typed_action(WorkspaceAction::ShowSettingsPageWithSearch {
-                search_query: "API 密钥".to_string(),
+                search_query: "api keys".to_string(),
                 section: Some(SettingsSection::WarpAgent),
             });
         })
@@ -3279,7 +3349,7 @@ pub(crate) fn render_debug_footer<V: View>(
                     warpui::ui_components::button::ButtonVariant::Text,
                     props.submit_issue_button_handle,
                 )
-                .with_centered_text_label("发送反馈".to_string())
+                .with_centered_text_label("Send Feedback".to_string())
                 .with_style(submit_button_style)
                 .with_hovered_styles(submit_button_hover_style)
                 .with_clicked_styles(submit_button_hover_style)
@@ -3295,7 +3365,7 @@ pub(crate) fn render_debug_footer<V: View>(
 
     // render the conversation's debug id so screenshots automatically show the debug id
     let debug_text = Text::new(
-        format!("调试信息：{debug_info}"),
+        format!("Debug information: {debug_info}"),
         appearance.ui_font_family(),
         appearance.monospace_font_size(),
     )
@@ -3339,7 +3409,7 @@ pub(crate) fn render_debug_footer<V: View>(
     })
     .finish();
     let copy_button_with_tooltip = appearance.ui_builder().tool_tip_on_element(
-        "复制调试 ID".to_string(),
+        "Copy debug ID".to_string(),
         props.debug_copy_button_handle,
         copy_button,
         warpui::elements::ParentAnchor::TopRight,

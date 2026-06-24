@@ -18,6 +18,7 @@ use nav::{SettingsNavItem, SettingsUmbrella};
 use pathfinder_geometry::vector::Vector2F;
 use privacy_page::{PrivacyPageView, PrivacyPageViewEvent};
 use referrals_page::{ReferralsPageEvent, ReferralsPageView};
+use scripting_page::ScriptingSettingsPageView;
 use settings_file_footer::{render_footer, SettingsFooterKind, SettingsFooterMouseStates};
 use settings_page::{
     MatchData, SettingsPage, SettingsPageEvent, SettingsPageMeta, SettingsPageViewHandle,
@@ -80,7 +81,7 @@ mod billing_and_usage_dispatch;
 mod billing_and_usage_page;
 mod billing_and_usage_page_v2;
 mod code_page;
-mod custom_inference_modal;
+pub(crate) mod custom_inference_modal;
 mod delete_environment_confirmation_dialog;
 mod directory_color_add_picker;
 pub(crate) mod environments_page;
@@ -100,6 +101,7 @@ mod privacy;
 mod privacy_page;
 mod referrals_page;
 mod remove_custom_endpoint_confirmation_dialog;
+mod scripting_page;
 mod settings_file_footer;
 pub(crate) mod settings_page;
 mod show_blocks_view;
@@ -246,6 +248,7 @@ pub enum SettingsSection {
     Keybindings,
     Privacy,
     Referrals,
+    Scripting,
     SharedBlocks,
     Teams,
     WarpDrive,
@@ -281,30 +284,22 @@ use crate::util::bindings::custom_tag_to_keystroke;
 impl Display for SettingsSection {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            SettingsSection::About => write!(f, "关于"),
-            SettingsSection::Account => write!(f, "账号"),
-            SettingsSection::MCPServers => write!(f, "MCP 服务器"),
-            SettingsSection::BillingAndUsage => write!(f, "账单和用量"),
-            SettingsSection::Appearance => write!(f, "外观"),
-            SettingsSection::Features => write!(f, "功能"),
-            SettingsSection::Keybindings => write!(f, "键盘快捷键"),
-            SettingsSection::Privacy => write!(f, "隐私"),
-            SettingsSection::Referrals => write!(f, "推荐"),
-            SettingsSection::SharedBlocks => write!(f, "共享块"),
-            SettingsSection::Teams => write!(f, "团队"),
+            SettingsSection::BillingAndUsage => write!(f, "Billing and usage"),
+            SettingsSection::Keybindings => write!(f, "Keyboard shortcuts"),
+            SettingsSection::SharedBlocks => write!(f, "Shared blocks"),
+            SettingsSection::MCPServers => write!(f, "MCP Servers"),
+            SettingsSection::Scripting => write!(f, "Scripting"),
             SettingsSection::WarpDrive => write!(f, "Warp Drive"),
-            SettingsSection::Warpify => write!(f, "Warpify"),
-            SettingsSection::AI => write!(f, "Agent"),
             SettingsSection::WarpAgent => write!(f, "Warp Agent"),
-            SettingsSection::AgentProfiles => write!(f, "配置档"),
-            SettingsSection::AgentMCPServers => write!(f, "MCP 服务器"),
-            SettingsSection::Knowledge => write!(f, "知识"),
-            SettingsSection::ThirdPartyCLIAgents => write!(f, "第三方 CLI Agent"),
-            SettingsSection::Code => write!(f, "代码"),
-            SettingsSection::CodeIndexing => write!(f, "索引和项目"),
-            SettingsSection::EditorAndCodeReview => write!(f, "编辑器和代码审查"),
-            SettingsSection::CloudEnvironments => write!(f, "环境"),
+            SettingsSection::AgentProfiles => write!(f, "Profiles"),
+            SettingsSection::AgentMCPServers => write!(f, "MCP servers"),
+            SettingsSection::Knowledge => write!(f, "Knowledge"),
+            SettingsSection::ThirdPartyCLIAgents => write!(f, "Third party CLI agents"),
+            SettingsSection::CodeIndexing => write!(f, "Indexing and projects"),
+            SettingsSection::EditorAndCodeReview => write!(f, "Editor and Code Review"),
+            SettingsSection::CloudEnvironments => write!(f, "Environments"),
             SettingsSection::OzCloudAPIKeys => write!(f, "Oz Cloud API Keys"),
+            _ => write!(f, "{self:?}"),
         }
     }
 }
@@ -381,40 +376,29 @@ impl FromStr for SettingsSection {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "About" => Ok(Self::About),
-            "关于" => Ok(Self::About),
             "Account" => Ok(Self::Account),
-            "账号" => Ok(Self::Account),
             "AI" => Ok(Self::AI),
             "MCP Servers" => Ok(Self::MCPServers),
-            "账单和用量" => Ok(Self::BillingAndUsage),
+            "Billing and usage" => Ok(Self::BillingAndUsage),
             "Appearance" => Ok(Self::Appearance),
-            "外观" => Ok(Self::Appearance),
             "Code" => Ok(Self::Code),
-            "代码" => Ok(Self::Code),
             "Features" => Ok(Self::Features),
-            "功能" => Ok(Self::Features),
-            "键盘快捷键" => Ok(Self::Keybindings),
+            "Keyboard shortcuts" => Ok(Self::Keybindings),
             "Privacy" => Ok(Self::Privacy),
-            "隐私" => Ok(Self::Privacy),
             "Referrals" => Ok(Self::Referrals),
-            "推荐" => Ok(Self::Referrals),
+            "Scripting" => Ok(Self::Scripting),
             "Shared blocks" => Ok(Self::SharedBlocks),
-            "共享块" => Ok(Self::SharedBlocks),
-            "团队" => Ok(Self::Teams),
+            "Teams" => Ok(Self::Teams),
             "Warpify" => Ok(Self::Warpify),
             "WarpDrive" | "Warp Drive" => Ok(Self::WarpDrive),
             // This page was called "Oz" at one point, keep for backward compatibility.
             "Oz" | "Warp Agent" => Ok(Self::WarpAgent),
-            "Profiles" | "AgentProfiles" | "配置档" => Ok(Self::AgentProfiles),
-            "MCP servers" | "AgentMCPServers" | "MCP 服务器" => Ok(Self::AgentMCPServers),
-            "Knowledge" | "知识" => Ok(Self::Knowledge),
-            "Third party CLI agents" | "ThirdPartyCLIAgents" | "第三方 CLI Agent" => {
-                Ok(Self::ThirdPartyCLIAgents)
-            }
-            "Indexing and projects" | "CodeIndexing" | "索引和项目" => Ok(Self::CodeIndexing),
-            "Editor and Code Review" | "EditorAndCodeReview" | "编辑器和代码审查" => {
-                Ok(Self::EditorAndCodeReview)
-            }
+            "Profiles" | "AgentProfiles" => Ok(Self::AgentProfiles),
+            "MCP servers" | "AgentMCPServers" => Ok(Self::AgentMCPServers),
+            "Knowledge" => Ok(Self::Knowledge),
+            "Third party CLI agents" | "ThirdPartyCLIAgents" => Ok(Self::ThirdPartyCLIAgents),
+            "Indexing and projects" | "CodeIndexing" => Ok(Self::CodeIndexing),
+            "Editor and Code Review" | "EditorAndCodeReview" => Ok(Self::EditorAndCodeReview),
             "CloudEnvironments" => Ok(Self::CloudEnvironments),
             "Oz Cloud API Keys" | "OzCloudAPIKeys" => Ok(Self::OzCloudAPIKeys),
             _ => Err(()),
@@ -457,10 +441,8 @@ pub mod flags {
     pub const MOUSE_REPORTING_CONTEXT_FLAG: &str = "Mouse_Reporting";
     pub const SCROLL_REPORTING_CONTEXT_FLAG: &str = "Scroll_Reporting";
     pub const FOCUS_REPORTING_CONTEXT_FLAG: &str = "Focus_Reporting";
-    #[deprecated = "Use `SSH_TMUX_WRAPPER_CONTEXT_FLAG` for new ssh warpification logic"]
-    pub const LEGACY_SSH_WRAPPER_CONTEXT_FLAG: &str = "SSH_Wrapper";
+    pub const SSH_REUSE_CONTROL_MASTER_CONTEXT_FLAG: &str = "SSH_Reuse_Control_Master";
     pub const SSH_WARPIFICATION_CONTEXT_FLAG: &str = "SSH_Warpification";
-    pub const SSH_TMUX_WRAPPER_CONTEXT_FLAG: &str = "SSH_Tmux_Wrapper";
     pub const NOTIFICATIONS_CONTEXT_FLAG: &str = "Notifications_Enabled";
     pub const LONG_RUNNING_NOTIFICATIONS_FLAG: &str = "Long_Running_Notifications";
     pub const AGENT_TASK_COMPLETED_NOTIFICATIONS_FLAG: &str = "Agent_Task_Completed_Notifications";
@@ -528,9 +510,20 @@ pub mod flags {
     pub const THINKING_DISPLAY_SHOW_AND_COLLAPSE: &str = "Thinking_Display_ShowAndCollapse";
     pub const THINKING_DISPLAY_ALWAYS_SHOW: &str = "Thinking_Display_AlwaysShow";
     pub const THINKING_DISPLAY_NEVER_SHOW: &str = "Thinking_Display_NeverShow";
+    pub const ORCHESTRATION_MESSAGE_DISPLAY_SHOW_AND_COLLAPSE: &str =
+        "Orchestration_Message_Display_ShowAndCollapse";
+    pub const ORCHESTRATION_MESSAGE_DISPLAY_ALWAYS_SHOW: &str =
+        "Orchestration_Message_Display_AlwaysShow";
+    pub const ORCHESTRATION_MESSAGE_DISPLAY_ALWAYS_COLLAPSE: &str =
+        "Orchestration_Message_Display_AlwaysCollapse";
     pub const PROMPT_SUBMISSION_INTERRUPT: &str = "Prompt_Submission_Interrupt";
     pub const PROMPT_SUBMISSION_QUEUE: &str = "Prompt_Submission_Queue";
+    pub const LRC_SUBMISSION_SEND_IMMEDIATELY: &str = "LRC_Submission_Send_Immediately";
+    pub const LRC_SUBMISSION_QUEUE_UNTIL_COMMAND_COMPLETES: &str =
+        "LRC_Submission_Queue_Until_Command_Completes";
     pub const SHOW_TERMINAL_INPUT_MESSAGE_LINE_FLAG: &str = "Show_Terminal_Input_Message_Line";
+    pub const PRESERVE_INPUT_FOCUS_ON_BLOCK_SELECTION_FLAG: &str =
+        "Preserve_Input_Focus_On_Block_Selection";
     pub const SLASH_COMMANDS_IN_TERMINAL_FLAG: &str = "Slash_Commands_In_Terminal";
     pub const AT_CONTEXT_MENU_IN_TERMINAL_FLAG: &str = "At_Context_Menu_In_Terminal";
     pub const OUTLINE_CODEBASE_SYMBOLS_FOR_AT_CONTEXT_MENU_FLAG: &str =
@@ -608,6 +601,7 @@ pub mod flags {
     pub const SHOW_CONVERSATION_HISTORY: &str = "ShowConversationHistory";
     pub const SHOW_PROJECT_EXPLORER: &str = "ShowProjectExplorer";
     pub const SHOW_GLOBAL_SEARCH: &str = "ShowGlobalSearch";
+    pub const SHOW_HIDDEN_FILES: &str = "ShowHiddenFiles";
 }
 
 pub fn init_actions_from_parent_view<T: Action + Clone>(
@@ -628,7 +622,10 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(
             vec![
                 ToggleSettingActionPair::custom(
-                    SettingActionPairDescriptions::new("显示初始化块", "隐藏初始化块"),
+                    SettingActionPairDescriptions::new(
+                        "Show initialization block",
+                        "Hide initialization block",
+                    ),
                     builder(SettingsAction::Debug(
                         DebugSettingsAction::ToggleInitializationBlock,
                     )),
@@ -639,7 +636,10 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                     None,
                 ),
                 ToggleSettingActionPair::custom(
-                    SettingActionPairDescriptions::new("显示带内命令块", "隐藏带内命令块"),
+                    SettingActionPairDescriptions::new(
+                        "Show in-band command blocks",
+                        "Hide in-band command blocks",
+                    ),
                     builder(SettingsAction::Debug(
                         DebugSettingsAction::ToggleInBandCommandBlocks,
                     )),
@@ -658,25 +658,25 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(
             vec![
                 ToggleSettingActionPair::new(
-                    "录制模式",
+                    "recording mode",
                     WorkspaceAction::ToggleRecordingMode,
                     &id!("Workspace"),
                     flags::RECORDING_MODE_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    "新会话的带内生成器",
+                    "in-band generators for new sessions",
                     WorkspaceAction::ToggleInBandGenerators,
                     &id!("Workspace"),
                     flags::IN_BAND_GENERATORS_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    "调试网络状态",
+                    "debug network status",
                     WorkspaceAction::ToggleDebugNetworkStatus,
                     &id!("Workspace"),
                     flags::DEBUG_NETWORK_ONLINE_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    "内存统计",
+                    "memory statistics",
                     WorkspaceAction::ToggleShowMemoryStats,
                     &id!("Workspace"),
                     flags::DEBUG_SHOW_MEMORY_STATS_FLAG,
@@ -776,8 +776,8 @@ impl<T: Action + Clone> ToggleSettingActionPair<T> {
 
         ToggleSettingActionPair {
             descriptions: SettingActionPairDescriptions {
-                enable: format!("启用 {description_suffix}"),
-                disable: format!("停用 {description_suffix}"),
+                enable: format!("Enable {description_suffix}"),
+                disable: format!("Disable {description_suffix}"),
             },
             contexts: SettingActionPairContexts {
                 enable_predicate: context_prefix.to_owned() & !id!(context_boolean_flag),
@@ -1071,6 +1071,7 @@ macro_rules! update_page {
             SettingsPageViewHandle::OzCloudAPIKeys(handle) => $ctx.update_view(handle, $update),
             SettingsPageViewHandle::Privacy(handle) => $ctx.update_view(handle, $update),
             SettingsPageViewHandle::Referrals(handle) => $ctx.update_view(handle, $update),
+            SettingsPageViewHandle::Scripting(handle) => $ctx.update_view(handle, $update),
             SettingsPageViewHandle::AI(handle) => $ctx.update_view(handle, $update),
             SettingsPageViewHandle::CloudEnvironments(handle) => $ctx.update_view(handle, $update),
             SettingsPageViewHandle::About(handle) => $ctx.update_view(handle, $update),
@@ -1117,7 +1118,7 @@ pub struct SettingsView {
 
 impl SettingsView {
     pub fn new(page: Option<SettingsSection>, ctx: &mut ViewContext<Self>) -> Self {
-        let pane_configuration = ctx.add_model(|_ctx| PaneConfiguration::new("设置"));
+        let pane_configuration = ctx.add_model(|_ctx| PaneConfiguration::new("Settings"));
 
         let global_resource_handles = GlobalResourceHandlesProvider::as_ref(ctx).get().clone();
         // Main settings page with accounts info
@@ -1219,6 +1220,11 @@ impl SettingsView {
         ctx.subscribe_to_view(&referrals_page_handle, |me, _, event, ctx| {
             me.handle_referrals_page_event(event, ctx);
         });
+        let scripting_page_handle = if FeatureFlag::WarpControlCli.is_enabled() {
+            Some(ctx.add_typed_action_view(ScriptingSettingsPageView::new))
+        } else {
+            None
+        };
 
         // Warp Drive page
         let warp_drive_page_handle =
@@ -1251,7 +1257,7 @@ impl SettingsView {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text("搜索", ctx);
+            editor.set_placeholder_text("Search", ctx);
             editor
         });
 
@@ -1282,6 +1288,10 @@ impl SettingsView {
             SettingsPage::new(warp_drive_page_handle),
         ];
 
+        if let Some(scripting_page_handle) = scripting_page_handle {
+            settings_pages.push(SettingsPage::new(scripting_page_handle));
+        }
+
         settings_pages.extend(vec![
             SettingsPage::new(mcp_servers_page_handle),
             SettingsPage::new(environments_page_handle.clone()),
@@ -1294,19 +1304,19 @@ impl SettingsView {
         let mut nav_items = vec![
             SettingsNavItem::Page(SettingsSection::Account),
             SettingsNavItem::Umbrella(SettingsUmbrella::new(
-                "Agent",
+                "Agents",
                 SettingsSection::ai_subpages().to_vec(),
             )),
             SettingsNavItem::Page(SettingsSection::BillingAndUsage),
             SettingsNavItem::Umbrella(SettingsUmbrella::new(
-                "代码",
+                "Code",
                 vec![
                     SettingsSection::CodeIndexing,
                     SettingsSection::EditorAndCodeReview,
                 ],
             )),
             SettingsNavItem::Umbrella(SettingsUmbrella::new(
-                "云平台",
+                "Cloud platform",
                 vec![
                     SettingsSection::CloudEnvironments,
                     SettingsSection::OzCloudAPIKeys,
@@ -1324,10 +1334,26 @@ impl SettingsView {
             SettingsNavItem::Page(SettingsSection::About),
         ];
 
+        if FeatureFlag::WarpControlCli.is_enabled() {
+            let shared_blocks_index = nav_items
+                .iter()
+                .position(|item| {
+                    matches!(item, SettingsNavItem::Page(SettingsSection::SharedBlocks))
+                })
+                .unwrap_or(nav_items.len());
+            nav_items.insert(
+                shared_blocks_index,
+                SettingsNavItem::Page(SettingsSection::Scripting),
+            );
+        }
+
         // Resolve the initial page: map internal backing-page sections to their default subpage.
         let initial_page = match page {
             Some(SettingsSection::AI) => SettingsSection::WarpAgent,
             Some(SettingsSection::Code) => SettingsSection::CodeIndexing,
+            Some(SettingsSection::Scripting) if !FeatureFlag::WarpControlCli.is_enabled() => {
+                SettingsSection::Account
+            }
             Some(section) if section.is_subpage() => section,
             other => other.unwrap_or_default(),
         };
@@ -1610,28 +1636,28 @@ impl SettingsView {
 
         if ContextFlag::CreateNewSession.is_enabled() {
             items.extend(vec![
-                MenuItemFields::new("向右拆分窗格")
+                MenuItemFields::new("Split pane right")
                     .with_on_select_action(SettingsAction::Split(Direction::Right))
                     .with_key_shortcut_label(keybinding_name_to_display_string(
                         "pane_group:add_right",
                         ctx,
                     ))
                     .into_item(),
-                MenuItemFields::new("向左拆分窗格")
+                MenuItemFields::new("Split pane left")
                     .with_on_select_action(SettingsAction::Split(Direction::Left))
                     .with_key_shortcut_label(keybinding_name_to_display_string(
                         "pane_group:add_left",
                         ctx,
                     ))
                     .into_item(),
-                MenuItemFields::new("向下拆分窗格")
+                MenuItemFields::new("Split pane down")
                     .with_on_select_action(SettingsAction::Split(Direction::Down))
                     .with_key_shortcut_label(keybinding_name_to_display_string(
                         "pane_group:add_down",
                         ctx,
                     ))
                     .into_item(),
-                MenuItemFields::new("向上拆分窗格")
+                MenuItemFields::new("Split pane up")
                     .with_on_select_action(SettingsAction::Split(Direction::Up))
                     .with_key_shortcut_label(keybinding_name_to_display_string(
                         "pane_group:add_up",
@@ -1660,7 +1686,7 @@ impl SettingsView {
             );
 
             items.push(
-                MenuItemFields::new("关闭窗格")
+                MenuItemFields::new("Close pane")
                     .with_on_select_action(SettingsAction::Close)
                     .with_key_shortcut_label(
                         custom_tag_to_keystroke(CustomAction::CloseCurrentSession.into())
@@ -2070,6 +2096,7 @@ impl SettingsView {
             SettingsPageViewHandle::Privacy(v) => v.as_ref(app).should_render(app),
             SettingsPageViewHandle::Warpify(v) => v.as_ref(app).should_render(app),
             SettingsPageViewHandle::Referrals(v) => v.as_ref(app).should_render(app),
+            SettingsPageViewHandle::Scripting(v) => v.as_ref(app).should_render(app),
             SettingsPageViewHandle::AI(v) => v.as_ref(app).should_render(app),
             SettingsPageViewHandle::CloudEnvironments(v) => v.as_ref(app).should_render(app),
             SettingsPageViewHandle::MCPServers(v) => v.as_ref(app).should_render(app),
@@ -2340,10 +2367,10 @@ impl SettingsView {
         Container::new(
             Align::new(
                 Flex::column()
-                    .with_cross_axis_alignment(CrossAxisAlignment::Center)
+                .with_cross_axis_alignment(CrossAxisAlignment::Center)
                     .with_children([
                         Text::new(
-                            "没有匹配搜索的设置。",
+                            "No settings match your search.",
                             appearance.ui_font_family(),
                             appearance.ui_font_size(),
                         )
@@ -2351,7 +2378,7 @@ impl SettingsView {
                         .with_color(theme.sub_text_color(theme.background()).into_solid())
                         .finish(),
                         Text::new(
-                            "可以尝试使用不同关键词，或检查是否有拼写错误。",
+                            "You may want to try using different keywords or checking for any possible typos.",
                             appearance.ui_font_family(),
                             appearance.ui_font_size(),
                         )
@@ -2362,7 +2389,7 @@ impl SettingsView {
             )
             .finish(),
         )
-        .with_uniform_margin(16.)
+            .with_uniform_margin(16.)
         .with_corner_radius(CornerRadius::with_all(Radius::Pixels(4.)))
         .with_background(internal_colors::fg_overlay_1(appearance.theme()))
         .finish()
@@ -2770,7 +2797,7 @@ impl BackingView for SettingsView {
         _ctx: &view::HeaderRenderContext<'_>,
         _app: &AppContext,
     ) -> view::HeaderContent {
-        view::HeaderContent::simple("设置")
+        view::HeaderContent::simple("Settings")
     }
 
     fn set_focus_handle(&mut self, focus_handle: PaneFocusHandle, _ctx: &mut ViewContext<Self>) {

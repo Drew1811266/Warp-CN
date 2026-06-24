@@ -8,21 +8,21 @@ use warpui::prelude::Empty;
 use warpui::{AppContext, Element, Entity, TypedActionView, View, ViewContext, ViewHandle};
 
 use super::{AgentFooterButtonTheme, USE_AGENT_KEYSTROKE};
-use crate::terminal::view::block_banner::WarpificationMode;
 use crate::terminal::view::{TerminalModel, PADDING_LEFT};
 use crate::ui_components::icons::Icon;
 use crate::view_components::action_button::{
     ActionButton, ButtonSize, KeystrokeSource, TooltipAlignment,
 };
 
-/// Footer view rendered for detected subshell/SSH commands, offering both
+/// Footer view rendered for detected subshell commands, offering both
 /// "Warpify" and "Use agent" buttons in a horizontal row.
 pub(super) struct WarpifyFooterView {
     terminal_model: Arc<FairMutex<TerminalModel>>,
     warpify_button: ViewHandle<ActionButton>,
     use_agent_button: ViewHandle<ActionButton>,
     dismiss_button: ViewHandle<ActionButton>,
-    mode: Option<WarpificationMode>,
+    /// Whether the footer is currently offering subshell warpification.
+    is_active: bool,
 }
 
 impl WarpifyFooterView {
@@ -30,10 +30,10 @@ impl WarpifyFooterView {
         let button_size = ButtonSize::XSmall;
 
         let warpify_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("Warpify 子 shell", AgentFooterButtonTheme::new(None))
+            ActionButton::new("Warpify subshell", AgentFooterButtonTheme::new(None))
                 .with_icon(Icon::Warp)
                 .with_size(button_size)
-                .with_tooltip("在此会话中启用 Warp shell 集成")
+                .with_tooltip("Enable Warp shell integration in this session")
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(WarpifyFooterViewAction::Warpify);
@@ -41,11 +41,11 @@ impl WarpifyFooterView {
         });
 
         let use_agent_button = ctx.add_typed_action_view(|ctx| {
-            ActionButton::new("使用 Agent", AgentFooterButtonTheme::new(None))
+            ActionButton::new("Use agent", AgentFooterButtonTheme::new(None))
                 .with_icon(Icon::Oz)
                 .with_keybinding(KeystrokeSource::Fixed(USE_AGENT_KEYSTROKE.clone()), ctx)
                 .with_size(button_size)
-                .with_tooltip("请求 Warp Agent 协助")
+                .with_tooltip("Ask the Warp agent to assist")
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(WarpifyFooterViewAction::UseAgent);
@@ -53,7 +53,7 @@ impl WarpifyFooterView {
         });
 
         let dismiss_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("关闭", AgentFooterButtonTheme::new(None))
+            ActionButton::new("Dismiss", AgentFooterButtonTheme::new(None))
                 .with_size(button_size)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(WarpifyFooterViewAction::Dismiss);
@@ -65,32 +65,30 @@ impl WarpifyFooterView {
             warpify_button,
             use_agent_button,
             dismiss_button,
-            mode: None,
+            is_active: false,
         }
     }
 
-    /// Updates the warpify button label, keybinding, and stores the current warpification mode.
-    pub fn set_mode(&mut self, mode: WarpificationMode, ctx: &mut ViewContext<Self>) {
-        let (label, binding_name) = match mode {
-            WarpificationMode::Ssh { .. } => ("Warpify SSH 会话", "terminal:warpify_ssh_session"),
-            WarpificationMode::Subshell { .. } => ("Warpify 子 shell", "terminal:warpify_subshell"),
-        };
+    /// Activates the footer so it offers subshell warpification.
+    pub fn show(&mut self, ctx: &mut ViewContext<Self>) {
         self.warpify_button.update(ctx, |button, ctx| {
-            button.set_label(label, ctx);
-            button.set_keybinding(Some(KeystrokeSource::Binding(binding_name)), ctx);
+            button.set_keybinding(
+                Some(KeystrokeSource::Binding("terminal:warpify_subshell")),
+                ctx,
+            );
         });
-        self.mode = Some(mode);
+        self.is_active = true;
         ctx.notify();
     }
 
-    /// Returns the current warpification mode, if set.
-    pub fn mode(&self) -> Option<&WarpificationMode> {
-        self.mode.as_ref()
+    /// Returns whether the footer is currently offering subshell warpification.
+    pub fn is_active(&self) -> bool {
+        self.is_active
     }
 
-    /// Clears the warpification mode.
-    pub fn clear_mode(&mut self, ctx: &mut ViewContext<Self>) {
-        self.mode = None;
+    /// Deactivates the footer.
+    pub fn clear(&mut self, ctx: &mut ViewContext<Self>) {
+        self.is_active = false;
         self.warpify_button.update(ctx, |button, ctx| {
             button.set_keybinding(None, ctx);
         });
@@ -106,7 +104,7 @@ pub enum WarpifyFooterViewAction {
 }
 
 pub enum WarpifyFooterViewEvent {
-    Warpify { mode: WarpificationMode },
+    Warpify,
     UseAgent,
     Dismiss,
 }
@@ -152,17 +150,17 @@ impl TypedActionView for WarpifyFooterView {
     fn handle_action(&mut self, action: &Self::Action, ctx: &mut ViewContext<Self>) {
         match action {
             WarpifyFooterViewAction::Warpify => {
-                if let Some(mode) = self.mode.clone() {
-                    self.clear_mode(ctx);
-                    ctx.emit(WarpifyFooterViewEvent::Warpify { mode });
+                if self.is_active {
+                    self.clear(ctx);
+                    ctx.emit(WarpifyFooterViewEvent::Warpify);
                 }
             }
             WarpifyFooterViewAction::UseAgent => {
-                self.clear_mode(ctx);
+                self.clear(ctx);
                 ctx.emit(WarpifyFooterViewEvent::UseAgent);
             }
             WarpifyFooterViewAction::Dismiss => {
-                self.clear_mode(ctx);
+                self.clear(ctx);
                 ctx.emit(WarpifyFooterViewEvent::Dismiss);
             }
         }

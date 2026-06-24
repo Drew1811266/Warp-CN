@@ -171,6 +171,7 @@ use crate::server::telemetry::{
 use crate::settings::{
     AISettings, AISettingsChangedEvent, AgentModeCodingPermissionsType, FontSettings,
     InputModeSettings, InputModeSettingsChangedEvent, InputSettings,
+    OrchestrationMessageDisplayMode,
 };
 use crate::settings_view::SettingsSection;
 use crate::terminal::find::TerminalFindModel;
@@ -476,13 +477,10 @@ pub(super) struct AIBlockStateHandles {
     /// Mouse state handle for AI document created block
     ai_document_handle: MouseStateHandle,
 
-    /// Mouse state handle for 'open skill' button
-    /// from an OpenSkill action banner
-    open_skill_button_handle: MouseStateHandle,
-
-    /// Mouse state handle for 'open skill' button
-    /// from a ReadFiles action banner
-    read_from_skill_button_handle: MouseStateHandle,
+    /// Per-action mouse state handles for the 'open skill' button shown on
+    /// ReadSkill and ReadFiles action banners. Keyed by action id so that
+    /// multiple skill banners in the same block don't share hover/click state.
+    skill_button_handles: HashMap<AIAgentActionId, MouseStateHandle>,
 }
 
 #[derive(Default, Clone, Debug)]
@@ -783,7 +781,7 @@ impl CollapsibleElementState {
     }
 
     fn finish_reasoning(&mut self, app: &AppContext) {
-        let should_auto_collapse = self.should_auto_collapse_reasoning_on_finish();
+        let should_auto_collapse = self.should_auto_collapse_on_finish();
         let thinking_mode = AISettings::as_ref(app).thinking_display_mode;
 
         self.sync_finished_state(true);
@@ -815,6 +813,23 @@ impl CollapsibleElementState {
         }
     }
 
+    /// Applies orchestration message display behavior after streaming finishes.
+    fn finish_orchestration_message(&mut self, display_mode: OrchestrationMessageDisplayMode) {
+        let should_auto_collapse = self.should_auto_collapse_on_finish();
+
+        self.sync_finished_state(true);
+
+        if display_mode.should_collapse_agent_message_body_on_finish() && should_auto_collapse {
+            self.expansion_state = CollapsibleExpansionState::Collapsed;
+        } else if let CollapsibleExpansionState::Expanded {
+            scroll_pinned_to_bottom,
+            ..
+        } = &mut self.expansion_state
+        {
+            *scroll_pinned_to_bottom = false;
+        }
+    }
+
     fn toggle_expansion(&mut self) {
         if !self.last_known_is_finished {
             self.user_toggled_while_streaming = true;
@@ -830,7 +845,7 @@ impl CollapsibleElementState {
         }
     }
 
-    fn should_auto_collapse_reasoning_on_finish(&self) -> bool {
+    fn should_auto_collapse_on_finish(&self) -> bool {
         !self.user_toggled_while_streaming
             && matches!(
                 self.expansion_state,
@@ -852,11 +867,30 @@ pub(crate) fn received_message_collapsible_id(message_id: &str) -> MessageId {
 
 fn default_collapsible_state_for_orchestration_action(
     action: &AIAgentActionType,
+    display_mode: OrchestrationMessageDisplayMode,
 ) -> Option<CollapsibleElementState> {
     match action {
         AIAgentActionType::StartAgent { .. } => Some(CollapsibleElementState::default()),
-        AIAgentActionType::SendMessageToAgent { .. } => Some(CollapsibleElementState::collapsed()),
+        AIAgentActionType::SendMessageToAgent { .. } => {
+            Some(default_orchestration_collapsible_state(
+                display_mode.should_expand_agent_message_body(),
+            ))
+        }
         _ => None,
+    }
+}
+
+fn default_collapsible_state_for_orchestration_message(
+    display_mode: OrchestrationMessageDisplayMode,
+) -> CollapsibleElementState {
+    default_orchestration_collapsible_state(display_mode.should_expand_agent_message_body())
+}
+
+fn default_orchestration_collapsible_state(expanded: bool) -> CollapsibleElementState {
+    if expanded {
+        CollapsibleElementState::default()
+    } else {
+        CollapsibleElementState::collapsed()
     }
 }
 
@@ -1131,6 +1165,10 @@ impl AIBlock {
                         }
                         _ => {}
                     }
+                    ctx.notify();
+                }
+                AISettingsChangedEvent::ThinkingDisplayMode { .. }
+                | AISettingsChangedEvent::OrchestrationMessageDisplayMode { .. } => {
                     ctx.notify();
                 }
                 _ => {}
@@ -1696,10 +1734,13 @@ impl AIBlock {
                         for source in image_sources {
                             resolved_image_sources.insert(
                                 source.clone(),
-                                Some(resolve_asset_source_relative_to_directory(
-                                    &source,
-                                    cwd.as_deref().map(Path::new),
-                                )),
+                                Some(
+                                    resolve_asset_source_relative_to_directory(
+                                        &source,
+                                        cwd.as_deref().map(Path::new),
+                                    )
+                                    .with_local_file_content_version(),
+                                ),
                             );
                         }
 
@@ -1970,6 +2011,16 @@ impl AIBlock {
                     .or_default();
             }
 
+            if matches!(
+                &action.action,
+                AIAgentActionType::ReadSkill(_) | AIAgentActionType::ReadFiles(_)
+            ) {
+                self.state_handles
+                    .skill_button_handles
+                    .entry(action.id.clone())
+                    .or_default();
+            }
+
             if let AIAgentActionType::RunAgents(req) = &action.action {
                 self.ensure_run_agents_card_view(&action.id, req, ctx);
             }
@@ -2147,32 +2198,37 @@ impl AIBlock {
             }
 
             // Register collapsible state for orchestration action messages.
-            if FeatureFlag::OrchestrationV2.is_enabled() {
-                match &message.message {
-                    AIAgentOutputMessageType::Action(AIAgentAction { action, .. }) => {
-                        if let Some(state) =
-                            default_collapsible_state_for_orchestration_action(action)
-                        {
-                            self.collapsible_block_states
-                                .entry(message.id.clone())
-                                .or_insert(state);
-                        }
+            let orchestration_message_display_mode =
+                AISettings::as_ref(ctx).orchestration_message_display_mode;
+            match &message.message {
+                AIAgentOutputMessageType::Action(AIAgentAction { action, .. }) => {
+                    if let Some(state) = default_collapsible_state_for_orchestration_action(
+                        action,
+                        orchestration_message_display_mode,
+                    ) {
+                        self.collapsible_block_states
+                            .entry(message.id.clone())
+                            .or_insert(state);
                     }
-                    AIAgentOutputMessageType::MessagesReceivedFromAgents { messages } => {
-                        for received_message in messages {
-                            let collapsible_id =
-                                received_message_collapsible_id(&received_message.message_id);
-                            self.collapsible_block_states
-                                .entry(collapsible_id.clone())
-                                .or_insert_with(CollapsibleElementState::collapsed);
-                            self.state_handles
-                                .transcript_avatar_handles
-                                .entry(collapsible_id)
-                                .or_default();
-                        }
-                    }
-                    _ => {}
                 }
+                AIAgentOutputMessageType::MessagesReceivedFromAgents { messages } => {
+                    for received_message in messages {
+                        let collapsible_id =
+                            received_message_collapsible_id(&received_message.message_id);
+                        self.collapsible_block_states
+                            .entry(collapsible_id.clone())
+                            .or_insert_with(|| {
+                                default_collapsible_state_for_orchestration_message(
+                                    orchestration_message_display_mode,
+                                )
+                            });
+                        self.state_handles
+                            .transcript_avatar_handles
+                            .entry(collapsible_id)
+                            .or_default();
+                    }
+                }
+                _ => {}
             }
         }
 
@@ -2342,7 +2398,59 @@ impl AIBlock {
         self.keyboard_navigable_buttons = Some(menu);
     }
 
+    /// Applies final display behavior to orchestration message bodies.
+    fn finish_orchestration_message_collapsible_states(
+        &mut self,
+        output: &AIAgentOutput,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        let display_mode = AISettings::as_ref(ctx).orchestration_message_display_mode;
+        for message in &output.messages {
+            match &message.message {
+                AIAgentOutputMessageType::Action(AIAgentAction {
+                    action: AIAgentActionType::SendMessageToAgent { .. },
+                    ..
+                }) => {
+                    self.collapsible_block_states
+                        .entry(message.id.clone())
+                        .or_insert_with(|| {
+                            default_orchestration_collapsible_state(
+                                display_mode.should_expand_agent_message_body(),
+                            )
+                        })
+                        .finish_orchestration_message(display_mode);
+                }
+                AIAgentOutputMessageType::MessagesReceivedFromAgents { messages } => {
+                    for received_message in messages {
+                        let collapsible_id =
+                            received_message_collapsible_id(&received_message.message_id);
+                        self.collapsible_block_states
+                            .entry(collapsible_id)
+                            .or_insert_with(|| {
+                                default_collapsible_state_for_orchestration_message(display_mode)
+                            })
+                            .finish_orchestration_message(display_mode);
+                    }
+                }
+                AIAgentOutputMessageType::Text(_)
+                | AIAgentOutputMessageType::Reasoning { .. }
+                | AIAgentOutputMessageType::Summarization { .. }
+                | AIAgentOutputMessageType::Subagent(_)
+                | AIAgentOutputMessageType::Action(_)
+                | AIAgentOutputMessageType::TodoOperation(_)
+                | AIAgentOutputMessageType::WebSearch(_)
+                | AIAgentOutputMessageType::WebFetch(_)
+                | AIAgentOutputMessageType::CommentsAddressed { .. }
+                | AIAgentOutputMessageType::DebugOutput { .. }
+                | AIAgentOutputMessageType::ArtifactCreated(_)
+                | AIAgentOutputMessageType::SkillInvoked(_)
+                | AIAgentOutputMessageType::EventsFromAgents { .. } => {}
+            }
+        }
+    }
+
     fn handle_complete_output(&mut self, output: &AIAgentOutput, ctx: &mut ViewContext<Self>) {
+        self.finish_orchestration_message_collapsible_states(output, ctx);
         let mut suggestions = BlocklistAIHistoryModel::as_ref(ctx)
             .existing_suggestions_for_conversation(self.client_ids.conversation_id)
             .cloned()
@@ -4210,7 +4318,7 @@ impl AIBlock {
         self.model
             .inputs_to_render(app)
             .iter()
-            .any(|input| input.user_query().is_some())
+            .any(|input| input.display_query().is_some())
     }
 
     /// `true` if the AI block is "finished".
@@ -4778,6 +4886,32 @@ impl AIBlock {
                     .find_map(|comment| comment.rich_text_editor.as_ref(ctx).selected_text(ctx))
             })
             .or_else(|| self.selected_text.read().clone())
+            .filter(|selection| !selection.is_empty())
+    }
+
+    /// Test-only helper to set the block-level text selection, which is normally
+    /// written by the `SelectableArea` selection callback during a drag.
+    #[cfg(any(test, feature = "integration_tests"))]
+    pub fn set_block_level_selected_text_for_test(&self, text: Option<String>) {
+        *self.selected_text.write() = text;
+    }
+
+    /// Test-only helper that simulates a block-level text selection in this AI
+    /// block: it writes the selected text and emits the same
+    /// [`AIBlockEvent::SelectionChanged`] signal that
+    /// [`AIBlockAction::SelectText`] does, so the terminal view mirrors it into
+    /// the model's rich content selection (which the copy/insert paths read).
+    ///
+    /// This lets integration tests exercise the in-AI-block copy path without
+    /// depending on layout-sensitive pixel coordinates.
+    #[cfg(any(test, feature = "integration_tests"))]
+    pub fn simulate_text_selection_for_test(
+        &mut self,
+        text: Option<String>,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        *self.selected_text.write() = text;
+        ctx.emit(AIBlockEvent::SelectionChanged);
     }
 
     /// Start a selection at the top left corner of the block's SelectableArea.
@@ -5354,7 +5488,7 @@ impl AIBlock {
         self.model
             .inputs_to_render(app)
             .iter()
-            .filter_map(|input| input.user_query())
+            .filter_map(|input| input.display_query())
             .collect::<Vec<_>>()
             .join("\n")
     }
@@ -5884,6 +6018,12 @@ pub enum AIBlockEvent {
     /// important because selecting across multiple blocks only supports text selections at the
     /// `AIBlock` level.
     ChildViewTextSelected,
+    /// Emitted when the `AIBlock`'s own (block-level) text selection state may
+    /// have changed. The terminal view uses this to keep the model's record of
+    /// which rich content block has an active selection in sync, so copy/insert
+    /// paths can find the selected text. Rich content selections are not tied to
+    /// the point-based model selection, so this signal is required.
+    SelectionChanged,
     CopiedEmptyText,
     OpenSettings,
     #[cfg(feature = "local_fs")]
@@ -6150,6 +6290,10 @@ impl TypedActionView for AIBlock {
                 // If we have a selection, we should use the default cursor, even if it's over a link.
                 ctx.reset_cursor();
                 self.dismiss_ai_tooltips(ctx);
+                // Notify the terminal view so it can keep the model's record of which rich
+                // content block has an active selection in sync (rich content selections are
+                // not tied to the point-based model selection used for regular blocks).
+                ctx.emit(AIBlockEvent::SelectionChanged);
             }
             AIBlockAction::CopyAIBlockCodeSnippet(text) => {
                 ctx.clipboard()
@@ -6538,10 +6682,7 @@ impl TypedActionView for AIBlock {
             } => {
                 // Resets the interaction states of ReadSkill and ReadFiles tool call banners before opening a new code pane
                 // Avoids an immediate re-hover (and stuck tooltip) while the new code pane is being created
-                for handle in [
-                    &self.state_handles.open_skill_button_handle,
-                    &self.state_handles.read_from_skill_button_handle,
-                ] {
+                for handle in self.state_handles.skill_button_handles.values() {
                     if let Ok(mut state) = handle.lock() {
                         state.reset_interaction_state();
                     }

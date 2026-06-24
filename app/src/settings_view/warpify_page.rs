@@ -21,16 +21,17 @@ use warpui::{
 
 use super::settings_page::{
     add_setting, render_alternating_color_list, render_body_item, render_dropdown_item,
-    render_page_title, AdditionalInfo, Category, LocalOnlyIconState, MatchData, PageType,
-    SettingsPageEvent, SettingsPageMeta, SettingsPageViewHandle, SettingsWidget, ToggleState,
-    HEADER_FONT_SIZE, HEADER_PADDING,
+    render_page_title, Category, LocalOnlyIconState, MatchData, PageType, SettingsPageEvent,
+    SettingsPageMeta, SettingsPageViewHandle, SettingsWidget, ToggleState, HEADER_FONT_SIZE,
+    HEADER_PADDING,
 };
 use super::{flags, SettingsAction, SettingsSection, ToggleSettingActionPair};
 use crate::appearance::Appearance;
 use crate::server::telemetry::TelemetryEvent;
+use crate::settings::{ReuseExistingSshControlMaster, SshSettings};
 use crate::terminal::warpify::settings::{
     EnableSshWarpification, SshExtensionInstallMode, SshExtensionInstallModeSetting,
-    UseSshTmuxWrapper, WarpifySettings, WarpifySettingsChangedEvent,
+    WarpifySettings, WarpifySettingsChangedEvent,
 };
 use crate::ui_components::blended_colors;
 use crate::view_components::dropdown::{Dropdown, DropdownItem};
@@ -44,10 +45,9 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 ) {
     // Add all of the toggle settings from the Warpify Page that you want to show up on the Command Palette here.
     let mut toggle_binding_pairs = vec![];
-    if FeatureFlag::SSHTmuxWrapper.is_enabled()
-        && WarpifySettings::as_ref(app)
-            .enable_ssh_warpification
-            .is_supported_on_current_platform()
+    if WarpifySettings::as_ref(app)
+        .enable_ssh_warpification
+        .is_supported_on_current_platform()
     {
         toggle_binding_pairs.push(ToggleSettingActionPair::new(
             "SSH Warpification",
@@ -56,21 +56,6 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
             )),
             context,
             flags::SSH_WARPIFICATION_CONTEXT_FLAG,
-        ));
-    }
-
-    if FeatureFlag::SSHTmuxWrapper.is_enabled()
-        && WarpifySettings::as_ref(app)
-            .use_ssh_tmux_wrapper
-            .is_value_explicitly_set()
-    {
-        toggle_binding_pairs.push(ToggleSettingActionPair::new(
-            "Warpification 的 SSH 会话检测",
-            builder(SettingsAction::WarpifyPageToggle(
-                WarpifyPageAction::ToggleTmuxWarpification,
-            )),
-            context,
-            flags::SSH_TMUX_WRAPPER_CONTEXT_FLAG,
         ));
     }
 
@@ -83,10 +68,10 @@ const ITEM_VERTICAL_SPACING: f32 = 24.;
 const BUILT_IN_TEXT_INPUT_MARGIN: f32 = 10.;
 const SPACE_AFTER_TEXT_INPUT: f32 = ITEM_VERTICAL_SPACING - BUILT_IN_TEXT_INPUT_MARGIN;
 
-const SSH_TMUX_WARPIFICATION_DESCRIPTION: &str = "tmux SSH 包装器可在许多默认方式无效的场景下工作，但可能需要你点击按钮来 Warpify。此设置会在新标签页中生效。";
+const SSH_REUSE_CONTROL_MASTER_DESCRIPTION: &str = "Attach to a live SSH ControlMaster you already have configured for the destination host instead of creating a Warp-owned one. Takes effect in new tabs.";
 
 const SSH_EXTENSION_INSTALL_MODE_DESCRIPTION: &str =
-    "控制远程主机未安装 Warp SSH 扩展时的安装行为。";
+    "Controls the installation behavior for Warp's SSH extension when a remote host doesn't have it installed.";
 
 /// This page lets users configure when they get asked to warpify a session. Some shell commands
 /// are recognized by default. Users can add new shell commands, or prevent the default ones from
@@ -101,9 +86,6 @@ pub struct WarpifyPageView {
     /// This needs to mirror the length of SubshellSettings::denylisted_remove_button_states.
     remove_denylisted_command_button_states: Vec<MouseStateHandle>,
     add_denylisted_commands_editor: ViewHandle<SubmittableTextInput>,
-
-    remove_denylisted_ssh_button_states: Vec<MouseStateHandle>,
-    add_denylisted_ssh_editor: ViewHandle<SubmittableTextInput>,
 
     ssh_extension_install_mode_dropdown: ViewHandle<Dropdown<WarpifyPageAction>>,
 }
@@ -129,7 +111,7 @@ impl WarpifyPageView {
         let add_added_commands_editor = ctx.add_typed_action_view(|ctx| {
             let mut input =
                 SubmittableTextInput::new(ctx).validate_on_edit(|regex| Regex::new(regex).is_ok());
-            input.set_placeholder_text("命令（支持正则）", ctx);
+            input.set_placeholder_text("command (supports regex)", ctx);
             input
         });
 
@@ -140,24 +122,13 @@ impl WarpifyPageView {
 
         let add_denylisted_commands_editor = ctx.add_typed_action_view(|ctx| {
             let mut input = SubmittableTextInput::new(ctx);
-            input.set_placeholder_text("命令（支持正则）", ctx);
+            input.set_placeholder_text("command (supports regex)", ctx);
             input
         });
 
         ctx.subscribe_to_view(
             &add_denylisted_commands_editor,
             Self::handle_denylisted_command_editor_event,
-        );
-
-        let add_denylisted_ssh_editor = ctx.add_typed_action_view(|ctx| {
-            let mut input = SubmittableTextInput::new(ctx);
-            input.set_placeholder_text("主机（支持正则）", ctx);
-            input
-        });
-
-        ctx.subscribe_to_view(
-            &add_denylisted_ssh_editor,
-            Self::handle_denylisted_ssh_editor_event,
         );
 
         let ssh_extension_install_mode_dropdown =
@@ -169,8 +140,6 @@ impl WarpifyPageView {
             add_added_commands_editor,
             remove_denylisted_command_button_states: Default::default(),
             add_denylisted_commands_editor,
-            remove_denylisted_ssh_button_states: Default::default(),
-            add_denylisted_ssh_editor,
             ssh_extension_install_mode_dropdown,
         };
 
@@ -181,19 +150,18 @@ impl WarpifyPageView {
     fn build_page(ctx: &mut ViewContext<Self>) -> PageType<Self> {
         let mut categories = vec![
             Category::new("", vec![Box::new(TitleWidget::default())]),
-            Category::new("子 Shell", vec![Box::new(SubshellsWidget::default())])
-                .with_subtitle("支持的子 Shell：bash、zsh 和 fish。"),
+            Category::new("Subshells", vec![Box::new(SubshellsWidget::default())])
+                .with_subtitle("Subshells supported: bash, zsh, and fish."),
         ];
 
         let warpify_settings = WarpifySettings::as_ref(ctx);
-        if FeatureFlag::SSHTmuxWrapper.is_enabled()
-            && warpify_settings
-                .enable_ssh_warpification
-                .is_supported_on_current_platform()
+        if warpify_settings
+            .enable_ssh_warpification
+            .is_supported_on_current_platform()
         {
             categories.push(
                 Category::new("SSH", vec![Box::new(SSHWidget::default())])
-                    .with_subtitle("Warpify 你的交互式 SSH 会话。"),
+                    .with_subtitle("Warpify your interactive SSH sessions."),
             );
         }
         PageType::new_categorized(categories, None)
@@ -214,11 +182,6 @@ impl WarpifyPageView {
             .collect();
         self.remove_added_command_button_states = warpify_settings
             .added_subshell_commands
-            .iter()
-            .map(|_| Default::default())
-            .collect();
-        self.remove_denylisted_ssh_button_states = warpify_settings
-            .ssh_hosts_denylist
             .iter()
             .map(|_| Default::default())
             .collect();
@@ -277,24 +240,6 @@ impl WarpifyPageView {
         }
     }
 
-    fn handle_denylisted_ssh_editor_event(
-        &mut self,
-        _handle: ViewHandle<SubmittableTextInput>,
-        event: &SubmittableTextInputEvent,
-        ctx: &mut ViewContext<Self>,
-    ) {
-        match event {
-            SubmittableTextInputEvent::Submit(new_command) => {
-                WarpifySettings::handle(ctx).update(ctx, |warpify_settings, ctx| {
-                    warpify_settings.denylist_ssh_host(new_command, ctx);
-                });
-
-                send_telemetry_from_ctx!(TelemetryEvent::AddDenylistedSshTmuxWrapperHost, ctx);
-            }
-            SubmittableTextInputEvent::Escape => ctx.emit(SettingsPageEvent::FocusModal),
-        }
-    }
-
     fn remove_denylisted_command(&self, index: usize, ctx: &mut ViewContext<Self>) {
         send_telemetry_from_ctx!(TelemetryEvent::RemoveDenylistedSubshellCommand, ctx);
         WarpifySettings::handle(ctx).update(ctx, |warpify, ctx| {
@@ -306,13 +251,6 @@ impl WarpifyPageView {
         send_telemetry_from_ctx!(TelemetryEvent::RemoveAddedSubshellCommand, ctx);
         WarpifySettings::handle(ctx).update(ctx, |warpify, ctx| {
             warpify.remove_added_subshell_command(index, ctx)
-        });
-    }
-
-    fn remove_denylisted_ssh_host(&self, index: usize, ctx: &mut ViewContext<Self>) {
-        send_telemetry_from_ctx!(TelemetryEvent::RemoveDenylistedSshTmuxWrapperHost, ctx);
-        WarpifySettings::handle(ctx).update(ctx, |warpify, ctx| {
-            warpify.remove_denylisted_ssh_host(index, ctx)
         });
     }
 }
@@ -428,10 +366,10 @@ impl View for WarpifyPageView {
 pub enum WarpifyPageAction {
     RemoveAddedCommand(usize),
     RemoveDenylistedCommand(usize),
-    RemoveDenylistedSshHost(usize),
-    /// If disabled, auto-Warpification and the SSH Warpification prompt will be disabled.
-    ToggleTmuxWarpification,
     ToggleSshWarpification,
+    /// Toggles whether the legacy SSH wrapper attaches to an existing
+    /// ControlMaster for the destination host instead of creating its own.
+    ToggleReuseSshControlMaster,
     /// Set the SSH extension installation mode (always ask / always install / always skip).
     SetSshExtensionInstallMode(SshExtensionInstallMode),
     OpenUrl(String),
@@ -469,12 +407,18 @@ impl TypedActionView for WarpifyPageView {
                         }
                     });
             }
-            ToggleTmuxWarpification => {
-                WarpifySettings::handle(ctx).update(ctx, |ssh_settings, ctx| {
-                    report_if_error!(ssh_settings.use_ssh_tmux_wrapper.toggle_and_save_value(ctx));
+            ToggleReuseSshControlMaster => {
+                SshSettings::handle(ctx).update(ctx, |ssh_settings, ctx| {
+                    report_if_error!(ssh_settings
+                        .reuse_existing_control_master
+                        .toggle_and_save_value(ctx));
                     send_telemetry_from_ctx!(
-                        TelemetryEvent::ToggleSshTmuxWrapper {
-                            enabled: *ssh_settings.use_ssh_tmux_wrapper.value(),
+                        TelemetryEvent::FeaturesPageAction {
+                            action: "ToggleSshReuseControlMaster".to_string(),
+                            value: ssh_settings
+                                .reuse_existing_control_master
+                                .value()
+                                .to_string(),
                         },
                         ctx
                     );
@@ -492,9 +436,6 @@ impl TypedActionView for WarpifyPageView {
                         ctx
                     );
                 });
-            }
-            WarpifyPageAction::RemoveDenylistedSshHost(index) => {
-                self.remove_denylisted_ssh_host(*index, ctx);
             }
             OpenUrl(url) => {
                 ctx.open_url(url.as_str());
@@ -540,10 +481,11 @@ impl TitleWidget {
     fn render_top_of_page(&self, appearance: &Appearance, _app: &AppContext) -> Box<dyn Element> {
         let warpify_description = vec![
             FormattedTextFragment::plain_text(
-                "配置 Warp 是否尝试对特定 shell 执行 Warpify（添加块、输入模式等支持）。 ",
+                "Configure whether Warp attempts to “Warpify” (add support for blocks, \
+                    input modes, etc) certain shells. ",
             ),
             FormattedTextFragment::hyperlink(
-                "了解更多",
+                "Learn more",
                 "https://docs.warp.dev/terminal/warpify/subshells",
             ),
         ];
@@ -604,7 +546,7 @@ impl SubshellsWidget {
 
         column.add_child(
             view.build_input_list(
-                "已添加命令",
+                "Added commands",
                 &warpify_settings.added_subshell_commands,
                 &view.remove_added_command_button_states,
                 WarpifyPageAction::RemoveAddedCommand,
@@ -616,7 +558,7 @@ impl SubshellsWidget {
 
         column.add_child(
             view.build_input_list(
-                "命令拒绝列表",
+                "Denylisted commands",
                 &warpify_settings.subshell_command_denylist,
                 &view.remove_denylisted_command_button_states,
                 WarpifyPageAction::RemoveDenylistedCommand,
@@ -652,9 +594,8 @@ impl SettingsWidget for SubshellsWidget {
 
 #[derive(Default)]
 struct SSHWidget {
-    tmux_warpification_switch_state: SwitchStateHandle,
     enable_ssh_warpification_switch_state: SwitchStateHandle,
-    additional_info_mouse_state: MouseStateHandle,
+    reuse_control_master_switch_state: SwitchStateHandle,
     local_only_icon_tooltip_states: RefCell<HashMap<String, MouseStateHandle>>,
 }
 
@@ -681,15 +622,12 @@ impl SettingsWidget for SSHWidget {
             .enable_ssh_warpification
             .value();
 
-        let should_prompt_ssh_tmux_wrapper =
-            *WarpifySettings::as_ref(app).use_ssh_tmux_wrapper.value();
-
         add_setting(
             &mut column,
             &WarpifySettings::as_ref(app).enable_ssh_warpification,
             move || {
                 render_body_item::<WarpifyPageAction>(
-                    "Warpify SSH 会话".into(),
+                    "Warpify SSH Sessions".into(),
                     None,
                     LocalOnlyIconState::for_setting(
                         EnableSshWarpification::storage_key(),
@@ -724,7 +662,7 @@ impl SettingsWidget for SSHWidget {
                 move || {
                     Container::new(render_dropdown_item(
                         appearance,
-                        "安装 SSH 扩展",
+                        "Install SSH extension",
                         Some(SSH_EXTENSION_INSTALL_MODE_DESCRIPTION),
                         None,
                         LocalOnlyIconState::for_setting(
@@ -742,59 +680,44 @@ impl SettingsWidget for SSHWidget {
             );
         }
 
-        // Only show the tmux warpification toggle if the user has explicitly changed
-        // the setting. We are gradually deprecating tmux warpification, so new users
-        // should not see this option, but existing users who opted in keep it.
-        if !WarpifySettings::as_ref(app)
-            .use_ssh_tmux_wrapper
-            .is_value_explicitly_set()
-        {
-            return column.finish();
-        }
-
+        let reuse_existing_control_master = *SshSettings::as_ref(app)
+            .reuse_existing_control_master
+            .value();
         add_setting(
             &mut column,
-            &WarpifySettings::as_ref(app).use_ssh_tmux_wrapper,
+            &SshSettings::as_ref(app).reuse_existing_control_master,
             move || {
                 let mut column = Flex::column();
-
                 column.add_child(render_body_item::<WarpifyPageAction>(
-                    "使用 Tmux Warpification".into(),
-                    Some(AdditionalInfo {
-                        mouse_state: self.additional_info_mouse_state.clone(),
-                        on_click_action: Some(WarpifyPageAction::OpenUrl(
-                            "https://docs.warp.dev/terminal/warpify/ssh".into(),
-                        )),
-                        secondary_text: None,
-                        tooltip_override_text: None,
-                    }),
+                    "Reuse existing SSH ControlMaster".into(),
+                    None,
                     LocalOnlyIconState::for_setting(
-                        UseSshTmuxWrapper::storage_key(),
-                        UseSshTmuxWrapper::sync_to_cloud(),
+                        ReuseExistingSshControlMaster::storage_key(),
+                        ReuseExistingSshControlMaster::sync_to_cloud(),
                         &mut self.local_only_icon_tooltip_states.borrow_mut(),
                         app,
                     ),
                     enable_ssh_warpification.into(),
                     appearance,
                     ui_builder
-                        .switch(self.tmux_warpification_switch_state.clone())
-                        .check(should_prompt_ssh_tmux_wrapper)
+                        .switch(self.reuse_control_master_switch_state.clone())
+                        .check(reuse_existing_control_master)
                         .with_disabled(!enable_ssh_warpification)
                         .build()
                         .on_click(move |ctx, _, _| {
                             if !enable_ssh_warpification {
                                 return;
                             }
-
-                            ctx.dispatch_typed_action(WarpifyPageAction::ToggleTmuxWarpification);
+                            ctx.dispatch_typed_action(
+                                WarpifyPageAction::ToggleReuseSshControlMaster,
+                            );
                         })
                         .finish(),
                     None,
                 ));
-
                 column.add_child(
                     ui_builder
-                        .paragraph(SSH_TMUX_WARPIFICATION_DESCRIPTION.to_owned())
+                        .paragraph(SSH_REUSE_CONTROL_MASTER_DESCRIPTION.to_owned())
                         .with_style(UiComponentStyles {
                             font_color: Some(description_text_color.into_solid()),
                             margin: Some(
@@ -807,29 +730,6 @@ impl SettingsWidget for SSHWidget {
                         .build()
                         .finish(),
                 );
-
-                if enable_ssh_warpification && should_prompt_ssh_tmux_wrapper {
-                    let warpify_settings = WarpifySettings::as_ref(app);
-                    column.add_child(
-                        view.build_input_list(
-                            "主机拒绝列表",
-                            &warpify_settings.ssh_hosts_denylist,
-                            &view.remove_denylisted_ssh_button_states,
-                            WarpifyPageAction::RemoveDenylistedSshHost,
-                            &view.add_denylisted_ssh_editor,
-                            appearance,
-                        )
-                        .finish(),
-                    );
-                } else {
-                    // Add margin to hint the user should scroll to see more.
-                    column.add_child(
-                        Container::new(Flex::column().finish())
-                            .with_margin_bottom(styles::MINIMUM_SCROLL_OFFSET_AFTER_SSH)
-                            .finish(),
-                    );
-                }
-
                 column.finish()
             },
         );
@@ -845,10 +745,4 @@ mod styles {
 
     /// The space after a description.
     pub const DESCRIPTION_LINE_MARGIN_BOTTOM: f32 = 18.;
-
-    /// Because we hide the SSH settings if the SSH wrapper is disabled, we need to add a margin
-    /// to the bottom to make it clear that toggling this item will reveal more settings,
-    /// even at smaller window sizes. We picked an offset that cuts off the first item
-    /// to imply the user should scroll to see more.
-    pub const MINIMUM_SCROLL_OFFSET_AFTER_SSH: f32 = 40.;
 }

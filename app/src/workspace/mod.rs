@@ -3,7 +3,7 @@ mod active_session;
 pub(crate) mod auto_handoff;
 pub mod bonus_grant_notification_model;
 #[cfg(target_os = "macos")]
-mod cli_install;
+pub(crate) mod cli_install;
 mod close_session_confirmation_dialog;
 pub(crate) mod cross_window_tab_drag;
 pub mod delete_conversation_confirmation_dialog;
@@ -92,8 +92,10 @@ pub fn init(app: &mut AppContext) {
     view::launch_modal::oz_launch::init(app);
     view::openwarp_launch_modal::init(app);
     view::orchestration_launch_modal::init(app);
+    view::auto_handoff_sleep_modal::init(app);
     view::cloud_agent_capacity_modal::init(app);
     view::codex_modal::init(app);
+    view::free_ai_removal_modal::init(app);
     view::free_tier_limit_hit_modal::init(app);
     view::global_search::view::GlobalSearchView::init(app);
     view::right_panel::RightPanelView::init(app);
@@ -110,7 +112,7 @@ pub fn init(app: &mut AppContext) {
     lsp::init(app);
 
     app.register_fixed_bindings([FixedBinding::empty(
-        "转储调试信息",
+        "Dump debug info",
         WorkspaceAction::DumpDebugInfo,
         id!("Workspace"),
     )]);
@@ -129,34 +131,34 @@ pub fn init(app: &mut AppContext) {
 
     if ChannelState::enable_debug_features() {
         let crash_description = if cfg!(target_os = "macos") {
-            "使 app 崩溃（用于测试 sentry-cocoa）"
+            "Crash the app (for testing sentry-cocoa)"
         } else {
-            "使 app 崩溃（用于测试 sentry-native）"
+            "Crash the app (for testing sentry-native)"
         };
         app.register_editable_bindings([
             EditableBinding::new("workspace:crash", crash_description, WorkspaceAction::Crash)
                 .with_context_predicate(id!("Workspace")),
             EditableBinding::new(
                 "workspace:log_review_comment_send_status_for_active_tab",
-                "[调试] 记录活动标签页的审查评论发送状态",
+                "[Debug] Log review comment send status for active tab",
                 WorkspaceAction::LogReviewCommentSendStatusForActiveTab,
             )
             .with_context_predicate(id!("Workspace")),
             EditableBinding::new(
                 "workspace:panic",
-                "触发 panic（用于测试 sentry-rust）",
+                "Trigger a panic (for testing sentry-rust)",
                 WorkspaceAction::Panic,
             )
             .with_context_predicate(id!("Workspace")),
             EditableBinding::new(
                 "workspace:open_view_tree_debug_view",
-                "打开视图树调试器",
+                "Open view tree debugger",
                 WorkspaceAction::OpenViewTreeDebugWindow,
             )
             .with_context_predicate(id!("Workspace")),
         ]);
         app.register_fixed_bindings([FixedBinding::empty(
-            "[调试] 查看首次用户体验",
+            "[Debug] View first-time user experience",
             WorkspaceAction::AddGetStartedTab,
             id!("Workspace"),
         )]);
@@ -166,79 +168,109 @@ pub fn init(app: &mut AppContext) {
             app.register_editable_bindings([
                 EditableBinding::new(
                     "workspace:open_build_plan_migration_modal",
-                    "[调试] 打开 Build 套餐迁移弹窗",
+                    "[Debug] Open Build Plan Migration Modal",
                     WorkspaceAction::OpenBuildPlanMigrationModal,
                 )
                 .with_context_predicate(id!("Workspace")),
                 EditableBinding::new(
                     "workspace:reset_build_plan_migration_modal_state",
-                    "[调试] 重置 Build 套餐迁移弹窗状态",
+                    "[Debug] Reset Build Plan Migration Modal State",
                     WorkspaceAction::ResetBuildPlanMigrationModalState,
                 )
                 .with_context_predicate(id!("Workspace")),
                 EditableBinding::new(
                     "workspace:debug_reset_aws_bedrock_login_banner_dismissed",
-                    "[调试] 取消隐藏 AWS 登录横幅",
+                    "[Debug] Un-dismiss AWS login banner",
                     WorkspaceAction::DebugResetAwsBedrockLoginBannerDismissed,
                 )
                 .with_context_predicate(id!("Workspace")),
                 EditableBinding::new(
                     "workspace:open_oz_launch_modal",
-                    "[调试] 打开 Oz 发布弹窗",
+                    "[Debug] Open Oz Launch Modal",
                     WorkspaceAction::OpenOzLaunchModal,
                 )
                 .with_context_predicate(id!("Workspace")),
                 EditableBinding::new(
                     "workspace:reset_oz_launch_modal_state",
-                    "[调试] 重置 Oz 发布弹窗状态",
+                    "[Debug] Reset Oz Launch Modal State",
                     WorkspaceAction::ResetOzLaunchModalState,
                 )
                 .with_context_predicate(id!("Workspace")),
                 EditableBinding::new(
                     "workspace:open_openwarp_launch_modal",
-                    "[调试] 打开 OpenWarp 发布弹窗",
+                    "[Debug] Open OpenWarp Launch Modal",
                     WorkspaceAction::OpenOpenWarpLaunchModal,
                 )
                 .with_context_predicate(id!("Workspace")),
                 EditableBinding::new(
                     "workspace:reset_openwarp_launch_modal_state",
-                    "[调试] 重置 OpenWarp 发布弹窗状态",
+                    "[Debug] Reset OpenWarp Launch Modal State",
                     WorkspaceAction::ResetOpenWarpLaunchModalState,
                 )
                 .with_context_predicate(id!("Workspace")),
                 EditableBinding::new(
                     "workspace:open_orchestration_launch_modal",
-                    "[调试] 打开编排发布弹窗",
+                    "[Debug] Open Orchestration Launch Modal",
                     WorkspaceAction::OpenOrchestrationLaunchModal,
                 )
                 .with_context_predicate(id!("Workspace")),
                 EditableBinding::new(
                     "workspace:reset_orchestration_launch_modal_state",
-                    "[调试] 重置编排发布弹窗状态",
+                    "[Debug] Reset Orchestration Launch Modal State",
                     WorkspaceAction::ResetOrchestrationLaunchModalState,
                 )
                 .with_context_predicate(id!("Workspace")),
                 EditableBinding::new(
+                    "workspace:open_auto_handoff_sleep_modal",
+                    "[Debug] Open Auto-Handoff Sleep Modal",
+                    WorkspaceAction::OpenAutoHandoffSleepModal,
+                )
+                .with_context_predicate(id!("Workspace")),
+                EditableBinding::new(
+                    "workspace:reset_auto_handoff_sleep_modal_state",
+                    "[Debug] Reset Auto-Handoff Sleep Modal State",
+                    WorkspaceAction::ResetAutoHandoffSleepModalState,
+                )
+                .with_context_predicate(id!("Workspace")),
+                EditableBinding::new(
+                    "workspace:trigger_auto_handoff_to_cloud",
+                    "[Debug] Trigger Auto-Handoff to Cloud",
+                    WorkspaceAction::TriggerAutoHandoffToCloud,
+                )
+                .with_context_predicate(id!("Workspace")),
+                EditableBinding::new(
+                    "workspace:open_free_ai_removal_modal",
+                    "[Debug] Open Free AI Removal Modal",
+                    WorkspaceAction::OpenFreeAiRemovalModal,
+                )
+                .with_context_predicate(id!("Workspace")),
+                EditableBinding::new(
+                    "workspace:reset_free_ai_removal_modal_state",
+                    "[Debug] Reset Free AI Removal Modal State",
+                    WorkspaceAction::ResetFreeAiRemovalModalState,
+                )
+                .with_context_predicate(id!("Workspace")),
+                EditableBinding::new(
                     "workspace:install_opencode_warp_plugin",
-                    "[调试] 安装 OpenCode Warp 插件",
+                    "[Debug] Install OpenCode Warp plugin",
                     WorkspaceAction::InstallOpenCodeWarpPlugin,
                 )
                 .with_context_predicate(id!("Workspace")),
                 EditableBinding::new(
                     "workspace:use_local_opencode_warp_plugin",
-                    "[调试] 使用本地 OpenCode Warp 插件（仅测试）",
+                    "[Debug] Use local OpenCode Warp plugin (testing only)",
                     WorkspaceAction::UseLocalOpenCodeWarpPlugin,
                 )
                 .with_context_predicate(id!("Workspace")),
                 EditableBinding::new(
                     "workspace:open_session_config_modal",
-                    "[调试] 打开会话配置弹窗",
+                    "[Debug] Open Session Config Modal",
                     WorkspaceAction::ShowSessionConfigModal,
                 )
                 .with_context_predicate(id!("Workspace")),
                 EditableBinding::new(
                     "workspace:show_hoa_onboarding_flow",
-                    "[调试] 启动 HOA onboarding 流程",
+                    "[Debug] Start HOA Onboarding Flow",
                     WorkspaceAction::ShowHoaOnboardingFlow,
                 )
                 .with_context_predicate(id!("Workspace")),
@@ -249,7 +281,7 @@ pub fn init(app: &mut AppContext) {
     #[cfg(target_os = "macos")]
     app.register_editable_bindings([EditableBinding::new(
         "workspace:sample_process",
-        "采样进程",
+        "Sample Process",
         WorkspaceAction::SampleProcess,
     )
     .with_context_predicate(id!("Workspace"))]);
@@ -258,7 +290,7 @@ pub fn init(app: &mut AppContext) {
     {
         app.register_editable_bindings([EditableBinding::new(
             "workspace:dump_heap_profile",
-            "转储堆配置文件（只能执行一次）",
+            "Dump heap profile (can only be done once)",
             WorkspaceAction::DumpHeapProfile,
         )
         .with_context_predicate(id!("Workspace"))]);
@@ -268,26 +300,26 @@ pub fn init(app: &mut AppContext) {
         FixedBinding::custom(
             CustomAction::CycleNextSession,
             WorkspaceAction::CycleNextSession,
-            "切换到下一个标签页",
+            "Switch to next tab",
             id!("Workspace") & id!("Workspace_MultipleTabs"),
         ),
         FixedBinding::custom(
             CustomAction::CyclePrevSession,
             WorkspaceAction::CyclePrevSession,
-            "切换到上一个标签页",
+            "Switch to previous tab",
             id!("Workspace") & id!("Workspace_MultipleTabs"),
         ),
         FixedBinding::custom(
             CustomAction::AddWindow,
             WorkspaceAction::AddWindow,
-            "创建新窗口",
+            "Create New Window",
             id!("Workspace"),
         )
         .with_enabled(|| ContextFlag::CreateNewSession.is_enabled()),
         FixedBinding::custom(
             CustomAction::NewFile,
             WorkspaceAction::NewCodeFile,
-            "新建文件",
+            "New File",
             id!("Workspace") & !id!("Workspace_ViewOnlySharedSession"),
         ),
     ]);
@@ -297,21 +329,21 @@ pub fn init(app: &mut AppContext) {
             FixedBinding::custom(
                 CustomAction::IncreaseZoom,
                 WorkspaceAction::IncreaseZoom,
-                "放大",
+                "Zoom In",
                 id!("Workspace"),
             )
             .with_group(bindings::BindingGroup::Settings.as_str()),
             FixedBinding::custom(
                 CustomAction::DecreaseZoom,
                 WorkspaceAction::DecreaseZoom,
-                "缩小",
+                "Zoom Out",
                 id!("Workspace"),
             )
             .with_group(bindings::BindingGroup::Settings.as_str()),
             FixedBinding::custom(
                 CustomAction::ResetZoom,
                 WorkspaceAction::ResetZoom,
-                "重置缩放",
+                "Reset Zoom",
                 id!("Workspace"),
             )
             .with_group(bindings::BindingGroup::Settings.as_str()),
@@ -321,14 +353,14 @@ pub fn init(app: &mut AppContext) {
             FixedBinding::custom(
                 CustomAction::IncreaseFontSize,
                 WorkspaceAction::IncreaseFontSize,
-                "增大字号",
+                "Increase font size",
                 id!("Workspace"),
             )
             .with_group(bindings::BindingGroup::Settings.as_str()),
             FixedBinding::custom(
                 CustomAction::DecreaseFontSize,
                 WorkspaceAction::DecreaseFontSize,
-                "减小字号",
+                "Decrease font size",
                 id!("Workspace"),
             )
             .with_group(bindings::BindingGroup::Settings.as_str()),
@@ -339,7 +371,7 @@ pub fn init(app: &mut AppContext) {
         app.register_fixed_bindings([FixedBinding::custom(
             CustomAction::SaveCurrentConfig,
             WorkspaceAction::OpenLaunchConfigSaveModal,
-            "保存新的启动配置",
+            "Save new launch configuration",
             id!("Workspace"),
         )]);
     }
@@ -374,7 +406,7 @@ pub fn init(app: &mut AppContext) {
         app.register_editable_bindings([
             EditableBinding::new(
                 "workspace:increase_zoom",
-                "提高缩放级别",
+                "Increase zoom level",
                 WorkspaceAction::IncreaseZoom,
             )
             .with_context_predicate(id!("Workspace"))
@@ -382,7 +414,7 @@ pub fn init(app: &mut AppContext) {
             .with_key_binding("cmdorctrl-="),
             EditableBinding::new(
                 "workspace:decrease_zoom",
-                "降低缩放级别",
+                "Decrease zoom level",
                 WorkspaceAction::DecreaseZoom,
             )
             .with_context_predicate(id!("Workspace"))
@@ -390,30 +422,30 @@ pub fn init(app: &mut AppContext) {
             .with_key_binding("cmdorctrl--"),
             EditableBinding::new(
                 "workspace:reset_zoom",
-                "将缩放级别重置为默认值",
+                "Reset zoom level to default",
                 WorkspaceAction::ResetZoom,
             )
             .with_group(bindings::BindingGroup::Settings.as_str())
             .with_context_predicate(id!("Workspace")),
             EditableBinding::new(
                 "workspace:increase_font_size",
-                "增大字号",
+                "Increase font size",
                 WorkspaceAction::IncreaseFontSize,
             )
             .with_context_predicate(id!("Workspace"))
             .with_group(bindings::BindingGroup::Settings.as_str())
-            .with_key_binding("ctrl-shift->"),
+            .with_key_binding("alt-shift->"),
             EditableBinding::new(
                 "workspace:decrease_font_size",
-                "减小字号",
+                "Decrease font size",
                 WorkspaceAction::DecreaseFontSize,
             )
             .with_context_predicate(id!("Workspace"))
             .with_group(bindings::BindingGroup::Settings.as_str())
-            .with_key_binding("ctrl-shift-<"),
+            .with_key_binding("alt-shift-<"),
             EditableBinding::new(
                 "workspace:reset_font_size",
-                "将字号重置为默认值",
+                "Reset font size to default",
                 WorkspaceAction::ResetFontSize,
             )
             .with_group(bindings::BindingGroup::Settings.as_str())
@@ -423,7 +455,7 @@ pub fn init(app: &mut AppContext) {
         app.register_editable_bindings([
             EditableBinding::new(
                 "workspace:increase_font_size",
-                "增大字号",
+                "Increase font size",
                 WorkspaceAction::IncreaseFontSize,
             )
             .with_context_predicate(id!("Workspace"))
@@ -431,7 +463,7 @@ pub fn init(app: &mut AppContext) {
             .with_key_binding("cmdorctrl-="),
             EditableBinding::new(
                 "workspace:decrease_font_size",
-                "减小字号",
+                "Decrease font size",
                 WorkspaceAction::DecreaseFontSize,
             )
             .with_context_predicate(id!("Workspace"))
@@ -439,7 +471,7 @@ pub fn init(app: &mut AppContext) {
             .with_key_binding("cmdorctrl--"),
             EditableBinding::new(
                 "workspace:reset_font_size",
-                "将字号重置为默认值",
+                "Reset font size to default",
                 WorkspaceAction::ResetFontSize,
             )
             .with_group(bindings::BindingGroup::Settings.as_str())
@@ -454,8 +486,8 @@ pub fn init(app: &mut AppContext) {
         FixedBinding::custom(
             CustomAction::ToggleProjectExplorer,
             WorkspaceAction::ToggleProjectExplorer,
-            BindingDescription::new("切换项目资源管理器")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "项目资源管理器"),
+            BindingDescription::new("Toggle project explorer")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Project Explorer"),
             id!("Workspace") & id!(flags::SHOW_PROJECT_EXPLORER),
         ),
     ]);
@@ -463,14 +495,14 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "workspace:show_theme_chooser",
-            "打开主题选择器",
+            "Open theme picker",
             WorkspaceAction::ShowThemeChooserForActiveTheme,
         )
         .with_context_predicate(id!("Workspace"))
         .with_group(bindings::BindingGroup::Settings.as_str()),
         EditableBinding::new(
             TOGGLE_TAB_CONFIGS_MENU_BINDING_NAME,
-            "打开标签页配置菜单",
+            "Open tab configs menu",
             WorkspaceAction::ToggleTabConfigsMenu,
         )
         .with_context_predicate(id!("Workspace"))
@@ -478,7 +510,7 @@ pub fn init(app: &mut AppContext) {
         .with_linux_or_windows_key_binding("ctrl-alt-shift-T"),
         EditableBinding::new(
             "workspace:activate_first_tab",
-            "切换到第 1 个标签页",
+            "Switch to 1st tab",
             WorkspaceAction::ActivateTabByNumber(1),
         )
         .with_context_predicate(id!("Workspace"))
@@ -486,7 +518,7 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding("cmdorctrl-1"),
         EditableBinding::new(
             "workspace:activate_second_tab",
-            "切换到第 2 个标签页",
+            "Switch to 2nd tab",
             WorkspaceAction::ActivateTabByNumber(2),
         )
         .with_context_predicate(id!("Workspace"))
@@ -494,7 +526,7 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding("cmdorctrl-2"),
         EditableBinding::new(
             "workspace:activate_third_tab",
-            "切换到第 3 个标签页",
+            "Switch to 3rd tab",
             WorkspaceAction::ActivateTabByNumber(3),
         )
         .with_context_predicate(id!("Workspace"))
@@ -502,7 +534,7 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding("cmdorctrl-3"),
         EditableBinding::new(
             "workspace:activate_fourth_tab",
-            "切换到第 4 个标签页",
+            "Switch to 4th tab",
             WorkspaceAction::ActivateTabByNumber(4),
         )
         .with_context_predicate(id!("Workspace"))
@@ -510,7 +542,7 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding("cmdorctrl-4"),
         EditableBinding::new(
             "workspace:activate_fifth_tab",
-            "切换到第 5 个标签页",
+            "Switch to 5th tab",
             WorkspaceAction::ActivateTabByNumber(5),
         )
         .with_context_predicate(id!("Workspace"))
@@ -518,7 +550,7 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding("cmdorctrl-5"),
         EditableBinding::new(
             "workspace:activate_sixth_tab",
-            "切换到第 6 个标签页",
+            "Switch to 6th tab",
             WorkspaceAction::ActivateTabByNumber(6),
         )
         .with_context_predicate(id!("Workspace"))
@@ -526,7 +558,7 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding("cmdorctrl-6"),
         EditableBinding::new(
             "workspace:activate_seventh_tab",
-            "切换到第 7 个标签页",
+            "Switch to 7th tab",
             WorkspaceAction::ActivateTabByNumber(7),
         )
         .with_context_predicate(id!("Workspace"))
@@ -534,7 +566,7 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding("cmdorctrl-7"),
         EditableBinding::new(
             "workspace:activate_eighth_tab",
-            "切换到第 8 个标签页",
+            "Switch to 8th tab",
             WorkspaceAction::ActivateTabByNumber(8),
         )
         .with_context_predicate(id!("Workspace"))
@@ -542,7 +574,7 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding("cmdorctrl-8"),
         EditableBinding::new(
             "workspace:activate_last_tab",
-            "切换到最后一个标签页",
+            "Switch to last tab",
             WorkspaceAction::ActivateLastTab,
         )
         .with_context_predicate(id!("Workspace"))
@@ -550,7 +582,7 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding("cmdorctrl-9"),
         EditableBinding::new(
             "workspace:activate_prev_tab",
-            "激活上一个标签页",
+            "Activate previous tab",
             WorkspaceAction::ActivatePrevTab,
         )
         .with_context_predicate(
@@ -560,7 +592,7 @@ pub fn init(app: &mut AppContext) {
         .with_linux_or_windows_key_binding("ctrl-pageup"),
         EditableBinding::new(
             "workspace:activate_next_tab",
-            "激活下一个标签页",
+            "Activate next tab",
             WorkspaceAction::ActivateNextTab,
         )
         .with_context_predicate(
@@ -571,7 +603,7 @@ pub fn init(app: &mut AppContext) {
         .with_linux_or_windows_key_binding("ctrl-pagedown"),
         EditableBinding::new(
             "pane_group:navigate_prev",
-            "激活上一个窗格",
+            "Activate previous pane",
             WorkspaceAction::NavigatePrevPaneOrPanel,
         )
         .with_context_predicate(id!("Workspace"))
@@ -579,7 +611,7 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::ActivatePreviousPane),
         EditableBinding::new(
             "pane_group:navigate_next",
-            "激活下一个窗格",
+            "Activate next pane",
             WorkspaceAction::NavigateNextPaneOrPanel,
         )
         .with_context_predicate(id!("Workspace"))
@@ -587,8 +619,8 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::ActivateNextPane),
         EditableBinding::new(
             "workspace:create_team_notebook",
-            BindingDescription::new("创建新的团队笔记本")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "新建团队笔记本"),
+            BindingDescription::new("Create a new team notebook")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "New Team Notebook"),
             WorkspaceAction::CreateTeamNotebook,
         )
         .with_custom_action(CustomAction::NewTeamNotebook)
@@ -601,8 +633,8 @@ pub fn init(app: &mut AppContext) {
         .with_group(bindings::BindingGroup::Notebooks.as_str()),
         EditableBinding::new(
             "workspace:create_personal_notebook",
-            BindingDescription::new("创建新的个人笔记本")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "新建个人笔记本"),
+            BindingDescription::new("Create a new personal notebook")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "New Personal Notebook"),
             WorkspaceAction::CreatePersonalNotebook,
         )
         .with_group(bindings::BindingGroup::Notebooks.as_str())
@@ -610,8 +642,8 @@ pub fn init(app: &mut AppContext) {
         .with_context_predicate(id!("Workspace") & id!(flags::ENABLE_WARP_DRIVE)),
         EditableBinding::new(
             "workspace:create_team_workflow",
-            BindingDescription::new("创建新的团队工作流")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "新建团队工作流"),
+            BindingDescription::new("Create a new team workflow")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "New Team Workflow"),
             WorkspaceAction::CreateTeamWorkflow,
         )
         .with_custom_action(CustomAction::NewTeamWorkflow)
@@ -624,8 +656,8 @@ pub fn init(app: &mut AppContext) {
         .with_group(bindings::BindingGroup::Workflow.as_str()),
         EditableBinding::new(
             "workspace:create_personal_workflow",
-            BindingDescription::new("创建新的个人工作流")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "新建个人工作流"),
+            BindingDescription::new("Create a new personal workflow")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "New Personal Workflow"),
             WorkspaceAction::CreatePersonalWorkflow,
         )
         .with_group(bindings::BindingGroup::Workflow.as_str())
@@ -633,8 +665,8 @@ pub fn init(app: &mut AppContext) {
         .with_context_predicate(id!("Workspace") & id!(flags::ENABLE_WARP_DRIVE)),
         EditableBinding::new(
             "workspace:create_team_folder",
-            BindingDescription::new("创建新的团队文件夹")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "新建团队文件夹"),
+            BindingDescription::new("Create a new team folder")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "New Team Folder"),
             WorkspaceAction::CreateTeamFolder,
         )
         .with_context_predicate(
@@ -646,15 +678,15 @@ pub fn init(app: &mut AppContext) {
         .with_group(bindings::BindingGroup::Folders.as_str()),
         EditableBinding::new(
             "workspace:create_personal_folder",
-            BindingDescription::new("创建新的个人文件夹")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "新建个人文件夹"),
+            BindingDescription::new("Create a new personal folder")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "New Personal Folder"),
             WorkspaceAction::CreatePersonalFolder,
         )
         .with_group(bindings::BindingGroup::Folders.as_str())
         .with_context_predicate(id!("Workspace") & id!(flags::ENABLE_WARP_DRIVE) & id!("IsOnline")),
         EditableBinding::new(
             NEW_TAB_BINDING_NAME,
-            BindingDescription::new("创建新标签页"),
+            BindingDescription::new("Create new tab"),
             WorkspaceAction::AddDefaultTab,
         )
         .with_context_predicate(id!("Workspace") & !id!("Workspace_PaneDragging"))
@@ -662,7 +694,7 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| ContextFlag::CreateNewSession.is_enabled()),
         EditableBinding::new(
             NEW_TERMINAL_TAB_BINDING_NAME,
-            BindingDescription::new("新建终端标签页"),
+            BindingDescription::new("New Terminal Tab"),
             WorkspaceAction::AddTerminalTab {
                 hide_homepage: false,
             },
@@ -672,7 +704,7 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| ContextFlag::CreateNewSession.is_enabled()),
         EditableBinding::new(
             NEW_AGENT_TAB_BINDING_NAME,
-            BindingDescription::new("新建 Agent 标签页"),
+            BindingDescription::new("New Agent Tab"),
             WorkspaceAction::AddAgentTab,
         )
         .with_group(bindings::BindingGroup::WarpAi.as_str())
@@ -682,7 +714,7 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             NEW_AMBIENT_AGENT_TAB_BINDING_NAME,
-            BindingDescription::new("新建云端 Agent 标签页"),
+            BindingDescription::new("New Cloud Agent Tab"),
             WorkspaceAction::AddAmbientAgentTab,
         )
         .with_group(bindings::BindingGroup::WarpAi.as_str())
@@ -694,15 +726,15 @@ pub fn init(app: &mut AppContext) {
         }),
         EditableBinding::new(
             "workspace:toggle_left_panel",
-            BindingDescription::new("打开左侧面板"),
+            BindingDescription::new("Open Left Panel"),
             WorkspaceAction::ToggleLeftPanel,
         )
         .with_context_predicate(id!("Workspace"))
         .with_custom_action(CustomAction::ToggleWarpDrive),
         EditableBinding::new(
             TOGGLE_RIGHT_PANEL_BINDING_NAME,
-            BindingDescription::new("切换代码审查")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "切换代码审查"),
+            BindingDescription::new("Toggle code review")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Toggle Code Review"),
             WorkspaceAction::ToggleRightPanel,
         )
         .with_enabled(|| cfg!(feature = "local_fs"))
@@ -711,8 +743,8 @@ pub fn init(app: &mut AppContext) {
         .with_linux_or_windows_key_binding("ctrl-shift-+"),
         EditableBinding::new(
             TOGGLE_VERTICAL_TABS_PANEL_BINDING_NAME,
-            BindingDescription::new("切换垂直标签页面板")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "切换垂直标签页面板"),
+            BindingDescription::new("Toggle vertical tabs panel")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Toggle Vertical Tabs Panel"),
             WorkspaceAction::ToggleVerticalTabsPanel,
         )
         .with_context_predicate(id!("Workspace") & id!(flags::USE_VERTICAL_TABS_FLAG))
@@ -721,7 +753,7 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding(cmd_or_ctrl_shift("b")),
         EditableBinding::new(
             LEFT_PANEL_PROJECT_EXPLORER_BINDING_NAME,
-            BindingDescription::new("左侧面板：项目资源管理器"),
+            BindingDescription::new("Left Panel: Project explorer"),
             WorkspaceAction::ToggleProjectExplorer,
         )
         .with_group(bindings::BindingGroup::Navigation.as_str())
@@ -729,7 +761,7 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::ToggleProjectExplorer),
         EditableBinding::new(
             LEFT_PANEL_AGENT_CONVERSATIONS_BINDING_NAME,
-            BindingDescription::new("左侧面板：Agent 对话"),
+            BindingDescription::new("Left Panel: Agent conversations"),
             WorkspaceAction::ToggleConversationListView,
         )
         .with_group(bindings::BindingGroup::Navigation.as_str())
@@ -738,7 +770,7 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::ToggleConversationListView),
         EditableBinding::new(
             LEFT_PANEL_GLOBAL_SEARCH_BINDING_NAME,
-            BindingDescription::new("左侧面板：全局搜索"),
+            BindingDescription::new("Left Panel: Global search"),
             WorkspaceAction::ToggleGlobalSearch,
         )
         .with_group(bindings::BindingGroup::Navigation.as_str())
@@ -746,8 +778,17 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| FeatureFlag::GlobalSearch.is_enabled())
         .with_custom_action(CustomAction::ToggleGlobalSearch),
         EditableBinding::new(
+            "file_tree:toggle_hidden_files",
+            BindingDescription::new("Toggle hidden files in Project Explorer"),
+            WorkspaceAction::ToggleHiddenFiles,
+        )
+        .with_group(bindings::BindingGroup::Navigation.as_str())
+        .with_context_predicate(id!("Workspace") & id!(flags::SHOW_PROJECT_EXPLORER))
+        .with_mac_key_binding("cmd-shift->")
+        .with_linux_or_windows_key_binding("ctrl-shift->"),
+        EditableBinding::new(
             LEFT_PANEL_WARP_DRIVE_BINDING_NAME,
-            BindingDescription::new("左侧面板：Warp Drive"),
+            BindingDescription::new("Left Panel: Warp Drive"),
             WorkspaceAction::ToggleWarpDrive,
         )
         .with_group(bindings::BindingGroup::Navigation.as_str())
@@ -756,15 +797,15 @@ pub fn init(app: &mut AppContext) {
         .with_linux_or_windows_key_binding("alt-4"),
         EditableBinding::new(
             TOGGLE_PROJECT_EXPLORER_BINDING_NAME,
-            BindingDescription::new("切换项目资源管理器")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "项目资源管理器"),
+            BindingDescription::new("Toggle project explorer")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Project Explorer"),
             WorkspaceAction::ToggleProjectExplorer,
         )
         .with_context_predicate(id!("Workspace") & id!(flags::SHOW_PROJECT_EXPLORER)),
         EditableBinding::new(
             OPEN_GLOBAL_SEARCH_BINDING_NAME,
-            BindingDescription::new("打开全局搜索")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "全局搜索"),
+            BindingDescription::new("Open global search")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Global Search"),
             WorkspaceAction::OpenGlobalSearch,
         )
         .with_context_predicate(id!("Workspace") & id!(flags::SHOW_GLOBAL_SEARCH))
@@ -773,15 +814,17 @@ pub fn init(app: &mut AppContext) {
         .with_linux_or_windows_key_binding("alt-shift-F"),
         EditableBinding::new(
             TOGGLE_WARP_DRIVE_BINDING_NAME,
-            BindingDescription::new("切换 Warp Drive")
+            BindingDescription::new("Toggle Warp Drive")
                 .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Warp Drive"),
             WorkspaceAction::ToggleWarpDrive,
         )
         .with_context_predicate(id!("Workspace") & id!(flags::ENABLE_WARP_DRIVE)),
         EditableBinding::new(
             TOGGLE_CONVERSATION_LIST_VIEW_BINDING_NAME,
-            BindingDescription::new("切换 Agent 对话列表视图")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Agent 对话列表视图"),
+            BindingDescription::new("Toggle Agent conversation list view").with_custom_description(
+                bindings::MAC_MENUS_CONTEXT,
+                "Agent conversation list view",
+            ),
             WorkspaceAction::ToggleConversationListView,
         )
         .with_enabled(|| FeatureFlag::AgentViewConversationListView.is_enabled())
@@ -791,16 +834,16 @@ pub fn init(app: &mut AppContext) {
         .with_group(bindings::BindingGroup::WarpAi.as_str()),
         EditableBinding::new(
             "workspace:close_panel",
-            BindingDescription::new("关闭聚焦面板")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "关闭聚焦面板"),
+            BindingDescription::new("Close focused panel")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Close focused panel"),
             WorkspaceAction::ClosePanel,
         )
         .with_context_predicate(id!("Workspace"))
         .with_custom_action(CustomAction::CloseCurrentSession),
         EditableBinding::new(
             "workspace:toggle_command_palette",
-            BindingDescription::new("切换命令面板")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "命令面板"),
+            BindingDescription::new("Toggle command palette")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Command Palette"),
             WorkspaceAction::TogglePalette {
                 mode: PaletteMode::Command,
                 source: PaletteSource::Keybinding,
@@ -811,9 +854,8 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::CommandPalette),
         EditableBinding::new(
             "workspace:move_tab_left",
-            BindingDescription::new("向左移动标签页").with_dynamic_override(|ctx| {
-                uses_vertical_tabs(ctx).then(|| "向上移动标签页".into())
-            }),
+            BindingDescription::new("Move tab left")
+                .with_dynamic_override(|ctx| uses_vertical_tabs(ctx).then(|| "move tab up".into())),
             WorkspaceAction::MoveActiveTabLeft,
         )
         .with_group(bindings::BindingGroup::Navigation.as_str())
@@ -826,8 +868,8 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::MoveTabLeft),
         EditableBinding::new(
             "workspace:move_tab_right",
-            BindingDescription::new("向右移动标签页").with_dynamic_override(|ctx| {
-                uses_vertical_tabs(ctx).then(|| "向下移动标签页".into())
+            BindingDescription::new("Move tab right").with_dynamic_override(|ctx| {
+                uses_vertical_tabs(ctx).then(|| "move tab down".into())
             }),
             WorkspaceAction::MoveActiveTabRight,
         )
@@ -841,7 +883,7 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::MoveTabRight),
         EditableBinding::new(
             "workspace:toggle_keybindings_page",
-            "切换键盘快捷键",
+            "Toggle keyboard shortcuts",
             WorkspaceAction::ToggleKeybindingsPage,
         )
         .with_group(bindings::BindingGroup::KeyboardShortcuts.as_str())
@@ -849,7 +891,7 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::ToggleKeybindingsPage),
         EditableBinding::new(
             "workspace:show_keybinding_settings",
-            "打开快捷键编辑器",
+            "Open keybindings editor",
             WorkspaceAction::ConfigureKeybindingSettings {
                 keybinding_name: None,
             },
@@ -859,7 +901,7 @@ pub fn init(app: &mut AppContext) {
         .with_mac_key_binding("cmd-ctrl-k"),
         EditableBinding::new(
             "workspace:toggle_block_snackbar",
-            "切换固定命令标题",
+            "Toggle sticky command header",
             WorkspaceAction::ToggleBlockSnackbar,
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
@@ -871,14 +913,14 @@ pub fn init(app: &mut AppContext) {
         app.register_editable_bindings([
             EditableBinding::new(
                 "workspace:set_a11y_concise_verbosity_level",
-                "[辅助功能] 设置简洁辅助功能播报",
+                "[a11y] Set concise accessibility announcements",
                 WorkspaceAction::SetA11yVerbosityLevel(AccessibilityVerbosity::Concise),
             )
             .with_context_predicate(id!("Workspace"))
             .with_key_binding("cmdorctrl-alt-c"),
             EditableBinding::new(
                 "workspace:set_a11y_verbose_verbosity_level",
-                "[辅助功能] 设置详细辅助功能播报",
+                "[a11y] Set verbose accessibility announcements",
                 WorkspaceAction::SetA11yVerbosityLevel(AccessibilityVerbosity::Verbose),
             )
             .with_context_predicate(id!("Workspace"))
@@ -888,7 +930,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "workspace:rename_active_tab",
-        "重命名当前标签页",
+        "Rename the current tab",
         WorkspaceAction::RenameActiveTab,
     )
     .with_group(bindings::BindingGroup::Settings.as_str())
@@ -902,7 +944,7 @@ pub fn init(app: &mut AppContext) {
     // reachable via the binding registry.
     app.register_editable_bindings([EditableBinding::new(
         "workspace:rename_active_pane",
-        "重命名当前窗格",
+        "Rename the current pane",
         WorkspaceAction::RenameActivePane,
     )
     .with_group(bindings::BindingGroup::Settings.as_str())
@@ -911,7 +953,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "workspace:terminate_app",
-            "退出 Warp",
+            "Quit Warp",
             WorkspaceAction::TerminateApp,
         )
         .with_context_predicate(id!("Workspace"))
@@ -919,8 +961,8 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| ContextFlag::CloseWindow.is_enabled()),
         EditableBinding::new(
             "workspace:close_window",
-            BindingDescription::new("关闭窗口")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "关闭窗口"),
+            BindingDescription::new("Close Window")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Close Window"),
             WorkspaceAction::CloseWindow,
         )
         .with_mac_key_binding("cmd-shift-W")
@@ -930,7 +972,7 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| ContextFlag::CloseWindow.is_enabled()),
         EditableBinding::new(
             "workspace:close_active_tab",
-            "关闭当前标签页",
+            "Close the current tab",
             WorkspaceAction::CloseActiveTab,
         )
         .with_custom_action(CustomAction::CloseTab)
@@ -940,7 +982,7 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             "workspace:close_other_tabs",
-            "关闭其他标签页",
+            "Close other tabs",
             WorkspaceAction::CloseNonActiveTabs,
         )
         .with_custom_action(CustomAction::CloseOtherTabs)
@@ -948,8 +990,8 @@ pub fn init(app: &mut AppContext) {
         .with_context_predicate(id!("Workspace")),
         EditableBinding::new(
             "workspace:close_tabs_right_active_tab",
-            BindingDescription::new("关闭右侧标签页").with_dynamic_override(|ctx| {
-                uses_vertical_tabs(ctx).then(|| "关闭下方标签页".into())
+            BindingDescription::new("Close tabs to the right").with_dynamic_override(|ctx| {
+                uses_vertical_tabs(ctx).then(|| "close tabs below".into())
             }),
             WorkspaceAction::CloseTabsRightActiveTab,
         )
@@ -960,22 +1002,22 @@ pub fn init(app: &mut AppContext) {
         // (i.e. whether notifications are already on or off).
         EditableBinding::new(
             "workspace:toggle_notifications_on",
-            "打开通知",
+            "Turn notifications on",
             WorkspaceAction::ToggleNotifications,
         )
         .with_group(bindings::BindingGroup::Notifications.as_str())
         .with_context_predicate(id!("Workspace") & !id!("Notifications_Enabled")),
         EditableBinding::new(
             "workspace:toggle_notifications_off",
-            "关闭通知",
+            "Turn notifications off",
             WorkspaceAction::ToggleNotifications,
         )
         .with_group(bindings::BindingGroup::Notifications.as_str())
         .with_context_predicate(id!("Workspace") & id!("Notifications_Enabled")),
         EditableBinding::new(
             "workspace:toggle_navigation_palette",
-            BindingDescription::new("切换导航面板")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "导航面板"),
+            BindingDescription::new("Toggle navigation palette")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Navigation Palette"),
             WorkspaceAction::TogglePalette {
                 mode: PaletteMode::Navigation,
                 source: PaletteSource::Keybinding,
@@ -986,7 +1028,7 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::NavigationPalette),
         EditableBinding::new(
             "workspace:toggle_launch_config_palette",
-            "启动配置面板",
+            "Launch configuration palette",
             WorkspaceAction::TogglePalette {
                 mode: PaletteMode::LaunchConfig,
                 source: PaletteSource::Keybinding,
@@ -997,7 +1039,7 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| ContextFlag::LaunchConfigurations.is_enabled()),
         EditableBinding::new(
             "workspace:toggle_files_palette",
-            "切换文件面板",
+            "Toggle Files Palette",
             WorkspaceAction::TogglePalette {
                 mode: PaletteMode::Files,
                 source: PaletteSource::Keybinding,
@@ -1007,7 +1049,7 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::FilesPalette),
         EditableBinding::new(
             "workspace:open_launch_config_save_modal",
-            "保存新的启动配置",
+            "Save new launch configuration",
             WorkspaceAction::OpenLaunchConfigSaveModal,
         )
         .with_context_predicate(id!("Workspace"))
@@ -1016,7 +1058,7 @@ pub fn init(app: &mut AppContext) {
         EditableBinding::new(
             // If you rename this name, please update the name in command_palette/action/data_source.rs
             "workspace:search_drive",
-            "搜索 Warp Drive",
+            "Search Warp Drive",
             WorkspaceAction::OpenPalette {
                 mode: PaletteMode::WarpDrive,
                 source: PaletteSource::Keybinding,
@@ -1031,7 +1073,7 @@ pub fn init(app: &mut AppContext) {
         app.register_editable_bindings([
             EditableBinding::new(
                 "workspace:update_and_relaunch",
-                "安装更新并重新启动",
+                "Install update and relaunch",
                 // TODO(vorporeal): I wonder if we should change wording here?
                 WorkspaceAction::ApplyUpdate,
             )
@@ -1040,7 +1082,7 @@ pub fn init(app: &mut AppContext) {
             .with_enabled(|| ContextFlag::PromptForVersionUpdates.is_enabled()),
             EditableBinding::new(
                 "workspace:check_for_updates",
-                "检查更新",
+                "Check for updates",
                 WorkspaceAction::CheckForUpdate,
             )
             .with_group(bindings::BindingGroup::AutoUpdate.as_str())
@@ -1051,7 +1093,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "workspace:log_out",
-        "退出登录",
+        "Log out",
         WorkspaceAction::LogOut,
     )
     .with_group(bindings::BindingGroup::Settings.as_str())
@@ -1060,7 +1102,7 @@ pub fn init(app: &mut AppContext) {
     if !FeatureFlag::AvatarInTabBar.is_enabled() {
         app.register_editable_bindings([EditableBinding::new(
             "workspace:toggle_resource_center",
-            "切换资源中心",
+            "Toggle resource center",
             WorkspaceAction::ToggleResourceCenter,
         )
         .with_group(bindings::BindingGroup::Navigation.as_str())
@@ -1071,32 +1113,50 @@ pub fn init(app: &mut AppContext) {
     if cfg!(not(target_family = "wasm")) {
         app.register_editable_bindings([EditableBinding::new(
             "workspace:export_all_warp_drive_objects",
-            "导出所有 Warp Drive 对象",
+            "Export all Warp Drive objects",
             WorkspaceAction::ExportAllWarpDriveObjects,
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
         .with_context_predicate(id!("Workspace") & id!(flags::ENABLE_WARP_DRIVE))]);
     }
 
-    // CLI install/uninstall actions (macOS only)
+    // Oz and Warp Control CLI install/uninstall actions (macOS only)
     #[cfg(target_os = "macos")]
     {
         app.register_editable_bindings([
             EditableBinding::new(
                 "workspace:install_cli",
-                "安装 Oz CLI 命令",
-                WorkspaceAction::InstallCLI,
+                "Install Oz CLI command",
+                WorkspaceAction::InstallOz,
             )
             .with_group(bindings::BindingGroup::Settings.as_str())
             .with_context_predicate(id!("Workspace")),
             EditableBinding::new(
                 "workspace:uninstall_cli",
-                "卸载 Oz CLI 命令",
-                WorkspaceAction::UninstallCLI,
+                "Uninstall Oz CLI command",
+                WorkspaceAction::UninstallOz,
             )
             .with_group(bindings::BindingGroup::Settings.as_str())
             .with_context_predicate(id!("Workspace")),
         ]);
+        if FeatureFlag::WarpControlCli.is_enabled() {
+            app.register_editable_bindings([
+                EditableBinding::new(
+                    "workspace:install_warpctrl",
+                    "Install Warp Control CLI command",
+                    WorkspaceAction::InstallWarpctrl,
+                )
+                .with_group(bindings::BindingGroup::Settings.as_str())
+                .with_context_predicate(id!("Workspace")),
+                EditableBinding::new(
+                    "workspace:uninstall_warpctrl",
+                    "Uninstall Warp Control CLI command",
+                    WorkspaceAction::UninstallWarpctrl,
+                )
+                .with_group(bindings::BindingGroup::Settings.as_str())
+                .with_context_predicate(id!("Workspace")),
+            ]);
+        }
     }
 
     if FeatureFlag::Changelog.is_enabled() {
@@ -1105,7 +1165,7 @@ pub fn init(app: &mut AppContext) {
             // but without a keybinding when the update toast is not visible.
             EditableBinding::new(
                 "workspace:view_changelog",
-                "查看最新变更日志",
+                "View latest changelog",
                 WorkspaceAction::ViewLatestChangelog,
             )
             .with_context_predicate(id!("Workspace") & !id!("UpdateToastVisible"))
@@ -1116,7 +1176,7 @@ pub fn init(app: &mut AppContext) {
             // When the update toast is visible, register the keybinding as well.
             EditableBinding::new(
                 "workspace:view_changelog",
-                "查看最新变更日志",
+                "View latest changelog",
                 WorkspaceAction::ViewLatestChangelog,
             )
             .with_context_predicate(id!("Workspace") & id!("UpdateToastVisible"))
@@ -1144,7 +1204,7 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::NewAgentModePane),
         EditableBinding::new(
             "workspace:toggle_ai_assistant",
-            "切换 Warp AI",
+            "Toggle Warp AI",
             WorkspaceAction::ToggleAIAssistant,
         )
         .with_enabled(|| !FeatureFlag::AgentMode.is_enabled())
@@ -1158,8 +1218,11 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "workspace:create_team_env_vars",
-            BindingDescription::new("创建新的团队环境变量")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "新建团队环境变量"),
+            BindingDescription::new("Create new team environment variables")
+                .with_custom_description(
+                    bindings::MAC_MENUS_CONTEXT,
+                    "New Team Environment Variables",
+                ),
             WorkspaceAction::CreateTeamEnvVarCollection,
         )
         .with_custom_action(CustomAction::NewTeamEnvVars)
@@ -1172,8 +1235,11 @@ pub fn init(app: &mut AppContext) {
         .with_group(bindings::BindingGroup::EnvVarCollection.as_str()),
         EditableBinding::new(
             "workspace:create_personal_env_vars",
-            BindingDescription::new("创建新的个人环境变量")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "新建个人环境变量"),
+            BindingDescription::new("Create new personal environment variables")
+                .with_custom_description(
+                    bindings::MAC_MENUS_CONTEXT,
+                    "New Personal Environment Variables",
+                ),
             WorkspaceAction::CreatePersonalEnvVarCollection,
         )
         .with_group(bindings::BindingGroup::EnvVarCollection.as_str())
@@ -1181,8 +1247,8 @@ pub fn init(app: &mut AppContext) {
         .with_context_predicate(id!("Workspace") & id!(flags::ENABLE_WARP_DRIVE)),
         EditableBinding::new(
             "workspace:create_personal_ai_prompt",
-            BindingDescription::new("创建新的个人提示词")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "新建个人提示词"),
+            BindingDescription::new("Create a new personal prompt")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "New Personal Prompt"),
             WorkspaceAction::CreatePersonalAIPrompt,
         )
         .with_group(bindings::BindingGroup::WarpAi.as_str())
@@ -1192,8 +1258,8 @@ pub fn init(app: &mut AppContext) {
         ),
         EditableBinding::new(
             "workspace:create_team_ai_prompt",
-            BindingDescription::new("创建新的团队提示词")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "新建团队提示词"),
+            BindingDescription::new("Create a new team prompt")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "New Team Prompt"),
             WorkspaceAction::CreateTeamAIPrompt,
         )
         .with_group(bindings::BindingGroup::WarpAi.as_str())
@@ -1210,14 +1276,14 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "workspace:shift_focus_left",
-            "将焦点切换到左侧面板",
+            "Switch Focus to Left Panel",
             WorkspaceAction::FocusLeftPanel,
         )
         .with_context_predicate(id!("Workspace"))
         .with_key_binding("cmdorctrl-shift-("),
         EditableBinding::new(
             "workspace:shift_focus_right",
-            "将焦点切换到右侧面板",
+            "Switch Focus to Right Panel",
             WorkspaceAction::FocusRightPanel,
         )
         .with_context_predicate(id!("Workspace"))
@@ -1227,13 +1293,13 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "workspace:import_to_personal_drive",
-            "导入到个人 Drive",
+            "Import To Personal Drive",
             WorkspaceAction::ImportToPersonalDrive,
         )
         .with_context_predicate(id!("Workspace") & id!(flags::ENABLE_WARP_DRIVE)),
         EditableBinding::new(
             "workspace:import_to_team_drive",
-            "导入到团队 Drive",
+            "Import To Team Drive",
             WorkspaceAction::ImportToTeamDrive,
         )
         .with_context_predicate(
@@ -1247,7 +1313,7 @@ pub fn init(app: &mut AppContext) {
     if ChannelState::enable_debug_features() {
         app.register_editable_bindings([EditableBinding::new(
             "workspace:copy_access_token_to_clipboard",
-            "将访问令牌复制到剪贴板",
+            "Copy access token to clipboard",
             WorkspaceAction::CopyAccessTokenToClipboard,
         )
         .with_context_predicate(id!("Workspace"))]);
@@ -1256,8 +1322,8 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "workspace:open_repository",
-            BindingDescription::new("打开仓库")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "打开仓库"),
+            BindingDescription::new("Open repository")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Open Repository"),
             WorkspaceAction::OpenRepository { path: None },
         )
         .with_context_predicate(id!("Workspace"))
@@ -1265,8 +1331,8 @@ pub fn init(app: &mut AppContext) {
         .with_group(bindings::BindingGroup::Folders.as_str()),
         EditableBinding::new(
             "workspace:open_ai_fact_collection",
-            BindingDescription::new("打开 AI 规则")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "打开 AI 规则"),
+            BindingDescription::new("Open AI Rules")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Open AI Rules"),
             WorkspaceAction::OpenAIFactCollection,
         )
         .with_enabled(|| FeatureFlag::AIRules.is_enabled())
@@ -1277,8 +1343,8 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "workspace:open_mcp_servers",
-        BindingDescription::new("打开 MCP 服务器")
-            .with_custom_description(bindings::MAC_MENUS_CONTEXT, "打开 MCP 服务器"),
+        BindingDescription::new("Open MCP Servers")
+            .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Open MCP Servers"),
         WorkspaceAction::OpenMCPServerCollection,
     )
     .with_enabled(|| {
@@ -1290,7 +1356,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "workspace:jump_to_latest_toast",
-        "跳转到最新 Agent 任务",
+        "Jump to latest agent task",
         WorkspaceAction::JumpToLatestToast,
     )
     .with_enabled(|| FeatureFlag::AgentMode.is_enabled())
@@ -1301,7 +1367,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         TOGGLE_NOTIFICATION_MAILBOX_BINDING_NAME,
-        "切换通知收件箱",
+        "Toggle notification mailbox",
         WorkspaceAction::ToggleNotificationMailbox { select_first: true },
     )
     .with_enabled(|| FeatureFlag::HOANotifications.is_enabled())
@@ -1315,7 +1381,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "workspace:toggle_agent_management_view",
-        "切换 Agent 管理视图",
+        "Toggle the agent management view",
         WorkspaceAction::ToggleAgentManagementView,
     )
     .with_enabled(|| FeatureFlag::AgentManagementView.is_enabled())
@@ -1332,8 +1398,8 @@ fn add_open_setting_pages_as_editable_binding(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "workspace:show_settings",
-            BindingDescription::new("打开设置")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "设置"),
+            BindingDescription::new("Open Settings")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Settings"),
             WorkspaceAction::ShowSettings,
         )
         .with_context_predicate(id!("Workspace"))
@@ -1341,7 +1407,7 @@ fn add_open_setting_pages_as_editable_binding(app: &mut AppContext) {
         .with_custom_action(CustomAction::ShowSettings),
         EditableBinding::new(
             "workspace:show_settings_account_page",
-            "打开设置：账号",
+            "Open Settings: Account",
             WorkspaceAction::ShowSettingsPage(SettingsSection::Account),
         )
         .with_context_predicate(id!("Workspace"))
@@ -1349,8 +1415,8 @@ fn add_open_setting_pages_as_editable_binding(app: &mut AppContext) {
         .with_custom_action(CustomAction::ShowAccount),
         EditableBinding::new(
             "workspace:show_settings_appearance_page",
-            BindingDescription::new("打开设置：外观")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "外观..."),
+            BindingDescription::new("Open Settings: Appearance")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Appearance..."),
             WorkspaceAction::ShowSettingsPage(SettingsSection::Appearance),
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
@@ -1358,15 +1424,15 @@ fn add_open_setting_pages_as_editable_binding(app: &mut AppContext) {
         .with_custom_action(CustomAction::ShowAppearance),
         EditableBinding::new(
             "workspace:show_settings_features_page",
-            "打开设置：功能",
+            "Open Settings: Features",
             WorkspaceAction::ShowSettingsPage(SettingsSection::Features),
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
         .with_context_predicate(id!("Workspace")),
         EditableBinding::new(
             "workspace:show_settings_shared_blocks_page",
-            BindingDescription::new("打开设置：共享块")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "查看共享块..."),
+            BindingDescription::new("Open Settings: Shared Blocks")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "View Shared Blocks..."),
             WorkspaceAction::ShowSettingsPage(SettingsSection::SharedBlocks),
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
@@ -1374,8 +1440,10 @@ fn add_open_setting_pages_as_editable_binding(app: &mut AppContext) {
         .with_custom_action(CustomAction::ViewSharedBlocks),
         EditableBinding::new(
             "workspace:show_settings_keyboard_shortcuts_page",
-            BindingDescription::new("打开设置：键盘快捷键")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "配置键盘快捷键..."),
+            BindingDescription::new("Open Settings: Keyboard Shortcuts").with_custom_description(
+                bindings::MAC_MENUS_CONTEXT,
+                "Configure Keyboard Shortcuts...",
+            ),
             WorkspaceAction::ShowSettingsPage(SettingsSection::Keybindings),
         )
         .with_group(bindings::BindingGroup::KeyboardShortcuts.as_str())
@@ -1383,8 +1451,8 @@ fn add_open_setting_pages_as_editable_binding(app: &mut AppContext) {
         .with_custom_action(CustomAction::ConfigureKeybindings),
         EditableBinding::new(
             "workspace:show_settings_about_page",
-            BindingDescription::new("打开设置：关于")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "关于 Warp"),
+            BindingDescription::new("Open Settings: About")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "About Warp"),
             WorkspaceAction::ShowSettingsPage(SettingsSection::About),
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
@@ -1392,8 +1460,8 @@ fn add_open_setting_pages_as_editable_binding(app: &mut AppContext) {
         .with_custom_action(CustomAction::ShowAboutWarp),
         EditableBinding::new(
             "workspace:show_settings_teams_page",
-            BindingDescription::new("打开设置：团队")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "打开团队设置"),
+            BindingDescription::new("Open Settings: Teams")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Open Team Settings"),
             WorkspaceAction::ShowSettingsPage(SettingsSection::Teams),
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
@@ -1401,22 +1469,22 @@ fn add_open_setting_pages_as_editable_binding(app: &mut AppContext) {
         .with_context_predicate(id!("Workspace")),
         EditableBinding::new(
             "workspace:show_settings_privacy_page",
-            BindingDescription::new("打开设置：隐私"),
+            BindingDescription::new("Open Settings: Privacy"),
             WorkspaceAction::ShowSettingsPage(SettingsSection::Privacy),
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
         .with_context_predicate(id!("Workspace")),
         EditableBinding::new(
             "workspace:show_settings_warpify_page",
-            BindingDescription::new("打开设置：Warpify")
-                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "配置 Warpify..."),
+            BindingDescription::new("Open Settings: Warpify")
+                .with_custom_description(bindings::MAC_MENUS_CONTEXT, "Configure Warpify..."),
             WorkspaceAction::ShowSettingsPage(SettingsSection::Warpify),
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
         .with_context_predicate(id!("Workspace")),
         EditableBinding::new(
             "workspace:show_ai_settings_page",
-            BindingDescription::new("打开设置：AI"),
+            BindingDescription::new("Open Settings: AI"),
             WorkspaceAction::ShowSettingsPage(SettingsSection::WarpAgent),
         )
         .with_enabled(|| FeatureFlag::AgentMode.is_enabled())
@@ -1424,42 +1492,42 @@ fn add_open_setting_pages_as_editable_binding(app: &mut AppContext) {
         .with_context_predicate(id!("Workspace")),
         EditableBinding::new(
             "workspace:show_settings_billing_and_usage_page",
-            BindingDescription::new("打开设置：账单和用量"),
+            BindingDescription::new("Open Settings: Billing and usage"),
             WorkspaceAction::ShowSettingsPage(SettingsSection::BillingAndUsage),
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
         .with_context_predicate(id!("Workspace")),
         EditableBinding::new(
             "workspace:show_settings_code_page",
-            BindingDescription::new("打开设置：代码"),
+            BindingDescription::new("Open Settings: Code"),
             WorkspaceAction::ShowSettingsPage(SettingsSection::CodeIndexing),
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
         .with_context_predicate(id!("Workspace")),
         EditableBinding::new(
             "workspace:show_settings_referrals_page",
-            BindingDescription::new("打开设置：推荐"),
+            BindingDescription::new("Open Settings: Referrals"),
             WorkspaceAction::ShowSettingsPage(SettingsSection::Referrals),
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
         .with_context_predicate(id!("Workspace")),
         EditableBinding::new(
             "workspace:show_settings_environments_page",
-            BindingDescription::new("打开设置：环境"),
+            BindingDescription::new("Open Settings: Environments"),
             WorkspaceAction::ShowSettingsPage(SettingsSection::CloudEnvironments),
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
         .with_context_predicate(id!("Workspace")),
         EditableBinding::new(
             "workspace:show_mcp_servers_settings_page",
-            BindingDescription::new("打开设置：MCP 服务器"),
+            BindingDescription::new("Open Settings: MCP Servers"),
             WorkspaceAction::ShowSettingsPage(SettingsSection::MCPServers),
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
         .with_context_predicate(id!("Workspace")),
         EditableBinding::new(
             "workspace:open_settings_file",
-            "打开设置文件",
+            "Open settings file",
             WorkspaceAction::OpenSettingsFile,
         )
         .with_enabled(|| FeatureFlag::SettingsFile.is_enabled() && cfg!(feature = "local_fs"))
@@ -1475,39 +1543,39 @@ fn add_overflow_menu_items_as_editable_binding(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "workspace:show_invite_modal",
-            "邀请成员...",
+            "Invite People...",
             WorkspaceAction::ShowReferralSettingsPage,
         )
         .with_context_predicate(id!("Workspace"))
         .with_custom_action(CustomAction::ReferAFriend),
         EditableBinding::new(
             "workspace:link_to_slack",
-            "加入我们的 Slack 社区（打开外部链接）",
+            "Join our Slack community (opens external link)",
             WorkspaceAction::JoinSlack,
         )
         .with_context_predicate(id!("Workspace")),
         EditableBinding::new(
             "workspace:link_to_user_docs",
-            "查看用户文档（打开外部链接）",
+            "View user docs (opens external link)",
             WorkspaceAction::ViewUserDocs,
         )
         .with_context_predicate(id!("Workspace")),
         EditableBinding::new(
             "workspace:send_feedback",
-            BindingDescription::new("发送反馈（打开外部链接）"),
+            BindingDescription::new("Send feedback (opens external link)"),
             WorkspaceAction::SendFeedback,
         )
         .with_context_predicate(id!("Workspace")),
         #[cfg(not(target_family = "wasm"))]
         EditableBinding::new(
             "workspace:view_logs",
-            "查看 Warp 日志",
+            "View Warp logs",
             WorkspaceAction::ViewLogs,
         )
         .with_context_predicate(id!("Workspace")),
         EditableBinding::new(
             "workspace:link_to_privacy_policy",
-            "查看隐私政策（打开外部链接）",
+            "View privacy policy (opens external link)",
             WorkspaceAction::ViewPrivacyPolicy,
         )
         .with_context_predicate(id!("Workspace")),

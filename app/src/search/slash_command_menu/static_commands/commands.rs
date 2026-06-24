@@ -12,7 +12,7 @@ use crate::ui_components::color_dot;
 
 pub static AGENT: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/agent",
-    description: "开始新对话",
+    description: "Start a new conversation",
     icon_path: "bundled/svg/oz.svg",
     availability: Availability::AI_ENABLED.union(Availability::NOT_CLOUD_AGENT),
     auto_enter_ai_mode: false,
@@ -21,7 +21,7 @@ pub static AGENT: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
 
 pub static CLOUD_AGENT: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/cloud-agent",
-    description: "开始新的云端 Agent 对话",
+    description: "Start a new cloud agent conversation",
     icon_path: "bundled/svg/oz-cloud.svg",
     availability: Availability::AI_ENABLED.union(Availability::NOT_CLOUD_AGENT),
     auto_enter_ai_mode: false,
@@ -30,7 +30,7 @@ pub static CLOUD_AGENT: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand
 
 pub const ADD_MCP: StaticCommand = StaticCommand {
     name: "/add-mcp",
-    description: "通过 MCP 设置页面添加新的 MCP 服务器",
+    description: "Add a new MCP server via the MCP settings page",
     icon_path: "bundled/svg/dataflow.svg",
     availability: Availability::AI_ENABLED,
     auto_enter_ai_mode: false,
@@ -39,7 +39,7 @@ pub const ADD_MCP: StaticCommand = StaticCommand {
 
 pub const PR_COMMENTS: StaticCommand = StaticCommand {
     name: "/pr-comments",
-    description: "拉取 GitHub PR 审查评论",
+    description: "Pull GitHub PR review comments",
     icon_path: "bundled/svg/github.svg",
     availability: Availability::REPOSITORY.union(Availability::AI_ENABLED),
     auto_enter_ai_mode: true,
@@ -48,20 +48,20 @@ pub const PR_COMMENTS: StaticCommand = StaticCommand {
 
 pub static CREATE_ENVIRONMENT: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/create-environment",
-    description: "通过引导式设置创建 Oz 环境（Docker 镜像 + 仓库）",
+    description: "Create an Oz environment (Docker image + repos) via guided setup",
     icon_path: "bundled/svg/dataflow.svg",
     availability: Availability::AI_ENABLED,
     auto_enter_ai_mode: false,
     argument: Some(
         Argument::optional()
-            .with_hint_text("<可选仓库路径或 GitHub URL>")
+            .with_hint_text("<optional repo paths or GitHub URLs>")
             .with_execute_on_selection(),
     ),
 });
 
 pub const CREATE_DOCKER_SANDBOX: StaticCommand = StaticCommand {
     name: "/docker-sandbox",
-    description: "创建新的 Docker 沙盒终端会话",
+    description: "Create a new docker sandbox terminal session",
     icon_path: "bundled/svg/docker.svg",
     availability: Availability::LOCAL.union(Availability::AI_ENABLED),
     auto_enter_ai_mode: false,
@@ -70,16 +70,16 @@ pub const CREATE_DOCKER_SANDBOX: StaticCommand = StaticCommand {
 
 pub static CREATE_NEW_PROJECT: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/create-new-project",
-    description: "让 Oz 引导你创建新的编码项目",
+    description: "Have Oz walk you through creating a new coding project",
     icon_path: "bundled/svg/plus.svg",
     availability: Availability::LOCAL | Availability::AI_ENABLED,
     auto_enter_ai_mode: true,
-    argument: Some(Argument::required().with_hint_text("<描述你想构建的内容>")),
+    argument: Some(Argument::required().with_hint_text("<describe what you want to build>")),
 });
 
 pub static EDIT_SKILL: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/open-skill",
-    description: "在 Warp 内置编辑器中打开技能的 Markdown 文件",
+    description: "Open a skill's markdown file in Warp's built-in editor",
     icon_path: "bundled/svg/file-code-02.svg",
     availability: Availability::AI_ENABLED,
     auto_enter_ai_mode: false,
@@ -88,7 +88,7 @@ pub static EDIT_SKILL: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand 
 
 pub static INVOKE_SKILL: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/skills",
-    description: "调用技能",
+    description: "Invoke a skill",
     icon_path: "bundled/svg/stars-01.svg",
     availability: Availability::AI_ENABLED,
     auto_enter_ai_mode: false,
@@ -97,7 +97,7 @@ pub static INVOKE_SKILL: LazyLock<StaticCommand> = LazyLock::new(|| StaticComman
 
 pub static ADD_PROMPT: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/add-prompt",
-    description: "添加新的 Agent 提示词",
+    description: "Add new Agent prompt",
     icon_path: if FeatureFlag::AgentView.is_enabled() {
         "bundled/svg/prompt.svg"
     } else {
@@ -110,7 +110,7 @@ pub static ADD_PROMPT: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand 
 
 pub const ADD_RULE: StaticCommand = StaticCommand {
     name: "/add-rule",
-    description: "为 Agent 添加新的全局规则",
+    description: "Add a new global rule for the agent",
     icon_path: "bundled/svg/book-open.svg",
     availability: Availability::AI_ENABLED,
     auto_enter_ai_mode: false,
@@ -119,20 +119,33 @@ pub const ADD_RULE: StaticCommand = StaticCommand {
 
 pub static EDIT: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/open-file",
-    description: "在 Warp 代码编辑器中打开文件",
+    description: "Open a file in Warp's code editor",
     icon_path: "bundled/svg/file-code-02.svg",
     availability: Availability::LOCAL,
     auto_enter_ai_mode: false,
-    argument: Some(Argument::optional().with_hint_text("<文件路径[:行[:列]]> 或 @ 搜索")),
+    argument: Some(
+        Argument::optional().with_hint_text("<path/to/file[:line[:col]]> or \"@\" to search"),
+    ),
 });
 
 pub static RENAME_TAB: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/rename-tab",
-    description: "重命名当前标签页",
+    description: "Rename the current tab",
     icon_path: "bundled/svg/pencil-line.svg",
     availability: Availability::ALWAYS,
     auto_enter_ai_mode: false,
-    argument: Some(Argument::required().with_hint_text("<标签页名称>")),
+    argument: Some(Argument::required().with_hint_text("<tab name>")),
+});
+
+pub static RENAME_CONVERSATION: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
+    name: "/rename-conversation",
+    description: "Rename the current conversation",
+    icon_path: "bundled/svg/pencil-line.svg",
+    availability: Availability::AGENT_VIEW
+        | Availability::ACTIVE_CONVERSATION
+        | Availability::AI_ENABLED,
+    auto_enter_ai_mode: false,
+    argument: Some(Argument::required().with_hint_text("<new title>")),
 });
 
 static SET_TAB_COLOR_HINT: LazyLock<String> = LazyLock::new(|| {
@@ -147,7 +160,7 @@ static SET_TAB_COLOR_HINT: LazyLock<String> = LazyLock::new(|| {
 
 pub static SET_TAB_COLOR: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/set-tab-color",
-    description: "设置当前标签页颜色",
+    description: "Set the color of the current tab",
     icon_path: "bundled/svg/ellipse.svg",
     availability: Availability::ALWAYS,
     auto_enter_ai_mode: false,
@@ -155,16 +168,15 @@ pub static SET_TAB_COLOR: LazyLock<StaticCommand> = LazyLock::new(|| StaticComma
 });
 
 pub static FORK: LazyLock<StaticCommand> = LazyLock::new(|| {
-    let hint_text = "<要发送到分叉对话的可选提示词>";
+    let hint_text = "<optional prompt to send in forked conversation>";
     StaticCommand {
         name: "/fork",
-        description: "在新窗格或新标签页中分叉当前对话",
+        description: "Fork the current conversation in a new pane or a new tab",
         icon_path: "bundled/svg/arrow-split.svg",
         availability: Availability::AGENT_VIEW
             | Availability::ACTIVE_CONVERSATION
             | Availability::NO_LRC_CONTROL
-            | Availability::AI_ENABLED
-            | Availability::NOT_CLOUD_AGENT,
+            | Availability::AI_ENABLED,
         auto_enter_ai_mode: true,
         argument: Some(Argument::optional().with_hint_text(hint_text)),
     }
@@ -172,7 +184,7 @@ pub static FORK: LazyLock<StaticCommand> = LazyLock::new(|| {
 
 pub static MOVE_TO_CLOUD: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/handoff",
-    description: "将此对话交接给云端 Agent",
+    description: "Hand off this conversation to a cloud agent",
     icon_path: "bundled/svg/upload-cloud-01.svg",
     availability: Availability::AGENT_VIEW
         | Availability::ACTIVE_CONVERSATION
@@ -181,14 +193,14 @@ pub static MOVE_TO_CLOUD: LazyLock<StaticCommand> = LazyLock::new(|| StaticComma
     auto_enter_ai_mode: false,
     argument: Some(
         Argument::optional()
-            .with_hint_text("<可选后续提示词>")
+            .with_hint_text("<optional follow-up prompt>")
             .with_execute_on_selection(),
     ),
 });
 
 pub const OPEN_CODE_REVIEW: StaticCommand = StaticCommand {
     name: "/open-code-review",
-    description: "打开代码审查",
+    description: "Open code review",
     icon_path: "bundled/svg/diff.svg",
     availability: Availability::REPOSITORY,
     auto_enter_ai_mode: false,
@@ -197,7 +209,7 @@ pub const OPEN_CODE_REVIEW: StaticCommand = StaticCommand {
 
 pub const INDEX: StaticCommand = StaticCommand {
     name: "/index",
-    description: "索引此代码库",
+    description: "Index this codebase",
     icon_path: "bundled/svg/find-all.svg",
     availability: Availability::REPOSITORY
         .union(Availability::CODEBASE_CONTEXT)
@@ -208,7 +220,7 @@ pub const INDEX: StaticCommand = StaticCommand {
 
 pub const INIT: StaticCommand = StaticCommand {
     name: "/init",
-    description: "索引此代码库并生成 AGENTS.md 文件",
+    description: "Index this codebase and generate an AGENTS.md file",
     icon_path: "bundled/svg/warp-2.svg",
     availability: Availability::REPOSITORY
         .union(Availability::AGENT_VIEW)
@@ -219,7 +231,7 @@ pub const INIT: StaticCommand = StaticCommand {
 
 pub const OPEN_PROJECT_RULES: StaticCommand = StaticCommand {
     name: "/open-project-rules",
-    description: "打开项目规则文件 (AGENTS.md)",
+    description: "Open the project rules file (AGENTS.md)",
     icon_path: "bundled/svg/file-code-02.svg",
     availability: Availability::REPOSITORY.union(Availability::AI_ENABLED),
     auto_enter_ai_mode: false,
@@ -228,7 +240,7 @@ pub const OPEN_PROJECT_RULES: StaticCommand = StaticCommand {
 
 pub const OPEN_MCP_SERVERS: StaticCommand = StaticCommand {
     name: "/open-mcp-servers",
-    description: "打开 MCP 服务器",
+    description: "Open MCP servers",
     icon_path: "bundled/svg/dataflow.svg",
     availability: Availability::AI_ENABLED,
     auto_enter_ai_mode: false,
@@ -237,7 +249,7 @@ pub const OPEN_MCP_SERVERS: StaticCommand = StaticCommand {
 
 pub const OPEN_SETTINGS_FILE: StaticCommand = StaticCommand {
     name: "/open-settings-file",
-    description: "打开设置文件 (TOML)",
+    description: "Open settings file (TOML)",
     icon_path: "bundled/svg/file-code-02.svg",
     availability: Availability::LOCAL,
     auto_enter_ai_mode: false,
@@ -246,7 +258,7 @@ pub const OPEN_SETTINGS_FILE: StaticCommand = StaticCommand {
 
 pub const CHANGELOG: StaticCommand = StaticCommand {
     name: "/changelog",
-    description: "打开最新变更日志",
+    description: "Open the latest changelog",
     icon_path: "bundled/svg/book-open.svg",
     availability: Availability::ALWAYS,
     auto_enter_ai_mode: false,
@@ -258,7 +270,7 @@ pub const CHANGELOG: StaticCommand = StaticCommand {
 // argument after `/feedback` would fall through and be treated as plain input.
 pub static FEEDBACK: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/feedback",
-    description: "发送反馈",
+    description: "Send feedback",
     icon_path: "bundled/svg/feedback.svg",
     availability: Availability::ALWAYS,
     auto_enter_ai_mode: false,
@@ -267,7 +279,7 @@ pub static FEEDBACK: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
 
 pub const OPEN_REPO: StaticCommand = StaticCommand {
     name: "/open-repo",
-    description: "切换到另一个已索引仓库",
+    description: "Switch to another indexed repository",
     icon_path: "bundled/svg/folder.svg",
     availability: Availability::LOCAL.union(Availability::AI_ENABLED),
     auto_enter_ai_mode: false,
@@ -276,7 +288,7 @@ pub const OPEN_REPO: StaticCommand = StaticCommand {
 
 pub const OPEN_RULES: StaticCommand = StaticCommand {
     name: "/open-rules",
-    description: "查看所有全局和项目规则",
+    description: "View all of your global and project rules",
     icon_path: "bundled/svg/book-open.svg",
     availability: Availability::AI_ENABLED,
     auto_enter_ai_mode: false,
@@ -285,7 +297,7 @@ pub const OPEN_RULES: StaticCommand = StaticCommand {
 
 pub static NEW: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/new",
-    description: "开始新对话（/agent 的别名）",
+    description: "Start a new conversation (alias for /agent)",
     icon_path: "bundled/svg/new-conversation.svg",
     availability: Availability::NO_LRC_CONTROL
         | Availability::AI_ENABLED
@@ -296,7 +308,7 @@ pub static NEW: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
 
 pub static MODEL: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/model",
-    description: "切换基础 Agent 模型",
+    description: "Switch the base agent model",
     icon_path: "bundled/svg/oz.svg",
     availability: Availability::AGENT_VIEW | Availability::AI_ENABLED,
     auto_enter_ai_mode: true,
@@ -305,40 +317,40 @@ pub static MODEL: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
 
 pub static HOST: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/host",
-    description: "切换云端 Agent 执行主机",
+    description: "Switch the cloud agent execution host",
     icon_path: "bundled/svg/oz-cloud.svg",
     availability: Availability::AGENT_VIEW
         | Availability::AI_ENABLED
-        | Availability::CLOUD_AGENT_V2,
+        | Availability::CLOUD_MODE_V2_COMPOSER,
     auto_enter_ai_mode: true,
     argument: None,
 });
 
 pub static HARNESS: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/harness",
-    description: "切换云端 Agent harness",
+    description: "Switch the cloud agent harness",
     icon_path: "bundled/svg/oz.svg",
     availability: Availability::AGENT_VIEW
         | Availability::AI_ENABLED
-        | Availability::CLOUD_AGENT_V2,
+        | Availability::CLOUD_MODE_V2_COMPOSER,
     auto_enter_ai_mode: true,
     argument: None,
 });
 
 pub static ENVIRONMENT: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/environment",
-    description: "切换云端 Agent 环境",
+    description: "Switch the cloud agent environment",
     icon_path: "bundled/svg/globe-04.svg",
     availability: Availability::AGENT_VIEW
         | Availability::AI_ENABLED
-        | Availability::CLOUD_AGENT_V2,
+        | Availability::CLOUD_MODE_V2_COMPOSER,
     auto_enter_ai_mode: true,
     argument: None,
 });
 
 pub static PROFILE: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/profile",
-    description: "切换当前执行配置",
+    description: "Switch the active execution profile",
     icon_path: "bundled/svg/psychology.svg",
     availability: Availability::AGENT_VIEW
         | Availability::AI_ENABLED
@@ -351,22 +363,22 @@ pub const PLAN_NAME: &str = "/plan";
 
 pub static PLAN: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: PLAN_NAME,
-    description: "让 Agent 先做研究并为任务创建计划",
+    description: "Prompt the agent to do some research and create a plan for a task",
     icon_path: "bundled/svg/file-06.svg",
     availability: Availability::AI_ENABLED,
     auto_enter_ai_mode: true,
-    argument: Some(Argument::optional().with_hint_text("<描述你的任务>")),
+    argument: Some(Argument::optional().with_hint_text("<describe your task>")),
 });
 
 pub const ORCHESTRATE_NAME: &str = "/orchestrate";
 
 pub static ORCHESTRATE: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: ORCHESTRATE_NAME,
-    description: "将任务拆分为子任务，并使用多个 Agent 并行运行",
+    description: "Break a task into subtasks and run them in parallel with multiple agents",
     icon_path: "bundled/svg/oz.svg",
     availability: Availability::LOCAL | Availability::AI_ENABLED,
     auto_enter_ai_mode: true,
-    argument: Some(Argument::optional().with_hint_text("<描述你的任务>")),
+    argument: Some(Argument::optional().with_hint_text("<describe your task>")),
 });
 
 /// If `query` starts with the given command `name` followed by a space,
@@ -380,7 +392,7 @@ pub fn strip_command_prefix(query: &str, name: &str) -> Option<String> {
 
 pub static COMPACT: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/compact",
-    description: "通过总结对话历史释放上下文",
+    description: "Free up context by summarizing convo history",
     icon_path: "bundled/svg/collapse_content.svg",
     availability: Availability::AGENT_VIEW
         | Availability::ACTIVE_CONVERSATION
@@ -388,12 +400,14 @@ pub static COMPACT: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
         | Availability::AI_ENABLED
         | Availability::NOT_CLOUD_AGENT,
     auto_enter_ai_mode: true,
-    argument: Some(Argument::optional().with_hint_text("<可选自定义总结说明>")),
+    argument: Some(
+        Argument::optional().with_hint_text("<optional custom summarization instructions>"),
+    ),
 });
 
 pub static COMPACT_AND: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/compact-and",
-    description: "压缩对话后发送后续提示词",
+    description: "Compact conversation and then send a follow-up prompt",
     icon_path: "bundled/svg/collapse_content.svg",
     availability: Availability::AGENT_VIEW
         | Availability::ACTIVE_CONVERSATION
@@ -401,26 +415,26 @@ pub static COMPACT_AND: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand
         | Availability::AI_ENABLED
         | Availability::NOT_CLOUD_AGENT,
     auto_enter_ai_mode: true,
-    argument: Some(Argument::optional().with_hint_text("<压缩后要发送的提示词>")),
+    argument: Some(Argument::optional().with_hint_text("<prompt to send after compaction>")),
 });
 
 pub static QUEUE: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/queue",
-    description: "排队一个提示词，在 Agent 回复完成后发送",
+    description: "Queue a prompt to send after the agent finishes responding",
     icon_path: "bundled/svg/clock-plus.svg",
     availability: Availability::AGENT_VIEW
         | Availability::ACTIVE_CONVERSATION
         | Availability::AI_ENABLED
         | Availability::NOT_CLOUD_AGENT,
     auto_enter_ai_mode: true,
-    argument: Some(Argument::required().with_hint_text("<Agent 完成后要发送的提示词>")),
+    argument: Some(Argument::required().with_hint_text("<prompt to send when agent is done>")),
 });
 
 pub static FORK_AND_COMPACT: LazyLock<StaticCommand> = LazyLock::new(|| {
-    let hint_text = "<压缩后要发送的可选提示词>";
+    let hint_text = "<optional prompt to send after compaction>";
     StaticCommand {
         name: "/fork-and-compact",
-        description: "分叉当前对话，并在分叉副本中压缩",
+        description: "Fork current conversation and compact it in the forked copy",
         icon_path: "bundled/svg/fork_and_compact.svg",
         availability: Availability::AGENT_VIEW
             | Availability::ACTIVE_CONVERSATION
@@ -434,7 +448,7 @@ pub static FORK_AND_COMPACT: LazyLock<StaticCommand> = LazyLock::new(|| {
 
 pub const FORK_FROM: StaticCommand = StaticCommand {
     name: "/fork-from",
-    description: "从指定查询分叉对话",
+    description: "Fork conversation from a specific query",
     icon_path: "bundled/svg/arrow-split.svg",
     availability: Availability::AGENT_VIEW
         .union(Availability::NO_LRC_CONTROL)
@@ -445,14 +459,15 @@ pub const FORK_FROM: StaticCommand = StaticCommand {
 };
 
 pub static CONTINUE_LOCALLY: LazyLock<StaticCommand> = LazyLock::new(|| {
-    let hint_text = "<要发送到分叉对话的可选提示词>";
+    let hint_text = "<optional prompt to send in local conversation>";
     StaticCommand {
         name: "/continue-locally",
-        description: "在本地继续此云端对话",
+        description: "Continue this cloud conversation locally",
         icon_path: "bundled/svg/arrow-split.svg",
         availability: Availability::AGENT_VIEW
             | Availability::ACTIVE_CONVERSATION
-            | Availability::AI_ENABLED,
+            | Availability::AI_ENABLED
+            | Availability::CLOUD_AGENT,
         auto_enter_ai_mode: true,
         argument: Some(Argument::optional().with_hint_text(hint_text)),
     }
@@ -460,7 +475,7 @@ pub static CONTINUE_LOCALLY: LazyLock<StaticCommand> = LazyLock::new(|| {
 
 pub const USAGE: StaticCommand = StaticCommand {
     name: "/usage",
-    description: "打开账单和用量设置",
+    description: "Open billing and usage settings",
     icon_path: "bundled/svg/bar-chart-04.svg",
     availability: Availability::AI_ENABLED,
     auto_enter_ai_mode: false,
@@ -469,7 +484,7 @@ pub const USAGE: StaticCommand = StaticCommand {
 
 pub const REMOTE_CONTROL: StaticCommand = StaticCommand {
     name: "/remote-control",
-    description: "为此会话启动远程控制",
+    description: "Start remote control for this session",
     icon_path: "bundled/svg/phone-01.svg",
     availability: Availability::AI_ENABLED.union(Availability::NOT_CLOUD_AGENT),
     auto_enter_ai_mode: false,
@@ -478,7 +493,7 @@ pub const REMOTE_CONTROL: StaticCommand = StaticCommand {
 
 pub const COST: StaticCommand = StaticCommand {
     name: "/cost",
-    description: "切换额度使用详情",
+    description: "Toggle credit usage details",
     icon_path: "bundled/svg/bar-chart-04.svg",
     availability: Availability::AGENT_VIEW
         .union(Availability::AI_ENABLED)
@@ -489,7 +504,7 @@ pub const COST: StaticCommand = StaticCommand {
 
 pub const CONVERSATIONS: StaticCommand = StaticCommand {
     name: "/conversations",
-    description: "打开对话历史",
+    description: "Open conversation history",
     icon_path: "bundled/svg/conversation.svg",
     availability: Availability::AI_ENABLED,
     auto_enter_ai_mode: false,
@@ -498,7 +513,7 @@ pub const CONVERSATIONS: StaticCommand = StaticCommand {
 
 pub static PROMPTS: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/prompts",
-    description: "搜索已保存提示词",
+    description: "Search saved prompts",
     icon_path: "bundled/svg/prompt.svg",
     availability: Availability::AI_ENABLED,
     auto_enter_ai_mode: false,
@@ -507,7 +522,7 @@ pub static PROMPTS: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
 
 pub const REWIND: StaticCommand = StaticCommand {
     name: "/rewind",
-    description: "回退到对话中的先前位置",
+    description: "Rewind to a previous point in the conversation",
     icon_path: "bundled/svg/clock-rewind.svg",
     availability: Availability::AGENT_VIEW
         .union(Availability::AI_ENABLED)
@@ -518,7 +533,7 @@ pub const REWIND: StaticCommand = StaticCommand {
 
 pub const EXPORT_TO_CLIPBOARD: StaticCommand = StaticCommand {
     name: "/export-to-clipboard",
-    description: "以 Markdown 格式将当前对话导出到剪贴板",
+    description: "Export current conversation to clipboard in markdown format",
     icon_path: "bundled/svg/copy.svg",
     availability: Availability::AGENT_VIEW
         .union(Availability::AI_ENABLED)
@@ -529,13 +544,13 @@ pub const EXPORT_TO_CLIPBOARD: StaticCommand = StaticCommand {
 
 pub static EXPORT_TO_FILE: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/export-to-file",
-    description: "将当前对话导出到 Markdown 文件",
+    description: "Export current conversation to a markdown file",
     icon_path: "bundled/svg/download-01.svg",
     availability: Availability::AGENT_VIEW
         | Availability::AI_ENABLED
         | Availability::NOT_CLOUD_AGENT,
     auto_enter_ai_mode: true,
-    argument: Some(Argument::optional().with_hint_text("<可选文件名>")),
+    argument: Some(Argument::optional().with_hint_text("<optional filename>")),
 });
 
 pub static COMMAND_REGISTRY: LazyLock<Registry> = LazyLock::new(Registry::new);
@@ -622,6 +637,7 @@ fn all_commands() -> Vec<StaticCommand> {
         AGENT.clone(),
         NEW.clone(),
         PLAN.clone(),
+        RENAME_CONVERSATION.clone(),
         RENAME_TAB.clone(),
         SET_TAB_COLOR.clone(),
         USAGE,
@@ -718,9 +734,7 @@ fn all_commands() -> Vec<StaticCommand> {
         commands.push(OPEN_REPO);
     }
 
-    if FeatureFlag::OrchestrationV2.is_enabled() {
-        commands.push(ORCHESTRATE.clone());
-    }
+    commands.push(ORCHESTRATE.clone());
 
     if FeatureFlag::SettingsFile.is_enabled() && cfg!(feature = "local_fs") {
         commands.push(OPEN_SETTINGS_FILE);

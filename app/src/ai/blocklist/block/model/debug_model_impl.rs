@@ -27,6 +27,7 @@ impl AIBlockModel for DebugAIBlockModel {
                     error_message: "未收到输出。".to_owned(),
                     will_attempt_resume: false,
                     waiting_for_network: false,
+                    is_user_error: false,
                 },
             },
         }

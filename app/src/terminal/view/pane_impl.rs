@@ -38,7 +38,7 @@ use crate::pane_group::pane::view::header::components::{
 use crate::pane_group::pane::view::header::{render_pane_header_draggable, PANE_HEADER_HEIGHT};
 use crate::pane_group::pane::view::PaneHeaderAction;
 use crate::pane_group::pane::{view, PaneStack};
-use crate::pane_group::{BackingView, SplitPaneState};
+use crate::pane_group::{BackingView, SplitPaneState, TOGGLE_MAXIMIZE_PANE_BINDING_NAME};
 use crate::settings::app_installation_detection::{
     UserAppInstallDetectionSettings, UserAppInstallStatus,
 };
@@ -51,6 +51,7 @@ use crate::ui_components::agent_icon::terminal_view_agent_icon_variant;
 use crate::ui_components::buttons::icon_button_with_color;
 use crate::ui_components::icon_with_status::render_icon_with_status;
 use crate::ui_components::{blended_colors, icons};
+use crate::util::bindings::keybinding_name_to_display_string;
 use crate::workspace::tab_settings::TabSettings;
 
 /// Total size of the agent icon-with-status component rendered in the pane header.
@@ -257,19 +258,10 @@ impl TerminalView {
         let is_fullscreen_agent_view = self.agent_view_controller.as_ref(app).is_fullscreen();
 
         if in_nav_stack || (is_fullscreen_agent_view && has_parent_terminal) {
-            if FeatureFlag::OrchestrationV2.is_enabled() {
-                Flex::row()
-                    .with_cross_axis_alignment(CrossAxisAlignment::Center)
-                    .with_child(ChildView::new(&self.agent_view_back_button).finish())
-                    .finish()
-            } else {
-                Flex::column()
-                    .with_main_axis_alignment(MainAxisAlignment::Center)
-                    .with_cross_axis_alignment(CrossAxisAlignment::Start)
-                    .with_main_axis_size(MainAxisSize::Max)
-                    .with_child(ChildView::new(&self.agent_view_back_button).finish())
-                    .finish()
-            }
+            Flex::row()
+                .with_cross_axis_alignment(CrossAxisAlignment::Center)
+                .with_child(ChildView::new(&self.agent_view_back_button).finish())
+                .finish()
         } else {
             Flex::row().finish()
         }
@@ -476,8 +468,7 @@ impl TerminalView {
     }
 
     fn render_parent_conversation_header_card(&self, app: &AppContext) -> Option<Box<dyn Element>> {
-        if !(FeatureFlag::OrchestrationV2.is_enabled()
-            && FeatureFlag::AgentView.is_enabled()
+        if !(FeatureFlag::AgentView.is_enabled()
             && self.agent_view_controller.as_ref(app).is_fullscreen())
         {
             return None;
@@ -503,23 +494,12 @@ impl TerminalView {
         parent_conversation_header_card: Option<Box<dyn Element>>,
         app: &AppContext,
     ) -> Box<dyn Element> {
-        // When `OrchestrationPillBar` is on, the pill bar takes the place of the
-        // parent navigation card (the parent pill is the "back to parent" link)
-        // and is shown for the orchestrator and the swap-target child panes.
-        // Split-off panes ("Open in new pane" / "Open in new tab") instead
-        // render a parent→child breadcrumb row so the user has a clear way
-        // back to the orchestrator without rendering the full sibling pill
-        // list a second time alongside the orchestrator's own pill bar.
-        //
-        // `OrchestrationViewerPillBar` is the parallel flag for shared
-        // session viewers (web + native). Children are registered via the
-        // REST data fetch in `OrchestrationViewerModel`; when none have
-        // arrived yet, `OrchestrationPillBar::pill_specs` returns `None`
-        // and the pill bar's `render` short-circuits to `Empty`, so the
-        // gate here is intentionally permissive.
-        if (FeatureFlag::OrchestrationPillBar.is_enabled()
-            || FeatureFlag::OrchestrationViewerPillBar.is_enabled())
-            && FeatureFlag::AgentView.is_enabled()
+        // The pill bar is shown for the orchestrator and swap-target child panes.
+        // Split-off panes ("Open in new pane" / "Open in new tab") render a
+        // breadcrumb row instead. When no children have arrived yet,
+        // `OrchestrationPillBar::pill_specs` returns `None` and the pill
+        // bar's `render` short-circuits to `Empty`.
+        if FeatureFlag::AgentView.is_enabled()
             && self.agent_view_controller.as_ref(app).is_fullscreen()
         {
             // The wrapping `Flex::column` would otherwise pass an infinite
@@ -552,10 +532,6 @@ impl TerminalView {
                 .with_child(pinned_header)
                 .with_child(secondary_row)
                 .finish();
-        }
-
-        if !FeatureFlag::OrchestrationV2.is_enabled() {
-            return header;
         }
 
         if let Some(parent_card) = parent_conversation_header_card {
@@ -724,6 +700,10 @@ impl BackingView for TerminalView {
             items.push(
                 MenuItemFields::toggle_pane_action(is_maximized)
                     .with_on_select_action(TerminalAction::ToggleMaximizePane)
+                    .with_key_shortcut_label(keybinding_name_to_display_string(
+                        TOGGLE_MAXIMIZE_PANE_BINDING_NAME,
+                        ctx,
+                    ))
                     .into_item(),
             );
         }
@@ -1052,6 +1032,17 @@ impl TerminalView {
         self.selected_conversation_for_user_facing_chrome(ctx)
             .map(|conversation| {
                 self.selected_conversation_display_title_for_chrome(conversation, is_ambient_agent)
+            })
+    }
+
+    /// Whether the selected conversation is a local orchestration child: it was spawned by a
+    /// parent orchestrator and is not executing on a remote worker. These runs are backed by a
+    /// server task (so they carry an ambient task id) but execute locally, so their agent icon
+    /// must use the local treatment rather than the cloud/ambient one.
+    pub(crate) fn selected_conversation_is_local_child(&self, ctx: &AppContext) -> bool {
+        self.selected_conversation_for_user_facing_chrome(ctx)
+            .is_some_and(|conversation| {
+                conversation.is_child_agent_conversation() && !conversation.is_remote_child()
             })
     }
 

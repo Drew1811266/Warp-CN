@@ -67,8 +67,8 @@ use crate::settings::{
     ChangelogSettings, CloudPreferencesSettings, CodeEditorLineNumberMode,
     CodeEditorLineNumberModeSetting, CodeSettings, CommandCorrections, CompletionsOpenWhileTyping,
     CopyOnSelect, CtrlTabBehavior, DefaultSessionMode, EnableSlashCommandsInTerminal,
-    EnableSshWrapper, ErrorUnderliningEnabled, ExtraMetaKeys, GPUSettings, GlobalHotkeyMode,
-    InputSettings, InputSettingsChangedEvent, LinuxSelectionClipboard, MiddleClickPasteEnabled,
+    ErrorUnderliningEnabled, ExtraMetaKeys, GPUSettings, GlobalHotkeyMode, InputSettings,
+    InputSettingsChangedEvent, LinuxSelectionClipboard, MiddleClickPasteEnabled,
     MouseScrollMultiplier, OutlineCodebaseSymbolsForAtContextMenu, PreferLowPowerGPU,
     PreferredGraphicsBackend, QuakeModeSettings, ScrollSettings, ScrollSettingsChangedEvent,
     SelectionSettings, ShowAutosuggestionIgnoreButton, ShowChangelogAfterUpdate,
@@ -96,10 +96,10 @@ use crate::terminal::session_settings::{
     SessionSettingsChangedEvent, ShouldConfirmCloseSession,
 };
 use crate::terminal::settings::{
-    AsyncFindEnabled, MaximumGridSize, ShowTerminalZeroStateBlock, TerminalSettings,
-    TerminalSettingsChangedEvent, UseAudibleBell,
+    AsyncFindEnabled, MaximumGridSize, Osc52ClipboardAccess, Osc52ClipboardAccessSetting,
+    ShowTerminalZeroStateBlock, TerminalSettings, TerminalSettingsChangedEvent, UseAudibleBell,
 };
-use crate::terminal::{BlockListSettings, SnackbarEnabled};
+use crate::terminal::{BlockListSettings, PreserveInputFocusOnBlockSelection, SnackbarEnabled};
 use crate::undo_close::UndoCloseSettings;
 use crate::user_config::{WarpConfig, WarpConfigUpdateEvent};
 use crate::util::bindings::{
@@ -112,11 +112,11 @@ use crate::{report_if_error, send_telemetry_from_ctx, themes, GlobalResourceHand
 
 cfg_if::cfg_if! {
     if #[cfg(target_os = "macos")] {
-        static EXTRA_META_KEYS_LEFT_TEXT: &str = "左 Option 键作为 Meta";
-        static EXTRA_META_KEYS_RIGHT_TEXT: &str = "右 Option 键作为 Meta";
+        static EXTRA_META_KEYS_LEFT_TEXT: &str = "Left Option key is Meta";
+        static EXTRA_META_KEYS_RIGHT_TEXT: &str = "Right Option key is Meta";
     } else {
-        static EXTRA_META_KEYS_LEFT_TEXT: &str = "左 Alt 键作为 Meta";
-        static EXTRA_META_KEYS_RIGHT_TEXT: &str = "右 Alt 键作为 Meta";
+        static EXTRA_META_KEYS_LEFT_TEXT: &str = "Left Alt key is Meta";
+        static EXTRA_META_KEYS_RIGHT_TEXT: &str = "Right Alt key is Meta";
     }
 }
 
@@ -130,7 +130,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     // Add all of the toggle settings from the Features Page that you want to show up on the Command Palette here.
     let mut toggle_binding_pairs = vec![
         ToggleSettingActionPair::new(
-            "在终端中选中即复制",
+            "copy on select within the terminal",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleCopyOnSelect,
             )),
@@ -138,7 +138,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
             flags::COPY_ON_SELECT_CONTEXT_FLAG,
         ),
         ToggleSettingActionPair::new(
-            "Linux 选择剪贴板",
+            "linux selection clipboard",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleLinuxClipboardSelection,
             )),
@@ -151,7 +151,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                 .is_supported_on_current_platform(),
         ),
         ToggleSettingActionPair::new(
-            "自动补全引号、圆括号和方括号",
+            "autocomplete quotes, parentheses, and brackets",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleAutocompleteSymbols,
             )),
@@ -164,7 +164,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                 .is_supported_on_current_platform(),
         ),
         ToggleSettingActionPair::new(
-            "启动时恢复窗口、标签页和窗格",
+            "restore windows, tabs, and panes on startup",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleRestoreSession,
             )),
@@ -198,7 +198,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                 .is_supported_on_current_platform(),
         ),
         ToggleSettingActionPair::new(
-            "滚动报告",
+            "scroll reporting",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleScrollReporting,
             )),
@@ -211,7 +211,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                 .is_supported_on_current_platform(),
         ),
         ToggleSettingActionPair::new(
-            "输入时显示补全",
+            "completions while typing",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleCompletionsOpenWhileTyping,
             )),
@@ -224,7 +224,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                 .is_supported_on_current_platform(),
         ),
         ToggleSettingActionPair::new(
-            "命令纠正",
+            "command corrections",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleCommandCorrections,
             )),
@@ -237,7 +237,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                 .is_supported_on_current_platform(),
         ),
         ToggleSettingActionPair::new(
-            "错误下划线",
+            "error underlining",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleErrorUnderlining,
             )),
@@ -250,7 +250,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                 .is_supported_on_current_platform(),
         ),
         ToggleSettingActionPair::new(
-            "语法高亮",
+            "syntax highlighting",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleSyntaxHighlighting,
             )),
@@ -263,7 +263,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                 .is_supported_on_current_platform(),
         ),
         ToggleSettingActionPair::new(
-            "终端响铃",
+            "audible terminal bell",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleUseAudibleBell,
             )),
@@ -284,7 +284,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
             flags::AUTOSUGGESTIONS_ENABLED_FLAG,
         ),
         ToggleSettingActionPair::new(
-            "自动建议快捷键提示",
+            "autosuggestion keybinding hint",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleAutosuggestionKeybindingHint,
             )),
@@ -292,7 +292,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
             flags::AUTOSUGGESTION_KEYBINDING_HINT_FLAG,
         ),
         ToggleSettingActionPair::new(
-            "自动建议忽略按钮",
+            "autosuggestion ignore button",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleShowAutosuggestionIgnoreButton,
             )),
@@ -302,21 +302,17 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         .with_enabled(|| FeatureFlag::AllowIgnoringInputSuggestions.is_enabled()),
     ];
 
-    if !FeatureFlag::SSHTmuxWrapper.is_enabled() {
-        toggle_binding_pairs.push(ToggleSettingActionPair::new(
-            "Warp SSH 包装器",
-            builder(SettingsAction::FeaturesPageToggle(
-                #[allow(deprecated)]
-                FeaturesPageAction::ToggleSshWrapper,
-            )),
-            context,
-            #[allow(deprecated)]
-            flags::LEGACY_SSH_WRAPPER_CONTEXT_FLAG,
-        ))
-    }
+    toggle_binding_pairs.push(ToggleSettingActionPair::new(
+        "reuse existing SSH ControlMaster in the Warp SSH wrapper",
+        builder(SettingsAction::FeaturesPageToggle(
+            FeaturesPageAction::ToggleSshReuseControlMaster,
+        )),
+        context,
+        flags::SSH_REUSE_CONTROL_MASTER_CONTEXT_FLAG,
+    ));
 
     toggle_binding_pairs.push(ToggleSettingActionPair::new(
-        "点击链接时显示工具提示",
+        "show tooltip on click on links",
         builder(SettingsAction::FeaturesPageToggle(
             FeaturesPageAction::ToggleLinkTooltip,
         )),
@@ -325,7 +321,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     ));
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "长时间运行命令通知",
+            "long-running command notifications",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleLongRunningNotifications,
             )),
@@ -340,7 +336,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     );
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "Agent 任务完成通知",
+            "agent task completion notifications",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleAgentTaskCompletedNotifications,
             )),
@@ -355,7 +351,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     );
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "需要注意的通知",
+            "needs-attention notifications",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleNeedsAttentionNotifications,
             )),
@@ -371,7 +367,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     #[cfg(target_os = "macos")]
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "通知声音",
+            "notification sounds",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleNotificationSound,
             )),
@@ -386,7 +382,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     );
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "应用内 Agent 通知",
+            "in-app agent notifications",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleAgentInAppNotifications,
             )),
@@ -398,7 +394,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "退出警告弹窗",
+            "quit warning modal",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleShowWarningBeforeQuitting,
             )),
@@ -413,7 +409,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     );
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "鼠标报告",
+            "mouse reporting",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleMouseReporting,
             )),
@@ -429,7 +425,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "别名展开",
+            "alias expansion",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleAliasExpansion,
             )),
@@ -445,7 +441,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "中键点击粘贴",
+            "middle-click paste",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleMiddleClickPaste,
             )),
@@ -461,7 +457,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "将代码编辑器设为默认编辑器",
+            "code as default editor",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleCodeAsDefaultEditor,
             )),
@@ -477,7 +473,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "输入提示文本",
+            "input hint text",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleShowInputHintText,
             )),
@@ -493,7 +489,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "使用 Vim 快捷键编辑命令",
+            "editing commands with Vim keybindings",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleVimMode,
             )),
@@ -509,7 +505,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "将 Vim 未命名寄存器作为系统剪贴板",
+            "Vim unnamed register as system clipboard",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleVimUnnamedSystemClipboard,
             )),
@@ -525,7 +521,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "Vim 状态栏",
+            "Vim status bar",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleVimStatusBar,
             )),
@@ -541,7 +537,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "焦点报告",
+            "focus reporting",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleFocusReporting,
             )),
@@ -556,7 +552,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     );
 
     toggle_binding_pairs.push(ToggleSettingActionPair::new(
-        "智能选择",
+        "smart select",
         builder(SettingsAction::FeaturesPageToggle(
             FeaturesPageAction::ToggleSmartSelection,
         )),
@@ -566,7 +562,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     if FeatureFlag::AgentView.is_enabled() && AISettings::as_ref(app).is_any_ai_enabled(app) {
         toggle_binding_pairs.push(
             ToggleSettingActionPair::new(
-                "新会话中的帮助块",
+                "help block in new sessions",
                 builder(SettingsAction::FeaturesPageToggle(
                     FeaturesPageAction::ToggleShowTerminalZeroStateBlock,
                 )),
@@ -583,7 +579,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "终端输入消息行",
+            "terminal input message line",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleShowTerminalInputMessageLine,
             )),
@@ -594,7 +590,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     );
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "终端模式下的 '@' 上下文菜单",
+            "'@' context menu in terminal mode",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleAtContextMenuInTerminalMode,
             )),
@@ -608,10 +604,19 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         ),
     );
 
+    toggle_binding_pairs.push(ToggleSettingActionPair::new(
+        "preserve input focus on block selection",
+        builder(SettingsAction::FeaturesPageToggle(
+            FeaturesPageAction::TogglePreserveInputFocusOnBlockSelection,
+        )),
+        context,
+        flags::PRESERVE_INPUT_FOCUS_ON_BLOCK_SELECTION_FLAG,
+    ));
+
     if FeatureFlag::AgentView.is_enabled() && AISettings::as_ref(app).is_any_ai_enabled(app) {
         toggle_binding_pairs.push(
             ToggleSettingActionPair::new(
-                "终端模式下的斜杠命令",
+                "slash commands in terminal mode",
                 builder(SettingsAction::FeaturesPageToggle(
                     FeaturesPageAction::ToggleSlashCommandsInTerminalMode,
                 )),
@@ -628,7 +633,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     if FeatureFlag::AIContextMenuCode.is_enabled() {
         toggle_binding_pairs.push(
             ToggleSettingActionPair::new(
-                "'@' 上下文菜单中的代码库符号",
+                "codebase symbols in the '@' context menu",
                 builder(SettingsAction::FeaturesPageToggle(
                     FeaturesPageAction::ToggleOutlineCodebaseSymbolsForAtContextMenu,
                 )),
@@ -644,7 +649,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     }
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            "命令搜索中的全局工作流",
+            "global workflows in Command Search",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleGlobalWorkflowsInUniversalSearch,
             )),
@@ -661,7 +666,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     if GPUState::as_ref(app).is_low_power_gpu_available() {
         toggle_binding_pairs.push(
             ToggleSettingActionPair::new(
-                "集成 GPU 渲染（低功耗）",
+                "integrated GPU rendering (low power)",
                 builder(SettingsAction::FeaturesPageToggle(
                     FeaturesPageAction::TogglePreferLowPowerGPU,
                 )),
@@ -681,7 +686,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         if windowing_system_is_customizable(app) {
             toggle_binding_pairs.push(
                 ToggleSettingActionPair::new(
-                    "使用 Wayland 进行窗口管理",
+                    "Wayland for window management",
                     builder(SettingsAction::FeaturesPageToggle(
                         FeaturesPageAction::ToggleForceX11,
                     )),
@@ -699,7 +704,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(toggle_binding_pairs, app);
 
     app.register_fixed_bindings([FixedBinding::empty(
-        "配置全局热键",
+        "Configure Global Hotkey",
         WorkspaceAction::ScrollToSettingsWidget {
             page: SettingsSection::Features,
             widget_id: GlobalHotkeyWidget::static_widget_id(),
@@ -709,7 +714,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     if DefaultTerminal::can_warp_become_default() {
         app.register_fixed_bindings([FixedBinding::empty(
-            "将 Warp 设为默认终端",
+            "Make Warp the default terminal",
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::MakeWarpDefaultTerminal,
             )),
@@ -727,8 +732,7 @@ pub enum FeaturesPageAction {
     ToggleAutocompleteSymbols,
     ToggleLinuxClipboardSelection,
     ToggleOpenLinksInDesktopApp,
-    #[deprecated]
-    ToggleSshWrapper,
+    ToggleSshReuseControlMaster,
     ToggleSnackbar,
     ToggleLinkTooltip,
     ToggleCompletionsOpenWhileTyping,
@@ -786,6 +790,7 @@ pub enum FeaturesPageAction {
     SetCtrlTabBehavior(CtrlTabBehavior),
     SetPreferredGraphicsBackend(Option<GraphicsBackend>),
     SetNewTabPlacement(NewTabPlacement),
+    SetOsc52ClipboardAccess(Osc52ClipboardAccess),
     SetDefaultSessionMode(DefaultSessionMode),
     SetDefaultTabConfig(String),
     SearchForKeybinding(String),
@@ -801,6 +806,7 @@ pub enum FeaturesPageAction {
     ToggleOutlineCodebaseSymbolsForAtContextMenu,
     ToggleAutoOpenCodeReviewPane,
     ToggleShowTerminalInputMessageLine,
+    TogglePreserveInputFocusOnBlockSelection,
     ToggleAgentInAppNotifications,
     MakeWarpDefaultTerminal,
     SetCodeEditorLineNumberMode(CodeEditorLineNumberMode),
@@ -855,12 +861,14 @@ fn max_max_grid_size() -> usize {
 
 fn block_maximum_rows_description() -> String {
     let max_rows = if ChannelState::enable_debug_features() {
-        "1000 万"
+        "10 million"
     } else {
-        "100 万"
+        "1 million"
     };
 
-    format!("将限制设置为超过 10 万行可能影响性能。支持的最大行数为 {max_rows}。")
+    format!(
+        "Setting the limit above 100k lines may impact performance. Maximum rows supported is {max_rows}."
+    )
 }
 
 fn to_string(b: bool) -> String {
@@ -873,7 +881,6 @@ impl FeaturesPageAction {
         let reporting_settings = AltScreenReporting::as_ref(ctx);
         let selection_settings = SelectionSettings::as_ref(ctx);
         let input_settings = InputSettings::as_ref(ctx);
-        let ssh_settings = SshSettings::as_ref(ctx);
         let keys_settings = KeysSettings::as_ref(ctx);
         match self {
             Self::ToggleCopyOnSelect => TelemetryEvent::FeaturesPageAction {
@@ -914,10 +921,13 @@ impl FeaturesPageAction {
                 action: "ToggleAutocompleteSymbols".to_string(),
                 value: to_string(*AppEditorSettings::as_ref(ctx).autocomplete_symbols),
             },
-            #[allow(deprecated)]
-            Self::ToggleSshWrapper => TelemetryEvent::FeaturesPageAction {
-                action: "ToggleSshWrapper".to_string(),
-                value: to_string(*ssh_settings.enable_legacy_ssh_wrapper.value()),
+            Self::ToggleSshReuseControlMaster => TelemetryEvent::FeaturesPageAction {
+                action: "ToggleSshReuseControlMaster".to_string(),
+                value: to_string(
+                    *SshSettings::as_ref(ctx)
+                        .reuse_existing_control_master
+                        .value(),
+                ),
             },
             Self::SetGlobalHotkeyMode(mode) => TelemetryEvent::FeaturesPageAction {
                 action: "SetGlobalHotkeyMode".to_string(),
@@ -1043,7 +1053,7 @@ impl FeaturesPageAction {
                 action: "QuakeEditorSetPinScreen".to_string(),
                 value: screen
                     .map(|idx| format!("{idx}"))
-                    .unwrap_or_else(|| "活动屏幕".into()),
+                    .unwrap_or_else(|| "Active Screen".into()),
             },
             Self::QuakeEditorResetWidthHeight => TelemetryEvent::FeaturesPageAction {
                 action: "QuakeEditorResetWidthHeight".to_string(),
@@ -1195,6 +1205,10 @@ impl FeaturesPageAction {
                 action: "SetNewTabPlacement".to_string(),
                 value: format!("{new_tab_placement:?}"),
             },
+            Self::SetOsc52ClipboardAccess(access) => TelemetryEvent::FeaturesPageAction {
+                action: "SetOsc52ClipboardAccess".to_string(),
+                value: format!("{access:?}"),
+            },
             Self::SetDefaultSessionMode(mode) => TelemetryEvent::FeaturesPageAction {
                 action: "SetDefaultSessionMode".to_string(),
                 value: format!("{mode:?}"),
@@ -1305,6 +1319,13 @@ impl FeaturesPageAction {
                     *GeneralSettings::as_ref(ctx).auto_open_code_review_pane_on_first_agent_change,
                 ),
             },
+            Self::TogglePreserveInputFocusOnBlockSelection => {
+                let settings = BlockListSettings::as_ref(ctx);
+                TelemetryEvent::FeaturesPageAction {
+                    action: "TogglePreserveInputFocusOnBlockSelection".to_string(),
+                    value: to_string(*settings.preserve_input_focus_on_block_selection),
+                }
+            }
             Self::SetNotificationToastDuration => TelemetryEvent::FeaturesPageAction {
                 action: "SetNotificationToastDuration".to_string(),
                 value: format!(
@@ -1388,10 +1409,6 @@ pub struct FeaturesPageView {
     mouse_scroll_input_editor: ViewHandle<EditorView>,
     valid_mouse_scroll_multiplier: bool,
 
-    // Whether or not the SSH wrapper value was changed while the page has been
-    // open.
-    ssh_wrapper_toggled: bool,
-
     #[cfg(feature = "local_fs")]
     external_editor_view: ViewHandle<features::ExternalEditorView>,
     word_boundary_editor: ViewHandle<EditorView>,
@@ -1399,6 +1416,7 @@ pub struct FeaturesPageView {
     tab_behavior_dropdown: ViewHandle<Dropdown<FeaturesPageAction>>,
     graphics_backend_dropdown: ViewHandle<Dropdown<FeaturesPageAction>>,
     new_tab_placement_dropdown: ViewHandle<Dropdown<FeaturesPageAction>>,
+    osc52_clipboard_access_dropdown: ViewHandle<Dropdown<FeaturesPageAction>>,
     default_session_mode_dropdown: ViewHandle<FilterableDropdown<FeaturesPageAction>>,
     tab_behavior: Tracked<TabBehavior>,
     completions_keystroke: Tracked<String>,
@@ -1495,12 +1513,10 @@ impl TypedActionView for FeaturesPageView {
                         .toggle_and_save_value(ctx));
                 })
             }
-            #[allow(deprecated)]
-            ToggleSshWrapper => {
-                self.ssh_wrapper_toggled = true;
+            ToggleSshReuseControlMaster => {
                 SshSettings::handle(ctx).update(ctx, |ssh_settings, ctx| {
                     report_if_error!(ssh_settings
-                        .enable_legacy_ssh_wrapper
+                        .reuse_existing_control_master
                         .toggle_and_save_value(ctx));
                 });
             }
@@ -1906,6 +1922,13 @@ impl TypedActionView for FeaturesPageView {
             SetNewTabPlacement(new_tab_placement) => {
                 self.set_new_tab_placement(new_tab_placement, ctx)
             }
+            SetOsc52ClipboardAccess(access) => {
+                TerminalSettings::handle(ctx).update(ctx, |terminal_settings, ctx| {
+                    report_if_error!(terminal_settings
+                        .osc52_clipboard_access
+                        .set_value(*access, ctx));
+                });
+            }
             SetDefaultSessionMode(mode) => self.set_default_session_mode(mode, ctx),
             SetDefaultTabConfig(path) => {
                 AISettings::handle(ctx).update(ctx, |ai_settings, ctx| {
@@ -2052,6 +2075,13 @@ impl TypedActionView for FeaturesPageView {
                         .toggle_and_save_value(ctx));
                 })
             }
+            TogglePreserveInputFocusOnBlockSelection => {
+                BlockListSettings::handle(ctx).update(ctx, |blocklist_settings, ctx| {
+                    report_if_error!(blocklist_settings
+                        .preserve_input_focus_on_block_selection
+                        .toggle_and_save_value(ctx));
+                });
+            }
             SetNotificationToastDuration => {
                 let user_input = self
                     .notification_toast_duration_editor
@@ -2127,9 +2157,6 @@ impl FeaturesPageView {
         });
 
         ctx.subscribe_to_model(&SelectionSettings::handle(ctx), |_, _, _, ctx| ctx.notify());
-
-        // TODO(CORE-3029): Remove when we launch the new SSH Warpification.
-        ctx.subscribe_to_model(&SshSettings::handle(ctx), |_, _, _, ctx| ctx.notify());
         ctx.subscribe_to_model(&AltScreenReporting::handle(ctx), |_, _, _, ctx| {
             ctx.notify()
         });
@@ -2240,6 +2267,15 @@ impl FeaturesPageView {
                         );
                     });
                 }
+                if matches!(
+                    event,
+                    TerminalSettingsChangedEvent::Osc52ClipboardAccessSetting { .. }
+                ) {
+                    Self::update_osc52_clipboard_access_dropdown(
+                        me.osc52_clipboard_access_dropdown.clone(),
+                        ctx,
+                    );
+                }
                 ctx.notify()
             },
         );
@@ -2268,22 +2304,22 @@ impl FeaturesPageView {
             let mut dropdown = Dropdown::new(ctx);
 
             let top = DropdownItem::new(
-                "固定到顶部",
+                "Pin to top",
                 FeaturesPageAction::QuakeEditorSetPinPosition(QuakeModePinPosition::Top),
             );
 
             let bottom = DropdownItem::new(
-                "固定到底部",
+                "Pin to bottom",
                 FeaturesPageAction::QuakeEditorSetPinPosition(QuakeModePinPosition::Bottom),
             );
 
             let left = DropdownItem::new(
-                "固定到左侧",
+                "Pin to left",
                 FeaturesPageAction::QuakeEditorSetPinPosition(QuakeModePinPosition::Left),
             );
 
             let right = DropdownItem::new(
-                "固定到右侧",
+                "Pin to right",
                 FeaturesPageAction::QuakeEditorSetPinPosition(QuakeModePinPosition::Right),
             );
 
@@ -2318,8 +2354,10 @@ impl FeaturesPageView {
         });
 
         let new_tab_placement_dropdown = ctx.add_typed_action_view(Dropdown::new);
-
         Self::update_new_tab_placement_dropdown(new_tab_placement_dropdown.clone(), ctx);
+
+        let osc52_clipboard_access_dropdown = ctx.add_typed_action_view(Dropdown::new);
+        Self::update_osc52_clipboard_access_dropdown(osc52_clipboard_access_dropdown.clone(), ctx);
 
         ctx.subscribe_to_model(&TabSettings::handle(ctx), |me, _, event, ctx| {
             if matches!(event, TabSettingsChangedEvent::NewTabPlacement { .. }) {
@@ -2592,8 +2630,6 @@ impl FeaturesPageView {
             max_block_size_input_editor: block_size_editor,
             valid_max_block_size: true,
 
-            ssh_wrapper_toggled: false,
-
             #[cfg(feature = "local_fs")]
             external_editor_view,
             word_boundary_editor,
@@ -2604,6 +2640,7 @@ impl FeaturesPageView {
             code_editor_line_number_mode_dropdown,
             graphics_backend_dropdown,
             new_tab_placement_dropdown,
+            osc52_clipboard_access_dropdown,
             default_session_mode_dropdown,
             tab_behavior: Default::default(),
 
@@ -2721,14 +2758,6 @@ impl FeaturesPageView {
         let mut session_widgets: Vec<Box<dyn SettingsWidget<View = Self>>> = vec![];
 
         session_widgets.push(Box::new(BlockLimitWidget::default()));
-
-        if !FeatureFlag::SSHTmuxWrapper.is_enabled()
-            && SshSettings::as_ref(ctx)
-                .enable_legacy_ssh_wrapper
-                .is_supported_on_current_platform()
-        {
-            session_widgets.push(Box::new(SSHWrapperWidget::default()));
-        }
 
         let session_settings = SessionSettings::as_ref(ctx);
 
@@ -2885,6 +2914,14 @@ impl FeaturesPageView {
 
         editor_widgets.push(Box::new(TabKeyBehaviorWidget::default()));
 
+        let blocklist_settings = BlockListSettings::as_ref(ctx);
+        if blocklist_settings
+            .preserve_input_focus_on_block_selection
+            .is_supported_on_current_platform()
+        {
+            editor_widgets.push(Box::new(PreserveInputFocusOnBlockSelectionWidget::default()));
+        }
+
         let mut terminal_widgets: Vec<Box<dyn SettingsWidget<View = Self>>> = vec![];
 
         let reporting_settings = AltScreenReporting::as_ref(ctx);
@@ -2921,6 +2958,7 @@ impl FeaturesPageView {
 
         terminal_widgets.push(Box::new(SmartSelectWidget::default()));
         terminal_widgets.push(Box::new(CopyOnSelectWidget::default()));
+        terminal_widgets.push(Box::new(Osc52ClipboardAccessWidget::default()));
         terminal_widgets.push(Box::new(NewTabPlacementWidget::default()));
 
         let mut system_widgets: Vec<Box<dyn SettingsWidget<View = Self>>> = vec![];
@@ -2956,18 +2994,18 @@ impl FeaturesPageView {
         }
 
         let categories = vec![
-            Category::new("通用", general_widgets),
-            Category::new("会话", session_widgets),
-            Category::new("按键", keys_widgets),
-            Category::new("文本编辑", text_editing_widgets),
-            Category::new("终端输入", editor_widgets),
-            Category::new("终端", terminal_widgets),
-            Category::new("通知", notifications_widgets),
+            Category::new("General", general_widgets),
+            Category::new("Session", session_widgets),
+            Category::new("Keys", keys_widgets),
+            Category::new("Text Editing", text_editing_widgets),
+            Category::new("Terminal Input", editor_widgets),
+            Category::new("Terminal", terminal_widgets),
+            Category::new("Notifications", notifications_widgets),
             Category::new(
-                "工作流",
+                "Workflows",
                 vec![Box::new(WorkflowsInCommandSearch::default())],
             ),
-            Category::new("系统", system_widgets),
+            Category::new("System", system_widgets),
         ];
 
         PageType::new_categorized(categories, None)
@@ -3424,7 +3462,7 @@ impl FeaturesPageView {
         self.graphics_backend_dropdown.update(ctx, |dropdown, ctx| {
             if let Some(window) = ctx.windows().platform_window(ctx.window_id()) {
                 let mut items = vec![DropdownItem::new(
-                    "默认",
+                    "Default",
                     FeaturesPageAction::SetPreferredGraphicsBackend(None),
                 )];
                 items.extend(window.supported_backends().into_iter().map(|backend| {
@@ -3440,7 +3478,7 @@ impl FeaturesPageView {
                 gpu_settings
                     .preferred_backend
                     .map(|backend| backend.to_label())
-                    .unwrap_or("默认"),
+                    .unwrap_or("Default"),
                 ctx,
             );
         });
@@ -3536,14 +3574,47 @@ impl FeaturesPageView {
 
     fn new_tab_placement_dropdown_item_label(val: NewTabPlacement) -> &'static str {
         match val {
-            NewTabPlacement::AfterAllTabs => "所有标签页之后",
-            NewTabPlacement::AfterCurrentTab => "当前标签页之后",
+            NewTabPlacement::AfterAllTabs => "After all tabs",
+            NewTabPlacement::AfterCurrentTab => "After current tab",
         }
     }
 
     fn set_new_tab_placement(&mut self, value: &NewTabPlacement, ctx: &mut ViewContext<Self>) {
         let _ = TabSettings::handle(ctx).update(ctx, |tab_settings, ctx| {
             tab_settings.new_tab_placement.set_value(*value, ctx)
+        });
+    }
+
+    fn update_osc52_clipboard_access_dropdown(
+        dropdown: ViewHandle<Dropdown<FeaturesPageAction>>,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        dropdown.update(ctx, |dropdown, ctx| {
+            let values = vec![
+                Osc52ClipboardAccess::Deny,
+                Osc52ClipboardAccess::WriteOnly,
+                Osc52ClipboardAccess::ReadWrite,
+            ];
+            let current_value = *TerminalSettings::as_ref(ctx).osc52_clipboard_access;
+
+            let selected_index = values
+                .iter()
+                .position(|val| *val == current_value)
+                .unwrap_or(0);
+
+            dropdown.set_items(
+                values
+                    .into_iter()
+                    .map(|val| {
+                        DropdownItem::new(
+                            val.as_dropdown_label(),
+                            FeaturesPageAction::SetOsc52ClipboardAccess(val),
+                        )
+                    })
+                    .collect(),
+                ctx,
+            );
+            dropdown.set_selected_by_index(selected_index, ctx);
         });
     }
 
@@ -3719,7 +3790,7 @@ impl FeaturesPageView {
                         .with_child(
                             Container::new(
                                 Text::new_inline(
-                                    "宽度 %",
+                                    "Width %",
                                     appearance.ui_font_family(),
                                     appearance.ui_font_size(),
                                 )
@@ -3757,7 +3828,7 @@ impl FeaturesPageView {
                         .with_child(
                             Container::new(
                                 Text::new_inline(
-                                    "高度 %",
+                                    "Height %",
                                     appearance.ui_font_family(),
                                     appearance.ui_font_size(),
                                 )
@@ -3835,7 +3906,7 @@ impl FeaturesPageView {
                 .with_child(
                     appearance
                         .ui_builder()
-                        .span("失去键盘焦点时自动隐藏")
+                        .span("Autohides on loss of keyboard focus")
                         .build()
                         .with_margin_left(5.)
                         .finish(),
@@ -3931,7 +4002,7 @@ impl FeaturesPageView {
                 Container::new(
                     Align::new(
                         Text::new_inline(
-                            "当命令运行时间超过",
+                            "When a command takes longer than",
                             appearance.ui_font_family(),
                             font_size,
                         )
@@ -3966,9 +4037,13 @@ impl FeaturesPageView {
             .with_child(
                 Container::new(
                     Align::new(
-                        Text::new_inline("秒才完成时", appearance.ui_font_family(), font_size)
-                            .with_color(font_color.into())
-                            .finish(),
+                        Text::new_inline(
+                            "seconds to complete",
+                            appearance.ui_font_family(),
+                            font_size,
+                        )
+                        .with_color(font_color.into())
+                        .finish(),
                     )
                     .finish(),
                 )
@@ -4045,7 +4120,7 @@ impl FeaturesPageView {
                     Shrinkable::new(
                         2.,
                         Align::new(
-                            Text::new_inline("键绑定", appearance.ui_font_family(), 13.)
+                            Text::new_inline("Keybinding", appearance.ui_font_family(), 13.)
                                 .with_color(appearance.theme().active_ui_text_color().into())
                                 .finish(),
                         )
@@ -4066,7 +4141,7 @@ impl FeaturesPageView {
                         } else {
                             appearance
                                 .ui_builder()
-                                .paragraph("点击设置全局热键".to_string())
+                                .paragraph("Click to set global hotkey".to_string())
                                 .build()
                                 .finish()
                         })
@@ -4121,7 +4196,7 @@ impl FeaturesPageView {
                 padding: Some(Coords::default().right(10.)),
                 ..Default::default()
             })
-            .with_text_label("取消".to_string())
+            .with_text_label("Cancel".to_string())
             .build()
             .on_click(move |ctx, _, _| {
                 ctx.dispatch_typed_action(cancel_action.clone());
@@ -4133,7 +4208,7 @@ impl FeaturesPageView {
             appearance
                 .ui_builder()
                 .button(ButtonVariant::Text, save_button_mouse_state)
-                .with_text_label("保存".to_string())
+                .with_text_label("Save".to_string())
                 .build()
                 .on_click(move |ctx, _, _| {
                     ctx.dispatch_typed_action(save_action.clone());
@@ -4157,7 +4232,7 @@ impl FeaturesPageView {
                                 2.,
                                 Align::new(
                                     Text::new_inline(
-                                        "按下新的键盘快捷键",
+                                        "Press new keyboard shortcut",
                                         appearance.ui_font_family(),
                                         13.,
                                     )
@@ -4208,7 +4283,7 @@ impl FeaturesPageView {
                 }
 
                 Container::new(
-                    Text::new_inline("更改键绑定", appearance.ui_font_family(), 12.)
+                    Text::new_inline("Change keybinding", appearance.ui_font_family(), 12.)
                         .with_color(button_color)
                         .finish(),
                 )
@@ -4286,10 +4361,6 @@ impl SettingsPageMeta for FeaturesPageView {
             display_count.0 = ctx.windows().display_count();
             ctx.notify();
         });
-
-        // Make sure we're not already showing the hint text for the SSH wrapper
-        // toggle when the user switches to the page.
-        self.ssh_wrapper_toggled = false;
 
         // Fetch the latest tab behavior state in case the user changed their keybindings
         // since we last loaded this page.
@@ -4378,7 +4449,7 @@ fn init_display_count_dropdown(
     ctx: &mut ViewContext<Dropdown<FeaturesPageAction>>,
 ) {
     let no_preference = DropdownItem::new(
-        "活动屏幕",
+        "Active Screen",
         //|| {
         FeaturesPageAction::QuakeEditorSetPinScreen(None), //}
     );
@@ -4402,7 +4473,7 @@ fn init_display_count_dropdown(
         Some(idx) if idx.is_valid_given_display_count(display_count) => {
             dropdown.set_selected_by_name(format!("{idx}"), ctx)
         }
-        _ => dropdown.set_selected_by_name("活动屏幕", ctx),
+        _ => dropdown.set_selected_by_name("Active Screen", ctx),
     };
 }
 
@@ -4427,12 +4498,14 @@ impl SettingsWidget for NativeRedirectWidget {
     ) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "在桌面应用中打开链接".into(),
+            "Open links in desktop app".into(),
             Some(AdditionalInfo {
                 mouse_state: self.additional_info_link.clone(),
                 on_click_action: None,
                 secondary_text: None,
-                tooltip_override_text: Some("尽可能自动在桌面应用中打开链接。".into()),
+                tooltip_override_text: Some(
+                    "Automatically open links in desktop app whenever possible.".into(),
+                ),
             }),
             LocalOnlyIconState::for_setting(
                 UserNativeRedirectPreference::storage_key(),
@@ -4495,7 +4568,7 @@ impl SettingsWidget for SessionRestorationWidget {
             .finish();
 
         let labeled_switch = render_body_item::<FeaturesPageAction>(
-            "启动时恢复窗口、标签页和窗格".into(),
+            "Restore windows, tabs, and panes on startup".into(),
             Some(AdditionalInfo {
                 mouse_state: self.additional_info_link.clone(),
                 on_click_action: Some(FeaturesPageAction::OpenUrl(
@@ -4521,7 +4594,7 @@ impl SettingsWidget for SessionRestorationWidget {
 
         if app.is_wayland() {
             let message = Text::new_inline(
-                "Wayland 上不会恢复窗口位置。 ",
+                "Window positions won't be restored on Wayland. ",
                 appearance.ui_font_family(),
                 CONTENT_FONT_SIZE,
             )
@@ -4530,7 +4603,7 @@ impl SettingsWidget for SessionRestorationWidget {
 
             let link = ui_builder
                 .link(
-                    "查看文档。".to_owned(),
+                    "See docs.".to_owned(),
                     Some("https://docs.warp.dev/terminal/sessions/session-restoration".to_owned()),
                     None,
                     self.docs_link.clone(),
@@ -4580,7 +4653,7 @@ impl SettingsWidget for SnackbarHeaderWidget {
     ) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "显示粘性命令标题".into(),
+            "Show sticky command header".into(),
             Some(AdditionalInfo {
                 mouse_state: self.additional_info_link.clone(),
                 on_click_action: Some(FeaturesPageAction::OpenUrl(
@@ -4633,7 +4706,7 @@ impl SettingsWidget for LinkTooltipWidget {
     ) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "点击链接时显示工具提示".into(),
+            "Show tooltip on click on links".into(),
             None,
             LocalOnlyIconState::for_setting(
                 LinkTooltip::storage_key(),
@@ -4702,7 +4775,7 @@ impl SettingsWidget for QuitWarningModalWidget {
         let general_settings = GeneralSettings::as_ref(app);
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "退出应用或退出登录前显示警告".into(),
+            "Show warning before quitting/logging out".into(),
             None,
             LocalOnlyIconState::for_setting(
                 ShowWarningBeforeQuitting::storage_key(),
@@ -4749,9 +4822,9 @@ impl SettingsWidget for LoginItemWidget {
         let general_settings = GeneralSettings::as_ref(app);
         let ui_builder = appearance.ui_builder();
         #[cfg(target_os = "macos")]
-        let label = "登录时启动 Warp（需要 macOS 13+）";
+        let label = "Start Warp at login (requires macOS 13+)";
         #[cfg(not(target_os = "macos"))]
-        let label = "登录时启动 Warp";
+        let label = "Start Warp at login";
         render_body_item::<FeaturesPageAction>(
             label.into(),
             None,
@@ -4800,7 +4873,7 @@ impl SettingsWidget for QuitWhenAllWindowsClosedWidget {
         let general_settings = GeneralSettings::as_ref(app);
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "关闭所有窗口时退出".into(),
+            "Quit when all windows are closed".into(),
             None,
             LocalOnlyIconState::for_setting(
                 QuitOnLastWindowClosed::storage_key(),
@@ -4847,7 +4920,7 @@ impl SettingsWidget for ShowChangelogWidget {
         let changelog_settings = ChangelogSettings::as_ref(app);
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "更新后显示更新日志提示".into(),
+            "Show changelog toast after updates".into(),
             None,
             LocalOnlyIconState::for_setting(
                 ShowChangelogAfterUpdate::storage_key(),
@@ -4920,7 +4993,7 @@ impl SettingsWidget for MouseScrollMultiplierWidget {
                 } else {
                     appearance
                         .ui_builder()
-                        .wrappable_text("允许值：1-20", true)
+                        .wrappable_text("Allowed Values: 1-20", true)
                         .with_style(UiComponentStyles {
                             font_color: Some(themes::theme::Fill::error().into_solid()),
                             ..Default::default()
@@ -4933,12 +5006,14 @@ impl SettingsWidget for MouseScrollMultiplierWidget {
             .finish();
 
         render_body_item::<FeaturesPageAction>(
-            "每次鼠标滚轮滚动的行数".into(),
+            "Lines scrolled by mouse wheel interval".into(),
             Some(AdditionalInfo {
                 mouse_state: self.additional_info_link.clone(),
                 on_click_action: None,
                 secondary_text: None,
-                tooltip_override_text: Some("支持 1 到 20 之间的浮点值。".to_string()),
+                tooltip_override_text: Some(
+                    "Supports floating point values between 1 and 20.".to_string(),
+                ),
             }),
             LocalOnlyIconState::for_setting(
                 MouseScrollMultiplier::storage_key(),
@@ -4978,7 +5053,7 @@ impl SettingsWidget for AutoOpenCodeReviewPaneWidget {
         let general_settings = GeneralSettings::as_ref(app);
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "自动打开代码审查面板".into(),
+            "Auto open code review panel".into(),
             None,
             LocalOnlyIconState::for_setting(
                 AutoOpenCodeReviewPaneOnFirstAgentChange::storage_key(),
@@ -4999,7 +5074,7 @@ impl SettingsWidget for AutoOpenCodeReviewPaneWidget {
                     ctx.dispatch_typed_action(FeaturesPageAction::ToggleAutoOpenCodeReviewPane);
                 })
                 .finish(),
-            Some("启用后，对话中首次接受 diff 时会打开代码审查面板".into()),
+            Some("When this setting is on, the code review panel will open on the first accepted diff of a conversation".into()),
         )
     }
 }
@@ -5026,7 +5101,7 @@ impl SettingsWidget for DefaultTerminalWidget {
         let default_terminal = DefaultTerminal::as_ref(app);
         if default_terminal.is_warp_default() {
             ui_builder
-                .wrappable_text("Warp 是默认终端", true)
+                .wrappable_text("Warp is the default terminal", true)
                 .with_style(UiComponentStyles {
                     font_color: Some(appearance.theme().disabled_ui_text_color().into()),
                     margin: Some(Coords::default().bottom(16.)),
@@ -5037,7 +5112,7 @@ impl SettingsWidget for DefaultTerminalWidget {
         } else {
             ui_builder
                 .link(
-                    "将 Warp 设为默认终端".to_string(),
+                    "Make Warp the default terminal".to_string(),
                     None,
                     Some(Box::new(|ctx| {
                         ctx.dispatch_typed_action(FeaturesPageAction::MakeWarpDefaultTerminal);
@@ -5090,7 +5165,7 @@ impl SettingsWidget for BlockLimitWidget {
             .finish();
 
         render_body_item::<FeaturesPageAction>(
-            "块中的最大行数".into(),
+            "Maximum rows in a block".into(),
             None,
             LocalOnlyIconState::for_setting(
                 MaximumGridSize::storage_key(),
@@ -5105,65 +5180,6 @@ impl SettingsWidget for BlockLimitWidget {
             appearance,
             input_field,
             Some(block_maximum_rows_description()),
-        )
-    }
-}
-
-#[derive(Default)]
-struct SSHWrapperWidget {
-    additional_info_link: MouseStateHandle,
-    switch_state: SwitchStateHandle,
-}
-
-impl SettingsWidget for SSHWrapperWidget {
-    type View = FeaturesPageView;
-
-    fn search_terms(&self) -> &str {
-        "ssh wrapper"
-    }
-
-    fn render(
-        &self,
-        view: &Self::View,
-        appearance: &Appearance,
-        app: &AppContext,
-    ) -> Box<dyn Element> {
-        let ui_builder = appearance.ui_builder();
-        render_body_item::<FeaturesPageAction>(
-            "Warp SSH 包装器".into(),
-            Some(AdditionalInfo {
-                mouse_state: self.additional_info_link.clone(),
-                on_click_action: Some(FeaturesPageAction::OpenUrl(
-                    "https://docs.warp.dev/terminal/warpify/ssh-legacy#implementation".into(),
-                )),
-                secondary_text: if view.ssh_wrapper_toggled {
-                    Some("此更改将在新会话中生效".to_string())
-                } else {
-                    None
-                },
-                tooltip_override_text: None,
-            }),
-            LocalOnlyIconState::for_setting(
-                EnableSshWrapper::storage_key(),
-                EnableSshWrapper::sync_to_cloud(),
-                &mut view
-                    .button_mouse_states
-                    .local_only_icon_tooltip_states
-                    .borrow_mut(),
-                app,
-            ),
-            ToggleState::Enabled,
-            appearance,
-            ui_builder
-                .switch(self.switch_state.clone())
-                .check(*SshSettings::as_ref(app).enable_legacy_ssh_wrapper.value())
-                .build()
-                .on_click(move |ctx, _, _| {
-                    #[allow(deprecated)]
-                    ctx.dispatch_typed_action(FeaturesPageAction::ToggleSshWrapper);
-                })
-                .finish(),
-            None,
         )
     }
 }
@@ -5191,7 +5207,7 @@ impl SettingsWidget for DesktopNotificationsWidget {
         let ui_builder = appearance.ui_builder();
         let mut column = Flex::column();
         column.add_child(render_body_item::<FeaturesPageAction>(
-            "接收来自 Warp 的桌面通知".into(),
+            "Receive desktop notifications from Warp".into(),
             Some(AdditionalInfo {
                 mouse_state: self.additional_info_link.clone(),
                 on_click_action: Some(FeaturesPageAction::OpenUrl(NOTIFICATIONS_DOCS_URL.into())),
@@ -5232,7 +5248,7 @@ impl SettingsWidget for DesktopNotificationsWidget {
                     session_settings
                         .notifications
                         .is_agent_task_completed_enabled,
-                    "Agent 完成任务时通知",
+                    "Notify when an agent completes a task",
                     FeaturesPageAction::ToggleAgentTaskCompletedNotifications,
                     view.button_mouse_states
                         .agent_task_completed_notifications_checkbox
@@ -5245,7 +5261,7 @@ impl SettingsWidget for DesktopNotificationsWidget {
                 ),
                 view.render_notification_toggle(
                     session_settings.notifications.is_needs_attention_enabled,
-                    "命令或 Agent 需要你关注才能继续时通知",
+                    "Notify when a command or agent needs your attention to continue",
                     FeaturesPageAction::ToggleNeedsAttentionNotifications,
                     view.button_mouse_states
                         .agent_needs_attention_notifications_checkbox
@@ -5257,7 +5273,7 @@ impl SettingsWidget for DesktopNotificationsWidget {
                 {
                     view.render_notification_toggle(
                         session_settings.notifications.play_notification_sound,
-                        "播放通知声音",
+                        "Play notification sounds",
                         FeaturesPageAction::ToggleNotificationSound,
                         view.button_mouse_states.notification_sound_checkbox.clone(),
                         appearance,
@@ -5272,7 +5288,7 @@ impl SettingsWidget for DesktopNotificationsWidget {
             let ai_settings = AISettings::as_ref(app);
             let show_agent_notifications = *ai_settings.show_agent_notifications;
             column.add_child(render_body_item::<FeaturesPageAction>(
-                "显示应用内 Agent 通知".into(),
+                "Show in-app agent notifications".into(),
                 None,
                 LocalOnlyIconState::Hidden,
                 ToggleState::Enabled,
@@ -5311,7 +5327,7 @@ impl SettingsWidget for DesktopNotificationsWidget {
                     .with_cross_axis_alignment(CrossAxisAlignment::Center)
                     .with_child(
                         Text::new_inline(
-                            "Toast 通知保持可见",
+                            "Toast notifications stay visible for",
                             appearance.ui_font_family(),
                             font_size,
                         )
@@ -5376,7 +5392,7 @@ impl SettingsWidget for StartupShellWidget {
             .with_children([
                 render_sub_sub_header(
                     appearance,
-                    "新会话的默认 shell".to_string(),
+                    "Default shell for new sessions".to_string(),
                     Some(LocalOnlyIconState::for_setting(
                         StartupShellOverride::storage_key(),
                         StartupShellOverride::sync_to_cloud(),
@@ -5415,7 +5431,7 @@ impl SettingsWidget for WorkingDirectoryWidget {
             .with_children([
                 render_sub_sub_header(
                     appearance,
-                    "新会话的工作目录".to_string(),
+                    "Working directory for new sessions".to_string(),
                     Some(LocalOnlyIconState::for_setting(
                         WorkingDirectoryConfig::storage_key(),
                         WorkingDirectoryConfig::sync_to_cloud(),
@@ -5473,7 +5489,7 @@ impl SettingsWidget for ConfirmCloseSharedSessionWidget {
         let ui_builder = appearance.ui_builder();
         let session_settings = SessionSettings::as_ref(app);
         render_body_item::<FeaturesPageAction>(
-            "关闭共享会话前确认".into(),
+            "Confirm before closing shared session".into(),
             None,
             LocalOnlyIconState::for_setting(
                 ShouldConfirmCloseSession::storage_key(),
@@ -5591,7 +5607,7 @@ impl SettingsWidget for GlobalHotkeyWidget {
         let ui_builder = appearance.ui_builder();
         if app.is_wayland() {
             column.add_child(render_body_item::<FeaturesPageAction>(
-                "全局热键：".to_owned(),
+                "Global hotkey:".to_owned(),
                 None,
                 // Fine not to show local only icon state for this, as it's not a supported setting.
                 LocalOnlyIconState::Hidden,
@@ -5599,10 +5615,13 @@ impl SettingsWidget for GlobalHotkeyWidget {
                 appearance,
                 Flex::row()
                     .with_children([
-                        ui_builder.span("Wayland 不支持。 ").build().finish(),
+                        ui_builder
+                            .span("Not supported on Wayland. ")
+                            .build()
+                            .finish(),
                         ui_builder
                             .link(
-                                "查看文档。".to_owned(),
+                                "See docs.".to_owned(),
                                 Some(
                                     "https://docs.warp.dev/terminal/windows/global-hotkey"
                                         .to_owned(),
@@ -5624,7 +5643,7 @@ impl SettingsWidget for GlobalHotkeyWidget {
                 || {
                     render_dropdown_item(
                         appearance,
-                        "全局热键：",
+                        "Global hotkey:",
                         None,
                         None,
                         LocalOnlyIconState::for_setting(
@@ -5731,7 +5750,7 @@ impl SettingsWidget for AutocompleteSymbolsWidget {
     ) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "自动补全引号、圆括号和方括号".into(),
+            "Autocomplete quotes, parentheses, and brackets".into(),
             None,
             LocalOnlyIconState::for_setting(
                 AutocompleteSymbols::storage_key(),
@@ -5780,7 +5799,7 @@ impl SettingsWidget for CodeEditorLineNumberModeWidget {
             || {
                 render_dropdown_item(
                     appearance,
-                    "代码编辑器行号：",
+                    "Code editor line numbers:",
                     None,
                     None,
                     LocalOnlyIconState::for_setting(
@@ -5820,7 +5839,7 @@ impl SettingsWidget for ErrorUnderliningWidget {
     ) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "命令错误下划线".into(),
+            "Error underlining for commands".into(),
             None,
             LocalOnlyIconState::for_setting(
                 ErrorUnderliningEnabled::storage_key(),
@@ -5866,7 +5885,7 @@ impl SettingsWidget for SyntaxHighlightingWidget {
     ) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "命令语法高亮".into(),
+            "Syntax highlighting for commands".into(),
             None,
             LocalOnlyIconState::for_setting(
                 SyntaxHighlighting::storage_key(),
@@ -5912,7 +5931,7 @@ impl SettingsWidget for CompletionsMenuWhileTypingWidget {
     ) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "输入时打开补全菜单".into(),
+            "Open completions menu as you type".into(),
             None,
             LocalOnlyIconState::for_setting(
                 CompletionsOpenWhileTyping::storage_key(),
@@ -5962,7 +5981,7 @@ impl SettingsWidget for CommandCorrectionsWidget {
     ) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "建议修正后的命令".into(),
+            "Suggest corrected commands".into(),
             None,
             LocalOnlyIconState::for_setting(
                 CommandCorrections::storage_key(),
@@ -6009,7 +6028,7 @@ impl SettingsWidget for AliasExpansionWidget {
         let alias_expansion_settings = AliasExpansionSettings::as_ref(app);
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "输入时展开别名".into(),
+            "Expand aliases as you type".into(),
             None,
             LocalOnlyIconState::for_setting(
                 AliasExpansionEnabled::storage_key(),
@@ -6056,7 +6075,7 @@ impl SettingsWidget for MiddleClickPasteWidget {
         let ui_builder = appearance.ui_builder();
         let selection_settings = SelectionSettings::as_ref(app);
         render_body_item::<FeaturesPageAction>(
-            "中键点击粘贴".into(),
+            "Middle-click to paste".into(),
             None,
             LocalOnlyIconState::for_setting(
                 MiddleClickPasteEnabled::storage_key(),
@@ -6108,7 +6127,7 @@ impl SettingsWidget for VimModeWidget {
         let app_editor_settings = AppEditorSettings::as_ref(app);
         let vim_mode_enabled = *app_editor_settings.vim_mode.value();
         column.add_child(render_body_item::<FeaturesPageAction>(
-            "使用 Vim 键绑定编辑代码和命令".into(),
+            "Edit code and commands with Vim keybindings".into(),
             None,
             LocalOnlyIconState::for_setting(
                 VimModeEnabled::storage_key(),
@@ -6156,7 +6175,7 @@ impl SettingsWidget for VimModeWidget {
                     app,
                 ),
                 clipboard_switch,
-                "将未命名寄存器设为系统剪贴板".into(),
+                "Set unnamed register as system clipboard".into(),
             );
 
             let vim_status_bar = *app_editor_settings.vim_status_bar.value();
@@ -6180,7 +6199,7 @@ impl SettingsWidget for VimModeWidget {
                     app,
                 ),
                 status_bar_switch,
-                "显示 Vim 状态栏".into(),
+                "Show Vim status bar".into(),
             );
 
             column.add_child(render_group(
@@ -6213,7 +6232,7 @@ impl SettingsWidget for AtContextMenuInTerminalModeWidget {
     ) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "在终端模式中启用 @ 上下文菜单".into(),
+            "Enable '@' context menu in terminal mode".into(),
             None,
             LocalOnlyIconState::for_setting(
                 AtContextMenuInTerminalMode::storage_key(),
@@ -6269,7 +6288,7 @@ impl SettingsWidget for SlashCommandsInTerminalModeWidget {
     ) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "在终端模式中启用斜杠命令".into(),
+            "Enable slash commands in terminal mode".into(),
             None,
             LocalOnlyIconState::for_setting(
                 EnableSlashCommandsInTerminal::storage_key(),
@@ -6321,7 +6340,7 @@ impl SettingsWidget for OutlineCodebaseSymbolsForAtContextMenuWidget {
     ) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "为 @ 上下文菜单生成代码库符号大纲".into(),
+            "Outline codebase symbols for '@' context menu".into(),
             None,
             LocalOnlyIconState::for_setting(
                 OutlineCodebaseSymbolsForAtContextMenu::storage_key(),
@@ -6373,7 +6392,7 @@ impl SettingsWidget for ShowTerminalInputMessageLineWidget {
     ) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "显示终端输入消息行".into(),
+            "Show terminal input message line".into(),
             None,
             LocalOnlyIconState::for_setting(
                 ShowTerminalInputMessageBar::storage_key(),
@@ -6402,6 +6421,54 @@ impl SettingsWidget for ShowTerminalInputMessageLineWidget {
 }
 
 #[derive(Default)]
+struct PreserveInputFocusOnBlockSelectionWidget {
+    switch_state: SwitchStateHandle,
+}
+
+impl SettingsWidget for PreserveInputFocusOnBlockSelectionWidget {
+    type View = FeaturesPageView;
+
+    fn search_terms(&self) -> &str {
+        "preserve input focus block selection navigate arrow keys"
+    }
+
+    fn render(
+        &self,
+        view: &Self::View,
+        appearance: &Appearance,
+        app: &AppContext,
+    ) -> Box<dyn Element> {
+        let ui_builder = appearance.ui_builder();
+        render_body_item::<FeaturesPageAction>(
+            "Preserve input focus on block selection".into(),
+            None,
+            LocalOnlyIconState::for_setting(
+                PreserveInputFocusOnBlockSelection::storage_key(),
+                PreserveInputFocusOnBlockSelection::sync_to_cloud(),
+                &mut view
+                    .button_mouse_states
+                    .local_only_icon_tooltip_states
+                    .borrow_mut(),
+                app,
+            ),
+            ToggleState::Enabled,
+            appearance,
+            ui_builder
+                .switch(self.switch_state.clone())
+                .check(*BlockListSettings::as_ref(app).preserve_input_focus_on_block_selection)
+                .build()
+                .on_click(move |ctx, _, _| {
+                    ctx.dispatch_typed_action(
+                        FeaturesPageAction::TogglePreserveInputFocusOnBlockSelection,
+                    );
+                })
+                .finish(),
+            None,
+        )
+    }
+}
+
+#[derive(Default)]
 struct AutosuggestionKeybindingHintWidget {
     enabled_switch_state: SwitchStateHandle,
 }
@@ -6410,7 +6477,7 @@ impl SettingsWidget for AutosuggestionKeybindingHintWidget {
     type View = FeaturesPageView;
 
     fn search_terms(&self) -> &str {
-        "自动建议快捷键提示"
+        "autosuggestion keybinding hint"
     }
 
     fn render(
@@ -6426,7 +6493,7 @@ impl SettingsWidget for AutosuggestionKeybindingHintWidget {
         let autosuggestion_keybinding_hint =
             *app_editor_settings.autosuggestion_keybinding_hint.value();
         column.add_child(render_body_item::<FeaturesPageAction>(
-            "显示自动建议键绑定提示".into(),
+            "Show autosuggestion keybinding hint".into(),
             None,
             LocalOnlyIconState::for_setting(
                 AutosuggestionKeybindingHint::storage_key(),
@@ -6482,7 +6549,7 @@ impl SettingsWidget for AutosuggestionIgnoreButtonWidget {
             .show_autosuggestion_ignore_button
             .value();
         column.add_child(render_body_item::<FeaturesPageAction>(
-            "显示忽略自动建议按钮".into(),
+            "Show autosuggestion ignore button".into(),
             None,
             LocalOnlyIconState::for_setting(
                 ShowAutosuggestionIgnoreButton::storage_key(),
@@ -6527,35 +6594,36 @@ impl TabKeyBehaviorWidget {
             TabBehavior::Completions if view.autosuggestions_keystroke.is_empty() => {
                 // If the "Accept autosuggestions" keybinding is unbound, the
                 // user can always still accept with right arrow.
-                Some("→ 接受自动建议。".into())
+                Some("→ accepts autosuggestions.".into())
             }
             TabBehavior::Completions => Some(format!(
-                "{} 接受自动建议。",
+                "{} accepts autosuggestions.",
                 *view.autosuggestions_keystroke
             )),
             TabBehavior::Autosuggestions
                 if *input_settings.completions_open_while_typing.value() =>
             {
                 if view.completions_keystroke.is_empty() {
-                    Some("补全会在输入时打开。".into())
+                    Some("Completions open as you type.".into())
                 } else {
                     Some(format!(
-                        "补全会在输入时打开（或按 {}）。",
+                        "Completions open as you type (or {}).",
                         *view.completions_keystroke
                     ))
                 }
             }
             TabBehavior::Autosuggestions if view.completions_keystroke.is_empty() => {
-                Some("打开补全菜单未绑定快捷键。".into())
+                Some("Opening the completion menu is unbound.".into())
             }
-            TabBehavior::Autosuggestions => {
-                Some(format!("{} 打开补全菜单。", *view.completions_keystroke))
-            }
+            TabBehavior::Autosuggestions => Some(format!(
+                "{} opens completion menu.",
+                *view.completions_keystroke
+            )),
             TabBehavior::UserDefined => None,
         };
         let other_keybinding_name = match *view.tab_behavior {
-            TabBehavior::Completions => Some("接受自动建议"),
-            TabBehavior::Autosuggestions => Some("打开补全菜单"),
+            TabBehavior::Completions => Some("Accept Autosuggestion"),
+            TabBehavior::Autosuggestions => Some("Open Completions Menu"),
             TabBehavior::UserDefined => None,
         };
 
@@ -6608,7 +6676,7 @@ impl SettingsWidget for TabKeyBehaviorWidget {
             .with_child(
                 appearance
                     .ui_builder()
-                    .span("Tab 键行为")
+                    .span("Tab key behavior")
                     .with_style(UiComponentStyles {
                         font_size: Some(CONTENT_FONT_SIZE + 1.),
                         ..Default::default()
@@ -6668,7 +6736,7 @@ impl SettingsWidget for CtrlTabBehaviorWidget {
             || {
                 render_dropdown_item(
                     appearance,
-                    "Ctrl+Tab 行为：",
+                    "Ctrl+Tab behavior:",
                     None,
                     None,
                     LocalOnlyIconState::for_setting(
@@ -6699,7 +6767,7 @@ impl SettingsWidget for MouseReportingWidget {
     type View = FeaturesPageView;
 
     fn search_terms(&self) -> &str {
-        "鼠标报告"
+        "mouse reporting"
     }
 
     fn render(
@@ -6711,7 +6779,7 @@ impl SettingsWidget for MouseReportingWidget {
         let reporting_settings = AltScreenReporting::as_ref(app);
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "启用鼠标报告".into(),
+            "Enable Mouse Reporting".into(),
             Some(AdditionalInfo {
                 mouse_state: self.additional_info_link.clone(),
                 on_click_action: Some(FeaturesPageAction::OpenUrl(
@@ -6754,7 +6822,7 @@ impl SettingsWidget for ScrollReportingWidget {
     type View = FeaturesPageView;
 
     fn search_terms(&self) -> &str {
-        "滚动报告"
+        "scroll reporting"
     }
 
     fn render(
@@ -6766,7 +6834,7 @@ impl SettingsWidget for ScrollReportingWidget {
         let reporting_settings = AltScreenReporting::as_ref(app);
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "启用滚动报告".into(),
+            "Enable Scroll Reporting".into(),
             None,
             LocalOnlyIconState::for_setting(
                 ScrollReportingEnabled::storage_key(),
@@ -6812,7 +6880,7 @@ impl SettingsWidget for FocusReportingWidget {
     type View = FeaturesPageView;
 
     fn search_terms(&self) -> &str {
-        "焦点报告"
+        "focus reporting"
     }
 
     fn render(
@@ -6824,7 +6892,7 @@ impl SettingsWidget for FocusReportingWidget {
         let reporting_settings = AltScreenReporting::as_ref(app);
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "启用焦点报告".into(),
+            "Enable Focus Reporting".into(),
             None,
             LocalOnlyIconState::for_setting(
                 FocusReportingEnabled::storage_key(),
@@ -6871,7 +6939,7 @@ impl SettingsWidget for AudibleBellWidget {
         let ui_builder = appearance.ui_builder();
         let terminal_settings = TerminalSettings::as_ref(app);
         render_body_item::<FeaturesPageAction>(
-            "使用可听铃声".into(),
+            "Use Audible Bell".into(),
             None,
             LocalOnlyIconState::for_setting(
                 UseAudibleBell::storage_key(),
@@ -6915,7 +6983,7 @@ impl SmartSelectWidget {
         Flex::column()
             .with_child(
                 ui_builder
-                    .label("被视为单词一部分的字符".to_string())
+                    .label("Characters considered part of a word".to_string())
                     .with_style(UiComponentStyles {
                         margin: Some(Coords {
                             top: 10.0,
@@ -6976,7 +7044,7 @@ impl SettingsWidget for SmartSelectWidget {
         let selection = SemanticSelection::as_ref(app);
         let mut column = Flex::column();
         column.add_child(render_body_item::<FeaturesPageAction>(
-            "双击智能选择".into(),
+            "Double-click smart selection".into(),
             Some(AdditionalInfo {
                 mouse_state: self.additional_info_link.clone(),
                 on_click_action: Some(FeaturesPageAction::OpenUrl(
@@ -7052,7 +7120,7 @@ impl SettingsWidget for ShowTerminalZeroStateBlockWidget {
         let ui_builder = appearance.ui_builder();
         let terminal_settings = TerminalSettings::as_ref(app);
         render_body_item::<FeaturesPageAction>(
-            "在新会话中显示帮助块".into(),
+            "Show help block in new sessions".into(),
             None,
             LocalOnlyIconState::for_setting(
                 ShowTerminalZeroStateBlock::storage_key(),
@@ -7094,7 +7162,7 @@ impl SettingsWidget for CopyOnSelectWidget {
         let ui_builder = appearance.ui_builder();
         let copy_on_select_enabled = SelectionSettings::as_ref(app).copy_on_select_enabled();
         render_body_item::<FeaturesPageAction>(
-            "选择时复制".into(),
+            "Copy on select".into(),
             None,
             LocalOnlyIconState::for_setting(
                 CopyOnSelect::storage_key(),
@@ -7121,6 +7189,42 @@ impl SettingsWidget for CopyOnSelectWidget {
 }
 
 #[derive(Default)]
+struct Osc52ClipboardAccessWidget {}
+
+impl SettingsWidget for Osc52ClipboardAccessWidget {
+    type View = FeaturesPageView;
+
+    fn search_terms(&self) -> &str {
+        "clipboard osc 52 osc52 paste copy access terminal program"
+    }
+
+    fn render(
+        &self,
+        view: &Self::View,
+        appearance: &Appearance,
+        app: &AppContext,
+    ) -> Box<dyn Element> {
+        render_dropdown_item(
+            appearance,
+            "Clipboard access (OSC 52)",
+            Some("Controls whether programs running in the terminal can read or write your system clipboard."),
+            None,
+            LocalOnlyIconState::for_setting(
+                Osc52ClipboardAccessSetting::storage_key(),
+                Osc52ClipboardAccessSetting::sync_to_cloud(),
+                &mut view
+                    .button_mouse_states
+                    .local_only_icon_tooltip_states
+                    .borrow_mut(),
+                app,
+            ),
+            None,
+            &view.osc52_clipboard_access_dropdown,
+        )
+    }
+}
+
+#[derive(Default)]
 struct NewTabPlacementWidget {}
 
 impl SettingsWidget for NewTabPlacementWidget {
@@ -7138,7 +7242,7 @@ impl SettingsWidget for NewTabPlacementWidget {
     ) -> Box<dyn Element> {
         render_dropdown_item(
             appearance,
-            "新标签页位置",
+            "New tab placement",
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -7173,7 +7277,7 @@ impl SettingsWidget for DefaultSessionModeWidget {
         app: &AppContext,
     ) -> Box<dyn Element> {
         let label = render_dropdown_item_label(
-            "新会话默认模式".to_string(),
+            "Default mode for new sessions".to_string(),
             None,
             LocalOnlyIconState::for_setting(
                 DefaultSessionMode::storage_key(),
@@ -7227,7 +7331,7 @@ impl SettingsWidget for WorkflowsInCommandSearch {
         let ui_builder = appearance.ui_builder();
         let workflow_settings = CommandSearchSettings::as_ref(app);
         render_body_item::<FeaturesPageAction>(
-            "在命令搜索中显示全局工作流（ctrl-r）".into(),
+            "Show Global Workflows in Command Search (ctrl-r)".into(),
             Some(AdditionalInfo {
                 mouse_state: self.additional_info_link.clone(),
                 on_click_action: Some(FeaturesPageAction::OpenUrl(
@@ -7282,12 +7386,14 @@ impl SettingsWidget for LinuxSelectionClipboardWidget {
         app: &AppContext,
     ) -> Box<dyn Element> {
         render_body_item::<FeaturesPageAction>(
-            "遵循 Linux 选择剪贴板".into(),
+            "Honor linux selection clipboard".into(),
             Some(AdditionalInfo {
                 mouse_state: self.additional_info_link.clone(),
                 on_click_action: None,
                 secondary_text: None,
-                tooltip_override_text: Some("是否支持 Linux 主剪贴板。".into()),
+                tooltip_override_text: Some(
+                    "Whether the Linux primary clipboard should be supported.".into(),
+                ),
             }),
             LocalOnlyIconState::for_setting(
                 LinuxSelectionClipboard::storage_key(),
@@ -7334,7 +7440,7 @@ impl SettingsWidget for GPUWidget {
     ) -> Box<dyn Element> {
         let gpu_settings = GPUSettings::as_ref(app);
         let mut col = Flex::column().with_child(render_body_item::<FeaturesPageAction>(
-            "优先使用集成 GPU 渲染新窗口（低功耗）".into(),
+            "Prefer rendering new windows with integrated GPU (low power)".into(),
             None,
             LocalOnlyIconState::for_setting(
                 PreferLowPowerGPU::storage_key(),
@@ -7364,7 +7470,7 @@ impl SettingsWidget for GPUWidget {
                 Container::new(
                     appearance
                         .ui_builder()
-                        .wrappable_text("更改将应用于新窗口。", true)
+                        .wrappable_text("Changes will apply to new windows.", true)
                         .with_style(UiComponentStyles {
                             font_color: Some(theme.sub_text_color(theme.background()).into_solid()),
                             ..Default::default()
@@ -7404,12 +7510,12 @@ impl SettingsWidget for WindowSystemWidget {
         let mut children = Flex::column();
         let force_x11 = *LinuxAppConfiguration::as_ref(app).force_x11.value();
         children.add_child(render_body_item::<FeaturesPageAction>(
-            "使用 Wayland 管理窗口".into(),
+            "Use Wayland for window management".into(),
             Some(AdditionalInfo {
                 mouse_state: self.additional_info_link.clone(),
                 on_click_action: None,
                 secondary_text: None,
-                tooltip_override_text: Some("启用 Wayland".to_string()),
+                tooltip_override_text: Some("Enables the use of Wayland".to_string()),
             }),
             LocalOnlyIconState::for_setting(
                 ForceX11::storage_key(),
@@ -7435,10 +7541,11 @@ impl SettingsWidget for WindowSystemWidget {
         ));
 
         let mut secondary_text =
-            "启用此设置会停用全局热键支持。停用时，如果你的 Wayland 合成器使用小数缩放（例如 125%），文本可能会模糊。"
+            "Enabling this setting disables global hotkey support. When disabled, text \
+                    may be blurry if your Wayland compositor is using fraction scaling (ex: 125%)."
                 .to_string();
         if view.force_x11_changed {
-            secondary_text.push_str("nn重启 Warp 以使更改生效。");
+            secondary_text.push_str("\n\nRestart Warp for changes to take effect.");
         }
         let warp_theme = appearance.theme();
         children.add_child(
@@ -7479,7 +7586,7 @@ impl SettingsWidget for GraphicsBackendWidget {
         let theme = appearance.theme();
         let dropdown = render_dropdown_item(
             appearance,
-            "首选图形后端",
+            "Preferred graphics backend",
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -7500,7 +7607,7 @@ impl SettingsWidget for GraphicsBackendWidget {
             col.add_child(
                 appearance
                     .ui_builder()
-                    .wrappable_text(format!("当前后端：{}", backend.to_label()), true)
+                    .wrappable_text(format!("Current backend: {}", backend.to_label()), true)
                     .with_style(UiComponentStyles {
                         font_color: Some(theme.sub_text_color(theme.background()).into_solid()),
                         ..Default::default()
@@ -7514,7 +7621,7 @@ impl SettingsWidget for GraphicsBackendWidget {
                 Container::new(
                     appearance
                         .ui_builder()
-                        .wrappable_text("更改将应用于新窗口。", true)
+                        .wrappable_text("Changes will apply to new windows.", true)
                         .with_style(UiComponentStyles {
                             font_color: Some(theme.sub_text_color(theme.background()).into_solid()),
                             ..Default::default()
@@ -7557,7 +7664,7 @@ impl SettingsWidget for AsyncFindWidget {
         let ui_builder = appearance.ui_builder();
 
         let label = render_body_item_label::<FeaturesPageAction>(
-            "异步查找".into(),
+            "Asynchronous find".into(),
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -7592,7 +7699,10 @@ impl SettingsWidget for AsyncFindWidget {
             label_with_chip,
             switch,
             appearance,
-            Some("使用改进的查找实现，在大型输出中搜索匹配项时保持界面响应。".into()),
+            Some(
+                "Use an improved implementation of find to keep the UI responsive while searching for matches on large outputs."
+                    .into(),
+            ),
         )
     }
 }
