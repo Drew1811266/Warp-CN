@@ -21,10 +21,10 @@
 - Official changelog latest product entry checked on 2026-06-24: `2026.06.17 (v0.2026.06.17.09.49)`.
 - GitHub latest stable release checked on 2026-06-24: `v0.2026.06.03.09.49.stable_00`.
 - GitHub latest dev release checked on 2026-06-24: `v0.2026.06.09.19.54.dev_00`.
-- Latest fetched upstream source commit checked on 2026-06-24: `origin/master` at `b2804a09125a0249f5d949c267d43de59e1df791`.
-- `origin/master` subject: `Fix copying selected text from AI blocks (#12892)`.
-- Current divergence: `git rev-list --left-right --count HEAD...origin/master` returned `893 304`.
-- Current diff scale: `git diff --shortstat HEAD..origin/master` returned `1911 files changed, 101778 insertions(+), 802794 deletions(-)`.
+- Latest fetched upstream source commit checked on 2026-06-24 after implementation-start refresh: `origin/master` at `6691e1e0e0408be8bdcb1891e3a795564cedd897`.
+- `origin/master` subject: `Make the New API key modal's Agent picker searchable (#12972)`.
+- Current divergence: `git rev-list --left-right --count HEAD...origin/master` returned `894 305`.
+- Current diff scale: `git diff --shortstat HEAD..origin/master` returned `1914 files changed, 101928 insertions(+), 803509 deletions(-)`.
 
 ## Non-Goals
 
@@ -49,7 +49,7 @@
 
 - A branch named `codex/zh-Hans-upstream-latest-2026-06-24` exists and contains the sync work.
 - Current `main` remains unchanged until an explicit final merge/publish decision.
-- Upstream base is recorded as `origin/master` commit `b2804a09125a0249f5d949c267d43de59e1df791`, unless a newer upstream commit is deliberately fetched and recorded before implementation starts.
+- Upstream base is recorded as `origin/master` commit `6691e1e0e0408be8bdcb1891e3a795564cedd897`, unless a newer upstream commit is deliberately fetched and recorded before implementation starts.
 - `python3 script/zh_apply_localization.py --validate-manifest` passes.
 - `python3 script/zh_apply_localization.py --check-glossary` passes.
 - `python3 script/zh_apply_localization.py --dry-run --summary` reports `missing: 0` and `would_change: 0` after overlay application.
@@ -172,8 +172,8 @@ git rev-list --left-right --count HEAD..."$UPSTREAM_BASE"
 Expected current base SHA unless refreshed deliberately:
 
 ```text
-b2804a09125a0249f5d949c267d43de59e1df791
-893 304
+6691e1e0e0408be8bdcb1891e3a795564cedd897
+894 305
 ```
 
 ## Task 3: Run Pre-Merge zh-Hans Baseline Gates
@@ -574,7 +574,7 @@ Change:
 to the approved fork version, and update the status paragraph to say the fork is synced to:
 
 ```text
-上游开发源 `origin/master` commit `b2804a09125a0249f5d949c267d43de59e1df791`
+上游开发源 `origin/master` commit `6691e1e0e0408be8bdcb1891e3a795564cedd897`
 ```
 
 If a package exists, update the download filename to:
@@ -593,7 +593,7 @@ Append to `docs/zh-Hans-upstream-sync.md`:
 - Upstream product changelog latest checked: `2026.06.17 (v0.2026.06.17.09.49)`
 - GitHub latest stable release checked: `v0.2026.06.03.09.49.stable_00`
 - Selected upstream source base: `origin/master`
-- Selected upstream source commit: `b2804a09125a0249f5d949c267d43de59e1df791`
+- Selected upstream source commit: `6691e1e0e0408be8bdcb1891e3a795564cedd897`
 - Fork branch: `codex/zh-Hans-upstream-latest-2026-06-24`
 - Manifest dry-run: `missing: 0`, `would_change: 0`
 - Release coverage: paste the exact output from `python3 script/zh_localization_inventory.py --preset release --coverage`.
