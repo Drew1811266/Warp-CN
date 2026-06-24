@@ -399,3 +399,86 @@ Decision:
 - Worktree: `/Users/drew/Project/warp-cn-0.19-adaptation`
 - Strategy: clean upstream stable worktree plus durable zh-Hans asset import, followed by manifest overlay regeneration.
 - Public-release posture: blocked until 0.19 command-line gates, fresh bundle, GUI evidence, and public-RC evidence gates are complete.
+
+## zh-Hans latest-source sync 2026-06-24 pre-merge baseline
+
+This record captures the baseline before merging latest upstream source into the
+Warp CN sync branch. No upstream merge, rebase, package, release, or tag mutation
+was performed in this step.
+
+- Branch: `codex/zh-Hans-upstream-latest-2026-06-24`
+- Branch point: `3229258e3cb055b40daf563e0cabb36bfc3a65f9`
+- Current branch head after planning commits: `61ca8ac7`
+- Current branch subject: `docs: refresh latest upstream sync base`
+- Current fork release tag: `0.20.6`
+- Upstream product changelog latest checked: `2026.06.17 (v0.2026.06.17.09.49)`
+- GitHub latest stable release checked: `v0.2026.06.03.09.49.stable_00`
+- GitHub latest dev release checked: `v0.2026.06.09.19.54.dev_00`
+- Selected upstream source base: `origin/master`
+- Selected upstream source commit: `6691e1e0e0408be8bdcb1891e3a795564cedd897`
+- Selected upstream source subject: `Make the New API key modal's Agent picker searchable (#12972)`
+- Selected upstream source date: `2026-06-23T19:42:07-07:00`
+- Stable source branch still available: `stable_release/v0.2026.06.03.09.49.stable`
+- Stable source branch commit: `2249469e5d24e472cee6ce97d3d324293f67db71`
+- Ahead/behind against selected latest source: `895 305`
+- Diff scale against selected latest source: `1914 files changed, 101928 insertions(+), 803509 deletions(-)`
+
+Release API evidence:
+
+```text
+gh api repos/warpdotdev/warp/releases/latest
+tag_name: v0.2026.06.03.09.49.stable_00
+name: Stable Release v0.2026.06.03.09.49.stable_00
+published_at: 2026-06-03T09:49:25Z
+prerelease: false
+draft: false
+
+gh api 'repos/warpdotdev/warp/releases?per_page=20'
+newest listed release: v0.2026.06.09.19.54.dev_00
+newest listed stable release: v0.2026.06.03.09.49.stable_00
+```
+
+Pre-merge zh-Hans validation:
+
+```text
+python3 script/zh_apply_localization.py --validate-manifest
+manifest validation passed
+
+python3 script/zh_apply_localization.py --check-glossary
+glossary check passed
+
+python3 script/zh_apply_localization.py --dry-run --summary
+entries: 7937
+files: 550
+already_applied: 5713
+would_change: 0
+missing: 0
+
+python3 script/zh_localization_inventory.py --preset release --coverage
+preset: release
+covered: 8532
+candidates: 10
+coverage: 99.9%
+
+git diff --check
+passed
+
+cargo fmt --check
+passed
+```
+
+Mojibake scan result:
+
+```text
+python3 script/zh_mojibake_scan.py
+app/assets/bundled/bootstrap/subshell_bootstrap_block_command.txt: terminal-ansi-sequence: accepted-token
+crates/editor/test_data/test_rust_file.rs: replacement-character: fixture-only
+docs/zh-Hans-localization-calibration-plan.md: replacement-character: example-only
+docs/zh-Hans-localization-calibration-plan.md: mojibake-signature: example-only
+```
+
+Decision:
+
+- Continue with a latest-source sync against `origin/master`, not a newer official stable tag adoption.
+- Preserve local upstream tag namespace; do not force-fetch or overwrite local `v0.2026.*` tags.
+- Proceed to upstream merge only after this durable baseline is committed.

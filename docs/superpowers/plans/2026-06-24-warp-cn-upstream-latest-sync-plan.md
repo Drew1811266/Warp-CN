@@ -23,7 +23,7 @@
 - GitHub latest dev release checked on 2026-06-24: `v0.2026.06.09.19.54.dev_00`.
 - Latest fetched upstream source commit checked on 2026-06-24 after implementation-start refresh: `origin/master` at `6691e1e0e0408be8bdcb1891e3a795564cedd897`.
 - `origin/master` subject: `Make the New API key modal's Agent picker searchable (#12972)`.
-- Current divergence: `git rev-list --left-right --count HEAD...origin/master` returned `894 305`.
+- Current divergence after recording the plan on the sync branch: `git rev-list --left-right --count HEAD...origin/master` returned `895 305`.
 - Current diff scale: `git diff --shortstat HEAD..origin/master` returned `1914 files changed, 101928 insertions(+), 803509 deletions(-)`.
 
 ## Non-Goals
@@ -173,7 +173,7 @@ Expected current base SHA unless refreshed deliberately:
 
 ```text
 6691e1e0e0408be8bdcb1891e3a795564cedd897
-894 305
+895 305
 ```
 
 ## Task 3: Run Pre-Merge zh-Hans Baseline Gates
