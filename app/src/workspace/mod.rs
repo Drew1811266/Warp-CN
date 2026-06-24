@@ -779,7 +779,7 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::ToggleGlobalSearch),
         EditableBinding::new(
             "file_tree:toggle_hidden_files",
-            BindingDescription::new("Toggle hidden files in Project Explorer"),
+            BindingDescription::new("切换项目资源管理器中的隐藏文件"),
             WorkspaceAction::ToggleHiddenFiles,
         )
         .with_group(bindings::BindingGroup::Navigation.as_str())
@@ -1142,14 +1142,14 @@ pub fn init(app: &mut AppContext) {
             app.register_editable_bindings([
                 EditableBinding::new(
                     "workspace:install_warpctrl",
-                    "Install Warp Control CLI command",
+                    "安装 Warp Control CLI 命令",
                     WorkspaceAction::InstallWarpctrl,
                 )
                 .with_group(bindings::BindingGroup::Settings.as_str())
                 .with_context_predicate(id!("Workspace")),
                 EditableBinding::new(
                     "workspace:uninstall_warpctrl",
-                    "Uninstall Warp Control CLI command",
+                    "卸载 Warp Control CLI 命令",
                     WorkspaceAction::UninstallWarpctrl,
                 )
                 .with_group(bindings::BindingGroup::Settings.as_str())

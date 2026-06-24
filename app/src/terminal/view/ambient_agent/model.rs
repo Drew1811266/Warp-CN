@@ -58,7 +58,7 @@ const HANDOFF_CONTINUE_WITH_SNAPSHOT_PROMPT: &str =
 /// Wire prompt substituted for an empty-prompt handoff against an active source
 /// conversation with no snapshot content.
 #[cfg(all(feature = "local_fs", not(target_family = "wasm")))]
-const HANDOFF_CONTINUE_PROMPT: &str = "Continue";
+const HANDOFF_CONTINUE_PROMPT: &str = "继续";
 /// Wire prompt substituted for an empty-prompt handoff against an idle source
 /// conversation that carries uploaded snapshot content.
 #[cfg(all(feature = "local_fs", not(target_family = "wasm")))]

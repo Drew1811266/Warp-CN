@@ -1375,9 +1375,9 @@ pub(crate) fn format_terminal_state(result: &RunAgentsResult) -> (String, Status
                 // Every child failed to launch: surface a terminal failure
                 // rather than the in-progress-looking mixed state.
                 let label = if total == 1 {
-                    "Failed to spawn agent".to_string()
+                    "启动 Agent 失败".to_string()
                 } else {
-                    format!("Failed to spawn {total} agents")
+                    format!("启动 {total} 个 Agent 失败")
                 };
                 (label, StatusKind::Failure)
             } else {

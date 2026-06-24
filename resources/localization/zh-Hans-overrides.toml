@@ -54050,3 +54050,1934 @@ target = "Agent"
 context = "0.19 visible product term; preserve Agent per glossary"
 status = "active"
 preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.agent.conversation.status.reconnecting"
+path = "app/src/ai/agent/conversation.rs"
+source = "Reconnecting"
+target = "正在重新连接"
+context = "Task 6 conversation status label"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.conversation.status.waiting"
+path = "app/src/ai/agent/conversation.rs"
+source = "Waiting"
+target = "等待中"
+context = "Task 6 conversation status label"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.conversation_rename.empty_title"
+path = "app/src/ai/conversation_rename.rs"
+source = "Please provide a conversation title"
+target = "请输入对话标题"
+context = "Task 6 rename conversation validation toast"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.conversation_rename.empty_conversation"
+path = "app/src/ai/conversation_rename.rs"
+source = "You can't rename an empty conversation"
+target = "不能重命名空对话"
+context = "Task 6 rename conversation validation toast"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.conversation_rename.not_found"
+path = "app/src/ai/conversation_rename.rs"
+source = "Conversation not found"
+target = "未找到对话"
+context = "Task 6 rename conversation error toast"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.conversation_rename.not_synced"
+path = "app/src/ai/conversation_rename.rs"
+source = "Your conversation hasn't synced to the cloud yet. Try sending another message, then rename it again."
+target = "你的对话尚未同步到云端。请再发送一条消息，然后重新重命名。"
+context = "Task 6 rename conversation error toast"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.conversation_rename.in_progress"
+path = "app/src/ai/conversation_rename.rs"
+source = "A rename is already in progress for this conversation"
+target = "此对话正在重命名"
+context = "Task 6 rename conversation error toast"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.conversation_rename.not_ready"
+path = "app/src/ai/conversation_rename.rs"
+source = "Your conversation is still syncing. Try renaming it again in a moment."
+target = "你的对话仍在同步。请稍后再重命名。"
+context = "Task 6 rename conversation error toast"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.conversation_rename.success"
+path = "app/src/ai/conversation_rename.rs"
+source = "Conversation renamed to {title}"
+target = "对话已重命名为 {title}"
+context = "Task 6 rename conversation success toast"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.conversation_rename.failed"
+path = "app/src/ai/conversation_rename.rs"
+source = "Failed to rename conversation: {e}"
+target = "重命名对话失败：{e}"
+context = "Task 6 rename conversation error toast"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.conversation_rename.too_long"
+path = "app/src/ai/conversation_rename.rs"
+source = "Conversation title must be {CONVERSATION_TITLE_MAX_CHARS} characters or fewer"
+target = "对话标题必须不超过 {CONVERSATION_TITLE_MAX_CHARS} 个字符"
+context = "Task 6 rename conversation validation toast"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.driver.managed_mcp_error"
+path = "app/src/ai/agent_sdk/driver.rs"
+source = "Failed to resolve managed MCP server {uid}: {message}"
+target = "无法解析托管 MCP server {uid}：{message}"
+context = "Task 6 user-facing managed MCP setup error"
+status = "active"
+preserve_terms = ["MCP"]
+
+[[replace]]
+key = "sync6.agent.driver.mcp_error_suffix"
+path = "app/src/ai/agent_sdk/driver.rs"
+source = ": {message}"
+target = "：{message}"
+context = "Task 6 MCP startup detail suffix"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.driver.mcp_failed_start"
+path = "app/src/ai/agent_sdk/driver.rs"
+source = "'{name}' failed to start{error}"
+target = "“{name}”启动失败{error}"
+context = "Task 6 MCP startup detail"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.driver.mcp_start_timeout"
+path = "app/src/ai/agent_sdk/driver.rs"
+source = "'{name}' did not start within {}s"
+target = "“{name}”未能在 {} 秒内启动"
+context = "Task 6 MCP startup timeout detail"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.driver.platform_manager_unavailable"
+path = "app/src/ai/agent_sdk/driver.rs"
+source = "Required platform plugin manager is unavailable"
+target = "必需的 platform 插件管理器不可用"
+context = "Task 6 required third-party harness platform plugin error"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.driver.platform_update_failed"
+path = "app/src/ai/agent_sdk/driver.rs"
+source = "Required platform plugin update failed: {e}"
+target = "必需的 platform 插件更新失败：{e}"
+context = "Task 6 required third-party harness platform plugin error"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.driver.platform_install_failed"
+path = "app/src/ai/agent_sdk/driver.rs"
+source = "Required platform plugin installation failed: {e}"
+target = "必需的 platform 插件安装失败：{e}"
+context = "Task 6 required third-party harness platform plugin error"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.driver.platform_not_installed"
+path = "app/src/ai/agent_sdk/driver.rs"
+source = "Required platform plugin is not installed"
+target = "必需的 platform 插件尚未安装"
+context = "Task 6 required third-party harness platform plugin error"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.driver.platform_version_low"
+path = "app/src/ai/agent_sdk/driver.rs"
+source = "Required platform plugin is below the minimum supported version"
+target = "必需的 platform 插件低于最低支持版本"
+context = "Task 6 required third-party harness platform plugin error"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.driver_terminal.spawn_failed_reason"
+path = "app/src/ai/agent_sdk/driver/terminal.rs"
+source = "Shell spawn failed: {r}. Check the Warp logs for details."
+target = "Shell 启动失败：{r}。请查看 Warp 日志了解详情。"
+context = "Task 6 terminal bootstrap error shown through agent setup"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.agent.driver_terminal.spawn_failed"
+path = "app/src/ai/agent_sdk/driver/terminal.rs"
+source = "Shell spawn failed. Check the Warp logs for details."
+target = "Shell 启动失败。请查看 Warp 日志了解详情。"
+context = "Task 6 terminal bootstrap error shown through agent setup"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.agent.driver_terminal.start_timeout"
+path = "app/src/ai/agent_sdk/driver/terminal.rs"
+source = "Terminal session did not start within the expected time. Check the Warp logs for details."
+target = "终端会话未在预期时间内启动。请查看 Warp 日志了解详情。"
+context = "Task 6 terminal bootstrap timeout"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.agent.driver_terminal.bootstrap_internal_error"
+path = "app/src/ai/agent_sdk/driver/terminal.rs"
+source = "An unexpected internal error occurred during bootstrap."
+target = "引导期间发生意外内部错误。"
+context = "Task 6 terminal bootstrap error"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.error_classification.managed_mcp"
+path = "app/src/ai/agent_sdk/driver/error_classification.rs"
+source = "Managed MCP server {uid} could not be resolved: {message}"
+target = "无法解析托管 MCP server {uid}：{message}"
+context = "Task 6 managed MCP task status update"
+status = "active"
+preserve_terms = ["MCP"]
+
+[[replace]]
+key = "sync6.agent.local_harness.codex_install_required"
+path = "app/src/ai/local_harness_setup.rs"
+source = "Install Codex to use this local harness."
+target = "安装 Codex 以使用此本地 harness。"
+context = "Task 6 local Codex harness disabled tooltip"
+status = "active"
+preserve_terms = ["Codex"]
+
+[[replace]]
+key = "sync6.agent.run_agents.failed_one"
+path = "app/src/ai/blocklist/inline_action/run_agents_card_view.rs"
+source = "Failed to spawn agent"
+target = "启动 Agent 失败"
+context = "Task 6 run agents card failure status"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.agent.run_agents.failed_many"
+path = "app/src/ai/blocklist/inline_action/run_agents_card_view.rs"
+source = "Failed to spawn {total} agents"
+target = "启动 {total} 个 Agent 失败"
+context = "Task 6 run agents card failure status"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.agent.usage.hide_breakdown"
+path = "app/src/ai/blocklist/usage/conversation_usage_view.rs"
+source = "Hide breakdown"
+target = "隐藏明细"
+context = "Task 6 context usage breakdown toggle"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.usage.view_breakdown"
+path = "app/src/ai/blocklist/usage/conversation_usage_view.rs"
+source = "View breakdown"
+target = "查看明细"
+context = "Task 6 context usage breakdown toggle"
+status = "active"
+
+[[replace]]
+key = "sync6.agent.usage.other_tooltip"
+path = "app/src/ai/blocklist/usage/conversation_usage_view.rs"
+source = "Includes other request context and temporary instructions added to help the agent better respond."
+target = "包括其他请求上下文，以及为帮助 Agent 更好响应而添加的临时指令。"
+context = "Task 6 context usage tooltip"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.agent.execution_profiles.long_context_warning"
+path = "app/src/ai/execution_profiles/mod.rs"
+source = "OpenAI automatically applies long-context pricing when context exceeds 272,000 tokens. "
+target = "当上下文超过 272,000 个 token 时，OpenAI 会自动应用长上下文价格。"
+context = "Task 6 OpenAI long-context pricing warning"
+status = "active"
+preserve_terms = ["OpenAI"]
+
+[[replace]]
+key = "sync6.agent.execution_profiles.learn_more"
+path = "app/src/ai/execution_profiles/mod.rs"
+source = "Learn more"
+target = "了解更多"
+context = "Task 6 OpenAI long-context pricing warning link"
+status = "active"
+
+[[replace]]
+key = "sync6.auth.login.third_party.create_account_title"
+path = "app/src/auth/login_slide.rs"
+source = "Create an account"
+target = "创建账号"
+context = "Task 6 third-party AI login title and skip-dialog CTA"
+status = "active"
+expected_count = 2
+
+[[replace]]
+key = "sync6.auth.login.third_party.create_account_subtitle"
+path = "app/src/auth/login_slide.rs"
+source = "Create a Warp account to enable AI-powered planning, coding, and automations."
+target = "创建 Warp 账号以启用 AI 驱动的规划、编码和自动化。"
+context = "Task 6 third-party AI login subtitle"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.auth.login.third_party.skip_title"
+path = "app/src/auth/login_slide.rs"
+source = "Are you sure you want to skip login?"
+target = "确定要跳过登录吗？"
+context = "Task 6 third-party AI skip-login dialog title"
+status = "active"
+
+[[replace]]
+key = "sync6.auth.login.third_party.skip_body"
+path = "app/src/auth/login_slide.rs"
+source = "Warp is better with an account. By continuing, you won't have access to any of the following features:"
+target = "登录账号后 Warp 会更强。继续后，你将无法使用以下功能："
+context = "Task 6 third-party AI skip-login dialog body"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.auth.provider_keys.title"
+path = "app/src/auth/provider_keys_modal.rs"
+source = "Add API key"
+target = "添加 API 密钥"
+context = "Task 6 provider keys modal title"
+status = "active"
+
+[[replace]]
+key = "sync6.auth.provider_keys.subtitle"
+path = "app/src/auth/provider_keys_modal.rs"
+source = "Use your own API keys from model providers for Warp Agent."
+target = "为 Warp Agent 使用你自己的模型提供商 API 密钥。"
+context = "Task 6 provider keys modal subtitle"
+status = "active"
+preserve_terms = ["Warp Agent"]
+
+[[replace]]
+key = "sync6.auth.provider_keys.openai"
+path = "app/src/auth/provider_keys_modal.rs"
+source = "OpenAI API key"
+target = "OpenAI API 密钥"
+context = "Task 6 provider keys modal field label"
+status = "active"
+preserve_terms = ["OpenAI"]
+
+[[replace]]
+key = "sync6.auth.provider_keys.anthropic"
+path = "app/src/auth/provider_keys_modal.rs"
+source = "Anthropic API key"
+target = "Anthropic API 密钥"
+context = "Task 6 provider keys modal field label"
+status = "active"
+preserve_terms = ["Anthropic"]
+
+[[replace]]
+key = "sync6.auth.provider_keys.google"
+path = "app/src/auth/provider_keys_modal.rs"
+source = "Google API key"
+target = "Google API 密钥"
+context = "Task 6 provider keys modal field label"
+status = "active"
+preserve_terms = ["Google"]
+
+[[replace]]
+key = "sync6.auth.provider_keys.cancel"
+path = "app/src/auth/provider_keys_modal.rs"
+source = "Cancel"
+target = "取消"
+context = "Task 6 provider keys modal button"
+status = "active"
+
+[[replace]]
+key = "sync6.auth.provider_keys.add_keys"
+path = "app/src/auth/provider_keys_modal.rs"
+source = "Add keys"
+target = "添加密钥"
+context = "Task 6 provider keys modal primary button"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.agent.give_ai"
+path = "crates/onboarding/src/agent_onboarding_view.rs"
+source = "Give me AI features"
+target = "给我启用 AI 功能"
+context = "Task 6 no-AI confirmation dialog cancel button"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.agent.no_ai"
+path = "crates/onboarding/src/agent_onboarding_view.rs"
+source = "I don't want AI"
+target = "我不想使用 AI"
+context = "Task 6 no-AI confirmation dialog primary button"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.agent.no_ai_title"
+path = "crates/onboarding/src/agent_onboarding_view.rs"
+source = "Are you sure you don't want AI?"
+target = "确定不使用 AI 吗？"
+context = "Task 6 no-AI confirmation dialog title"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.agent.no_ai_body"
+path = "crates/onboarding/src/agent_onboarding_view.rs"
+source = "Warp is better with AI. By continuing, you won't have access to any of the following features:"
+target = "Warp 搭配 AI 会更强。继续后，你将无法使用以下功能："
+context = "Task 6 no-AI confirmation dialog body"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.onboarding.agent.plan_activated"
+path = "crates/onboarding/src/agent_onboarding_view.rs"
+source = "Plan successfully activated!"
+target = "套餐已成功激活！"
+context = "Task 6 onboarding plan success toast"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.lib.full_terminal_use"
+path = "crates/onboarding/src/lib.rs"
+source = "Full Terminal Use"
+target = "完整终端使用"
+context = "Task 6 onboarding feature label"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_access.title"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "Choose how to access AI"
+target = "选择 AI 访问方式"
+context = "Task 6 AI access onboarding title"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_access.subtitle"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "Save with a recurring plan, or use your own key or endpoint."
+target = "选择周期性套餐可节省费用，或使用你自己的 API 密钥或端点。"
+context = "Task 6 AI access onboarding subtitle"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_access.subscription"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "Subscription"
+target = "订阅"
+context = "Task 6 AI access subscription card title"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_access.best_value"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "Best value"
+target = "最优惠"
+context = "Task 6 AI access subscription badge"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_access.subscription_description"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "Starting at $18 / mo, available with monthly or annual plans. Includes base credits, frontier models, cloud agents, collaboration, and more."
+target = "每月 $18 起，可选择月付或年付套餐。包含基础额度、前沿模型、云端 Agent、协作等功能。"
+context = "Task 6 AI access subscription card description"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.onboarding.ai_access.choose_plan"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "Choose plan"
+target = "选择套餐"
+context = "Task 6 AI access subscription CTA"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_access.byok_title"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "Use my own key or endpoint"
+target = "使用我自己的 API 密钥或端点"
+context = "Task 6 AI access BYOK card title"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_access.byok_description"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "Use your own API key or OpenAI-compatible endpoint with Warp for free."
+target = "在 Warp 中免费使用你自己的 API 密钥或 OpenAI 兼容端点。"
+context = "Task 6 AI access BYOK card description"
+status = "active"
+preserve_terms = ["Warp", "OpenAI"]
+
+[[replace]]
+key = "sync6.onboarding.ai_access.add_key"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "+ Add key"
+target = "+ 添加密钥"
+context = "Task 6 AI access BYOK CTA"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_access.add_endpoint"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "+ Add custom endpoint"
+target = "+ 添加自定义端点"
+context = "Task 6 AI access endpoint CTA"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_access.connected_count"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "{} connected"
+target = "已连接 {}"
+context = "Task 6 AI access BYOK connected count"
+status = "active"
+expected_count = 2
+
+[[replace]]
+key = "sync6.onboarding.ai_access.connected_pair"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "{} and {} connected"
+target = "已连接 {} 和 {}"
+context = "Task 6 AI access BYOK connected count"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_access.back"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "Back"
+target = "返回"
+context = "Task 6 AI access bottom navigation"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_access.no_ai"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "I don't want AI"
+target = "我不想使用 AI"
+context = "Task 6 AI access bottom navigation"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_access.next"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "Next"
+target = "下一步"
+context = "Task 6 AI access bottom navigation"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_access.tooltip_requires_subscription"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "Warp Agent requires a subscription or inference supplied by you"
+target = "Warp Agent 需要订阅或由你提供推理服务"
+context = "Task 6 AI access disabled next tooltip"
+status = "active"
+preserve_terms = ["Warp Agent"]
+
+[[replace]]
+key = "sync6.onboarding.ai_setup.feature_harness"
+path = "crates/onboarding/src/slides/ai_setup_slide.rs"
+source = "Best harness for terminal tasks and agentic coding"
+target = "最适合终端任务和 Agent 编码的 harness"
+context = "Task 6 AI setup Warp Agent checklist"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.onboarding.ai_setup.feature_frontier_models"
+path = "crates/onboarding/src/slides/ai_setup_slide.rs"
+source = "Frontier models from OpenAI, Anthropic, and Google"
+target = "来自 OpenAI、Anthropic 和 Google 的前沿模型"
+context = "Task 6 AI setup Warp Agent checklist"
+status = "active"
+preserve_terms = ["OpenAI", "Anthropic", "Google"]
+
+[[replace]]
+key = "sync6.onboarding.ai_setup.feature_routing"
+path = "crates/onboarding/src/slides/ai_setup_slide.rs"
+source = "Model routing across frontier and open-weight models"
+target = "跨前沿模型和开放权重模型进行模型路由"
+context = "Task 6 AI setup Warp Agent checklist"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_setup.feature_multi_agent"
+path = "crates/onboarding/src/slides/ai_setup_slide.rs"
+source = "Multi-agent orchestration"
+target = "多 Agent 编排"
+context = "Task 6 AI setup Warp Agent checklist"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.onboarding.ai_setup.title"
+path = "crates/onboarding/src/slides/ai_setup_slide.rs"
+source = "Choose your AI setup"
+target = "选择你的 AI 设置"
+context = "Task 6 AI setup onboarding title"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_setup.subtitle"
+path = "crates/onboarding/src/slides/ai_setup_slide.rs"
+source = "Choose if you'd like to use Warp Agent or third party agents."
+target = "选择使用 Warp Agent 还是第三方 Agent。"
+context = "Task 6 AI setup onboarding subtitle"
+status = "active"
+preserve_terms = ["Warp Agent", "Agent"]
+
+[[replace]]
+key = "sync6.onboarding.ai_setup.use_warp_agent"
+path = "crates/onboarding/src/slides/ai_setup_slide.rs"
+source = "Use Warp Agent"
+target = "使用 Warp Agent"
+context = "Task 6 AI setup Warp Agent card title"
+status = "active"
+preserve_terms = ["Warp Agent"]
+
+[[replace]]
+key = "sync6.onboarding.ai_setup.access_more_models"
+path = "crates/onboarding/src/slides/ai_setup_slide.rs"
+source = "Access more models"
+target = "访问更多模型"
+context = "Task 6 AI setup Warp Agent badge"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_setup.warp_agent_description"
+path = "crates/onboarding/src/slides/ai_setup_slide.rs"
+source = "State of the art agent harness deeply integrated into the terminal."
+target = "深度集成到终端中的先进 Agent harness。"
+context = "Task 6 AI setup Warp Agent card description"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.onboarding.ai_setup.third_party_title"
+path = "crates/onboarding/src/slides/ai_setup_slide.rs"
+source = "Use third party agents"
+target = "使用第三方 Agent"
+context = "Task 6 AI setup third-party card title"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.onboarding.ai_setup.third_party_description"
+path = "crates/onboarding/src/slides/ai_setup_slide.rs"
+source = "Use agents like Claude Code, Codex, and Gemini."
+target = "使用 Claude Code、Codex 和 Gemini 等 Agent。"
+context = "Task 6 AI setup third-party card description"
+status = "active"
+preserve_terms = ["Claude Code", "Codex", "Gemini", "Agent"]
+
+[[replace]]
+key = "sync6.onboarding.ai_setup.back"
+path = "crates/onboarding/src/slides/ai_setup_slide.rs"
+source = "Back"
+target = "返回"
+context = "Task 6 AI setup bottom navigation"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_setup.no_ai"
+path = "crates/onboarding/src/slides/ai_setup_slide.rs"
+source = "I don't want AI"
+target = "我不想使用 AI"
+context = "Task 6 AI setup bottom navigation"
+status = "active"
+
+[[replace]]
+key = "sync6.onboarding.ai_setup.next"
+path = "crates/onboarding/src/slides/ai_setup_slide.rs"
+source = "Next"
+target = "下一步"
+context = "Task 6 AI setup bottom navigation"
+status = "active"
+
+[[replace]]
+key = "sync6.search.rename_conversation.description"
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "Rename the current conversation"
+target = "重命名当前对话"
+context = "Task 6 slash command description"
+status = "active"
+
+[[replace]]
+key = "sync6.search.rename_conversation.argument"
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "<new title>"
+target = "<新标题>"
+context = "Task 6 slash command argument hint"
+status = "active"
+
+[[replace]]
+key = "sync6.search.continue_locally.argument"
+path = "app/src/search/slash_command_menu/static_commands/commands.rs"
+source = "<optional prompt to send in local conversation>"
+target = "<可选：发送到本地对话的提示>"
+context = "Task 6 slash command argument hint"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.ai.grok.placeholder"
+path = "app/src/settings_view/ai_page.rs"
+source = "Paste sign-in code"
+target = "粘贴登录代码"
+context = "Task 6 SuperGrok manual code placeholder"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.ai.grok.start_error"
+path = "app/src/settings_view/ai_page.rs"
+source = "Couldn't start Grok login: {err}"
+target = "无法启动 Grok 登录：{err}"
+context = "Task 6 SuperGrok connection toast"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.ai.grok.opening_browser"
+path = "app/src/settings_view/ai_page.rs"
+source = "Opening your browser to connect your SuperGrok subscription…"
+target = "正在打开浏览器以连接你的 SuperGrok 订阅..."
+context = "Task 6 SuperGrok connection toast"
+status = "active"
+preserve_terms = ["SuperGrok"]
+
+[[replace]]
+key = "sync6.settings.ai.grok.copy_url"
+path = "app/src/settings_view/ai_page.rs"
+source = "Copy URL"
+target = "复制 URL"
+context = "Task 6 SuperGrok connection toast link"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.ai.grok.connected_toast"
+path = "app/src/settings_view/ai_page.rs"
+source = "SuperGrok subscription connected"
+target = "SuperGrok 订阅已连接"
+context = "Task 6 SuperGrok connection success toast"
+status = "active"
+preserve_terms = ["SuperGrok"]
+expected_count = 2
+
+[[replace]]
+key = "sync6.settings.ai.grok.connect_failed"
+path = "app/src/settings_view/ai_page.rs"
+source = "Couldn't connect SuperGrok: {err}"
+target = "无法连接 SuperGrok：{err}"
+context = "Task 6 SuperGrok connection error toast"
+status = "active"
+preserve_terms = ["SuperGrok"]
+expected_count = 2
+
+[[replace]]
+key = "sync6.settings.ai.grok.disconnected_toast"
+path = "app/src/settings_view/ai_page.rs"
+source = "SuperGrok subscription disconnected"
+target = "SuperGrok 订阅已断开连接"
+context = "Task 6 SuperGrok disconnect toast"
+status = "active"
+preserve_terms = ["SuperGrok"]
+
+[[replace]]
+key = "sync6.settings.ai.lrc_mode.title"
+path = "app/src/settings_view/ai_page.rs"
+source = "Default long-running command submission mode"
+target = "默认长时间运行命令提交模式"
+context = "Task 6 AI settings dropdown label"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.ai.lrc_mode.description"
+path = "app/src/settings_view/ai_page.rs"
+source = "What happens when you submit a prompt while an agent is driving an agent-requested long-running command. Queued prompts are sent to the agent when the command finishes."
+target = "当 Agent 正在驱动由 Agent 请求的长时间运行命令时，提交提示后的处理方式。排队的提示会在命令完成后发送给 Agent。"
+context = "Task 6 AI settings dropdown description"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.settings.ai.orchestration_display.title"
+path = "app/src/settings_view/ai_page.rs"
+source = "Orchestration message display"
+target = "编排消息显示"
+context = "Task 6 AI settings dropdown label"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.ai.orchestration_display.description"
+path = "app/src/settings_view/ai_page.rs"
+source = "Controls whether orchestration messages stay expanded."
+target = "控制编排消息是否保持展开。"
+context = "Task 6 AI settings dropdown description"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.ai.rich_input_ctrl_enter"
+path = "app/src/settings_view/ai_page.rs"
+source = "Submit Rich Input with Ctrl+Enter"
+target = "用 Ctrl+Enter 提交 Rich Input"
+context = "Task 6 AI settings toggle label"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.ai.grok.connect"
+path = "app/src/settings_view/ai_page.rs"
+source = "Connect"
+target = "连接"
+context = "Task 6 SuperGrok button label"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.ai.grok.connecting"
+path = "app/src/settings_view/ai_page.rs"
+source = "Connecting"
+target = "连接中"
+context = "Task 6 SuperGrok button label"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.ai.grok.disconnect"
+path = "app/src/settings_view/ai_page.rs"
+source = "Disconnect"
+target = "断开连接"
+context = "Task 6 SuperGrok button label"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.ai.grok.use_your"
+path = "app/src/settings_view/ai_page.rs"
+source = "Use your"
+target = "使用你的"
+context = "Task 6 SuperGrok row label prefix"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.ai.grok.subscription_label"
+path = "app/src/settings_view/ai_page.rs"
+source = "Premium or SuperGrok subscription"
+target = "Premium 或 SuperGrok 订阅"
+context = "Task 6 SuperGrok row label"
+status = "active"
+preserve_terms = ["SuperGrok"]
+
+[[replace]]
+key = "sync6.settings.ai.grok.description"
+path = "app/src/settings_view/ai_page.rs"
+source = "Connect your SuperGrok subscription to use Grok models in the Warp Agent through your xAI account."
+target = "连接你的 SuperGrok 订阅，通过 xAI 账号在 Warp Agent 中使用 Grok 模型。"
+context = "Task 6 SuperGrok row description"
+status = "active"
+preserve_terms = ["SuperGrok", "Warp Agent"]
+
+[[replace]]
+key = "sync6.settings.ai.grok.connected_on"
+path = "app/src/settings_view/ai_page.rs"
+source = "Connected on {}."
+target = "连接于 {}。"
+context = "Task 6 SuperGrok connected status"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.ai.grok.date_format"
+path = "app/src/settings_view/ai_page.rs"
+source = "%m/%d/%Y at %-I:%M%P"
+target = "%Y/%m/%d %H:%M"
+context = "Task 6 SuperGrok connected status date format"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.ai.grok.connected_status"
+path = "app/src/settings_view/ai_page.rs"
+source = "Connected."
+target = "已连接。"
+context = "Task 6 SuperGrok connected status"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.appearance.show_dock"
+path = "app/src/settings_view/appearance_page.rs"
+source = "Show Warp in Dock"
+target = "在 Dock 中显示 Warp"
+context = "Task 6 appearance setting label"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.settings.appearance.vertical_tabs_search_terms"
+path = "app/src/settings_view/appearance_page.rs"
+source = "hide title bar search bar vertical tabs chrome minimal"
+target = "hide title bar search bar vertical tabs chrome minimal 隐藏 标题栏 搜索栏 垂直标签页"
+context = "Task 6 appearance settings search terms"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.appearance.vertical_tabs_hide_search"
+path = "app/src/settings_view/appearance_page.rs"
+source = "Hide search bar in vertical tab layout"
+target = "在垂直标签页布局中隐藏搜索栏"
+context = "Task 6 appearance setting label"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.appearance.vertical_tabs_hide_search_description"
+path = "app/src/settings_view/appearance_page.rs"
+source = "When using the vertical tab layout, hide the search bar in the title bar. Search stays available via the command palette and keyboard shortcuts."
+target = "使用垂直标签页布局时，隐藏标题栏中的搜索栏。仍可通过命令面板和键盘快捷键使用搜索。"
+context = "Task 6 appearance setting description"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.code.hidden_files_action"
+path = "app/src/settings_view/code_page.rs"
+source = "show hidden files in project explorer"
+target = "show hidden files in project explorer 显示隐藏文件 项目资源管理器"
+context = "Task 6 code settings action/search label"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.code.hidden_files_search"
+path = "app/src/settings_view/code_page.rs"
+source = "show hidden files dotfiles project explorer file tree"
+target = "show hidden files dotfiles project explorer file tree 显示隐藏文件 点文件 项目资源管理器 文件树"
+context = "Task 6 code settings search terms"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.code.hidden_files_title"
+path = "app/src/settings_view/code_page.rs"
+source = "Show hidden files in project explorer"
+target = "在项目资源管理器中显示隐藏文件"
+context = "Task 6 code setting label"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.code.hidden_files_description"
+path = "app/src/settings_view/code_page.rs"
+source = "Show dotfiles and hidden files (starting with .) in the project explorer."
+target = "在项目资源管理器中显示点文件和以 . 开头的隐藏文件。"
+context = "Task 6 code setting description"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.code.format_on_save_search"
+path = "app/src/settings_view/code_page.rs"
+source = "format on save lsp language server formatting reformat editor"
+target = "format on save lsp language server formatting reformat editor 保存时格式化 语言服务器 编辑器"
+context = "Task 6 code settings search terms"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.code.format_on_save_title"
+path = "app/src/settings_view/code_page.rs"
+source = "Format on save (requires an active language server)"
+target = "保存时格式化（需要活动的语言服务器）"
+context = "Task 6 code setting label"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.code.format_on_save_description"
+path = "app/src/settings_view/code_page.rs"
+source = "Only applies when a language server is active for the file. Automatically formats the file with the language server on save; other LSP features (hover, go-to-definition, references, diagnostics) are unaffected."
+target = "仅当文件有活动的语言服务器时适用。保存时会通过语言服务器自动格式化文件；其他 LSP 功能（悬停、跳转到定义、引用、诊断）不受影响。"
+context = "Task 6 code setting description"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.features.ssh_reuse_action"
+path = "app/src/settings_view/features_page.rs"
+source = "reuse existing SSH ControlMaster in the Warp SSH wrapper"
+target = "在 Warp SSH wrapper 中复用现有 SSH ControlMaster"
+context = "Task 6 features setting action label"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.settings.features.preserve_focus_action"
+path = "app/src/settings_view/features_page.rs"
+source = "preserve input focus on block selection"
+target = "选择块时保留输入焦点"
+context = "Task 6 features setting action label"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.features.preserve_focus_search"
+path = "app/src/settings_view/features_page.rs"
+source = "preserve input focus block selection navigate arrow keys"
+target = "preserve input focus block selection navigate arrow keys 保留输入焦点 块选择 导航 方向键"
+context = "Task 6 features settings search terms"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.features.preserve_focus_title"
+path = "app/src/settings_view/features_page.rs"
+source = "Preserve input focus on block selection"
+target = "选择块时保留输入焦点"
+context = "Task 6 features setting label"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.features.clipboard_search"
+path = "app/src/settings_view/features_page.rs"
+source = "clipboard osc 52 osc52 paste copy access terminal program"
+target = "clipboard osc 52 osc52 paste copy access terminal program 剪贴板 粘贴 复制 访问 终端程序"
+context = "Task 6 features settings search terms"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.features.clipboard_title"
+path = "app/src/settings_view/features_page.rs"
+source = "Clipboard access (OSC 52)"
+target = "剪贴板访问（OSC 52）"
+context = "Task 6 OSC 52 setting label"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.features.clipboard_description"
+path = "app/src/settings_view/features_page.rs"
+source = "Controls whether programs running in the terminal can read or write your system clipboard."
+target = "控制终端中运行的程序能否读取或写入系统剪贴板。"
+context = "Task 6 OSC 52 setting description"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.scripting.page_title"
+path = "app/src/settings_view/scripting_page.rs"
+source = "Scripting"
+target = "脚本"
+context = "Task 6 scripting settings page title"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.scripting.install_success"
+path = "app/src/settings_view/scripting_page.rs"
+source = "Successfully installed the Warp Control CLI! You can now run '{command_name}' from the command line."
+target = "已成功安装 Warp Control CLI！你现在可以在命令行运行 '{command_name}'。"
+context = "Task 6 Warp Control CLI install success toast"
+status = "active"
+preserve_terms = ["Warp", "CLI"]
+
+[[replace]]
+key = "sync6.settings.scripting.install_failed"
+path = "app/src/settings_view/scripting_page.rs"
+source = "Failed to install Warp Control command: {error}"
+target = "安装 Warp Control 命令失败：{error}"
+context = "Task 6 Warp Control CLI install error toast"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.settings.scripting.warpctrl_search"
+path = "app/src/settings_view/scripting_page.rs"
+source = "warp control cli command warpctrl install scripting"
+target = "warp control cli command warpctrl install scripting Warp Control CLI 命令 安装 脚本"
+context = "Task 6 scripting settings search terms"
+status = "active"
+preserve_terms = ["Warp", "CLI"]
+
+[[replace]]
+key = "sync6.settings.scripting.installing"
+path = "app/src/settings_view/scripting_page.rs"
+source = "Installing…"
+target = "安装中..."
+context = "Task 6 Warp Control CLI install button"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.scripting.installed"
+path = "app/src/settings_view/scripting_page.rs"
+source = "Installed"
+target = "已安装"
+context = "Task 6 Warp Control CLI install button"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.scripting.install"
+path = "app/src/settings_view/scripting_page.rs"
+source = "Install"
+target = "安装"
+context = "Task 6 Warp Control CLI install button"
+status = "active"
+
+[[replace]]
+key = "sync6.settings.scripting.warp_control_command"
+path = "app/src/settings_view/scripting_page.rs"
+source = "Warp Control CLI command"
+target = "Warp Control CLI 命令"
+context = "Task 6 Warp Control CLI setting label"
+status = "active"
+preserve_terms = ["Warp", "CLI"]
+
+[[replace]]
+key = "sync6.settings.scripting.warp_control_description"
+path = "app/src/settings_view/scripting_page.rs"
+source = "Install the warpctrl command for scripting Warp from your terminal."
+target = "安装 warpctrl 命令，以便从终端编写脚本控制 Warp。"
+context = "Task 6 Warp Control CLI setting description"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.settings.scripting.local_control_search"
+path = "app/src/settings_view/scripting_page.rs"
+source = "scripting warp control automation warpctrl local cli scripts disabled enabled"
+target = "scripting warp control automation warpctrl local cli scripts disabled enabled 脚本 自动化 本地 CLI 启用 停用"
+context = "Task 6 scripting local control search terms"
+status = "active"
+preserve_terms = ["CLI"]
+
+[[replace]]
+key = "sync6.settings.scripting.warpctrl_cli"
+path = "app/src/settings_view/scripting_page.rs"
+source = "warpctrl CLI"
+target = "warpctrl CLI"
+context = "Task 6 scripting local control setting label; preserve CLI command name"
+status = "active"
+preserve_terms = ["CLI"]
+
+[[replace]]
+key = "sync6.settings.scripting.warpctrl_cli_description"
+path = "app/src/settings_view/scripting_page.rs"
+source = "warpctrl allows for scripting Warp's UI. Use with care."
+target = "warpctrl 可用于编写脚本控制 Warp 的 UI。请谨慎使用。"
+context = "Task 6 scripting local control setting description"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.settings.warpify.ssh_reuse_description"
+path = "app/src/settings_view/warpify_page.rs"
+source = "Attach to a live SSH ControlMaster you already have configured for the destination host instead of creating a Warp-owned one. Takes effect in new tabs."
+target = "附加到你已为目标主机配置的现有 SSH ControlMaster，而不是创建由 Warp 拥有的 ControlMaster。对新标签页生效。"
+context = "Task 6 Warpify SSH ControlMaster description"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.settings.warpify.ssh_reuse_title"
+path = "app/src/settings_view/warpify_page.rs"
+source = "Reuse existing SSH ControlMaster"
+target = "复用现有 SSH ControlMaster"
+context = "Task 6 Warpify SSH ControlMaster setting label"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.update_not_effective"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "Plugin update did not take effect"
+target = "插件更新未生效"
+context = "Task 6 Codex Warp plugin update error"
+status = "active"
+preserve_terms = ["Codex"]
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.install_success"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "Warp plugin installed. Please restart Codex to activate."
+target = "Warp 插件已安装。请重启 Codex 以启用。"
+context = "Task 6 Codex Warp plugin install success message"
+status = "active"
+preserve_terms = ["Warp", "Codex"]
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.update_success"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "Warp plugin updated. Please restart Codex to activate."
+target = "Warp 插件已更新。请重启 Codex 以启用。"
+context = "Task 6 Codex Warp plugin update success message"
+status = "active"
+preserve_terms = ["Warp", "Codex"]
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.platform_update_not_effective"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "Platform plugin update did not take effect"
+target = "Platform 插件更新未生效"
+context = "Task 6 Codex platform plugin update error"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.install_title"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "Install Warp Plugin for Codex"
+target = "为 Codex 安装 Warp 插件"
+context = "Task 6 Codex Warp plugin install instructions title"
+status = "active"
+preserve_terms = ["Warp", "Codex"]
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.instructions_subtitle"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "Run the following commands, then restart Codex."
+target = "运行以下命令，然后重启 Codex。"
+context = "Task 6 Codex Warp plugin install/update instructions subtitle"
+status = "active"
+preserve_terms = ["Codex"]
+expected_count = 2
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.add_marketplace"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "Add the Warp plugin marketplace repository"
+target = "添加 Warp 插件 marketplace 仓库"
+context = "Task 6 Codex Warp plugin install step"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.install_step"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "Install the Warp plugin"
+target = "安装 Warp 插件"
+context = "Task 6 Codex Warp plugin install step"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.restart_install"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "Restart Codex to activate the plugin."
+target = "重启 Codex 以启用该插件。"
+context = "Task 6 Codex Warp plugin install note"
+status = "active"
+preserve_terms = ["Codex"]
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.update_title"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "Update Warp Plugin for Codex"
+target = "更新 Codex 的 Warp 插件"
+context = "Task 6 Codex Warp plugin update instructions title"
+status = "active"
+preserve_terms = ["Warp", "Codex"]
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.upgrade_marketplace"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "Upgrade the marketplace"
+target = "升级 marketplace"
+context = "Task 6 Codex Warp plugin update step"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.reinstall_step"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "Reinstall the Warp plugin"
+target = "重新安装 Warp 插件"
+context = "Task 6 Codex Warp plugin update step"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.restart_update"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "Restart Codex to activate the update."
+target = "重启 Codex 以启用更新。"
+context = "Task 6 Codex Warp plugin update note"
+status = "active"
+preserve_terms = ["Codex"]
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.marketplace_note"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "If this fails because codex-warp is not configured as a Git marketplace, remove and re-add the marketplace."
+target = "如果失败原因是 codex-warp 未配置为 Git marketplace，请移除并重新添加该 marketplace。"
+context = "Task 6 Codex Warp plugin update note"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.codex_plugin.home_dir"
+path = "app/src/terminal/cli_agent_sessions/plugin_manager/codex.rs"
+source = "could not determine home directory"
+target = "无法确定主目录"
+context = "Task 6 Codex plugin home directory error"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.input.queue_running"
+path = "app/src/terminal/input.rs"
+source = "Queue a follow up for the running agent"
+target = "为正在运行的 Agent 排队一条追问"
+context = "Task 6 queued prompt input hint"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.terminal.input.queue_running_classic"
+path = "app/src/terminal/input.rs"
+source = "Queue a follow up for the running agent, or backspace to exit"
+target = "为正在运行的 Agent 排队一条追问，或按退格退出"
+context = "Task 6 queued prompt input hint"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.terminal.input.queue_child"
+path = "app/src/terminal/input.rs"
+source = "Queue a follow up for the {agent_name} agent"
+target = "为 {agent_name} Agent 排队一条追问"
+context = "Task 6 child-agent prompt hint"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.terminal.input.steer_child"
+path = "app/src/terminal/input.rs"
+source = "Steer the {agent_name} agent"
+target = "引导 {agent_name} Agent"
+context = "Task 6 child-agent prompt hint"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.terminal.input.ask_child_followup"
+path = "app/src/terminal/input.rs"
+source = "Ask the {agent_name} agent a follow up"
+target = "向 {agent_name} Agent 继续追问"
+context = "Task 6 child-agent prompt hint"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.terminal.slash.rename_requires_conversation"
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "/rename-conversation requires an active conversation"
+target = "/rename-conversation 需要一个活动对话"
+context = "Task 6 slash command error toast"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.slash.handoff_empty"
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "Nothing to hand off — start a conversation first."
+target = "没有可交接的内容，请先开始一个对话。"
+context = "Task 6 slash command error toast"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.slash.continue_locally"
+path = "app/src/terminal/input/slash_commands/mod.rs"
+source = "Continue locally"
+target = "在本地继续"
+context = "Task 6 slash command tooltip"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.settings.osc52_deny"
+path = "app/src/terminal/settings.rs"
+source = "Deny"
+target = "拒绝"
+context = "Task 6 OSC 52 dropdown option"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.settings.osc52_write_only"
+path = "app/src/terminal/settings.rs"
+source = "Write only"
+target = "仅写入"
+context = "Task 6 OSC 52 dropdown option"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.settings.osc52_read_write"
+path = "app/src/terminal/settings.rs"
+source = "Read and write"
+target = "读取和写入"
+context = "Task 6 OSC 52 dropdown option"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.settings.osc52_description"
+path = "app/src/terminal/settings.rs"
+source = "Controls whether terminal programs can access the system clipboard via OSC 52 escape sequences. Options: deny (default), write_only, read_write."
+target = "控制终端程序能否通过 OSC 52 转义序列访问系统剪贴板。选项：deny（默认）、write_only、read_write。"
+context = "Task 6 OSC 52 settings description"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.host_selector.default"
+path = "app/src/terminal/view/ambient_agent/host_selector.rs"
+source = "Default"
+target = "默认"
+context = "Task 6 ambient agent host selector badge"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.host_selector.connected"
+path = "app/src/terminal/view/ambient_agent/host_selector.rs"
+source = "Connected"
+target = "已连接"
+context = "Task 6 ambient agent host selector badge"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.host_selector.disconnected"
+path = "app/src/terminal/view/ambient_agent/host_selector.rs"
+source = "Disconnected"
+target = "已断开"
+context = "Task 6 ambient agent host selector badge"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.queued_prompts.read_only"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "Read-only viewers cannot send prompts."
+target = "只读查看者无法发送提示。"
+context = "Task 6 queued prompts disabled tooltip"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.queued_prompts.lrc_suffix"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "(queued until the command finishes)"
+target = "（已排队，等待命令完成）"
+context = "Task 6 queued prompt row suffix"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.queued_prompts.to_send"
+path = "app/src/terminal/view/queued_prompts_panel.rs"
+source = "to send"
+target = "发送"
+context = "Task 6 queued prompt keyboard hint suffix"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.ssh_tmux_deprecation.title"
+path = "app/src/terminal/view/ssh_tmux_deprecation_banner.rs"
+source = "Tmux SSH warpification has been deprecated"
+target = "Tmux SSH warpification 已弃用"
+context = "Task 6 SSH tmux deprecation banner title"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.ssh_tmux_deprecation.body"
+path = "app/src/terminal/view/ssh_tmux_deprecation_banner.rs"
+source = "Warp now connects to remote sessions using the SSH extension, which is more robust than the tmux-based flow. The tmux option has been removed."
+target = "Warp 现在使用 SSH 扩展连接远程会话，比基于 tmux 的流程更稳定。tmux 选项已移除。"
+context = "Task 6 SSH tmux deprecation banner body"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.terminal.ssh_tmux_deprecation.learn_more"
+path = "app/src/terminal/view/ssh_tmux_deprecation_banner.rs"
+source = "Learn more"
+target = "了解更多"
+context = "Task 6 SSH tmux deprecation banner link"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.view.osc52_access_banner"
+path = "app/src/terminal/view.rs"
+source = "A terminal program tried to access your clipboard. This is disabled by default for security reasons."
+target = "一个终端程序尝试访问你的剪贴板。出于安全原因，此操作默认已停用。"
+context = "Task 6 OSC 52 clipboard access banner"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.view.osc52_allow"
+path = "app/src/terminal/view.rs"
+source = "Allow"
+target = "允许"
+context = "Task 6 OSC 52 clipboard banner button"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.view.osc52_dont_show_again"
+path = "app/src/terminal/view.rs"
+source = "Don't show again"
+target = "不再显示"
+context = "Task 6 OSC 52 clipboard banner button"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.view.osc52_write_banner"
+path = "app/src/terminal/view.rs"
+source = "A terminal program tried to write to your clipboard. This is disabled by default for security reasons, to protect against malicious software."
+target = "一个终端程序尝试写入你的剪贴板。为防范恶意软件，此操作出于安全原因默认已停用。"
+context = "Task 6 OSC 52 clipboard write banner"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.view.osc52_read_banner"
+path = "app/src/terminal/view.rs"
+source = "A terminal program tried to read your clipboard. This is disabled by default for security reasons, to protect against malicious software."
+target = "一个终端程序尝试读取你的剪贴板。为防范恶意软件，此操作出于安全原因默认已停用。"
+context = "Task 6 OSC 52 clipboard read banner"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.view.osc52_allow_writes"
+path = "app/src/terminal/view.rs"
+source = "Allow clipboard writes"
+target = "允许写入剪贴板"
+context = "Task 6 OSC 52 clipboard write banner button"
+status = "active"
+
+[[replace]]
+key = "sync6.terminal.view.osc52_allow_read_write"
+path = "app/src/terminal/view.rs"
+source = "Allow clipboard reads and writes"
+target = "允许读取和写入剪贴板"
+context = "Task 6 OSC 52 clipboard read banner button"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.auto_handoff.handed_off"
+path = "app/src/workspace/auto_handoff.rs"
+source = "Handed session off to the cloud"
+target = "已将会话交接到云端"
+context = "Task 6 auto-handoff success toast"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.free_ai.notice_title"
+path = "app/src/workspace/view/free_ai_removal_modal.rs"
+source = "Warp is no longer providing inference on the free plan."
+target = "Warp 不再为免费套餐提供推理服务。"
+context = "Task 6 free AI removal modal notice title"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.workspace.free_ai.notice_body"
+path = "app/src/workspace/view/free_ai_removal_modal.rs"
+source = "To keep using Warp's AI features, please upgrade to a paid plan, bring your own API key or endpoint, or log in with your Grok subscription."
+target = "要继续使用 Warp 的 AI 功能，请升级到付费套餐、使用你自己的 API 密钥或端点，或通过 Grok 订阅登录。"
+context = "Task 6 free AI removal modal notice body"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.workspace.free_ai.bonus_credits"
+path = "app/src/workspace/view/free_ai_removal_modal.rs"
+source = "If you have any unused bonus credits, AI will keep working until these run out."
+target = "如果你还有未使用的赠送额度，AI 会继续可用直到这些额度用完。"
+context = "Task 6 free AI removal modal secondary note"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.free_ai.prompt_suggestions_title"
+path = "app/src/workspace/view/free_ai_removal_modal.rs"
+source = "How to use AI features in Warp"
+target = "如何在 Warp 中使用 AI 功能"
+context = "Task 6 free AI removal modal prompt suggestions title"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.workspace.free_ai.prompt_suggestions_body"
+path = "app/src/workspace/view/free_ai_removal_modal.rs"
+source = "To use AI features in Warp, subscribe to a paid plan, add an API key (OpenAI, Anthropic, or Google), add a custom inference endpoint (OpenRouter, LiteLLM), or log in using your SuperGrok subscription."
+target = "要在 Warp 中使用 AI 功能，请订阅付费套餐、添加 API 密钥（OpenAI、Anthropic 或 Google）、添加自定义推理端点（OpenRouter、LiteLLM），或使用你的 SuperGrok 订阅登录。"
+context = "Task 6 free AI removal modal prompt suggestions body"
+status = "active"
+preserve_terms = ["Warp", "OpenAI", "Anthropic", "Google", "SuperGrok"]
+
+[[replace]]
+key = "sync6.workspace.free_ai.bring_your_own"
+path = "app/src/workspace/view/free_ai_removal_modal.rs"
+source = "Bring your own AI"
+target = "使用你自己的 AI"
+context = "Task 6 free AI removal modal CTA"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.free_ai.view_pricing"
+path = "app/src/workspace/view/free_ai_removal_modal.rs"
+source = "View pricing"
+target = "查看价格"
+context = "Task 6 free AI removal modal CTA"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.global_search.searching"
+path = "app/src/workspace/view/global_search/view.rs"
+source = "Searching…"
+target = "搜索中..."
+context = "Task 6 global search progress label"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.global_search.remote_unavailable"
+path = "app/src/workspace/view/global_search/view.rs"
+source = "Global search isn't available for this remote session."
+target = "此远程会话无法使用全局搜索。"
+context = "Task 6 global search remote zero-state body"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.global_search.remote_connecting"
+path = "app/src/workspace/view/global_search/view.rs"
+source = "Connecting to remote session"
+target = "正在连接远程会话"
+context = "Task 6 global search remote loading title"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.global_search.remote_wait"
+path = "app/src/workspace/view/global_search/view.rs"
+source = "Global search will be available once the connection is ready."
+target = "连接就绪后即可使用全局搜索。"
+context = "Task 6 global search remote loading body"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.auto_handoff_modal.enable"
+path = "app/src/workspace/view/auto_handoff_sleep_modal/view.rs"
+source = "Enable"
+target = "启用"
+context = "Task 6 auto-handoff sleep modal button"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.auto_handoff_modal.dismiss"
+path = "app/src/workspace/view/auto_handoff_sleep_modal/view.rs"
+source = "Dismiss"
+target = "关闭"
+context = "Task 6 auto-handoff sleep modal button"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.auto_handoff_modal.badge"
+path = "app/src/workspace/view/auto_handoff_sleep_modal/view.rs"
+source = "Run Connection Lost"
+target = "运行连接已断开"
+context = "Task 6 auto-handoff sleep modal badge"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.auto_handoff_modal.title"
+path = "app/src/workspace/view/auto_handoff_sleep_modal/view.rs"
+source = "Enable auto-handoff?"
+target = "启用自动交接？"
+context = "Task 6 auto-handoff sleep modal title"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.auto_handoff_modal.description"
+path = "app/src/workspace/view/auto_handoff_sleep_modal/view.rs"
+source = "Give Warp the option to automatically move active local agents to the cloud when your computer sleeps."
+target = "允许 Warp 在你的电脑睡眠时自动将活动的本地 Agent 移动到云端。"
+context = "Task 6 auto-handoff sleep modal description"
+status = "active"
+preserve_terms = ["Warp", "Agent"]
+
+[[replace]]
+key = "sync6.workspace.tab_grouping.create_group"
+path = "app/src/workspace/view/tab_grouping.rs"
+source = "Create group from tabs"
+target = "从标签页创建分组"
+context = "Task 6 tab grouping context menu"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.tab_grouping.remove_from_group"
+path = "app/src/workspace/view/tab_grouping.rs"
+source = "Remove from group"
+target = "从分组中移除"
+context = "Task 6 tab grouping context menu"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.view.warpctrl_install_success"
+path = "app/src/workspace/view.rs"
+source = "Successfully installed the Warp Control CLI! You can now run '{command_name}' from the command line."
+target = "已成功安装 Warp Control CLI！你现在可以在命令行运行 '{command_name}'。"
+context = "Task 6 Warp Control CLI install success toast"
+status = "active"
+preserve_terms = ["Warp", "CLI"]
+
+[[replace]]
+key = "sync6.workspace.view.warpctrl_install_failed"
+path = "app/src/workspace/view.rs"
+source = "Failed to install Warp Control command"
+target = "安装 Warp Control 命令失败"
+context = "Task 6 Warp Control CLI install error toast prefix"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.workspace.view.warpctrl_uninstall_success"
+path = "app/src/workspace/view.rs"
+source = "Successfully uninstalled the Warp Control command."
+target = "已成功卸载 Warp Control 命令。"
+context = "Task 6 Warp Control CLI uninstall success toast"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.workspace.view.warpctrl_uninstall_failed"
+path = "app/src/workspace/view.rs"
+source = "Failed to uninstall Warp Control command"
+target = "卸载 Warp Control 命令失败"
+context = "Task 6 Warp Control CLI uninstall error toast prefix"
+status = "active"
+preserve_terms = ["Warp"]
+
+[[replace]]
+key = "sync6.workspace.view.move_group_left"
+path = "app/src/workspace/view.rs"
+source = "Move group left"
+target = "左移分组"
+context = "Task 6 horizontal tab group context menu"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.view.move_group_right"
+path = "app/src/workspace/view.rs"
+source = "Move group right"
+target = "右移分组"
+context = "Task 6 horizontal tab group context menu"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.view.close_tabs_left"
+path = "app/src/workspace/view.rs"
+source = "Close tabs to the left"
+target = "关闭左侧标签页"
+context = "Task 6 horizontal tab group context menu"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.view.close_tabs_right"
+path = "app/src/workspace/view.rs"
+source = "Close tabs to the right"
+target = "关闭右侧标签页"
+context = "Task 6 horizontal tab group context menu"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.view.unpin_group"
+path = "app/src/workspace/view.rs"
+source = "Unpin group"
+target = "取消固定分组"
+context = "Task 6 tab group context menu"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.view.pin_group"
+path = "app/src/workspace/view.rs"
+source = "Pin group"
+target = "固定分组"
+context = "Task 6 tab group context menu"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.view.local_continuation_unsupported"
+path = "app/src/workspace/view.rs"
+source = "Local continuation is not supported for this harness"
+target = "此 harness 不支持本地继续"
+context = "Task 6 local third-party conversation continuation error"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.view.local_continuation_failed"
+path = "app/src/workspace/view.rs"
+source = "Couldn't continue this conversation locally. Check the logs for details."
+target = "无法在本地继续此对话。请查看日志了解详情。"
+context = "Task 6 local third-party conversation continuation toast"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.mod.toggle_hidden_files"
+path = "app/src/workspace/mod.rs"
+source = "Toggle hidden files in Project Explorer"
+target = "切换项目资源管理器中的隐藏文件"
+context = "Task 6 workspace binding description"
+status = "active"
+
+[[replace]]
+key = "sync6.workspace.mod.install_warpctrl"
+path = "app/src/workspace/mod.rs"
+source = "Install Warp Control CLI command"
+target = "安装 Warp Control CLI 命令"
+context = "Task 6 workspace binding description"
+status = "active"
+preserve_terms = ["Warp", "CLI"]
+
+[[replace]]
+key = "sync6.workspace.mod.uninstall_warpctrl"
+path = "app/src/workspace/mod.rs"
+source = "Uninstall Warp Control CLI command"
+target = "卸载 Warp Control CLI 命令"
+context = "Task 6 workspace binding description"
+status = "active"
+preserve_terms = ["Warp", "CLI"]
+
+[[replace]]
+key = "sync6.followup.agent.connection_lost"
+path = "app/src/ai/agent/mod.rs"
+source = "Warp lost connection while receiving the agent response. This is usually temporary."
+target = "Warp 在接收 Agent 响应时失去连接。这通常只是暂时问题。"
+context = "Task 6 follow-up user-facing agent connection error"
+status = "active"
+preserve_terms = ["Warp", "Agent"]
+
+[[replace]]
+key = "sync6.followup.agent.read_documents.hydrate_failed"
+path = "app/src/ai/blocklist/action_model/execute/read_documents.rs"
+source = "Failed to hydrate requested plan document {id} from Warp Drive: {error}"
+target = "无法从 Warp Drive 加载请求的计划文档 {id}：{error}"
+context = "Task 6 follow-up read documents warning"
+status = "active"
+preserve_terms = ["Warp Drive"]
+
+[[replace]]
+key = "sync6.followup.agent.read_documents.not_found"
+path = "app/src/ai/blocklist/action_model/execute/read_documents.rs"
+source = "Document(s) not found: {missing_list}"
+target = "未找到文档：{missing_list}"
+context = "Task 6 follow-up read documents result error"
+status = "active"
+
+[[replace]]
+key = "sync6.followup.agent.skills.bundled_unavailable"
+path = "app/src/ai/skills/mod.rs"
+source = "Bundled skills are not available on this remote session"
+target = "此远程会话无法使用内置 skills"
+context = "Task 6 follow-up skill lookup error"
+status = "active"
+
+[[replace]]
+key = "sync6.followup.agent.skills.not_found"
+path = "app/src/ai/skills/mod.rs"
+source = "Skill not found: {reference}"
+target = "未找到 skill：{reference}"
+context = "Task 6 follow-up skill lookup error"
+status = "active"
+
+[[replace]]
+key = "sync6.followup.host_picker.connected"
+path = "app/src/ai/blocklist/inline_action/host_picker.rs"
+source = "Connected"
+target = "已连接"
+context = "Task 6 follow-up inline host picker status badge"
+status = "active"
+
+[[replace]]
+key = "sync6.followup.host_picker.disconnected"
+path = "app/src/ai/blocklist/inline_action/host_picker.rs"
+source = "Disconnected"
+target = "已断开"
+context = "Task 6 follow-up inline host picker status badge"
+status = "active"
+
+[[replace]]
+key = "sync6.followup.terminal.block_list_settings.preserve_focus"
+path = "app/src/terminal/block_list_settings.rs"
+source = "Whether to preserve input box focus when selecting a block."
+target = "选择块时是否保留输入框焦点。"
+context = "Task 6 follow-up terminal setting description"
+status = "active"
+
+[[replace]]
+key = "sync6.followup.shared_session.create_timeout"
+path = "app/src/terminal/shared_session/sharer/network.rs"
+source = "Timed out creating shared session"
+target = "创建共享会话超时"
+context = "Task 6 follow-up shared session failure detail"
+status = "active"
+
+[[replace]]
+key = "sync6.followup.terminal.ambient_model.continue"
+path = "app/src/terminal/view/ambient_agent/model.rs"
+source = "Continue"
+target = "继续"
+context = "Task 6 follow-up wire prompt shown as local continuation default"
+status = "active"
+
+[[replace]]
+key = "sync6.followup.terminal.init.jump_latest_agent"
+path = "app/src/terminal/view/init.rs"
+source = "Jump to latest agent message"
+target = "跳转到最新 Agent 消息"
+context = "Task 6 follow-up terminal command label"
+status = "active"
+preserve_terms = ["Agent"]
+
+[[replace]]
+key = "sync6.followup.terminal.init.next_orchestration"
+path = "app/src/terminal/view/init.rs"
+source = "Cycle to next orchestration session"
+target = "切换到下一个编排会话"
+context = "Task 6 follow-up terminal command label"
+status = "active"
+
+[[replace]]
+key = "sync6.followup.terminal.init.prev_orchestration"
+path = "app/src/terminal/view/init.rs"
+source = "Cycle to previous orchestration session"
+target = "切换到上一个编排会话"
+context = "Task 6 follow-up terminal command label"
+status = "active"
+
+[[replace]]
+key = "sync6.followup.workspace.cli_install.missing_wrapper"
+path = "app/src/workspace/cli_install.rs"
+source = "Cannot install Warp Control CLI: bundled wrapper not found at {}"
+target = "无法安装 Warp Control CLI：在 {} 未找到内置 wrapper"
+context = "Task 6 follow-up Warp Control CLI install error"
+status = "active"
+preserve_terms = ["Warp", "CLI"]
+
+[[replace]]
+key = "sync6.followup.workspace.tab_settings.vertical_tabs_description"
+path = "app/src/workspace/tab_settings.rs"
+source = "When using the vertical tab layout, hide the search bar in the title bar. Search stays available via the command palette and keyboard shortcuts."
+target = "使用垂直标签页布局时，隐藏标题栏中的搜索栏。仍可通过命令面板和键盘快捷键使用搜索。"
+context = "Task 6 follow-up tab setting description"
+status = "active"
+
+[[replace]]
+key = "sync6.followup.workspace.view.failure_message_format"
+path = "app/src/workspace/view.rs"
+source = "{failure_message}: {error}"
+target = "{failure_message}：{error}"
+context = "Task 6 follow-up CLI operation failure toast format"
+status = "active"
+
+[[replace]]
+key = "sync6.followup.onboarding.agent_slide.no_ai"
+path = "crates/onboarding/src/slides/agent_slide.rs"
+source = "I don't want AI"
+target = "我不想使用 AI"
+context = "Task 6 follow-up onboarding AI opt-out button"
+status = "active"
+
+[[replace]]
+key = "sync6.followup.onboarding.ai_access.count_label"
+path = "crates/onboarding/src/slides/ai_access_slide.rs"
+source = "{count} {noun}{}"
+target = "{count} {noun}{}"
+context = "Task 6 follow-up BYOK count formatter; noun values are protocol literals handled separately"
+status = "active"

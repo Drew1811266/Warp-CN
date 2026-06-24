@@ -185,7 +185,7 @@ impl CliAgentPluginManager for CodexPluginManager {
         if still_outdated {
             log.push_str("Post-update version check: plugin is still outdated\n");
             return Err(PluginInstallError {
-                message: "Plugin update did not take effect".to_owned(),
+                message: "插件更新未生效".to_owned(),
                 log,
             });
         }
@@ -193,11 +193,11 @@ impl CliAgentPluginManager for CodexPluginManager {
     }
 
     fn install_success_message(&self) -> &'static str {
-        "Warp plugin installed. Please restart Codex to activate."
+        "Warp 插件已安装。请重启 Codex 以启用。"
     }
 
     fn update_success_message(&self) -> &'static str {
-        "Warp plugin updated. Please restart Codex to activate."
+        "Warp 插件已更新。请重启 Codex 以启用。"
     }
 
     fn install_instructions(&self) -> &'static PluginInstructions {
@@ -263,7 +263,7 @@ impl CliAgentPluginManager for CodexPluginManager {
         if !updated {
             log.push_str("Post-update version check: platform plugin is still outdated\n");
             return Err(PluginInstallError {
-                message: "Platform plugin update did not take effect".to_owned(),
+                message: "Platform 插件更新未生效".to_owned(),
                 log,
             });
         }
@@ -273,23 +273,23 @@ impl CliAgentPluginManager for CodexPluginManager {
 
 static PLUGIN_INSTALL_INSTRUCTIONS: LazyLock<PluginInstructions> =
     LazyLock::new(|| PluginInstructions {
-        title: "Install Warp Plugin for Codex",
-        subtitle: "Run the following commands, then restart Codex.",
+        title: "为 Codex 安装 Warp 插件",
+        subtitle: "运行以下命令，然后重启 Codex。",
         steps: &[
             PluginInstructionStep {
-                description: "Add the Warp plugin marketplace repository",
+                description: "添加 Warp 插件 marketplace 仓库",
                 command: "codex plugin marketplace add warpdotdev/codex-warp",
                 executable: true,
                 link: None,
             },
             PluginInstructionStep {
-                description: "Install the Warp plugin",
+                description: "安装 Warp 插件",
                 command: "codex plugin add warp@codex-warp",
                 executable: true,
                 link: None,
             },
         ],
-        post_install_notes: &["Restart Codex to activate the plugin."],
+        post_install_notes: &["重启 Codex 以启用该插件。"],
     });
 
 static NATIVE_INSTALL_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| {
@@ -321,30 +321,29 @@ static EMPTY_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| Plugi
     post_install_notes: &[],
 });
 
-static PLUGIN_UPDATE_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| {
-    PluginInstructions {
-        title: "Update Warp Plugin for Codex",
-        subtitle: "Run the following commands, then restart Codex.",
+static PLUGIN_UPDATE_INSTRUCTIONS: LazyLock<PluginInstructions> =
+    LazyLock::new(|| PluginInstructions {
+        title: "更新 Codex 的 Warp 插件",
+        subtitle: "运行以下命令，然后重启 Codex。",
         steps: &[
             PluginInstructionStep {
-                description: "Upgrade the marketplace",
+                description: "升级 marketplace",
                 command: "codex plugin marketplace upgrade codex-warp",
                 executable: true,
                 link: None,
             },
             PluginInstructionStep {
-                description: "Reinstall the Warp plugin",
+                description: "重新安装 Warp 插件",
                 command: "codex plugin add warp@codex-warp",
                 executable: true,
                 link: None,
             },
         ],
         post_install_notes: &[
-            "Restart Codex to activate the update.",
-            "If this fails because codex-warp is not configured as a Git marketplace, remove and re-add the marketplace.",
+            "重启 Codex 以启用更新。",
+            "如果失败原因是 codex-warp 未配置为 Git marketplace，请移除并重新添加该 marketplace。",
         ],
-    }
-});
+    });
 
 fn check_installed(codex_dir: &Path) -> bool {
     check_plugin_enabled(codex_dir, PLUGIN_KEY)
@@ -470,12 +469,7 @@ fn codex_home_dir() -> io::Result<PathBuf> {
     }
     dirs::home_dir()
         .map(|home| home.join(CODEX_CONFIG_DIR))
-        .ok_or_else(|| {
-            io::Error::new(
-                io::ErrorKind::NotFound,
-                "could not determine home directory",
-            )
-        })
+        .ok_or_else(|| io::Error::new(io::ErrorKind::NotFound, "无法确定主目录"))
 }
 
 /// Creates the resolved Codex home directory if it does not yet exist.

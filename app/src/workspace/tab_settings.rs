@@ -508,7 +508,7 @@ define_settings_group!(TabSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "appearance.vertical_tabs.hide_title_bar_search_bar",
-        description: "When using the vertical tab layout, hide the search bar in the title bar. Search stays available via the command palette and keyboard shortcuts.",
+        description: "使用垂直标签页布局时，隐藏标题栏中的搜索栏。仍可通过命令面板和键盘快捷键使用搜索。",
     },
     use_latest_user_prompt_as_conversation_title_in_tab_names: UseLatestUserPromptAsConversationTitleInTabNames {
         type: bool,

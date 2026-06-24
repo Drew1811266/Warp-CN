@@ -218,7 +218,7 @@ pub fn install_warpctrl() -> Result<()> {
 
     if !warpctrl_source.exists() {
         return Err(anyhow!(
-            "Cannot install Warp Control CLI: bundled wrapper not found at {}",
+            "无法安装 Warp Control CLI：在 {} 未找到内置 wrapper",
             warpctrl_source.display()
         ));
     }

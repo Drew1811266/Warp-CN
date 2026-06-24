@@ -214,7 +214,7 @@ impl StartupFailure {
                 }
             }
             Self::Timeout => FailedToInitializeSessionReason::InternalServerError {
-                details: "Timed out creating shared session".to_string(),
+                details: "创建共享会话超时".to_string(),
             },
             Self::Transport | Self::InitializeSend | Self::WebsocketError => {
                 FailedToInitializeSessionReason::internal_server_error_without_details()

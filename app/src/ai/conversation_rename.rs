@@ -8,14 +8,12 @@ use crate::workspace::ToastStack;
 
 const CONVERSATION_TITLE_MAX_CHARS: usize = 500;
 
-const EMPTY_TITLE_MESSAGE: &str = "Please provide a conversation title";
-const EMPTY_CONVERSATION_MESSAGE: &str = "You can't rename an empty conversation";
-const CONVERSATION_NOT_FOUND_MESSAGE: &str = "Conversation not found";
-const NOT_SYNCED_MESSAGE: &str =
-    "Your conversation hasn't synced to the cloud yet. Try sending another message, then rename it again.";
-const RENAME_IN_PROGRESS_MESSAGE: &str = "A rename is already in progress for this conversation";
-const CONVERSATION_NOT_READY_MESSAGE: &str =
-    "Your conversation is still syncing. Try renaming it again in a moment.";
+const EMPTY_TITLE_MESSAGE: &str = "请输入对话标题";
+const EMPTY_CONVERSATION_MESSAGE: &str = "不能重命名空对话";
+const CONVERSATION_NOT_FOUND_MESSAGE: &str = "未找到对话";
+const NOT_SYNCED_MESSAGE: &str = "你的对话尚未同步到云端。请再发送一条消息，然后重新重命名。";
+const RENAME_IN_PROGRESS_MESSAGE: &str = "此对话正在重命名";
+const CONVERSATION_NOT_READY_MESSAGE: &str = "你的对话仍在同步。请稍后再重命名。";
 
 /// Renames a conversation locally and triggers a conversation rename on the server.
 ///
@@ -99,7 +97,7 @@ pub(crate) fn rename_conversation<T: View>(
                     });
                     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
-                            DismissibleToast::success(format!("Conversation renamed to {title}")),
+                            DismissibleToast::success(format!("对话已重命名为 {title}")),
                             window_id,
                             ctx,
                         );
@@ -111,7 +109,7 @@ pub(crate) fn rename_conversation<T: View>(
                     });
                     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
-                            DismissibleToast::error(format!("Failed to rename conversation: {e}")),
+                            DismissibleToast::error(format!("重命名对话失败：{e}")),
                             window_id,
                             ctx,
                         );
@@ -145,7 +143,7 @@ fn validate_conversation_title(title: String) -> Result<String, String> {
 
     if title.chars().count() > CONVERSATION_TITLE_MAX_CHARS {
         return Err(format!(
-            "Conversation title must be {CONVERSATION_TITLE_MAX_CHARS} characters or fewer",
+            "对话标题必须不超过 {CONVERSATION_TITLE_MAX_CHARS} 个字符",
         ));
     }
 

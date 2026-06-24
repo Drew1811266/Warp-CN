@@ -137,13 +137,13 @@ pub static RENAME_TAB: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand 
 
 pub static RENAME_CONVERSATION: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/rename-conversation",
-    description: "Rename the current conversation",
+    description: "重命名当前对话",
     icon_path: "bundled/svg/pencil-line.svg",
     availability: Availability::AGENT_VIEW
         | Availability::ACTIVE_CONVERSATION
         | Availability::AI_ENABLED,
     auto_enter_ai_mode: false,
-    argument: Some(Argument::required().with_hint_text("<new title>")),
+    argument: Some(Argument::required().with_hint_text("<新标题>")),
 });
 
 static SET_TAB_COLOR_HINT: LazyLock<String> = LazyLock::new(|| {
@@ -455,7 +455,7 @@ pub const FORK_FROM: StaticCommand = StaticCommand {
 };
 
 pub static CONTINUE_LOCALLY: LazyLock<StaticCommand> = LazyLock::new(|| {
-    let hint_text = "<optional prompt to send in local conversation>";
+    let hint_text = "<可选：发送到本地对话的提示>";
     StaticCommand {
         name: "/continue-locally",
         description: "在本地继续此云端对话",

@@ -32,7 +32,7 @@ pub const AI_FEATURES: &[&str] = &[
     "Oz 云端 Agent 平台",
     "提示词建议",
     "下一条命令预测",
-    "Full Terminal Use",
+    "完整终端使用",
     "代码库上下文",
     "使用 Claude Code、Codex 和其他 Agent 进行远程控制",
 ];

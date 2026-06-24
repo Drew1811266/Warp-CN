@@ -412,7 +412,7 @@ pub fn init(app: &mut AppContext) {
         .with_context_predicate(id!("Terminal") & !id!("IMEOpen")),
         EditableBinding::new(
             "terminal:jump_to_latest_agent_message",
-            "Jump to latest agent message",
+            "跳转到最新 Agent 消息",
             TerminalAction::JumpToLatestAgentMessage,
         )
         // Available from the terminal (enters the latest conversation's agent view)
@@ -1081,7 +1081,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             CYCLE_NEXT_ORCHESTRATION_CHILD_AGENT_KEYBINDING,
-            "Cycle to next orchestration session",
+            "切换到下一个编排会话",
             TerminalAction::CycleNextOrchestrationChildAgent,
         )
         .with_group(bindings::BindingGroup::WarpAi.as_str())
@@ -1092,7 +1092,7 @@ pub fn init(app: &mut AppContext) {
         .with_linux_or_windows_key_binding("ctrl-alt-]"),
         EditableBinding::new(
             CYCLE_PREVIOUS_ORCHESTRATION_CHILD_AGENT_KEYBINDING,
-            "Cycle to previous orchestration session",
+            "切换到上一个编排会话",
             TerminalAction::CyclePreviousOrchestrationChildAgent,
         )
         .with_group(bindings::BindingGroup::WarpAi.as_str())

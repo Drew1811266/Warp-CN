@@ -2941,7 +2941,7 @@ impl SettingsWidget for CustomAppIconWidget {
         );
 
         let show_dock_icon_toggle = render_body_item::<AppearancePageAction>(
-            "Show Warp in Dock".into(),
+            "在 Dock 中显示 Warp".into(),
             None,
             LocalOnlyIconState::for_setting(
                 ShowDockIconState::storage_key(),
@@ -4783,7 +4783,7 @@ impl SettingsWidget for HideTitleBarSearchBarInVerticalTabsWidget {
     type View = AppearanceSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "hide title bar search bar vertical tabs chrome minimal"
+        "hide title bar search bar vertical tabs chrome minimal 隐藏 标题栏 搜索栏 垂直标签页"
     }
 
     fn render(
@@ -4795,7 +4795,7 @@ impl SettingsWidget for HideTitleBarSearchBarInVerticalTabsWidget {
         let tab_settings = TabSettings::as_ref(app);
 
         render_body_item::<AppearancePageAction>(
-            "Hide search bar in vertical tab layout".into(),
+            "在垂直标签页布局中隐藏搜索栏".into(),
             None,
             LocalOnlyIconState::for_setting(
                 HideTitleBarSearchBarInVerticalTabs::storage_key(),
@@ -4817,7 +4817,7 @@ impl SettingsWidget for HideTitleBarSearchBarInVerticalTabsWidget {
                 })
                 .finish(),
             Some(
-                "When using the vertical tab layout, hide the search bar in the title bar. Search stays available via the command palette and keyboard shortcuts."
+                "使用垂直标签页布局时，隐藏标题栏中的搜索栏。仍可通过命令面板和键盘快捷键使用搜索。"
                     .to_string(),
             ),
         )

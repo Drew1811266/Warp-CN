@@ -8716,7 +8716,7 @@ impl Workspace {
                 });
             }
             Err(error) => {
-                let error_message = format!("{failure_message}: {error}");
+                let error_message = format!("{failure_message}：{error}");
                 log::warn!("{error_message}");
                 self.toast_stack.update(ctx, |toast_stack, ctx| {
                     let toast = DismissibleToast::error(error_message);
@@ -8759,14 +8759,11 @@ impl Workspace {
             async { cli_install::install_warpctrl() },
             |view, result, ctx| {
                 let command_name = ChannelState::channel().warpctrl_command_name();
-                let message = format!("Successfully installed the Warp Control CLI! You can now run '{command_name}' from the command line.");
-                let toast = DismissibleToast::success(message);
-                view.handle_cli_command_result(
-                    result,
-                    toast,
-                    "Failed to install Warp Control command",
-                    ctx,
+                let message = format!(
+                    "已成功安装 Warp Control CLI！你现在可以在命令行运行 '{command_name}'。"
                 );
+                let toast = DismissibleToast::success(message);
+                view.handle_cli_command_result(result, toast, "安装 Warp Control 命令失败", ctx);
             },
         );
     }
@@ -8777,15 +8774,8 @@ impl Workspace {
         ctx.spawn(
             async { cli_install::uninstall_warpctrl() },
             |view, result, ctx| {
-                let toast = DismissibleToast::success(
-                    "Successfully uninstalled the Warp Control command.".to_string(),
-                );
-                view.handle_cli_command_result(
-                    result,
-                    toast,
-                    "Failed to uninstall Warp Control command",
-                    ctx,
-                );
+                let toast = DismissibleToast::success("已成功卸载 Warp Control 命令。".to_string());
+                view.handle_cli_command_result(result, toast, "卸载 Warp Control 命令失败", ctx);
             },
         );
     }
@@ -9608,7 +9598,7 @@ impl Workspace {
                 let label = if is_vertical {
                     "上移分组"
                 } else {
-                    "Move group left"
+                    "左移分组"
                 };
                 items.push(
                     MenuItemFields::new(label)
@@ -9620,7 +9610,7 @@ impl Workspace {
                 let label = if is_vertical {
                     "下移分组"
                 } else {
-                    "Move group right"
+                    "右移分组"
                 };
                 items.push(
                     MenuItemFields::new(label)
@@ -9646,7 +9636,7 @@ impl Workspace {
                 let label = if is_vertical {
                     "关闭上方标签页"
                 } else {
-                    "Close tabs to the left"
+                    "关闭左侧标签页"
                 };
                 items.push(
                     MenuItemFields::new(label)
@@ -9658,7 +9648,7 @@ impl Workspace {
                 let label = if is_vertical {
                     "关闭下方标签页"
                 } else {
-                    "Close tabs to the right"
+                    "关闭右侧标签页"
                 };
                 items.push(
                     MenuItemFields::new(label)
@@ -9671,9 +9661,9 @@ impl Workspace {
 
         let pin_section = if FeatureFlag::PinnedTabs.is_enabled() {
             let (label, action) = if self.tab_groups.get(&group_id).is_some_and(|g| g.pinned) {
-                ("Unpin group", WorkspaceAction::UnpinTabGroup(group_id))
+                ("取消固定分组", WorkspaceAction::UnpinTabGroup(group_id))
             } else {
-                ("Pin group", WorkspaceAction::PinTabGroup(group_id))
+                ("固定分组", WorkspaceAction::PinTabGroup(group_id))
             };
             vec![MenuItemFields::new(label)
                 .with_on_select_action(action)
@@ -13137,7 +13127,7 @@ impl Workspace {
                         })
                     }
                     _ => anyhow::bail!(
-                        "Local continuation is not supported for this harness"
+                        "此 harness 不支持本地继续"
                     ),
                 }
             },
@@ -13150,7 +13140,7 @@ impl Workspace {
                         );
                         WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                             let toast = DismissibleToast::error(
-                                "Couldn't continue this conversation locally. Check the logs for details."
+                                "无法在本地继续此对话。请查看日志了解详情。"
                                     .to_owned(),
                             );
                             toast_stack.add_ephemeral_toast(toast, window_id, ctx);

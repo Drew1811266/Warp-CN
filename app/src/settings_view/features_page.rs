@@ -303,7 +303,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     ];
 
     toggle_binding_pairs.push(ToggleSettingActionPair::new(
-        "reuse existing SSH ControlMaster in the Warp SSH wrapper",
+        "在 Warp SSH wrapper 中复用现有 SSH ControlMaster",
         builder(SettingsAction::FeaturesPageToggle(
             FeaturesPageAction::ToggleSshReuseControlMaster,
         )),
@@ -605,7 +605,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     );
 
     toggle_binding_pairs.push(ToggleSettingActionPair::new(
-        "preserve input focus on block selection",
+        "选择块时保留输入焦点",
         builder(SettingsAction::FeaturesPageToggle(
             FeaturesPageAction::TogglePreserveInputFocusOnBlockSelection,
         )),
@@ -6416,7 +6416,7 @@ impl SettingsWidget for PreserveInputFocusOnBlockSelectionWidget {
     type View = FeaturesPageView;
 
     fn search_terms(&self) -> &str {
-        "preserve input focus block selection navigate arrow keys"
+        "preserve input focus block selection navigate arrow keys 保留输入焦点 块选择 导航 方向键"
     }
 
     fn render(
@@ -6427,7 +6427,7 @@ impl SettingsWidget for PreserveInputFocusOnBlockSelectionWidget {
     ) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder();
         render_body_item::<FeaturesPageAction>(
-            "Preserve input focus on block selection".into(),
+            "选择块时保留输入焦点".into(),
             None,
             LocalOnlyIconState::for_setting(
                 PreserveInputFocusOnBlockSelection::storage_key(),
@@ -7181,7 +7181,7 @@ impl SettingsWidget for Osc52ClipboardAccessWidget {
     type View = FeaturesPageView;
 
     fn search_terms(&self) -> &str {
-        "clipboard osc 52 osc52 paste copy access terminal program"
+        "clipboard osc 52 osc52 paste copy access terminal program 剪贴板 粘贴 复制 访问 终端程序"
     }
 
     fn render(
@@ -7192,8 +7192,8 @@ impl SettingsWidget for Osc52ClipboardAccessWidget {
     ) -> Box<dyn Element> {
         render_dropdown_item(
             appearance,
-            "Clipboard access (OSC 52)",
-            Some("Controls whether programs running in the terminal can read or write your system clipboard."),
+            "剪贴板访问（OSC 52）",
+            Some("控制终端中运行的程序能否读取或写入系统剪贴板。"),
             None,
             LocalOnlyIconState::for_setting(
                 Osc52ClipboardAccessSetting::storage_key(),

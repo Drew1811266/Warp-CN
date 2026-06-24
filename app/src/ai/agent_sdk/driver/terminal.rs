@@ -56,21 +56,16 @@ impl std::fmt::Display for BootstrapError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             BootstrapError::PtySpawnFailed { reason: Some(r) } => {
-                write!(
-                    f,
-                    "Shell spawn failed: {r}. Check the Warp logs for details."
-                )
+                write!(f, "Shell 启动失败：{r}。请查看 Warp 日志了解详情。")
             }
             BootstrapError::PtySpawnFailed { reason: None } => {
-                write!(f, "Shell spawn failed. Check the Warp logs for details.")
+                write!(f, "Shell 启动失败。请查看 Warp 日志了解详情。")
             }
-            BootstrapError::TimedOut => write!(
-                f,
-                "Terminal session did not start within the expected time. \
-                 Check the Warp logs for details."
-            ),
+            BootstrapError::TimedOut => {
+                write!(f, "终端会话未在预期时间内启动。请查看 Warp 日志了解详情。")
+            }
             BootstrapError::InternalError => {
-                write!(f, "An unexpected internal error occurred during bootstrap.")
+                write!(f, "引导期间发生意外内部错误。")
             }
         }
     }

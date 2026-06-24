@@ -84,14 +84,14 @@ impl AutoHandoffSleepModal {
         });
 
         let enable_button = ctx.add_view(|_ctx| {
-            ActionButton::new("Enable", PrimaryTheme)
+            ActionButton::new("启用", PrimaryTheme)
                 .with_full_width(true)
                 .with_size(ButtonSize::Default)
                 .on_click(|ctx| ctx.dispatch_typed_action(AutoHandoffSleepModalAction::Enable))
         });
 
         let dismiss_button = ctx.add_view(|_ctx| {
-            ActionButton::new("Dismiss", SecondaryTheme)
+            ActionButton::new("关闭", SecondaryTheme)
                 .with_full_width(true)
                 .with_size(ButtonSize::Default)
                 .on_click(|ctx| ctx.dispatch_typed_action(AutoHandoffSleepModalAction::Dismiss))
@@ -145,7 +145,7 @@ impl AutoHandoffSleepModal {
         let text_color: ColorU = red.into();
         let background_color = appearance.theme().ansi_overlay_2(red);
         let text = Text::new_inline(
-            "Run Connection Lost".to_string(),
+            "运行连接已断开".to_string(),
             appearance.ui_font_family(),
             14.,
         )
@@ -169,7 +169,7 @@ impl AutoHandoffSleepModal {
     }
 
     fn render_title(appearance: &Appearance) -> Box<dyn Element> {
-        Text::new("Enable auto-handoff?", appearance.ui_font_family(), 20.)
+        Text::new("启用自动交接？", appearance.ui_font_family(), 20.)
             .with_color(
                 appearance
                     .theme()
@@ -182,8 +182,7 @@ impl AutoHandoffSleepModal {
 
     fn render_description(appearance: &Appearance) -> Box<dyn Element> {
         Text::new(
-            "Give Warp the option to automatically move active local agents to the cloud when \
-             your computer sleeps.",
+            "允许 Warp 在你的电脑睡眠时自动将活动的本地 Agent 移动到云端。",
             appearance.ui_font_family(),
             14.,
         )

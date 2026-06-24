@@ -57,10 +57,10 @@ const PROMPT_PREVIEW_MAX_CHARS: usize = 500;
 const INITIAL_CLOUD_MODE_PROMPT_TOOLTIP: &str = "第一个云模式提示无法更改。";
 const SEND_NOW_DURING_CLOUD_SETUP_TOOLTIP: &str = "环境设置完成前无法发送提示。";
 const SEND_NOW_TO_FULL_TERMINAL_USE_AGENT_TOOLTIP: &str = "发送给完整终端 Use Agent";
-const SEND_NOW_AS_READ_ONLY_VIEWER_TOOLTIP: &str = "Read-only viewers cannot send prompts.";
+const SEND_NOW_AS_READ_ONLY_VIEWER_TOOLTIP: &str = "只读查看者无法发送提示。";
 /// Suffix on rows auto-queued during an agent-requested long-running command, which fire
 /// when that command completes rather than at the end of the full response.
-const LRC_AUTO_QUEUE_ROW_SUFFIX: &str = "(queued until the command finishes)";
+const LRC_AUTO_QUEUE_ROW_SUFFIX: &str = "（已排队，等待命令完成）";
 
 /// Returns the position-cache id used to look up a row's bounding rect during a drag.
 /// Indexed by the row's current visual index so swaps maintain stable lookups.
@@ -1039,7 +1039,7 @@ fn render_header(
             );
             row.add_child(Container::new(keycap).with_margin_left(4.).finish());
             row.add_child(
-                Text::new("to send", ui_font_family, ui_font_size)
+                Text::new("发送", ui_font_family, ui_font_size)
                     .with_style(Properties {
                         style: Style::Normal,
                         weight: Weight::Normal,

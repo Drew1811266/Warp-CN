@@ -533,8 +533,8 @@ impl LoginSlideView {
                 "连接账号以启用 AI 驱动的规划、编码和自动化。",
             ),
             LoginPurpose::ThirdParty => (
-                "Create an account",
-                "Create a Warp account to enable AI-powered planning, coding, and automations.",
+                "创建账号",
+                "创建 Warp 账号以启用 AI 驱动的规划、编码和自动化。",
             ),
         };
         let title = FormattedTextElement::from_str(title_text, appearance.ui_font_family(), 36.)
@@ -960,10 +960,10 @@ impl LoginSlideView {
                 "启用 AI 功能",
             ),
             LoginPurpose::ThirdParty => (
-                "Are you sure you want to skip login?",
-                "Warp is better with an account. By continuing, you won't have access to any of the following features:",
+                "确定要跳过登录吗？",
+                "登录账号后 Warp 会更强。继续后，你将无法使用以下功能：",
                 AI_FEATURES,
-                "Create an account",
+                "创建账号",
             ),
         };
 

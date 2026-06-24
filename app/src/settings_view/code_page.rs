@@ -999,7 +999,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                     flags::SHOW_GLOBAL_SEARCH,
                 ),
                 ToggleSettingActionPair::new(
-                    "show hidden files in project explorer",
+                    "show hidden files in project explorer 显示隐藏文件 项目资源管理器",
                     builder(SettingsAction::Code(
                         CodeSettingsPageAction::ToggleShowHiddenFiles,
                     )),
@@ -2876,7 +2876,7 @@ impl SettingsWidget for ShowHiddenFilesToggleWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "show hidden files dotfiles project explorer file tree"
+        "show hidden files dotfiles project explorer file tree 显示隐藏文件 点文件 项目资源管理器 文件树"
     }
 
     fn render(
@@ -2888,7 +2888,7 @@ impl SettingsWidget for ShowHiddenFilesToggleWidget {
         let code_settings = CodeSettings::as_ref(app);
 
         render_body_item::<CodeSettingsPageAction>(
-            "Show hidden files in project explorer".into(),
+            "在项目资源管理器中显示隐藏文件".into(),
             None,
             LocalOnlyIconState::Hidden,
             ToggleState::Enabled,
@@ -2902,9 +2902,7 @@ impl SettingsWidget for ShowHiddenFilesToggleWidget {
                     ctx.dispatch_typed_action(CodeSettingsPageAction::ToggleShowHiddenFiles);
                 })
                 .finish(),
-            Some(
-                "Show dotfiles and hidden files (starting with .) in the project explorer.".into(),
-            ),
+            Some("在项目资源管理器中显示点文件和以 . 开头的隐藏文件。".into()),
         )
     }
 }
@@ -2918,7 +2916,7 @@ impl SettingsWidget for FormatOnSaveToggleWidget {
     type View = CodeSettingsPageView;
 
     fn search_terms(&self) -> &str {
-        "format on save lsp language server formatting reformat editor"
+        "format on save lsp language server formatting reformat editor 保存时格式化 语言服务器 编辑器"
     }
 
     fn render(
@@ -2930,7 +2928,7 @@ impl SettingsWidget for FormatOnSaveToggleWidget {
         let code_settings = CodeSettings::as_ref(app);
 
         render_body_item::<CodeSettingsPageAction>(
-            "Format on save (requires an active language server)".into(),
+            "保存时格式化（需要活动的语言服务器）".into(),
             None,
             LocalOnlyIconState::Hidden,
             ToggleState::Enabled,
@@ -2945,7 +2943,7 @@ impl SettingsWidget for FormatOnSaveToggleWidget {
                 })
                 .finish(),
             Some(
-                "Only applies when a language server is active for the file. Automatically formats the file with the language server on save; other LSP features (hover, go-to-definition, references, diagnostics) are unaffected."
+                "仅当文件有活动的语言服务器时适用。保存时会通过语言服务器自动格式化文件；其他 LSP 功能（悬停、跳转到定义、引用、诊断）不受影响。"
                     .into(),
             ),
         )

@@ -53,9 +53,7 @@ impl ReadDocumentsExecutor {
                     if let Err(error) =
                         model.hydrate_saved_plan_from_warp_drive(*id, conversation_id, ctx)
                     {
-                        log::warn!(
-                            "Failed to hydrate requested plan document {id} from Warp Drive: {error}"
-                        );
+                        log::warn!("无法从 Warp Drive 加载请求的计划文档 {id}：{error}");
                     }
                 });
                 document = try_read_document(id, ctx);
@@ -73,7 +71,7 @@ impl ReadDocumentsExecutor {
                 .collect::<Vec<_>>()
                 .join(", ");
             return ActionExecution::Sync(
-                ReadDocumentsResult::Error(format!("Document(s) not found: {missing_list}")).into(),
+                ReadDocumentsResult::Error(format!("未找到文档：{missing_list}")).into(),
             );
         }
 

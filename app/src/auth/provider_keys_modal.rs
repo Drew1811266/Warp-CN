@@ -195,11 +195,12 @@ impl View for ProviderKeysModalView {
         let border_color = internal_colors::neutral_4(theme);
         let ui_builder = appearance.ui_builder();
 
-        let title = FormattedTextElement::from_str("Add API key", appearance.ui_font_family(), 16.)
-            .with_color(internal_colors::text_main(theme, dialog_surface_solid))
-            .with_weight(Weight::Bold)
-            .with_line_height_ratio(1.25)
-            .finish();
+        let title =
+            FormattedTextElement::from_str("添加 API 密钥", appearance.ui_font_family(), 16.)
+                .with_color(internal_colors::text_main(theme, dialog_surface_solid))
+                .with_weight(Weight::Bold)
+                .with_line_height_ratio(1.25)
+                .finish();
 
         let close_button = ui_builder
             .close_button(24., self.close_mouse_state.clone())
@@ -218,7 +219,7 @@ impl View for ProviderKeysModalView {
             .finish();
 
         let subtitle = FormattedTextElement::from_str(
-            "Use your own API keys from model providers for Warp Agent.",
+            "为 Warp Agent 使用你自己的模型提供商 API 密钥。",
             appearance.ui_font_family(),
             14.,
         )
@@ -231,11 +232,11 @@ impl View for ProviderKeysModalView {
         let body = Flex::column()
             .with_cross_axis_alignment(CrossAxisAlignment::Stretch)
             .with_child(Container::new(subtitle).with_margin_bottom(16.).finish())
-            .with_child(self.render_field(appearance, "OpenAI API key", self.openai_input.clone()))
+            .with_child(self.render_field(appearance, "OpenAI API 密钥", self.openai_input.clone()))
             .with_child(
                 Container::new(self.render_field(
                     appearance,
-                    "Anthropic API key",
+                    "Anthropic API 密钥",
                     self.anthropic_input.clone(),
                 ))
                 .with_margin_top(16.)
@@ -244,7 +245,7 @@ impl View for ProviderKeysModalView {
             .with_child(
                 Container::new(self.render_field(
                     appearance,
-                    "Google API key",
+                    "Google API 密钥",
                     self.google_input.clone(),
                 ))
                 .with_margin_top(16.)
@@ -255,7 +256,7 @@ impl View for ProviderKeysModalView {
         let cancel_button = self.cancel_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Cancel".into()),
+                content: button::Content::Label("取消".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -269,7 +270,7 @@ impl View for ProviderKeysModalView {
         let add_button = self.add_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Add keys".into()),
+                content: button::Content::Label("添加密钥".into()),
                 theme: &button::themes::Primary,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {

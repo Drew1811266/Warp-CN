@@ -754,7 +754,7 @@ pub enum RenderableAIError {
 
 impl RenderableAIError {
     const TRANSIENT_NETWORK_ERROR_MESSAGE: &'static str =
-        "Warp lost connection while receiving the agent response. This is usually temporary.";
+        "Warp 在接收 Agent 响应时失去连接。这通常只是暂时问题。";
     /// Creates a transient network error. `kind` is the structured cause (including the raw API
     /// error where one exists), preserved so user reports can disambiguate the different causes
     /// behind the shared user-facing copy.

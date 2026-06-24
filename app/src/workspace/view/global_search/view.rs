@@ -2149,7 +2149,7 @@ impl View for GlobalSearchView {
         let message = if let Some(error) = &self.last_error {
             error.clone()
         } else if self.is_search_in_progress && self.total_match_count == 0 {
-            "Searching…".to_string()
+            "搜索中...".to_string()
         } else if !self.is_search_in_progress && self.total_match_count == 0 {
             "未找到结果。请检查你的 gitignore 文件。".to_string()
         } else {
@@ -2343,15 +2343,15 @@ impl GlobalSearchView {
         self.render_zero_state(
             Icon::AlertTriangle,
             "全局搜索不可用",
-            "Global search isn't available for this remote session.",
+            "此远程会话无法使用全局搜索。",
             app,
         )
     }
     fn render_remote_loading_state(&self, app: &AppContext) -> Box<dyn Element> {
         self.render_zero_state(
             Icon::Loading,
-            "Connecting to remote session",
-            "Global search will be available once the connection is ready.",
+            "正在连接远程会话",
+            "连接就绪后即可使用全局搜索。",
             app,
         )
     }

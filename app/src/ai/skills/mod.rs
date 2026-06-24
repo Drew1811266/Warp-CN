@@ -30,9 +30,9 @@ pub enum SkillManagerEvent {
 
 #[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
 pub enum ActiveSkillLookupError {
-    #[error("Bundled skills are not available on this remote session")]
+    #[error("此远程会话无法使用内置 skills")]
     BundledSkillsUnavailable,
-    #[error("Skill not found: {reference}")]
+    #[error("未找到 skill：{reference}")]
     NotFound { reference: SkillReference },
 }
 

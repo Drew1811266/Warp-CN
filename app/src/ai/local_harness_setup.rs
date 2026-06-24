@@ -8,7 +8,7 @@ use crate::util::path::resolve_executable;
 pub(crate) const LOCAL_HARNESS_INSTALLATION_REQUIRED_TOOLTIP: &str =
     "安装 Claude Code 以使用此本地 harness。";
 pub(crate) const LOCAL_CODEX_HARNESS_INSTALLATION_REQUIRED_TOOLTIP: &str =
-    "Install Codex to use this local harness.";
+    "安装 Codex 以使用此本地 harness。";
 pub(crate) const LOCAL_CODEX_HARNESS_DISABLED_MESSAGE: &str = "本地 Codex 子 Agent 暂时已停用。";
 
 /// Client-side readiness for using a harness in local orchestration.

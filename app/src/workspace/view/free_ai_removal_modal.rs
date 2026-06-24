@@ -29,16 +29,13 @@ const CORNER_RADIUS: f32 = 12.;
 const PANEL_PADDING: f32 = 24.;
 const CLOSE_BUTTON_DIAMETER: f32 = 20.;
 
-const NOTICE_TITLE_TEXT: &str = "Warp is no longer providing inference on the free plan.";
-const NOTICE_BODY_TEXT: &str = "To keep using Warp's AI features, please upgrade to a paid plan, \
-     bring your own API key or endpoint, or log in with your Grok subscription.";
-const NOTICE_BONUS_CREDITS_TEXT: &str = "If you have any unused bonus credits, AI will keep \
-     working until these run out.";
+const NOTICE_TITLE_TEXT: &str = "Warp 不再为免费套餐提供推理服务。";
+const NOTICE_BODY_TEXT: &str = "要继续使用 Warp 的 AI 功能，请升级到付费套餐、使用你自己的 API 密钥或端点，或通过 Grok 订阅登录。";
+const NOTICE_BONUS_CREDITS_TEXT: &str =
+    "如果你还有未使用的赠送额度，AI 会继续可用直到这些额度用完。";
 
-const PROMPT_SUGGESTIONS_TITLE_TEXT: &str = "How to use AI features in Warp";
-const PROMPT_SUGGESTIONS_BODY_TEXT: &str = "To use AI features in Warp, subscribe to a paid plan, \
-     add an API key (OpenAI, Anthropic, or Google), add a custom inference endpoint (OpenRouter, \
-     LiteLLM), or log in using your SuperGrok subscription.";
+const PROMPT_SUGGESTIONS_TITLE_TEXT: &str = "如何在 Warp 中使用 AI 功能";
+const PROMPT_SUGGESTIONS_BODY_TEXT: &str = "要在 Warp 中使用 AI 功能，请订阅付费套餐、添加 API 密钥（OpenAI、Anthropic 或 Google）、添加自定义推理端点（OpenRouter、LiteLLM），或使用你的 SuperGrok 订阅登录。";
 
 /// Which surface opened the modal. Selects the copy and disambiguates telemetry;
 /// the layout and CTAs are identical across variants.
@@ -152,7 +149,7 @@ impl FreeAiRemovalModal {
                 height: Some(32.),
                 ..Default::default()
             })
-            .with_centered_text_label("Bring your own AI".to_string())
+            .with_centered_text_label("使用你自己的 AI".to_string())
             .build()
             .with_cursor(Cursor::PointingHand)
             .on_click(|ctx, _, _| {
@@ -171,7 +168,7 @@ impl FreeAiRemovalModal {
                 height: Some(32.),
                 ..Default::default()
             })
-            .with_centered_text_label("View pricing".to_string())
+            .with_centered_text_label("查看价格".to_string())
             .build()
             .with_cursor(Cursor::PointingHand)
             .on_click(|ctx, _, _| {

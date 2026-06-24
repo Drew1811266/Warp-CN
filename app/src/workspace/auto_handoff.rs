@@ -196,7 +196,7 @@ impl AutoCloudHandoffController {
         log::info!("auto handoff: showing success toast in window {window_id:?}");
         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
             toast_stack.add_ephemeral_toast(
-                DismissibleToast::success("Handed session off to the cloud".to_owned()),
+                DismissibleToast::success("已将会话交接到云端".to_owned()),
                 window_id,
                 ctx,
             );

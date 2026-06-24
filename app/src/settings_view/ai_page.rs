@@ -2194,7 +2194,7 @@ impl AISettingsPageView {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text("Paste sign-in code", ctx);
+            editor.set_placeholder_text("粘贴登录代码", ctx);
             editor
         })
     }
@@ -2244,8 +2244,7 @@ impl AISettingsPageView {
                 );
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                    let toast =
-                        DismissibleToast::error(format!("Couldn't start Grok login: {err}"));
+                    let toast = DismissibleToast::error(format!("无法启动 Grok 登录：{err}"));
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
                 return;
@@ -2270,14 +2269,14 @@ impl AISettingsPageView {
             // forever: the completion toast below replaces it (shared object
             // id), and the OAuth attempt itself times out when the callback
             // never arrives.
-            let toast = DismissibleToast::default(
-                "Opening your browser to connect your SuperGrok subscription…".to_string(),
-            )
-            .with_object_id(CONNECT_TOAST_OBJECT_ID.to_string())
-            .with_link(
-                ToastLink::new("Copy URL".to_string())
-                    .with_onclick_action(WorkspaceAction::CopyTextToClipboard(authorize_url)),
-            );
+            let toast =
+                DismissibleToast::default("正在打开浏览器以连接你的 SuperGrok 订阅...".to_string())
+                    .with_object_id(CONNECT_TOAST_OBJECT_ID.to_string())
+                    .with_link(
+                        ToastLink::new("复制 URL".to_string()).with_onclick_action(
+                            WorkspaceAction::CopyTextToClipboard(authorize_url),
+                        ),
+                    );
             toast_stack.add_persistent_toast(toast, window_id, ctx);
         });
 
@@ -2303,7 +2302,7 @@ impl AISettingsPageView {
                     ApiKeyManager::handle(ctx).update(ctx, move |manager, ctx| {
                         manager.store_grok_tokens(tokens, ctx);
                     });
-                    DismissibleToast::success("SuperGrok subscription connected".to_string())
+                    DismissibleToast::success("SuperGrok 订阅已连接".to_string())
                 }
                 Err(err) => {
                     me.grok_oauth_attempt = None;
@@ -2320,7 +2319,7 @@ impl AISettingsPageView {
                         },
                         ctx
                     );
-                    DismissibleToast::error(format!("Couldn't connect SuperGrok: {err}"))
+                    DismissibleToast::error(format!("无法连接 SuperGrok：{err}"))
                 }
             };
             ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
@@ -2372,7 +2371,7 @@ impl AISettingsPageView {
                         ApiKeyManager::handle(ctx).update(ctx, move |manager, ctx| {
                             manager.store_grok_tokens(tokens, ctx);
                         });
-                        DismissibleToast::success("SuperGrok subscription connected".to_string())
+                        DismissibleToast::success("SuperGrok 订阅已连接".to_string())
                     }
                     Err(err) => {
                         // Keep the row open so the user can correct the code.
@@ -2386,7 +2385,7 @@ impl AISettingsPageView {
                             },
                             ctx
                         );
-                        DismissibleToast::error(format!("Couldn't connect SuperGrok: {err}"))
+                        DismissibleToast::error(format!("无法连接 SuperGrok：{err}"))
                     }
                 };
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
@@ -4071,7 +4070,7 @@ impl TypedActionView for AISettingsPageView {
                 let window_id = ctx.window_id();
                 crate::ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     let toast = crate::view_components::DismissibleToast::default(
-                        "SuperGrok subscription disconnected".to_string(),
+                        "SuperGrok 订阅已断开连接".to_string(),
                     );
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
@@ -6120,11 +6119,9 @@ impl SettingsWidget for AIInputWidget {
                 widget_children.push(
                     Container::new(render_dropdown_item(
                         appearance,
-                        "Default long-running command submission mode",
+                        "默认长时间运行命令提交模式",
                         Some(
-                            "What happens when you submit a prompt while an agent is driving an \
-                             agent-requested long-running command. Queued prompts are sent to the \
-                             agent when the command finishes.",
+                            "当 Agent 正在驱动由 Agent 请求的长时间运行命令时，提交提示后的处理方式。排队的提示会在命令完成后发送给 Agent。",
                         ),
                         None,
                         LocalOnlyIconState::for_setting(
@@ -6922,8 +6919,8 @@ impl SettingsWidget for OtherAIWidget {
 
         column.add_child(render_dropdown_item(
             appearance,
-            "Orchestration message display",
-            Some("Controls whether orchestration messages stay expanded."),
+            "编排消息显示",
+            Some("控制编排消息是否保持展开。"),
             None,
             LocalOnlyIconState::for_setting(
                 OrchestrationMessageDisplayMode::storage_key(),
@@ -7111,7 +7108,7 @@ impl SettingsWidget for CLIAgentWidget {
 
                 // Setting 3: Submit Rich Input with Ctrl+Enter
                 column.add_child(render_ai_setting_toggle::<SubmitRichInputOnCtrlEnter>(
-                    "Submit Rich Input with Ctrl+Enter",
+                    "用 Ctrl+Enter 提交 Rich Input",
                     AISettingsPageAction::ToggleSubmitRichInputOnCtrlEnter,
                     *ai_settings.submit_on_ctrl_enter,
                     true,
@@ -7785,20 +7782,20 @@ impl ApiKeysWidget {
         });
 
         let grok_connect_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Connect", SecondaryTheme)
+            ActionButton::new("连接", SecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(AISettingsPageAction::ConnectGrokSubscription);
                 })
         });
         let grok_connecting_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Connecting", SecondaryTheme).with_size(ButtonSize::Small)
+            ActionButton::new("连接中", SecondaryTheme).with_size(ButtonSize::Small)
         });
         grok_connecting_button.update(ctx, |button, ctx| {
             button.set_disabled(true, ctx);
         });
         let grok_disconnect_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Disconnect", DangerSecondaryTheme)
+            ActionButton::new("断开连接", DangerSecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(AISettingsPageAction::DisconnectGrokSubscription);
@@ -8111,7 +8108,7 @@ impl ApiKeysWidget {
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_spacing(4.)
             .with_child(
-                Text::new_inline("Use your", appearance.ui_font_family(), CONTENT_FONT_SIZE)
+                Text::new_inline("使用你的", appearance.ui_font_family(), CONTENT_FONT_SIZE)
                     .with_color(text_color.into())
                     .finish(),
             )
@@ -8123,7 +8120,7 @@ impl ApiKeysWidget {
             )
             .with_child(
                 Text::new_inline(
-                    "Premium or SuperGrok subscription",
+                    "Premium 或 SuperGrok 订阅",
                     appearance.ui_font_family(),
                     CONTENT_FONT_SIZE,
                 )
@@ -8150,7 +8147,7 @@ impl ApiKeysWidget {
 
         let description = Container::new(
             Text::new(
-                "Connect your SuperGrok subscription to use Grok models in the Warp Agent through your xAI account.",
+                "连接你的 SuperGrok 订阅，通过 xAI 账号在 Warp Agent 中使用 Grok 模型。",
                 appearance.ui_font_family(),
                 CONTENT_FONT_SIZE,
             )
@@ -8168,12 +8165,9 @@ impl ApiKeysWidget {
 
         if let Some(tokens) = grok_tokens {
             let connected_text = match tokens.connected_at.map(DateTime::<Local>::from) {
-                Some(connected_at) => format!(
-                    "Connected on {}.",
-                    connected_at.format("%m/%d/%Y at %-I:%M%P")
-                ),
+                Some(connected_at) => format!("连接于 {}。", connected_at.format("%Y/%m/%d %H:%M")),
                 // Tokens stored before the connection time was tracked.
-                None => "Connected.".to_string(),
+                None => "已连接。".to_string(),
             };
             let check = ConstrainedBox::new(
                 Icon::Check

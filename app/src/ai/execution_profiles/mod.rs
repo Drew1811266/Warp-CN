@@ -23,9 +23,9 @@ pub(crate) const LONG_CONTEXT_PRICING_WARNING_URL: &str =
 pub(crate) fn long_context_pricing_warning_title() -> FormattedTextInline {
     vec![
         FormattedTextFragment::plain_text(
-            "OpenAI automatically applies long-context pricing when context exceeds 272,000 tokens. ",
+            "当上下文超过 272,000 个 token 时，OpenAI 会自动应用长上下文价格。",
         ),
-        FormattedTextFragment::hyperlink("Learn more", LONG_CONTEXT_PRICING_WARNING_URL),
+        FormattedTextFragment::hyperlink("了解更多", LONG_CONTEXT_PRICING_WARNING_URL),
     ]
 }
 

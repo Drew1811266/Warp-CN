@@ -20,12 +20,12 @@ use crate::terminal::warpify::render::SSH_DOCS_URL;
 use crate::ui_components::icons::Icon;
 use crate::Appearance;
 
-const BANNER_TITLE: &str = "Tmux SSH warpification has been deprecated";
+const BANNER_TITLE: &str = "Tmux SSH warpification 已弃用";
 
-const BANNER_BODY: &str = "Warp now connects to remote sessions using the SSH extension, which is \
-    more robust than the tmux-based flow. The tmux option has been removed.";
+const BANNER_BODY: &str =
+    "Warp 现在使用 SSH 扩展连接远程会话，比基于 tmux 的流程更稳定。tmux 选项已移除。";
 
-const LEARN_MORE_LABEL: &str = "Learn more";
+const LEARN_MORE_LABEL: &str = "了解更多";
 
 #[derive(Clone, Debug)]
 pub enum SshTmuxDeprecationBannerAction {

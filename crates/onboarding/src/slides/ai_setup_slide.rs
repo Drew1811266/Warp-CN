@@ -25,10 +25,10 @@ use crate::slides::{bottom_nav, layout, slide_content};
 
 /// Checklist shown on the "Use Warp agent" card.
 const WARP_AGENT_FEATURES: &[&str] = &[
-    "Best harness for terminal tasks and agentic coding",
-    "Frontier models from OpenAI, Anthropic, and Google",
-    "Model routing across frontier and open-weight models",
-    "Multi-agent orchestration",
+    "最适合终端任务和 Agent 编码的 harness",
+    "来自 OpenAI、Anthropic 和 Google 的前沿模型",
+    "跨前沿模型和开放权重模型进行模型路由",
+    "多 Agent 编排",
 ];
 
 #[derive(Debug, Clone)]
@@ -110,7 +110,7 @@ impl AiSetupSlide {
 
         let title = appearance
             .ui_builder()
-            .paragraph("Choose your AI setup")
+            .paragraph("选择你的 AI 设置")
             .with_style(UiComponentStyles {
                 font_size: Some(36.),
                 font_weight: Some(Weight::Medium),
@@ -120,7 +120,7 @@ impl AiSetupSlide {
             .finish();
 
         let subtitle = FormattedTextElement::from_str(
-            "Choose if you'd like to use Warp Agent or third party agents.",
+            "选择使用 Warp Agent 还是第三方 Agent。",
             appearance.ui_font_family(),
             16.,
         )
@@ -231,7 +231,7 @@ impl AiSetupSlide {
         let header_row = {
             let label = appearance
                 .ui_builder()
-                .paragraph("Use Warp Agent")
+                .paragraph("使用 Warp Agent")
                 .with_style(UiComponentStyles {
                     font_size: Some(16.),
                     font_weight: Some(Weight::Semibold),
@@ -245,7 +245,7 @@ impl AiSetupSlide {
                 let green = theme.ansi_fg_green();
                 let badge_text = appearance
                     .ui_builder()
-                    .paragraph("Access more models")
+                    .paragraph("访问更多模型")
                     .with_style(UiComponentStyles {
                         font_size: Some(12.),
                         font_weight: Some(Weight::Normal),
@@ -272,7 +272,7 @@ impl AiSetupSlide {
         };
 
         let description = FormattedTextElement::from_str(
-            "State of the art agent harness deeply integrated into the terminal.",
+            "深度集成到终端中的先进 Agent harness。",
             appearance.ui_font_family(),
             14.,
         )
@@ -358,7 +358,7 @@ impl AiSetupSlide {
 
         let label = appearance
             .ui_builder()
-            .paragraph("Use third party agents")
+            .paragraph("使用第三方 Agent")
             .with_style(UiComponentStyles {
                 font_size: Some(16.),
                 font_weight: Some(Weight::Semibold),
@@ -369,7 +369,7 @@ impl AiSetupSlide {
             .finish();
 
         let description = FormattedTextElement::from_str(
-            "Use agents like Claude Code, Codex, and Gemini.",
+            "使用 Claude Code、Codex 和 Gemini 等 Agent。",
             appearance.ui_font_family(),
             14.,
         )
@@ -399,7 +399,7 @@ impl AiSetupSlide {
         let back_button = self.back_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Back".into()),
+                content: button::Content::Label("返回".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -414,7 +414,7 @@ impl AiSetupSlide {
         let no_ai_button = self.no_ai_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("I don't want AI".into()),
+                content: button::Content::Label("我不想使用 AI".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     keystroke: Some(no_ai_keystroke),
@@ -430,7 +430,7 @@ impl AiSetupSlide {
         let next_button = self.next_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Next".into()),
+                content: button::Content::Label("下一步".into()),
                 theme: &button::themes::Primary,
                 options: button::Options {
                     keystroke: Some(enter),

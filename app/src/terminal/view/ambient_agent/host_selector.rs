@@ -41,11 +41,11 @@ const BUTTON_TOOLTIP: &str = "执行主机";
 
 const MENU_HEADER_LABEL: &str = "执行主机";
 
-const DEFAULT_BADGE: &str = "Default";
+const DEFAULT_BADGE: &str = "默认";
 
-const CONNECTED_BADGE: &str = "Connected";
+const CONNECTED_BADGE: &str = "已连接";
 
-const DISCONNECTED_BADGE: &str = "Disconnected";
+const DISCONNECTED_BADGE: &str = "已断开";
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Host {

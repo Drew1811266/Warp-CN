@@ -506,10 +506,7 @@ impl Input {
                     .as_ref(ctx)
                     .selected_conversation_id(ctx)
                 else {
-                    show_error_toast(
-                        "/rename-conversation requires an active conversation".to_owned(),
-                        ctx,
-                    );
+                    show_error_toast("/rename-conversation 需要一个活动对话".to_owned(), ctx);
                     return true;
                 };
                 rename_conversation(conversation_id, argument.cloned().unwrap_or_default(), ctx);
@@ -940,10 +937,7 @@ impl Input {
                     // so the user knows why nothing happened. The chip falls
                     // back to `&` compose mode here; the slash-command flow
                     // does not because it has no compose-draft state to seed.
-                    show_error_toast(
-                        "Nothing to hand off — start a conversation first.".to_owned(),
-                        ctx,
-                    );
+                    show_error_toast("没有可交接的内容，请先开始一个对话。".to_owned(), ctx);
                 }
             }
             fork if command.name == commands::FORK.name => {
@@ -1409,7 +1403,7 @@ pub(crate) fn fork_button_action(
         && conversation_id.is_some_and(|id| conversation_is_cloud_oz_for_slash_command(id, ctx))
     {
         ForkButtonAction {
-            tooltip: "Continue locally",
+            tooltip: "在本地继续",
             command_name: commands::CONTINUE_LOCALLY.name,
         }
     } else {

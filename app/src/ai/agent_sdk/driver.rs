@@ -467,7 +467,7 @@ pub enum AgentDriverError {
     InvalidRuntimeState,
     #[error("未找到请求的 MCP server：{0}")]
     MCPServerNotFound(uuid::Uuid),
-    #[error("Failed to resolve managed MCP server {uid}: {message}")]
+    #[error("无法解析托管 MCP server {uid}：{message}")]
     ManagedMcpResolutionFailed { uid: Uuid, message: String },
     #[error("启动 MCP server 失败：{}", .details.join("; "))]
     MCPStartupFailed {
@@ -1256,9 +1256,9 @@ impl AgentDriver {
                     pending_servers.remove(uuid);
                     let error = TemplatableMCPServerManager::as_ref(ctx)
                         .get_server_error_message(*uuid)
-                        .map(|message| format!(": {message}"))
+                        .map(|message| format!("：{message}"))
                         .unwrap_or_default();
-                    let detail = format!("'{name}' failed to start{error}");
+                    let detail = format!("“{name}”启动失败{error}");
                     log::warn!("MCP server {detail}");
                     if let Ok(mut failed_servers) = failed_for_subscription.lock() {
                         failed_servers.push(detail);
@@ -1316,7 +1316,7 @@ impl AgentDriver {
             details.extend(
                 still_starting
                     .iter()
-                    .map(|name| format!("'{name}' did not start within {}s", timeout.as_secs())),
+                    .map(|name| format!("“{name}”未能在 {} 秒内启动", timeout.as_secs())),
             );
 
             if details.is_empty() {
@@ -2469,7 +2469,7 @@ impl AgentDriver {
             if requires_platform_plugin {
                 return Err(Self::required_platform_plugin_error(
                     harness_name,
-                    "Required platform plugin manager is unavailable",
+                    "必需的 platform 插件管理器不可用",
                 ));
             }
             return Ok(());
@@ -2532,7 +2532,7 @@ impl AgentDriver {
                 if required {
                     return Err(Self::required_platform_plugin_error(
                         harness_name,
-                        format!("Required platform plugin update failed: {e}"),
+                        format!("必需的 platform 插件更新失败：{e}"),
                     ));
                 }
                 log::warn!("Platform plugin update failed (continuing): {e}");
@@ -2548,7 +2548,7 @@ impl AgentDriver {
                 if required {
                     return Err(Self::required_platform_plugin_error(
                         harness_name,
-                        format!("Required platform plugin installation failed: {e}"),
+                        format!("必需的 platform 插件安装失败：{e}"),
                     ));
                 }
                 log::warn!("Platform plugin installation failed (continuing): {e}");
@@ -2568,13 +2568,13 @@ impl AgentDriver {
         if !manager.is_platform_plugin_installed() {
             return Err(Self::required_platform_plugin_error(
                 harness_name,
-                "Required platform plugin is not installed",
+                "必需的 platform 插件尚未安装",
             ));
         }
         if manager.platform_plugin_needs_update() {
             return Err(Self::required_platform_plugin_error(
                 harness_name,
-                "Required platform plugin is below the minimum supported version",
+                "必需的 platform 插件低于最低支持版本",
             ));
         }
         Ok(())

@@ -493,8 +493,8 @@ impl ConversationUsageView {
                     .with_child(render_toggle_link(
                         self.context_window_toggle_mouse_state.clone(),
                         self.context_window_expanded,
-                        "Hide breakdown",
-                        "View breakdown",
+                        "隐藏明细",
+                        "查看明细",
                         ConversationUsageViewAction::ToggleContextWindowExpanded,
                         appearance,
                     ));
@@ -1115,7 +1115,7 @@ fn render_context_window_other_tooltip(appearance: &Appearance) -> Box<dyn Eleme
     let background = theme.tooltip_background();
     let text = ConstrainedBox::new(
         Text::new(
-            "Includes other request context and temporary instructions added to help the agent better respond.".to_string(),
+            "包括其他请求上下文，以及为帮助 Agent 更好响应而添加的临时指令。".to_string(),
             appearance.ui_font_family(),
             appearance.ui_font_size() - 2.,
         )

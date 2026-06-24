@@ -449,9 +449,9 @@ fn get_stable_agent_mode_hint_text(cached_hint: &mut Option<&'static str>) -> &'
 
 const AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI: &str = "引导正在运行的 Agent";
 const AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_CLASSIC: &str = "引导正在运行的 Agent，或按退格退出";
-const AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_UDI: &str = "Queue a follow up for the running agent";
+const AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_UDI: &str = "为正在运行的 Agent 排队一条追问";
 const AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_CLASSIC: &str =
-    "Queue a follow up for the running agent, or backspace to exit";
+    "为正在运行的 Agent 排队一条追问，或按退格退出";
 const AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_UDI: &str = "继续追问";
 const AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_CLASSIC: &str = "继续追问，或按退格退出";
 
@@ -6195,11 +6195,11 @@ impl Input {
                         let agent_name = conversation.agent_name().unwrap_or("child");
                         if conversation.status().is_in_progress() {
                             if is_queue_next_prompt_enabled {
-                                return format!("Queue a follow up for the {agent_name} agent");
+                                return format!("为 {agent_name} Agent 排队一条追问");
                             }
-                            return format!("Steer the {agent_name} agent");
+                            return format!("引导 {agent_name} Agent");
                         }
-                        return format!("Ask the {agent_name} agent a follow up");
+                        return format!("向 {agent_name} Agent 继续追问");
                     }
                 }
 

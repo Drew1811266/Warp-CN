@@ -53,8 +53,8 @@ pub enum HostPickerEvent {
 
 const CUSTOM_HOST_LABEL: &str = "自定义主机…";
 const DEFAULT_BADGE: &str = "默认";
-const CONNECTED_BADGE: &str = "Connected";
-const DISCONNECTED_BADGE: &str = "Disconnected";
+const CONNECTED_BADGE: &str = "已连接";
+const DISCONNECTED_BADGE: &str = "已断开";
 const EDITOR_PLACEHOLDER: &str = "my-worker-host";
 
 // ── Internal action plumbing ────────────────────────────────────────

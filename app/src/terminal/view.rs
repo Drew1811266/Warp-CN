@@ -3951,19 +3951,21 @@ impl TerminalView {
         let osc52_clipboard_blocked_banner = ctx.add_typed_action_view(|_| {
             Banner::<TerminalAction>::new_with_buttons(
                 BannerTextContent::plain_text(
-                    "A terminal program tried to access your clipboard. This is disabled by default for security reasons.",
+                    "一个终端程序尝试访问你的剪贴板。出于安全原因，此操作默认已停用。",
                 ),
                 vec![
                     BannerTextButton::new(
-                        "Allow".to_string(),
+                        "允许".to_string(),
                         Rc::new(|event_ctx, _ctx, _position| {
-                            event_ctx.dispatch_typed_action(BannerAction::<TerminalAction>::Action(
-                                TerminalAction::Osc52AllowBlockedClipboardOperation,
-                            ));
+                            event_ctx.dispatch_typed_action(
+                                BannerAction::<TerminalAction>::Action(
+                                    TerminalAction::Osc52AllowBlockedClipboardOperation,
+                                ),
+                            );
                         }),
                     ),
                     BannerTextButton::new(
-                        "Don't show again".to_string(),
+                        "不再显示".to_string(),
                         Rc::new(|event_ctx, _ctx, _position| {
                             event_ctx.dispatch_typed_action(
                                 BannerAction::<TerminalAction>::Dismiss(DismissalType::Permanent),
@@ -22064,15 +22066,15 @@ impl TerminalView {
         }
         let text = match blocked_type {
             Osc52ClipboardBlockedType::Write => {
-                "A terminal program tried to write to your clipboard. This is disabled by default for security reasons, to protect against malicious software."
+                "一个终端程序尝试写入你的剪贴板。为防范恶意软件，此操作出于安全原因默认已停用。"
             }
             Osc52ClipboardBlockedType::Read => {
-                "A terminal program tried to read your clipboard. This is disabled by default for security reasons, to protect against malicious software."
+                "一个终端程序尝试读取你的剪贴板。为防范恶意软件，此操作出于安全原因默认已停用。"
             }
         };
         let button_label = match blocked_type {
-            Osc52ClipboardBlockedType::Write => "Allow clipboard writes",
-            Osc52ClipboardBlockedType::Read => "Allow clipboard reads and writes",
+            Osc52ClipboardBlockedType::Write => "允许写入剪贴板",
+            Osc52ClipboardBlockedType::Read => "允许读取和写入剪贴板",
         };
         self.osc52_clipboard_blocked_banner
             .update(ctx, |banner, ctx| {

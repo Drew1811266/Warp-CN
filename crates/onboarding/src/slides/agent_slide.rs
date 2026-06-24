@@ -812,7 +812,7 @@ impl AgentSlide {
         let no_ai_button = self.no_ai_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("I don't want AI".into()),
+                content: button::Content::Label("我不想使用 AI".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     keystroke: Some(no_ai_keystroke),

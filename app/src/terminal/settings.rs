@@ -44,9 +44,9 @@ impl Osc52ClipboardAccess {
 
     pub fn as_dropdown_label(self) -> &'static str {
         match self {
-            Self::Deny => "Deny",
-            Self::WriteOnly => "Write only",
-            Self::ReadWrite => "Read and write",
+            Self::Deny => "拒绝",
+            Self::WriteOnly => "仅写入",
+            Self::ReadWrite => "读取和写入",
         }
     }
 }
@@ -185,7 +185,7 @@ define_settings_group!(TerminalSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "terminal.osc52_clipboard_access",
-        description: "Controls whether terminal programs can access the system clipboard via OSC 52 escape sequences. Options: deny (default), write_only, read_write.",
+        description: "控制终端程序能否通过 OSC 52 转义序列访问系统剪贴板。选项：deny（默认）、write_only、read_write。",
     },
     // Opt-in toggle for running terminal find on a background thread. Only consulted on
     // channels where `FeatureFlag::AsyncFind` is off; channels with the flag on force the

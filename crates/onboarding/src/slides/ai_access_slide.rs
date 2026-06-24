@@ -141,7 +141,7 @@ impl AiAccessSlide {
 
         let title = appearance
             .ui_builder()
-            .paragraph("Choose how to access AI")
+            .paragraph("选择 AI 访问方式")
             .with_style(UiComponentStyles {
                 font_size: Some(36.),
                 font_weight: Some(Weight::Medium),
@@ -151,7 +151,7 @@ impl AiAccessSlide {
             .finish();
 
         let subtitle = FormattedTextElement::from_str(
-            "Save with a recurring plan, or use your own key or endpoint.",
+            "选择周期性套餐可节省费用，或使用你自己的 API 密钥或端点。",
             appearance.ui_font_family(),
             16.,
         )
@@ -250,7 +250,7 @@ impl AiAccessSlide {
 
         let label = appearance
             .ui_builder()
-            .paragraph("Subscription")
+            .paragraph("订阅")
             .with_style(UiComponentStyles {
                 font_size: Some(16.),
                 font_weight: Some(Weight::Semibold),
@@ -264,7 +264,7 @@ impl AiAccessSlide {
             let green = theme.ansi_fg_green();
             let badge_text = appearance
                 .ui_builder()
-                .paragraph("Best value")
+                .paragraph("最优惠")
                 .with_style(UiComponentStyles {
                     font_size: Some(12.),
                     font_weight: Some(Weight::Normal),
@@ -290,8 +290,7 @@ impl AiAccessSlide {
             .finish();
 
         let description = FormattedTextElement::from_str(
-            "Starting at $18 / mo, available with monthly or annual plans. Includes base credits, \
-             frontier models, cloud agents, collaboration, and more.",
+            "每月 $18 起，可选择月付或年付套餐。包含基础额度、前沿模型、云端 Agent、协作等功能。",
             appearance.ui_font_family(),
             14.,
         )
@@ -304,7 +303,7 @@ impl AiAccessSlide {
         let choose_plan_button = self.choose_plan_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Choose plan".into()),
+                content: button::Content::Label("选择套餐".into()),
                 theme: &button::themes::Secondary,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -348,7 +347,7 @@ impl AiAccessSlide {
 
         let label = appearance
             .ui_builder()
-            .paragraph("Use my own key or endpoint")
+            .paragraph("使用我自己的 API 密钥或端点")
             .with_style(UiComponentStyles {
                 font_size: Some(16.),
                 font_weight: Some(Weight::Semibold),
@@ -359,7 +358,7 @@ impl AiAccessSlide {
             .finish();
 
         let description = FormattedTextElement::from_str(
-            "Use your own API key or OpenAI-compatible endpoint with Warp for free.",
+            "在 Warp 中免费使用你自己的 API 密钥或 OpenAI 兼容端点。",
             appearance.ui_font_family(),
             14.,
         )
@@ -372,7 +371,7 @@ impl AiAccessSlide {
         let add_key_button = self.add_key_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("+ Add key".into()),
+                content: button::Content::Label("+ 添加密钥".into()),
                 theme: &button::themes::Secondary,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -386,7 +385,7 @@ impl AiAccessSlide {
         let add_endpoint_button = self.add_endpoint_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("+ Add custom endpoint".into()),
+                content: button::Content::Label("+ 添加自定义端点".into()),
                 theme: &button::themes::Secondary,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -438,10 +437,10 @@ impl AiAccessSlide {
         }
         match (self.byok_key_count, self.byok_endpoint_count) {
             (0, 0) => None,
-            (keys, 0) => Some(format!("{} connected", count_label(keys, "key"))),
-            (0, endpoints) => Some(format!("{} connected", count_label(endpoints, "endpoint"))),
+            (keys, 0) => Some(format!("已连接 {}", count_label(keys, "key"))),
+            (0, endpoints) => Some(format!("已连接 {}", count_label(endpoints, "endpoint"))),
             (keys, endpoints) => Some(format!(
-                "{} and {} connected",
+                "已连接 {} 和 {}",
                 count_label(keys, "key"),
                 count_label(endpoints, "endpoint"),
             )),
@@ -486,7 +485,7 @@ impl AiAccessSlide {
         let back_button = self.back_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Back".into()),
+                content: button::Content::Label("返回".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -501,7 +500,7 @@ impl AiAccessSlide {
         let no_ai_button = self.no_ai_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("I don't want AI".into()),
+                content: button::Content::Label("我不想使用 AI".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     keystroke: Some(no_ai_keystroke),
@@ -518,7 +517,7 @@ impl AiAccessSlide {
         let next_button = self.next_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Next".into()),
+                content: button::Content::Label("下一步".into()),
                 theme: &button::themes::Primary,
                 options: button::Options {
                     disabled: !can_advance,
@@ -526,9 +525,7 @@ impl AiAccessSlide {
                     // paid plan or a configured key/endpoint.
                     tooltip: (!can_advance).then(|| button::Tooltip {
                         params: tooltip::Params {
-                            label:
-                                "Warp Agent requires a subscription or inference supplied by you"
-                                    .into(),
+                            label: "Warp Agent 需要订阅或由你提供推理服务".into(),
                             options: tooltip::Options {
                                 keyboard_shortcut: None,
                             },

@@ -416,7 +416,7 @@ impl AgentOnboardingView {
         let cancel_button = self.no_ai_cancel_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Give me AI features".into()),
+                content: button::Content::Label("给我启用 AI 功能".into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -431,7 +431,7 @@ impl AgentOnboardingView {
         let confirm_button = self.no_ai_confirm_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("I don't want AI".into()),
+                content: button::Content::Label("我不想使用 AI".into()),
                 theme: &button::themes::Primary,
                 options: button::Options {
                     keystroke: Some(enter),
@@ -446,9 +446,8 @@ impl AgentOnboardingView {
         render_feature_optout_dialog(
             appearance,
             FeatureOptOutDialog {
-                title: "Are you sure you don't want AI?",
-                body: "Warp is better with AI. By continuing, you won't have access to any of the \
-                       following features:",
+                title: "确定不使用 AI 吗？",
+                body: "Warp 搭配 AI 会更强。继续后，你将无法使用以下功能：",
                 features: AI_FEATURES,
                 close_button,
                 cancel_button,
@@ -513,7 +512,7 @@ impl AgentOnboardingView {
         .finish();
 
         let text = ui_builder
-            .span("Plan successfully activated!")
+            .span("套餐已成功激活！")
             .with_style(UiComponentStyles {
                 font_color: Some(text_color),
                 font_size: Some(FONT_SIZE),

@@ -68,7 +68,7 @@ const ITEM_VERTICAL_SPACING: f32 = 24.;
 const BUILT_IN_TEXT_INPUT_MARGIN: f32 = 10.;
 const SPACE_AFTER_TEXT_INPUT: f32 = ITEM_VERTICAL_SPACING - BUILT_IN_TEXT_INPUT_MARGIN;
 
-const SSH_REUSE_CONTROL_MASTER_DESCRIPTION: &str = "Attach to a live SSH ControlMaster you already have configured for the destination host instead of creating a Warp-owned one. Takes effect in new tabs.";
+const SSH_REUSE_CONTROL_MASTER_DESCRIPTION: &str = "附加到你已为目标主机配置的现有 SSH ControlMaster，而不是创建由 Warp 拥有的 ControlMaster。对新标签页生效。";
 
 const SSH_EXTENSION_INSTALL_MODE_DESCRIPTION: &str =
     "控制远程主机未安装 Warp SSH 扩展时的安装行为。";
@@ -688,7 +688,7 @@ impl SettingsWidget for SSHWidget {
             move || {
                 let mut column = Flex::column();
                 column.add_child(render_body_item::<WarpifyPageAction>(
-                    "Reuse existing SSH ControlMaster".into(),
+                    "复用现有 SSH ControlMaster".into(),
                     None,
                     LocalOnlyIconState::for_setting(
                         ReuseExistingSshControlMaster::storage_key(),
